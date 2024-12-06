@@ -69,10 +69,11 @@ class SystemController extends BasicController
                 }
 
                 // aquí filtrar visible & status
-                if (Schema::hasColumn($using, 'visible')) {
+                $table = (new $using)->getTable();
+                if (Schema::hasColumn($table, 'visible')) {
                     $query->where('visible', true);
                 }
-                if (Schema::hasColumn($using, 'status')) {
+                if (Schema::hasColumn($table, 'status')) {
                     $query->where('status', true);
                 }
 

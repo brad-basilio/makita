@@ -1146,7 +1146,7 @@
     ]
   },
   "resources/js/Components/Adminto/Modal.jsx": {
-    "file": "assets/Modal-ClxeGkIS.js",
+    "file": "assets/Modal-uOWZuDyS.js",
     "name": "Modal",
     "src": "resources/js/Components/Adminto/Modal.jsx",
     "isEntry": true,
@@ -1263,7 +1263,7 @@
     ]
   },
   "resources/js/Components/Adminto/form/CheckboxFormGroup.jsx": {
-    "file": "assets/CheckboxFormGroup-uOWZuDyS.js",
+    "file": "assets/CheckboxFormGroup-ClxeGkIS.js",
     "name": "CheckboxFormGroup",
     "src": "resources/js/Components/Adminto/form/CheckboxFormGroup.jsx",
     "isEntry": true,
@@ -1283,7 +1283,7 @@
     ]
   },
   "resources/js/Components/Adminto/form/InputFormGroup.jsx": {
-    "file": "assets/InputFormGroup-uOWZuDyS.js",
+    "file": "assets/InputFormGroup-ClxeGkIS.js",
     "name": "InputFormGroup",
     "src": "resources/js/Components/Adminto/form/InputFormGroup.jsx",
     "isEntry": true,
@@ -1293,7 +1293,7 @@
     ]
   },
   "resources/js/Components/Adminto/form/PasswordFormGroup.jsx": {
-    "file": "assets/PasswordFormGroup-uOWZuDyS.js",
+    "file": "assets/PasswordFormGroup-ClxeGkIS.js",
     "name": "PasswordFormGroup",
     "src": "resources/js/Components/Adminto/form/PasswordFormGroup.jsx",
     "isEntry": true,
@@ -1303,7 +1303,7 @@
     ]
   },
   "resources/js/Components/Adminto/form/QuillFormGroup.jsx": {
-    "file": "assets/QuillFormGroup-uOWZuDyS.js",
+    "file": "assets/QuillFormGroup-ClxeGkIS.js",
     "name": "QuillFormGroup",
     "src": "resources/js/Components/Adminto/form/QuillFormGroup.jsx",
     "isEntry": true,
@@ -1345,7 +1345,7 @@
     ]
   },
   "resources/js/Components/Adminto/form/TextareaFormGroup.jsx": {
-    "file": "assets/TextareaFormGroup-uOWZuDyS.js",
+    "file": "assets/TextareaFormGroup-ClxeGkIS.js",
     "name": "TextareaFormGroup",
     "src": "resources/js/Components/Adminto/form/TextareaFormGroup.jsx",
     "isEntry": true,
@@ -1355,7 +1355,7 @@
     ]
   },
   "resources/js/Components/Adminto/form/TippyButton.jsx": {
-    "file": "assets/TippyButton-CjFt2XZT.js",
+    "file": "assets/TippyButton-BX8lFSaT.js",
     "name": "TippyButton",
     "src": "resources/js/Components/Adminto/form/TippyButton.jsx",
     "isEntry": true,
@@ -1402,7 +1402,7 @@
     ]
   },
   "resources/js/Components/Blog/Results.jsx": {
-    "file": "assets/Results-BFZKHDlC.js",
+    "file": "assets/Results-DWBvfU6E.js",
     "name": "Results",
     "src": "resources/js/Components/Blog/Results.jsx",
     "isEntry": true,
@@ -1479,7 +1479,7 @@
     ]
   },
   "resources/js/Components/Courses/Results.jsx": {
-    "file": "assets/Results-DWBvfU6E.js",
+    "file": "assets/Results-BFZKHDlC.js",
     "name": "Results",
     "src": "resources/js/Components/Courses/Results.jsx",
     "isEntry": true,
@@ -1635,7 +1635,7 @@
     ]
   },
   "resources/js/Components/Modal.jsx": {
-    "file": "assets/Modal-uOWZuDyS.js",
+    "file": "assets/Modal-ClxeGkIS.js",
     "name": "Modal",
     "src": "resources/js/Components/Modal.jsx",
     "isEntry": true,
@@ -1741,37 +1741,31 @@
     ]
   },
   "resources/js/Components/Tailwind/Footer/FooterCallToAction.jsx": {
-    "file": "assets/FooterCallToAction-DMCWohn4.js",
+    "file": "assets/FooterCallToAction-BagITd5X.js",
     "name": "FooterCallToAction",
     "src": "resources/js/Components/Tailwind/Footer/FooterCallToAction.jsx",
-    "isDynamicEntry": true,
+    "isEntry": true,
     "imports": [
       "resources/js/Components/About/AboutHeader.jsx",
       "_index-B80Lgev0.js",
       "_index-B1nVdsa0.js",
-      "_SubscriptionsRest-CSmau4o2.js",
+      "resources/js/Components/Adminto/Basic/BasicEditing.jsx",
       "_sweetalert2.all-Dh0rZL5X.js",
-      "_Global-mC9lKANG.js",
-      "_tippy-react.esm-CHhA99mn.js",
-      "_HtmlContent-BZJNaxQq.js",
       "_index-DO3Aws4m.js",
       "_index-CqrOtH36.js",
-      "resources/js/Components/Adminto/Basic/BasicEditing.jsx",
       "_main-B2CtU6ez.js",
       "____vite-browser-external_commonjs-proxy-C9-083JZ.js"
     ]
   },
   "resources/js/Components/Tailwind/Footer/FooterSocials.jsx": {
-    "file": "assets/FooterSocials-DtCnQMMc.js",
+    "file": "assets/FooterSocials-CpPx52vs.js",
     "name": "FooterSocials",
     "src": "resources/js/Components/Tailwind/Footer/FooterSocials.jsx",
-    "isDynamicEntry": true,
+    "isEntry": true,
     "imports": [
       "resources/js/Components/About/AboutHeader.jsx",
       "_index-B80Lgev0.js",
       "_index-B1nVdsa0.js",
-      "_tippy-react.esm-CHhA99mn.js",
-      "_HtmlContent-BZJNaxQq.js",
       "_index-DO3Aws4m.js",
       "_index-CqrOtH36.js"
     ]
@@ -1858,10 +1852,10 @@
     ]
   },
   "resources/js/Components/Tailwind/Sliders/SliderSimple.jsx": {
-    "file": "assets/SliderSimple-DtoQtiQu.js",
+    "file": "assets/SliderSimple-B5TBinfr.js",
     "name": "SliderSimple",
     "src": "resources/js/Components/Tailwind/Sliders/SliderSimple.jsx",
-    "isDynamicEntry": true,
+    "isEntry": true,
     "imports": [
       "resources/js/Components/About/AboutHeader.jsx",
       "_index-B80Lgev0.js",
@@ -1894,10 +1888,10 @@
     ]
   },
   "resources/js/Components/Tailwind/TopBars/TopBarSocials.jsx": {
-    "file": "assets/TopBarSocials-CYTaiLEu.js",
+    "file": "assets/TopBarSocials-uOWZuDyS.js",
     "name": "TopBarSocials",
     "src": "resources/js/Components/Tailwind/TopBars/TopBarSocials.jsx",
-    "isDynamicEntry": true,
+    "isEntry": true,
     "imports": [
       "resources/js/Components/About/AboutHeader.jsx",
       "_index-B80Lgev0.js"
@@ -1972,7 +1966,7 @@
     "isEntry": true
   },
   "resources/js/Components/form/CheckboxFormGroup.jsx": {
-    "file": "assets/CheckboxFormGroup-ClxeGkIS.js",
+    "file": "assets/CheckboxFormGroup-uOWZuDyS.js",
     "name": "CheckboxFormGroup",
     "src": "resources/js/Components/form/CheckboxFormGroup.jsx",
     "isEntry": true,
@@ -1982,7 +1976,7 @@
     ]
   },
   "resources/js/Components/form/InputFormGroup.jsx": {
-    "file": "assets/InputFormGroup-ClxeGkIS.js",
+    "file": "assets/InputFormGroup-uOWZuDyS.js",
     "name": "InputFormGroup",
     "src": "resources/js/Components/form/InputFormGroup.jsx",
     "isEntry": true,
@@ -1992,7 +1986,7 @@
     ]
   },
   "resources/js/Components/form/PasswordFormGroup.jsx": {
-    "file": "assets/PasswordFormGroup-ClxeGkIS.js",
+    "file": "assets/PasswordFormGroup-uOWZuDyS.js",
     "name": "PasswordFormGroup",
     "src": "resources/js/Components/form/PasswordFormGroup.jsx",
     "isEntry": true,
@@ -2002,7 +1996,7 @@
     ]
   },
   "resources/js/Components/form/QuillFormGroup.jsx": {
-    "file": "assets/QuillFormGroup-ClxeGkIS.js",
+    "file": "assets/QuillFormGroup-uOWZuDyS.js",
     "name": "QuillFormGroup",
     "src": "resources/js/Components/form/QuillFormGroup.jsx",
     "isEntry": true,
@@ -2034,7 +2028,7 @@
     ]
   },
   "resources/js/Components/form/TextareaFormGroup.jsx": {
-    "file": "assets/TextareaFormGroup-ClxeGkIS.js",
+    "file": "assets/TextareaFormGroup-uOWZuDyS.js",
     "name": "TextareaFormGroup",
     "src": "resources/js/Components/form/TextareaFormGroup.jsx",
     "isEntry": true,
@@ -2044,7 +2038,7 @@
     ]
   },
   "resources/js/Components/form/TippyButton.jsx": {
-    "file": "assets/TippyButton-BX8lFSaT.js",
+    "file": "assets/TippyButton-CjFt2XZT.js",
     "name": "TippyButton",
     "src": "resources/js/Components/form/TippyButton.jsx",
     "isEntry": true,
