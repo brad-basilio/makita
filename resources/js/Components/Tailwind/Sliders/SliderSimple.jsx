@@ -14,7 +14,6 @@ const SliderSimple = ({ items }) => {
     <Swiper
       className="slider"
       slidesPerView={1}
-      spaceBetween={20}
       loop={true}
       grabCursor={true}
       centeredSlides={false}
