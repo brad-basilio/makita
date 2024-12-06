@@ -31,7 +31,7 @@ const SliderBoxed = ({ sliders }) => {
             <div
               className="bg-[#907755] w-full px-[5%] py-[25%] md:px-[7.5%] md:py-[10%] [background-position:left] md:[background-position:center] md:rounded-3xl"
               style={{
-                backgroundImage: `url('/api/sliders/media/${slide.image}')`,
+                backgroundImage: `url('/api/sliders/media/${slide.bg_image}')`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
               }}
