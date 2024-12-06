@@ -44,7 +44,7 @@ const SliderSimple = ({ items }) => {
         items.map((slider, i) => {
           return <SwiperSlide key={`slider-${i}`}>
             <div className="gap-20 bg-no-repeat object-top bg-center bg-cover w-full px-[5%] h-[600px] xl:h-[650px] flex flex-row items-center"
-              style={{ backgroundImage: `url(/api/sliders/media/${slider.image})` }}>
+              style={{ backgroundImage: `url('/api/sliders/media/${slider.image}')` }}>
               <div className="flex flex-row justify-center items-center gap-2 w-full xl:w-2/3 py-12 lg:py-24">
                 <div className="flex flex-col gap-5 lg:gap-10 items-start px-0 lg:px-[2%]">
                   <h2 className='text-white text-3xl sm:text-5xl md:text-6xl tracking-normal font-poppins_black font-bold uppercase' style={{ textShadow: '0 0 20px rgba(0, 0, 0, .25)' }}>
