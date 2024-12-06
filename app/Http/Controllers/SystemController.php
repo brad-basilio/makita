@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use SoDe\Extend\Crypto;
 use SoDe\Extend\File;
 use SoDe\Extend\JSON;
+use Illuminate\Support\Facades\Schema;
 
 class SystemController extends BasicController
 {
@@ -65,6 +66,14 @@ class SystemController extends BasicController
                     foreach ($system->filters as $field) {
                         $query->where($field, true);
                     }
+                }
+
+                // aquí filtrar visible & status
+                if (Schema::hasColumn($using, 'visible')) {
+                    $query->where('visible', true);
+                }
+                if (Schema::hasColumn($using, 'status')) {
+                    $query->where('status', true);
                 }
 
                 $shortID = Crypto::short();
