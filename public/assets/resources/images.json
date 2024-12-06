@@ -1,0 +1,37 @@
+[
+  {
+    "name": "Imagen nosotros",
+    "description": "Imagen que acompaña a la sección \"nosotros\" en la pantalla principal",
+    "src": "about.png",
+    "fit": "contain",
+    "aspect": "1.064"
+  },
+  {
+    "name": "Imagen testimonios",
+    "description": "Imagen que acompaña a la sección \"testimonios\"",
+    "src": "testimonies.png",
+    "fit": "contain",
+    "aspect": "1.125"
+  },
+  {
+    "name": "Imagen subscripción",
+    "description": "Imagen que acompaña al formulario de \"subscripción\"",
+    "src": "subscription.png",
+    "fit": "cover",
+    "aspect": "4"
+  },
+  {
+    "name": "Imagen team",
+    "description": "Imagen del primer bloque de la pantalla nosotros",
+    "src": "team.png",
+    "fit": "contain",
+    "aspect": "1.325"
+  },
+  {
+    "name": "Imagen contacto",
+    "description": "Imagen que acompaña a la página de \"Blog\"",
+    "src": "blog.png",
+    "fit": "cover",
+    "aspect": "16/9"
+  }
+]

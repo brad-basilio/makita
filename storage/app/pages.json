@@ -1,0 +1,48 @@
+[
+    {
+        "id": "d1c9cc65-d819-40d4-8484-0684619f15ea",
+        "name": "Home",
+        "path": "\/",
+        "extends_base": true,
+        "description": "P\u00e1gina de inicio",
+        "keywords": [
+            "Hola mundo",
+            "Del mundo mundial"
+        ]
+    },
+    {
+        "id": "54e5a8e1-e972-4001-b20e-b583629c76e5",
+        "name": "Nosotros",
+        "path": "\/about",
+        "extends_base": false
+    },
+    {
+        "id": "888f8b32-2638-4f69-a843-af4b2edf69ab",
+        "name": "Contacto",
+        "path": "\/contact",
+        "extends_base": true
+    },
+    {
+        "id": "aa3f2e6a-eee9-4d5c-99a8-8a62bc6f9dfc",
+        "name": "Cat\u00e1logo",
+        "path": "\/catalogo\/{cSlug}\/{scSlug}",
+        "pseudo_path": "\/catalogo\/",
+        "extends_base": false,
+        "using": {
+            "cSlug": "Category",
+            "scSlug": "Subcategory"
+        }
+    },
+    {
+        "id": "f9cfede5-dae6-43ae-8989-f02967d7d513",
+        "name": "Detalle del producto",
+        "path": "\/producto\/{cSlug}",
+        "extends_base": false
+    },
+    {
+        "id": "8e5634df-4d70-4693-b10d-ebad46012bd0",
+        "name": "Nueva p\u00e1gina",
+        "path": "\/page-abcba75e",
+        "extends_base": true
+    }
+]

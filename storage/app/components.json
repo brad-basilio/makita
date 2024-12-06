@@ -1,0 +1,147 @@
+[
+  {
+    "id": "top_bar",
+    "name": "Cintillo",
+    "options": [
+      {
+        "id": "TopBarSimple",
+        "name": "Simple",
+        "image": "top-bar-simple.png"
+      },
+      {
+        "id": "TopBarSocials",
+        "name": "Con redes sociales",
+        "image": "top-bar-socials.png"
+      }
+    ]
+  },
+  {
+    "id": "header",
+    "name": "Header",
+    "options": [
+      {
+        "id": "HeaderSimple",
+        "name": "Simple",
+        "image": "header-simple.png"
+      },
+      {
+        "id": "HeaderWithSearch",
+        "name": "Con barra de búsqueda",
+        "image": "header-with-search.png"
+      },
+      {
+        "id": "HeaderWithMegaMenu",
+        "name": "Con megamenu (Categorías)",
+        "image": "header-with-mega-menu.png",
+        "using": {
+          "model": "Category",
+          "with": [
+            "subcategories"
+          ],
+          "fields": [
+            "name",
+            "slug",
+            "image"
+          ],
+          "filters": [
+            "featured",
+            "recommended"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "slider",
+    "name": "Sliders",
+    "options": [
+      {
+        "id": "SliderBoxed",
+        "name": "Boxed",
+        "image": "slider-boxed.png",
+        "using": {
+          "model": "Slider",
+          "fields": [
+            "name",
+            "description",
+            "bg_image",
+            "button_text",
+            "button_link"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "product",
+    "name": "Productos",
+    "options": [
+      {
+        "id": "Carousel",
+        "name": "Carousel",
+        "image": "products-carousel.png",
+        "data": [
+          "title",
+          "description"
+        ],
+        "using": {
+          "model": "Item",
+          "filters": [
+            "featured",
+            "recommended"
+          ],
+          "limit": 10
+        }
+      },
+      {
+        "id": "List",
+        "name": "Listado",
+        "image": "products-list.png",
+        "data": [
+          "title",
+          "description"
+        ],
+        "using": {
+          "model": "Item",
+          "filters": [
+            "featured",
+            "recommended"
+          ],
+          "limit": 10
+        }
+      }
+    ]
+  },
+  {
+    "id": "banner",
+    "name": "Banners",
+    "options": [
+      {
+        "id": "BannerSimple",
+        "name": "Simple",
+        "data": [
+          "title",
+          "description",
+          "button_text",
+          "button_link"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "footer",
+    "name": "Footer",
+    "options": [
+      {
+        "id": "FooterCallToAction",
+        "name": "Llamada a la acción",
+        "image": "footer-call-to-action.png"
+      },
+      {
+        "id": "FooterSocials",
+        "name": "Con redes sociales",
+        "image": "footer-socials.png"
+      }
+    ]
+  }
+]

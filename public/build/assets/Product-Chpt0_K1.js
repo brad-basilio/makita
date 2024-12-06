@@ -1,0 +1,2 @@
+const __vite__fileDeps=["assets/ProductCarousel-DGg8XcU7.js","assets/AboutHeader-CpM0iYLI.js","assets/index-B80Lgev0.js","assets/ProductList-CnQOejFw.js","assets/autoplay-D5SuFwl8.js","swiper.css","assets/ProductList-DhgIxCnQ.js"],__vite__mapDeps=i=>i.map(i=>__vite__fileDeps[i]);
+import{_}from"./preload-helper-CZZ3Qsu7.js";import"./AboutHeader-CpM0iYLI.js";import{R as o}from"./index-B80Lgev0.js";o.lazy(()=>_(()=>import("./ProductCarousel-DGg8XcU7.js"),__vite__mapDeps([0,1,2,3,4,5])));o.lazy(()=>_(()=>import("./ProductList-DhgIxCnQ.js"),__vite__mapDeps([6,1,2,3])));
