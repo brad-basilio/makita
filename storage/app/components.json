@@ -69,6 +69,39 @@
             "button_link"
           ]
         }
+      },
+      {
+        "id": "SliderSimple",
+        "name": "Simple",
+        "image": "slider-simple.png",
+        "using": {
+          "model": "Slider",
+          "fields": [
+            "name",
+            "description",
+            "bg_image",
+            "button_text",
+            "button_link"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "category",
+    "name": "Categorías",
+    "options": [
+      {
+        "id": "Simple",
+        "name": "Simple",
+        "image": "categories-simple.png",
+        "data": [
+          "path"
+        ],
+        "using": {
+          "model": "Category",
+          "limit": 10
+        }
       }
     ]
   },

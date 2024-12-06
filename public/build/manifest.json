@@ -337,13 +337,13 @@
       "_index-B80Lgev0.js"
     ]
   },
-  "_swiper-!~{02a}~.js": {
+  "_swiper-!~{02d}~.js": {
     "file": "swiper.css",
-    "src": "_swiper-!~{02a}~.js"
+    "src": "_swiper-!~{02d}~.js"
   },
-  "_tippy-!~{022}~.js": {
+  "_tippy-!~{025}~.js": {
     "file": "tippy.css",
-    "src": "_tippy-!~{022}~.js"
+    "src": "_tippy-!~{025}~.js"
   },
   "_tippy-react.esm-CHhA99mn.js": {
     "file": "assets/tippy-react.esm-CHhA99mn.js",
@@ -1146,7 +1146,7 @@
     ]
   },
   "resources/js/Components/Adminto/Modal.jsx": {
-    "file": "assets/Modal-uOWZuDyS.js",
+    "file": "assets/Modal-ClxeGkIS.js",
     "name": "Modal",
     "src": "resources/js/Components/Adminto/Modal.jsx",
     "isEntry": true,
@@ -1263,7 +1263,7 @@
     ]
   },
   "resources/js/Components/Adminto/form/CheckboxFormGroup.jsx": {
-    "file": "assets/CheckboxFormGroup-ClxeGkIS.js",
+    "file": "assets/CheckboxFormGroup-uOWZuDyS.js",
     "name": "CheckboxFormGroup",
     "src": "resources/js/Components/Adminto/form/CheckboxFormGroup.jsx",
     "isEntry": true,
@@ -1283,7 +1283,7 @@
     ]
   },
   "resources/js/Components/Adminto/form/InputFormGroup.jsx": {
-    "file": "assets/InputFormGroup-ClxeGkIS.js",
+    "file": "assets/InputFormGroup-uOWZuDyS.js",
     "name": "InputFormGroup",
     "src": "resources/js/Components/Adminto/form/InputFormGroup.jsx",
     "isEntry": true,
@@ -1293,7 +1293,7 @@
     ]
   },
   "resources/js/Components/Adminto/form/PasswordFormGroup.jsx": {
-    "file": "assets/PasswordFormGroup-uOWZuDyS.js",
+    "file": "assets/PasswordFormGroup-ClxeGkIS.js",
     "name": "PasswordFormGroup",
     "src": "resources/js/Components/Adminto/form/PasswordFormGroup.jsx",
     "isEntry": true,
@@ -1325,7 +1325,7 @@
     ]
   },
   "resources/js/Components/Adminto/form/SelectFormGroup.jsx": {
-    "file": "assets/SelectFormGroup-ClxeGkIS.js",
+    "file": "assets/SelectFormGroup-uOWZuDyS.js",
     "name": "SelectFormGroup",
     "src": "resources/js/Components/Adminto/form/SelectFormGroup.jsx",
     "isEntry": true,
@@ -1382,7 +1382,7 @@
     ]
   },
   "resources/js/Components/Blog/Filter.jsx": {
-    "file": "assets/Filter-ClxeGkIS.js",
+    "file": "assets/Filter-uOWZuDyS.js",
     "name": "Filter",
     "src": "resources/js/Components/Blog/Filter.jsx",
     "isEntry": true,
@@ -1402,7 +1402,7 @@
     ]
   },
   "resources/js/Components/Blog/Results.jsx": {
-    "file": "assets/Results-BFZKHDlC.js",
+    "file": "assets/Results-DWBvfU6E.js",
     "name": "Results",
     "src": "resources/js/Components/Blog/Results.jsx",
     "isEntry": true,
@@ -1459,7 +1459,7 @@
     ]
   },
   "resources/js/Components/Courses/Filter.jsx": {
-    "file": "assets/Filter-uOWZuDyS.js",
+    "file": "assets/Filter-ClxeGkIS.js",
     "name": "Filter",
     "src": "resources/js/Components/Courses/Filter.jsx",
     "isEntry": true,
@@ -1479,7 +1479,7 @@
     ]
   },
   "resources/js/Components/Courses/Results.jsx": {
-    "file": "assets/Results-DWBvfU6E.js",
+    "file": "assets/Results-BFZKHDlC.js",
     "name": "Results",
     "src": "resources/js/Components/Courses/Results.jsx",
     "isEntry": true,
@@ -1635,7 +1635,7 @@
     ]
   },
   "resources/js/Components/Modal.jsx": {
-    "file": "assets/Modal-ClxeGkIS.js",
+    "file": "assets/Modal-uOWZuDyS.js",
     "name": "Modal",
     "src": "resources/js/Components/Modal.jsx",
     "isEntry": true,
@@ -1669,10 +1669,10 @@
     ]
   },
   "resources/js/Components/Tailwind/Banners/BannerSimple.jsx": {
-    "file": "assets/BannerSimple-B677JPSv.js",
+    "file": "assets/BannerSimple-CBJjvOsZ.js",
     "name": "BannerSimple",
     "src": "resources/js/Components/Tailwind/Banners/BannerSimple.jsx",
-    "isDynamicEntry": true,
+    "isEntry": true,
     "imports": [
       "resources/js/Components/About/AboutHeader.jsx",
       "_index.esm-Cu-mVv1q.js",
@@ -1697,6 +1697,34 @@
       "resources/js/Components/Tailwind/TopBars/TopBarSocials.jsx"
     ]
   },
+  "resources/js/Components/Tailwind/Categories/CategorySimple.jsx": {
+    "file": "assets/CategorySimple-D4lMk-5r.js",
+    "name": "CategorySimple",
+    "src": "resources/js/Components/Tailwind/Categories/CategorySimple.jsx",
+    "isEntry": true,
+    "imports": [
+      "resources/js/Components/About/AboutHeader.jsx",
+      "_index-B80Lgev0.js",
+      "resources/js/Components/Tailwind/Products/ProductList.jsx"
+    ],
+    "css": [
+      "CategorySimple.css"
+    ]
+  },
+  "resources/js/Components/Tailwind/Category.jsx": {
+    "file": "assets/Category-Di3GoYOu.js",
+    "name": "Category",
+    "src": "resources/js/Components/Tailwind/Category.jsx",
+    "isEntry": true,
+    "imports": [
+      "_preload-helper-CZZ3Qsu7.js",
+      "resources/js/Components/About/AboutHeader.jsx",
+      "_index-B80Lgev0.js"
+    ],
+    "dynamicImports": [
+      "resources/js/Components/Tailwind/Categories/CategorySimple.jsx"
+    ]
+  },
   "resources/js/Components/Tailwind/Footer.jsx": {
     "file": "assets/Footer-B4Wgj7xK.js",
     "name": "Footer",
@@ -1713,22 +1741,18 @@
     ]
   },
   "resources/js/Components/Tailwind/Footer/FooterCallToAction.jsx": {
-    "file": "assets/FooterCallToAction-DMCWohn4.js",
+    "file": "assets/FooterCallToAction-BagITd5X.js",
     "name": "FooterCallToAction",
     "src": "resources/js/Components/Tailwind/Footer/FooterCallToAction.jsx",
-    "isDynamicEntry": true,
+    "isEntry": true,
     "imports": [
       "resources/js/Components/About/AboutHeader.jsx",
       "_index-B80Lgev0.js",
       "_index-B1nVdsa0.js",
-      "_SubscriptionsRest-CSmau4o2.js",
+      "resources/js/Components/Adminto/Basic/BasicEditing.jsx",
       "_sweetalert2.all-Dh0rZL5X.js",
-      "_Global-mC9lKANG.js",
-      "_tippy-react.esm-CHhA99mn.js",
-      "_HtmlContent-BZJNaxQq.js",
       "_index-DO3Aws4m.js",
       "_index-CqrOtH36.js",
-      "resources/js/Components/Adminto/Basic/BasicEditing.jsx",
       "_main-B2CtU6ez.js",
       "____vite-browser-external_commonjs-proxy-C9-083JZ.js"
     ]
@@ -1799,23 +1823,22 @@
     ]
   },
   "resources/js/Components/Tailwind/Slider.jsx": {
-    "file": "assets/Slider-CNSx8Wz7.js",
+    "file": "assets/Slider-CFUtphfx.js",
     "name": "Slider",
     "src": "resources/js/Components/Tailwind/Slider.jsx",
     "isEntry": true,
     "imports": [
+      "_preload-helper-CZZ3Qsu7.js",
       "resources/js/Components/About/AboutHeader.jsx",
-      "_index-B80Lgev0.js",
-      "resources/js/Components/Tailwind/Products/ProductList.jsx",
-      "resources/js/Components/About/Strengths.jsx"
+      "_index-B80Lgev0.js"
     ],
-    "css": [
-      "Slider.css",
-      "swiper.css"
+    "dynamicImports": [
+      "resources/js/Components/Tailwind/Sliders/SliderSimple.jsx",
+      "resources/js/Components/Tailwind/Sliders/SliderBoxed.jsx"
     ]
   },
   "resources/js/Components/Tailwind/Sliders/SliderBoxed.jsx": {
-    "file": "assets/SliderBoxed-TvbAu0_1.js",
+    "file": "assets/SliderBoxed-DY-vF72v.js",
     "name": "SliderBoxed",
     "src": "resources/js/Components/Tailwind/Sliders/SliderBoxed.jsx",
     "isEntry": true,
@@ -1823,11 +1846,22 @@
       "resources/js/Components/About/AboutHeader.jsx",
       "_index-B80Lgev0.js",
       "resources/js/Components/Tailwind/Products/ProductList.jsx",
-      "resources/js/Components/Tailwind/Slider.jsx",
       "resources/js/Components/About/Strengths.jsx"
     ],
     "css": [
+      "SliderBoxed.css",
       "swiper.css"
+    ]
+  },
+  "resources/js/Components/Tailwind/Sliders/SliderSimple.jsx": {
+    "file": "assets/SliderSimple-Bjg1Mndf.js",
+    "name": "SliderSimple",
+    "src": "resources/js/Components/Tailwind/Sliders/SliderSimple.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/Components/About/AboutHeader.jsx",
+      "_index-B80Lgev0.js",
+      "resources/js/Components/Tailwind/Products/ProductList.jsx"
     ]
   },
   "resources/js/Components/Tailwind/TopBar.jsx": {
@@ -1934,7 +1968,7 @@
     "isEntry": true
   },
   "resources/js/Components/form/CheckboxFormGroup.jsx": {
-    "file": "assets/CheckboxFormGroup-uOWZuDyS.js",
+    "file": "assets/CheckboxFormGroup-ClxeGkIS.js",
     "name": "CheckboxFormGroup",
     "src": "resources/js/Components/form/CheckboxFormGroup.jsx",
     "isEntry": true,
@@ -1944,7 +1978,7 @@
     ]
   },
   "resources/js/Components/form/InputFormGroup.jsx": {
-    "file": "assets/InputFormGroup-uOWZuDyS.js",
+    "file": "assets/InputFormGroup-ClxeGkIS.js",
     "name": "InputFormGroup",
     "src": "resources/js/Components/form/InputFormGroup.jsx",
     "isEntry": true,
@@ -1954,7 +1988,7 @@
     ]
   },
   "resources/js/Components/form/PasswordFormGroup.jsx": {
-    "file": "assets/PasswordFormGroup-ClxeGkIS.js",
+    "file": "assets/PasswordFormGroup-uOWZuDyS.js",
     "name": "PasswordFormGroup",
     "src": "resources/js/Components/form/PasswordFormGroup.jsx",
     "isEntry": true,
@@ -1986,7 +2020,7 @@
     ]
   },
   "resources/js/Components/form/SelectFormGroup.jsx": {
-    "file": "assets/SelectFormGroup-uOWZuDyS.js",
+    "file": "assets/SelectFormGroup-ClxeGkIS.js",
     "name": "SelectFormGroup",
     "src": "resources/js/Components/form/SelectFormGroup.jsx",
     "isEntry": true,
@@ -2262,7 +2296,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-CZ6PWRaV.js",
+    "file": "assets/System-ClIsgSqS.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,
@@ -2274,25 +2308,21 @@
       "resources/js/Components/Tailwind/Base.jsx",
       "_Header-DNKnEJFX.js",
       "_SortByAfterField-BaS5rBg8.js",
-      "resources/js/Components/Tailwind/Products/ProductList.jsx",
-      "_pagination-BoZZ8szj.js",
-      "_autoplay-D5SuFwl8.js",
-      "resources/js/Components/Tailwind/Slider.jsx",
-      "resources/js/Components/About/Strengths.jsx",
-      "_em-C9j-sJ25.js",
       "_preload-helper-CZZ3Qsu7.js",
       "_index-DO3Aws4m.js",
       "_index.esm-Cu-mVv1q.js",
       "____vite-browser-external_commonjs-proxy-C9-083JZ.js",
       "_main-B2CtU6ez.js",
       "_Global-mC9lKANG.js",
-      "_tippy-react.esm-CHhA99mn.js",
-      "_HtmlContent-BZJNaxQq.js"
+      "_tippy-react.esm-CHhA99mn.js"
     ],
     "dynamicImports": [
+      "resources/js/Components/Tailwind/Sliders/SliderSimple.jsx",
+      "resources/js/Components/Tailwind/Sliders/SliderBoxed.jsx",
       "resources/js/Components/Tailwind/Products/ProductCarousel.jsx",
       "resources/js/Components/Tailwind/Products/ProductList.jsx",
-      "resources/js/Components/Tailwind/Banners/BannerSimple.jsx"
+      "resources/js/Components/Tailwind/Banners/BannerSimple.jsx",
+      "resources/js/Components/Tailwind/Categories/CategorySimple.jsx"
     ],
     "css": [
       "swiper.css",

@@ -25,6 +25,7 @@ use App\Http\Controllers\Admin\WebDetailController as AdminWebDetailController;
 // Public
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CoverController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\MessageController;
@@ -45,6 +46,7 @@ use App\Http\Controllers\SubscriptionController;
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/signup', [AuthController::class, 'signup']);
 Route::get('/sliders/media/{uuid}', [AdminSliderController::class, 'media']);
+Route::get('/categories/media/{uuid}', [AdminCategoryController::class, 'media']);
 Route::get('/testimonies/media/{uuid}', [AdminTestimonyController::class, 'media']);
 Route::get('/posts/media/{uuid}', [AdminPostController::class, 'media']);
 Route::get('/courses/media/{uuid}', [AdminItemController::class, 'media']);

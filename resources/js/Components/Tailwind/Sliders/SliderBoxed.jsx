@@ -42,7 +42,7 @@ const SliderBoxed = ({ sliders }) => {
               <p className="text-white py-4 w-2/3 lg:w-1/3" data-aos="fade-up">
                 {slide.description}
               </p>
-              {slide.button_text && slide.button_link && (
+              {(slide.button_text && slide.button_link) && (
                 <a
                   href={slide.button_link}
                   className="bg-[#DAAD9A] text-white text-sm px-4 py-3 rounded border border-white inline-block uppercase"

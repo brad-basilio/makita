@@ -4,7 +4,6 @@ const ProductCarousel = React.lazy(() => import('./Products/ProductCarousel'))
 const ProductList = React.lazy(() => import('./Products/ProductList'))
 
 const Product = ({ which, data, items }) => {
-  console.log(which)
   const getProduct = () => {
     switch (which) {
       case 'Carousel':

@@ -9,6 +9,7 @@ import SortByAfterField from './Utils/SortByAfterField';
 import Slider from './Components/Tailwind/Slider';
 import Product from './Components/Tailwind/Product';
 import Banner from './Components/Tailwind/Banner';
+import Category from './Components/Tailwind/Category';
 
 const System = ({ page, pages, systems, socials = [], sliders = [], categories = [], systemItems = {} }) => {
 
@@ -34,6 +35,8 @@ const System = ({ page, pages, systems, socials = [], sliders = [], categories =
         break
       case 'product':
         return <Product which={value} data={data} items={getItems(itemsId)} />
+      case 'category':
+        return <Category which={value} data={data} items={getItems(itemsId)} />
       case 'slider':
         return <Slider which={value} sliders={getItems(itemsId)} />
       case 'banner':
