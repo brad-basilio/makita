@@ -44,8 +44,7 @@
             "image"
           ],
           "filters": [
-            "featured",
-            "recommended"
+            "featured"
           ]
         }
       }
@@ -120,8 +119,7 @@
         "using": {
           "model": "Item",
           "filters": [
-            "featured",
-            "recommended"
+            "featured"
           ],
           "limit": 10
         }
@@ -137,8 +135,7 @@
         "using": {
           "model": "Item",
           "filters": [
-            "featured",
-            "recommended"
+            "featured"
           ],
           "limit": 10
         }
