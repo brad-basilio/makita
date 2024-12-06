@@ -128,7 +128,10 @@ class BasicController extends Controller
       }
 
       if (Auth::check()) {
-        $instance->whereNotNull($this->prefix4filter ? $this->prefix4filter . '.status' : 'status');
+        $table = $this->prefix4filter ? $this->prefix4filter : (new $this->model)->getTable();
+        if (Schema::hasColumn($table, 'status')) {
+          $instance->whereNotNull($this->prefix4filter ? $this->prefix4filter . '.status' : 'status');
+        }
       }
 
       if ($request->filter) {
