@@ -21,6 +21,9 @@ use Inertia\Inertia;
 use SoDe\Extend\Crypto;
 use SoDe\Extend\Response;
 use SoDe\Extend\Text;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
+
 
 class BasicController extends Controller
 {
@@ -205,9 +208,10 @@ class BasicController extends Controller
         if (!$request->hasFile($field)) continue;
         $full = $request->file($field);
         $uuid = Crypto::randomUUID();
-        $path = "images/{$snake_case}/{$uuid}.img";
+        $ext = $full->getClientOriginalExtension();
+        $path = "images/{$snake_case}/{$uuid}.{$ext}";
         Storage::put($path, file_get_contents($full));
-        $body[$field] = $uuid;
+        $body[$field] = "{$uuid}.{$ext}";
       }
 
       $jpa = $this->model::find(isset($body['id']) ? $body['id'] : null);
@@ -216,6 +220,16 @@ class BasicController extends Controller
         $jpa = $this->model::create($body);
       } else {
         $jpa->update($body);
+      }
+
+      $table = (new $this->model)->getTable();
+      if (Schema::hasColumn($table, 'slug')) {
+        $slug = Str::slug($jpa->name);
+        $slugExists = $this->model::where('slug', $slug)->where('id', '<>', $jpa->id)->exists();
+        if ($slugExists) {
+          $slug = $slug . '-' . Crypto::short();
+        }
+        $jpa->update(['slug' => $slug]);
       }
 
       $data = $this->afterSave($request, $jpa);

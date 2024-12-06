@@ -11,6 +11,7 @@ import SwitchFormGroup from '@Adminto/form/SwitchFormGroup';
 import Swal from 'sweetalert2';
 import InputFormGroup from '../Components/form/InputFormGroup';
 import CategoriesRest from '../Actions/Admin/CategoriesRest';
+import ImageFormGroup from '../Components/Adminto/form/ImageFormGroup';
 
 const categoriesRest = new CategoriesRest()
 
@@ -23,6 +24,7 @@ const Categories = () => {
   const idRef = useRef()
   const nameRef = useRef()
   const descriptionRef = useRef()
+  const imageRef = useRef()
 
   const [isEditing, setIsEditing] = useState(false)
 
@@ -33,6 +35,8 @@ const Categories = () => {
     idRef.current.value = data?.id ?? ''
     nameRef.current.value = data?.name ?? ''
     descriptionRef.current.value = data?.description ?? ''
+    imageRef.image.src = `/api/categories/media/${data?.image}`
+    imageRef.current.value = null
 
     $(modalRef.current).modal('show')
   }
@@ -46,7 +50,16 @@ const Categories = () => {
       description: descriptionRef.current.value,
     }
 
-    const result = await categoriesRest.save(request)
+    const formData = new FormData()
+    for (const key in request) {
+      formData.append(key, request[key])
+    }
+    const file = imageRef.current.files[0]
+    if (file) {
+      formData.append('image', file)
+    }
+
+    const result = await categoriesRest.save(formData)
     if (!result) return
 
     $(gridRef.current).dxDataGrid('instance').refresh()
@@ -112,6 +125,15 @@ const Categories = () => {
           width: '50%',
         },
         {
+          dataField: 'image',
+          caption: 'Imagen',
+          width: '90px',
+          allowFiltering: false,
+          cellTemplate: (container, { data }) => {
+            ReactAppend(container, <img src={`/api/categories/media/${data.image}`} style={{ width: '80px', height: '48px', objectFit: 'cover', objectPosition: 'center', borderRadius: '4px' }} onError={e => e.target.src = '/api/cover/thumbnail/null'} />)
+          }
+        },
+        {
           dataField: 'visible',
           caption: 'Visible',
           dataType: 'boolean',
@@ -144,7 +166,8 @@ const Categories = () => {
           allowExporting: false
         }
       ]} />
-    <Modal modalRef={modalRef} title={isEditing ? 'Editar categoría' : 'Agregar categoría'} onSubmit={onModalSubmit} size='md'>
+    <Modal modalRef={modalRef} title={isEditing ? 'Editar categoría' : 'Agregar categoría'} onSubmit={onModalSubmit} size='sm'>
+      <ImageFormGroup eRef={imageRef} label='Imagen' col='col-12' aspect={16/9} />
       <div className='row' id='faqs-container'>
         <input ref={idRef} type='hidden' />
         <InputFormGroup eRef={nameRef} label='Categoría' col='col-12' required />
