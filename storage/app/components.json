@@ -11,7 +11,10 @@
       {
         "id": "TopBarSocials",
         "name": "Con redes sociales",
-        "image": "top-bar-socials.png"
+        "image": "top-bar-socials.png",
+        "data": [
+          "title"
+        ]
       }
     ]
   },
@@ -25,7 +28,7 @@
         "image": "header-simple.png"
       },
       {
-        "id": "HeaderWithSearch",
+        "id": "HeaderSearch",
         "name": "Con barra de búsqueda",
         "image": "header-with-search.png"
       },
@@ -83,6 +86,21 @@
             "button_link"
           ]
         }
+      },
+      {
+        "id": "SliderSearch",
+        "name": "Search",
+        "image": "slider-search.png",
+        "using": {
+          "model": "Slider",
+          "fields": [
+            "name",
+            "description",
+            "bg_image",
+            "button_text",
+            "button_link"
+          ]
+        }
       }
     ]
   },
@@ -91,7 +109,7 @@
     "name": "Categorías",
     "options": [
       {
-        "id": "Simple",
+        "id": "CategorySimple",
         "name": "Simple",
         "image": "categories-simple.png",
         "data": [
@@ -100,6 +118,21 @@
         "using": {
           "model": "Category",
           "limit": 10
+        }
+      },
+      {
+        "id": "CategoryCarousel",
+        "name": "Carousel",
+        "image": "categories-carousel.png",
+        "data": [
+          "path",
+          "title",
+          "description"
+        ],
+        "using": {
+          "model": "Category",
+          "limit": 10,
+          "filters": ["featured"]
         }
       }
     ]

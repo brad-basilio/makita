@@ -1,2 +1,0 @@
-const __vite__fileDeps=["assets/CategorySimple-6ZcnGTr9.js","assets/AboutHeader-CpM0iYLI.js","assets/index-B80Lgev0.js","assets/ProductList-CnQOejFw.js","assets/CategorySimple-D4lMk-5r.js","CategorySimple.css"],__vite__mapDeps=i=>i.map(i=>__vite__fileDeps[i]);
-import{_ as o}from"./preload-helper-CZZ3Qsu7.js";import"./AboutHeader-CpM0iYLI.js";import{R as r}from"./index-B80Lgev0.js";r.lazy(()=>o(()=>import("./CategorySimple-6ZcnGTr9.js"),__vite__mapDeps([0,1,2,3,4,5])));

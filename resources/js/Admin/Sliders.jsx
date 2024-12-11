@@ -64,7 +64,9 @@ const Sliders = () => {
     }
 
     const file = bgImageRef.current.files[0]
-    formData.append('bg_image', file)
+    if (file) {
+      formData.append('bg_image', file)
+    }
 
     const result = await slidersRest.save(formData)
     if (!result) return

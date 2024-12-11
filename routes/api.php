@@ -147,6 +147,9 @@ Route::middleware('auth')->group(function () {
       Route::delete('/system/page/{id}', [AdminSystemController::class, 'deletePage']);
       Route::patch('/system/order', [AdminSystemController::class, 'updateOrder']);
       Route::delete('/system/{id}', [AdminSystemController::class, 'delete']);
+
+      Route::get('/system/backup', [AdminSystemController::class, 'export']);
+      Route::put('/system/backup', [AdminSystemController::class, 'import']);
     });
 
     Route::post('/generals', [AdminGeneralController::class, 'save']);

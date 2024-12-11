@@ -200,37 +200,47 @@ const System = ({ systems: systemsDB, pages: pagesDB, components, models }) => {
                                         <span className='ms-1'>{system.name}</span>
                                       </button>
                                     } else {
-                                      return <div className="dropdown">
-                                        <button data-id={system.id} className="btn btn-light dropdown-toggle text-truncate w-100 text-start" type="button" id={`dd-${system.id}`} data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                          <i className="mdi mdi-chevron-down ms-1 float-end"></i>
-                                          <i className="fa fa-ellipsis-v"></i>
-                                          <i className="fa fa-ellipsis-v"></i>
-                                          <span className='ms-1'>{system.name}</span>
-                                        </button>
-                                        <div className="dropdown-menu" aria-labelledby={`dd-${system.id}`} data-popper-placement="bottom-start">
-                                          {
-                                            options.length > 1 &&
-                                            <>
-                                              {
-                                                options.filter(x => x.id != system.value).map(option => (
-                                                  <button className='dropdown-item' onClick={() => onComponentClicked({
-                                                    ...system,
-                                                    name: `${component.name} - ${option.name}`,
-                                                    value: option.id
-                                                  })}>
-                                                    {component.name} - {option.name}
-                                                  </button>
-                                                ))
-                                              }
-                                              <div className="dropdown-divider"></div>
-                                            </>
-                                          }
-                                          <button className="dropdown-item" onClick={() => onDeleteClicked(system)}>
-                                            <i className="mdi mdi-trash-can-outline me-1"></i>
-                                            Eliminar componente
-                                          </button>
-                                        </div>
-                                      </div>
+                                      const component = components.find(x => x.id == system.component);
+                                      return <Component
+                                        key={system.id}
+                                        className=''
+                                        system={system}
+                                        component={component}
+                                        onComponentClicked={onComponentClicked}
+                                        onDeleteClicked={onDeleteClicked}
+                                        onEditDataClicked={onEditDataClicked}
+                                      />
+                                      // return <div className="dropdown">
+                                      //   <button data-id={system.id} className="btn btn-light dropdown-toggle text-truncate w-100 text-start" type="button" id={`dd-${system.id}`} data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                      //     <i className="mdi mdi-chevron-down ms-1 float-end"></i>
+                                      //     <i className="fa fa-ellipsis-v"></i>
+                                      //     <i className="fa fa-ellipsis-v"></i>
+                                      //     <span className='ms-1'>{system.name}</span>
+                                      //   </button>
+                                      //   <div className="dropdown-menu" aria-labelledby={`dd-${system.id}`} data-popper-placement="bottom-start">
+                                      //     {
+                                      //       options.length > 1 &&
+                                      //       <>
+                                      //         {
+                                      //           options.filter(x => x.id != system.value).map(option => (
+                                      //             <button className='dropdown-item' onClick={() => onComponentClicked({
+                                      //               ...system,
+                                      //               name: `${component.name} - ${option.name}`,
+                                      //               value: option.id
+                                      //             })}>
+                                      //               {component.name} - {option.name}
+                                      //             </button>
+                                      //           ))
+                                      //         }
+                                      //         <div className="dropdown-divider"></div>
+                                      //       </>
+                                      //     }
+                                      //     <button className="dropdown-item" onClick={() => onDeleteClicked(system)}>
+                                      //       <i className="mdi mdi-trash-can-outline me-1"></i>
+                                      //       Eliminar
+                                      //     </button>
+                                      //   </div>
+                                      // </div>
                                     }
                                   })
                                 }

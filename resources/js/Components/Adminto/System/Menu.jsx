@@ -29,6 +29,10 @@ const Menu = ({components, onClick}) => {
                 </MenuItemContainer>
               ))
           }
+
+          <li className="menu-title">Sistema de respaldo</li>
+          <MenuItem icon='mdi mdi-cloud-download' onClick={() => {}}>Exportar Backup</MenuItem>
+          <MenuItem icon='mdi mdi-backup-restore' onClick={() => { }}>Importar Backup</MenuItem>
         </ul>
       </div>
       <div className="clearfix"></div>

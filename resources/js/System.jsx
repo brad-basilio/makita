@@ -20,7 +20,7 @@ const System = ({ page, pages, systems, socials = [], sliders = [], categories =
   const getSystem = ({ component, value, data, itemsId }) => {
     switch (component) {
       case 'top_bar':
-        return <TopBar which={value} socials={socials} />
+        return <TopBar which={value} socials={socials} data={data} />
       case 'header':
         return <Header which={value} socials={socials} />
       case 'content':
@@ -49,9 +49,9 @@ const System = ({ page, pages, systems, socials = [], sliders = [], categories =
   const systemsSorted = SortByAfterField(systems).filter(x => page.extends_base ? !x.page_id : true)
 
   return (
-    <>
+    <main className='text-[#10235b]'>
       {systemsSorted.map(getSystem)}
-    </>
+    </main>
   );
 };
 

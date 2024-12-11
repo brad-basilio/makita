@@ -13,6 +13,7 @@ use SoDe\Extend\JSON;
 use SoDe\Extend\Response;
 use Throwable;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Facades\DB;
 use ReflectionClass;
 
 class SystemController extends BasicController
@@ -22,7 +23,7 @@ class SystemController extends BasicController
     public $softDeletion = false;
 
 
-    private function obtenerRelacionesDeModelo(Model $modelo)
+    private function getRelations(Model $modelo)
     {
         $relaciones = [];
         $reflexion = new ReflectionClass($modelo);
@@ -61,7 +62,7 @@ class SystemController extends BasicController
             $modelInstance = new $className();
             $fields = $modelInstance->getFillable();
 
-            $relations = $this->obtenerRelacionesDeModelo($modelInstance);
+            $relations = $this->getRelations($modelInstance);
 
             $models[] = [
                 'name' => $modelName,
@@ -143,6 +144,29 @@ class SystemController extends BasicController
             return true;
         });
 
+        return response($response->toArray(), $response->status);
+    }
+
+    public function exportBK(Request $request)
+    {
+        $backup = [
+            'pages' => JSON::parse(File::get(storage_path('app/pages.json'))),
+            'components' => $this->model::with([])->all()
+        ];
+        return $backup;
+    }
+
+    public function importBK(Request $request)
+    {
+        $response = Response::simpleTryCatch(function () use ($request) {
+            DB::transaction(function () use ($request) {
+                $this->model::whereNotNull('id')->delete();
+
+                foreach ($request->all() as $data) {
+                    $this->model::create($data);
+                }
+            });
+        });
         return response($response->toArray(), $response->status);
     }
 }
