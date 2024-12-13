@@ -66,7 +66,10 @@ const System = ({ systems: systemsDB, pages: pagesDB, components, models }) => {
 
   useEffect(() => {
     const iframe = $('iframe:visible');
-    if (iframe) $(iframe).attr('src', iframe.attr('src'));
+    if (iframe){
+      $(iframe).removeAttr('src');
+      $(iframe).attr('src', iframe.data('path'));
+    } 
   }, [systems, pages])
 
   const onEditSEOClicked = async (page) => {
@@ -247,7 +250,7 @@ const System = ({ systems: systemsDB, pages: pagesDB, components, models }) => {
                               </div>
                             </div>
                             <div className="col-md-8">
-                              <iframe src='/base-template' className='w-100 h-100 border' style={{
+                              <iframe src='/base-template' data-path='/base-template' className='w-100 h-100 border' style={{
                                 minHeight: 'calc(100vh - 185px)',
                                 borderRadius: '4px'
                               }}></iframe>
@@ -280,7 +283,7 @@ const System = ({ systems: systemsDB, pages: pagesDB, components, models }) => {
                                   </div>
                                 </div>
                                 <div className="col-md-8">
-                                  <iframe src={page.path} className='w-100 h-100 border' style={{
+                                  <iframe src={page?.pseudo_path || page.path} data-path={page?.pseudo_path || page.path} className='w-100 h-100 border' style={{
                                     minHeight: 'calc(100vh - 185px)',
                                     borderRadius: '4px'
                                   }}></iframe>

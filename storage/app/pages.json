@@ -26,18 +26,22 @@
         "id": "aa3f2e6a-eee9-4d5c-99a8-8a62bc6f9dfc",
         "name": "Cat\u00e1logo",
         "path": "\/catalog\/{cSlug?}\/{scSlug?}",
-        "pseudo_path": "\/catalogo\/",
+        "pseudo_path": "\/catalog",
         "extends_base": true,
         "using": {
-            "cSlug": "Category",
-            "scSlug": "Subcategory"
+            "cSlug": [],
+            "scSlug": []
         }
     },
     {
         "id": "f9cfede5-dae6-43ae-8989-f02967d7d513",
         "name": "Detalle del producto",
-        "path": "\/product\/{cSlug}",
-        "extends_base": false
+        "path": "\/product\/{slug?}",
+        "extends_base": true,
+        "pseudo_path": "\/product",
+        "using": {
+            "slug": []
+        }
     },
     {
         "id": "8e5634df-4d70-4693-b10d-ebad46012bd0",

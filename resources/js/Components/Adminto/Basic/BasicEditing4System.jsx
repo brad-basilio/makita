@@ -3,6 +3,7 @@ import SystemRest from "../../../Actions/Admin/SystemRest"
 import Tippy from "@tippyjs/react"
 import SwitchFormGroup from "../form/SwitchFormGroup"
 import RouteParams from "../../../Utils/RouteParams"
+import TrimEnd from "../../../Utils/TrimEnd"
 
 const systemRest = new SystemRest()
 
@@ -27,10 +28,25 @@ const BasicEditing4System = (page) => {
 
   const onPathChange = async (e) => {
     if (path === e.target.value) return setPathEditing(false)
+
+    const newPath = e.target.value
+    let path2check = structuredClone(newPath);
+    const using = page.using ?? { model: null, field: null, with: [] }
+    RouteParams(newPath).forEach(param => {
+      path2check = path2check
+        .replace(`{${param}}`, '')
+        .replace(`{${param}?}`, '')
+      using[param] = using[param] ?? {}
+    })
+    const pseudo = TrimEnd(path2check, '/')
+
     const result = systemRest.savePage({
       id,
-      path: e.target.value
+      path: newPath,
+      pseudo_path: pseudo,
+      using: Object.keys(using).length > 0 ? using : undefined
     })
+
     if (!result) return
     setPathEditing(false)
     setPages(old => old.map(page => page.id === id ? { ...page, path: e.target.value } : page))

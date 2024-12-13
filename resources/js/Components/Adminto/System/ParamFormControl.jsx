@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react"
 import SelectFormGroup from "../../form/SelectFormGroup"
 
-const ParamFormControl = ({ param, models }) => {
+const ParamFormControl = ({ page, param, models, setUsing }) => {
 
   const modelRef = useRef()
   const fieldRef = useRef()
@@ -20,7 +20,14 @@ const ParamFormControl = ({ param, models }) => {
   }, [param])
 
   useEffect(() => {
-    $(withRef.current).trigger('change');
+    setUsing(old => ({
+      ...old, [param]: {
+        ...old[param],
+        model: selected?.name ?? null
+      }
+    }))
+    $(fieldRef.current).val(null).trigger('change');
+    $(withRef.current).val(null).trigger('change');
   }, [selected])
 
   const container = `${param}-container`
@@ -31,13 +38,28 @@ const ParamFormControl = ({ param, models }) => {
         return <option key={index}>{model.name}</option>
       })}
     </SelectFormGroup>
-    <SelectFormGroup eRef={fieldRef} label='Campo' col='col-md-6' dropdownParent={`#${container}`}>
+    <SelectFormGroup eRef={fieldRef} label='Campo' col='col-md-6' dropdownParent={`#${container}`} onChange={e => {
+      setUsing(old => ({
+        ...old, [param]: {
+          ...old[param],
+          field: e.target.value
+        }
+      }))
+    }}>
       {selected?.fields?.map((field, index) => {
         return <option key={index}>{field}</option>
       })}
     </SelectFormGroup>
     <div hidden={(selected?.relations?.length ?? 0) == 0}>
-      <SelectFormGroup eRef={withRef} label='Relaciones' multiple dropdownParent={`#${container}`} >
+      <SelectFormGroup eRef={withRef} label='Relaciones' multiple dropdownParent={`#${container}`} onChange={e => {
+        const relations = $(e.target).val()
+        setUsing(old => ({
+          ...old, [param]: {
+            ...old[param],
+            relations
+          }
+        }))
+      }}>
         {
           selected?.relations?.map((rel, index) => {
             return <option key={index}>{rel}</option>

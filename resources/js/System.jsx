@@ -18,7 +18,9 @@ import ItemsRest from './Actions/ItemsRest';
 
 const itemsRest = new ItemsRest();
 
-const System = ({ page, pages, systems, socials = [], sliders = [], categories = [], systemItems = {} }) => {
+const System = ({ page, pages, params, systems, socials = [], systemItems = {} }) => {
+
+  console.log(params)
 
   const getItems = (itemsId) => {
     return systemItems[itemsId] ?? []
@@ -58,7 +60,7 @@ const System = ({ page, pages, systems, socials = [], sliders = [], categories =
           </div>
         } else if (page.extends_base) {
           const contentSystems = SortByAfterField(systems).filter(x => Boolean(x.page_id))
-          return contentSystems.map(getSystem)
+          return contentSystems.map(content => getSystem(content))
         }
         break
       case 'product':
@@ -82,7 +84,7 @@ const System = ({ page, pages, systems, socials = [], sliders = [], categories =
 
   return (
     <main className='text-textPrimary'>
-      {systemsSorted.map(getSystem)}
+      {systemsSorted.map((system) => getSystem(system))}
     </main>
   );
 };

@@ -32,10 +32,15 @@ class SystemController extends BasicController
             return $props;
         }
 
-        $page = collect($pages)->firstWhere('path', $path);
+        $page = collect($pages)->filter(function ($item) use ($path) {
+            $path2check = $item['pseudo_path'] ?? $item['path'];
+            return strpos($path, $path2check ) === 0; // Filtra las páginas que comienzan con el path
+        })->sortByDesc(function ($item) {
+            return strlen($item['pseudo_path'] ?? $item['path']);
+        })->first();
 
         if (!$page) {
-            abort(404);
+            abort(403);
         }
 
         $page['using'] = $page['using'] ?? [];
@@ -84,6 +89,7 @@ class SystemController extends BasicController
         }
 
         $props['systems'] = $systems;
+        $props['params'] = $request->route() ? $request->route()->parameters() : [];
         return $props;
     }
 }

@@ -26,7 +26,7 @@ const HeaderSimple = ({ data, cart, setCart }) => {
             <i className="mdi mdi-account-outline text-4xl"></i>
           </button>
           <button className="relative" onClick={() => setModalOpen(true)}>
-            <span className="flex items-center justify-center absolute w-max px-1 h-4 right-0 top-0 bg-primary text-xs text-white rounded-full">
+            <span className="flex items-center justify-center absolute w-max px-1 h-4 min-w-4 right-0 top-0 bg-primary text-xs text-white rounded-full">
               <span>{totalCount}</span>
             </span>
             <i className="mdi mdi-cart-outline text-4xl"></i>
