@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 class BrandController extends BasicController
 {
-    public $table = Brand::class;
+    public $model = Brand::class;
     public $reactView = 'Admin/Brands';
     public $imageFields = ['image'];
 }
