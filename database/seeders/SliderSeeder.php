@@ -13,32 +13,13 @@ class SliderSeeder extends Seeder
      */
     public function run(): void
     {
-        $sliders = [
-            [
-                'name' => 'Cursos y Talleres',
-                'description' => 'Explora nuestros cursos y talleres especializados en coaching.',
-                'bg_image' => 'https://example.com/bg_courses.jpg', // Imagen de fondo para Cursos y Talleres
-                'button_text' => 'Ver Cursos',
-                'link' => 'https://tupagina.com/cursos',
-            ],
-            [
-                'name' => 'Noticias y Actualizaciones',
-                'description' => 'Mantente informado con las últimas noticias y eventos en el mundo del coaching.',
-                'bg_image' => 'https://example.com/bg_news.jpg', // Imagen de fondo para Noticias
-                'button_text' => 'Ver Noticias',
-                'link' => 'https://tupagina.com/noticias',
-            ]
-        ];
-
-        foreach ($sliders as $slider) {
-            Slider::updateOrCreate(
-                ['name' => $slider['name']],
+        for ($i = 1; $i <= 4; $i++) {
+            Slider::create(
                 [
-                    'name' => $slider['name'],
-                    'description' => $slider['description'],
-                    'bg_image' => $slider['bg_image'],
-                    'button_text' => $slider['button_text'],
-                    'button_link' => $slider['link'],
+                    'name' => 'Título de slider ' . $i,
+                    'description' => 'Una breve descripción de mi slider ' . $i . ', y algo mas de texto',
+                    'button_text' => 'Botón dummy',
+                    'button_link' => '/',
                     'visible' => true,
                     'status' => true,
                 ]

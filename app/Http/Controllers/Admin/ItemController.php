@@ -13,7 +13,7 @@ use SoDe\Extend\JSON;
 class ItemController extends BasicController
 {
     public $model = Item::class;
-    public $reactView = 'Admin/Courses';
+    public $reactView = 'Admin/Items';
     public $imageFields = ['image'];
     public $prefix4filter = 'items';
 
@@ -32,7 +32,7 @@ class ItemController extends BasicController
     public function setPaginationInstance(string $model)
     {
         return $model::select(['items.*'])
-            ->with(['category'])
+            ->with(['category', 'subcategory', 'brand'])
             ->leftJoin('categories AS category', 'category.id', 'items.category_id');
     }
 }

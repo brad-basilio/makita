@@ -66,6 +66,12 @@ const Categories = () => {
     $(modalRef.current).modal('hide')
   }
 
+  const onFeaturedChange = async ({ id, value }) => {
+    const result = await categoriesRest.boolean({ id, field: 'featured', value })
+    if (!result) return
+    $(gridRef.current).dxDataGrid('instance').refresh()
+  }
+
   const onVisibleChange = async ({ id, value }) => {
     const result = await categoriesRest.boolean({ id, field: 'visible', value })
     if (!result) return
@@ -131,6 +137,18 @@ const Categories = () => {
           allowFiltering: false,
           cellTemplate: (container, { data }) => {
             ReactAppend(container, <img src={`/api/categories/media/${data.image}`} style={{ width: '80px', height: '48px', objectFit: 'cover', objectPosition: 'center', borderRadius: '4px' }} onError={e => e.target.src = '/api/cover/thumbnail/null'} />)
+          }
+        },
+        {
+          dataField: 'featured',
+          caption: 'Destacado',
+          dataType: 'boolean',
+          cellTemplate: (container, { data }) => {
+            $(container).empty()
+            ReactAppend(container, <SwitchFormGroup checked={data.featured == 1} onChange={() => onFeaturedChange({
+              id: data.id,
+              value: !data.featured
+            })} />)
           }
         },
         {

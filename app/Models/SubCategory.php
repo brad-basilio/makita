@@ -20,6 +20,7 @@ class SubCategory extends Model
         'name',
         'description',
         'image',
+        'featured',
         'visible',
         'status',
     ];

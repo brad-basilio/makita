@@ -20,16 +20,11 @@ use App\Http\Controllers\Admin\ItemController as AdminItemController;
 use App\Http\Controllers\Admin\GalleryController as AdminGalleryController;
 use App\Http\Controllers\Admin\SystemController as AdminSystemController;
 use App\Http\Controllers\Admin\TagController as AdminTagController;
+use App\Http\Controllers\Admin\BrandController as AdminBrandController;
+use App\Http\Controllers\Admin\SubCategoryController as AdminSubCategoryController;
 
 // Public 
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\AboutController;
-use App\Http\Controllers\ArticleController;
-use App\Http\Controllers\BlogController;
-use App\Http\Controllers\ContactController;
-use App\Http\Controllers\ItemController;
-use App\Http\Controllers\ItemDetailController;
 use App\Http\Controllers\SystemController;
 use SoDe\Extend\File;
 
@@ -59,7 +54,11 @@ Route::middleware(['can:Admin', 'auth'])->prefix('admin')->group(function () {
     Route::get('/', fn() => redirect('Admin/Home.jsx'));
     Route::get('/home', [AdminHomeController::class, 'reactView'])->name('Admin/Home.jsx');
     Route::get('/posts', [AdminPostController::class, 'reactView'])->name('Admin/Posts.jsx');
-    Route::get('/courses', [AdminItemController::class, 'reactView'])->name('Admin/Courses.jsx');
+    Route::get('/items', [AdminItemController::class, 'reactView'])->name('Admin/Items.jsx');
+    Route::get('/categories', [AdminCategoryController::class, 'reactView'])->name('Admin/Categories.jsx');
+    Route::get('/subcategories', [AdminSubCategoryController::class, 'reactView'])->name('Admin/SubCategories.jsx');
+    Route::get('/brands', [AdminBrandController::class, 'reactView'])->name('Admin/Brands.jsx');
+    Route::get('/tags', [AdminTagController::class, 'reactView'])->name('Admin/Tags.jsx');
     Route::get('/messages', [AdminSubscriptionController::class, 'reactView'])->name('Admin/Messages.jsx');
     Route::get('/subscriptions', [AdminSubscriptionController::class, 'reactView'])->name('Admin/Subscriptions.jsx');
 
@@ -67,8 +66,6 @@ Route::middleware(['can:Admin', 'auth'])->prefix('admin')->group(function () {
     Route::get('/indicators', [AdminIndicatorController::class, 'reactView'])->name('Admin/Indicators.jsx');
     Route::get('/sliders', [AdminSliderController::class, 'reactView'])->name('Admin/Sliders.jsx');
     Route::get('/testimonies', [AdminTestimonyController::class, 'reactView'])->name('Admin/Testimonies.jsx');
-    Route::get('/categories', [AdminCategoryController::class, 'reactView'])->name('Admin/Categories.jsx');
-    Route::get('/tags', [AdminTagController::class, 'reactView'])->name('Admin/Tags.jsx');
     Route::get('/socials', [AdminSocialController::class, 'reactView'])->name('Admin/Socials.jsx');
     Route::get('/strengths', [AdminStrengthController::class, 'reactView'])->name('Admin/Strengths.jsx');
     Route::get('/generals', [AdminGeneralController::class, 'reactView'])->name('Admin/Generals.jsx');

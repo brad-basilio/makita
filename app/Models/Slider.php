@@ -17,6 +17,7 @@ class Slider extends Model
         'name',
         'description',
         'bg_image',
+        'image',
         'button_text',
         'button_link',
         'visible',

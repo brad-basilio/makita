@@ -18,6 +18,7 @@ class Category extends Model
         'name',
         'description',
         'image',
+        'featured',
         'visible',
         'status',
     ];

@@ -16,6 +16,8 @@ class Item extends Model
     protected $fillable = [
         'slug',
         'category_id',
+        'subcategory_id',
+        'brand_id',
         'name',
         'summary',
         'description',
@@ -32,6 +34,9 @@ class Item extends Model
         'requirements',
         'objectives',
         'content',
+        "is_new",
+        "offering",
+        "recommended",
         'featured',
         'visible',
         'status',
@@ -40,5 +45,15 @@ class Item extends Model
     public function category()
     {
         return $this->hasOne(Category::class, 'id', 'category_id');
+    }
+
+    public function subcategory()
+    {
+        return $this->hasOne(SubCategory::class, 'id', 'subcategory_id');
+    }
+
+    public function brand()
+    {
+        return $this->hasOne(Brand::class, 'id', 'brand_id');
     }
 }

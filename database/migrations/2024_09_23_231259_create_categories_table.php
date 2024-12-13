@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->longText('description')->nullable();
             $table->string('image')->nullable();
+            $table->boolean('featured')->default(false);
             $table->boolean('visible')->default(true);
             $table->boolean('status')->default(true)->nullable();
             $table->timestamps();

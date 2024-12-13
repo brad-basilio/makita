@@ -23,13 +23,14 @@ const ImageFormGroup = ({ id, col, label, eRef, required = false, onChange = () 
       {label} {required && <b className="text-danger">*</b>}
     </label>
     <label htmlFor={id} style={{width: '100%'}}>
-      <img ref={imageRef} className="d-block" src="" alt="aspect-video" onError={e => e.target.src = '/api/cover/thumbnail/null'} style={{
+      <img ref={imageRef} className="d-block border" src="" alt="aspect-video" onError={e => e.target.src = '/api/cover/thumbnail/null'} style={{
         width: '100%',
         borderRadius: '4px',
         cursor: 'pointer',
         aspectRatio: aspect,
         objectFit: 'cover',
-        objectPosition: 'center'
+        objectPosition: 'center',
+        boxShadow: '2.5px 2.5px 5px rgba(0,0,0,.125)'
       }} />
     </label>
     <input ref={eRef} id={id} type="file" src="" alt="" hidden accept="image/*" onChange={onImageChange} />

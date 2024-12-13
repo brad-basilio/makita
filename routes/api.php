@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
 use App\Http\Controllers\Admin\AccountController as AdminAccountController;
 use App\Http\Controllers\Admin\GalleryController as AdminGalleryController;
 use App\Http\Controllers\Admin\ItemController as AdminItemController;
+use App\Http\Controllers\Admin\SubCategoryController as AdminSubCategoryController;
 use App\Http\Controllers\Admin\SystemController as AdminSystemController;
 use App\Http\Controllers\Admin\TagController as AdminTagController;
 use App\Http\Controllers\Admin\WebDetailController as AdminWebDetailController;
@@ -30,6 +31,7 @@ use App\Http\Controllers\CoverController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\SubscriptionController;
 
 /*
@@ -47,9 +49,10 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/signup', [AuthController::class, 'signup']);
 Route::get('/sliders/media/{uuid}', [AdminSliderController::class, 'media']);
 Route::get('/categories/media/{uuid}', [AdminCategoryController::class, 'media']);
+Route::get('/subcategories/media/{uuid}', [AdminSubCategoryController::class, 'media']);
 Route::get('/testimonies/media/{uuid}', [AdminTestimonyController::class, 'media']);
 Route::get('/posts/media/{uuid}', [AdminPostController::class, 'media']);
-Route::get('/courses/media/{uuid}', [AdminItemController::class, 'media']);
+Route::get('/items/media/{uuid}', [AdminItemController::class, 'media']);
 
 Route::post('/posts/paginate', [PostController::class, 'paginate']);
 Route::post('/courses/paginate', [ItemController::class, 'paginate']);
@@ -61,6 +64,8 @@ Route::get('/cover/{uuid}', [CoverController::class, 'full']);
 Route::get('/cover/thumbnail/{uuid}', [CoverController::class, 'thumbnail']);
 Route::get('/mailing/notify', [BlogController::class, 'notifyToday']);
 Route::delete('/mailing/down/{id}', [SubscriptionController::class, 'delete'])->name('mailing.down');
+
+Route::post('/items/verify-stock', [ItemController::class, 'verifyStock']);
 
 Route::middleware('auth')->group(function () {
   Route::delete('logout', [AuthController::class, 'destroy'])
@@ -77,11 +82,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/web-details', [AdminWebDetailController::class, 'save']);
     Route::post('/gallery', [AdminGalleryController::class, 'save']);
 
-    Route::post('/courses', [AdminItemController::class, 'save']);
-    Route::post('/courses/paginate', [AdminItemController::class, 'paginate']);
-    Route::patch('/courses/status', [AdminItemController::class, 'status']);
-    Route::patch('/courses/{field}', [AdminItemController::class, 'boolean']);
-    Route::delete('/courses/{id}', [AdminItemController::class, 'delete']);
+    Route::post('/items', [AdminItemController::class, 'save']);
+    Route::post('/items/paginate', [AdminItemController::class, 'paginate']);
+    Route::patch('/items/status', [AdminItemController::class, 'status']);
+    Route::patch('/items/{field}', [AdminItemController::class, 'boolean']);
+    Route::delete('/items/{id}', [AdminItemController::class, 'delete']);
 
     Route::post('/messages', [AdminMessageController::class, 'save']);
     Route::post('/messages/paginate', [AdminMessageController::class, 'paginate']);
@@ -123,6 +128,12 @@ Route::middleware('auth')->group(function () {
     Route::patch('/categories/{field}', [AdminCategoryController::class, 'boolean']);
     Route::delete('/categories/{id}', [AdminCategoryController::class, 'delete']);
 
+    Route::post('/subcategories', [AdminSubCategoryController::class, 'save']);
+    Route::post('/subcategories/paginate', [AdminSubCategoryController::class, 'paginate']);
+    Route::patch('/subcategories/status', [AdminSubCategoryController::class, 'status']);
+    Route::patch('/subcategories/{field}', [AdminSubCategoryController::class, 'boolean']);
+    Route::delete('/subcategories/{id}', [AdminSubCategoryController::class, 'delete']);
+
     Route::post('/tags', [AdminTagController::class, 'save']);
     Route::post('/tags/paginate', [AdminTagController::class, 'paginate']);
     Route::patch('/tags/status', [AdminTagController::class, 'status']);
@@ -148,8 +159,8 @@ Route::middleware('auth')->group(function () {
       Route::patch('/system/order', [AdminSystemController::class, 'updateOrder']);
       Route::delete('/system/{id}', [AdminSystemController::class, 'delete']);
 
-      Route::get('/system/backup', [AdminSystemController::class, 'export']);
-      Route::put('/system/backup', [AdminSystemController::class, 'import']);
+      Route::get('/system/backup', [AdminSystemController::class, 'exportBK']);
+      Route::post('/system/backup', [AdminSystemController::class, 'importBK']);
     });
 
     Route::post('/generals', [AdminGeneralController::class, 'save']);

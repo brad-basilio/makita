@@ -1,4 +1,4 @@
-import { Fetch, Notify } from "sode-extend-react";
+import { Cookies, Fetch, Notify } from "sode-extend-react";
 import BasicRest from "../BasicRest";
 
 class SystemRest extends BasicRest {
@@ -57,6 +57,45 @@ class SystemRest extends BasicRest {
         type: 'danger'
       })
       return false
+    }
+  }
+
+  exportBK = async () => {
+    try {
+      const { status, result } = await Fetch(`/api/${this.path}/backup`)
+      if (!status) throw new Error(result?.message || 'Ocurrio un error inesperado')
+      return result;
+    } catch (error) {
+      Notify.add({
+        icon: '/assets/img/icon.svg',
+        title: 'Error',
+        body: error.message,
+        type: 'danger'
+      })
+      return null
+    }
+  }
+
+  importBK = async (request) => {
+    try {
+      const res = await fetch(`/api/${this.path}/backup`, {
+        method: 'POST',
+        headers: {
+          'X-Xsrf-Token': decodeURIComponent(Cookies.get('XSRF-TOKEN'))
+        },
+        body: request
+      })
+      const result = JSON.parseable(await res.text())
+      if (!res.ok) throw new Error(result?.message || 'Ocurrio un error inesperado')
+      return result ?? true;
+    } catch (error) {
+      Notify.add({
+        icon: '/assets/img/icon.svg',
+        title: 'Error',
+        body: error.message,
+        type: 'danger'
+      })
+      return null
     }
   }
 }

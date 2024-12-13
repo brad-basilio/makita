@@ -30,7 +30,8 @@
       {
         "id": "HeaderSearch",
         "name": "Con barra de búsqueda",
-        "image": "header-with-search.png"
+        "image": "header-with-search.png",
+        "data": ["class", "link_cart"]
       },
       {
         "id": "HeaderWithMegaMenu",
@@ -127,12 +128,15 @@
         "data": [
           "path",
           "title",
-          "description"
+          "description",
+          "link_catalog"
         ],
         "using": {
           "model": "Category",
           "limit": 10,
-          "filters": ["featured"]
+          "filters": [
+            "featured"
+          ]
         }
       }
     ]
@@ -146,13 +150,23 @@
         "name": "Carousel",
         "image": "products-carousel.png",
         "data": [
+          "path",
           "title",
-          "description"
+          "description",
+          "link_catalog"
         ],
         "using": {
           "model": "Item",
           "filters": [
-            "featured"
+            "featured",
+            "recommended",
+            "offering",
+            "is_new"
+          ],
+          "with": [
+            "category",
+            "subcategory",
+            "brand"
           ],
           "limit": 10
         }
@@ -192,18 +206,72 @@
     ]
   },
   {
+    "id": "step",
+    "name": "Steps",
+    "options": [
+      {
+        "id": "StepSimple",
+        "name": "Simple",
+        "data": [
+          "steps",
+          "selected"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "cart",
+    "name": "Cart",
+    "options": [
+      {
+        "id": "CartSimple",
+        "name": "Simple",
+        "data": [
+          "url_catalog",
+          "url_checkout"
+        ]
+      }
+    ]
+  },
+  {
     "id": "footer",
     "name": "Footer",
     "options": [
       {
         "id": "FooterCallToAction",
         "name": "Llamada a la acción",
-        "image": "footer-call-to-action.png"
+        "image": "footer-call-to-action.png",
+        "data": [
+          "summary"
+        ],
+        "using": {
+          "model": "Social",
+          "limit": 10
+        }
       },
       {
         "id": "FooterSocials",
         "name": "Con redes sociales",
-        "image": "footer-socials.png"
+        "image": "footer-socials.png",
+        "data": [
+          "summary"
+        ],
+        "using": {
+          "model": "Social",
+          "limit": 10
+        }
+      },
+      {
+        "id": "FooterSimpleCallToAction",
+        "name": "Llamada a la acción simple",
+        "image": "footer-call-to-action-simple.png",
+        "data": [
+          "summary"
+        ],
+        "using": {
+          "model": "Social",
+          "limit": 10
+        }
       }
     ]
   }

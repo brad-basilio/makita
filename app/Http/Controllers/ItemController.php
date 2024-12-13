@@ -7,6 +7,7 @@ use App\Models\Item;
 use App\Models\WebDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use SoDe\Extend\Response;
 
 class ItemController extends BasicController
 {
@@ -43,5 +44,15 @@ class ItemController extends BasicController
             ->where('items.visible', true)
             ->where('category.status', true)
             ->where('category.visible', true);
+    }
+
+    public function verifyStock(Request $request)
+    {
+        $response = Response::simpleTryCatch(function () use ($request) {
+            return Item::select(['id', 'price', 'discount', 'name'])
+                ->whereIn('id', $request->all())
+                ->get();
+        });
+        return response($response->toArray(), $response->status);
     }
 }

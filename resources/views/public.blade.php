@@ -62,6 +62,21 @@
   <script src="/lte/assets/libs/moment/moment-timezone.js"></script>
   <script src="/lte/assets/libs/moment/locale/es.js"></script>
   <script src="/lte/assets/libs/quill/quill.min.js"></script>
+  <script>
+    document.addEventListener('click', function(event) {
+      const target = event.target;
+
+      if (target.tagName === 'BUTTON' && target.hasAttribute('href')) {
+        const href = target.getAttribute('href');
+
+        if (target.getAttribute('target') === '_blank') {
+          window.open(href, '_blank');
+        } else {
+          window.location.href = href;
+        }
+      }
+    });
+  </script>
 </body>
 
 </html>

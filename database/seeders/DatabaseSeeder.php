@@ -20,6 +20,8 @@ class DatabaseSeeder extends Seeder
             AboutusSeeder::class,
             TestimonySeeder::class,
             CategorySeeder::class,
+            SubCategorySeeder::class,
+            BrandSeeder::class,
             StrengthSeeder::class,
             SocialSeeder::class,
             GeneralSeeder::class,

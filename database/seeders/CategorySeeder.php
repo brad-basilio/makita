@@ -14,17 +14,12 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        $categories = [
-            'Crecimiento Personal',
-            'Desarrollo Profesional',
-            'Transformación Integral',
-        ];
-
-        foreach ($categories as $category) {
-            Category::updateOrCreate([
-                'name' => $category
-            ], [
-                'slug' => Str::slug($category)
+        for ($i=1; $i <= 6; $i++) { 
+            $name = 'Categoría ' . $i;
+            Category::create([
+                'name' => 'Categoría ' . $i,
+                'slug' => Str::slug($name),
+                'featured' => true
             ]);
         }
     }

@@ -12,7 +12,7 @@ class SliderController extends BasicController
 {
     public $model = Slider::class;
     public $reactView = 'Admin/Sliders';
-    public $imageFields = ['bg_image'];
+    public $imageFields = ['bg_image', 'image'];
 
     public function setReactViewProperties(Request $request)
     {

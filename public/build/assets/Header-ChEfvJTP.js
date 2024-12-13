@@ -1,2 +1,0 @@
-const __vite__fileDeps=["assets/HeaderContact-BYryRIfs.js","assets/AboutHeader-CpM0iYLI.js","assets/index-B80Lgev0.js","assets/tippy-react.esm-CHhA99mn.js","assets/index-DO3Aws4m.js","assets/HeaderSearch-B3RIc_RP.js"],__vite__mapDeps=i=>i.map(i=>__vite__fileDeps[i]);
-import{_}from"./preload-helper-CZZ3Qsu7.js";import"./AboutHeader-CpM0iYLI.js";import{R as o}from"./index-B80Lgev0.js";o.lazy(()=>_(()=>import("./HeaderContact-BYryRIfs.js"),__vite__mapDeps([0,1,2,3,4])));o.lazy(()=>_(()=>import("./HeaderSearch-B3RIc_RP.js"),__vite__mapDeps([5,1,2])));

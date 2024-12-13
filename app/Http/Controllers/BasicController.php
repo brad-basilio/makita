@@ -95,6 +95,7 @@ class BasicController extends Controller
         'APP_NAME' => env('APP_NAME', 'Trasciende'),
         'APP_URL' => env('APP_URL'),
         'APP_DOMAIN' => env('APP_DOMAIN'),
+        'APP_CORRELATIVE' => env('APP_CORRELATIVE'),
         'APP_PROTOCOL' => env('APP_PROTOCOL', 'https'),
         'GMAPS_API_KEY' => env('GMAPS_API_KEY')
       ],
@@ -121,7 +122,10 @@ class BasicController extends Controller
       if ($request->group != null) {
         [$grouping] = $request->group;
         $selector = $grouping['selector'];
-        $instance = $this->model::select([
+        if ($this->prefix4filter && !str_contains($selector, '.')) {
+          $selector = $this->prefix4filter . '.' . $selector;
+        }
+        $instance = $instance->select([
           DB::raw("{$selector} AS 'key'")
         ])
           ->groupBy($selector);

@@ -151,7 +151,7 @@ class SystemController extends BasicController
     {
         $backup = [
             'pages' => JSON::parse(File::get(storage_path('app/pages.json'))),
-            'components' => $this->model::with([])->all()
+            'components' => System::with([])->get()
         ];
         return $backup;
     }
@@ -160,10 +160,18 @@ class SystemController extends BasicController
     {
         $response = Response::simpleTryCatch(function () use ($request) {
             DB::transaction(function () use ($request) {
-                $this->model::whereNotNull('id')->delete();
+                $backupData = $request->file('backup')->get();
+                $data = JSON::parse($backupData);
 
-                foreach ($request->all() as $data) {
-                    $this->model::create($data);
+                if (isset($data['pages'])) {
+                    File::save(storage_path('app/pages.json'), JSON::stringify($data['pages'], true));
+                }
+
+                $this->model::whereNotNull('id')->delete();
+                if (isset($data['components'])) {
+                    foreach ($data['components'] as $component) {
+                        $this->model::create($component);
+                    }
                 }
             });
         });

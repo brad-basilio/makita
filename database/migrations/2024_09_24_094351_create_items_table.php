@@ -14,29 +14,23 @@ return new class extends Migration
     {
         Schema::create('items', function (Blueprint $table) {
             $table->uuid('id')->default(DB::raw('(UUID())'))->primary();
+            $table->string('slug');
             $table->string('name');
             $table->longText('summary')->nullable();
             $table->longText('description')->nullable();
-            $table->integer('sessions')->nullable();
-            $table->string('type')->default('Presencial');
-            $table->string('certificate')->default('Físico y Virtual PDF');
-            $table->integer('session_duration')->nullable();
-            $table->integer('long_duration')->nullable();
             $table->decimal('price', 10, 2)->default(0.00);
             $table->decimal('discount', 10, 2)->default(0.00)->nullable();
-            $table->integer('students')->default(0);
             $table->string('image')->nullable();
-            $table->longText('audience')->nullable();
-            $table->longText('requirements')->nullable();
-            $table->longText('objectives')->nullable();
-            $table->longText('content')->nullable();
-            $table->char('category_id', 36)->nullable();
+            $table->foreignUuid('category_id')->nullable()->constrained('categories')->nullOnDelete();
+            $table->foreignUuid('subcategory_id')->nullable()->constrained('sub_categories')->nullOnDelete();
+            $table->foreignUuid('brand_id')->nullable()->constrained('brands')->nullOnDelete();
+            $table->boolean('is_new')->default(false);
+            $table->boolean('offering')->default(false);
+            $table->boolean('recommended')->default(false);
             $table->boolean('featured')->default(false);
             $table->boolean('visible')->default(true);
             $table->boolean('status')->default(true)->nullable();
             $table->timestamps();
-
-            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
         });
     }
 

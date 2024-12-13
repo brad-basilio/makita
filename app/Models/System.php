@@ -14,6 +14,7 @@ class System extends Model
     protected $keyType = 'string';
 
     protected $fillable = [
+        'id',
         'name',
         'description',
         'page_id',
