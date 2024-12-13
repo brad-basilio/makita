@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import BaseAdminto from '@Adminto/Base';
 import CreateReactScript from '../Utils/CreateReactScript';
-import Table from '../Components/Table';
+import Table from '../Components/Adminto/Table';
 import Modal from '../Components/Modal';
 import InputFormGroup from '../Components/Adminto/form/InputFormGroup';
 import ReactAppend from '../Utils/ReactAppend';
@@ -192,6 +192,8 @@ const Items = ({ icons, categories, details }) => {
           }
         });
       }}
+      exportable={true}
+      exportableName='Items'
       columns={[
         {
           dataField: 'id',
@@ -202,7 +204,7 @@ const Items = ({ icons, categories, details }) => {
           dataField: 'category.name',
           caption: 'Categoría',
           width: '120px',
-          cellTemplate: (container, {data}) => {
+          cellTemplate: (container, { data }) => {
             container.html(renderToString(<>
               <b>{data.category?.name}</b>
               <small className='text-muted'>{data.subcategory?.name}</small>
@@ -253,10 +255,10 @@ const Items = ({ icons, categories, details }) => {
           dataType: 'boolean',
           width: '80px',
           cellTemplate: (container, { data }) => {
-            ReactAppend(container, <SwitchFormGroup checked={data.is_new} onChange={(e) => onBooleanChange({ 
-              id: data.id, 
+            ReactAppend(container, <SwitchFormGroup checked={data.is_new} onChange={(e) => onBooleanChange({
+              id: data.id,
               field: 'is_new',
-              value: e.target.checked 
+              value: e.target.checked
             })} />)
           }
         },
@@ -279,10 +281,10 @@ const Items = ({ icons, categories, details }) => {
           dataType: 'boolean',
           width: '80px',
           cellTemplate: (container, { data }) => {
-            ReactAppend(container, <SwitchFormGroup checked={data.recommended} onChange={(e) => onBooleanChange({ 
-              id: data.id, 
+            ReactAppend(container, <SwitchFormGroup checked={data.recommended} onChange={(e) => onBooleanChange({
+              id: data.id,
               field: 'recommended',
-              value: e.target.checked 
+              value: e.target.checked
             })} />)
           }
         },
@@ -292,10 +294,10 @@ const Items = ({ icons, categories, details }) => {
           dataType: 'boolean',
           width: '80px',
           cellTemplate: (container, { data }) => {
-            ReactAppend(container, <SwitchFormGroup checked={data.featured} onChange={(e) => onBooleanChange({ 
-              id: data.id, 
+            ReactAppend(container, <SwitchFormGroup checked={data.featured} onChange={(e) => onBooleanChange({
+              id: data.id,
               field: 'featured',
-              value: e.target.checked 
+              value: e.target.checked
             })} />)
           }
         },
@@ -349,7 +351,7 @@ const Items = ({ icons, categories, details }) => {
           </div>
         </div>
       </div>
-      <hr className='my-2'/>
+      <hr className='my-2' />
       <div className="row" id='items-container'>
         <InputFormGroup eRef={certificateRef} label='Tipo certificado' col='col-md-6' placeholder='Físico y Virtual PDF' required />
         <InputFormGroup eRef={studentsRef} label='Estudiantes' type='number' col='col-md-2' required />
