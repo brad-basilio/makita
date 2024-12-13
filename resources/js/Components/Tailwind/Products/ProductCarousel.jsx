@@ -79,7 +79,7 @@ const ProductCarousel = ({ data, items, cart, setCart }) => {
             <img src={`/api/items/media/${item?.image}`} alt={item?.name} className="w-full h-full object-cover mb-4 aspect-square rounded-3xl shadow-lg" />
             {
               item?.category &&
-              <h3 className="text-lg line-clamp-1 h-8 mb-2">{item?.category?.name}</h3>
+              <h3 className="line-clamp-1 h-8">{item?.category?.name}</h3>
             }
             <h2 className="text-2xl line-clamp-1 font-bold mb-2">{item?.name}</h2>
             <p className="line-clamp-3 h-[72px] opacity-80 mb-4">{item?.description}</p>

@@ -20,7 +20,7 @@ import Number2Currency from '../Utils/Number2Currency';
 
 const itemsRest = new ItemsRest()
 
-const Items = ({ icons, categories, details }) => {
+const Items = ({ icons, categories }) => {
   const gridRef = useRef()
   const modalRef = useRef()
 
@@ -210,6 +210,11 @@ const Items = ({ icons, categories, details }) => {
               <small className='text-muted'>{data.subcategory?.name}</small>
             </>))
           }
+        },
+        {
+          dataField: 'subcategory.name',
+          caption: 'Subcategoría',
+          visible: false
         },
         {
           dataField: 'brand.name',

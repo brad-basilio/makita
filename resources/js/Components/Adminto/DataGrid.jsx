@@ -62,7 +62,8 @@ const DataGrid = ({ gridRef: dataGridRef, rest, columns, toolBar, masterDetail, 
               vertical: 'top',
               ...options.excelCell.alignment
             };
-          }
+          },
+          includeHiddenColumns: true
         }).then(function () {
           workbook.xlsx.writeBuffer().then(function (buffer) {
             saveAs(new Blob([buffer], { type: 'application/octet-stream' }), `${exportableName}.xlsx`);

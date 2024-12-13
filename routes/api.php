@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\StrengthController as AdminStrengthController;
 use App\Http\Controllers\Admin\GeneralController as AdminGeneralController;
 use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
 use App\Http\Controllers\Admin\AccountController as AdminAccountController;
+use App\Http\Controllers\Admin\BrandController as AdminBrandController;
 use App\Http\Controllers\Admin\GalleryController as AdminGalleryController;
 use App\Http\Controllers\Admin\ItemController as AdminItemController;
 use App\Http\Controllers\Admin\SubCategoryController as AdminSubCategoryController;
@@ -26,12 +27,10 @@ use App\Http\Controllers\Admin\WebDetailController as AdminWebDetailController;
 // Public
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BlogController;
-use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CoverController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PostController;
-use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\SubscriptionController;
 
 /*
@@ -50,6 +49,7 @@ Route::post('/signup', [AuthController::class, 'signup']);
 Route::get('/sliders/media/{uuid}', [AdminSliderController::class, 'media']);
 Route::get('/categories/media/{uuid}', [AdminCategoryController::class, 'media']);
 Route::get('/subcategories/media/{uuid}', [AdminSubCategoryController::class, 'media']);
+Route::get('/brands/media/{uuid}', [AdminBrandController::class, 'media']);
 Route::get('/testimonies/media/{uuid}', [AdminTestimonyController::class, 'media']);
 Route::get('/posts/media/{uuid}', [AdminPostController::class, 'media']);
 Route::get('/items/media/{uuid}', [AdminItemController::class, 'media']);
@@ -133,6 +133,12 @@ Route::middleware('auth')->group(function () {
     Route::patch('/subcategories/status', [AdminSubCategoryController::class, 'status']);
     Route::patch('/subcategories/{field}', [AdminSubCategoryController::class, 'boolean']);
     Route::delete('/subcategories/{id}', [AdminSubCategoryController::class, 'delete']);
+
+    Route::post('/brands', [AdminBrandController::class, 'save']);
+    Route::post('/brands/paginate', [AdminBrandController::class, 'paginate']);
+    Route::patch('/brands/status', [AdminBrandController::class, 'status']);
+    Route::patch('/brands/{field}', [AdminBrandController::class, 'boolean']);
+    Route::delete('/brands/{id}', [AdminBrandController::class, 'delete']);
 
     Route::post('/tags', [AdminTagController::class, 'save']);
     Route::post('/tags/paginate', [AdminTagController::class, 'paginate']);
