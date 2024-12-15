@@ -224,7 +224,7 @@ const Items = ({ icons, categories }) => {
         {
           dataField: 'name',
           caption: 'Nombre',
-          width: '40%',
+          width: '300px',
           cellTemplate: (container, { data }) => {
             container.html(renderToString(<>
               <b>{data.name}</b><br />
@@ -340,7 +340,6 @@ const Items = ({ icons, categories }) => {
     <Modal modalRef={modalRef} title={isEditing ? 'Editar curso' : 'Agregar curso'} onSubmit={onModalSubmit} size='lg'>
       <div className='row' id='principal-container'>
         <input ref={idRef} type='hidden' />
-        <ImageFormGroup eRef={imageRef} label='Imagen' col='col-md-6' aspect={1} />
         <div className="col-md-6">
           <SelectFormGroup eRef={categoryRef} label='Categoría' required dropdownParent='#principal-container' onChange={(e) => setSelectedCategory(e.target.value)}>
             {
@@ -355,93 +354,29 @@ const Items = ({ icons, categories }) => {
             <InputFormGroup eRef={discountRef} label='Descuento' type='number' col='col-sm-6' step='0.01' />
           </div>
         </div>
+        <div className='col-md-6'>
+          <div className='row'>
+            <ImageFormGroup eRef={imageRef} label='Banner' aspect={2 / 1} col='col-12' />
+            <ImageFormGroup eRef={imageRef} label='Imagen' aspect={1} col='col-6' />
+            <div className='col-6'>
+              <input id='input-item-gallery' type="file" multiple accept='image/' hidden />
+              <div className='d-flex justify-content-between items-center'>
+                <span className='form-label d-block mb-1' htmlFor="input-item-gallery">Galería</span>
+                <button className='btn btn-white rounded-pill btn-xs'>
+                  <i className='mdi mdi-plus'></i>
+                  Agregar
+                </button>
+              </div>
+              <div className='w-100 bg-primary' style={{aspectRatio: 1}}>
+
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <hr className='my-2' />
       <div className="row" id='items-container'>
-        <InputFormGroup eRef={certificateRef} label='Tipo certificado' col='col-md-6' placeholder='Físico y Virtual PDF' required />
-        <InputFormGroup eRef={studentsRef} label='Estudiantes' type='number' col='col-md-2' required />
-        <InputFormGroup eRef={longDurationRef} label='Duración total (días)' placeholder='30' col='col-md-4' />
-        <QuillFormGroup eRef={descriptionRef} label='Descripción' />
 
-
-
-        <div className="col-md-6 mb-3">
-          <label className="form-label">¿A quién va dirigido?</label>
-          {audience.map((item, index) => (
-            <div key={index} className="input-group mb-2">
-              <input
-                type="text"
-                className="form-control"
-                value={item}
-                onChange={(e) => handleArrayChange(index, e.target.value, setAudience)}
-              />
-              <button type="button" className="btn btn-outline-danger" onClick={() => handleArrayRemove(index, setAudience)}>
-                <i className='fa fa-trash'></i>
-              </button>
-            </div>
-          ))}
-          <button type="button" className="btn btn-outline-primary" onClick={() => handleArrayAdd(setAudience)}>Agregar Audiencia</button>
-        </div>
-
-        <div className="col-md-6 mb-3">
-          <label className="form-label">¿Cuáles son los requisitos?</label>
-          {requirements.map((item, index) => (
-            <div key={index} className="input-group mb-2">
-              <input
-                type="text"
-                className="form-control"
-                value={item}
-                onChange={(e) => handleArrayChange(index, e.target.value, setRequirements)}
-              />
-              <button type="button" className="btn btn-outline-danger" onClick={() => handleArrayRemove(index, setRequirements)}>
-                <i className='fa fa-trash'></i>
-              </button>
-            </div>
-          ))}
-          <button type="button" className="btn btn-outline-primary" onClick={() => handleArrayAdd(setRequirements)}>Agregar Requisito</button>
-        </div>
-
-        <div className="col-md-12 mb-3">
-          <label className="form-label">¿Qué aprenderas?</label>
-          {objectives.map((item, index) => (
-            <div key={index} className="input-group mb-2">
-              <input
-                type="text"
-                className="form-control"
-                value={item}
-                onChange={(e) => handleArrayChange(index, e.target.value, setObjectives)}
-              />
-              <button type="button" className="btn btn-outline-danger" onClick={() => handleArrayRemove(index, setObjectives)}>
-                <i className='fa fa-trash'></i>
-              </button>
-            </div>
-          ))}
-          <button type="button" className="btn btn-outline-primary" onClick={() => handleArrayAdd(setObjectives)}>Agregar Objetivo</button>
-        </div>
-
-        <div className="col-12 mb-3">
-          <label className="form-label">Contenido</label>
-          {content.map((item, index) => (
-            <div key={index} className="input-group mb-2" style={{ width: '100%' }}>
-              <SelectFormGroup className='input-group-text' dropdownParent='#items-container' onChange={(e) => handleContentChange(index, 'icon', e.target.value)} templateResult={iconTemplate} templateSelection={iconTemplate} noMargin>
-                {icons.map((icon, index) => {
-                  return <option key={index} value={icon.id}>{icon.value}</option>
-                })}
-              </SelectFormGroup>
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Texto"
-                value={item.text}
-                onChange={(e) => handleContentChange(index, 'text', e.target.value)}
-              />
-              <button type="button" className="btn btn-outline-danger input-group-text" onClick={() => handleContentRemove(index)}>
-                <i className='fa fa-trash'></i>
-              </button>
-            </div>
-          ))}
-          <button type="button" className="btn btn-outline-primary" onClick={handleContentAdd}>Agregar Contenido</button>
-        </div>
       </div>
     </Modal>
   </>

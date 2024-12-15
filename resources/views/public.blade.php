@@ -12,6 +12,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>{{ $data['name'] ?? 'Página' }} | {{ env('APP_NAME', 'Kaori') }}</title>
+
   <link rel="shortcut icon" href="/assets/img/icon.svg" type="image/svg+xml">
   @isset ($data['description'])
     <meta name="description" content="{{ $data['description'] }}">
@@ -19,6 +20,8 @@
   @isset ($data['keywords'])
     <meta name="keywords" content="{{ implode(', ', $data['keywords']) }}">
   @endisset
+
+  <meta name="author" content="Powered by Manuel Gamboa">
 
   <link href="/lte/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
   <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
