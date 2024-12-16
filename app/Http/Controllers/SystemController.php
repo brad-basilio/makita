@@ -27,8 +27,6 @@ class SystemController extends BasicController
             'params' => []
         ];
 
-        dump($path);
-
         if ($path === '/base-template') {
             $props['systems'] = System::whereNull('page_id')->get();
             $props['page'] = ['name' => 'Template base'];
