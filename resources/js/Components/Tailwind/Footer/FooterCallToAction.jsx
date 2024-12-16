@@ -9,7 +9,7 @@ import HtmlContent from "../../../Utils/HtmlContent";
 
 const subscriptionsRest = new SubscriptionsRest();
 
-const FooterCallToAction = ({ socials = [], summary = '', generals = [] }) => {
+const FooterCallToAction = ({ socials = [], summary = '', generals = [], pages = [] }) => {
 
   const emailRef = useRef()
 
@@ -81,12 +81,11 @@ const FooterCallToAction = ({ socials = [], summary = '', generals = [] }) => {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="flex flex-col gap-2">
-              
-              <a href="/">Inicio</a>
-              <a href="/courses">Cursos y Talleres</a>
-              <a href="/about">Nosotros</a>
-              <a href="/blog">Blog</a>
-              <a href="/contact">Contacto</a>
+              {
+                pages.filter(x => x.menuable).map((page, index) => {
+                  return <button href={page.pseudo_path || page.path}>{page.name}</button>
+                })
+              }
             </div>
             <div className="flex flex-col gap-4 text-sm">
               <div className="flex flex-col gap-2">
