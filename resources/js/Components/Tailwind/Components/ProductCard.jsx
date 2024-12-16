@@ -55,7 +55,7 @@ const ProductCard = ({ cart, item, setCart }) => {
       <h3 className="line-clamp-1 h-8">{item?.category?.name}</h3>
     }
     <h2 className="text-2xl w-full line-clamp-1 font-bold mb-2">{item?.name}</h2>
-    <p className="line-clamp-3 h-[72px] opacity-80 mb-4">{item?.description}</p>
+    <p className="line-clamp-3 h-[72px] opacity-80 mb-4">{item?.summary}</p>
     <div className="flex justify-between items-end">
       <div className="h-[52px] flex flex-col items-start justify-end">
         <span className="text-sm block opacity-80 line-through">{item?.discount > 0 ? <>S/. {Number2Currency(item?.price)}</> : ''}</span>
