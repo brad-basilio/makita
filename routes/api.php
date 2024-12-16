@@ -49,7 +49,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/signup', [AuthController::class, 'signup']);
 Route::get( '/banners/media/{uuid}', [AdminBannerController::class, 'media']);
 Route::get('/sliders/media/{uuid}', [AdminSliderController::class, 'media']);
-Route::get('/categories/media/{uuid}', [AdminBrandController::class, 'media']);
+Route::get('/categories/media/{uuid}', [AdminCategoryController::class, 'media']);
 Route::get('/subcategories/media/{uuid}', [AdminSubCategoryController::class, 'media']);
 Route::get('/brands/media/{uuid}', [AdminBrandController::class, 'media']);
 Route::get('/testimonies/media/{uuid}', [AdminTestimonyController::class, 'media']);
