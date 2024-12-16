@@ -46,7 +46,10 @@ const System = ({ page, pages, params, systems, socials = [], systemItems = {} }
       })
   }, [null])
 
-  const getSystem = ({ component, value, data, itemsId }) => {
+  const getSystem = ({ component, value, data, itemsId, visible }) => {
+    
+    if (visible == 0) return <></>
+
     switch (component) {
       case 'top_bar':
         return <TopBar which={value} socials={socials} data={data} />

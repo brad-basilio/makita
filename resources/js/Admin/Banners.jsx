@@ -11,6 +11,7 @@ import TextareaFormGroup from '@Adminto/form/TextareaFormGroup';
 import ImageFormGroup from '../Components/Adminto/form/ImageFormGroup';
 import BannersRest from '../Actions/Admin/BannersRest';
 import { renderToString } from 'react-dom/server';
+import SwitchFormGroup from '../Components/Adminto/form/SwitchFormGroup';
 
 const bannersRest = new BannersRest()
 
@@ -79,6 +80,12 @@ const Banners = ({ pages }) => {
     $(modalRef.current).modal('hide')
   }
 
+  const onVisibleChange = async ({ id, value }) => {
+    const result = await bannersRest.boolean({ id, field: 'visible', value })
+    if (!result) return
+    $(gridRef.current).dxDataGrid('instance').refresh()
+  }
+
   return (<>
     <Table gridRef={gridRef} title='Banners' rest={bannersRest}
       toolBar={(container) => {
@@ -137,6 +144,18 @@ const Banners = ({ pages }) => {
           allowFiltering: false,
           cellTemplate: (container, { data }) => {
             ReactAppend(container, <img src={`/api/banners/media/${data?.data?.image}`} style={{ width: '80px', height: '48px', objectFit: 'cover', objectPosition: 'center', borderRadius: '4px' }} onError={e => e.target.src = '/api/cover/thumbnail/null'} />)
+          }
+        },
+        {
+          dataField: 'visible',
+          caption: 'Visible',
+          dataType: 'boolean',
+          cellTemplate: (container, { data }) => {
+            $(container).empty()
+            ReactAppend(container, <SwitchFormGroup checked={data.visible == 1} onChange={() => onVisibleChange({
+              id: data.id,
+              value: !data.visible
+            })} />)
           }
         },
         {

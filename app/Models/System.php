@@ -22,7 +22,8 @@ class System extends Model
         'component',
         'value',
         'data',
-        'filters'
+        'filters',
+        'visible'
     ];
 
     protected $casts = [
