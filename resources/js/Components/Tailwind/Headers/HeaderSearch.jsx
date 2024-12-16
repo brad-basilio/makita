@@ -37,7 +37,7 @@ const HeaderSimple = ({ data, cart, setCart, pages }) => {
       <menu className="flex mx-auto p-4 gap-6 items-center justify-center font-bold">
         {
           pages.filter(x => x.menuable).map((page, index) => {
-            return <button href={page.pseudo_path || page.path}>{page.name}</button>
+            return <button href={page.pseudo_path || page.path} className="border-b-[3px] border-transparent hover:border-b-primary transition-all">{page.name}</button>
           })
         }
       </menu>

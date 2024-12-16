@@ -70,7 +70,7 @@ const FooterSimpleCallToAction = ({ socials = [], terms = {}, footerLinks = [], 
                   {
                     pages.filter(x => x.menuable).map((page, index) => {
                       return <li className="flex flex-row gap-2">
-                        <button href={page.pseudo_path || page.path}>{page.name}</button>
+                        <button className="border-b-[3px] border-transparent hover:border-b-white transition-all" href={page.pseudo_path || page.path}>{page.name}</button>
                       </li>
                     })
                   }
