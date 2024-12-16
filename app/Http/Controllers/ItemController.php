@@ -43,12 +43,37 @@ class ItemController extends BasicController
     public function setPaginationInstance(string $model)
     {
         return $model::select(['items.*'])
-            ->with(['category'])
+            ->with(['category', 'subcategory', 'brand', 'tags'])
             ->leftJoin('categories AS category', 'category.id', 'items.category_id')
+            ->leftJoin('sub_categories AS subcategory', 'subcategory.id', 'items.subcategory_id')
+            ->leftJoin('brands AS brand', 'brand.id', 'items.brand_id')
+            ->leftJoin('item_tags AS item_tag', 'item_tag.item_id', 'items.id')
             ->where('items.status', true)
             ->where('items.visible', true)
-            ->where('category.status', true)
-            ->where('category.visible', true);
+            ->where(function($query) {
+                $query->where('category.status', true)
+                      ->orWhereNull('category.id'); // Ignorar si es null
+            })
+            ->where(function($query) {
+                $query->where('category.visible', true)
+                      ->orWhereNull('category.id'); // Ignorar si es null
+            })
+            ->where(function($query) {
+                $query->where('subcategory.status', true)
+                      ->orWhereNull('subcategory.id'); // Ignorar si es null
+            })
+            ->where(function($query) {
+                $query->where('subcategory.visible', true)
+                      ->orWhereNull('subcategory.id'); // Ignorar si es null
+            })
+            ->where(function($query) {
+                $query->where('brand.status', true)
+                      ->orWhereNull('brand.id'); // Ignorar si es null
+            })
+            ->where(function($query) {
+                $query->where('brand.visible', true)
+                      ->orWhereNull('brand.id'); // Ignorar si es null
+            });
     }
 
     public function setPaginationSummary(Request $request, Builder $builder)

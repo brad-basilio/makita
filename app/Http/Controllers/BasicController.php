@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Classes\dxResponse;
 use App\Models\Aboutus;
 use App\Models\dxDataGrid;
-use App\Models\Faq;
 use App\Models\General;
 use App\Models\Slider;
 use App\Models\Social;

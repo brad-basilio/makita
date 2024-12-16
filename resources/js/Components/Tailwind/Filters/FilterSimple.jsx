@@ -7,7 +7,8 @@ import FilterPagination from "../../../Reutilizables/Pagination/FilterPagination
 
 const itemsRest = new ItemsRest()
 
-const FilterItem = ({ summary, keyName, field, title, onChange, filter }) => {
+const FilterItem = ({ summary, keyName, field, otherField, title, onChange, filter }) => {
+
   if ((summary[keyName] ?? []).length == 0) return
 
   const filtering = filter.find(x => x.field == field)
@@ -18,9 +19,9 @@ const FilterItem = ({ summary, keyName, field, title, onChange, filter }) => {
       <b className="mb-1 block">{title}</b>
       <div className="flex flex-wrap gap-x-2 gap-y-1">
         {summary[keyName]?.map((x, index) => {
-          const inFilter = filtering.values.includes(x.id)
+          const inFilter = filtering?.values?.includes(x.id)
           return <label key={index} className="cursor-pointer border rounded-lg py-1 px-2 text-sm">
-            <input className="me-1 cursor-pointer" type="checkbox" name={field} value={x.id} onChange={onChange} checked={inFilter} />
+            <input className="me-1 cursor-pointer" type="checkbox" name={field} value={x.id} other-field={otherField} other-field-value={x[otherField]} onChange={onChange} checked={inFilter} />
             <span>{x.name}</span>
           </label>
         })}
@@ -30,7 +31,7 @@ const FilterItem = ({ summary, keyName, field, title, onChange, filter }) => {
 }
 
 const FilterSimple = ({ data, cart, setCart }) => {
-  const filters = ['category_id', 'subcategory_id', 'brand_id']
+  const filters = ['category_id', 'subcategory_id', 'brand_id', 'item_tag.tag_id']
   const [filter, setFilter] = useState(filters.map(x => ({ field: x, values: [] })))
   const [items, setItems] = useState([])
   const [order, setOrder] = useState({ value: 'asc', label: <>Menor a mayor <i className="mdi mdi-arrow-up"></i></> })
@@ -50,6 +51,8 @@ const FilterSimple = ({ data, cart, setCart }) => {
     const field = target.name;
     const value = target.value
     const checked = target.checked
+    const otherField = target.getAttribute('other-field')
+    const otherFieldValue = target.getAttribute('other-field-value')
 
     setFilter(old => {
       return old.map(x => {
@@ -58,6 +61,12 @@ const FilterSimple = ({ data, cart, setCart }) => {
           else {
             x.values = x.values.filter(v => v != value)
           }
+        }
+        if (x.field == otherField) {
+          if (checked) x.values.push(otherFieldValue)
+          // else {
+          //   x.values = x.values.filter(v => v != otherFieldValue)
+          // }
         }
         return x
       })
@@ -84,7 +93,7 @@ const FilterSimple = ({ data, cart, setCart }) => {
       }]
     })
     if (!result.status) return
-    setItems(result.data)
+    setItems(result.data ?? [])
     setTotalCount(result.totalCount)
     setPages(Math.ceil(result.totalCount / 12))
     setSummary(result.summary)
@@ -111,8 +120,9 @@ const FilterSimple = ({ data, cart, setCart }) => {
           <div className="shadow-lg border h-max sticky top-4 p-4 rounded-3xl">
             <h3 className="text-lg font-bold">Filtros de items</h3>
             <FilterItem filter={filter} keyName='categories' title='Categoria' field='category_id' summary={summary} onChange={onFilterChange} />
-            <FilterItem filter={filter} keyName='subcategories' title='Subcategoria' field='subcategory_id' summary={summary} onChange={onFilterChange} />
+            <FilterItem filter={filter} keyName='subcategories' title='Subcategoria' field='subcategory_id' otherField='category_id' summary={summary} onChange={onFilterChange} />
             <FilterItem filter={filter} keyName='brands' title='Marca' field='brand_id' summary={summary} onChange={onFilterChange} />
+            <FilterItem filter={filter} keyName='tags' title='Tags' field='item_tag.tag_id' summary={summary} onChange={onFilterChange} />
             <hr className="my-2" />
             <div>
               <b className="mb-1 block">Ordenar precio</b>

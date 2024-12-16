@@ -35,6 +35,7 @@ const Items = ({ categories, brands }) => {
   const summaryRef = useRef()
   const priceRef = useRef()
   const discountRef = useRef()
+  const tagsRef = useRef()
   const bannerRef = useRef()
   const imageRef = useRef()
   const descriptionRef = useRef()
@@ -54,6 +55,8 @@ const Items = ({ categories, brands }) => {
     summaryRef.current.value = data?.summary || ''
     priceRef.current.value = data?.price || 0
     discountRef.current.value = data?.discount || 0
+
+    SetSelectValue(tagsRef.current, data?.tags ?? [], 'id', 'name')
 
     bannerRef.current.value = null
     imageRef.current.value = null
@@ -77,6 +80,7 @@ const Items = ({ categories, brands }) => {
       summary: summaryRef.current.value,
       price: priceRef.current.value,
       discount: discountRef.current.value,
+      tags: $(tagsRef.current).val(),
       description: descriptionRef.current.value,
     }
 
@@ -317,12 +321,13 @@ const Items = ({ categories, brands }) => {
             <InputFormGroup eRef={priceRef} label='Precio' type='number' col='col-sm-6' step='0.01' required />
             <InputFormGroup eRef={discountRef} label='Descuento' type='number' col='col-sm-6' step='0.01' />
           </div>
+          <SelectAPIFormGroup id='tags' eRef={tagsRef} searchAPI={'/api/admin/tags/paginate'} searchBy='name' label='Tags' dropdownParent='#principal-container' tags multiple />
         </div>
         <div className='col-md-6'>
           <div className='row'>
             <ImageFormGroup eRef={bannerRef} label='Banner' aspect={2 / 1} col='col-12' />
-            <ImageFormGroup eRef={imageRef} label='Imagen' aspect={1} col='col-6' />
-            <div className='col-6'>
+            <ImageFormGroup eRef={imageRef} label='Imagen' aspect={1} col='col-lg-6 col-md-12 col-sm-6' />
+            <div className='col-lg-6 col-md-12 col-sm-6'>
               <input id='input-item-gallery' type="file" multiple accept='image/' hidden />
               <div style={{ position: 'relative' }}>
                 <span className='form-label d-block mb-1' htmlFor="input-item-gallery">Galería</span>

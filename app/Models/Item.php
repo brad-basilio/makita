@@ -58,7 +58,7 @@ class Item extends Model
         $tableThrough = (new $through)->getTable();
         return $builder->reorder()
             ->join($tableThrough, $tableThrough . '.item_id', '=', 'items.id')
-            ->join($table, $table . '.id', $tableThrough . '.item_id')
+            ->join($table, $table . '.id', $tableThrough . '.tag_id')
             ->select($table . '.*')
             ->distinct()
             ->orderBy($table . '.name', 'ASC')
@@ -83,5 +83,9 @@ class Item extends Model
     public function brand()
     {
         return $this->hasOne(Brand::class, 'id', 'brand_id');
+    }
+
+    public function tags() {
+        return $this->belongsToMany(Tag::class, 'item_tags', 'item_id', 'tag_id');
     }
 }

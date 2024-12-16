@@ -40,8 +40,16 @@ const ProductCard = ({ cart, item, setCart }) => {
     </div>
   </div>
 
-  return <div className="w-full ">
+  return <div className="w-full relative">
     <img src={`/api/items/media/${item?.image}`} alt={item?.name} className="border w-full object-cover mb-4 aspect-square rounded-3xl shadow-lg" />
+    {
+      item?.tags &&
+      <div className="absolute top-2 left-2 flex flex-col gap-1 text-xs font-bold">
+        {item?.tags?.map((tag, index) => {
+          return <span className="px-2 py-1 bg-secondary text-textPrimary rounded">{tag.name}</span>
+        })}
+      </div>
+    }
     {
       item?.category &&
       <h3 className="line-clamp-1 h-8">{item?.category?.name}</h3>
