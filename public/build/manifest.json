@@ -1263,7 +1263,7 @@
     ]
   },
   "resources/js/Components/Adminto/Modal.jsx": {
-    "file": "assets/Modal-BZ2SQWt6.js",
+    "file": "assets/Modal-DCTBjBLC.js",
     "name": "Modal",
     "src": "resources/js/Components/Adminto/Modal.jsx",
     "isEntry": true,
@@ -1462,7 +1462,7 @@
     ]
   },
   "resources/js/Components/Adminto/form/TextareaFormGroup.jsx": {
-    "file": "assets/TextareaFormGroup-BZ2SQWt6.js",
+    "file": "assets/TextareaFormGroup-DCTBjBLC.js",
     "name": "TextareaFormGroup",
     "src": "resources/js/Components/Adminto/form/TextareaFormGroup.jsx",
     "isEntry": true,
@@ -1499,7 +1499,7 @@
     ]
   },
   "resources/js/Components/Blog/Filter.jsx": {
-    "file": "assets/Filter-DCTBjBLC.js",
+    "file": "assets/Filter-BZ2SQWt6.js",
     "name": "Filter",
     "src": "resources/js/Components/Blog/Filter.jsx",
     "isEntry": true,
@@ -1576,7 +1576,7 @@
     ]
   },
   "resources/js/Components/Courses/Filter.jsx": {
-    "file": "assets/Filter-BZ2SQWt6.js",
+    "file": "assets/Filter-DCTBjBLC.js",
     "name": "Filter",
     "src": "resources/js/Components/Courses/Filter.jsx",
     "isEntry": true,
@@ -1752,7 +1752,7 @@
     ]
   },
   "resources/js/Components/Modal.jsx": {
-    "file": "assets/Modal-DCTBjBLC.js",
+    "file": "assets/Modal-BZ2SQWt6.js",
     "name": "Modal",
     "src": "resources/js/Components/Modal.jsx",
     "isEntry": true,
@@ -1830,24 +1830,29 @@
     ]
   },
   "resources/js/Components/Tailwind/Carts/CartSimple.jsx": {
-    "file": "assets/CartSimple-BZ2SQWt6.js",
+    "file": "assets/CartSimple-BiREaf43.js",
     "name": "CartSimple",
     "src": "resources/js/Components/Tailwind/Carts/CartSimple.jsx",
-    "isEntry": true,
-    "imports": [
-      "resources/js/Components/About/AboutHeader.jsx",
-      "_index-DFv2mRv-.js"
-    ]
-  },
-  "resources/js/Components/Tailwind/Categories/CategoryCarousel.jsx": {
-    "file": "assets/CategoryCarousel-BnnPO4pV.js",
-    "name": "CategoryCarousel",
-    "src": "resources/js/Components/Tailwind/Categories/CategoryCarousel.jsx",
-    "isEntry": true,
+    "isDynamicEntry": true,
     "imports": [
       "resources/js/Components/About/AboutHeader.jsx",
       "_index-DFv2mRv-.js",
-      "resources/js/Components/Tailwind/Products/ProductList.jsx"
+      "_CartItemRow-QOjih-V7.js",
+      "_Number2Currency-e57Tgsuk.js",
+      "_tippy-react.esm-BVvHiWwH.js",
+      "_index-DgyC5pTR.js"
+    ]
+  },
+  "resources/js/Components/Tailwind/Categories/CategoryCarousel.jsx": {
+    "file": "assets/CategoryCarousel-DV-ujAWX.js",
+    "name": "CategoryCarousel",
+    "src": "resources/js/Components/Tailwind/Categories/CategoryCarousel.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/Components/About/AboutHeader.jsx",
+      "_index-DFv2mRv-.js",
+      "resources/js/Components/Tailwind/Products/ProductList.jsx",
+      "_autoplay-CXxwwNHA.js"
     ],
     "css": [
       "swiper.css"
@@ -1977,18 +1982,22 @@
     ]
   },
   "resources/js/Components/Tailwind/Footer/FooterCallToAction.jsx": {
-    "file": "assets/FooterCallToAction-BlVGfGXR.js",
+    "file": "assets/FooterCallToAction-CrnUitAI.js",
     "name": "FooterCallToAction",
     "src": "resources/js/Components/Tailwind/Footer/FooterCallToAction.jsx",
-    "isEntry": true,
+    "isDynamicEntry": true,
     "imports": [
       "resources/js/Components/About/AboutHeader.jsx",
       "_index-DFv2mRv-.js",
       "_index-B7NCnfQQ.js",
-      "resources/js/Components/Adminto/Basic/BasicEditing.jsx",
+      "_SubscriptionsRest-MOsjBW5C.js",
       "resources/js/Components/Tailwind/Components/ProductCard.jsx",
+      "_Global-mC9lKANG.js",
+      "_tippy-react.esm-BVvHiWwH.js",
+      "_HtmlContent-ux768mvo.js",
       "_index-DgyC5pTR.js",
       "_index-Cevqm-zP.js",
+      "resources/js/Components/Adminto/Basic/BasicEditing.jsx",
       "_main-BBbUrZUL.js",
       "____vite-browser-external_commonjs-proxy-BQdpDcDf.js"
     ]
@@ -2007,17 +2016,14 @@
     ]
   },
   "resources/js/Components/Tailwind/Footer/FooterSimpleCallToAction.jsx": {
-    "file": "assets/FooterSimpleCallToAction-BQQlL1FI.js",
+    "file": "assets/FooterSimpleCallToAction-CopIjPID.js",
     "name": "FooterSimpleCallToAction",
     "src": "resources/js/Components/Tailwind/Footer/FooterSimpleCallToAction.jsx",
-    "isDynamicEntry": true,
+    "isEntry": true,
     "imports": [
       "resources/js/Components/About/AboutHeader.jsx",
       "_index-DFv2mRv-.js",
       "_index-B7NCnfQQ.js",
-      "_tippy-react.esm-BVvHiWwH.js",
-      "_HtmlContent-ux768mvo.js",
-      "_Global-mC9lKANG.js",
       "_index-DgyC5pTR.js",
       "_index-Cevqm-zP.js"
     ]
@@ -2048,20 +2054,19 @@
     ]
   },
   "resources/js/Components/Tailwind/Headers/HeaderSearch.jsx": {
-    "file": "assets/HeaderSearch-CS6Eivhr.js",
+    "file": "assets/HeaderSearch-DjQGUbrS.js",
     "name": "HeaderSearch",
     "src": "resources/js/Components/Tailwind/Headers/HeaderSearch.jsx",
-    "isDynamicEntry": true,
+    "isEntry": true,
     "imports": [
       "resources/js/Components/About/AboutHeader.jsx",
       "_index-DFv2mRv-.js",
       "_index-B7NCnfQQ.js",
-      "resources/js/Components/Tailwind/Headers/HeaderSearch.jsx",
+      "_CartItemRow-QOjih-V7.js",
+      "_Number2Currency-e57Tgsuk.js",
       "_index-DgyC5pTR.js",
       "_index-Cevqm-zP.js",
-      "_CartItemRow-QOjih-V7.js",
-      "_tippy-react.esm-BVvHiWwH.js",
-      "_Number2Currency-e57Tgsuk.js"
+      "_tippy-react.esm-BVvHiWwH.js"
     ]
   },
   "resources/js/Components/Tailwind/Product.jsx": {
@@ -2137,10 +2142,10 @@
     ]
   },
   "resources/js/Components/Tailwind/Sliders/SliderSearch.jsx": {
-    "file": "assets/SliderSearch-CvSeqUqv.js",
+    "file": "assets/SliderSearch-DRMNM3rt.js",
     "name": "SliderSearch",
     "src": "resources/js/Components/Tailwind/Sliders/SliderSearch.jsx",
-    "isEntry": true,
+    "isDynamicEntry": true,
     "imports": [
       "resources/js/Components/About/AboutHeader.jsx",
       "_index-DFv2mRv-.js",
@@ -2173,10 +2178,10 @@
     ]
   },
   "resources/js/Components/Tailwind/Steps/StepSimple.jsx": {
-    "file": "assets/StepSimple-BZ2SQWt6.js",
+    "file": "assets/StepSimple-CTEMhGIb.js",
     "name": "StepSimple",
     "src": "resources/js/Components/Tailwind/Steps/StepSimple.jsx",
-    "isEntry": true,
+    "isDynamicEntry": true,
     "imports": [
       "resources/js/Components/About/AboutHeader.jsx",
       "_index-DFv2mRv-.js"
@@ -2348,7 +2353,7 @@
     ]
   },
   "resources/js/Components/form/TextareaFormGroup.jsx": {
-    "file": "assets/TextareaFormGroup-DCTBjBLC.js",
+    "file": "assets/TextareaFormGroup-BZ2SQWt6.js",
     "name": "TextareaFormGroup",
     "src": "resources/js/Components/form/TextareaFormGroup.jsx",
     "isEntry": true,
