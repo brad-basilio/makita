@@ -81,6 +81,7 @@ const FooterCallToAction = ({ socials = [], summary = '', generals = [] }) => {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="flex flex-col gap-2">
+              
               <a href="/">Inicio</a>
               <a href="/courses">Cursos y Talleres</a>
               <a href="/about">Nosotros</a>

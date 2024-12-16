@@ -1,7 +1,7 @@
 [
     {
         "id": "d1c9cc65-d819-40d4-8484-0684619f15ea",
-        "name": "Home",
+        "name": "Inicio",
         "path": "\/",
         "extends_base": true,
         "description": "P\u00e1gina de inicio",

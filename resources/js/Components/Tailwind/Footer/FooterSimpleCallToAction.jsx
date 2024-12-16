@@ -7,7 +7,7 @@ import Global from "../../../Utils/Global";
 
 ReactModal.setAppElement('#app')
 
-const FooterSimpleCallToAction = ({ socials = [], terms = {}, footerLinks = [] }) => {
+const FooterSimpleCallToAction = ({ socials = [], terms = {}, footerLinks = [], pages = [] }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);
@@ -67,10 +67,13 @@ const FooterSimpleCallToAction = ({ socials = [], terms = {}, footerLinks = [] }
 
               <nav>
                 <ul className="flex flex-col gap-3 text-base font-normal">
-                  <li className="flex flex-row gap-2"><a href="#"> Inicio </a></li>
-                  <li className="flex flex-row gap-2"><a href="#"> Productos </a></li>
-                  <li className="flex flex-row gap-2"><a href="#"> Blog </a></li>
-                  <li className="flex flex-row gap-2"><a href="#"> Contáctanos </a></li>
+                  {
+                    pages.filter(x => x.menuable).map((page, index) => {
+                      return <li className="flex flex-row gap-2">
+                        <button href={page.pseudo_path || page.path}>{page.name}</button>
+                      </li>
+                    })
+                  }
                 </ul>
               </nav>
             </div>

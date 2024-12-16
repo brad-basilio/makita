@@ -40,10 +40,6 @@ const HeaderSimple = ({ data, cart, setCart, pages }) => {
             return <button href={page.pseudo_path || page.path}>{page.name}</button>
           })
         }
-        {/* <button>Inicio</button>
-        <button>Juguetes</button>
-        <button>Blog</button>
-        <button>Contacto</button> */}
       </menu>
     </section>
     <CartModal data={data} cart={cart} setCart={setCart} modalOpen={modalOpen} setModalOpen={setModalOpen}/>

@@ -8,11 +8,11 @@ const Footer = ({ which, items, pages }) => {
   const getFooter = () => {
     switch (which) {
       case 'FooterSimpleCallToAction':
-        return <FooterSimpleCallToAction socials={items} />
+        return <FooterSimpleCallToAction socials={items} pages={pages}/>
       case 'FooterCallToAction':
-        return <FooterCallToAction socials={items} />
+        return <FooterCallToAction socials={items} pages={pages}/>
       case 'FooterSimple':
-        return <FooterSimple socials={items} />
+        return <FooterSimple socials={items} pages={pages}/>
       default:
         return <div className="w-full max-w-6xl p-4 mx-auto">- No Hay componente <b>{which}</b> -</div>
     }
