@@ -2,29 +2,9 @@ import React from "react"
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from 'swiper/modules';
 import 'swiper/css';
-import Tippy from "@tippyjs/react";
-import Number2Currency from "../../../Utils/Number2Currency";
-import Swal from "sweetalert2";
+import ProductCard from "../Components/ProductCard";
 
 const ProductCarousel = ({ data, items, cart, setCart }) => {
-
-  const onAddClicked = (item) => {
-    const newCart = structuredClone(cart)
-    const index = newCart.findIndex(x => x.id == item.id)
-    if (index == -1) {
-      newCart.push({ ...item, quantity: 1 })
-    } else {
-      newCart[index].quantity++
-    }
-    setCart(newCart)
-
-    Swal.fire({
-      title: 'Producto agregado',
-      text: `Se agregó ${item.name} al carrito`,
-      icon: 'success',
-      timer: 1500,
-    })
-  }
 
   if (items.length == 0) return
 
@@ -76,24 +56,7 @@ const ProductCarousel = ({ data, items, cart, setCart }) => {
           const inCart = cart.find(x => x.id == item.id)
           const finalPrice = item?.discount > 0 ? item?.discount : item?.price
           return <SwiperSlide key={index}>
-            <img src={`/api/items/media/${item?.image}`} alt={item?.name} className="w-full h-full object-cover mb-4 aspect-square rounded-3xl shadow-lg" />
-            {
-              item?.category &&
-              <h3 className="line-clamp-1 h-8">{item?.category?.name}</h3>
-            }
-            <h2 className="text-2xl line-clamp-1 font-bold mb-2">{item?.name}</h2>
-            <p className="line-clamp-3 h-[72px] opacity-80 mb-4">{item?.description}</p>
-            <div className="flex justify-between items-end">
-              <div className="h-[52px] flex flex-col items-start justify-end">
-                <span className="text-sm block opacity-80 line-through">{item?.discount > 0 ? <>S/. {Number2Currency(item?.price)}</> : ''}</span>
-                <span className="text-2xl font-bold">S/. {Number2Currency(finalPrice)}</span>
-              </div>
-              <Tippy content='Agregar al carrito'>
-                <button className="bg-primary text-white text-lg px-3 py-1 rounded disabled:cursor-not-allowed disabled:opacity-80" disabled={inCart} onClick={() => onAddClicked(item)}>
-                  <i className="mdi mdi-cart-plus"></i>
-                </button>
-              </Tippy>
-            </div>
+            <ProductCard item={item} cart={cart} setCart={setCart}/>
           </SwiperSlide>
         })}
       </Swiper>

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -20,6 +21,8 @@ class Item extends Model
         'description',
         'price',
         'discount',
+        'final_price',
+        'discount_percent',
         'banner',
         'image',
         'category_id',
@@ -32,6 +35,40 @@ class Item extends Model
         'visible',
         'status',
     ];
+
+    static function getForeign(Builder $builder, string $model, $relation)
+    {
+        $table = (new $model)->getTable();
+        return $builder->reorder()
+            ->join($table, $table . '.id', '=', 'items.' . $relation)
+            ->select($table . '.*')
+            ->distinct()
+            ->orderBy($table . '.name', 'ASC')
+            ->get()
+            ->map(function ($item) use ($model) {
+                $jpa = new $model((array) $item->toArray());
+                $jpa->id = $item->id;
+                return $jpa;
+            });
+    }
+
+    static function getForeignMany(Builder $builder, string $through, string $model)
+    {
+        $table = (new $model)->getTable();
+        $tableThrough = (new $through)->getTable();
+        return $builder->reorder()
+            ->join($tableThrough, $tableThrough . '.item_id', '=', 'items.id')
+            ->join($table, $table . '.id', $tableThrough . '.item_id')
+            ->select($table . '.*')
+            ->distinct()
+            ->orderBy($table . '.name', 'ASC')
+            ->get()
+            ->map(function ($item) use ($model) {
+                $jpa = new $model((array) $item->toArray());
+                $jpa->id = $item->id;
+                return $jpa;
+            });
+    }
 
     public function category()
     {

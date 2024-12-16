@@ -17,59 +17,50 @@ import QuillFormGroup from '../Components/Adminto/form/QuillFormGroup';
 import { renderToString } from 'react-dom/server';
 import SelectAPIFormGroup from '../Components/Adminto/form/SelectAPIFormGroup';
 import Number2Currency from '../Utils/Number2Currency';
+import SetSelectValue from '../Utils/SetSelectValue';
 
 const itemsRest = new ItemsRest()
 
-const Items = ({ icons, categories }) => {
+const Items = ({ categories, brands }) => {
   const gridRef = useRef()
   const modalRef = useRef()
 
   // Form elements ref
+
   const idRef = useRef()
   const categoryRef = useRef()
+  const subcategoryRef = useRef()
+  const brandRef = useRef()
   const nameRef = useRef()
   const summaryRef = useRef()
-  const descriptionRef = useRef()
-  const sessionsRef = useRef()
-  const typeRef = useRef()
-  const certificateRef = useRef()
-  const sessionDurationRef = useRef()
-  const longDurationRef = useRef()
   const priceRef = useRef()
   const discountRef = useRef()
-  const studentsRef = useRef()
+  const bannerRef = useRef()
   const imageRef = useRef()
+  const descriptionRef = useRef()
 
   const [isEditing, setIsEditing] = useState(false)
-  const [audience, setAudience] = useState([''])
-  const [requirements, setRequirements] = useState([''])
-  const [objectives, setObjectives] = useState([''])
-  const [content, setContent] = useState([{ icon: '', text: '' }])
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   const onModalOpen = (data) => {
     if (data?.id) setIsEditing(true)
     else setIsEditing(false)
 
-    // idRef.current.value = data?.id ?? ''
-    // $(categoryRef.current).val(data?.category_id ?? null).trigger('change')
-    // nameRef.current.value = data?.name ?? ''
-    // summaryRef.current.value = data?.summary ?? ''
-    // descriptionRef.editor.root.innerHTML = data?.description ?? ''
-    // sessionsRef.current.value = data?.sessions ?? 0
-    // typeRef.current.value = data?.type ?? 'Presencial'
-    // certificateRef.current.value = data?.certificate ?? ''
-    // sessionDurationRef.current.value = data?.session_duration ?? ''
-    // longDurationRef.current.value = data?.long_duration ?? ''
-    // priceRef.current.value = data?.price ?? ''
-    // discountRef.current.value = data?.discount ?? ''
-    // studentsRef.current.value = data?.students ?? ''
-    // imageRef.image.src = `/api/items/media/${data?.image}`
-    // imageRef.current.value = null
-    // setAudience(data?.audience ? JSON.parse(data.audience) : [''])
-    // setRequirements(data?.requirements ? JSON.parse(data.requirements) : [''])
-    // setObjectives(data?.objectives ? JSON.parse(data.objectives) : [''])
-    // setContent(data?.content ? JSON.parse(data.content) : [{ icon: '', text: '' }])
+    idRef.current.value = data?.id || ''
+    $(categoryRef.current).val(data?.category_id || null).trigger('change')
+    SetSelectValue(subcategoryRef.current, data?.subcategory?.id, data?.subcategory?.name)
+    $(brandRef.current).val(data?.brand_id || null).trigger('change')
+    nameRef.current.value = data?.name || ''
+    summaryRef.current.value = data?.summary || ''
+    priceRef.current.value = data?.price || 0
+    discountRef.current.value = data?.discount || 0
+
+    bannerRef.current.value = null
+    imageRef.current.value = null
+    bannerRef.image.src = `/api/items/media/${data?.banner ?? 'undefined'}`
+    imageRef.image.src = `/api/items/media/${data?.image ?? 'undefined'}`
+
+    descriptionRef.editor.root.innerHTML = data?.description ?? ''
 
     $(modalRef.current).modal('show')
   }
@@ -80,30 +71,27 @@ const Items = ({ icons, categories }) => {
     const request = {
       id: idRef.current.value || undefined,
       category_id: categoryRef.current.value,
+      subcategory_id: subcategoryRef.current.value,
+      brand_id: brandRef.current.value,
       name: nameRef.current.value,
       summary: summaryRef.current.value,
-      description: descriptionRef.current.value,
-      sessions: sessionsRef.current.value,
-      type: typeRef.current.value,
-      certificate: certificateRef.current.value,
-      session_duration: sessionDurationRef.current.value,
-      long_duration: longDurationRef.current.value,
       price: priceRef.current.value,
       discount: discountRef.current.value,
-      students: studentsRef.current.value,
-      audience: JSON.stringify(audience.filter(Boolean)),
-      requirements: JSON.stringify(requirements.filter(Boolean)),
-      objectives: JSON.stringify(objectives.filter(Boolean)),
-      content: JSON.stringify(content.filter(item => item.icon || item.text)),
+      description: descriptionRef.current.value,
     }
 
     const formData = new FormData()
     for (const key in request) {
       formData.append(key, request[key])
     }
-    const file = imageRef.current.files[0]
-    if (file) {
-      formData.append('image', file)
+
+    const image = imageRef.current.files[0]
+    if (image) {
+      formData.append('image', image)
+    }
+    const banner = bannerRef.current.files[0]
+    if (banner) {
+      formData.append('banner', banner)
     }
 
     const result = await itemsRest.save(formData)
@@ -138,37 +126,6 @@ const Items = ({ icons, categories }) => {
     const result = await itemsRest.delete(id)
     if (!result) return
     $(gridRef.current).dxDataGrid('instance').refresh()
-  }
-
-  const handleArrayChange = (index, value, setter) => {
-    setter(prev => prev.map((item, i) => i === index ? value : item))
-  }
-
-  const handleArrayAdd = (setter) => {
-    setter(prev => [...prev, ''])
-  }
-
-  const handleArrayRemove = (index, setter) => {
-    setter(prev => prev.filter((_, i) => i !== index))
-  }
-
-  const handleContentChange = (index, key, value) => {
-    setContent(prev => prev.map((item, i) => i === index ? { ...item, [key]: value } : item))
-  }
-
-  const handleContentAdd = () => {
-    setContent(prev => [...prev, { icon: '', text: '' }])
-  }
-
-  const handleContentRemove = (index) => {
-    setContent(prev => prev.filter((_, i) => i !== index))
-  }
-
-  const iconTemplate = (e) => {
-    return $(renderToString(<span>
-      <i className={`${e.id} me-1`}></i>
-      {/* {e.text} */}
-    </span>))
   }
 
   return (<>
@@ -206,7 +163,7 @@ const Items = ({ icons, categories }) => {
           width: '120px',
           cellTemplate: (container, { data }) => {
             container.html(renderToString(<>
-              <b>{data.category?.name}</b>
+              <b className='d-block'>{data.category?.name}</b>
               <small className='text-muted'>{data.subcategory?.name}</small>
             </>))
           }
@@ -233,7 +190,7 @@ const Items = ({ icons, categories }) => {
           }
         },
         {
-          dataField: 'price',
+          dataField: 'final_price',
           caption: 'Precio',
           dataType: 'number',
           width: '75px',
@@ -346,7 +303,14 @@ const Items = ({ icons, categories }) => {
               categories.map((item, index) => (<option key={index} value={item.id}>{item.name}</option>))
             }
           </SelectFormGroup>
-          <SelectAPIFormGroup label='Subcategoría' searchAPI='/api/admin/subcategories/paginate' searchBy='name' filter={['category_id', '=', selectedCategory]} dropdownParent='#principal-container' />
+          <SelectAPIFormGroup eRef={subcategoryRef} label='Subcategoría' searchAPI='/api/admin/subcategories/paginate' searchBy='name' filter={['category_id', '=', selectedCategory]} dropdownParent='#principal-container' />
+
+          <SelectFormGroup eRef={brandRef} label='Marca' required dropdownParent='#principal-container'>
+            {
+              brands.map((item, index) => (<option key={index} value={item.id}>{item.name}</option>))
+            }
+          </SelectFormGroup>
+
           <InputFormGroup eRef={nameRef} label='Nombre' required />
           <TextareaFormGroup eRef={summaryRef} label='Resumen' rows={3} required />
           <div className="row">
@@ -356,28 +320,31 @@ const Items = ({ icons, categories }) => {
         </div>
         <div className='col-md-6'>
           <div className='row'>
-            <ImageFormGroup eRef={imageRef} label='Banner' aspect={2 / 1} col='col-12' />
+            <ImageFormGroup eRef={bannerRef} label='Banner' aspect={2 / 1} col='col-12' />
             <ImageFormGroup eRef={imageRef} label='Imagen' aspect={1} col='col-6' />
             <div className='col-6'>
               <input id='input-item-gallery' type="file" multiple accept='image/' hidden />
-              <div className='d-flex justify-content-between items-center'>
+              <div style={{ position: 'relative' }}>
                 <span className='form-label d-block mb-1' htmlFor="input-item-gallery">Galería</span>
-                <button className='btn btn-white rounded-pill btn-xs'>
+                <button className='btn btn-white rounded-pill btn-xs' style={{
+                  position: 'absolute',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  right: 0
+                }}>
                   <i className='mdi mdi-plus'></i>
                   Agregar
                 </button>
               </div>
-              <div className='w-100 bg-primary' style={{aspectRatio: 1}}>
+              <div className='w-100 bg-primary' style={{ aspectRatio: 1 }}>
 
               </div>
             </div>
           </div>
         </div>
       </div>
-      <hr className='my-2' />
-      <div className="row" id='items-container'>
-
-      </div>
+      <hr className='my-1' />
+      <QuillFormGroup eRef={descriptionRef} label='Descripcion' />
     </Modal>
   </>
   )

@@ -11,6 +11,7 @@ use App\Models\Slider;
 use App\Models\Social;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Routing\ResponseFactory;
@@ -65,7 +66,7 @@ class BasicController extends Controller
     return $model::select();
   }
 
-  public function setPaginationSummary(string $model)
+  public function setPaginationSummary(Request $request, Builder $builder)
   {
     return [];
   }
@@ -185,7 +186,7 @@ class BasicController extends Controller
       $response->status = 200;
       $response->message = 'Operación correcta';
       $response->data = $jpas;
-      $response->summary = $this->setPaginationSummary($this->model);
+      $response->summary = $this->setPaginationSummary($request, $instance);
       $response->totalCount = $totalCount;
     } catch (\Throwable $th) {
       $response->status = 400;

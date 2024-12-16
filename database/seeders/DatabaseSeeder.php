@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use SoDe\Extend\File;
 
 class DatabaseSeeder extends Seeder
 {
@@ -28,5 +29,7 @@ class DatabaseSeeder extends Seeder
             ItemSeeder::class,
             SystemSeeder::class,
         ]);
+
+        File::save(storage_path('app/pages.json'), '[]');
     }
 }

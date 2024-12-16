@@ -27,10 +27,20 @@
         "name": "Cat\u00e1logo",
         "path": "\/catalog\/{cSlug?}\/{scSlug?}",
         "pseudo_path": "\/catalog",
-        "extends_base": true,
+        "extends_base": false,
         "using": {
-            "cSlug": [],
-            "scSlug": []
+            "cSlug": {
+                "model": "Category",
+                "field": "slug",
+                "relations": []
+            },
+            "scSlug": {
+                "model": "SubCategory",
+                "field": "slug",
+                "relations": [
+                    "category"
+                ]
+            }
         }
     },
     {
@@ -40,7 +50,15 @@
         "extends_base": true,
         "pseudo_path": "\/product",
         "using": {
-            "slug": []
+            "slug": {
+                "model": "Item",
+                "field": "slug",
+                "relations": [
+                    "category",
+                    "subcategory",
+                    "brand"
+                ]
+            }
         }
     },
     {

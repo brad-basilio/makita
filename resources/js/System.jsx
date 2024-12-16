@@ -15,12 +15,11 @@ import Step from './Components/Tailwind/Step';
 import { Local } from 'sode-extend-react';
 import Global from './Utils/Global';
 import ItemsRest from './Actions/ItemsRest';
+import Filter from './Components/Tailwind/Filter';
 
 const itemsRest = new ItemsRest();
 
 const System = ({ page, pages, params, systems, socials = [], systemItems = {} }) => {
-
-  console.log(params)
 
   const getItems = (itemsId) => {
     return systemItems[itemsId] ?? []
@@ -63,6 +62,8 @@ const System = ({ page, pages, params, systems, socials = [], systemItems = {} }
           return contentSystems.map(content => getSystem(content))
         }
         break
+      case 'filter':
+        return <Filter which={value} data={data} cart={cart} setCart={setCart} />
       case 'product':
         return <Product which={value} data={data} items={getItems(itemsId)} cart={cart} setCart={setCart} />
       case 'category':

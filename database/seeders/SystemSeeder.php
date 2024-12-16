@@ -25,10 +25,10 @@ class SystemSeeder extends Seeder
             ],
             [
                 'id' => 'c8551507-eb21-4a45-93df-8e17a22096f1',
-                'name' => 'Header - Simple',
+                'name' => 'Header - Search',
                 'page_id' => null,
                 'component' => 'header',
-                'value' => 'HeaderSimple',
+                'value' => 'HeaderSearch',
                 'after_component' => '42480980-a7fc-495b-a834-cbdca39dfde9'
             ],
             [
@@ -41,10 +41,10 @@ class SystemSeeder extends Seeder
             ],
             [
                 'id' => Crypto::randomUUID(),
-                'name' => 'Footer - Con redes sociales',
+                'name' => 'Footer - Call to Action Simple',
                 'page_id' => null,
                 'component' => 'footer',
-                'value' => 'FooterSocials',
+                'value' => 'FooterSimpleCallToAction',
                 'after_component' => '26b46e06-da01-4f06-b47e-379a538037a1'
             ],
         ];

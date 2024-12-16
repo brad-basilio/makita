@@ -1,0 +1,2 @@
+const __vite__fileDeps=["assets/TopBarSimple-DtAdFKP8.js","assets/AboutHeader-Bdo2C3ON.js","assets/index-DFv2mRv-.js","assets/TopBarSocials-BJsMEPAe.js"],__vite__mapDeps=i=>i.map(i=>__vite__fileDeps[i]);
+import{_}from"./preload-helper-CZZ3Qsu7.js";import"./AboutHeader-Bdo2C3ON.js";import{R as o}from"./index-DFv2mRv-.js";o.lazy(()=>_(()=>import("./TopBarSimple-DtAdFKP8.js"),__vite__mapDeps([0,1,2])));o.lazy(()=>_(()=>import("./TopBarSocials-BJsMEPAe.js"),__vite__mapDeps([3,1,2])));

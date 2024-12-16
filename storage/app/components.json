@@ -14,7 +14,10 @@
         "image": "top-bar-socials.png",
         "data": [
           "title"
-        ]
+        ],
+        "using": {
+          "model": "Social"
+        }
       }
     ]
   },
@@ -31,7 +34,10 @@
         "id": "HeaderSearch",
         "name": "Con barra de búsqueda",
         "image": "header-with-search.png",
-        "data": ["class", "link_cart"]
+        "data": [
+          "class",
+          "link_cart"
+        ]
       },
       {
         "id": "HeaderWithMegaMenu",
@@ -102,6 +108,21 @@
             "button_link"
           ]
         }
+      }
+    ]
+  },
+  {
+    "id": "filter",
+    "name": "Filtros",
+    "options": [
+      {
+        "id": "FilterSimple",
+        "name": "Simple",
+        "image": "filters-simple.png",
+        "data": [
+          "title",
+          "description"
+        ]
       }
     ]
   },

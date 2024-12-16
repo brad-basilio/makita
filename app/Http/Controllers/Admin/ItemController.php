@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\BasicController;
+use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Item;
 use App\Models\WebDetail;
@@ -19,13 +20,12 @@ class ItemController extends BasicController
 
     public function setReactViewProperties(Request $request)
     {
-        $icons = JSON::parse(File::get('../storage/app/utils/icons.json'));
         $categories = Category::all();
-        $details = WebDetail::where('page', 'courses')->get();
+        $brands = Brand::all();
+
         return [
-            'icons' => $icons,
             'categories' => $categories,
-            'details' => $details,
+            'brands' => $brands
         ];
     }
 

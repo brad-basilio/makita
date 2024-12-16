@@ -302,7 +302,7 @@ const System = ({ systems: systemsDB, pages: pagesDB, components, models }) => {
         </div>
       </div>
       <SEOModal dataLoaded={pageLoaded} setDataLoaded={setPageLoaded} modalRef={modalSEORef} />
-      <ParamsModal dataLoaded={pageLoaded} setDataLoaded={setPageLoaded} modalRef={modalParamsRef} models={models}/>
+      <ParamsModal dataLoaded={pageLoaded} setDataLoaded={setPageLoaded} setPages={setPages} modalRef={modalParamsRef} models={models}/>
       <DataModal dataLoaded={systemLoaded} setDataLoaded={setSystemLoaded} setSystems={setSystems} modalRef={dataModalRef} />
     </>
   );

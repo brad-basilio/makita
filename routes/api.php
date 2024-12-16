@@ -55,7 +55,7 @@ Route::get('/posts/media/{uuid}', [AdminPostController::class, 'media']);
 Route::get('/items/media/{uuid}', [AdminItemController::class, 'media']);
 
 Route::post('/posts/paginate', [PostController::class, 'paginate']);
-Route::post('/courses/paginate', [ItemController::class, 'paginate']);
+Route::post('/items/paginate', [ItemController::class, 'paginate']);
 
 Route::post('/messages', [MessageController::class, 'save']);
 Route::post('/subscriptions', [SubscriptionController::class, 'save']);

@@ -20,6 +20,8 @@ return new class extends Migration
             $table->longText('description')->nullable();
             $table->decimal('price', 10, 2)->default(0.00);
             $table->decimal('discount', 10, 2)->default(0.00)->nullable();
+            $table->decimal('final_price', 10, 2)->default(0.00);
+            $table->decimal('discount_percent', 10, 2)->default(0.00);
             $table->string('banner')->nullable();
             $table->string('image')->nullable();
             $table->foreignUuid('category_id')->nullable()->constrained('categories')->nullOnDelete();

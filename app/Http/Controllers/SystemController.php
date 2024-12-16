@@ -22,7 +22,9 @@ class SystemController extends BasicController
         $components = JSON::parse(File::get(storage_path('app/components.json')));
 
         $props = [
-            'pages' => $pages
+            'pages' => $pages,
+            'systems' => [],
+            'params' => []
         ];
 
         if ($path === '/base-template') {
@@ -90,6 +92,11 @@ class SystemController extends BasicController
 
         $props['systems'] = $systems;
         $props['params'] = $request->route() ? $request->route()->parameters() : [];
+
+        foreach ($props['params'] as $key) {
+            
+        }
+
         return $props;
     }
 }
