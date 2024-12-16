@@ -21,6 +21,8 @@ class SystemController extends BasicController
         $pages = JSON::parse(File::get(storage_path('app/pages.json')));
         $components = JSON::parse(File::get(storage_path('app/components.json')));
 
+        dump($request->server);
+
         $props = [
             'pages' => $pages,
             'systems' => [],

@@ -43,7 +43,6 @@ use SoDe\Extend\File;
 $pages = json_decode(File::get(storage_path('app/pages.json')), true);
 
 foreach ($pages as $page) {
-    dump($page['path']);
     Route::get($page['path'], [SystemController::class, 'reactView'])->name('System.jsx');
 }
 
