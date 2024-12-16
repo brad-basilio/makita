@@ -8,19 +8,37 @@
         "keywords": [
             "Hola mundo",
             "Del mundo mundial"
-        ]
+        ],
+        "pseudo_path": null,
+        "using": {
+            "model": null,
+            "field": null,
+            "with": []
+        }
     },
     {
         "id": "54e5a8e1-e972-4001-b20e-b583629c76e5",
         "name": "Carrito",
         "path": "\/cart",
-        "extends_base": true
+        "extends_base": true,
+        "pseudo_path": "\/cart",
+        "using": {
+            "model": null,
+            "field": null,
+            "with": []
+        }
     },
     {
         "id": "888f8b32-2638-4f69-a843-af4b2edf69ab",
         "name": "Contacto",
         "path": "\/contact",
-        "extends_base": true
+        "extends_base": true,
+        "pseudo_path": "\/contact",
+        "using": {
+            "model": null,
+            "field": null,
+            "with": []
+        }
     },
     {
         "id": "aa3f2e6a-eee9-4d5c-99a8-8a62bc6f9dfc",
