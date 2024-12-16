@@ -42,7 +42,7 @@ class SystemController extends BasicController
         })->first();
 
         if (!$page) {
-            abort(403);
+            abort(404);
         }
 
         $page['using'] = $page['using'] ?? [];

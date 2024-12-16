@@ -191,7 +191,7 @@ const System = ({ systems: systemsDB, pages: pagesDB, components, models }) => {
                         <div className="tab-pane active" id="base-template">
                           <div className="row">
                             <div className="col-md-4">
-                              <div className='d-flex flex-column gap-2'>
+                              <div className='d-flex flex-column gap-2 components-container' data-page-id={null}>
                                 {
                                   SortByAfterField(systems).filter(x => x.page_id == null).map(system => {
                                     const component = components.find(x => x.id == system.component);
