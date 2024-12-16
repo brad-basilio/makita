@@ -9,11 +9,12 @@ const systemRest = new SystemRest()
 
 const BasicEditing4System = (page) => {
 
-  const { id, name, path, extends_base = false, setPages, onSEOClicked, onParamsClicked } = page
+  const { id, name, path, extends_base = false, menuable = false, setPages, onSEOClicked, onParamsClicked } = page
 
   const [nameEditing, setNameEditing] = useState(false)
   const [pathEditing, setPathEditing] = useState(false)
   const [extendsBaseEditing, setExtendsBaseEditing] = useState(false)
+  const [menuableEditing, setMenuableEditing] = useState(false)
 
   const onNameChange = async (e) => {
     if (name === e.target.value) return setNameEditing(false)
@@ -53,14 +54,27 @@ const BasicEditing4System = (page) => {
   }
 
   const onExtendsBaseChange = async (e) => {
+    setExtendsBaseEditing(true)
     const checked = e.target.checked
     const result = systemRest.savePage({
       id,
       extends_base: checked
     })
-    if (!result) return
     setExtendsBaseEditing(false)
+    if (!result) return
     setPages(old => old.map(page => page.id === id ? { ...page, extends_base: checked } : page))
+  }
+
+  const onMenuableChange = async (e) => {
+    setMenuableEditing(true)
+    const checked = e.target.checked
+    const result = systemRest.savePage({
+      id,
+      menuable: checked
+    })
+    setMenuableEditing(false)
+    if (!result) return
+    setPages(old => old.map(page => page.id === id ? { ...page, menuable: checked } : page))
   }
 
   const onDeletePageClicked = async (page) => {
@@ -115,7 +129,10 @@ const BasicEditing4System = (page) => {
             <small className='text-muted d-block mb-1' onClick={() => setPathEditing(true)} style={{ minWidth: '200px', cursor: 'pointer' }}>{path || 'Sin ruta'}</small>
           </Tippy>
       }
-      <SwitchFormGroup label="Extiende de base" checked={extends_base} onChange={onExtendsBaseChange} disabled={extendsBaseEditing} />
+    </div>
+    <div className="row">
+      <SwitchFormGroup label="Extiende de base" col={'col-lg-6 col-md-12 col-sm-6'} checked={extends_base} onChange={onExtendsBaseChange} disabled={extendsBaseEditing} />
+      <SwitchFormGroup label="Mostrar en menu" col={'col-lg-6 col-md-12 col-sm-6'} checked={menuable} onChange={onMenuableChange} disabled={menuableEditing} />
     </div>
   </>
 }

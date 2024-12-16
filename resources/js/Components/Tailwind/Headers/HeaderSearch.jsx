@@ -4,11 +4,11 @@ import CartModal from "../Components/CartModal"
 
 
 
-const HeaderSimple = ({ data, cart, setCart }) => {
+const HeaderSimple = ({ data, cart, setCart, pages }) => {
   const [modalOpen, setModalOpen] = useState(false)
 
   const totalCount = cart.reduce((acc, item) => {
-    return Number(acc) + Number(item.quantity); // Sumar el precio total por cantidad
+    return Number(acc) + Number(item.quantity);
   }, 0);
 
   return <>
@@ -35,10 +35,15 @@ const HeaderSimple = ({ data, cart, setCart }) => {
       </header>
       <hr />
       <menu className="flex mx-auto p-4 gap-6 items-center justify-center font-bold">
-        <button>Inicio</button>
+        {
+          pages.filter(x => x.menuable).map((page, index) => {
+            return <button href={page.pseudo_path || page.path}>{page.name}</button>
+          })
+        }
+        {/* <button>Inicio</button>
         <button>Juguetes</button>
         <button>Blog</button>
-        <button>Contacto</button>
+        <button>Contacto</button> */}
       </menu>
     </section>
     <CartModal data={data} cart={cart} setCart={setCart} modalOpen={modalOpen} setModalOpen={setModalOpen}/>

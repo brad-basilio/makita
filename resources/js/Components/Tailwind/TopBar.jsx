@@ -10,8 +10,8 @@ const TopBar = ({ which, socials, data }) => {
         return <TopBarSimple data={data} />
       case 'TopBarSocials':
         return <TopBarSocials socials={socials} data={data} />
-      // case 'TopBarCarrito':
-      //   return <TopBarCarrito />
+      default:
+        return <div className="w-full max-w-6xl p-4 mx-auto">- No Hay componente <b>{which}</b> -</div>
     }
   }
   return getTopBar()

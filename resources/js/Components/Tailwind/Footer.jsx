@@ -4,7 +4,7 @@ const FooterSimple = React.lazy(() => import('./Footer/FooterSimple'))
 const FooterSimpleCallToAction = React.lazy(() => import('./Footer/FooterSimpleCallToAction'))
 const FooterCallToAction = React.lazy(() => import('./Footer/FooterCallToAction'))
 
-const Footer = ({ which, items }) => {
+const Footer = ({ which, items, pages }) => {
   const getFooter = () => {
     switch (which) {
       case 'FooterSimpleCallToAction':

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\BasicController;
-use App\Http\Controllers\Controller;
 use App\Models\System;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;

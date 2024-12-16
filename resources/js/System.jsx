@@ -54,7 +54,7 @@ const System = ({ page, pages, params, systems, socials = [], systemItems = {} }
       case 'top_bar':
         return <TopBar which={value} socials={socials} data={data} />
       case 'header':
-        return <Header data={data} which={value} socials={socials} cart={cart} setCart={setCart} />
+        return <Header data={data} which={value} socials={socials} cart={cart} setCart={setCart} pages={pages} />
       case 'content':
         if (!page.id) {
           return <div className='h-80 w-full bg-gray-300 flex items-center justify-center'>
@@ -80,7 +80,7 @@ const System = ({ page, pages, params, systems, socials = [], systemItems = {} }
       case 'cart':
         return <Cart which={value} data={data} cart={cart} setCart={setCart} />
       case 'footer':
-        return <Footer which={value} items={getItems(itemsId)} />
+        return <Footer which={value} items={getItems(itemsId)} pages={pages} />
     }
   }
 

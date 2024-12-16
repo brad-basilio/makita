@@ -7,6 +7,8 @@ const Banner = ({ which, data }) => {
     switch (which) {
       case 'BannerSimple':
         return <BannerSimple data={data} />
+      default:
+        return <div className="w-full max-w-6xl p-4 mx-auto">- No Hay componente <b>{which}</b> -</div>
     }
   }
   return getBanner()
