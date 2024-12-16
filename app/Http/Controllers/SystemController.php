@@ -36,7 +36,7 @@ class SystemController extends BasicController
 
         $page = collect($pages)->filter(function ($item) use ($path) {
             $path2check = isset($item['pseudo_path']) && $item['pseudo_path'] ?  $item['pseudo_path'] : $item['path'];
-            return strpos($path2check, $path) === 0; // Filtra las páginas que comienzan con el path
+            return strpos($path, $path2check) === 0; // Filtra las páginas que comienzan con el path
         })->sortByDesc(function ($item) {
             return strlen($item['pseudo_path'] ?? $item['path']);
         })->first();
