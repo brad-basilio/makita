@@ -42,9 +42,8 @@ use SoDe\Extend\File;
 // Public routes
 $pages = json_decode(File::get(storage_path('app/pages.json')), true);
 
-dump($pages);
-
 foreach ($pages as $page) {
+    dump($page['path']);
     Route::get($page['path'], [SystemController::class, 'reactView'])->name('System.jsx');
 }
 
