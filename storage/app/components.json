@@ -216,13 +216,7 @@
     "options": [
       {
         "id": "BannerSimple",
-        "name": "Simple",
-        "data": [
-          "title",
-          "description",
-          "button_text",
-          "button_link"
-        ]
+        "name": "Simple"
       }
     ]
   },

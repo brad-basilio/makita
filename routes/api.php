@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\StrengthController as AdminStrengthController;
 use App\Http\Controllers\Admin\GeneralController as AdminGeneralController;
 use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
 use App\Http\Controllers\Admin\AccountController as AdminAccountController;
+use App\Http\Controllers\Admin\BannerController as AdminBannerController;
 use App\Http\Controllers\Admin\BrandController as AdminBrandController;
 use App\Http\Controllers\Admin\GalleryController as AdminGalleryController;
 use App\Http\Controllers\Admin\ItemController as AdminItemController;
@@ -46,6 +47,7 @@ use App\Http\Controllers\SubscriptionController;
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/signup', [AuthController::class, 'signup']);
+Route::get( '/banners/media/{uuid}', [AdminBannerController::class, 'media']);
 Route::get('/sliders/media/{uuid}', [AdminSliderController::class, 'media']);
 Route::get('/categories/media/{uuid}', [AdminBrandController::class, 'media']);
 Route::get('/subcategories/media/{uuid}', [AdminSubCategoryController::class, 'media']);
@@ -109,6 +111,12 @@ Route::middleware('auth')->group(function () {
     Route::patch('/indicators/status', [AdminIndicatorController::class, 'status']);
     Route::patch('/indicators/{field}', [AdminIndicatorController::class, 'boolean']);
     Route::delete('/indicators/{id}', [AdminIndicatorController::class, 'delete']);
+
+    Route::post('/banners', [AdminBannerController::class, 'save']);
+    Route::post('/banners/paginate', [AdminBannerController::class, 'paginate']);
+    Route::patch('/banners/status', [AdminBannerController::class, 'status']);
+    Route::patch('/banners/{field}', [AdminBannerController::class, 'boolean']);
+    Route::delete('/banners/{id}', [AdminBannerController::class, 'delete']);
 
     Route::post('/sliders', [AdminSliderController::class, 'save']);
     Route::post('/sliders/paginate', [AdminSliderController::class, 'paginate']);

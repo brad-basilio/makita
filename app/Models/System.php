@@ -29,4 +29,9 @@ class System extends Model
         'data' => 'array',
         'filters' => 'array'
     ];
+
+    public function after()
+    {
+        return $this->hasOne(System::class, 'id', 'after_component');
+    }
 }
