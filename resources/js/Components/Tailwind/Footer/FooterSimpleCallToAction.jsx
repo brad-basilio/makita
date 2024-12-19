@@ -25,7 +25,7 @@ const FooterSimpleCallToAction = ({ socials = [], terms = {}, footerLinks = [], 
             <div className="lg:col-span-3 w-full flex flex-col gap-10">
               <div>
                 <a href="/">
-                  <img src="/assets/img/logo-default.pnng" alt={Global.APP_NAME} className="drop-shadow-lg" />
+                  <img src="/assets/img/logo-default.png" alt={Global.APP_NAME} className="drop-shadow-lg" />
                 </a>
               </div>
               <nav>

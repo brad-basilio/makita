@@ -74,7 +74,7 @@ const FooterCallToAction = ({ socials = [], summary = '', generals = [], pages =
         </form>
         <section className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div className="flex flex-col gap-4 items-start justify-start">
-            <img src="/assets/img/logo-default.pnng" alt="" className="h-8" />
+            <img src="/assets/img/logo-default.png" alt="" className="h-8" />
             <p className="text-sm max-w-md">
               {summary}
             </p>
