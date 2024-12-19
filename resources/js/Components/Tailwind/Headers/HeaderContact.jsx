@@ -31,7 +31,7 @@ const HeaderContact = ({ socials, generals = [] }) => {
       <div className={`flex justify-between items-center bg-gray-600 ${!isOpen && location.pathname == '/' && 'bg-opacity-80'} text-white ps-[5%] border-b`}>
         <div className="py-4">
           <a href="/">
-            <img src="/assets/img/logo.png" alt="Trasciende Logo" className="h-8" />
+            <img src="/assets/img/logo-default.pnng" alt="Trasciende Logo" className="h-8" />
           </a>
         </div>
         <div className="flex">

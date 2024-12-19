@@ -67,7 +67,7 @@ const NavBar = ({ session = {}, title = 'Pagina' }) => {
             <img src="/assets/img/icon.svg" alt="" height="22" />
           </span>
           <span className="logo-lg">
-            <img src="/assets/img/logo.png" alt="" height="16" />
+            <img src="/assets/img/logo-default.pnng" alt="" height="16" />
           </span>
         </a>
         <a href="/home" className="logo logo-dark text-center">

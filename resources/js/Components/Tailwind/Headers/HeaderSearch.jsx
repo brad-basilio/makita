@@ -1,5 +1,5 @@
-import React, { useState } from "react"
-import CartModal from "../Components/CartModal"
+import React, { useState } from "react";
+import CartModal from "../Components/CartModal";
 
 
 
@@ -13,7 +13,7 @@ const HeaderSimple = ({ data, cart, setCart, pages }) => {
   return <>
     <section className={`bg-white shadow-lg z-20 ${data?.class}`}>
       <header className="max-w-6xl mx-auto flex p-4 justify-between items-center">
-        <img className="h-10 w-auto" src="/assets/img/logo.png" alt="" />
+        <img className="h-10 w-auto" src="/assets/img/logo-default.pnng" alt="" />
         <button className="h-10 border rounded-xl w-1/3 text-start px-4 cursor-text hidden md:block">
           <i className="mdi mdi-magnify"></i> Buscar...
         </button>
