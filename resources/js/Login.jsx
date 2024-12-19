@@ -1,12 +1,12 @@
-import { createRoot } from 'react-dom/client'
-import React, { useEffect, useRef, useState } from 'react'
-import JSEncrypt from 'jsencrypt'
-import CreateReactScript from './Utils/CreateReactScript'
-import AuthRest from './actions/AuthRest'
 import { Link } from '@inertiajs/react'
-import Swal from 'sweetalert2'
+import JSEncrypt from 'jsencrypt'
+import React, { useEffect, useRef, useState } from 'react'
+import { createRoot } from 'react-dom/client'
 import { GET } from 'sode-extend-react'
+import Swal from 'sweetalert2'
+import CreateReactScript from './Utils/CreateReactScript'
 import Global from './Utils/Global'
+import AuthRest from './actions/AuthRest'
 
 const Login = ({ }) => {
 
@@ -61,7 +61,7 @@ const Login = ({ }) => {
             <div className="col-md-8 col-lg-6 col-xl-4">
               <div className="text-center">
                 <Link href="/">
-                  <img src='/assets/img/logo.svg' alt="" className="mx-auto" style={{ height: '40px' }} />
+                  <img src='/assets/img/logo.png' alt="" className="mx-auto" style={{ height: '40px' }} />
                 </Link>
                 <p className="text-muted mt-2 mb-4">Bienvenido a {Global.APP_NAME}</p>
               </div>

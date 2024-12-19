@@ -1,10 +1,10 @@
-import React, { useRef, useState } from "react"
+import React, { useRef, useState } from "react";
 import ReactModal from "react-modal";
 
-import SubscriptionsRest from "../../../Actions/SubscriptionsRest";
-import Swal from "sweetalert2";
-import Global from "../../../Utils/Global";
 import Tippy from "@tippyjs/react";
+import Swal from "sweetalert2";
+import SubscriptionsRest from "../../../Actions/SubscriptionsRest";
+import Global from "../../../Utils/Global";
 import HtmlContent from "../../../Utils/HtmlContent";
 
 const subscriptionsRest = new SubscriptionsRest();
@@ -74,7 +74,7 @@ const FooterCallToAction = ({ socials = [], summary = '', generals = [], pages =
         </form>
         <section className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div className="flex flex-col gap-4 items-start justify-start">
-            <img src="/assets/img/logo.svg" alt="" className="h-8" />
+            <img src="/assets/img/logo.png" alt="" className="h-8" />
             <p className="text-sm max-w-md">
               {summary}
             </p>

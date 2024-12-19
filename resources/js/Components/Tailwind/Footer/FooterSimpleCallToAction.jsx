@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import ReactModal from "react-modal";
 
 import Tippy from "@tippyjs/react";
-import HtmlContent from "../../../Utils/HtmlContent";
 import Global from "../../../Utils/Global";
+import HtmlContent from "../../../Utils/HtmlContent";
 
 ReactModal.setAppElement('#app')
 
@@ -25,7 +25,7 @@ const FooterSimpleCallToAction = ({ socials = [], terms = {}, footerLinks = [], 
             <div className="lg:col-span-3 w-full flex flex-col gap-10">
               <div>
                 <a href="/">
-                  <img src="/assets/img/logo.svg" alt={Global.APP_NAME} className="drop-shadow-lg" />
+                  <img src="/assets/img/logo.png" alt={Global.APP_NAME} className="drop-shadow-lg" />
                 </a>
               </div>
               <nav>

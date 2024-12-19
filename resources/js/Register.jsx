@@ -1,14 +1,14 @@
-import { createRoot } from 'react-dom/client'
-import React, { useEffect, useRef, useState } from 'react'
-import JSEncrypt from 'jsencrypt'
-import CreateReactScript from './Utils/CreateReactScript'
-import AuthRest from './actions/AuthRest'
-import ReCAPTCHA from 'react-google-recaptcha'
 import { Link } from '@inertiajs/react'
+import JSEncrypt from 'jsencrypt'
+import React, { useEffect, useRef, useState } from 'react'
+import { createRoot } from 'react-dom/client'
+import ReCAPTCHA from 'react-google-recaptcha'
+import Swal from 'sweetalert2'
+import AuthRest from './actions/AuthRest'
 import SelectFormGroup from './Components/form/SelectFormGroup'
 import Modal from './Components/Modal'
+import CreateReactScript from './Utils/CreateReactScript'
 import HtmlContent from './Utils/HtmlContent'
-import Swal from 'sweetalert2'
 
 const Register = ({ PUBLIC_RSA_KEY, RECAPTCHA_SITE_KEY, token, terms = 'Terminos y condiciones', roles = [], specialties }) => {
 
@@ -100,7 +100,7 @@ const Register = ({ PUBLIC_RSA_KEY, RECAPTCHA_SITE_KEY, token, terms = 'Terminos
           <div className="col-md-8 col-lg-6 col-xl-4">
             <div className="text-center">
               <a href="/">
-                <img src='/assets/img/logo.svg' alt="" className="mx-auto" style={{ height: '40px' }} />
+                <img src='/assets/img/logo.png' alt="" className="mx-auto" style={{ height: '40px' }} />
               </a>
               <p className="text-muted mt-2 mb-4">Bienvenido a Trasciende</p>
             </div>
