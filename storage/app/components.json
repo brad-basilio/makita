@@ -267,6 +267,16 @@
     ]
   },
   {
+    "id": "contact",
+    "name": "Contacto",
+    "options": [
+      {
+        "id": "ContactSimple",
+        "name": "Simple"
+      }
+    ]
+  },
+  {
     "id": "footer",
     "name": "Footer",
     "options": [

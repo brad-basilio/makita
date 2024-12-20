@@ -28,8 +28,11 @@ class MessageController extends BasicController
         $validatedData = $request->validate([
             'name' => 'required|string',
             'email' => 'nullable|email|max:320',
-            'subject' => 'required|string',
-            'description' => 'required|string',
+            'phone' => 'numeric',
+            'subject' => 'string',
+            'description' => 'string',
+            // 'subject' => 'required|string',
+            // 'description' => 'required|string',
         ], $messages);
 
         return $validatedData;

@@ -17,6 +17,7 @@ import Global from './Utils/Global';
 import ItemsRest from './Actions/ItemsRest';
 import Filter from './Components/Tailwind/Filter';
 import ProductDetail from './Components/Tailwind/ProductDetail';
+import Contact from './Components/Tailwind/Contact';
 
 const itemsRest = new ItemsRest();
 
@@ -82,6 +83,8 @@ const System = ({ page, pages, params, filteredData = {}, systems, socials = [],
         return <ProductDetail which={value} item={filteredData.Item ?? {}} cart={cart} setCart={setCart}/>
       case 'cart':
         return <Cart which={value} data={data} cart={cart} setCart={setCart} />
+      case 'contact':
+        return <Contact which={value} data={data}/>
       case 'footer':
         return <Footer which={value} items={getItems(itemsId)} pages={pages} />
     }

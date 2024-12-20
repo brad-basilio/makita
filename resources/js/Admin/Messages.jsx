@@ -134,10 +134,20 @@ const Messages = () => {
         <b>Correo</b>:
         <span className='ms-1'>{dataLoaded?.email || <i className='text-muted'>- Sin correo -</i>}</span>
       </p>
+      {
+        dataLoaded?.phone &&
+        <p>
+          <b>Telefono</b>:
+          <span className='ms-1'>{dataLoaded?.phone}</span>
+        </p>
+      }
+      {
+        dataLoaded?.subject &&
       <p>
         <b>Asunto</b>:
         <span className='ms-1'>{dataLoaded?.subject}</span>
       </p>
+      }
       <p>
         <b>Mensaje</b>:
         <span className='ms-1'>{dataLoaded?.description}</span>
