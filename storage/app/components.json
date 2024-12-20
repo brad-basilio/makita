@@ -277,6 +277,19 @@
     ]
   },
   {
+    "id": "frame",
+    "name": "Frame",
+    "options": [
+      {
+        "id": "Simple",
+        "name": "Simple",
+        "data": [
+          "code:html"
+        ]
+      }
+    ]
+  },
+  {
     "id": "footer",
     "name": "Footer",
     "options": [

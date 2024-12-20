@@ -95,5 +95,17 @@
             "field": null,
             "with": []
         }
+    },
+    {
+        "id": "cae7b6e8-31f7-4e4b-8bf4-4bd4fca7ff55",
+        "name": "Thank you",
+        "path": "\/contact-thanks",
+        "extends_base": true,
+        "pseudo_path": "\/contact-thanks",
+        "using": {
+            "model": null,
+            "field": null,
+            "with": []
+        }
     }
 ]
