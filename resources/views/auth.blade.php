@@ -13,7 +13,7 @@
   <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
   <meta content="Coderthemes" name="author" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <link rel="shortcut icon" href="/assets/img/icon.svg" type="image/svg+xml">
+  <link rel="shortcut icon" href="/assets/resources/icon.png" type="image/png">
 
   <link href="/lte/assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
 
