@@ -21,7 +21,10 @@ const BannerFullWidth = ({ data }) => {
           }
         </div>
         <div className="flex items-center justify-center">
-          <img src={`/api/banners/media/${data?.image}`} className="w-full aspect-auto object-contain object-bottom" alt="" />
+          {
+            data?.image &&
+            <img src={`/api/banners/media/${data?.image}`} className="w-full aspect-auto object-contain object-bottom" alt="" />
+          }
         </div>
       </div>
     </div>
