@@ -120,6 +120,7 @@
         "name": "Simple",
         "image": "filters-simple.png",
         "data": [
+          "path",
           "title",
           "description"
         ]
