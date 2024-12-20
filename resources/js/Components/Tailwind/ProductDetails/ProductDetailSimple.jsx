@@ -59,7 +59,7 @@ const ProductDetailSimple = ({ item, cart, setCart }) => {
             </div>
           </div>
           <div>
-            <input ref={quantityRef} type="number" class="text-textPrimary border-2 rounded-lg w-16 border-[#FF3131]" value="01" step="1" />
+            <input ref={quantityRef} type="number" class="text-textPrimary px-2 py-1 border-2 rounded-lg w-16 border-[#FF3131]" defaultValue={1} step={1} />
           </div>
 
           {
