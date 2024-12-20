@@ -203,9 +203,12 @@
         "using": {
           "model": "Item",
           "filters": [
-            "featured"
+            "featured",
+            "recommended",
+            "offering",
+            "is_new"
           ],
-          "limit": 10
+          "limit": 8
         }
       }
     ]
