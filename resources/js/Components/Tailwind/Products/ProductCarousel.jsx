@@ -52,13 +52,11 @@ const ProductCarousel = ({ data, items, cart, setCart }) => {
           },
         }}
       >
-        {items?.map((item, index) => {
-          const inCart = cart.find(x => x.id == item.id)
-          const finalPrice = item?.discount > 0 ? item?.discount : item?.price
-          return <SwiperSlide key={index}>
-            <ProductCard item={item} cart={cart} setCart={setCart}/>
-          </SwiperSlide>
-        })}
+        {
+          items?.map((item, index) => <SwiperSlide key={index}>
+            <ProductCard item={item} cart={cart} setCart={setCart} />
+          </SwiperSlide>)
+        }
       </Swiper>
     </div>
   </div>

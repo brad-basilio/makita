@@ -47,7 +47,7 @@
       }
 
       .ql-editor * {
-        color: #475569;
+        /* color: #475569; */
       }
 
       .ql-editor img {

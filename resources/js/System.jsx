@@ -16,10 +16,11 @@ import { Local } from 'sode-extend-react';
 import Global from './Utils/Global';
 import ItemsRest from './Actions/ItemsRest';
 import Filter from './Components/Tailwind/Filter';
+import ProductDetail from './Components/Tailwind/ProductDetail';
 
 const itemsRest = new ItemsRest();
 
-const System = ({ page, pages, params, systems, socials = [], systemItems = {} }) => {
+const System = ({ page, pages, params, filteredData = {}, systems, socials = [], systemItems = {} }) => {
 
   const getItems = (itemsId) => {
     return systemItems[itemsId] ?? []
@@ -77,6 +78,8 @@ const System = ({ page, pages, params, systems, socials = [], systemItems = {} }
         return <Banner which={value} data={data} />
       case 'step':
         return <Step which={value} data={data} />
+      case 'product-detail': 
+        return <ProductDetail which={value} item={filteredData.Item ?? {}} cart={cart} setCart={setCart}/>
       case 'cart':
         return <Cart which={value} data={data} cart={cart} setCart={setCart} />
       case 'footer':

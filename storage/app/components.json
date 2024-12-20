@@ -235,6 +235,16 @@
     ]
   },
   {
+    "id": "product-detail",
+    "name": "Detalle de producto",
+    "options": [
+      {
+        "id": "ProductDetailSimple",
+        "name": "Simple"
+      }
+    ]
+  },
+  {
     "id": "cart",
     "name": "Cart",
     "options": [

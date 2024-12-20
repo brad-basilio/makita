@@ -92,8 +92,21 @@ class SystemController extends BasicController
 
         $props['systems'] = $systems;
         $props['params'] = $request->route() ? $request->route()->parameters() : [];
+        $props['filteredData'] = [];
 
-        foreach ($props['params'] as $key) {
+        foreach ($page['using'] as $key => $using) {
+            $model = $using['model'] ?? null;
+            $field = $using['field'] ?? null;
+            $value = $request->$key ?? null;
+            $relations = $using['relations'] ?? [];
+
+            if ($model && $field && $value) {
+                $class = 'App\\Models\\' . $model;
+                $result = $class::with($relations)
+                    ->where($field, $value)
+                    ->first();
+                $props['filteredData'][$model] = $result;
+            }
         }
 
         return $props;
