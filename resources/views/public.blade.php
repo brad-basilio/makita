@@ -13,11 +13,11 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>{{ $data['name'] ?? 'Página' }} | {{ env('APP_NAME', 'Kaori') }}</title>
 
-  <link rel="shortcut icon" href="/assets/resources/icon.png" type="image/png">
-  @isset ($data['description'])
+  <link rel="shortcut icon" href="/assets/resources/icon.png?v={{ uniqid() }}" type="image/png">
+  @isset($data['description'])
     <meta name="description" content="{{ $data['description'] }}">
   @endisset
-  @isset ($data['keywords'])
+  @isset($data['keywords'])
     <meta name="keywords" content="{{ implode(', ', $data['keywords']) }}">
   @endisset
 
