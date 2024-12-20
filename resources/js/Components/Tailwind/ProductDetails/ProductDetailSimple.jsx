@@ -1,14 +1,18 @@
+import Swal from "sweetalert2"
 import html2string from "../../../Utils/html2string"
 import HtmlContent from "../../../Utils/HtmlContent"
 import Number2Currency from "../../../Utils/Number2Currency"
+import { useRef } from "react"
 
 const ProductDetailSimple = ({ item, cart, setCart }) => {
+
+  const quantityRef = useRef()
 
   const onAddClicked = () => {
     const newCart = structuredClone(cart)
     const index = newCart.findIndex(x => x.id == item.id)
     if (index == -1) {
-      newCart.push({ ...item, quantity: 1 })
+      newCart.push({ ...item, quantity: Number(quantityRef.current.value || 1) })
     } else {
       newCart[index].quantity++
     }
@@ -55,7 +59,7 @@ const ProductDetailSimple = ({ item, cart, setCart }) => {
             </div>
           </div>
           <div>
-            <input type="number" id="cantidadInput" class="text-textPrimary border-2 rounded-lg w-16 border-[#FF3131]" value="01" step="1" />
+            <input ref={quantityRef} type="number" class="text-textPrimary border-2 rounded-lg w-16 border-[#FF3131]" value="01" step="1" />
           </div>
 
           {
