@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react"
-import ItemsRest from "../../../Actions/ItemsRest"
 import Select from 'react-select'
+import ItemsRest from "../../../Actions/ItemsRest"
+import FilterPagination from "../../../Reutilizables/Pagination/FilterPagination"
 import ArrayJoin from "../../../Utils/ArrayJoin"
 import ProductCard from "../Components/ProductCard"
-import FilterPagination from "../../../Reutilizables/Pagination/FilterPagination"
 
 const itemsRest = new ItemsRest()
 
@@ -101,7 +101,7 @@ const FilterSimple = ({ data, cart, setCart }) => {
   }
 
   return <section className="bg-white">
-    <div className="max-w-6xl w-full mx-auto px-4 py-[5%] md:py-[2.5%]">
+    <div className="px-[5%] replace-max-w-here w-full mx-auto px-4 py-[5%] md:py-[2.5%]">
       {
         (data?.title || data?.description) &&
         <div className="mb-[2%]">

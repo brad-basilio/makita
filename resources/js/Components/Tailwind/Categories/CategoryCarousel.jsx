@@ -1,11 +1,11 @@
-import React from "react"
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay } from 'swiper/modules';
+import React from "react";
 import 'swiper/css';
+import { Autoplay } from 'swiper/modules';
+import { Swiper, SwiperSlide } from "swiper/react";
 
 const CategoryCarousel = ({ data, items }) => {
   return <div className="bg-white">
-    <div className="max-w-6xl w-full mx-auto px-4 py-[5%] md:py-[2.5%]">
+    <div className="px-[5%] replace-max-w-here w-full mx-auto px-4 py-[5%] md:py-[2.5%]">
       <div className="flex flex-wrap justify-between mb-[2%]">
         <div>
           {

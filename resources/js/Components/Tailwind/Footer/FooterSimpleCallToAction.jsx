@@ -20,7 +20,7 @@ const FooterSimpleCallToAction = ({ socials = [], terms = {}, footerLinks = [], 
   return (
     <>
       <footer className="font-poppins bg-primary text-white">
-        <div className="max-w-6xl mx-auto px-4 py-[5%] md:py-[2.5%]">
+        <div className="px-[5%] replace-max-w-here mx-auto px-4 py-[5%] md:py-[2.5%]">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4 md:justify-center">
             <div className="lg:col-span-3 w-full flex flex-col gap-10">
               <div>

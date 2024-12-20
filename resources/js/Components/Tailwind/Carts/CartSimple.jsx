@@ -1,6 +1,6 @@
-import React from "react"
-import CartItemRow from "../Components/CartItemRow";
+import React from "react";
 import Number2Currency from "../../../Utils/Number2Currency";
+import CartItemRow from "../Components/CartItemRow";
 
 const CartSimple = ({ data, cart, setCart }) => {
 
@@ -12,7 +12,7 @@ const CartSimple = ({ data, cart, setCart }) => {
   const subTotal = (totalPrice * 100) / 118
 
   return <section className="bg-white">
-    <div className="max-w-6xl w-full mx-auto p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 lg:grid-cols-3 gap-4">
+    <div className="px-[5%] replace-max-w-here w-full mx-auto p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 lg:grid-cols-3 gap-4">
       <div className="md:col-span-3 lg:col-span-2 min-h-80">
         {
           cart.length > 0

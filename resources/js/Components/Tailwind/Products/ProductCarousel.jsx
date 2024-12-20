@@ -1,7 +1,7 @@
-import React from "react"
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay } from 'swiper/modules';
+import React from "react";
 import 'swiper/css';
+import { Autoplay } from 'swiper/modules';
+import { Swiper, SwiperSlide } from "swiper/react";
 import ProductCard from "../Components/ProductCard";
 
 const ProductCarousel = ({ data, items, cart, setCart }) => {
@@ -9,7 +9,7 @@ const ProductCarousel = ({ data, items, cart, setCart }) => {
   if (items.length == 0) return
 
   return <div className="bg-gray-50">
-    <div className="max-w-6xl w-full mx-auto px-4 py-[5%] md:py-[2.5%]">
+    <div className="px-[5%] replace-max-w-here w-full mx-auto px-4 py-[5%] md:py-[2.5%]">
       <div className="flex flex-wrap justify-between mb-[2%]">
         <div>
           {

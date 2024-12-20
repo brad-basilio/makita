@@ -8,7 +8,7 @@ const Filter = ({ which, data, cart, setCart }) => {
       case 'FilterSimple':
         return <FilterSimple data={data} cart={cart} setCart={setCart} />
       default:
-        return <div className="w-full max-w-6xl p-4 mx-auto">- No Hay componente <b>{which}</b> -</div>
+        return <div className="w-full px-[5%] replace-max-w-here p-4 mx-auto">- No Hay componente <b>{which}</b> -</div>
     }
   }
   return getFilter()

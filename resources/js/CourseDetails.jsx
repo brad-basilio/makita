@@ -1,10 +1,10 @@
+import { motion } from 'framer-motion';
 import React from "react";
 import { createRoot } from "react-dom/client";
-import CreateReactScript from "./Utils/CreateReactScript";
-import Base from "./Components/Tailwind/Base";
-import { motion } from 'framer-motion';
-import HtmlContent from "./Utils/HtmlContent";
 import { JSON } from "sode-extend-react";
+import Base from "./Components/Tailwind/Base";
+import CreateReactScript from "./Utils/CreateReactScript";
+import HtmlContent from "./Utils/HtmlContent";
 import Number2Currency from "./Utils/Number2Currency";
 
 const CourseDetails = ({ course }) => {
@@ -19,7 +19,7 @@ const CourseDetails = ({ course }) => {
 
   return <>
     <section className="mt-16 bg-slate-100">
-      <div className="flex flex-col p-[5%]  items-start max-w-6xl mx-auto ">
+      <div className="flex flex-col p-[5%]  items-start px-[5%] replace-max-w-here mx-auto ">
         <div className="flex flex-col">
           <div className="flex flex-col w-full">
             <div
@@ -53,7 +53,7 @@ const CourseDetails = ({ course }) => {
         </div>
       </div>
     </section>
-    <section className="relative p-[5%] max-w-6xl mx-auto max-md:flex max-md:flex-col-reverse md:grid md:grid-cols-2 lg:grid-cols-3 gap-[5%]">
+    <section className="relative p-[5%] px-[5%] replace-max-w-here mx-auto max-md:flex max-md:flex-col-reverse md:grid md:grid-cols-2 lg:grid-cols-3 gap-[5%]">
       <div className="lg:col-span-2 w-full">
         <img
           className="w-full aspect-video rounded-lg object-cover object-center"
@@ -124,69 +124,69 @@ const CourseDetails = ({ course }) => {
         </motion.div>
       </div>
       {/* <div className="w-full"> */}
-        <div className="sticky top-2 h-max rounded bg-slate-100 w-full px-6 max-md:px-5">
-          <div className="flex gap-10 justify-between items-center pt-8 pb-6 w-full font-medium leading-none uppercase border-b border-solid border-b-[#CFD8E8]">
-            <div className="self-stretch my-auto text-2xl not-italic tracking-wide text-[#2B384F]">
-              S/.{Number2Currency(course.price)}
+      <div className="sticky top-2 h-max rounded bg-slate-100 w-full px-6 max-md:px-5">
+        <div className="flex gap-10 justify-between items-center pt-8 pb-6 w-full font-medium leading-none uppercase border-b border-solid border-b-[#CFD8E8]">
+          <div className="self-stretch my-auto text-2xl not-italic tracking-wide text-[#2B384F]">
+            S/.{Number2Currency(course.price)}
+          </div>
+          <div className="flex gap-2.5 justify-center items-center self-stretch px-3 py-2 my-auto text-sm not-italic whitespace-nowrap rounded-3xl bg-[#FFF0FA] text-[#FF27B9]">
+            OFERTA
+          </div>
+        </div>
+
+        <div className="flex flex-col py-6 w-full text-sm tracking-normal leading-relaxed border-b border-solid border-b-[#CFD8E8]">
+          <div className="flex gap-10 justify-between items-center w-full">
+            <div className="flex gap-2 items-center justify-between self-stretch my-auto text-[#2E405E]">
+              <i className="fas fa-clock w-6 text-center"></i>
+              <div className="self-stretch my-auto not-italic">
+                Duración del curso
+              </div>
             </div>
-            <div className="flex gap-2.5 justify-center items-center self-stretch px-3 py-2 my-auto text-sm not-italic whitespace-nowrap rounded-3xl bg-[#FFF0FA] text-[#FF27B9]">
-              OFERTA
+            <div className="self-stretch my-auto not-italic text-[#5375A4] text-end">
+              {course.long_duration} días
             </div>
           </div>
 
-          <div className="flex flex-col py-6 w-full text-sm tracking-normal leading-relaxed border-b border-solid border-b-[#CFD8E8]">
-            <div className="flex gap-10 justify-between items-center w-full">
-              <div className="flex gap-2 items-center justify-between self-stretch my-auto text-[#2E405E]">
-                <i className="fas fa-clock w-6 text-center"></i>
-                <div className="self-stretch my-auto not-italic">
-                  Duración del curso
-                </div>
-              </div>
-              <div className="self-stretch my-auto not-italic text-[#5375A4] text-end">
-                {course.long_duration} días
+          <div className="flex gap-10 justify-between items-center mt-3 w-full">
+            <div className="flex gap-2 items-center justify-between self-stretch my-auto text-[#2E405E]">
+              <i className="fas fa-users w-6 text-center"></i>
+              <div className="self-stretch my-auto not-italic">
+                Estudiantes matriculados
               </div>
             </div>
-
-            <div className="flex gap-10 justify-between items-center mt-3 w-full">
-              <div className="flex gap-2 items-center justify-between self-stretch my-auto text-[#2E405E]">
-                <i className="fas fa-users w-6 text-center"></i>
-                <div className="self-stretch my-auto not-italic">
-                  Estudiantes matriculados
-                </div>
-              </div>
-              <div className="self-stretch my-auto not-italic text-[#5375A4] text-end">
-                {course.students} estudiantes
-              </div>
-            </div>
-          </div>
-
-          <div className="flex flex-col justify-center py-6 w-full text-base font-medium tracking-normal leading-none text-white uppercase">
-          <a href={`//wa.me/51945622983?text=${encodeURIComponent(`Estoy interesado en este curso:\n- ${course.name}`)}`} className="flex gap-2 justify-center items-center px-6 py-4 w-full rounded-3xl bg-[#2E405E] max-md:px-5" target="_blank">
-              <div className="self-stretch my-auto">
-                Quiero el curso
-              </div>
-              <i className="mdi mdi-arrow-top-right"></i>
-            </a>
-          </div>
-
-          <div className="flex flex-col pt-6 pb-8 w-full">
-            <div className="text-base not-italic font-medium tracking-normal leading-none uppercase text-[#07090D]">
-              Este curso incluye:
-            </div>
-            <div className="flex flex-col gap-2 mt-6 w-full text-sm tracking-normal leading-relaxed text-[#4E5566]">
-              {
-                content.map(({ icon, text }, index) => {
-                  return <div className="flex gap-3 items-center w-full">
-                    <i className={`${icon || 'fas fa-cube'} w-6 text-center`}></i>
-                    <div className="flex-1 shrink self-stretch my-auto not-italic basis-0">
-                      {text}
-                    </div>
-                  </div>
-                })
-              }
+            <div className="self-stretch my-auto not-italic text-[#5375A4] text-end">
+              {course.students} estudiantes
             </div>
           </div>
         </div>
+
+        <div className="flex flex-col justify-center py-6 w-full text-base font-medium tracking-normal leading-none text-white uppercase">
+          <a href={`//wa.me/51945622983?text=${encodeURIComponent(`Estoy interesado en este curso:\n- ${course.name}`)}`} className="flex gap-2 justify-center items-center px-6 py-4 w-full rounded-3xl bg-[#2E405E] max-md:px-5" target="_blank">
+            <div className="self-stretch my-auto">
+              Quiero el curso
+            </div>
+            <i className="mdi mdi-arrow-top-right"></i>
+          </a>
+        </div>
+
+        <div className="flex flex-col pt-6 pb-8 w-full">
+          <div className="text-base not-italic font-medium tracking-normal leading-none uppercase text-[#07090D]">
+            Este curso incluye:
+          </div>
+          <div className="flex flex-col gap-2 mt-6 w-full text-sm tracking-normal leading-relaxed text-[#4E5566]">
+            {
+              content.map(({ icon, text }, index) => {
+                return <div className="flex gap-3 items-center w-full">
+                  <i className={`${icon || 'fas fa-cube'} w-6 text-center`}></i>
+                  <div className="flex-1 shrink self-stretch my-auto not-italic basis-0">
+                    {text}
+                  </div>
+                </div>
+              })
+            }
+          </div>
+        </div>
+      </div>
       {/* </div> */}
     </section>
   </>
