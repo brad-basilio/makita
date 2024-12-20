@@ -75,6 +75,10 @@ class SystemController extends BasicController
                     }
                 }
 
+                if (isset($component['using']['limit'])) {
+                    $query->limit($component['using']['limit']);
+                }
+
                 // aquí filtrar visible & status
                 $table = (new $using)->getTable();
                 if (Schema::hasColumn($table, 'visible')) {
