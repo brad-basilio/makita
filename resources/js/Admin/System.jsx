@@ -11,6 +11,7 @@ import Component from '../Components/Adminto/System/Component';
 import DataModal from '../Components/Adminto/System/DataModal';
 import Menu from '../Components/Adminto/System/Menu';
 import ParamsModal from '../Components/Adminto/System/ParamsModal';
+import RouteParams from '../Utils/RouteParams';
 
 const systemRest = new SystemRest()
 
@@ -66,11 +67,20 @@ const System = ({ systems: systemsDB, pages: pagesDB, components, models }) => {
 
   useEffect(() => {
     const iframe = $('iframe:visible');
-    if (iframe){
+    if (iframe) {
       $(iframe).removeAttr('src');
       $(iframe).attr('src', iframe.data('path'));
-    } 
+    }
   }, [systems, pages])
+
+  const onPathChange = (e) => {
+    const pageId = $(e.target).data('page-id')
+    const path = $(e.target).data('page-path')
+    const value = $(e.target).val()
+    
+    $(`#iframe-${pageId}`).removeAttr('src')
+    $(`#iframe-${pageId}`).attr('src', `${path}/${value}`)
+  }
 
   const onEditSEOClicked = async (page) => {
     setPageLoaded(page);
@@ -283,7 +293,17 @@ const System = ({ systems: systemsDB, pages: pagesDB, components, models }) => {
                                   </div>
                                 </div>
                                 <div className="col-md-8">
-                                  <iframe src={page?.pseudo_path || page.path} data-path={page?.pseudo_path || page.path} className='w-100 h-100 border' style={{
+                                  <div class="input-group mb-2">
+                                    <span className='input-group-text'>
+                                      {page?.pseudo_path || page.path}
+                                      {RouteParams(page?.path).length > 0 && '/'}
+                                    </span>
+                                    {
+                                      RouteParams(page?.path).length > 0 &&
+                                      <input type="text" class="form-control" placeholder="Parametros" data-page-path={page.pseudo_path} data-page-id={page.id} onChange={onPathChange} />
+                                    }
+                                  </div>
+                                  <iframe id={`iframe-${page.id}`} src={page?.pseudo_path || page.path} data-path={page?.pseudo_path || page.path} className='w-100 h-100 border' style={{
                                     minHeight: 'calc(100vh - 185px)',
                                     borderRadius: '4px'
                                   }}></iframe>
@@ -302,7 +322,7 @@ const System = ({ systems: systemsDB, pages: pagesDB, components, models }) => {
         </div>
       </div>
       <SEOModal dataLoaded={pageLoaded} setDataLoaded={setPageLoaded} modalRef={modalSEORef} />
-      <ParamsModal dataLoaded={pageLoaded} setDataLoaded={setPageLoaded} setPages={setPages} modalRef={modalParamsRef} models={models}/>
+      <ParamsModal dataLoaded={pageLoaded} setDataLoaded={setPageLoaded} setPages={setPages} modalRef={modalParamsRef} models={models} />
       <DataModal dataLoaded={systemLoaded} setDataLoaded={setSystemLoaded} setSystems={setSystems} modalRef={dataModalRef} />
     </>
   );
