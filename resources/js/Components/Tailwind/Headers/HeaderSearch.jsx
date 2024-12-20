@@ -14,7 +14,9 @@ const HeaderSimple = ({ data, cart, setCart, pages }) => {
   return <>
     <section className={`bg-white shadow-lg z-20 ${data?.class}`}>
       <header className="px-[5%] replace-max-w-here mx-auto flex p-4 justify-between items-center">
-        <img className="h-10 aspect-[13/4] object-contain object-center w-auto" src={`/assets/resources/logo.png?v=${crypto.randomUUID()}`} alt={Global.APP_NAME} />
+        <a href="/">
+          <img className="h-10 aspect-[13/4] object-contain object-center w-auto" src={`/assets/resources/logo.png?v=${crypto.randomUUID()}`} alt={Global.APP_NAME} />
+        </a>
         <button className="h-10 border rounded-xl w-1/3 text-start px-4 cursor-text hidden md:block">
           <i className="mdi mdi-magnify"></i> Buscar...
         </button>
