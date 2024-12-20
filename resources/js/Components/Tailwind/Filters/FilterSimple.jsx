@@ -148,7 +148,7 @@ const FilterSimple = ({ data, cart, setCart }) => {
           </div>
           <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[5px] sm:gap-[10px] md:gap-[15px] lg:gap-5">
             {
-              items.map((item, index) => <ProductCard key={index} item={item} cart={cart} setCart={setCart} />)
+              items.map((item, index) => <ProductCard data={{ path: 'product' }} key={index} item={item} cart={cart} setCart={setCart} />)
             }
             {
               loading &&

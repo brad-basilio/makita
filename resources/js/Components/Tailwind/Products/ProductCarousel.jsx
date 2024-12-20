@@ -54,7 +54,7 @@ const ProductCarousel = ({ data, items, cart, setCart }) => {
       >
         {
           items?.map((item, index) => <SwiperSlide key={index}>
-            <ProductCard item={item} cart={cart} setCart={setCart} />
+            <ProductCard data={data} item={item} cart={cart} setCart={setCart} />
           </SwiperSlide>)
         }
       </Swiper>
