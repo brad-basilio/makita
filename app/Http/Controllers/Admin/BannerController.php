@@ -54,7 +54,7 @@ class BannerController extends BasicController
             }
 
             $bannerJpa = $this->model::find($request->id);
-            $body = \array_merge($bannerJpa->data, $body);
+            $body = \array_merge($bannerJpa->data ?? [], $body);
 
             $this->model::where('id', $request->id)
                 ->update([
