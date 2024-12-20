@@ -30,9 +30,15 @@ const FilterItem = ({ summary, keyName, field, otherField, title, onChange, filt
   </>
 }
 
-const FilterSimple = ({ data, cart, setCart }) => {
+const FilterSimple = ({ data, category, subcategory, cart, setCart }) => {
+
   const filters = ['category_id', 'subcategory_id', 'brand_id', 'item_tag.tag_id']
-  const [filter, setFilter] = useState(filters.map(x => ({ field: x, values: [] })))
+  const [filter, setFilter] = useState(filters.map(x => {
+    const values= []
+    if (x == 'category_id' && category) values.push(category.id)
+    if (x == 'subcategory_id' && subcategory) values.push(subcategory.id)
+    return { field: x, values }
+  }))
   const [items, setItems] = useState([])
   const [order, setOrder] = useState({ value: 'asc', label: <>Menor a mayor <i className="mdi mdi-arrow-up"></i></> })
 

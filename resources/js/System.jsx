@@ -67,7 +67,7 @@ const System = ({ page, pages, params, filteredData = {}, systems, socials = [],
         }
         break
       case 'filter':
-        return <Filter which={value} data={data} cart={cart} setCart={setCart} />
+        return <Filter which={value} data={data} category={filteredData.Category} subcategory={filteredData.SubCategory} cart={cart} setCart={setCart} />
       case 'product':
         return <Product which={value} data={data} items={getItems(itemsId)} cart={cart} setCart={setCart} />
       case 'category':
