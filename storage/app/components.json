@@ -217,6 +217,10 @@
       {
         "id": "BannerSimple",
         "name": "Simple"
+      },
+      {
+        "id": "BannerFullWidth",
+        "name": "Full Width"
       }
     ]
   },

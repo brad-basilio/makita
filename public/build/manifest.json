@@ -383,13 +383,13 @@
       "_index-DFv2mRv-.js"
     ]
   },
-  "_swiper-!~{02u}~.js": {
+  "_swiper-!~{02v}~.js": {
     "file": "swiper.css",
-    "src": "_swiper-!~{02u}~.js"
+    "src": "_swiper-!~{02v}~.js"
   },
-  "_tippy-!~{02q}~.js": {
+  "_tippy-!~{02r}~.js": {
     "file": "tippy.css",
-    "src": "_tippy-!~{02q}~.js"
+    "src": "_tippy-!~{02r}~.js"
   },
   "_tippy-react.esm-BVvHiWwH.js": {
     "file": "assets/tippy-react.esm-BVvHiWwH.js",
@@ -1248,7 +1248,7 @@
     ]
   },
   "resources/js/Components/Adminto/DataGrid.jsx": {
-    "file": "assets/DataGrid-BZ2SQWt6.js",
+    "file": "assets/DataGrid-DCTBjBLC.js",
     "name": "DataGrid",
     "src": "resources/js/Components/Adminto/DataGrid.jsx",
     "isEntry": true,
@@ -1269,7 +1269,7 @@
     ]
   },
   "resources/js/Components/Adminto/Dx/DxButton.jsx": {
-    "file": "assets/DxButton-l0sNRNKZ.js",
+    "file": "assets/DxButton-DP2rzg_V.js",
     "name": "DxButton",
     "src": "resources/js/Components/Adminto/Dx/DxButton.jsx",
     "isEntry": true
@@ -1301,7 +1301,7 @@
     ]
   },
   "resources/js/Components/Adminto/Modal.jsx": {
-    "file": "assets/Modal-BZ2SQWt6.js",
+    "file": "assets/Modal-DCTBjBLC.js",
     "name": "Modal",
     "src": "resources/js/Components/Adminto/Modal.jsx",
     "isEntry": true,
@@ -1438,7 +1438,7 @@
     ]
   },
   "resources/js/Components/Adminto/form/InputFormGroup.jsx": {
-    "file": "assets/InputFormGroup-BZ2SQWt6.js",
+    "file": "assets/InputFormGroup-DCTBjBLC.js",
     "name": "InputFormGroup",
     "src": "resources/js/Components/Adminto/form/InputFormGroup.jsx",
     "isEntry": true,
@@ -1458,7 +1458,7 @@
     ]
   },
   "resources/js/Components/Adminto/form/QuillFormGroup.jsx": {
-    "file": "assets/QuillFormGroup-BZ2SQWt6.js",
+    "file": "assets/QuillFormGroup-DCTBjBLC.js",
     "name": "QuillFormGroup",
     "src": "resources/js/Components/Adminto/form/QuillFormGroup.jsx",
     "isEntry": true,
@@ -1537,7 +1537,7 @@
     ]
   },
   "resources/js/Components/Blog/Filter.jsx": {
-    "file": "assets/Filter-BZ2SQWt6.js",
+    "file": "assets/Filter-DCTBjBLC.js",
     "name": "Filter",
     "src": "resources/js/Components/Blog/Filter.jsx",
     "isEntry": true,
@@ -1614,7 +1614,7 @@
     ]
   },
   "resources/js/Components/Courses/Filter.jsx": {
-    "file": "assets/Filter-DCTBjBLC.js",
+    "file": "assets/Filter-BZ2SQWt6.js",
     "name": "Filter",
     "src": "resources/js/Components/Courses/Filter.jsx",
     "isEntry": true,
@@ -1647,7 +1647,7 @@
     ]
   },
   "resources/js/Components/DataGrid.jsx": {
-    "file": "assets/DataGrid-DCTBjBLC.js",
+    "file": "assets/DataGrid-BZ2SQWt6.js",
     "name": "DataGrid",
     "src": "resources/js/Components/DataGrid.jsx",
     "isEntry": true,
@@ -1790,7 +1790,7 @@
     ]
   },
   "resources/js/Components/Modal.jsx": {
-    "file": "assets/Modal-DCTBjBLC.js",
+    "file": "assets/Modal-BZ2SQWt6.js",
     "name": "Modal",
     "src": "resources/js/Components/Modal.jsx",
     "isEntry": true,
@@ -1810,7 +1810,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Banner.jsx": {
-    "file": "assets/Banner-BJV6xhQB.js",
+    "file": "assets/Banner-Ug0GOG7L.js",
     "name": "Banner",
     "src": "resources/js/Components/Tailwind/Banner.jsx",
     "isEntry": true,
@@ -1820,7 +1820,18 @@
       "_index-DFv2mRv-.js"
     ],
     "dynamicImports": [
-      "resources/js/Components/Tailwind/Banners/BannerSimple.jsx"
+      "resources/js/Components/Tailwind/Banners/BannerSimple.jsx",
+      "resources/js/Components/Tailwind/Banners/BannerFullWidth.jsx"
+    ]
+  },
+  "resources/js/Components/Tailwind/Banners/BannerFullWidth.jsx": {
+    "file": "assets/BannerFullWidth-BZ2SQWt6.js",
+    "name": "BannerFullWidth",
+    "src": "resources/js/Components/Tailwind/Banners/BannerFullWidth.jsx",
+    "isEntry": true,
+    "imports": [
+      "resources/js/Components/About/AboutHeader.jsx",
+      "_index-DFv2mRv-.js"
     ]
   },
   "resources/js/Components/Tailwind/Banners/BannerSimple.jsx": {
@@ -2150,19 +2161,14 @@
     ]
   },
   "resources/js/Components/Tailwind/Products/ProductCarousel.jsx": {
-    "file": "assets/ProductCarousel-CjJmHCCu.js",
+    "file": "assets/ProductCarousel-CKQLTI4M.js",
     "name": "ProductCarousel",
     "src": "resources/js/Components/Tailwind/Products/ProductCarousel.jsx",
-    "isDynamicEntry": true,
+    "isEntry": true,
     "imports": [
       "resources/js/Components/About/AboutHeader.jsx",
       "_index-DFv2mRv-.js",
-      "_autoplay-CXxwwNHA.js",
       "resources/js/Components/Tailwind/Products/ProductList.jsx",
-      "_ProductCard-ChWd0_ag.js",
-      "_Number2Currency-e57Tgsuk.js",
-      "_tippy-react.esm-BVvHiWwH.js",
-      "_index-DgyC5pTR.js",
       "resources/js/Components/Tailwind/Components/ProductCard.jsx"
     ],
     "css": [
@@ -2355,7 +2361,7 @@
     ]
   },
   "resources/js/Components/dx/DxButton.jsx": {
-    "file": "assets/DxButton-DP2rzg_V.js",
+    "file": "assets/DxButton-l0sNRNKZ.js",
     "name": "DxButton",
     "src": "resources/js/Components/dx/DxButton.jsx",
     "isEntry": true
@@ -2371,7 +2377,7 @@
     ]
   },
   "resources/js/Components/form/InputFormGroup.jsx": {
-    "file": "assets/InputFormGroup-DCTBjBLC.js",
+    "file": "assets/InputFormGroup-BZ2SQWt6.js",
     "name": "InputFormGroup",
     "src": "resources/js/Components/form/InputFormGroup.jsx",
     "isEntry": true,
@@ -2391,7 +2397,7 @@
     ]
   },
   "resources/js/Components/form/QuillFormGroup.jsx": {
-    "file": "assets/QuillFormGroup-DCTBjBLC.js",
+    "file": "assets/QuillFormGroup-BZ2SQWt6.js",
     "name": "QuillFormGroup",
     "src": "resources/js/Components/form/QuillFormGroup.jsx",
     "isEntry": true,
@@ -2682,7 +2688,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-Dxx2TiGg.js",
+    "file": "assets/System-OZySZw5R.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,
@@ -2709,6 +2715,7 @@
       "resources/js/Components/Tailwind/Products/ProductCarousel.jsx",
       "resources/js/Components/Tailwind/Products/ProductList.jsx",
       "resources/js/Components/Tailwind/Banners/BannerSimple.jsx",
+      "resources/js/Components/Tailwind/Banners/BannerFullWidth.jsx",
       "resources/js/Components/Tailwind/Categories/CategorySimple.jsx",
       "resources/js/Components/Tailwind/Categories/CategoryCarousel.jsx",
       "resources/js/Components/Tailwind/Carts/CartSimple.jsx",

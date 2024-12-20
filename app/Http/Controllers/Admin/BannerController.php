@@ -53,6 +53,9 @@ class BannerController extends BasicController
                 $body[$field] = "{$uuid}.{$ext}";
             }
 
+            $bannerJpa = $this->model::find($request->id);
+            $body = \array_merge($bannerJpa->data, $body);
+
             $this->model::where('id', $request->id)
                 ->update([
                     'data' => $body
