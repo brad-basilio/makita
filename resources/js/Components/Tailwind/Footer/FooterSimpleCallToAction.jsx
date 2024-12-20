@@ -25,7 +25,7 @@ const FooterSimpleCallToAction = ({ socials = [], terms = {}, footerLinks = [], 
             <div className="lg:col-span-3 w-full flex flex-col gap-10">
               <div>
                 <a href="/">
-                  <img src="/assets/resources/logo.png" alt={Global.APP_NAME} className="w-full aspect-[13/4] object-contain object-center" />
+                  <img src={`/assets/resources/logo.png?v=${crypto.randomUUID()}`} alt={Global.APP_NAME} className="w-full aspect-[13/4] object-contain object-center" />
                 </a>
               </div>
               <nav>

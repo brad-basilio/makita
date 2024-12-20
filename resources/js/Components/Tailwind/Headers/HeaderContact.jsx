@@ -32,7 +32,7 @@ const HeaderContact = ({ socials, generals = [] }) => {
       <div className={`flex justify-between items-center bg-gray-600 ${!isOpen && location.pathname == '/' && 'bg-opacity-80'} text-white ps-[5%] border-b`}>
         <div className="py-4">
           <a href="/">
-            <img src="/assets/resources/logo.png" alt={Global.APP_NAME} className="h-8 aspect-[13/4] object-contain object-center" />
+            <img src={`/assets/resources/logo.png?v=${crypto.randomUUID()}`} alt={Global.APP_NAME} className="h-8 aspect-[13/4] object-contain object-center" />
           </a>
         </div>
         <div className="flex">
