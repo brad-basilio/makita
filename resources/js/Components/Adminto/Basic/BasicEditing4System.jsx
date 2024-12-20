@@ -33,12 +33,14 @@ const BasicEditing4System = (page) => {
     const newPath = e.target.value
     let path2check = structuredClone(newPath);
     const using = page.using ?? { model: null, field: null, with: [] }
-    RouteParams(newPath).forEach(param => {
+
+    for (const param in RouteParams(newPath)) {
       path2check = path2check
         .replace(`{${param}}`, '')
         .replace(`{${param}?}`, '')
       using[param] = using[param] ?? {}
-    })
+    }
+    
     const pseudo = TrimEnd(path2check, '/')
 
     const result = systemRest.savePage({

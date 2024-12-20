@@ -1,11 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
-import InputFormGroup from '../../form/InputFormGroup';
-import TextareaFormGroup from '../../form/TextareaFormGroup';
+import React, { useEffect, useState } from "react";
 import Modal from '../../Adminto/Modal';
-import SelectFormGroup from "../../form/SelectFormGroup";
-import Global from "../../../Utils/Global";
 import SystemRest from "../../../Actions/Admin/SystemRest";
-import SetSelectValue from "../../../Utils/SetSelectValue";
 import RouteParams from "../../../Utils/RouteParams";
 import ParamFormControl from "./ParamFormControl";
 
@@ -35,7 +30,7 @@ const ParamsModal = ({ dataLoaded, setDataLoaded, setPages, modalRef, models }) 
   return (
     <Modal modalRef={modalRef} title={`Editar parámetros de URL - ${dataLoaded?.name}`} onSubmit={onParamsSubmit} onClose={() => setDataLoaded(null)}>
       {
-        params.map((param, index) => <ParamFormControl key={index} page={dataLoaded} param={param} models={models} setUsing={setUsing} />)
+        params.map((param, index) => <ParamFormControl key={index} page={dataLoaded} param={param} models={models} using={using} setUsing={setUsing} setPages={setPages} />)
       }
     </Modal>
   )

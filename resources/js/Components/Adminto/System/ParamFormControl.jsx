@@ -1,22 +1,24 @@
 import React, { useEffect, useRef, useState } from "react"
 import SelectFormGroup from "../../form/SelectFormGroup"
 
-const ParamFormControl = ({ page, param, models, setUsing }) => {
+const ParamFormControl = ({ page, param, models, setUsing, setPages }) => {
 
   const modelRef = useRef()
   const fieldRef = useRef()
   const withRef = useRef()
 
+  const using = page?.using
+
   const [selected, setSelected] = useState(null);
 
   const onModelChange = (e) => {
-    const value = e.target.value
+    const value = modelRef.current.value
     const model = models.find(x => x.name == value) ?? null
     setSelected(model)
   }
 
   useEffect(() => {
-    $(modelRef.current).val(null).trigger('change');
+    $(modelRef.current).val(using?.[param]?.model).trigger('change');
   }, [param])
 
   useEffect(() => {
@@ -26,8 +28,8 @@ const ParamFormControl = ({ page, param, models, setUsing }) => {
         model: selected?.name ?? null
       }
     }))
-    $(fieldRef.current).val(null).trigger('change');
-    $(withRef.current).val(null).trigger('change');
+    $(fieldRef.current).val(using?.[param]?.field ?? null).trigger('change');
+    $(withRef.current).val(using?.[param]?.relations ?? []).trigger('change');
   }, [selected])
 
   const container = `${param}-container`
@@ -35,7 +37,7 @@ const ParamFormControl = ({ page, param, models, setUsing }) => {
     <label className="form-label">Parámetro <code>{param}</code></label>
     <SelectFormGroup eRef={modelRef} label='Modelo' col='col-md-6' dropdownParent={`#${container}`} onChange={onModelChange}>
       {models.map((model, index) => {
-        return <option key={index}>{model.name}</option>
+        return <option key={index} value={model.name}>{model.name}</option>
       })}
     </SelectFormGroup>
     <SelectFormGroup eRef={fieldRef} label='Campo' col='col-md-6' dropdownParent={`#${container}`} onChange={e => {
