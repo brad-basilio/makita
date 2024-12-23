@@ -21,4 +21,4 @@ composer.lock
 /.vscode
 /storage/profile
 /storage/public
-/storage/app/utils/pages.json
+/storage/app/pages.json
