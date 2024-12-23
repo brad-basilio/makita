@@ -12,7 +12,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
   <title>Panel - {{ env('APP_NAME', 'Kaori') }}</title>
-  <link rel="shortcut icon" href="/assets/resources/icon.png?v={{uniqid()}}" type="image/png">
+  <link rel="shortcut icon" href="/assets/resources/icon.png?v={{ uniqid() }}" type="image/png">
 
   <meta name="csrf_token" content="{{ csrf_token() }}">
 
@@ -35,6 +35,9 @@
 
   @if ($route == 'Admin/Gallery.jsx')
     <link href="/lte/assets/libs/magnific-popup/magnific-popup.css" rel="stylesheet" type="text/css" />
+  @elseif ($route == 'Admin/System.jsx')
+    <link rel="stylesheet" href="/lte/assets/libs/codemirror/codemirror.min.css">
+    <link rel="stylesheet" href="/lte/assets/libs/codemirror/themes/sode.css">
   @endif
 
   {{-- Bootstrap Styles --}}
@@ -84,9 +87,14 @@
     <script src="/lte/assets/libs/isotope-layout/isotope.pkgd.min.js"></script>
     <script src="/lte/assets/libs/magnific-popup/jquery.magnific-popup.min.js"></script>
     <script src="/lte/assets/js/pages/gallery.init.js"></script>
-  @endif
-  @if ($route == 'Admin/System.jsx')
+  @elseif ($route == 'Admin/System.jsx')
     <script src="/lte/assets/libs/jquery-ui/jquery-ui.min.js"></script>
+    <script src="/lte/assets/libs/codemirror/codemirror.min.js"></script>
+    <script src="/lte/assets/libs/codemirror/beautify-html.min.js"></script>
+    <script src="/lte/assets/libs/codemirror/mode/xml/xml.min.js"></script>
+    <script src="/lte/assets/libs/codemirror/mode/javascript/javascript.min.js"></script>
+    <script src="/lte/assets/libs/codemirror/mode/css/css.min.js"></script>
+    <script src="/lte/assets/libs/codemirror/mode/htmlmixed/htmlmixed.min.js"></script>
   @endif
   <script src="/lte/assets/libs/mohithg-switchery/switchery.min.js"></script>
   <script src="/lte/assets/libs/select2/js/select2.full.min.js"></script>

@@ -293,14 +293,14 @@ const System = ({ systems: systemsDB, pages: pagesDB, components, models }) => {
                                   </div>
                                 </div>
                                 <div className="col-md-8">
-                                  <div class="input-group mb-2">
+                                  <div className="input-group mb-2">
                                     <span className='input-group-text'>
                                       {page?.pseudo_path || page.path}
                                       {RouteParams(page?.path).length > 0 && '/'}
                                     </span>
                                     {
                                       RouteParams(page?.path).length > 0 &&
-                                      <input type="text" class="form-control" placeholder="Parametros" data-page-path={page.pseudo_path} data-page-id={page.id} onChange={onPathChange} />
+                                      <input type="text" className="form-control" placeholder="Parametros" data-page-path={page.pseudo_path} data-page-id={page.id} onChange={onPathChange} />
                                     }
                                   </div>
                                   <iframe id={`iframe-${page.id}`} src={page?.pseudo_path || page.path} data-path={page?.pseudo_path || page.path} className='w-100 h-100 border' style={{

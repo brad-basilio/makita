@@ -1,9 +1,5 @@
-import React, { useRef, useState } from "react"
-import MessagesRest from "../../../Actions/MessagesRest"
-import Swal from "sweetalert2"
+import React from "react"
 import HtmlContent from "../../../Utils/HtmlContent"
-
-const messagesRest = new MessagesRest()
 
 const ContactSimple = ({ data }) => {
   return <div className="bg-white">

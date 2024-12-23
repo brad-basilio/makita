@@ -4,6 +4,7 @@ import TextareaFormGroup from '../../form/TextareaFormGroup';
 import Modal from '../../Modal';
 import SelectFormGroup from "../../form/SelectFormGroup";
 import SystemRest from "../../../Actions/Admin/SystemRest";
+import EditorFormGroup from "../form/EditorFormGroup";
 
 const systemRest = new SystemRest()
 
@@ -55,10 +56,9 @@ const DataModal = ({ dataLoaded, setDataLoaded, setSystems, modalRef }) => {
         <div className="tab-pane active" id="tab-info" hidden={!dataLoaded?.component?.data?.length}>
           {
             dataLoaded?.component?.data?.map((element, index) => (
-              
-              <TextareaFormGroup key={index} label={element} value={data[element] ?? ''} rows={1} onChange={e => setData({ ...data, [element]: e.target.value })} style={element.startsWith('code:') ? {
-                fontFamily: 'var(--bs-font-monospace)'
-              }: {}} ></TextareaFormGroup>
+              element.startsWith('code:')
+                ? <EditorFormGroup key={index} label={element.replace('code:', '')} value={data[element] ?? ''} rows={1} onChange={e => setData({ ...data, [element]: e.target.value })} />
+                : <TextareaFormGroup key={index} label={element} value={data[element] ?? ''} rows={1} onChange={e => setData({ ...data, [element]: e.target.value })} />
             ))
           }
         </div>

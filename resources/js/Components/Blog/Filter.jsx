@@ -7,13 +7,13 @@ const Filter = ({ categories, filter, setFilter, details }) => {
       <div className="col-span-1 md:col-span-2 lg:col-span-4 text-center lg:text-left">
         <div
           $name="Todos nuestros Cursos & Talleres"
-          class="text-2xl md:text-4xl not-italic text-slate-700 max-md:text-4xl max-md:leading-[52px] font-bold"
+          className="text-2xl md:text-4xl not-italic text-slate-700 max-md:text-4xl max-md:leading-[52px] font-bold"
         >
           {em(details['blog.title'])}
         </div>
         <div
           $name="Fusce a magna nec diam blandit hendrerit. In lobortis, est eget ultrices pharetra, est tortor pellentesque odio, ut auctor tortor ipsum ac orci."
-          class="mt-6 text-base not-italic leading-6 text-[color:var(--Woodsmoke-900,#2B384F)]"
+          className="mt-6 text-base not-italic leading-6 text-[color:var(--Woodsmoke-900,#2B384F)]"
         >
           {em(details['blog.description'])}
         </div>

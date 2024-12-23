@@ -8,7 +8,7 @@ const AboutTrasciende = ({details}) => {
       {em(details['about.title'])}
     </h2>
     <div
-      class="mt-2 text-center text-sm md:text-base not-italic text-[color:var(--Woodsmoke-900,#2B384F)]"
+      className="mt-2 text-center text-sm md:text-base not-italic text-[color:var(--Woodsmoke-900,#2B384F)]"
     >
       {em(details['about.description'])}
     </div>

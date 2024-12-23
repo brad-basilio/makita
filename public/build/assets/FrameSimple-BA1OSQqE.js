@@ -1,0 +1,1 @@
+import{j as t}from"./AboutHeader-Bdo2C3ON.js";import"./index-DFv2mRv-.js";import{H as m}from"./HtmlContent-ux768mvo.js";const l=({data:e})=>t.jsx("div",{className:"bg-white",children:t.jsx("div",{className:"px-[5%] replace-max-w-here w-full mx-auto px-4 py-[5%] md:py-[2.5%]",children:t.jsx(m,{html:e["code:html"]})})});export{l as default};

@@ -1,2 +1,0 @@
-const __vite__fileDeps=["assets/FrameSimple-B6nQDtwV.js","assets/AboutHeader-Bdo2C3ON.js","assets/index-DFv2mRv-.js","assets/BasicEditing-Ce9hwHaI.js","assets/main-BBbUrZUL.js","assets/___vite-browser-external_commonjs-proxy-BQdpDcDf.js","assets/ProductCard-FwiEcsI0.js","assets/HtmlContent-ux768mvo.js"],__vite__mapDeps=i=>i.map(i=>__vite__fileDeps[i]);
-import{_ as o}from"./preload-helper-CZZ3Qsu7.js";import"./AboutHeader-Bdo2C3ON.js";import{R as r}from"./index-DFv2mRv-.js";r.lazy(()=>o(()=>import("./FrameSimple-B6nQDtwV.js"),__vite__mapDeps([0,1,2,3,4,5,6,7])));
