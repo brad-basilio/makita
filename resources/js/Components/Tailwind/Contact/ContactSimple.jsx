@@ -38,6 +38,10 @@ const ContactSimple = ({ data }) => {
       timer: 3000
     })
 
+    if (data.redirect) {
+      location.href = data.redirect
+    }
+
     nameRef.current.value = null
     phoneRef.current.value = null
     emailRef.current.value = null

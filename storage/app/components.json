@@ -272,7 +272,10 @@
     "options": [
       {
         "id": "ContactSimple",
-        "name": "Simple"
+        "name": "Simple",
+        "data": [
+          "redirect"
+        ]
       }
     ]
   },
