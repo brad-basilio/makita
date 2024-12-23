@@ -1,1 +1,0 @@
-import{j as t}from"./AboutHeader-Bdo2C3ON.js";import"./index-DFv2mRv-.js";import{H as o}from"./HtmlContent-ux768mvo.js";const l=({data:m})=>t.jsx("section",{className:"w-full",children:t.jsx(o,{html:m["code:html"]})});export{l as default};
