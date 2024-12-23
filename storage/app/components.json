@@ -286,6 +286,13 @@
         "data": [
           "code:html"
         ]
+      },
+      {
+        "id": "Full",
+        "name": "Full Width",
+        "data": [
+          "code:html"
+        ]
       }
     ]
   },
