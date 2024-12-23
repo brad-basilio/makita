@@ -1,1 +1,0 @@
-import{j as r}from"./AboutHeader-Bdo2C3ON.js";import"./index-DFv2mRv-.js";const p=({title:e="Sin título"})=>r.jsx("div",{className:"bg-primary py-3 px-primary flex justify-center items-center",children:r.jsx("p",{children:e})});export{p as default};

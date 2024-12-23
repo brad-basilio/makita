@@ -1,1 +1,0 @@
-var o=Object.defineProperty;var p=(i,t,s)=>t in i?o(i,t,{enumerable:!0,configurable:!0,writable:!0,value:s}):i[t]=s;var a=(i,t,s)=>(p(i,typeof t!="symbol"?t+"":t,s),s);const c=class c{};a(c,"set",(t,s)=>{c[t]=s}),a(c,"get",t=>c[t]);let g=c;export{g as G};

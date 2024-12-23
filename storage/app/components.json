@@ -6,18 +6,21 @@
       {
         "id": "TopBarSimple",
         "name": "Simple",
-        "image": "top-bar-simple.png"
+        "image": "top-bar-simple.png",
+        "generals": [
+          "cintillo"
+        ]
       },
       {
         "id": "TopBarSocials",
         "name": "Con redes sociales",
         "image": "top-bar-socials.png",
-        "data": [
-          "title"
-        ],
         "using": {
           "model": "Social"
-        }
+        },
+        "generals": [
+          "cintillo"
+        ]
       }
     ]
   },

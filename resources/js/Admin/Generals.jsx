@@ -19,6 +19,7 @@ const Generals = ({ generals }) => {
   const [formData, setFormData] = useState({
     phones: generals.find(x => x.correlative == 'phone_contact')?.description?.split(',')?.map(x => x.trim()) ?? [''],
     emails: generals.find(x => x.correlative == 'email_contact')?.description?.split(',')?.map(x => x.trim()) ?? [''],
+    cintillo: generals.find(x => x.correlative == 'cintillo')?.description ?? '',
     address: generals.find(x => x.correlative == 'address')?.description ?? '',
     openingHours: generals.find(x => x.correlative == 'opening_hours')?.description ?? '',
     supportPhone: generals.find(x => x.correlative == 'support_phone')?.description ?? '',
@@ -78,6 +79,7 @@ const Generals = ({ generals }) => {
         { correlative: 'phone_contact', name: 'Teléfono de contacto', description: formData.phones.join(',') },
         { correlative: 'email_contact', name: 'Correo de contacto', description: formData.emails.join(',') },
         { correlative: 'address', name: 'Dirección', description: formData.address },
+        { correlative: 'cintillo', name: 'Cintillo', description: formData.cintillo },
         { correlative: 'opening_hours', name: 'Horarios de atención', description: formData.openingHours },
         { correlative: 'support_phone', name: 'Número de soporte', description: formData.supportPhone },
         { correlative: 'support_email', name: 'Correo de soporte', description: formData.supportEmail },
@@ -160,6 +162,16 @@ const Generals = ({ generals }) => {
                 ))}
                 <button type="button" className="btn btn-outline-primary" onClick={() => handleAddField('emails')}>Agregar correo</button>
               </div>
+            </div>
+            <div className="mb-3">
+              <label htmlFor="cintillo" className="form-label">Cintillo</label>
+              <textarea
+                className="form-control"
+                id="cintillo"
+                value={formData.cintillo}
+                onChange={(e) => setFormData({ ...formData, cintillo: e.target.value })}
+                required
+              ></textarea>
             </div>
             <div className="mb-3">
               <label htmlFor="address" className="form-label">Dirección</label>

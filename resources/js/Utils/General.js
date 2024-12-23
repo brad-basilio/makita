@@ -5,7 +5,7 @@ class General {
   }
 
   static get = (name) => {
-    return General[name]
+    return General[name] ?? null
   }
 }
 
