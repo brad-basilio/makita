@@ -39,7 +39,7 @@ const DataModal = ({ dataLoaded, setDataLoaded, setSystems, modalRef }) => {
   }, [dataLoaded])
 
   return (
-    <Modal modalRef={modalRef} title={dataLoaded?.name} onSubmit={onDataSubmit}>
+    <Modal modalRef={modalRef} title={dataLoaded?.name} onSubmit={onDataSubmit} size={dataLoaded?.component?.data?.some(x => x.startsWith('code:')) ? 'lg' : 'md'}>
       <ul className="nav nav-tabs nav-bordered">
         <li className="nav-item" hidden={!dataLoaded?.component?.data?.length}>
           <a href="#tab-info" data-bs-toggle="tab" aria-expanded="true" className="nav-link active">
