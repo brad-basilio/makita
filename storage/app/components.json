@@ -343,7 +343,10 @@
           "terms_conditions",
           "privacy_policy",
           "delivery_policy",
-          "saleback_policy"
+          "saleback_policy",
+          "address",
+          "support_phone",
+          "support_email"
         ]
       }
     ]

@@ -6,6 +6,7 @@ import Global from "../../../Utils/Global";
 import HtmlContent from "../../../Utils/HtmlContent";
 import Swal from "sweetalert2";
 import SubscriptionsRest from "../../../Actions/SubscriptionsRest";
+import General from "../../../Utils/General";
 
 ReactModal.setAppElement('#app')
 
@@ -62,15 +63,15 @@ const FooterSimpleCallToAction = ({ socials = [], generals = [], pages = [] }) =
                 <ul className="flex flex-col gap-3 text-base font-normal">
                   <li className="flex flex-row items-start gap-2">
                     <i className="mdi mdi-map-marker"></i>
-                    <span>Av. Camino Real 356 - San Isidro. Lima - Perú</span>
+                    <span>{General.get('address')}</span>
                   </li>
                   <li className="flex flex-row gap-2">
                     <i className="mdi mdi-email"></i>
-                    <span className="text-wrap break-all">soporte@jugueteslúdicos.com.pe</span>
+                    <span className="text-wrap break-all">{General.get('support_email')}</span>
                   </li>
                   <li className="flex flex-row gap-2">
                     <i className="mdi mdi-whatsapp"></i>
-                    <span>+51 987435733</span>
+                    <span>{General.get('support_phone')}</span>
                   </li>
                 </ul>
               </nav>

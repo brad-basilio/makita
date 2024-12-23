@@ -3,6 +3,7 @@ import { Cookies, FetchParams } from 'sode-extend-react'
 import Global from './Global';
 import 'swiper/css'
 import 'tippy.js/dist/tippy.css'
+import General from './General';
 
 const CreateReactScript = (render) => {
 
@@ -13,6 +14,12 @@ const CreateReactScript = (render) => {
       if (properties?.global) {
         for (const name in properties.global) {
           Global.set(name, properties.global[name])
+        }
+      }
+      if (properties?.generals) {
+        for (const key in properties.generals) {
+          const { correlative, description } = properties.generals[key]
+          General.set(correlative, description)
         }
       }
       const can = (page, ...keys) => {
