@@ -2,7 +2,7 @@ import Tippy from "@tippyjs/react";
 import React, { useEffect, useRef, useState } from "react";
 import Global from "../../../Utils/Global";
 
-const HeaderContact = ({ socials, generals = [] }) => {
+const HeaderContact = ({ items, generals = [] }) => {
   const [isOpen, setIsOpen] = useState(false)
   const menuRef = useRef(null)
 
@@ -86,7 +86,7 @@ const HeaderContact = ({ socials, generals = [] }) => {
               </p>
               <div className="flex gap-4 mt-4">
                 {
-                  socials.map((item, index) => {
+                  items.map((item, index) => {
                     return <Tippy key={index} content={`Ver ${item.name} en ${item.description}`}>
                       <a href={item.link} className="text-2xl" onClick={() => setIsOpen(false)}>
                         <i className={`fab ${item.icon}`}></i>

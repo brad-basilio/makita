@@ -1,21 +1,51 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import ReactModal from "react-modal";
 
 import Tippy from "@tippyjs/react";
 import Global from "../../../Utils/Global";
 import HtmlContent from "../../../Utils/HtmlContent";
+import Swal from "sweetalert2";
+import SubscriptionsRest from "../../../Actions/SubscriptionsRest";
 
 ReactModal.setAppElement('#app')
 
-const FooterSimpleCallToAction = ({ socials = [], terms = {}, footerLinks = [], pages = [] }) => {
-  const [modalOpen, setModalOpen] = useState(false);
-  const openModal = () => setModalOpen(true);
-  const closeModal = () => setModalOpen(false);
+const subscriptionsRest = new SubscriptionsRest();
 
-  const links = {}
-  footerLinks.forEach(fl => {
-    links[fl.correlative] = fl.description
-  })
+const FooterSimpleCallToAction = ({ socials = [], generals = [], pages = [] }) => {
+
+  const emailRef = useRef()
+
+  const [modalOpen, setModalOpen] = useState(null);
+  const [saving, setSaving] = useState()
+
+  const onEmailSubmit = async (e) => {
+    e.preventDefault()
+    setSaving(true)
+
+    const request = {
+      email: emailRef.current.value
+    }
+    const result = await subscriptionsRest.save(request);
+    setSaving(false)
+
+    if (!result) return
+
+    Swal.fire({
+      title: '¡Éxito!',
+      text: `Te has suscrito correctamente al blog de ${Global.APP_NAME}.`,
+      icon: 'success',
+      confirmButtonText: 'Ok'
+    })
+
+    emailRef.current.value = null
+  }
+
+  const policyItems = {
+    'terms_conditions': 'Términos y condiciones',
+    'privacy_policy': 'Políticas de privacidad',
+    'delivery_policy': 'Políticas de envío',
+    'saleback_policy': 'Políticas de devolucion y cambio'
+  }
 
   return (
     <>
@@ -53,9 +83,18 @@ const FooterSimpleCallToAction = ({ socials = [], terms = {}, footerLinks = [], 
 
               <nav>
                 <ul className="flex flex-col gap-3 text-base font-normal">
-                  <li className="flex flex-row gap-2"><a href="https://juguetesludicos.mundoweb.pe/catalogo"> Políticas de privacidad </a></li>
-                  <li className="flex flex-row gap-2"><a href="https://juguetesludicos.mundoweb.pe/catalogo"> Políticas de envío </a></li>
-                  <li className="flex flex-row gap-2"><a href="https://juguetesludicos.mundoweb.pe/catalogo"> Políticas de devolución y cambio </a></li>
+                  {
+                    Object.keys(policyItems).map((key, index) => {
+                      const title = policyItems[key];
+                      const foundIndex = generals.findIndex(x => x.correlative == key);
+                      if (foundIndex == -1) return
+                      return <li
+                        key={index}
+                        className="flex flex-row gap-2">
+                        <button className="text-start" onClick={() => setModalOpen(key)}>{title}</button>
+                      </li>
+                    })
+                  }
                 </ul>
               </nav>
 
@@ -85,15 +124,13 @@ const FooterSimpleCallToAction = ({ socials = [], terms = {}, footerLinks = [], 
               <p className="font-normal text-base">Mantente actualizado sobre las últimas noticias y ofertas.</p>
 
               <div className="flex flex-col gap-2">
-                <form action="" id="footerFormulario" className="flex flex-col md:flex-row md:justify-start md:items-center gap-3">
-                  <input type="hidden" name="_token" value="Ek9NgzaWpp9BKf76URqctRbsjpo73zuqd1GaRvdw" autoComplete="off" />                    <div className="w-full">
-                    <input required="" name="email" type="email" id="emailFooter" className="ring-0 focus:ring-0 border-transparent focus:border-transparent bg-white px-5 py-3 rounded-xl w-full text-colorJL placeholder:text-colorJL" placeholder="info@mail.com" />
+                <form onSubmit={onEmailSubmit} className="flex flex-col md:flex-row md:justify-start md:items-center gap-3">
+                  <div className="w-full">
+                    <input required="" name="email" type="email" ref={emailRef} className="ring-0 focus:ring-0 border-transparent focus:border-transparent bg-white px-5 py-3 rounded-xl w-full text-textPrimary outline-none" placeholder="info@mail.com" disabled={saving} />
                   </div>
-                  <input type="hidden" id="nameFooter" required="" name="full_name" value="Usuario suscrito" />
-                  <input type="hidden" id="tipo" placeholder="tipo" name="tipo_message" value="Inscripción" />
 
                   <div className="flex justify-center items-center w-full md:w-auto">
-                    <button type="submit" className="font-helveticaBold text-base text-white border border-white py-3 px-3 rounded-xl w-full md:w-auto text-center">Suscribirme
+                    <button type="submit" className="font-helveticaBold text-base text-white border border-white py-3 px-3 rounded-xl w-full md:w-auto text-center" disabled={saving}>Suscribirme
                     </button>
                   </div>
                 </form>
@@ -131,20 +168,24 @@ const FooterSimpleCallToAction = ({ socials = [], terms = {}, footerLinks = [], 
         </div>
       </footer>
 
-      {/* Modal para Términos y Condiciones */}
-      <ReactModal
-        isOpen={modalOpen}
-        onRequestClose={closeModal}
-        contentLabel="Términos y condiciones"
-        className="absolute left-1/2 -translate-x-1/2 bg-white p-6 rounded shadow-lg w-[95%] max-w-2xl my-8 outline-none h-[90vh]"
-        overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-50"
-      >
-        <button onClick={closeModal} className="float-right text-gray-500 hover:text-gray-900">
-          Cerrar
-        </button>
-        <h2 className="text-xl font-bold mb-4">Políticas de privacidad y condiciones de uso</h2>
-        <HtmlContent className="prose h-[calc(90vh-120px)] lg:h-[calc(90vh-90px)] overflow-auto" html={terms.description} />
-      </ReactModal>
+      {Object.keys(policyItems).map((key, index) => {
+        const title = policyItems[key]
+        const content = generals.find(x => x.correlative == key)?.description ?? '';
+        return <ReactModal
+          key={index}
+          isOpen={modalOpen === key}
+          onRequestClose={() => setModalOpen(null)}
+          contentLabel={title}
+          className="absolute left-1/2 -translate-x-1/2 bg-white p-6 rounded shadow-lg w-[95%] max-w-4xl my-8"
+          overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-50"
+        >
+          <button onClick={() => setModalOpen(null)} className="float-right text-gray-500 hover:text-gray-900">
+            Cerrar
+          </button>
+          <h2 className="text-2xl font-bold mb-4">{title}</h2>
+          <HtmlContent className='prose' html={content} />
+        </ReactModal>
+      })}
     </>
   );
 };

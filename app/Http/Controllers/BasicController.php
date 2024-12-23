@@ -77,19 +77,10 @@ class BasicController extends Controller
 
   public function reactView(Request $request)
   {
-    $socials = Social::where('visible', true)->where('status', true)->get();
-    $terms = General::select(['description'])->where('correlative', 'terms_conditions')->first();
-    $footerLinks = Aboutus::whereIn('correlative', ['phone', 'email', 'whatsapp', 'customer-complaints'])->get();
-    $sliders = Slider::where('visible', true)->where('status', true)->get();
-
     if (Auth::check()) Auth::user()->getAllPermissions();
 
     $properties = [
       'session' => Auth::user(),
-      'socials' => $socials,
-      'terms' => $terms,
-      'footerLinks' => $footerLinks,
-      'sliders' => $sliders,
       'global' => [
         'PUBLIC_RSA_KEY' => Controller::$PUBLIC_RSA_KEY,
         'APP_NAME' => env('APP_NAME', 'Trasciende'),

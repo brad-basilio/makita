@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\General;
 use App\Models\System;
 use Illuminate\Http\Request;
 use SoDe\Extend\Crypto;
@@ -57,6 +58,7 @@ class SystemController extends BasicController
             $systems = System::where('page_id', $page['id'])->get();
         }
 
+        $generals = [];
         foreach ($systems as $key => $system) {
             if ($system->component == 'content') continue;
             $parent = collect($components)->firstWhere('id', $system->component);
@@ -92,11 +94,16 @@ class SystemController extends BasicController
                 $system->itemsId = $shortID;
                 $props['systemItems'][$shortID] = $query->get();
             }
+
+            if (isset($component['generals'])) {
+                $generals = array_merge($generals, $component['generals']);
+            }
         }
 
         $props['systems'] = $systems;
         $props['params'] = $request->route() ? $request->route()->parameters() : [];
         $props['filteredData'] = [];
+        $props['generals'] = General::whereIn('correlative', $generals)->get();
 
         foreach ($page['using'] as $key => $using) {
             $model = $using['model'] ?? null;

@@ -22,7 +22,7 @@ import Frame from './Components/Tailwind/Frame';
 
 const itemsRest = new ItemsRest();
 
-const System = ({ page, pages, params, filteredData = {}, systems, socials = [], systemItems = {} }) => {
+const System = ({ page, pages, params, filteredData = {}, systems, generals = [], systemItems = {} }) => {
 
   const getItems = (itemsId) => {
     return systemItems[itemsId] ?? []
@@ -50,14 +50,14 @@ const System = ({ page, pages, params, filteredData = {}, systems, socials = [],
   }, [null])
 
   const getSystem = ({ component, value, data, itemsId, visible }) => {
-    
+
     if (visible == 0) return <></>
 
     switch (component) {
       case 'top_bar':
-        return <TopBar which={value} socials={socials} data={data} />
+        return <TopBar which={value} items={getItems(itemsId)} data={data} />
       case 'header':
-        return <Header data={data} which={value} socials={socials} cart={cart} setCart={setCart} pages={pages} />
+        return <Header data={data} which={value} items={getItems(itemsId)} cart={cart} setCart={setCart} pages={pages} />
       case 'content':
         if (!page.id) {
           return <div className='h-80 w-full bg-gray-300 flex items-center justify-center'>
@@ -80,16 +80,16 @@ const System = ({ page, pages, params, filteredData = {}, systems, socials = [],
         return <Banner which={value} data={data} />
       case 'step':
         return <Step which={value} data={data} />
-      case 'product-detail': 
-        return <ProductDetail which={value} item={filteredData.Item ?? {}} cart={cart} setCart={setCart}/>
+      case 'product-detail':
+        return <ProductDetail which={value} item={filteredData.Item ?? {}} cart={cart} setCart={setCart} />
       case 'cart':
         return <Cart which={value} data={data} cart={cart} setCart={setCart} />
       case 'contact':
-        return <Contact which={value} data={data}/>
+        return <Contact which={value} data={data} />
       case 'frame':
         return <Frame which={value} data={data} />
       case 'footer':
-        return <Footer which={value} items={getItems(itemsId)} pages={pages} />
+        return <Footer which={value} items={getItems(itemsId)} pages={pages} generals={generals} />
     }
   }
 

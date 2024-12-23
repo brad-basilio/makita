@@ -16,16 +16,12 @@ const FooterCallToAction = ({ socials = [], summary = '', generals = [], pages =
   const [modalOpen, setModalOpen] = useState(null);
   const [saving, setSaving] = useState()
 
-  const policyItems = [
-    {
-      title: 'Términos y condiciones',
-      modalContent: generals.find(x => x.correlative == 'terms_conditions')?.description,
-    },
-    {
-      title: 'Políticas de privacidad',
-      modalContent: generals.find(x => x.correlative == 'privacy_policy')?.description,
-    },
-  ];
+  const policyItems = {
+    'terms_conditions': 'Términos y condiciones',
+    'privacy_policy': 'Políticas de privacidad',
+    // 'delivery_policy': 'Políticas de envío',
+    // 'saleback_policy': 'Políticas de devolucion y cambio'
+  }
 
   const openModal = (index) => setModalOpen(index);
   const closeModal = () => setModalOpen(null);
@@ -56,15 +52,15 @@ const FooterCallToAction = ({ socials = [], summary = '', generals = [], pages =
   return (
     <>
       <img src="/assets/resources/subscription.png" alt="" className="aspect-[2/1] md:aspect-[3/1] lg:aspect-[4/1] object-cover object-center w-full" onError={e => e.target.src = '/assets/resources/cover-404.svg'} />
-      <footer className=" p-[5%] pt-[calc(5%+64px)] bg-[#747D84] text-white relative">
-        <form className="absolute left-1/4 right-[5%] bottom-[calc(100%-64px)] p-[5%] bg-primary text-[color:var(--Woodsmoke-900,#2B384F)]"
+      <footer className=" p-[5%] pt-[calc(5%+64px)] bg-white text-textPrimary relative">
+        <form className="absolute left-1/4 right-[5%] bottom-[calc(100%-64px)] p-[5%] bg-primary text-white"
           onSubmit={onEmailSubmit}>
           <div className="grid md:grid-cols-2 items-end gap-4">
             <h1 className="text-xl md:text-2xl">
               Mantente siempre <b>Informado</b> con nuestra newsletter
             </h1>
             <div>
-              <input ref={emailRef} type="email" className="bg-transparent border-b border-b-[color:var(--Woodsmoke-900,#2B384F)] outline-none px-3 py-2 w-full placeholder-[color:var(--Woodsmoke-900,#2B384F)]" placeholder="Correo electrónico" disabled={saving} required />
+              <input ref={emailRef} type="email" className="bg-transparent border-b border-b-white outline-none px-3 py-2 w-full placeholder-white" placeholder="Correo electrónico" disabled={saving} required />
               <button className="mt-4 px-3 py-2 " disabled={saving}>
                 Enviar
                 <i className="mdi mdi-arrow-top-right ms-1"></i>
@@ -122,22 +118,24 @@ const FooterCallToAction = ({ socials = [], summary = '', generals = [], pages =
         </section>
       </footer>
 
-      {policyItems.map((item, index) => (
-        <ReactModal
+      {Object.keys(policyItems).map((key, index) => {
+        const title = policyItems[key]
+        const content = generals.find(x => x.correlative == key)?.description ?? '';
+        return <ReactModal
           key={index}
           isOpen={modalOpen === index}
           onRequestClose={closeModal}
-          contentLabel={item.title}
-          className="absolute left-1/2 -translate-x-1/2 bg-white p-6 rounded shadow-lg w-[95%] max-w-lg my-8"
+          contentLabel={title}
+          className="absolute left-1/2 -translate-x-1/2 bg-white p-6 rounded shadow-lg w-[95%] max-w-4xl my-8"
           overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-50"
         >
           <button onClick={closeModal} className="float-right text-gray-500 hover:text-gray-900">
             Cerrar
           </button>
-          <h2 className="text-2xl font-bold mb-4">{item.title}</h2>
-          <HtmlContent className='prose' html={item.modalContent} />
+          <h2 className="text-2xl font-bold mb-4">{title}</h2>
+          <HtmlContent className='prose' html={content} />
         </ReactModal>
-      ))}
+      })}
     </>
   );
 };

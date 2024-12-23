@@ -40,9 +40,15 @@ use SoDe\Extend\File;
 |
 */
 
-// Public routes
-$pages = json_decode(File::get(storage_path('app/pages.json')), true);
+// Verificar si el archivo existe, si no, crear uno vacío
+$filePath = storage_path('app/pages.json');
+if (!file_exists($filePath)) {
+    file_put_contents($filePath, json_encode([]));
+}
 
+$pages = json_decode(File::get($filePath), true);
+
+// Public routes
 foreach ($pages as $page) {
     Route::get($page['path'], [SystemController::class, 'reactView'])->name('System.jsx');
 }

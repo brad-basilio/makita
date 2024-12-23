@@ -304,6 +304,15 @@
     "name": "Footer",
     "options": [
       {
+        "id": "FooterSimple",
+        "name": "Simple",
+        "image": "footer-simple.png",
+        "using": {
+          "model": "Social",
+          "limit": 10
+        }
+      },
+      {
         "id": "FooterCallToAction",
         "name": "Llamada a la acción",
         "image": "footer-call-to-action.png",
@@ -313,19 +322,11 @@
         "using": {
           "model": "Social",
           "limit": 10
-        }
-      },
-      {
-        "id": "FooterSocials",
-        "name": "Con redes sociales",
-        "image": "footer-socials.png",
-        "data": [
-          "summary"
-        ],
-        "using": {
-          "model": "Social",
-          "limit": 10
-        }
+        },
+        "generals": [
+          "terms_conditions",
+          "privacy_policy"
+        ]
       },
       {
         "id": "FooterSimpleCallToAction",
@@ -337,7 +338,13 @@
         "using": {
           "model": "Social",
           "limit": 10
-        }
+        },
+        "generals": [
+          "terms_conditions",
+          "privacy_policy",
+          "delivery_policy",
+          "saleback_policy"
+        ]
       }
     ]
   }
