@@ -31,6 +31,7 @@ class GeneralController extends BasicController
                 General::updateOrCreate([
                     'correlative' => $record['correlative']
                 ], [
+                    'name' => $record['name'],
                     'description' => $record['description']
                 ]);
             }

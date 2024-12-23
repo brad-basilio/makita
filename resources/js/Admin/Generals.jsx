@@ -25,6 +25,8 @@ const Generals = ({ generals }) => {
     supportEmail: generals.find(x => x.correlative == 'support_email')?.description ?? '',
     privacyPolicy: generals.find(x => x.correlative == 'privacy_policy')?.description ?? '',
     termsConditions: generals.find(x => x.correlative == 'terms_conditions')?.description ?? '',
+    deliveryPolicy: generals.find(x => x.correlative == 'delivery_policy')?.description ?? '',
+    salebackPolicy: generals.find(x => x.correlative == 'saleback_policy')?.description ?? '',
     location: {
       lat: Number(location.split(',').map(x => x.trim())[0]),
       lng: Number(location.split(',').map(x => x.trim())[1])
@@ -81,6 +83,8 @@ const Generals = ({ generals }) => {
         { correlative: 'support_email', name: 'Correo de soporte', description: formData.supportEmail },
         { correlative: 'privacy_policy', name: 'Política de privacidad', description: formData.privacyPolicy },
         { correlative: 'terms_conditions', name: 'Términos y condiciones', description: formData.termsConditions },
+        { correlative: 'delivery_policy', name: 'Políticas de envío', description: formData.deliveryPolicy },
+        { correlative: 'saleback_policy', name: 'Políticas de devolucion y cambio', description: formData.salebackPolicy },
         { correlative: 'location', name: 'Ubicación', description: `${formData.location.lat},${formData.location.lng}` }
       ]);
       // alert('Datos guardados exitosamente');
@@ -201,6 +205,13 @@ const Generals = ({ generals }) => {
             <div className="mb-3">
               <QuillFormGroup label='Términos y condiciones' value={formData.termsConditions} onChange={(value) => setFormData({ ...formData, termsConditions: value })} />
             </div>
+            <div className="mb-3">
+              <QuillFormGroup label='Políticas de envío' value={formData.deliveryPolicy} onChange={(value) => setFormData({ ...formData, deliveryPolicy: value })} />
+            </div>
+            <div className="mb-3">
+              <QuillFormGroup label='Políticas de devolución y cambio' value={formData.salebackPolicy} onChange={(value) => setFormData({ ...formData, salebackPolicy: value })} />
+            </div>
+
           </div>
 
           <div className={`tab-pane fade ${activeTab === 'location' ? 'show active' : ''}`} role="tabpanel">
