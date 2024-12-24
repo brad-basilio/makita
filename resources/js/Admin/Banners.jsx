@@ -12,6 +12,7 @@ import ImageFormGroup from '../Components/Adminto/form/ImageFormGroup';
 import BannersRest from '../Actions/Admin/BannersRest';
 import { renderToString } from 'react-dom/server';
 import SwitchFormGroup from '../Components/Adminto/form/SwitchFormGroup';
+import Swal from 'sweetalert2';
 
 const bannersRest = new BannersRest()
 
