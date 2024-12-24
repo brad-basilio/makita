@@ -86,6 +86,21 @@ const Banners = ({ pages }) => {
     $(gridRef.current).dxDataGrid('instance').refresh()
   }
 
+  const onDeleteClicked = async (id) => {
+    const { isConfirmed } = await Swal.fire({
+      title: 'Eliminar registro',
+      text: '¿Estas seguro de eliminar este registro?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si, eliminar',
+      cancelButtonText: 'Cancelar'
+    })
+    if (!isConfirmed) return
+    const result = await bannersRest.delete(id)
+    if (!result) return
+    $(gridRef.current).dxDataGrid('instance').refresh()
+  }
+
   return (<>
     <Table gridRef={gridRef} title='Banners' rest={bannersRest}
       toolBar={(container) => {
@@ -167,6 +182,12 @@ const Banners = ({ pages }) => {
               title: 'Editar',
               icon: 'fa fa-pen',
               onClick: () => onModalOpen(data)
+            }))
+            container.append(DxButton({
+              className: 'btn btn-xs btn-soft-danger',
+              title: 'Eliminar',
+              icon: 'fa fa-trash',
+              onClick: () => onDeleteClicked(data.id)
             }))
           },
           allowFiltering: false,
