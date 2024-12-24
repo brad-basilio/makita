@@ -20,6 +20,7 @@ class BannerController extends BasicController
     public $model = System::class;
     public $reactView = 'Admin/Banners';
     public $imageFields = ['background', 'image'];
+    public $softDeletion = false;
 
     public function setReactViewProperties(Request $request)
     {
