@@ -117,10 +117,10 @@ const Banners = ({ pages }) => {
           dataField: 'name',
           caption: 'Nombre',
           cellTemplate: (container, { data }) => {
-            const page = pages.find(x => x.id == data.page_id)
+            const page = pages.find(x => x.id == data?.page_id)
             container.html(renderToString(<>
-              <b className='d-block'>{data.name}</b>
-              <small className='text-muted'>Pagina: {page.name}</small>
+              <b className='d-block'>{data?.name}</b>
+              <small className='text-muted'>Pagina: {page?.name}</small>
             </>))
           }
         },
