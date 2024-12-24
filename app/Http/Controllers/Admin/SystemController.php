@@ -140,6 +140,7 @@ class SystemController extends BasicController
                 return $p['id'] !== $pageId;
             });
             File::save(storage_path('app/pages.json'), JSON::stringify(array_values($newPages), true));
+            System::where('page_id', $pageId)->delete();
             return true;
         });
 
