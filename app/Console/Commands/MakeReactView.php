@@ -55,6 +55,8 @@ JS;
         $template = <<<JS
 import React from 'react';
 import {$singleName}Rest from '@Rest/{$name}Rest';
+import CreateReactScript from '@Utils/CreateReactScript';
+import { createRoot } from 'react-dom/client';
 
 const {$singleNameLower}Rest = new {$singleName}Rest();
 
