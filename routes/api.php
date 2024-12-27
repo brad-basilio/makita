@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\BrandController as AdminBrandController;
 use App\Http\Controllers\Admin\GalleryController as AdminGalleryController;
 use App\Http\Controllers\Admin\ItemController as AdminItemController;
 use App\Http\Controllers\Admin\SubCategoryController as AdminSubCategoryController;
+use App\Http\Controllers\Admin\SystemColorController as AdminSystemColorController;
 use App\Http\Controllers\Admin\SystemController as AdminSystemController;
 use App\Http\Controllers\Admin\TagController as AdminTagController;
 use App\Http\Controllers\Admin\WebDetailController as AdminWebDetailController;
@@ -33,6 +34,7 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\SystemColorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,7 +49,7 @@ use App\Http\Controllers\SubscriptionController;
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/signup', [AuthController::class, 'signup']);
-Route::get( '/banners/media/{uuid}', [AdminBannerController::class, 'media']);
+Route::get('/banners/media/{uuid}', [AdminBannerController::class, 'media']);
 Route::get('/sliders/media/{uuid}', [AdminSliderController::class, 'media']);
 Route::get('/categories/media/{uuid}', [AdminCategoryController::class, 'media']);
 Route::get('/subcategories/media/{uuid}', [AdminSubCategoryController::class, 'media']);
@@ -175,6 +177,8 @@ Route::middleware('auth')->group(function () {
 
       Route::get('/system/backup', [AdminSystemController::class, 'exportBK']);
       Route::post('/system/backup', [AdminSystemController::class, 'importBK']);
+
+      Route::post('/colors', [AdminSystemColorController::class, 'save']);
     });
 
     Route::post('/generals', [AdminGeneralController::class, 'save']);

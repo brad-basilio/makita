@@ -49,7 +49,7 @@ const ContactSimple = ({ data }) => {
   }
 
   return <div className="bg-white">
-    <div className="px-[5%] replace-max-w-here w-full mx-auto px-4 py-[5%] md:py-[2.5%]">
+    <div className="px-[5%] replace-max-w-here w-full mx-auto py-[5%] md:py-[2.5%]">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-44">
         <div className="flex flex-col gap-5 aos-init aos-animate" data-aos="fade-up" data-aos-offset="150">
           <h2 className="font-poppins font-bold text-4xl  leading-none text-colorJL">Escríbenos para

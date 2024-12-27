@@ -1,0 +1,1 @@
+import{j as r}from"./AboutHeader-Bdo2C3ON.js";import"./index-DFv2mRv-.js";import"./BasicEditing-Ce9hwHaI.js";import"./main-BBbUrZUL.js";import"./___vite-browser-external_commonjs-proxy-BQdpDcDf.js";const i=()=>r.jsx("div",{children:r.jsx("h1",{children:"DeliveryPrices Component"})});CreateReactScript((e,t)=>{createRoot(e).render(r.jsx(i,{...t}))});

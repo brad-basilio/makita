@@ -58,7 +58,7 @@ Route::get('/login', [AuthController::class, 'loginView'])->name('Login.jsx');
 
 // Admin routes
 Route::middleware(['can:Admin', 'auth'])->prefix('admin')->group(function () {
-    Route::get('/', fn() => redirect('Admin/Home.jsx'));
+    Route::get('/', fn() => redirect()->route('Admin/Home.jsx'));
     Route::get('/home', [AdminHomeController::class, 'reactView'])->name('Admin/Home.jsx');
     Route::get('/posts', [AdminPostController::class, 'reactView'])->name('Admin/Posts.jsx');
     Route::get('/items', [AdminItemController::class, 'reactView'])->name('Admin/Items.jsx');

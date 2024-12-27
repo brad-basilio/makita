@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from '@inertiajs/react'
 
-const MenuItem = ({ href, icon, children, onClick, target = '_self' }) => {
+const MenuItem = ({ href, icon, children, onClick, target = '_self', rightBarToggle }) => {
   return (
     <li className={location.pathname.startsWith(href) ? 'menuitem-active' : ''}>
       {
@@ -11,7 +11,7 @@ const MenuItem = ({ href, icon, children, onClick, target = '_self' }) => {
             <span> {children} </span>
           </a>
         ) : (
-          <a href={href} target={target} className={location.pathname.startsWith(href) ? 'active' : ''}>
+          <a href={href} target={target} className={`${location.pathname.startsWith(href) ? 'active' : ''} ${rightBarToggle ? 'right-bar-toggle' : ''}`} style={{ cursor: 'pointer' }}>
             <i className={icon}></i>
             <span> {children} </span>
           </a>

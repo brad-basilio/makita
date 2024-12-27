@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\BasicController;
 use App\Models\System;
+use App\Models\SystemColor;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use SoDe\Extend\Crypto;
@@ -70,11 +71,14 @@ class SystemController extends BasicController
             ];
         }
 
+        $colors = SystemColor::all();
+
         return [
             'systems' => $systems,
             'pages' => $pages,
             'components' => $components,
-            'models' => $models
+            'models' => $models,
+            'colors' => $colors
         ];
     }
 

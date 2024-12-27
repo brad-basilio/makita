@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\General;
 use App\Models\System;
+use App\Models\SystemColor;
 use Illuminate\Http\Request;
 use SoDe\Extend\Crypto;
 use SoDe\Extend\File;
@@ -32,6 +33,17 @@ class SystemController extends BasicController
             $props['systems'] = System::whereNull('page_id')->get();
             $props['page'] = ['name' => 'Template base'];
             $this->reactData = $props['page'];
+            $this->reactData['colors'] = SystemColor::all();
+            $generals = [];
+            foreach ($props['systems'] as $system) {
+                if ($system->component == 'content') continue;
+                $parent = collect($components)->firstWhere('id', $system->component);
+                $component = collect($parent['options'])->firstWhere('id', $system->value);
+                if (isset($component['generals'])) {
+                    $generals = array_merge($generals, $component['generals']);
+                }
+            }
+            $props['generals'] = General::whereIn('correlative', $generals)->get();
             return $props;
         }
 
@@ -50,6 +62,7 @@ class SystemController extends BasicController
 
         $props['page'] = $page;
         $this->reactData = $page;
+        $this->reactData['colors'] = SystemColor::all();
 
         $systems = [];
         if (isset($page['extends_base']) && $page['extends_base']) {

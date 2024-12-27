@@ -16,9 +16,19 @@ class GalleryController extends BasicController
 {
     public $reactView = 'Admin/Gallery';
 
+    public function __construct()
+    {
+        // Crear la carpeta si no existe
+        $directory = public_path('assets/resources');
+        if (!is_dir($directory)) {
+            mkdir($directory, 0755, true);
+        }
+    }
+
     public function setReactViewProperties(Request $request)
     {
-        $images = JSON::parse(File::get('./assets/resources/images.json'));
+        $directory = public_path('assets/resources');
+        $images = JSON::parse(File::get($directory . '/images.json'));
         return [
             'images' => $images
         ];
@@ -30,7 +40,13 @@ class GalleryController extends BasicController
             if (!$request->hasFile('image')) throw new Exception('Debe cargar una imagen válida');
             $file = $request->file('image');
             $name = $request->name;
-            file_put_contents('./assets/resources/' . $name, file_get_contents($file));
+
+            $directory = public_path('assets/resources');
+            if (!is_dir($directory)) {
+                mkdir($directory, 0755, true);
+            }
+
+            file_put_contents($directory . '/' . $name, file_get_contents($file));
         });
         return response($response->toArray(), $response->status);
     }

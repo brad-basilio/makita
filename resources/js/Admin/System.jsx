@@ -12,10 +12,16 @@ import DataModal from '../Components/Adminto/System/DataModal';
 import Menu from '../Components/Adminto/System/Menu';
 import ParamsModal from '../Components/Adminto/System/ParamsModal';
 import RouteParams from '../Utils/RouteParams';
+import RigthBar from '../Components/Adminto/System/RightBar';
 
 const systemRest = new SystemRest()
 
-const System = ({ systems: systemsDB, pages: pagesDB, components, models }) => {
+const System = ({
+  systems: systemsDB = [],
+  pages: pagesDB = [],
+  colors: colorsDB = [],
+  components, models,
+}) => {
 
   const modalSEORef = useRef(null);
   const modalParamsRef = useRef(null);
@@ -23,6 +29,8 @@ const System = ({ systems: systemsDB, pages: pagesDB, components, models }) => {
 
   const [systems, setSystems] = useState(systemsDB);
   const [pages, setPages] = useState(pagesDB);
+  const [colors, setColors] = useState(colorsDB)
+
   const [addingPage, setAddingPage] = useState(false);
   const [pageLoaded, setPageLoaded] = useState(null);
   const [systemLoaded, setSystemLoaded] = useState(null);
@@ -77,7 +85,7 @@ const System = ({ systems: systemsDB, pages: pagesDB, components, models }) => {
     const pageId = $(e.target).data('page-id')
     const path = $(e.target).data('page-path')
     const value = $(e.target).val()
-    
+
     $(`#iframe-${pageId}`).removeAttr('src')
     $(`#iframe-${pageId}`).attr('src', `${path}/${value}`)
   }
@@ -321,6 +329,8 @@ const System = ({ systems: systemsDB, pages: pagesDB, components, models }) => {
           </div>
         </div>
       </div>
+      <RigthBar colors={colors} setColors={setColors} />
+
       <SEOModal dataLoaded={pageLoaded} setDataLoaded={setPageLoaded} modalRef={modalSEORef} />
       <ParamsModal dataLoaded={pageLoaded} setDataLoaded={setPageLoaded} setPages={setPages} modalRef={modalParamsRef} models={models} />
       <DataModal dataLoaded={systemLoaded} setDataLoaded={setSystemLoaded} setSystems={setSystems} modalRef={dataModalRef} />

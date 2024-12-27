@@ -1,0 +1,16 @@
+import React from 'react';
+import DeliveryPricesRest from '@Rest/Admin/DeliveryPricesRest';
+
+const deliverypricesRest = new DeliveryPricesRest();
+
+const DeliveryPrices = () => {
+    return (
+        <div>
+            <h1>DeliveryPrices Component</h1>
+        </div>
+    );
+};
+
+CreateReactScript((el, properties) => {
+  createRoot(el).render(<DeliveryPrices {...properties} />);
+})

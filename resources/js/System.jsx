@@ -55,7 +55,7 @@ const System = ({ page, pages, params, filteredData = {}, systems, generals = []
 
     switch (component) {
       case 'top_bar':
-        return <TopBar which={value} items={getItems(itemsId)} />
+        return <TopBar data={data} which={value} items={getItems(itemsId)} />
       case 'header':
         return <Header data={data} which={value} items={getItems(itemsId)} cart={cart} setCart={setCart} pages={pages} />
       case 'content':

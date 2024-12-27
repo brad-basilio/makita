@@ -56,6 +56,17 @@
       }
     </style>
   @endif
+
+  <style>
+    @foreach ($data['colors'] as $color)
+      .bg-{{$color->name}} {
+        background-color: {{$color->description}};
+      }
+      .customtext-{{$color->name}} {
+        color: {{$color->description}};
+      }
+    @endforeach
+  </style>
 </head>
 
 <body>

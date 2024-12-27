@@ -34,6 +34,7 @@ const Menu = ({ components, onClick }) => {
           }
 
           <li className="menu-title">Sistema de respaldo</li>
+          <MenuItem icon='mdi mdi-cogs' rightBarToggle>Configuraciones</MenuItem>
           <MenuItem icon='mdi mdi-cloud-download' onClick={async () => {
             const backup = await systemRest.exportBK();
             const blob = new Blob([JSON.stringify(backup)], { type: 'application/json' });
