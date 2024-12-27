@@ -16,7 +16,7 @@ import SaleStatusesRest from '../Actions/Admin/SaleStatusesRest';
 const salesRest = new SalesRest()
 const saleStatusesRest = new SaleStatusesRest()
 
-const Sales = ({ statuses }) => {
+const Sales = ({ statuses = [] }) => {
   const gridRef = useRef()
   const modalRef = useRef()
 

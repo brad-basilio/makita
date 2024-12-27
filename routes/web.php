@@ -23,6 +23,7 @@ use App\Http\Controllers\Admin\SystemController as AdminSystemController;
 use App\Http\Controllers\Admin\TagController as AdminTagController;
 use App\Http\Controllers\Admin\BrandController as AdminBrandController;
 use App\Http\Controllers\Admin\DeliveryPriceController as AdminDeliveryPriceController;
+use App\Http\Controllers\Admin\SaleController as AdminSaleController;
 use App\Http\Controllers\Admin\SubCategoryController as AdminSubCategoryController;
 
 // Public 
