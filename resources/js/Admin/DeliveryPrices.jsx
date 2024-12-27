@@ -86,7 +86,18 @@ const DeliveryPrices = ({ ubigeo = [] }) => {
     }
 
     const handleFileUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
 
+        e.target.value = null
+
+        const formData = new FormData();
+        formData.append('excel', file);
+
+        const result = await deliverypricesRest.upload(formData);
+
+        if (!result) return
+        $(gridRef.current).dxDataGrid('instance').refresh()
     }
 
     return (<>
@@ -135,6 +146,7 @@ const DeliveryPrices = ({ ubigeo = [] }) => {
                 {
                     dataField: 'name',
                     caption: 'Envío a',
+                    width: '200px',
                     allowExporting: false,
                 },
                 {
@@ -148,10 +160,15 @@ const DeliveryPrices = ({ ubigeo = [] }) => {
                     dataField: 'price',
                     caption: 'Precio',
                     dataType: 'number',
+                    width: '150px',
                     cellTemplate: (container, { data }) => {
-                        container.html(renderToString(data.price === null
-                            ? <span className='text-muted'>Pago en destino</span>
-                            : <span>S/. {Number2Currency(data.price)}</span>))
+                        if (data.price === null) {
+                            container.html(renderToString(<span className='text-muted'>Pago en destino</span>))
+                        } else if (data.price > 0) {
+                            container.html(renderToString(<span>S/. {Number2Currency(data.price)}</span>))
+                        } else {
+                            container.text('Gratis')
+                        }
                     }
                 },
                 {
@@ -184,7 +201,7 @@ const DeliveryPrices = ({ ubigeo = [] }) => {
                         return <option key={index} value={x.reniec}>{x.reniec} {x.distrito} {x.provincia} {x.departamento}</option>
                     })}
                 </SelectFormGroup>
-                <SwitchFormGroup label='Pago en destino' col='col-6' onChange={(e) => setInHome(e.target.checked)} checked={inHome} />
+                <SwitchFormGroup label='Pago en destino' col='col-6' onChange={(e) => setInHome(e.target.checked)} checked={inHome} refreshable={[inHome]}/>
                 <div className='col-6' hidden={inHome}>
                     <InputFormGroup eRef={priceRef} label='Costo de envío' col='col-12' type='number' step={0.01} required />
                 </div>

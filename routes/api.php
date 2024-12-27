@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\BrandController as AdminBrandController;
 use App\Http\Controllers\Admin\DeliveryPriceController as AdminDeliveryPriceController;
 use App\Http\Controllers\Admin\GalleryController as AdminGalleryController;
 use App\Http\Controllers\Admin\ItemController as AdminItemController;
+use App\Http\Controllers\Admin\SaleController as AdminSaleController;
 use App\Http\Controllers\Admin\SubCategoryController as AdminSubCategoryController;
 use App\Http\Controllers\Admin\SystemColorController as AdminSystemColorController;
 use App\Http\Controllers\Admin\SystemController as AdminSystemController;
@@ -34,6 +35,7 @@ use App\Http\Controllers\CoverController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\SaleController;
 use App\Http\Controllers\SubscriptionController;
 
 /*
@@ -77,11 +79,15 @@ Route::middleware('auth')->group(function () {
 
   Route::middleware('can:Admin')->prefix('admin')->group(function () {
 
-    Route::post('/posts', [AdminPostController::class, 'save']);
-    Route::post('/posts/paginate', [AdminPostController::class, 'paginate']);
-    Route::patch('/posts/status', [AdminPostController::class, 'status']);
-    Route::patch('/posts/{field}', [AdminPostController::class, 'boolean']);
-    Route::delete('/posts/{id}', [AdminPostController::class, 'delete']);
+    Route::get('/sales/{id}', [AdminSaleController::class, 'get']);
+    Route::post('/sales', [AdminSaleController::class, 'save']);
+    Route::post('/sales/paginate', [AdminSaleController::class, 'paginate']);
+    Route::patch('/sales/status', [AdminSaleController::class, 'status']);
+    Route::patch('/sales/{field}', [AdminSaleController::class, 'boolean']);
+    Route::delete('/sales/{id}', [AdminSaleController::class, 'delete']);
+
+    Route::get('/sale-statuses/by-sale/{id}', [AdminSaleStatusController::class, 'bySale']);
+
 
     Route::post('/web-details', [AdminWebDetailController::class, 'save']);
     Route::post('/gallery', [AdminGalleryController::class, 'save']);
@@ -101,6 +107,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/subscriptions/paginate', [AdminSubscriptionController::class, 'paginate']);
     Route::patch('/subscriptions/status', [AdminSubscriptionController::class, 'status']);
     Route::delete('/subscriptions/{id}', [AdminSubscriptionController::class, 'delete']);
+
+    Route::post('/posts', [AdminPostController::class, 'save']);
+    Route::post('/posts/paginate', [AdminPostController::class, 'paginate']);
+    Route::patch('/posts/status', [AdminPostController::class, 'status']);
+    Route::patch('/posts/{field}', [AdminPostController::class, 'boolean']);
+    Route::delete('/posts/{id}', [AdminPostController::class, 'delete']);
 
     Route::post('/aboutus', [AdminAboutusController::class, 'save']);
     Route::post('/aboutus/paginate', [AdminAboutusController::class, 'paginate']);
@@ -152,6 +164,7 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/prices', [AdminDeliveryPriceController::class, 'save']);
     Route::post('/prices/paginate', [AdminDeliveryPriceController::class, 'paginate']);
+    Route::post('/prices/massive', [AdminDeliveryPriceController::class, 'massive']);
     Route::patch('/prices/status', [AdminDeliveryPriceController::class, 'status']);
     Route::patch('/prices/{field}', [AdminDeliveryPriceController::class, 'boolean']);
     Route::delete('/prices/{id}', [AdminDeliveryPriceController::class, 'delete']);

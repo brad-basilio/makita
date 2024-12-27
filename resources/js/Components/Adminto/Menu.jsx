@@ -73,7 +73,7 @@ const Menu = ({ session, hasRole }) => {
           {
             hasRole('Admin', 'Root') && <>
               <MenuItem href="/admin/home" icon='mdi mdi-home'>Dashboard</MenuItem>
-              <MenuItem href="/admin/posts" icon='mdi mdi-post'>Posts</MenuItem>
+              <MenuItem href="/admin/sales" icon='mdi mdi-cart-outline'>Pedidos</MenuItem>
               <MenuItem href="/admin/items" icon='mdi mdi-bookshelf'>Items</MenuItem>
               <MenuItemContainer title='Características' icon='mdi mdi-view-dashboard'>
                 <MenuItem href="/admin/categories" icon='mdi mdi-shape-outline'>Categorías</MenuItem>
@@ -85,6 +85,7 @@ const Menu = ({ session, hasRole }) => {
               <MenuItem href="/admin/messages" icon='mdi mdi-message-text'>Mensajes</MenuItem>
               <MenuItem href="/admin/subscriptions" icon='mdi mdi-email-multiple'>Suscripciones</MenuItem>
               <li className="menu-title">Landing Page</li>
+              <MenuItem href="/admin/posts" icon='mdi mdi-post'>Posts</MenuItem>
               <MenuItem href="/admin/about" icon='mdi mdi-briefcase'>Nosotros</MenuItem>
               {/* <MenuItem href="/admin/indicators" icon='mdi mdi-dots-grid'>Indicadores</MenuItem> */}
               <MenuItem href="/admin/banners" icon='mdi mdi-post-outline'>Banners</MenuItem>
