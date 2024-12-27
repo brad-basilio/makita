@@ -1,19 +1,18 @@
 import React, { useRef, useState } from 'react';
-import { renderToString } from 'react-dom/server';
 import { createRoot } from 'react-dom/client';
+import { renderToString } from 'react-dom/server';
 
 import DeliveryPricesRest from '@Rest/Admin/DeliveryPricesRest';
 import CreateReactScript from '@Utils/CreateReactScript';
+import Swal from 'sweetalert2';
 import BaseAdminto from '../Components/Adminto/Base';
-import Table from '../Components/Adminto/Table';
+import DxButton from '../Components/Adminto/Dx/DxButton';
 import Modal from '../Components/Adminto/Modal';
-import TextareaFormGroup from '../Components/Adminto/form/TextareaFormGroup';
+import Table from '../Components/Adminto/Table';
 import InputFormGroup from '../Components/Adminto/form/InputFormGroup';
 import SelectFormGroup from '../Components/Adminto/form/SelectFormGroup';
 import SwitchFormGroup from '../Components/Adminto/form/SwitchFormGroup';
-import Swal from 'sweetalert2';
-import { String } from 'sode-extend-react';
-import DxButton from '../Components/Adminto/Dx/DxButton';
+import TextareaFormGroup from '../Components/Adminto/form/TextareaFormGroup';
 import Number2Currency from '../Utils/Number2Currency';
 
 const deliverypricesRest = new DeliveryPricesRest();
@@ -86,9 +85,24 @@ const DeliveryPrices = ({ ubigeo = [] }) => {
         </span>))
     }
 
+    const handleFileUpload = async (e) => {
+
+    }
+
     return (<>
+        <input id="file-input" type="file" accept=".xlsx, .xls" style={{ display: 'none' }} onChange={handleFileUpload} />
         <Table gridRef={gridRef} title='Costos de envío' rest={deliverypricesRest}
+            exportable={true}
+            exportableName='delivery.prices'
             toolBar={(container) => {
+                container.unshift({
+                    widget: 'dxButton', location: 'after',
+                    options: {
+                        icon: 'upload',
+                        hint: 'Cargar archivo Excel',
+                        onClick: () => document.getElementById('file-input').click()
+                    }
+                });
                 container.unshift({
                     widget: 'dxButton', location: 'after',
                     options: {
@@ -114,13 +128,19 @@ const DeliveryPrices = ({ ubigeo = [] }) => {
                     visible: false
                 },
                 {
+                    dataField: 'ubigeo',
+                    caption: 'Ubigeo (RENIEC)',
+                    width: '150px'
+                },
+                {
                     dataField: 'name',
                     caption: 'Envío a',
+                    allowExporting: false,
                 },
                 {
                     dataField: 'description',
                     caption: 'Descripción',
-                    cellTemplate: (container, {data}) => {
+                    cellTemplate: (container, { data }) => {
                         container.html(data.description || '<i class="text-muted">- Sin descripción -</i>')
                     }
                 },
@@ -136,6 +156,7 @@ const DeliveryPrices = ({ ubigeo = [] }) => {
                 },
                 {
                     caption: 'Acciones',
+                    width: '100px',
                     cellTemplate: (container, { data }) => {
                         container.css('text-overflow', 'unset')
                         container.append(DxButton({
