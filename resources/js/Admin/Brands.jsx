@@ -1,17 +1,17 @@
+import BaseAdminto from '@Adminto/Base';
+import SwitchFormGroup from '@Adminto/form/SwitchFormGroup';
+import TextareaFormGroup from '@Adminto/form/TextareaFormGroup';
 import React, { useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import BaseAdminto from '@Adminto/Base';
-import CreateReactScript from '../Utils/CreateReactScript';
-import Table from '../Components/Table';
-import Modal from '../Components/Modal';
-import ReactAppend from '../Utils/ReactAppend';
-import DxButton from '../Components/dx/DxButton';
-import TextareaFormGroup from '@Adminto/form/TextareaFormGroup';
-import SwitchFormGroup from '@Adminto/form/SwitchFormGroup';
 import Swal from 'sweetalert2';
-import InputFormGroup from '../Components/form/InputFormGroup';
-import ImageFormGroup from '../Components/Adminto/form/ImageFormGroup';
 import BrandsRest from '../Actions/Admin/BrandsRest';
+import ImageFormGroup from '../Components/Adminto/form/ImageFormGroup';
+import Modal from '../Components/Adminto/Modal';
+import Table from '../Components/Adminto/Table';
+import DxButton from '../Components/dx/DxButton';
+import InputFormGroup from '../Components/form/InputFormGroup';
+import CreateReactScript from '../Utils/CreateReactScript';
+import ReactAppend from '../Utils/ReactAppend';
 
 const brandsRest = new BrandsRest()
 
@@ -185,7 +185,7 @@ const Brands = () => {
         }
       ]} />
     <Modal modalRef={modalRef} title={isEditing ? 'Editar marca' : 'Agregar marca'} onSubmit={onModalSubmit} size='sm'>
-      <ImageFormGroup eRef={imageRef} label='Imagen' col='col-12' aspect={16/9} />
+      <ImageFormGroup eRef={imageRef} label='Imagen' col='col-12' aspect={16 / 9} />
       <div className='row' id='faqs-container'>
         <input ref={idRef} type='hidden' />
         <InputFormGroup eRef={nameRef} label='Marca' col='col-12' required />

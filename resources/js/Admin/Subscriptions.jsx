@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { createRoot } from 'react-dom/client';
 import BaseAdminto from '@Adminto/Base';
 import CreateReactScript from '../Utils/CreateReactScript';
-import Table from '../Components/Table';
+import Table from '../Components/Adminto/Table';
 import DxButton from '../Components/dx/DxButton';
 import SubscriptionsRest from '@Rest/Admin/SubscriptionsRest';
 import ReactAppend from '../Utils/ReactAppend';

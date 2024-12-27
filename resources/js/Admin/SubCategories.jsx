@@ -1,18 +1,18 @@
+import BaseAdminto from '@Adminto/Base';
+import SwitchFormGroup from '@Adminto/form/SwitchFormGroup';
+import TextareaFormGroup from '@Adminto/form/TextareaFormGroup';
 import React, { useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import BaseAdminto from '@Adminto/Base';
-import CreateReactScript from '../Utils/CreateReactScript';
-import Table from '../Components/Table';
-import Modal from '../Components/Modal';
-import ReactAppend from '../Utils/ReactAppend';
-import DxButton from '../Components/dx/DxButton';
-import TextareaFormGroup from '@Adminto/form/TextareaFormGroup';
-import SwitchFormGroup from '@Adminto/form/SwitchFormGroup';
 import Swal from 'sweetalert2';
-import InputFormGroup from '../Components/form/InputFormGroup';
 import SubCategoriesRest from '../Actions/Admin/SubCategoriesRest';
 import ImageFormGroup from '../Components/Adminto/form/ImageFormGroup';
 import SelectAPIFormGroup from '../Components/Adminto/form/SelectAPIFormGroup';
+import Modal from '../Components/Adminto/Modal';
+import Table from '../Components/Adminto/Table';
+import DxButton from '../Components/dx/DxButton';
+import InputFormGroup from '../Components/form/InputFormGroup';
+import CreateReactScript from '../Utils/CreateReactScript';
+import ReactAppend from '../Utils/ReactAppend';
 import SetSelectValue from '../Utils/SetSelectValue';
 
 const subCategoriesRest = new SubCategoriesRest()
@@ -193,10 +193,10 @@ const SubCategories = () => {
         }
       ]} />
     <Modal modalRef={modalRef} title={isEditing ? 'Editar sub categoría' : 'Agregar sub categoría'} onSubmit={onModalSubmit} size='sm'>
-        <input ref={idRef} type='hidden' />
-      <ImageFormGroup eRef={imageRef} label='Imagen' col='col-12' aspect={16/9} />
+      <input ref={idRef} type='hidden' />
+      <ImageFormGroup eRef={imageRef} label='Imagen' col='col-12' aspect={16 / 9} />
       <div className='row' id='modal-container'>
-        <SelectAPIFormGroup eRef={categoryRef} label='Categoría' searchAPI='/api/admin/categories/paginate' searchBy='name' required dropdownParent='#modal-container'/>
+        <SelectAPIFormGroup eRef={categoryRef} label='Categoría' searchAPI='/api/admin/categories/paginate' searchBy='name' required dropdownParent='#modal-container' />
         <InputFormGroup eRef={nameRef} label='Sub Categoría' col='col-12' required />
         <TextareaFormGroup eRef={descriptionRef} label='Descripción' rows={3} />
       </div>

@@ -3,22 +3,22 @@ import SwitchFormGroup from '@Adminto/form/SwitchFormGroup';
 import TextareaFormGroup from '@Adminto/form/TextareaFormGroup';
 import React, { useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
+import Swal from 'sweetalert2';
 import AboutusRest from '../Actions/Admin/AboutusRest';
-import Modal from '../Components/Modal';
-import Table from '../Components/Table';
+import WebDetailsRest from '../Actions/Admin/WebDetailsRest';
+import BasicEditing from '../Components/Adminto/Basic/BasicEditing';
+import Modal from '../Components/Adminto/Modal';
+import Table from '../Components/Adminto/Table';
 import DxButton from '../Components/dx/DxButton';
 import InputFormGroup from '../Components/form/InputFormGroup';
+import ArrayDetails2Object from '../Utils/ArrayDetails2Object';
 import CreateReactScript from '../Utils/CreateReactScript';
 import ReactAppend from '../Utils/ReactAppend';
-import Swal from 'sweetalert2';
-import BasicEditing from '../Components/Adminto/Basic/BasicEditing';
-import ArrayDetails2Object from '../Utils/ArrayDetails2Object';
-import WebDetailsRest from '../Actions/Admin/WebDetailsRest';
 
 const aboutusRest = new AboutusRest()
 const webDetailsRest = new WebDetailsRest()
 
-const About = ({details: detailsDB}) => {
+const About = ({ details: detailsDB }) => {
 
   const gridRef = useRef()
   const modalRef = useRef()
@@ -100,13 +100,13 @@ const About = ({details: detailsDB}) => {
 
   return (<>
     <Table gridRef={gridRef} title={<>
-      <BasicEditing correlative='about' details={detailsDB}/>
+      <BasicEditing correlative='about' details={detailsDB} />
       {
         videoEditing
           ? <input className='form-control form-control-sm mb-1' defaultValue={details?.[`about.video`]} onBlur={onVideoChange} autoFocus />
           : <smal className='header-title mt-1' onClick={() => setVideoEditing(true)}>{details?.[`about.video`] || 'Sin video'}</smal>
       }
-      </>
+    </>
     } rest={aboutusRest}
       toolBar={(container) => {
         container.unshift({

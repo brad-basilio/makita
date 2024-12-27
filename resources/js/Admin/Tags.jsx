@@ -1,16 +1,16 @@
+import BaseAdminto from '@Adminto/Base';
+import SwitchFormGroup from '@Adminto/form/SwitchFormGroup';
+import TextareaFormGroup from '@Adminto/form/TextareaFormGroup';
 import React, { useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import BaseAdminto from '@Adminto/Base';
-import CreateReactScript from '../Utils/CreateReactScript';
-import Table from '../Components/Table';
-import Modal from '../Components/Modal';
-import ReactAppend from '../Utils/ReactAppend';
-import DxButton from '../Components/dx/DxButton';
-import TextareaFormGroup from '@Adminto/form/TextareaFormGroup';
-import SwitchFormGroup from '@Adminto/form/SwitchFormGroup';
 import Swal from 'sweetalert2';
-import InputFormGroup from '../Components/form/InputFormGroup';
 import TagsRest from '../Actions/Admin/TagsRets';
+import Modal from '../Components/Adminto/Modal';
+import Table from '../Components/Adminto/Table';
+import DxButton from '../Components/dx/DxButton';
+import InputFormGroup from '../Components/form/InputFormGroup';
+import CreateReactScript from '../Utils/CreateReactScript';
+import ReactAppend from '../Utils/ReactAppend';
 
 const tagsRest = new TagsRest()
 
@@ -156,7 +156,6 @@ const Tags = () => {
 }
 
 CreateReactScript((el, properties) => {
-
   createRoot(el).render(<BaseAdminto {...properties} title='Etiquetas'>
     <Tags {...properties} />
   </BaseAdminto>);

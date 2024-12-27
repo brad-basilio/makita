@@ -1,23 +1,20 @@
+import BaseAdminto from '@Adminto/Base';
 import React, { useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import BaseAdminto from '@Adminto/Base';
-import CreateReactScript from '../Utils/CreateReactScript';
-import Table from '../Components/Table';
-import Modal from '../Components/Modal';
-import InputFormGroup from '../Components/form/InputFormGroup';
-import ReactAppend from '../Utils/ReactAppend';
-import DxButton from '../Components/dx/DxButton';
-import TextareaFormGroup from '@Adminto/form/TextareaFormGroup';
-import SwitchFormGroup from '@Adminto/form/SwitchFormGroup';
-import ImageFormGroup from '../Components/Adminto/form/ImageFormGroup';
-import SelectFormGroup from '../Components/form/SelectFormGroup';
 import Swal from 'sweetalert2';
 import PostsRest from '../Actions/Admin/PostsRest';
+import BasicEditing from '../Components/Adminto/Basic/BasicEditing';
+import ImageFormGroup from '../Components/Adminto/form/ImageFormGroup';
 import QuillFormGroup from '../Components/Adminto/form/QuillFormGroup';
 import SelectAPIFormGroup from '../Components/Adminto/form/SelectAPIFormGroup';
+import Modal from '../Components/Adminto/Modal';
+import DxButton from '../Components/dx/DxButton';
+import InputFormGroup from '../Components/form/InputFormGroup';
+import Table from '../Components/Adminto/Table';
+import CreateReactScript from '../Utils/CreateReactScript';
 import html2string from '../Utils/html2string';
+import ReactAppend from '../Utils/ReactAppend';
 import SetSelectValue from '../Utils/SetSelectValue';
-import BasicEditing from '../Components/Adminto/Basic/BasicEditing';
 
 const postsRest = new PostsRest()
 
@@ -104,7 +101,7 @@ const Posts = ({ details }) => {
   }
 
   return (<>
-    <Table gridRef={gridRef} title={<BasicEditing correlative='blog' details={details}/>} rest={postsRest}
+    <Table gridRef={gridRef} title={<BasicEditing correlative='blog' details={details} />} rest={postsRest}
       toolBar={(container) => {
         container.unshift({
           widget: 'dxButton', location: 'after',
@@ -137,9 +134,9 @@ const Posts = ({ details }) => {
         {
           dataField: 'name',
           caption: 'Título',
-          cellTemplate: (container, {data}) => {
+          cellTemplate: (container, { data }) => {
             ReactAppend(container, <>
-              {data.name}<br/>
+              {data.name}<br />
               {data.tags?.map((tag, index) => <span key={index} className='badge badge-soft-success me-1'>{tag.name}</span>)}
             </>)
           }
@@ -181,7 +178,7 @@ const Posts = ({ details }) => {
         <InputFormGroup eRef={nameRef} label='Título' rows={2} required />
         <QuillFormGroup eRef={descriptionRef} label='Contenido' />
         {/* <TextareaFormGroup eRef={tagsRef} label='Tags (Separado por comas)' rows={1} /> */}
-        <SelectAPIFormGroup id='tags' eRef={tagsRef} searchAPI={'/api/admin/tags/paginate'} searchBy='name' label='Tags' dropdownParent='#posts-container' tags multiple/>
+        <SelectAPIFormGroup id='tags' eRef={tagsRef} searchAPI={'/api/admin/tags/paginate'} searchBy='name' label='Tags' dropdownParent='#posts-container' tags multiple />
         <InputFormGroup eRef={postDateRef} label='Fecha de publicación' type='date' required />
       </div>
     </Modal>

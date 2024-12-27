@@ -1,18 +1,18 @@
+import BaseAdminto from '@Adminto/Base';
+import InputFormGroup from '@Adminto/form/InputFormGroup';
+import SelectFormGroup from '@Adminto/form/SelectFormGroup';
+import SwitchFormGroup from '@Adminto/form/SwitchFormGroup';
+import TextareaFormGroup from '@Adminto/form/TextareaFormGroup';
 import React, { useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import BaseAdminto from '@Adminto/Base';
-import CreateReactScript from '../Utils/CreateReactScript';
-import Table from '../Components/Table';
-import Modal from '../Components/Modal';
-import ReactAppend from '../Utils/ReactAppend';
-import DxButton from '../Components/dx/DxButton';
-import TextareaFormGroup from '@Adminto/form/TextareaFormGroup';
-import SwitchFormGroup from '@Adminto/form/SwitchFormGroup';
-import Swal from 'sweetalert2';
-import InputFormGroup from '@Adminto/form/InputFormGroup';
-import SocialsRest from '../Actions/Admin/SocialsRest';
-import SelectFormGroup from '@Adminto/form/SelectFormGroup';
 import { renderToString } from 'react-dom/server';
+import Swal from 'sweetalert2';
+import SocialsRest from '../Actions/Admin/SocialsRest';
+import Modal from '../Components/Adminto/Modal';
+import Table from '../Components/Adminto/Table';
+import DxButton from '../Components/dx/DxButton';
+import CreateReactScript from '../Utils/CreateReactScript';
+import ReactAppend from '../Utils/ReactAppend';
 
 const socialsRest = new SocialsRest()
 
@@ -124,8 +124,8 @@ const Socials = ({ icons }) => {
           caption: 'Red Social',
           cellTemplate: (container, { data }) => {
             container.html(renderToString(<>
-            <i className={`fab ${data.icon} me-1`}></i>
-            {data.description}
+              <i className={`fab ${data.icon} me-1`}></i>
+              {data.description}
             </>))
           }
         },

@@ -1,21 +1,21 @@
+import BaseAdminto from '@Adminto/Base';
+import SwitchFormGroup from '@Adminto/form/SwitchFormGroup';
+import TextareaFormGroup from '@Adminto/form/TextareaFormGroup';
 import React, { useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import BaseAdminto from '@Adminto/Base';
-import CreateReactScript from '../Utils/CreateReactScript';
-import Table from '../Components/Table';
-import Modal from '../Components/Modal';
-import ReactAppend from '../Utils/ReactAppend';
-import DxButton from '../Components/dx/DxButton';
-import TextareaFormGroup from '@Adminto/form/TextareaFormGroup';
-import SwitchFormGroup from '@Adminto/form/SwitchFormGroup';
 import Swal from 'sweetalert2';
-import InputFormGroup from '../Components/form/InputFormGroup';
 import StrengthsRest from '../Actions/Admin/StrengthsRest';
 import BasicEditing from '../Components/Adminto/Basic/BasicEditing';
+import Modal from '../Components/Adminto/Modal';
+import Table from '../Components/Adminto/Table';
+import DxButton from '../Components/dx/DxButton';
+import InputFormGroup from '../Components/form/InputFormGroup';
+import CreateReactScript from '../Utils/CreateReactScript';
+import ReactAppend from '../Utils/ReactAppend';
 
 const strengthsRest = new StrengthsRest()
 
-const Strengths = ({details}) => {
+const Strengths = ({ details }) => {
 
   const gridRef = useRef()
   const modalRef = useRef()
@@ -76,7 +76,7 @@ const Strengths = ({details}) => {
   }
 
   return (<>
-    <Table gridRef={gridRef} title={<BasicEditing correlative='values' details={details}/>} rest={strengthsRest}
+    <Table gridRef={gridRef} title={<BasicEditing correlative='values' details={details} />} rest={strengthsRest}
       toolBar={(container) => {
         container.unshift({
           widget: 'dxButton', location: 'after',

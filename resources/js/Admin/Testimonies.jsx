@@ -1,20 +1,20 @@
+import BaseAdminto from '@Adminto/Base';
+import SwitchFormGroup from '@Adminto/form/SwitchFormGroup';
+import TextareaFormGroup from '@Adminto/form/TextareaFormGroup';
 import React, { useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import BaseAdminto from '@Adminto/Base';
-import CreateReactScript from '../Utils/CreateReactScript';
-import Table from '../Components/Table';
-import Modal from '../Components/Modal';
-import InputFormGroup from '../Components/form/InputFormGroup';
-import ReactAppend from '../Utils/ReactAppend';
-import DxButton from '../Components/dx/DxButton';
-import TextareaFormGroup from '@Adminto/form/TextareaFormGroup';
-import SwitchFormGroup from '@Adminto/form/SwitchFormGroup';
-import ImageFormGroup from '../Components/Adminto/form/ImageFormGroup';
-import SelectFormGroup from '../Components/form/SelectFormGroup';
-import TestimoniesRest from '../Actions/Admin/TestimoniesRest';
-import DxBox from '../Components/Adminto/Dx/DxBox';
 import Swal from 'sweetalert2';
+import TestimoniesRest from '../Actions/Admin/TestimoniesRest';
 import BasicEditing from '../Components/Adminto/Basic/BasicEditing';
+import DxBox from '../Components/Adminto/Dx/DxBox';
+import ImageFormGroup from '../Components/Adminto/form/ImageFormGroup';
+import Modal from '../Components/Adminto/Modal';
+import Table from '../Components/Adminto/Table';
+import DxButton from '../Components/dx/DxButton';
+import InputFormGroup from '../Components/form/InputFormGroup';
+import SelectFormGroup from '../Components/form/SelectFormGroup';
+import CreateReactScript from '../Utils/CreateReactScript';
+import ReactAppend from '../Utils/ReactAppend';
 
 const testimoniesRest = new TestimoniesRest()
 
@@ -96,7 +96,7 @@ const Testimonies = ({ countries, details }) => {
   }
 
   return (<>
-    <Table gridRef={gridRef} title={<BasicEditing correlative='testimonies' details={details}/>} rest={testimoniesRest}
+    <Table gridRef={gridRef} title={<BasicEditing correlative='testimonies' details={details} />} rest={testimoniesRest}
       toolBar={(container) => {
         container.unshift({
           widget: 'dxButton', location: 'after',
@@ -177,7 +177,7 @@ const Testimonies = ({ countries, details }) => {
         <input ref={idRef} type='hidden' />
         <div className='col-12'>
           <div className='row'>
-            <ImageFormGroup eRef={imageRef} label='Imagen' col='col-sm-4 col-xs-12' aspect={1}/>
+            <ImageFormGroup eRef={imageRef} label='Imagen' col='col-sm-4 col-xs-12' aspect={1} />
             <div className='col-sm-8 col-xs-12'>
               <InputFormGroup eRef={nameRef} label='Autor' rows={2} required />
               <SelectFormGroup eRef={countryRef} label='Pais' required dropdownParent='#testimony-container'>
