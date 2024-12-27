@@ -19,6 +19,7 @@ import Filter from './Components/Tailwind/Filter';
 import ProductDetail from './Components/Tailwind/ProductDetail';
 import Contact from './Components/Tailwind/Contact';
 import Frame from './Components/Tailwind/Frame';
+import Checkout from './Components/Tailwind/Checkout';
 
 const itemsRest = new ItemsRest();
 
@@ -84,6 +85,8 @@ const System = ({ page, pages, params, filteredData = {}, systems, generals = []
         return <ProductDetail which={value} item={filteredData.Item ?? {}} cart={cart} setCart={setCart} />
       case 'cart':
         return <Cart which={value} data={data} cart={cart} setCart={setCart} />
+      case 'checkout':
+        return <Checkout which={value} cart={cart} setCart={setCart}/>
       case 'contact':
         return <Contact which={value} data={data} />
       case 'frame':

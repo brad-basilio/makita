@@ -64,18 +64,18 @@ const NavBar = ({ session = {}, title = 'Pagina' }) => {
       <div className="logo-box">
         <a href="/home" className="logo logo-light text-center">
           <span className="logo-sm">
-            <img src="/assets/img/icon.svg" alt="" height="22" />
+            <img src="/assets/resources/icon.png" alt="" height="22" />
           </span>
           <span className="logo-lg">
-            <img src="/assets/img/logo-default.png" alt="" height="16" />
+            <img src="/assets/resources/logo.png" alt="" style={{height: '32px', aspectRatio: 13/4}} />
           </span>
         </a>
         <a href="/home" className="logo logo-dark text-center">
           <span className="logo-sm">
-            <img src="/assets/img/icon.svg" alt="" height="22" />
+            <img src="/assets/resources/icon.png" alt="" height="22" />
           </span>
           <span className="logo-lg">
-            <img src="/assets/img/logo-dark.svg" alt="" height="16" />
+            <img src="/assets/resources/logo.png" alt="" style={{height: '32px', aspectRatio: 13/4}} />
           </span>
         </a>
       </div>

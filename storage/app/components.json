@@ -270,6 +270,19 @@
     ]
   },
   {
+    "id": "checkout",
+    "name": "Checkout",
+    "options": [
+      {
+        "id": "CheckoutCulqi",
+        "name": "Culqi",
+        "data": [
+          "url_thanks"
+        ]
+      }
+    ]
+  },
+  {
     "id": "contact",
     "name": "Contacto",
     "options": [

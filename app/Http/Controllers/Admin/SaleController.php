@@ -10,4 +10,5 @@ use Illuminate\Http\Request;
 class SaleController extends BasicController
 {
     public $model = Sale::class;
+    public $reactView = 'Admin/Sales';
 }

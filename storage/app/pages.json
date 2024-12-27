@@ -107,5 +107,17 @@
             "field": null,
             "with": []
         }
+    },
+    {
+        "id": "337255c7-c3bf-4763-a294-535e84b0b9af",
+        "name": "Checkout",
+        "path": "\/checkout",
+        "extends_base": true,
+        "pseudo_path": "\/checkout",
+        "using": {
+            "model": null,
+            "field": null,
+            "with": []
+        }
     }
 ]
