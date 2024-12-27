@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import InputFormGroup from '../../form/InputFormGroup';
 import TextareaFormGroup from '../../form/TextareaFormGroup';
-import Modal from '../../Modal';
+import Modal from '../../Adminto/Modal';
 import SelectFormGroup from "../../form/SelectFormGroup";
 import Global from "../../../Utils/Global";
 import SystemRest from "../../../Actions/Admin/SystemRest";
