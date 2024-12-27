@@ -1,5 +1,7 @@
 import React from 'react';
 import DeliveryPricesRest from '@Rest/Admin/DeliveryPricesRest';
+import CreateReactScript from '@Utils/CreateReactScript';
+import { createRoot } from 'react-dom/client';
 
 const deliverypricesRest = new DeliveryPricesRest();
 
