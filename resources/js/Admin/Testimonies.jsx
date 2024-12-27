@@ -8,11 +8,11 @@ import TestimoniesRest from '../Actions/Admin/TestimoniesRest';
 import BasicEditing from '../Components/Adminto/Basic/BasicEditing';
 import DxBox from '../Components/Adminto/Dx/DxBox';
 import ImageFormGroup from '../Components/Adminto/form/ImageFormGroup';
+import InputFormGroup from '../Components/Adminto/form/InputFormGroup';
+import SelectFormGroup from '../Components/Adminto/form/SelectFormGroup';
 import Modal from '../Components/Adminto/Modal';
 import Table from '../Components/Adminto/Table';
 import DxButton from '../Components/dx/DxButton';
-import InputFormGroup from '../Components/form/InputFormGroup';
-import SelectFormGroup from '../Components/form/SelectFormGroup';
 import CreateReactScript from '../Utils/CreateReactScript';
 import ReactAppend from '../Utils/ReactAppend';
 

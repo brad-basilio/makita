@@ -27,7 +27,6 @@ use App\Http\Controllers\Admin\SubCategoryController as AdminSubCategoryControll
 
 // Public 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\DeliveryPriceController;
 use App\Http\Controllers\SystemController;
 use SoDe\Extend\File;
 

@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
-import InputFormGroup from '../../form/InputFormGroup';
-import TextareaFormGroup from '../../form/TextareaFormGroup';
+import InputFormGroup from '../../Adminto/form/InputFormGroup';
+import TextareaFormGroup from '../../Adminto/form/TextareaFormGroup';
 import Modal from '../../Adminto/Modal';
-import SelectFormGroup from "../../form/SelectFormGroup";
+import SelectFormGroup from "../../Adminto/form/SelectFormGroup";
 import SystemRest from "../../../Actions/Admin/SystemRest";
-import EditorFormGroup from "../form/EditorFormGroup";
+import EditorFormGroup from "../../Adminto/form/EditorFormGroup";
 
 const systemRest = new SystemRest()
 

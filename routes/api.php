@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
 use App\Http\Controllers\Admin\AccountController as AdminAccountController;
 use App\Http\Controllers\Admin\BannerController as AdminBannerController;
 use App\Http\Controllers\Admin\BrandController as AdminBrandController;
+use App\Http\Controllers\Admin\DeliveryPriceController as AdminDeliveryPriceController;
 use App\Http\Controllers\Admin\GalleryController as AdminGalleryController;
 use App\Http\Controllers\Admin\ItemController as AdminItemController;
 use App\Http\Controllers\Admin\SubCategoryController as AdminSubCategoryController;
@@ -34,7 +35,6 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\SubscriptionController;
-use App\Http\Controllers\SystemColorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -149,6 +149,12 @@ Route::middleware('auth')->group(function () {
     Route::patch('/brands/status', [AdminBrandController::class, 'status']);
     Route::patch('/brands/{field}', [AdminBrandController::class, 'boolean']);
     Route::delete('/brands/{id}', [AdminBrandController::class, 'delete']);
+
+    Route::post('/prices', [AdminDeliveryPriceController::class, 'save']);
+    Route::post('/prices/paginate', [AdminDeliveryPriceController::class, 'paginate']);
+    Route::patch('/prices/status', [AdminDeliveryPriceController::class, 'status']);
+    Route::patch('/prices/{field}', [AdminDeliveryPriceController::class, 'boolean']);
+    Route::delete('/prices/{id}', [AdminDeliveryPriceController::class, 'delete']);
 
     Route::post('/tags', [AdminTagController::class, 'save']);
     Route::post('/tags/paginate', [AdminTagController::class, 'paginate']);

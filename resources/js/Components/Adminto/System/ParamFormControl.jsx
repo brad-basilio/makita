@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react"
-import SelectFormGroup from "../../form/SelectFormGroup"
+import SelectFormGroup from "../../Adminto/form/SelectFormGroup"
 
 const ParamFormControl = ({ page, param, models, setUsing, setPages }) => {
 

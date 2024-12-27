@@ -1,36 +1,46 @@
 import React, { useRef, useState } from 'react';
+import { renderToString } from 'react-dom/server';
+import { createRoot } from 'react-dom/client';
+
 import DeliveryPricesRest from '@Rest/Admin/DeliveryPricesRest';
 import CreateReactScript from '@Utils/CreateReactScript';
-import { createRoot } from 'react-dom/client';
 import BaseAdminto from '../Components/Adminto/Base';
 import Table from '../Components/Adminto/Table';
 import Modal from '../Components/Adminto/Modal';
+import TextareaFormGroup from '../Components/Adminto/form/TextareaFormGroup';
+import InputFormGroup from '../Components/Adminto/form/InputFormGroup';
+import SelectFormGroup from '../Components/Adminto/form/SelectFormGroup';
+import SwitchFormGroup from '../Components/Adminto/form/SwitchFormGroup';
+import Swal from 'sweetalert2';
+import { String } from 'sode-extend-react';
+import DxButton from '../Components/Adminto/Dx/DxButton';
+import Number2Currency from '../Utils/Number2Currency';
 
 const deliverypricesRest = new DeliveryPricesRest();
 
-const DeliveryPrices = () => {
+const DeliveryPrices = ({ ubigeo = [] }) => {
+
     const gridRef = useRef()
     const modalRef = useRef()
 
     // Form elements ref
     const idRef = useRef()
-    const categoryRef = useRef()
-    const nameRef = useRef()
+    const ubigeoRef = useRef()
+    const priceRef = useRef()
     const descriptionRef = useRef()
-    const imageRef = useRef()
 
     const [isEditing, setIsEditing] = useState(false)
+    const [inHome, setInHome] = useState(false);
 
     const onModalOpen = (data) => {
         if (data?.id) setIsEditing(true)
         else setIsEditing(false)
 
         idRef.current.value = data?.id ?? ''
-        SetSelectValue(categoryRef.current, data?.category?.id, data?.category?.name)
-        nameRef.current.value = data?.name ?? ''
+        $(ubigeoRef.current).val(data?.ubigeo ?? null).trigger('change')
+        setInHome(data?.price === null)
+        priceRef.current.value = data?.price ?? 0
         descriptionRef.current.value = data?.description ?? ''
-        imageRef.image.src = `/api/subcategories/media/${data?.image}`
-        imageRef.current.value = null
 
         $(modalRef.current).modal('show')
     }
@@ -38,39 +48,20 @@ const DeliveryPrices = () => {
     const onModalSubmit = async (e) => {
         e.preventDefault()
 
+        const selected = ubigeo.find(x => x.reniec == ubigeoRef.current.value)
         const request = {
             id: idRef.current.value || undefined,
-            category_id: categoryRef.current.value,
-            name: nameRef.current.value,
+            name: `${selected.distrito}, ${selected.departamento}`.toTitleCase(),
+            price: inHome ? null : priceRef.current.value,
             description: descriptionRef.current.value,
+            ubigeo: ubigeoRef.current.value
         }
 
-        const formData = new FormData()
-        for (const key in request) {
-            formData.append(key, request[key])
-        }
-        const file = imageRef.current.files[0]
-        if (file) {
-            formData.append('image', file)
-        }
-
-        const result = await deliverypricesRest.save(formData)
+        const result = await deliverypricesRest.save(request)
         if (!result) return
 
         $(gridRef.current).dxDataGrid('instance').refresh()
         $(modalRef.current).modal('hide')
-    }
-
-    const onFeaturedChange = async ({ id, value }) => {
-        const result = await deliverypricesRest.boolean({ id, field: 'featured', value })
-        if (!result) return
-        $(gridRef.current).dxDataGrid('instance').refresh()
-    }
-
-    const onVisibleChange = async ({ id, value }) => {
-        const result = await deliverypricesRest.boolean({ id, field: 'visible', value })
-        if (!result) return
-        $(gridRef.current).dxDataGrid('instance').refresh()
     }
 
     const onDeleteClicked = async (id) => {
@@ -88,8 +79,15 @@ const DeliveryPrices = () => {
         $(gridRef.current).dxDataGrid('instance').refresh()
     }
 
+    const ubigeoTemplate = (e) => {
+        return $(renderToString(<span>
+            <span className='d-block w-100 text-truncate'>{e.text.replace(e.id, '')}</span>
+            <small className='d-block'>Ubigeo: {e.id}</small>
+        </span>))
+    }
+
     return (<>
-        <Table gridRef={gridRef} title='Sub Categorías' rest={deliverypricesRest}
+        <Table gridRef={gridRef} title='Costos de envío' rest={deliverypricesRest}
             toolBar={(container) => {
                 container.unshift({
                     widget: 'dxButton', location: 'after',
@@ -116,49 +114,24 @@ const DeliveryPrices = () => {
                     visible: false
                 },
                 {
-                    dataField: 'category.name',
-                    caption: 'Categoría',
-                },
-                {
                     dataField: 'name',
-                    caption: 'Sub Categoría',
+                    caption: 'Envío a',
                 },
                 {
                     dataField: 'description',
                     caption: 'Descripción',
-                    width: '50%',
-                },
-                {
-                    dataField: 'image',
-                    caption: 'Imagen',
-                    width: '90px',
-                    allowFiltering: false,
-                    cellTemplate: (container, { data }) => {
-                        ReactAppend(container, <img src={`/api/subcategories/media/${data.image}`} style={{ width: '80px', height: '48px', objectFit: 'cover', objectPosition: 'center', borderRadius: '4px' }} onError={e => e.target.src = '/api/cover/thumbnail/null'} />)
+                    cellTemplate: (container, {data}) => {
+                        container.html(data.description || '<i class="text-muted">- Sin descripción -</i>')
                     }
                 },
                 {
-                    dataField: 'featured',
-                    caption: 'Destacado',
-                    dataType: 'boolean',
+                    dataField: 'price',
+                    caption: 'Precio',
+                    dataType: 'number',
                     cellTemplate: (container, { data }) => {
-                        $(container).empty()
-                        ReactAppend(container, <SwitchFormGroup checked={data.featured == 1} onChange={() => onFeaturedChange({
-                            id: data.id,
-                            value: !data.featured
-                        })} />)
-                    }
-                },
-                {
-                    dataField: 'visible',
-                    caption: 'Visible',
-                    dataType: 'boolean',
-                    cellTemplate: (container, { data }) => {
-                        $(container).empty()
-                        ReactAppend(container, <SwitchFormGroup checked={data.visible == 1} onChange={() => onVisibleChange({
-                            id: data.id,
-                            value: !data.visible
-                        })} />)
+                        container.html(renderToString(data.price === null
+                            ? <span className='text-muted'>Pago en destino</span>
+                            : <span>S/. {Number2Currency(data.price)}</span>))
                     }
                 },
                 {
@@ -182,13 +155,19 @@ const DeliveryPrices = () => {
                     allowExporting: false
                 }
             ]} />
-        <Modal modalRef={modalRef} title={isEditing ? 'Editar sub categoría' : 'Agregar sub categoría'} onSubmit={onModalSubmit} size='sm'>
+        <Modal modalRef={modalRef} title={isEditing ? 'Editar Costo de envío' : 'Agregar Costo de envío'} onSubmit={onModalSubmit} size='sm'>
             <input ref={idRef} type='hidden' />
-            <ImageFormGroup eRef={imageRef} label='Imagen' col='col-12' aspect={16 / 9} />
-            <div className='row' id='modal-container'>
-                <SelectAPIFormGroup eRef={categoryRef} label='Categoría' searchAPI='/api/admin/categories/paginate' searchBy='name' required dropdownParent='#modal-container' />
-                <InputFormGroup eRef={nameRef} label='Sub Categoría' col='col-12' required />
-                <TextareaFormGroup eRef={descriptionRef} label='Descripción' rows={3} />
+            <div id="form-container" className='row'>
+                <SelectFormGroup eRef={ubigeoRef} label='Distrito/Ubigeo' templateResult={ubigeoTemplate} templateSelection={ubigeoTemplate} dropdownParent='#form-container' required>
+                    {ubigeo.map((x, index) => {
+                        return <option key={index} value={x.reniec}>{x.reniec} {x.distrito} {x.provincia} {x.departamento}</option>
+                    })}
+                </SelectFormGroup>
+                <SwitchFormGroup label='Pago en destino' col='col-6' onChange={(e) => setInHome(e.target.checked)} checked={inHome} />
+                <div className='col-6' hidden={inHome}>
+                    <InputFormGroup eRef={priceRef} label='Costo de envío' col='col-12' type='number' step={0.01} required />
+                </div>
+                <TextareaFormGroup eRef={descriptionRef} label='Descripción' rows={2} />
             </div>
         </Modal>
     </>

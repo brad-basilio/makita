@@ -7,7 +7,7 @@ import Swal from 'sweetalert2';
 import IndicatorsRest from '../Actions/Admin/IndicatorsRest';
 import Modal from '../Components/Adminto/Modal';
 import DxButton from '../Components/dx/DxButton';
-import InputFormGroup from '../Components/form/InputFormGroup';
+import InputFormGroup from '../Components/Adminto/form/InputFormGroup';
 import Table from '../Components/Adminto/Table';
 import CreateReactScript from '../Utils/CreateReactScript';
 import ReactAppend from '../Utils/ReactAppend';

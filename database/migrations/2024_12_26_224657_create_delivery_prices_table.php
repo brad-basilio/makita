@@ -15,8 +15,8 @@ return new class extends Migration
         Schema::create('delivery_prices', function (Blueprint $table) {
             $table->uuid('id')->default(DB::raw('(UUID())'))->primary();
             $table->string('name');
-            $table->longText('description');
-            $table->decimal('price', 10, 2)->default(0);
+            $table->longText('description')->nullable();
+            $table->decimal('price', 10, 2)->nullable();
             $table->char('ubigeo', 6);
             $table->timestamps();
         });
