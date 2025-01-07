@@ -63,7 +63,7 @@ const SliderSimple = ({ data, items }) => {
 
                     <div className="w-full">
                       <div className="relative w-full text-left flex flex-col justify-center items-center">
-                        <input name='search' type="text" className='w-full py-3 px-3 text-base font-poppins_regular font-semibold text-[#2D464C] border-0 focus:border-0 focus:ring-0' placeholder='En que curso estas interesado?' required />
+                        <input name='search' type="text" className='w-full py-3 px-3 text-base font-poppins_regular font-semibold text-[#2D464C] border-0 focus:border-0 focus:ring-0' placeholder={data?.placeholder} required />
                       </div>
                     </div>
 
