@@ -87,7 +87,7 @@
         if (target.getAttribute('target') === '_blank') {
           window.open(href, '_blank');
         } else {
-          window.location.href = href;
+          location.href = href;
         }
       }
     });
