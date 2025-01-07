@@ -76,7 +76,7 @@ const System = ({ page, pages, params, filteredData = {}, systems, generals = []
       case 'category':
         return <Category which={value} data={data} items={getItems(itemsId)} />
       case 'slider':
-        return <Slider which={value} sliders={getItems(itemsId)} />
+        return <Slider which={value} data={data} sliders={getItems(itemsId)} />
       case 'banner':
         return <Banner which={value} data={data} />
       case 'step':

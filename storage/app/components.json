@@ -101,6 +101,9 @@
         "id": "SliderSearch",
         "name": "Search",
         "image": "slider-search.png",
+        "data": [
+          "link_catalog"
+        ],
         "using": {
           "model": "Slider",
           "fields": [
