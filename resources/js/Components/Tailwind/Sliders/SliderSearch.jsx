@@ -6,7 +6,7 @@ const SliderSimple = ({ data, items }) => {
   const onFormSubmit = (e) => {
     e.preventDefault()
     const input = document.querySelector('[name="search"]')
-    location.href = `/${data.link_catalog}?search=${input.value}`
+    location.href = `${data?.link_catalog}?search=${input.value}`
   }
 
   return (
