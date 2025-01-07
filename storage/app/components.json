@@ -201,8 +201,10 @@
         "name": "Listado",
         "image": "products-list.png",
         "data": [
+          "path",
           "title",
-          "description"
+          "description",
+          "link_catalog"
         ],
         "using": {
           "model": "Item",
