@@ -1,2 +1,0 @@
-const __vite__fileDeps=["assets/CartSimple-CQsw2MKB.js","assets/AboutHeader-Bdo2C3ON.js","assets/index-DFv2mRv-.js","assets/Number2Currency-e57Tgsuk.js","assets/CartItemRow-QOjih-V7.js","assets/tippy-react.esm-BVvHiWwH.js","assets/index-DgyC5pTR.js"],__vite__mapDeps=i=>i.map(i=>__vite__fileDeps[i]);
-import{_ as o}from"./preload-helper-CZZ3Qsu7.js";import"./AboutHeader-Bdo2C3ON.js";import{R as r}from"./index-DFv2mRv-.js";r.lazy(()=>o(()=>import("./CartSimple-CQsw2MKB.js"),__vite__mapDeps([0,1,2,3,4,5,6])));

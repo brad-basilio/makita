@@ -1,0 +1,1 @@
+import{j as r}from"./AboutHeader-COUW3Uy_.js";import{G as e}from"./General-BmbBKdsB.js";import"./index-CqkZ-sT_.js";const s=({})=>r.jsx("div",{className:"bg-primary py-3 px-primary flex justify-center items-center",children:r.jsx("p",{children:e.get("cintillo")})});export{s as default};

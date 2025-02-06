@@ -1,0 +1,1 @@
+import{c}from"./ReactAppend-CtUeIECI.js";const d=({className:e,title:o,icon:t,onClick:n,...r})=>$("<div>").dxButton({hint:o,template:(p,a)=>{a.addClass(`${t} d-block`)},elementAttr:{class:`${e} position-relative me-1 px-1 py-0 tippy-here`,...r},onClick:n}),i=(e,o)=>{const t=document.createElement("div");e.append(t),c(t).render(o)};export{d as D,i as R};
