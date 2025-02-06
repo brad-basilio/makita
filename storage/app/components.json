@@ -43,6 +43,15 @@
         ]
       },
       {
+        "id": "HeaderSearchB",
+        "name": "HeaderSearchB",
+        "image": "header-with-search.png",
+        "data": [
+          "class",
+          "link_cart"
+        ]
+      },
+      {
         "id": "HeaderWithMegaMenu",
         "name": "Con megamenu (Categorías)",
         "image": "header-with-mega-menu.png",
@@ -86,6 +95,9 @@
         "id": "SliderSimple",
         "name": "Simple",
         "image": "slider-simple.png",
+        "data":[
+          "pagination"
+        ],
         "using": {
           "model": "Slider",
           "fields": [
@@ -104,6 +116,42 @@
         "data": [
           "link_catalog",
           "placeholder"
+        ],
+        "using": {
+          "model": "Slider",
+          "fields": [
+            "name",
+            "description",
+            "bg_image",
+            "button_text",
+            "button_link"
+          ]
+        }
+      },
+      {
+        "id": "InfiniteSlider",
+        "name": "slider-infinito",
+        "image": "slider-simple.png",
+        "data":[
+          "paginationAlignment"
+        ],
+        "using": {
+          "model": "Slider",
+          "fields": [
+            "name",
+            "description",
+            "bg_image",
+            "button_text",
+            "button_link"
+          ]
+        }
+      },
+      {
+        "id": "SliderImagen",
+        "name": "Imagen",
+        "image": "slider-simple.png",
+        "data":[
+          "paginationAlignment"
         ],
         "using": {
           "model": "Slider",
@@ -141,6 +189,18 @@
       {
         "id": "CategorySimple",
         "name": "Simple",
+        "image": "categories-simple.png",
+        "data": [
+          "path"
+        ],
+        "using": {
+          "model": "Category",
+          "limit": 10
+        }
+      },
+       {
+        "id": "InfiniteCategory",
+        "name": "category-infinito",
         "image": "categories-simple.png",
         "data": [
           "path"
@@ -230,6 +290,10 @@
       {
         "id": "BannerSimple",
         "name": "Simple"
+      },
+       {
+        "id": "BannerInline",
+        "name": "BannerInline"
       },
       {
         "id": "BannerFullWidth",
@@ -328,6 +392,15 @@
       {
         "id": "FooterSimple",
         "name": "Simple",
+        "image": "footer-simple.png",
+        "using": {
+          "model": "Social",
+          "limit": 10
+        }
+      },
+      {
+        "id": "FooterB",
+        "name": "FooterB",
         "image": "footer-simple.png",
         "using": {
           "model": "Social",
