@@ -16,16 +16,25 @@ class SystemColorSeeder extends Seeder
         $colors = [
             [
                 'name' => 'primary',
-                'description' => '#333333',
+                'description' => '#007BFF',
             ],
             [
                 'name' => 'secondary',
-                'description' => '#0866ff',
+                'description' => '#28A745',
             ],
             [
-                'name' => 'extracolor',
-                'description' => '#42b72a',
-            ]
+                'name' => 'accent',
+                'description' => '#FFC107',
+            ],
+            [
+                'name' => 'neutral-light',
+                'description' => '#F8F9FA',
+            ],
+            [
+                'name' => 'neutral-dark',
+                'description' => '#343A40',
+            ],
+
         ];
 
         SystemColor::truncate();

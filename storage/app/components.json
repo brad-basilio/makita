@@ -150,17 +150,14 @@
         "id": "SliderImagen",
         "name": "Imagen",
         "image": "slider-simple.png",
-        "data":[
-          "paginationAlignment"
-        ],
+       
         "using": {
-          "model": "Slider",
+          "model": "Brand",
           "fields": [
             "name",
             "description",
-            "bg_image",
-            "button_text",
-            "button_link"
+            "image"
+           
           ]
         }
       }

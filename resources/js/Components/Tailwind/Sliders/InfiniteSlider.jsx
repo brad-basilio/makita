@@ -136,7 +136,7 @@ const InfiniteSlider = ({ items, data }) => {
                             <div className="relative w-full px-[5%]  mx-auto p-4 h-[480px] md:h-[600px] flex flex-col items-start justify-center">
                                 <div className="flex flex-col gap-5 lg:gap-10 items-start">
                                     <h2
-                                        className="max-w-md font-font-primary text-black text-3xl sm:text-5xl md:text-6xl tracking-normal font-bold "
+                                        className="max-w-md font-font-primary customtext-neutral-dark text-3xl sm:text-5xl md:text-6xl tracking-normal font-bold "
                                         style={{
                                             textShadow:
                                                 "0 0 20px rgba(0, 0, 0, .25)",
@@ -145,7 +145,7 @@ const InfiniteSlider = ({ items, data }) => {
                                         {item.name}
                                     </h2>
                                     <p
-                                        className="max-w-md text-black text-lg tracking-wider font-font-secondary
+                                        className="max-w-md customtext-neutral-dark text-lg  font-font-secondary
                                          font-normal"
                                         style={{
                                             textShadow:
@@ -157,7 +157,7 @@ const InfiniteSlider = ({ items, data }) => {
                                     <div className="flex flex-row gap-5 md:gap-10 justify-center items-start">
                                         <a
                                             href={item.button_link}
-                                            className="bg-[#20A4E0] text-white border-2 border-none flex flex-row items-center gap-3 px-3 md:px-6 py-3 text-base rounded-2xl tracking-wide font-bold"
+                                            className="bg-primary text-white border-2 border-none flex flex-row items-center gap-3 px-3 md:px-6 py-3 text-base rounded-lg tracking-wide font-bold"
                                         >
                                             {item.button_text}
                                             <svg
@@ -242,20 +242,20 @@ const InfiniteSlider = ({ items, data }) => {
                                 ? "inset-x-0 left-0"
                                 : alignmentClassPagination === "right"
                                     ? "right-0"
-                                    : "inset-x-0 flex justify-center"
+                                    : "left-1/2 transform -translate-x-1/2"
                                 }`}
                         >
                             {items.map((_, index) => (
                                 <div
                                     key={`dot-${index}`}
                                     className={`inline-flex mx-1 w-3 h-3 rounded-full ${currentIndex === index + 1
-                                        ? "bg-white w-5 h-5 items-center justify-center border-2 border-[#20A4E0]"
-                                        : "bg-[#D2ECF8]"
+                                        ? "bg-white w-5 h-5 items-center justify-center border-2 border-primary"
+                                        : "bg-secondary"
                                         }`}
                                     onClick={() => setCurrentIndex(index + 1)}
                                 >
                                     {currentIndex === index + 1 && (
-                                        <div className="w-3 h-3 bg-[#20A4E0] rounded-full items-center justify-center"></div>
+                                        <div className="w-3 h-3 bg-primary rounded-full items-center justify-center"></div>
                                     )}
                                 </div>
                             ))}

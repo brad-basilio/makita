@@ -1,23 +1,16 @@
-"use client"
-
 import { useState } from "react"
 
-const SliderImagen = () => {
+const SliderImagen = ({ items, data }) => {
     const [currentSlide, setCurrentSlide] = useState(0)
 
-    const brands = [
-        { name: "Canon", logo: "path-to-canon-logo.png" },
-        { name: "Motorola", logo: "path-to-motorola-logo.png" },
-        { name: "Epson", logo: "path-to-epson-logo.png" },
-        { name: "Panasonic", logo: "path-to-panasonic-logo.png" },
-    ]
+
 
     const nextSlide = () => {
-        setCurrentSlide((prev) => (prev + 1) % brands.length)
+        setCurrentSlide((prev) => (prev + 1) % items.length)
     }
 
     const prevSlide = () => {
-        setCurrentSlide((prev) => (prev - 1 + brands.length) % brands.length)
+        setCurrentSlide((prev) => (prev - 1 + items.length) % items.length)
     }
 
     return (
@@ -34,14 +27,19 @@ const SliderImagen = () => {
                         </svg>
                     </button>
 
-                    <div className="overflow-hidden mx-12">
+                    <div className="overflow-hidden w-full">
                         <div
-                            className="flex transition-transform duration-300 ease-in-out"
+                            className="flex justify-center items-center w-full transition-transform duration-300 ease-in-out"
                             style={{ transform: `translateX(-${currentSlide * 100}%)` }}
                         >
-                            {brands.map((brand, index) => (
-                                <div key={brand.name} className="w-full flex-shrink-0 flex justify-center items-center px-4">
-                                    <img src={brand.logo || "/placeholder.svg"} alt={`${brand.name} logo`} className="h-12 w-auto" />
+                            {items.map((brand, index) => (
+                                <div key={index} className="flex-shrink-0 sm:w-1/3 lg:w-1/5  flex justify-center items-center">
+                                    <img
+                                        src={`/api/brands/media/${brand.image}`}
+                                        alt={brand.name}
+                                        className="h-9 w-full object-contain grayscale invert"
+
+                                    />
                                 </div>
                             ))}
                         </div>

@@ -12,14 +12,6 @@ export default {
         'font-primary': ['Rajdhani', 'sans-serif'],
         'font-secondary': ['Open Sans', 'serif'],
             },
-      colors: {
-        textPrimary: '#10235b',
-        primary: '#FF3131',
-        secondary: '#ffd632'
-      },
-      fontSize: {
-        '2xl': '1.5rem',
-      },
       margin: {
         primary: '5%',
       },
