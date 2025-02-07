@@ -1,25 +1,44 @@
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import React, { useState, useRef, useEffect } from "react";
 
 const InfiniteSlider = ({ items, data }) => {
+
+    //TODO: Validación y conversión de infiniteLoop
+    const parseInfiniteLoop = (value) => {
+        const validTrueValues = ["true", "si"];
+        const validFalseValues = ["false", "no"];
+        if (validTrueValues.includes(value?.toLowerCase())) {
+            return true;
+        } else if (validFalseValues.includes(value?.toLowerCase())) {
+            return false;
+        }
+        return false; // Valor predeterminado si no se especifica o es inválido
+    };
+
+    const infiniteLoop = parseInfiniteLoop(data?.infiniteLoop);
+
+
     const [currentIndex, setCurrentIndex] = useState(1); // Empezamos en 1 para evitar el salto brusco
     const sliderRef = useRef(null);
     const isDragging = useRef(false);
     const startX = useRef(0);
     const currentTranslate = useRef(0);
 
-    // Duplicamos los slides al principio y al final para crear el efecto de loop infinito
+    //TODO: Duplicamos los slides al principio y al final para crear el efecto de loop infinito
     const duplicatedItems = [items[items.length - 1], ...items, items[0]];
-
     const validAlignments = ["center", "left", "right"];
-    const showPagination = validAlignments.includes(data.paginationAlignment);
+    const validPosition = ["yes", "true", "si"];
+    const showPagination = validAlignments.includes(data?.paginationAlignment);
     const alignmentClassPagination = showPagination
-        ? data.paginationAlignment
+        ? data?.paginationAlignment
         : "center";
 
-    const showNavigation = validAlignments.includes(data.navigationAlignment);
+    const showNavigation = validPosition.includes(data?.showNavigation);
     const alignmentClassNavigation = showNavigation
-        ? data.navigationAlignment
-        : "center";
+        ? data?.navigationAlignment
+        : "true";
+
+    //TODO: Funciones del Slider
 
     const nextSlide = () => {
         setCurrentIndex(
@@ -80,36 +99,49 @@ const InfiniteSlider = ({ items, data }) => {
         }
     };
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            nextSlide();
-        }, 5000);
+    //TODO: Problema Loop - Validacion y Efectuar
+    if (infiniteLoop) {
+        useEffect(() => {
+            const interval = setInterval(() => {
+                nextSlide();
+            }, 5000);
 
-        return () => clearInterval(interval);
-    }, [currentIndex]);
-
-    // Efecto para manejar el loop infinito sin saltos bruscos
+            return () => clearInterval(interval);
+        }, [currentIndex]);
+    }
+    //TODO: Efecto para manejar el loop infinito sin saltos bruscos
     useEffect(() => {
         if (currentIndex === 0) {
             setTimeout(() => {
-                sliderRef.current.style.transition = "none";
-                setCurrentIndex(duplicatedItems.length - 2);
-                sliderRef.current.style.transform = `translateX(-${(duplicatedItems.length - 2) * 100
-                    }%)`;
+                sliderRef.current.style.transition = "none"; // Desactivar transición
+                setCurrentIndex(duplicatedItems.length - 2); // Ir al penúltimo elemento
+                requestAnimationFrame(() => {
+                    sliderRef.current.style.transform = `translateX(-${(duplicatedItems.length - 2) * 100}%)`;
+                    setTimeout(() => {
+                        sliderRef.current.style.transition = "transform 0.5s ease-in-out"; // Reactivar transición
+                    }, 50); // Pequeño retraso para evitar saltos visibles
+                });
             }, 500);
         } else if (currentIndex === duplicatedItems.length - 1) {
             setTimeout(() => {
-                sliderRef.current.style.transition = "none";
-                setCurrentIndex(1);
-                sliderRef.current.style.transform = `translateX(-${1 * 100}%)`;
+                sliderRef.current.style.transition = "none"; // Desactivar transición
+                setCurrentIndex(1); // Ir al segundo elemento
+                requestAnimationFrame(() => {
+                    sliderRef.current.style.transform = `translateX(-${1 * 100}%)`;
+                    setTimeout(() => {
+                        sliderRef.current.style.transition = "transform 0.5s ease-in-out"; // Reactivar transición
+                    }, 50); // Pequeño retraso para evitar saltos visibles
+                });
             }, 500);
         }
     }, [currentIndex]);
 
+
+
     return (
         <div className="relative w-full mx-auto">
             <div
-                className="overflow-hidden relative cursor-grab"
+                className="overflow-hidden relative cursor-grab ease"
                 onMouseDown={handleMouseDown}
                 onMouseMove={handleMouseMove}
                 onMouseUp={handleMouseUp}
@@ -207,29 +239,23 @@ const InfiniteSlider = ({ items, data }) => {
             {showNavigation && (
                 <>
                     <div
-                        className={`absolute top-1/2 left-4 transform -translate-y-1/2 ${alignmentClassNavigation === "left"
-                            ? "visible"
-                            : "hidden"
-                            }`}
+                        className={`absolute top-1/2 left-4 transform -translate-y-1/2 `}
                     >
                         <button
                             onClick={prevSlide}
-                            className="bg-gray-800 text-white p-2 rounded-full hover:bg-gray-700 transition-colors duration-300"
+                            className="bg-accent  rounded-lg customtext-neutral-light w-8 h-8 flex items-center justify-center  transition-colors duration-300"
                         >
-                            &#10094;
+                            <ChevronLeft width={"1rem"} />
                         </button>
                     </div>
                     <div
-                        className={`absolute top-1/2 right-4 transform -translate-y-1/2 ${alignmentClassNavigation === "right"
-                            ? "visible"
-                            : "hidden"
-                            }`}
+                        className={`absolute top-1/2 right-4 transform -translate-y-1/2 `}
                     >
                         <button
                             onClick={nextSlide}
-                            className="bg-gray-800 text-white p-2 rounded-full hover:bg-gray-700 transition-colors duration-300"
+                            className="bg-accent rounded-lg customtext-neutral-light w-8 h-8 flex items-center justify-center  transition-colors duration-300"
                         >
-                            &#10095;
+                            <ChevronRight width={"1rem"} />
                         </button>
                     </div>
                 </>

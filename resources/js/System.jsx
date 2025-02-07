@@ -20,6 +20,7 @@ import ProductDetail from './Components/Tailwind/ProductDetail';
 import Contact from './Components/Tailwind/Contact';
 import Frame from './Components/Tailwind/Frame';
 import Checkout from './Components/Tailwind/Checkout';
+import Menu from './Components/Tailwind/Menu';
 
 const itemsRest = new ItemsRest();
 
@@ -59,6 +60,9 @@ const System = ({ page, pages, params, filteredData = {}, systems, generals = []
         return <TopBar data={data} which={value} items={getItems(itemsId)} />
       case 'header':
         return <Header data={data} which={value} items={getItems(itemsId)} cart={cart} setCart={setCart} pages={pages} />
+      case 'menu':
+        return <Menu data={data} which={value} items={getItems(itemsId)} cart={cart} setCart={setCart} pages={pages} />
+
       case 'content':
         if (!page.id) {
           return <div className='h-80 w-full bg-gray-300 flex items-center justify-center'>

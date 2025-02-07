@@ -24,6 +24,18 @@
       }
     ]
   },
+    {
+    "id": "menu",
+    "name": "Menu",
+    "options": [
+      {
+        "id": "MenuSimple",
+        "name": "MenuSimple",
+        "image": "top-bar-simple.png"
+       
+      }
+    ]
+  },
   
   {
     "id": "header",
@@ -134,7 +146,9 @@
         "name": "slider-infinito",
         "image": "slider-simple.png",
         "data":[
-          "paginationAlignment"
+          "infiniteLoop",
+          "paginationAlignment",
+          "showNavigation"
         ],
         "using": {
           "model": "Slider",
@@ -281,8 +295,8 @@
         }
       },
        {
-        "id": "InfiniteProduct",
-        "name": "InfiniteProduct",
+        "id": "ProductInfinite",
+        "name": "Producto Infinito",
         "image": "products-list.png",
         "data": [
           "title",
@@ -325,8 +339,8 @@
         ]
       },
        {
-        "id": "BannerInline",
-        "name": "BannerInline",
+        "id": "BannerBeneficio",
+        "name": "BannerBeneficio",
         "data": [
           "title"
         ]
