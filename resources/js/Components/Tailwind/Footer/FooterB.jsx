@@ -5,10 +5,21 @@ const FooterB = () => {
         <footer className="bg-accent text-white py-12  font-font-secondary">
             <div className="px-primary mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
                 {/* Logo Column */}
-                <div>
-                    <img src={`/assets/resources/logo.png?v=${crypto.randomUUID()}`} alt={Global.APP_NAME} className="h-14 aspect-[13/4] object-contain object-center" />
 
+                <div className="h-14 aspect-[13/4] ">
+                    <div
+                        className="h-full w-full bg-primary"
+                        style={{
+                            maskImage: `url(/assets/resources/logo.png)`,
+                            maskSize: "contain",
+                            maskPosition: "center",
+                            maskRepeat: "no-repeat",
+
+                        }}
+                    />
                 </div>
+
+
 
                 {/* Menu Columns */}
                 <div className="grid grid-cols-2 gap-8 col-span-2">

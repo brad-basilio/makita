@@ -22,4 +22,9 @@ class Category extends Model
         'visible',
         'status',
     ];
+
+    public function subcategories()
+    {
+        return $this->hasMany(Subcategory::class);
+    }
 }
