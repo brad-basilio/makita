@@ -1,69 +1,51 @@
 
 import { useState } from "react"
+import Global from "../../../Utils/Global";
+import { CircleUser, Search, ShoppingCart } from "lucide-react";
 
 const HeaderSearchB = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   return (
     <header className="w-full">
-      <div className="container mx-auto px-4 py-4">
-        <div className="flex items-center justify-between gap-4">
+      <div className="px-primary mx-auto py-4 font-font-secondary text-base font-semibold">
+        <div className="flex items-center justify-between gap-4 ">
           {/* Logo */}
           <a href="/" className="flex items-center gap-2">
-            <img
-              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Wireframe%20-%201-dD7WZg4zL7Aape3mL2kpqmRNZlk68V.png"
-              alt="S&T Logo"
-              className="h-10 w-10"
-            />
-            <span className="text-xl font-bold">S&T</span>
+            <img src={`/assets/resources/logo.png?v=${crypto.randomUUID()}`} alt={Global.APP_NAME} className="h-14 aspect-[13/4] object-contain object-center" />
+
+
           </a>
 
           {/* Search Bar */}
-          <div className="hidden flex-1 max-w-xl mx-4 lg:flex items-center relative">
-            <input type="search" placeholder="Buscar productos" className="w-full pr-10 py-2 px-4 border rounded-md" />
-            <button className="absolute right-0 top-0 h-full px-3" aria-label="Buscar">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="h-4 w-4"
-              >
-                <circle cx="11" cy="11" r="8"></circle>
-                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-              </svg>
+          <div className="relative w-full max-w-xl mx-auto">
+            <input
+              type="search"
+              placeholder="Buscar productos"
+              className="w-full pr-14 py-4 pl-4 border rounded-full focus:ring-0 focus:outline-none"
+            />
+            <button
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 p-2 bg-primary text-white rounded-lg"
+              aria-label="Buscar"
+            >
+              <Search />
             </button>
           </div>
 
           {/* Account and Cart */}
           <div className="flex items-center gap-4">
             <a href="/account" className="hidden md:flex items-center gap-2 text-sm">
+              <div className="customtext-primary">
+                <CircleUser />
+              </div>
               <span>Mi Cuenta</span>
             </a>
-            <a href="/cart" className="flex items-center gap-2 text-sm">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="h-5 w-5"
-              >
-                <circle cx="9" cy="21" r="1"></circle>
-                <circle cx="20" cy="21" r="1"></circle>
-                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-              </svg>
+            <a href="/cart" className="flex items-center gap-2 text-sm relative">
+              <div className="customtext-primary">
+                <ShoppingCart />
+              </div>
               <span className="hidden md:inline">Mi Carrito</span>
-              <span className="inline-flex items-center justify-center w-5 h-5 text-xs bg-blue-500 text-white rounded-full">
+              <span className="absolute -right-6 -top-2 inline-flex items-center justify-center w-5 h-5 text-xs bg-primary text-white rounded-full">
                 0
               </span>
             </a>
@@ -72,8 +54,8 @@ const HeaderSearchB = () => {
       </div>
 
       {/* Navigation */}
-      <nav className="bg-sky-50">
-        <div className="container mx-auto px-4">
+      <nav className="bg-secondary font-font-secondary font-normal text-sm">
+        <div className="px-primary mx-auto ">
           <ul className="flex items-center gap-6 text-sm">
             <li className="relative py-3">
               <button className="flex items-center" onClick={() => setIsMenuOpen(!isMenuOpen)}>

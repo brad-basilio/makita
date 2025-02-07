@@ -69,7 +69,7 @@ const InfiniteProduct = ({ items, data }) => {
                     {/* Previous button */}
                     <button
                         onClick={prevSlide}
-                        className="absolute -left-4 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center bg-secondary rounded-lg customtext-neutral-dark "
+                        className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center bg-secondary rounded-lg customtext-neutral-dark "
                         aria-label="Productos anteriores"
                     >
                         <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -96,12 +96,12 @@ const InfiniteProduct = ({ items, data }) => {
                                     >
                                         {/* Product image and discount badge */}
                                         <div className="relative mb-4">
-                                            {product.discount && (
-                                                <span className="absolute top-2 left-2 bg-red-500 text-white text-sm font-medium px-2 py-1 rounded">
-                                                    -{product.discount}%
+                                            {product.discount != null && !isNaN(product.discount) && (
+                                                <span className="absolute top-2 left-2 bg-[#F93232] text-white text-base font-medium px-2 py-1 rounded-full">
+                                                    -{Number(100 - (product.discount * 100 / product.price)).toFixed(0)}%
                                                 </span>
                                             )}
-                                            <div className="aspect-square rounded-lg overflow-hidden bg-gray-50 flex items-center justify-center p-4">
+                                            <div className="aspect-square rounded-lg overflow-hidden  flex items-center justify-center p-4">
                                                 <img
                                                     src={`/api/items/media/${product.image}`}
                                                     alt={product.name}
@@ -142,7 +142,7 @@ const InfiniteProduct = ({ items, data }) => {
 
                                             {/* Price */}
                                             <div className="flex flex-col items-baseline gap-2 mb-4">
-                                                {product.price && (
+                                                {product.discount != null && !isNaN(product.discount) && (
                                                     <span className="text-xs customtext-neutral-light font-semibold1 line-through">
                                                         S/ {product.price}
                                                     </span>
@@ -163,7 +163,7 @@ const InfiniteProduct = ({ items, data }) => {
                     {/* Next button */}
                     <button
                         onClick={nextSlide}
-                        className="absolute -right-4 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center bg-secondary rounded-lg customtext-neutral-dark "
+                        className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center bg-secondary rounded-lg customtext-neutral-dark "
                         aria-label="Siguientes productos"
                     >
                         <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">

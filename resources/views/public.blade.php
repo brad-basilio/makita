@@ -70,6 +70,12 @@
                 color: {{ $color->description }};
             }
 
+            /* Variantes de hover */
+            .hover\:customtext-{{ $color->name }}:hover {
+                color: {{ $color->description }};
+
+            }
+
             .border-{{ $color->name }} {
                 border-color: {{ $color->description }};
             }

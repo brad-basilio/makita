@@ -317,6 +317,13 @@
         "id": "BannerSimple",
         "name": "Simple"
       },
+      {
+        "id": "BannerPublicitario",
+        "name": "BannerPublicitario",
+        "data": [
+          "title"
+        ]
+      },
        {
         "id": "BannerInline",
         "name": "BannerInline",

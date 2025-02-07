@@ -33,7 +33,7 @@ const InfiniteCategory = ({ items, data }) => {
                         </svg>
                     </button>
 
-                    <div className="overflow-hidden">
+                    <div className="">
                         <div
                             className="flex transition-transform duration-300 ease-in-out"
                             style={{

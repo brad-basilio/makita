@@ -1,0 +1,1 @@
+function o(t){const s=t.match(/\d+/g),n=parseInt(s[0]),c=parseInt(s[1]),a=parseInt(s[2]);return(.299*n+.587*c+.114*a)/255}function i(t){const s=window.getComputedStyle(t).backgroundColor;o(s)<.55?(t.classList.add("text-white"),t.classList.remove("text-black")):(t.classList.add("text-black"),t.classList.remove("text-white"))}export{i as a};
