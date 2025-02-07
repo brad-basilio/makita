@@ -1,3 +1,7 @@
+import { Hexagon } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { adjustTextColor } from "../../../Functions/adjustTextColor";
+
 const BannerBeneficio = () => {
 
 
@@ -82,38 +86,76 @@ const BannerBeneficio = () => {
             title: "Soporte en línea 24/7",
             subtitle: "Servicio premium",
         },
+        {
+            icon: (
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-8 w-8"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                >
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"
+                    />
+                </svg>
+            ),
+            title: "Soporte en línea 24/7",
+            subtitle: "Servicio premium",
+        },
     ]
 
+    // Duplicamos los elementos para lograr el efecto infinito
+    const infiniteBenefits = [...benefits, ...benefits];
+    const sliderRef = useRef(null);
+
+    useEffect(() => {
+        const slider = sliderRef.current;
+        if (slider) {
+            const totalWidth = slider.scrollWidth / 2; // La mitad porque duplicamos la lista
+            let start = 0;
+
+            const animate = () => {
+                start -= 1; // Velocidad de desplazamiento
+                if (Math.abs(start) >= totalWidth) {
+                    start = 0; // Reinicia el scroll sin que se note el corte
+                }
+                slider.style.transform = `translateX(${start}px)`;
+                requestAnimationFrame(animate);
+            };
+
+            animate();
+        }
+    }, []);
+
+    const benefitsRef = useRef(null);
+    useEffect(() => {
+        adjustTextColor(benefitsRef.current)
+    })
+
     return (
-        <div className="bg-primary text-white py-6">
-            <div className="px-[5%] mx-auto">
-
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    {benefits.map((benefit, index) => (
-                        <div key={index} className="flex items-center gap-4 justify-start">
-                            {index > 0 && <div className="w-1 h-16 bg-white rounded-full"></div>}
+        <div ref={benefitsRef} className="bg-primary   py-6 overflow-hidden">
+            <div className="px-[5%] mx-auto relative">
+                <div
+                    ref={sliderRef}
+                    className="flex w-full gap-8 whitespace-nowrap transition-none"
+                >
+                    {infiniteBenefits.map((benefit, index) => (
+                        <div key={index} className="flex items-center gap-4 justify-start w-1/4 flex-shrink-0">
                             <div className="relative w-16 h-16 flex items-center justify-center">
-                                {/* Hexagon SVG background */}
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 63 70"
-                                    fill="none"
-                                    className="absolute w-full h-full"
-                                >
-                                    <path
-                                        d="M28.5 3.04145C30.3564 1.96966 32.6436 1.96966 34.5 3.04145L57.6769 16.4226C59.5333 17.4944 60.6769 19.4752 60.6769 21.6188V48.3812C60.6769 50.5248 59.5333 52.5056 57.6769 53.5774L34.5 66.9585C32.6436 68.0303 30.3564 68.0303 28.5 66.9585L5.32308 53.5773C3.46668 52.5056 2.32309 50.5248 2.32309 48.3812V21.6188C2.32309 19.4752 3.46668 17.4944 5.32309 16.4227L28.5 3.04145Z"
-                                        stroke="white"
-                                        strokeWidth="4"
-                                    />
-                                </svg>
-                                {/* Icon */}
-                                <div className="relative z-10">{benefit.icon}</div>
-                            </div>
-                            <div className="font-font-secondary text-white">
-                                <h3 className="font-bold text-lg  ">{benefit.title}</h3>
-                                <p className="text-sm font-font-secondary ">{benefit.subtitle}</p>
-                            </div>
+                                {/* Hexágono SVG */}
 
+                                <Hexagon className="absolute w-full h-full" strokeWidth={"1.5px"} />
+                                {/* Ícono */}
+                                <div className="relative z-10 text-3xl">{benefit.icon}</div>
+                            </div>
+                            <div className="">
+                                <h3 className="font-bold text-lg">{benefit.title}</h3>
+                                <p className="text-sm">{benefit.subtitle}</p>
+                            </div>
                         </div>
                     ))}
                 </div>

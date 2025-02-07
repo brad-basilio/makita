@@ -1,47 +1,77 @@
-import { useState } from "react"
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useState, useEffect, useMemo, useRef } from "react";
+import { adjustTextColor } from "../../../Functions/adjustTextColor";
 
 const InfiniteCategory = ({ items, data }) => {
-    const [currentSlide, setCurrentSlide] = useState(0)
+    const [currentSlide, setCurrentSlide] = useState(0);
+    const [slidesPerView, setSlidesPerView] = useState(6); // Default en desktop
 
-    const slidesPerView = {
-        mobile: 1,
-        tablet: 3,
-        desktop: 5,
-    }
+    // Detectar el tamaño de la pantalla para ajustar slidesPerView
+    useEffect(() => {
+        const updateSlidesPerView = () => {
+            const width = window.innerWidth;
+            if (width < 640) setSlidesPerView(1); // Móvil
+            else if (width < 1024) setSlidesPerView(3); // Tablet
+            else setSlidesPerView(6); // Desktop
+        };
+        updateSlidesPerView();
+        window.addEventListener("resize", updateSlidesPerView);
+        return () => window.removeEventListener("resize", updateSlidesPerView);
+    }, []);
 
+    // Calcular el máximo número de desplazamientos permitidos
+    const maxSlide = useMemo(() => {
+        return Math.max(0, Math.ceil(items.length / slidesPerView) - 1);
+    }, [items.length, slidesPerView]);
+
+    // Función para avanzar al siguiente slide
     const nextSlide = () => {
-        setCurrentSlide((prev) => (prev === items.length - slidesPerView.desktop ? 0 : prev + 1))
-    }
+        setCurrentSlide((prev) => (prev < maxSlide ? prev + 1 : prev));
+    };
 
+    // Función para retroceder al slide anterior
     const prevSlide = () => {
-        setCurrentSlide((prev) => (prev === 0 ? items.length - slidesPerView.desktop : prev - 1))
-    }
+        setCurrentSlide((prev) => (prev > 0 ? prev - 1 : prev));
+    };
+
+    const prevSlideRef = useRef(null);
+    const nextSlideRef = useRef(null);
+    useEffect(() => {
+        adjustTextColor(prevSlideRef.current); // Aplicar a cada botón en el slider
+        adjustTextColor(nextSlideRef.current); // Aplicar a cada botón en el slider
+    }, []);
 
     return (
         <section className="py-12">
-            <div className=" w-full px-primary  mx-auto ">
-                <h2 className="text-4xl font-bold pb-4 mb-8 font-font-secondary border-b-2 customborder-neutral-light">{data.title}</h2>
-
+            <div className="w-full px-primary mx-auto">
+                <h2 className="text-4xl font-bold pb-4 mb-8 font-font-secondary border-b-2 customborder-neutral-light">
+                    {data.title}
+                </h2>
                 <div className="relative">
+                    {/* Botón de retroceso */}
                     <button
+                        ref={prevSlideRef}
                         onClick={prevSlide}
-                        className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center bg-primary rounded-lg shadow-lg "
+                        disabled={currentSlide === 0}
+                        className="absolute -left-2 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center rounded-lg shadow-lg transition bg-primary"
                         aria-label="Categoría anterior"
                     >
-                        <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                        </svg>
+                        <ChevronLeft width={"1rem"} />
                     </button>
 
-                    <div className="">
+                    {/* Contenedor de categorías */}
+                    <div className="overflow-hidden py-4">
                         <div
                             className="flex transition-transform duration-300 ease-in-out"
                             style={{
-                                transform: `translateX(-${currentSlide * (100 / slidesPerView.desktop)}%)`,
+                                transform: `translateX(-${currentSlide * (100 / slidesPerView)}%)`,
                             }}
                         >
                             {items.map((category) => (
-                                <div key={category.id} className="w-full min-w-[200px] px-2 sm:w-1/3 lg:w-1/6 flex-shrink-0">
+                                <div
+                                    key={category.id}
+                                    className="w-full min-w-[200px] px-2 sm:w-1/3 lg:w-1/6 flex-shrink-0"
+                                >
                                     <a href={category.link} className="block group">
                                         <div className="bg-secondary rounded-lg p-4 transition-transform duration-300 group-hover:scale-105">
                                             <div className="aspect-square relative mb-4">
@@ -51,7 +81,9 @@ const InfiniteCategory = ({ items, data }) => {
                                                     className="w-full h-full object-contain"
                                                 />
                                             </div>
-                                            <h3 className="text-center font-semibold text-base customtext-neutral-dark">{category.name}</h3>
+                                            <h3 className="text-center font-semibold text-base customtext-neutral-dark">
+                                                {category.name}
+                                            </h3>
                                         </div>
                                     </a>
                                 </div>
@@ -59,19 +91,20 @@ const InfiniteCategory = ({ items, data }) => {
                         </div>
                     </div>
 
+                    {/* Botón de avance */}
                     <button
+                        ref={nextSlideRef}
                         onClick={nextSlide}
-                        className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center bg-[#20A4E0] rounded-lg shadow-lg hover:bg-[rgb(22,133,185)]"
-                        aria-label="Siguiente categoría"
+                        disabled={currentSlide >= maxSlide}
+                        className="absolute -right-2 top-1/2 -translate-y-1/2 z-10 w-8 h-8  flex items-center justify-center rounded-lg shadow-lg transition bg-primary"
+                        aria-label="Categoría siguiente"
                     >
-                        <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
+                        <ChevronRight width={"1rem"} />
                     </button>
                 </div>
             </div>
         </section>
-    )
-}
+    );
+};
 
 export default InfiniteCategory;
