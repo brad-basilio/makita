@@ -24,6 +24,7 @@
       }
     ]
   },
+  
   {
     "id": "header",
     "name": "Header",
@@ -150,7 +151,7 @@
         "id": "SliderImagen",
         "name": "Imagen",
         "image": "slider-simple.png",
-       
+       "data":[ "title"],
         "using": {
           "model": "Brand",
           "fields": [
@@ -200,6 +201,7 @@
         "name": "category-infinito",
         "image": "categories-simple.png",
         "data": [
+          "title",
           "path"
         ],
         "using": {
@@ -277,6 +279,33 @@
           ],
           "limit": 8
         }
+      },
+       {
+        "id": "InfiniteProduct",
+        "name": "InfiniteProduct",
+        "image": "products-list.png",
+        "data": [
+          "title",
+          "path",
+          "description",
+          "link_catalog"
+        ],
+        "using": {
+          "model": "Item",
+          "filters": [
+            "featured",
+            "recommended",
+            "offering",
+            "is_new"
+          ],
+           "with": [
+            "category",
+            "subcategory",
+            "brand"
+          ],
+          "limit": 8
+        }
+       
       }
     ]
   },
@@ -290,7 +319,10 @@
       },
        {
         "id": "BannerInline",
-        "name": "BannerInline"
+        "name": "BannerInline",
+        "data": [
+          "title"
+        ]
       },
       {
         "id": "BannerFullWidth",

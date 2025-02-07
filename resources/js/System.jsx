@@ -86,7 +86,7 @@ const System = ({ page, pages, params, filteredData = {}, systems, generals = []
       case 'cart':
         return <Cart which={value} data={data} cart={cart} setCart={setCart} />
       case 'checkout':
-        return <Checkout which={value} cart={cart} setCart={setCart}/>
+        return <Checkout which={value} cart={cart} setCart={setCart} />
       case 'contact':
         return <Contact which={value} data={data} />
       case 'frame':

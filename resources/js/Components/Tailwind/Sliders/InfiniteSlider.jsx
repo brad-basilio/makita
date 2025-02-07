@@ -156,6 +156,7 @@ const InfiniteSlider = ({ items, data }) => {
                                     </p>
                                     <div className="flex flex-row gap-5 md:gap-10 justify-center items-start">
                                         <a
+
                                             href={item.button_link}
                                             className="bg-primary text-white border-2 border-none flex flex-row items-center gap-3 px-3 md:px-6 py-3 text-base rounded-lg tracking-wide font-bold"
                                         >

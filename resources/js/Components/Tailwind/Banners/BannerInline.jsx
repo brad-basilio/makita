@@ -85,11 +85,13 @@ const BannerInline = () => {
     ]
 
     return (
-        <div className="bg-blue-500 text-white py-6">
+        <div className="bg-primary text-white py-6">
             <div className="px-[5%] mx-auto">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     {benefits.map((benefit, index) => (
-                        <div key={index} className="flex items-center gap-4">
+                        <div key={index} className="flex items-center gap-4 justify-start">
+                            {index > 0 && <div className="w-1 h-16 bg-white rounded-full"></div>}
                             <div className="relative w-16 h-16 flex items-center justify-center">
                                 {/* Hexagon SVG background */}
                                 <svg
@@ -107,10 +109,11 @@ const BannerInline = () => {
                                 {/* Icon */}
                                 <div className="relative z-10">{benefit.icon}</div>
                             </div>
-                            <div>
-                                <h3 className="font-bold text-lg">{benefit.title}</h3>
-                                <p className="text-sm text-white/80">{benefit.subtitle}</p>
+                            <div className="font-font-secondary text-white">
+                                <h3 className="font-bold text-lg  ">{benefit.title}</h3>
+                                <p className="text-sm font-font-secondary ">{benefit.subtitle}</p>
                             </div>
+
                         </div>
                     ))}
                 </div>
