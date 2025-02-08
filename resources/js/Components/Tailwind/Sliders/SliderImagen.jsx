@@ -1,18 +1,44 @@
-import { useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
+import { adjustTextColor } from "../../../Functions/adjustTextColor";
 
 const SliderImagen = ({ items, data }) => {
-    const [currentSlide, setCurrentSlide] = useState(0)
+    const [currentSlide, setCurrentSlide] = useState(0);
+    const [slidesPerView, setSlidesPerView] = useState(5); // Default en desktop
 
+    // Detectar el tamaño de la pantalla para ajustar slidesPerView
+    useEffect(() => {
+        const updateSlidesPerView = () => {
+            const width = window.innerWidth;
+            if (width < 640) setSlidesPerView(1); // Móvil
+            else if (width < 1024) setSlidesPerView(3); // Tablet
+            else setSlidesPerView(5); // Desktop
+        };
+        updateSlidesPerView();
+        window.addEventListener("resize", updateSlidesPerView);
+        return () => window.removeEventListener("resize", updateSlidesPerView);
+    }, []);
 
+    // Calcular el máximo número de desplazamientos permitidos
+    const maxSlide = useMemo(() => {
+        return Math.max(0, Math.ceil(items.length / slidesPerView) - 1);
+    }, [items.length, slidesPerView]);
 
-    const nextSlide = ({ data }) => {
-        setCurrentSlide((prev) => (prev + 1) % items.length)
-    }
+    // Función para avanzar al siguiente slide
+    const nextSlide = () => {
+        setCurrentSlide((prev) => (prev < maxSlide ? prev + 1 : prev));
+    };
 
+    // Función para retroceder al slide anterior
     const prevSlide = () => {
-        setCurrentSlide((prev) => (prev - 1 + items.length) % items.length)
-    }
+        setCurrentSlide((prev) => (prev > 0 ? prev - 1 : prev));
+    };
 
+    const prevSlideRef = useRef(null);
+    const nextSlideRef = useRef(null);
+    useEffect(() => {
+        adjustTextColor(prevSlideRef.current); // Aplicar a cada botón en el slider
+        adjustTextColor(nextSlideRef.current); // Aplicar a cada botón en el slider
+    }, []);
     return (
         <div>
             <h2 className="text-5xl text-center font-bold  font-font-primary py-8 bg-[#F7F9FB]">{data?.title}</h2>
@@ -22,7 +48,9 @@ const SliderImagen = ({ items, data }) => {
                     <div className="relative flex items-center">
                         <button
                             onClick={prevSlide}
-                            className="absolute left-0 z-10 p-2 bg-white rounded-lg shadow-lg"
+                            ref={prevSlideRef}
+                            disabled={currentSlide === 0}
+                            className="absolute -left-2 z-10 p-2 bg-white rounded-lg shadow-lg"
                             aria-label="Previous brand"
                         >
                             <svg className="h-4 w-4 customtext-neutral-dark" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -30,17 +58,19 @@ const SliderImagen = ({ items, data }) => {
                             </svg>
                         </button>
 
-                        <div className="overflow-hidden w-full">
+                        <div className="overflow-hidden">
                             <div
-                                className="flex justify-center items-center w-full transition-transform duration-300 ease-in-out"
-                                style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+                                className="flex items-center transition-all duration-300   ease-in-out px-4"
+                                style={{
+                                    transform: `translateX(-${currentSlide * (100 / slidesPerView)}%)`,
+                                }}
                             >
                                 {items.map((brand, index) => (
-                                    <div key={index} className="flex-shrink-0 sm:w-1/3 lg:w-1/5  flex justify-center items-center">
+                                    <div key={index} className="group w-full flex   px-2 sm:w-1/3 lg:w-1/5 flex-shrink-0 font-font-secondary">
                                         <img
                                             src={`/api/brands/media/${brand.image}`}
                                             alt={brand.name}
-                                            className="h-9 w-full object-contain grayscale brightness-0 invert"
+                                            className="h-10 w-full object-contain grayscale brightness-0 invert"
 
                                         />
                                     </div>
@@ -50,7 +80,9 @@ const SliderImagen = ({ items, data }) => {
 
                         <button
                             onClick={nextSlide}
-                            className="absolute right-0 z-10 p-2 bg-white rounded-lg shadow-lg "
+                            ref={nextSlideRef}
+                            disabled={currentSlide >= maxSlide}
+                            className="absolute -right-2 z-10 p-2 bg-white rounded-lg shadow-lg "
                             aria-label="Next brand"
                         >
                             <svg className="h-4 w-4 customtext-neutral-dark" fill="none" viewBox="0 0 24 24" stroke="currentColor">

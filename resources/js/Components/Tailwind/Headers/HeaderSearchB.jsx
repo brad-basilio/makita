@@ -22,7 +22,7 @@ const HeaderSearchB = ({ }) => {
             <input
               type="search"
               placeholder="Buscar productos"
-              className="w-full pr-14 py-4 pl-4 border rounded-full focus:ring-0 focus:outline-none"
+              className="w-full pr-14 py-4  pl-4 border rounded-full focus:ring-0 focus:outline-none"
             />
             <button
               className="absolute right-3 top-1/2 transform -translate-y-1/2 p-2 bg-primary text-white rounded-lg"

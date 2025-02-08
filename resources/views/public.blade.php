@@ -79,6 +79,10 @@
             .border-{{ $color->name }} {
                 border-color: {{ $color->description }};
             }
+
+            .fill-{{ $color->name }} {
+                fill: {{ $color->description }};
+            }
         @endforeach
     </style>
 </head>
