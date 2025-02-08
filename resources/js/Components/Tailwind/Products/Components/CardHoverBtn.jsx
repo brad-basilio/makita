@@ -1,24 +1,24 @@
-//rsc
 import React from 'react';
+import { ShoppingCart } from 'lucide-react'; // Icono para la cesta
 
 const CardHoverBtn = ({ product }) => {
     return (
         <div
             key={product.id}
-            className="group w-full min-w-[200px] px-2 sm:w-1/3 lg:w-1/5 flex-shrink-0 font-font-secondary"
+            className="group w-full  px-2 sm:w-1/3 lg:w-1/5 flex-shrink-0 font-font-secondary"
         >
             <div
                 className="bg-white rounded-2xl shadow-md p-4"
                 style={{ boxShadow: "0px 0px 6px 0px #00000040" }}
             >
-                {/* Product image and discount badge */}
-                <div className="relative mb-4">
+                {/* Imagen del producto y etiqueta de descuento */}
+                <div className="relative">
                     {product.discount != null && !isNaN(product.discount) && (
                         <span className="absolute top-2 left-2 bg-[#F93232] text-white text-base font-medium px-2 py-1 rounded-full">
                             -{Number(100 - (product.discount * 100 / product.price)).toFixed(0)}%
                         </span>
                     )}
-                    <div className="aspect-square rounded-lg overflow-hidden  flex items-center justify-center p-4">
+                    <div className="aspect-square rounded-lg overflow-hidden flex items-center justify-center p-4">
                         <img
                             src={`/api/items/media/${product.image}`}
                             alt={product.name}
@@ -26,8 +26,9 @@ const CardHoverBtn = ({ product }) => {
                         />
                     </div>
                 </div>
-                {/* Action buttons (hidden by default, shown on hover) */}
-                <div className="my-4 gap-2  hidden group-hover:flex  transition-all  duration-500">
+
+                {/* Botones de acción (ocultos por defecto, aparecen con hover) */}
+                <div className="h-0 opacity-0 overflow-hidden group-hover:h-auto group-hover:opacity-100 group-hover:translate-y-0 transition-[height,opacity,transform] duration-500 ease-out flex  gap-2 my-2">
                     <button className="flex-1 bg-primary text-white px-4 py-2 rounded-lg  transition-colors">
                         Ver detalle
                     </button>
@@ -48,7 +49,7 @@ const CardHoverBtn = ({ product }) => {
                     </button>
                 </div>
 
-                {/* Product info */}
+                {/* Información del producto */}
                 <div>
                     <p className="text-xs customtext-neutral-light font-semibold mb-1">
                         {product.brand.name}
@@ -57,7 +58,7 @@ const CardHoverBtn = ({ product }) => {
                         {product.name}
                     </h3>
 
-                    {/* Price */}
+                    {/* Precio */}
                     <div className="flex flex-col items-baseline gap-2 mb-4">
                         {product.discount != null && !isNaN(product.discount) && (
                             <span className="text-xs customtext-neutral-light font-semibold1 line-through">
@@ -68,8 +69,6 @@ const CardHoverBtn = ({ product }) => {
                             S/ {product.final_price}
                         </span>
                     </div>
-
-
                 </div>
             </div>
         </div>

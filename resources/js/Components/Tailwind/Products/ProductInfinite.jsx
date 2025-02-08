@@ -1,21 +1,52 @@
 
 
 import { ChevronLeft, ChevronRight } from "lucide-react"
-import { useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import CardHoverBtn from "./Components/CardHoverBtn"
+import { adjustTextColor } from "../../../Functions/adjustTextColor";
 
 const ProductInfinite = ({ items, data }) => {
-    const [currentSlide, setCurrentSlide] = useState(0)
 
 
 
+
+    const [currentSlide, setCurrentSlide] = useState(0);
+    const [slidesPerView, setSlidesPerView] = useState(6); // Default en desktop
+
+    // Detectar el tamaño de la pantalla para ajustar slidesPerView
+    useEffect(() => {
+        const updateSlidesPerView = () => {
+            const width = window.innerWidth;
+            if (width < 640) setSlidesPerView(1); // Móvil
+            else if (width < 1024) setSlidesPerView(3); // Tablet
+            else setSlidesPerView(5); // Desktop
+        };
+        updateSlidesPerView();
+        window.addEventListener("resize", updateSlidesPerView);
+        return () => window.removeEventListener("resize", updateSlidesPerView);
+    }, []);
+
+    // Calcular el máximo número de desplazamientos permitidos
+    const maxSlide = useMemo(() => {
+        return Math.max(0, Math.ceil(items.length / slidesPerView) - 1);
+    }, [items.length, slidesPerView]);
+
+    // Función para avanzar al siguiente slide
     const nextSlide = () => {
-        setCurrentSlide((prev) => (prev + 1) % (items.length - 3))
-    }
+        setCurrentSlide((prev) => (prev < maxSlide ? prev + 1 : prev));
+    };
 
+    // Función para retroceder al slide anterior
     const prevSlide = () => {
-        setCurrentSlide((prev) => (prev - 1 + (items.length - 3)) % (products.length - 3))
-    }
+        setCurrentSlide((prev) => (prev > 0 ? prev - 1 : prev));
+    };
+
+    const prevSlideRef = useRef(null);
+    const nextSlideRef = useRef(null);
+    useEffect(() => {
+        adjustTextColor(prevSlideRef.current); // Aplicar a cada botón en el slider
+        adjustTextColor(nextSlideRef.current); // Aplicar a cada botón en el slider
+    }, []);
 
     return (
         <section className="py-12 bg-[#F7F9FB]">
@@ -71,18 +102,20 @@ const ProductInfinite = ({ items, data }) => {
                     {/* Previous button */}
                     <button
                         onClick={prevSlide}
-                        className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center bg-secondary rounded-lg customtext-neutral-dark "
+                        ref={prevSlideRef}
+                        disabled={currentSlide === 0}
+                        className="absolute -left-2 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center bg-secondary rounded-lg "
                         aria-label="Productos anteriores"
                     >
                         <ChevronLeft width={"1rem"} />
                     </button>
 
                     {/* Products container */}
-                    <div className="">
+                    <div className="overflow-hidden py-4">
                         <div
-                            className="flex items-center transition-all duration-300   ease-in-out"
+                            className="flex items-center transition-all duration-300   ease-in-out "
                             style={{
-                                transform: `translateX(-${currentSlide * 25}%)`,
+                                transform: `translateX(-${currentSlide * (100 / slidesPerView)}%)`,
                             }}
                         >
                             {items.map((product) => (
@@ -94,7 +127,9 @@ const ProductInfinite = ({ items, data }) => {
                     {/* Next button */}
                     <button
                         onClick={nextSlide}
-                        className="absolute  right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center bg-secondary rounded-lg customtext-neutral-dark "
+                        ref={nextSlideRef}
+                        disabled={currentSlide >= maxSlide}
+                        className="absolute  -right-2 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center bg-secondary rounded-lg  "
                         aria-label="Siguientes productos"
                     >
                         <ChevronRight width={"1rem"} />
