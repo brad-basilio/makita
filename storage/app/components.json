@@ -92,6 +92,20 @@
     ]
   },
   {
+    "id": "carrusel",
+    "name": "Carrusel",
+    "options": [
+      {
+        "id": "CarruselBenefitsInifinite",
+        "name": "Beneficios",
+        "using": {
+          "model": "Indicator"
+          
+        }
+      }
+    ]
+  },
+  {
     "id": "slider",
     "name": "Sliders",
     "options": [
@@ -148,8 +162,8 @@
         }
       },
       {
-        "id": "InfiniteSlider",
-        "name": "slider-infinito",
+        "id": "SliderInteractive",
+        "name": "Interactivo Loop Nav Pag",
         "image": "slider-simple.png",
         "data":[
           "infiniteLoop",
@@ -370,13 +384,7 @@
         "data": [
           "title"
         ]
-      },
-       {
-        "id": "BannerBeneficio",
-        "name": "BannerBeneficio",
-        "data": [
-          "title"
-        ]
+        
       },
       {
         "id": "BannerFullWidth",

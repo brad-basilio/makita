@@ -28,7 +28,7 @@ const MenuSimple = ({ pages = [], items }) => {
             <div className="px-primary mx-auto ">
                 <ul className="flex items-center gap-6 text-sm" ref={menuRef}>
                     <li className="relative py-3" >
-                        <button className="flex items-center gap-2" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+                        <button className="customtext-neutral-dark flex items-center gap-2 hover:customtext-primary  border-r-2 border-neutral-dark pr-6 transition-colors duration-300" onClick={() => setIsMenuOpen(!isMenuOpen)}>
                             Categorias
                             <ChevronDown width={"1rem"} />
                         </button>
@@ -42,7 +42,7 @@ const MenuSimple = ({ pages = [], items }) => {
                                                 <ul className="space-y-2">
                                                     {category.subcategories.map((item, itemIndex) => (
                                                         <li key={itemIndex}>
-                                                            <a href="#" className="customtext-neutral-light text-sm hover:customtext-primary transition-colors duration-200">
+                                                            <a href="#" className=" customtext-neutral-dark text-sm hover:customtext-primary transition-colors duration-200 cursor-pointer">
                                                                 {item.name}
                                                             </a>
                                                         </li>
@@ -57,14 +57,14 @@ const MenuSimple = ({ pages = [], items }) => {
 
                     </li>
                     {pages.map((page, index) => (
-                        <li key={index} className="py-3">
-                            <a href={page.url} className="hover:customtext-primary">
-                                {page.name}
-                            </a>
-                        </li>
+                        page.menuable && ( // Simplified conditional rendering
+                            <li key={index} className="py-3">
+                                <a href={page.path} className="hover:customtext-primary cursor-pointer transition-all duration-300 border-r-2 border-neutral-dark pr-6">
+                                    {page.name}
+                                </a>
+                            </li>
+                        )
                     ))}
-
-
                 </ul>
             </div>
         </nav >

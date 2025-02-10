@@ -21,6 +21,7 @@ import Contact from './Components/Tailwind/Contact';
 import Frame from './Components/Tailwind/Frame';
 import Checkout from './Components/Tailwind/Checkout';
 import Menu from './Components/Tailwind/Menu';
+import Carrusel from './Components/Tailwind/Carrusel';
 
 const itemsRest = new ItemsRest();
 
@@ -81,6 +82,10 @@ const System = ({ page, pages, params, filteredData = {}, systems, generals = []
         return <Category which={value} data={data} items={getItems(itemsId)} />
       case 'slider':
         return <Slider which={value} data={data} sliders={getItems(itemsId)} />
+
+      case 'carrusel':
+        return <Carrusel which={value} data={data} items={getItems(itemsId)} />
+
       case 'banner':
         return <Banner which={value} data={data} />
       case 'step':
