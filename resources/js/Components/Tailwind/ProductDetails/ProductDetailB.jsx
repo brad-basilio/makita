@@ -42,7 +42,7 @@ export default function ProductDetail({ item, data }) {
     ]
 
     return (
-        <div className="max-w-[1200px] mx-auto p-4">
+        <div className="px-primary mx-auto py-12">
             <div>
 
 
@@ -61,7 +61,7 @@ export default function ProductDetail({ item, data }) {
                                             }`}
                                     >
                                         <img
-                                            src={`https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Frame%201618873261-rnDjXYAiLSNVyL0qFr0dhkDh8FzJth.png`}
+                                            src={`/api/items/media/${item.image}`}
                                             alt={`Thumbnail ${index + 1}`}
                                             className="w-full h-full object-contain"
                                         />
@@ -72,7 +72,7 @@ export default function ProductDetail({ item, data }) {
                             {/* Main Image */}
                             <div className="flex-1">
                                 <img
-                                    src={`https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Frame%201618873261-rnDjXYAiLSNVyL0qFr0dhkDh8FzJth.png`}
+                                    src={`/api/items/media/${item.image}`}
                                     alt="Product main"
                                     className="w-full h-auto object-contain"
                                 />
@@ -250,7 +250,7 @@ export default function ProductDetail({ item, data }) {
 
 
             </div>
-            <div className="max-w-7xl mx-auto p-6 grid gap-8 md:grid-cols-2">
+            <div className=" grid gap-8 md:grid-cols-2">
                 {/* Specifications Section */}
                 <div>
                     <h2 className="text-2xl font-semibold mb-4">Especificaciones</h2>
