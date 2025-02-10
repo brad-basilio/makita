@@ -1,11 +1,11 @@
 import React from 'react';
 import { ShoppingCart } from 'lucide-react'; // Icono para la cesta
 
-const CardHoverBtn = ({ product }) => {
+const CardHoverBtn = ({ product, widthClass = "lg:w-1/5" }) => {
     return (
         <div
             key={product.id}
-            className="group w-full  px-2 sm:w-1/3 lg:w-1/5 flex-shrink-0 font-font-secondary"
+            className={`group w-full  px-2 sm:w-1/3 ${widthClass} flex-shrink-0 font-font-secondary"`}
         >
             <div
                 className="bg-white rounded-xl shadow-md p-4"
