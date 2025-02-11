@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Brand;
+use App\Models\Category;
 use App\Models\General;
 use App\Models\System;
 use App\Models\SystemColor;
@@ -132,6 +134,21 @@ class SystemController extends BasicController
                 $props['filteredData'][$model] = $result;
             }
         }
+
+
+        // Obtener todas las categorías, marcas y otros filtros dinámicamente
+        $props['filteredData']['Category'] = Category::where('visible', true)->with('subcategories')->get();
+        $props['filteredData']['Brand'] = Brand::where('visible', true)->get();
+        //$props['filteredData']['Color'] = Color::all();
+        $props['filteredData']['PriceRange'] = [
+            ["label" => "S/ 100 - S/ 250", "min" => 100, "max" => 250],
+            ["label" => "S/ 250 - S/ 500", "min" => 250, "max" => 500],
+            ["label" => "S/ 500 - S/ 1.000", "min" => 500, "max" => 1000],
+            ["label" => "S/ 1.000 - S/ 2.000", "min" => 1000, "max" => 2000],
+            ["label" => "S/ 2.000 - S/ 5.000", "min" => 2000, "max" => 5000],
+            ["label" => "Desde S/ 5.000", "min" => 5000, "max" => null]
+        ];
+
 
         return $props;
     }

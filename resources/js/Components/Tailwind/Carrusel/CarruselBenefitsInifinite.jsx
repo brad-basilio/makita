@@ -150,7 +150,9 @@ const CarruselBenefitsInifinite = ({ items }) => {
 
                                 <Hexagon className="absolute w-full h-full" strokeWidth={"1.5px"} />
                                 {/* Ícono */}
-                                <div className="relative z-10 text-3xl">{benefit.symbol}</div>
+                                <div className="relative z-10 text-3xl">
+                                    <img src={`/api/indicators/media/${benefit.symbol}`} className="w-full h-auto" />
+                                </div>
                             </div>
                             <div className="">
                                 <h3 className="font-bold text-lg">{benefit.name}</h3>

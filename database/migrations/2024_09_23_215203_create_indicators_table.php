@@ -15,8 +15,8 @@ return new class extends Migration
         Schema::create('indicators', function (Blueprint $table) {
             $table->uuid('id')->default(DB::raw('(UUID())'))->primary();
             $table->string('symbol')->default('·');
-            $table->string('name');
-            $table->longText('description');
+            $table->string('name')->default('·');
+            $table->longText('description')->default('·');
             $table->boolean('visible')->default(true);
             $table->boolean('status')->default(true)->nullable();
             $table->timestamps();

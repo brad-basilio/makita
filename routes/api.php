@@ -60,6 +60,8 @@ Route::get('/testimonies/media/{uuid}', [AdminTestimonyController::class, 'media
 Route::get('/posts/media/{uuid}', [AdminPostController::class, 'media']);
 Route::get('/items/media/{uuid}', [AdminItemController::class, 'media']);
 
+Route::get('/indicators/media/{uuid}', [AdminIndicatorController::class, 'media']);
+
 Route::post('/posts/paginate', [PostController::class, 'paginate']);
 Route::post('/items/paginate', [ItemController::class, 'paginate']);
 
@@ -97,6 +99,13 @@ Route::middleware('auth')->group(function () {
     Route::patch('/items/status', [AdminItemController::class, 'status']);
     Route::patch('/items/{field}', [AdminItemController::class, 'boolean']);
     Route::delete('/items/{id}', [AdminItemController::class, 'delete']);
+
+
+    Route::get('/items/filters', [AdminItemController::class, 'getFilters']);
+
+
+
+
 
     Route::post('/messages', [AdminMessageController::class, 'save']);
     Route::post('/messages/paginate', [AdminMessageController::class, 'paginate']);

@@ -11,6 +11,7 @@ import InputFormGroup from '../Components/Adminto/form/InputFormGroup';
 import Table from '../Components/Adminto/Table';
 import CreateReactScript from '../Utils/CreateReactScript';
 import ReactAppend from '../Utils/ReactAppend';
+import ImageFormGroup from '../Components/Adminto/form/ImageFormGroup';
 
 const indicatorsRest = new IndicatorsRest()
 
@@ -32,9 +33,11 @@ const Indicators = () => {
     else setIsEditing(false)
 
     idRef.current.value = data?.id ?? ''
-    symbolRef.current.value = data?.symbol ?? ''
+
     nameRef.current.value = data?.name ?? ''
     descriptionRef.current.value = data?.description ?? ''
+    symbolRef.current.value = null
+    symbolRef.image.src = `/api/indicators/media/${data?.symbol ?? 'undefined'}`
 
     $(modalRef.current).modal('show')
   }
@@ -44,13 +47,24 @@ const Indicators = () => {
 
     const request = {
       id: idRef.current.value || undefined,
-      symbol: symbolRef.current.value,
       name: nameRef.current.value,
       description: descriptionRef.current.value,
+
+    }
+    const formData = new FormData()
+    for (const key in request) {
+      formData.append(key, request[key])
     }
 
-    const result = await indicatorsRest.save(request)
+    const symbol = symbolRef.current.files[0]
+    if (symbol) {
+      formData.append('symbol', symbol)
+    }
+
+    const result = await indicatorsRest.save(formData)
     if (!result) return
+
+
 
     $(gridRef.current).dxDataGrid('instance').refresh()
     $(modalRef.current).modal('hide')
@@ -117,10 +131,14 @@ const Indicators = () => {
         {
           dataField: 'symbol',
           caption: 'Símbolo',
+          cellTemplate: (container, { data }) => {
+            ReactAppend(container, <img src={`/api/indicators/media/${data.symbol}`} style={{ width: '80px', height: '48px', objectFit: 'cover', objectPosition: 'center', borderRadius: '4px' }} onError={e => e.target.src = '/api/cover/thumbnail/null'} />)
+          }
         },
         {
           dataField: 'description',
           caption: 'Descripción',
+
         },
         {
           dataField: 'visible',
@@ -176,7 +194,7 @@ const Indicators = () => {
       <div className='row' id='indicators-container'>
         <input ref={idRef} type='hidden' />
         <InputFormGroup eRef={nameRef} label='Número' col='col-sm-8' rows={2} required />
-        <InputFormGroup eRef={symbolRef} label='Símbolo' col='col-sm-4' rows={2} required />
+        <ImageFormGroup eRef={symbolRef} label='Símbolo' col='col-sm-4' rows={2} required />
         <TextareaFormGroup eRef={descriptionRef} label='Descripción' rows={3} />
       </div>
     </Modal>

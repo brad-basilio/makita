@@ -29,9 +29,11 @@ const CardHoverBtn = ({ product, widthClass = "lg:w-1/5" }) => {
 
                 {/* Botones de acción (ocultos por defecto, aparecen con hover) */}
                 <div className="h-0 opacity-0 overflow-hidden group-hover:h-auto group-hover:opacity-100 group-hover:translate-y-0 transition-[height,opacity,transform] duration-500 ease-out flex  gap-2 my-2">
-                    <button className="flex-1 bg-primary text-white px-4 py-2 rounded-lg  transition-colors">
+                    <a
+                        href={`/product/${product.slug}`}
+                        className="flex-1 inline-flex items-center justify-center bg-primary text-white px-4 py-2 rounded-lg  transition-colors">
                         Ver detalle
-                    </button>
+                    </a>
                     <button className="p-2 border border-primary rounded-lg customtext-primary transition-colors">
                         <svg
                             className="w-5 h-5"

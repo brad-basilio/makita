@@ -56,7 +56,7 @@ const ProductInfinite = ({ items, data }) => {
                     <h2 className="text-4xl font-bold  font-font-secondary ">{data?.title}</h2>
                     <a
 
-                        href="#"
+                        href={data.link_catalog}
                         className="bg-primary text-white border-2 border-none flex flex-row items-center gap-3 px-3 md:px-6 py-3 text-base rounded-lg tracking-wide font-bold"
                     >
                         Ver todos

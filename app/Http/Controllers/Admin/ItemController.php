@@ -59,4 +59,16 @@ class ItemController extends BasicController
             }
         });
     }
+
+    public function getFilters()
+    {
+        return response()->json([
+            'status' => true,
+            'data' => [
+                'marcas' => Brand::select('id', 'name')->get(),
+                'categorias' => Category::select('id', 'name')->get(),
+                // 'colores' => Color::select('id', 'nombre')->get(),
+            ]
+        ]);
+    }
 }

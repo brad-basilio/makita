@@ -10,6 +10,7 @@ class IndicatorController extends BasicController
 {
     public $model = Indicator::class;
     public $reactView = 'Admin/Indicators';
+    public $imageFields = ['symbol'];
 
     public function setReactViewProperties(Request $request)
     {
