@@ -5,7 +5,7 @@ import { useEffect, useMemo, useRef, useState } from "react"
 import CardHoverBtn from "./Components/CardHoverBtn"
 import { adjustTextColor } from "../../../Functions/adjustTextColor";
 
-const ProductInfinite = ({ items, data }) => {
+const ProductInfinite = ({ items, data, setCart, cart }) => {
 
 
 
@@ -86,7 +86,7 @@ const ProductInfinite = ({ items, data }) => {
                             }}
                         >
                             {items.map((product) => (
-                                <CardHoverBtn product={product} />
+                                <CardHoverBtn product={product} setCart={setCart} cart={cart} />
                             ))}
                         </div>
                     </div>

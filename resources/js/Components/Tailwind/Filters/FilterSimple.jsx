@@ -154,7 +154,7 @@ const FilterSimple = ({ data, category, subcategory, cart, setCart }) => {
           </div>
           <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[5px] sm:gap-[10px] md:gap-[15px] lg:gap-5">
 
-            {console.log(items)}
+
             {
               items.map((item, index) => <ProductCard data={data} key={index} item={item} cart={cart} setCart={setCart} />)
             }

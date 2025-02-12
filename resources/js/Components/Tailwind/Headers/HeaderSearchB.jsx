@@ -1,11 +1,17 @@
 
 
+import { useState } from "react";
 import Global from "../../../Utils/Global";
 import { CircleUser, Search, ShoppingCart } from "lucide-react";
+import CartModal from "../Components/CartModal";
 
-const HeaderSearchB = ({ }) => {
+const HeaderSearchB = ({ data, cart, setCart }) => {
 
+  const [modalOpen, setModalOpen] = useState(false)
 
+  const totalCount = cart.reduce((acc, item) => {
+    return Number(acc) + Number(item.quantity);
+  }, 0);
   return (
     <header className="w-full">
       <div className="px-primary mx-auto py-4 font-font-secondary text-base font-semibold">
@@ -40,20 +46,20 @@ const HeaderSearchB = ({ }) => {
               </div>
               <span>Mi Cuenta</span>
             </a>
-            <a href="/cart" className="flex items-center gap-2 text-sm relative">
+            <button onClick={() => setModalOpen(true)} className="flex items-center gap-2 text-sm relative">
               <div className="customtext-primary">
                 <ShoppingCart />
               </div>
               <span className="hidden md:inline">Mi Carrito</span>
               <span className="absolute -right-6 -top-2 inline-flex items-center justify-center w-5 h-5 text-xs bg-primary text-white rounded-full">
-                0
+                {totalCount}
               </span>
-            </a>
+            </button>
           </div>
         </div>
       </div>
 
-
+      <CartModal data={data} cart={cart} setCart={setCart} modalOpen={modalOpen} setModalOpen={setModalOpen} />
     </header>
   )
 }

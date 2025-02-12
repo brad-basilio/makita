@@ -1,7 +1,28 @@
 import React from 'react';
 import { ShoppingCart } from 'lucide-react'; // Icono para la cesta
+import Swal from 'sweetalert2';
 
-const CardHoverBtn = ({ product, widthClass = "lg:w-1/5" }) => {
+const CardHoverBtn = ({ product, widthClass = "lg:w-1/5", setCart, cart }) => {
+    const onAddClicked = (product) => {
+        const newCart = structuredClone(cart)
+        const index = newCart.findIndex(x => x.id == product.id)
+        if (index == -1) {
+            newCart.push({ ...product, quantity: 1 })
+        } else {
+            newCart[index].quantity++
+        }
+        setCart(newCart)
+
+        Swal.fire({
+            title: 'Producto agregado',
+            text: `Se agregó ${product.name} al carrito`,
+            icon: 'success',
+            timer: 1500,
+        })
+    }
+
+    const inCart = cart?.find(x => x.id == product?.id)
+    const finalPrice = product?.discount > 0 ? product?.discount : product?.price
     return (
         <div
             key={product.id}
@@ -34,7 +55,7 @@ const CardHoverBtn = ({ product, widthClass = "lg:w-1/5" }) => {
                         className="flex-1 inline-flex items-center justify-center bg-primary text-white px-4 py-2 rounded-lg  transition-colors">
                         Ver detalle
                     </a>
-                    <button className="p-2 border border-primary rounded-lg customtext-primary transition-colors">
+                    <button className="p-2 border border-primary rounded-lg customtext-primary transition-colors" disabled={inCart} onClick={() => onAddClicked(product)}>
                         <svg
                             className="w-5 h-5"
                             viewBox="0 0 24 24"

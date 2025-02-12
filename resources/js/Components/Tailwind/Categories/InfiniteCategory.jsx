@@ -45,7 +45,7 @@ const InfiniteCategory = ({ items, data }) => {
         <section className="py-12">
             <div className="w-full px-primary mx-auto">
                 <h2 className="text-4xl font-bold pb-4 mb-8 font-font-secondary border-b-2 customborder-neutral-light">
-                    {data.title}
+                    {data?.title}
                 </h2>
                 <div className="relative">
                     {/* Botón de retroceso */}
@@ -72,7 +72,7 @@ const InfiniteCategory = ({ items, data }) => {
                                     key={category.id}
                                     className="w-full min-w-[200px] px-2 sm:w-1/3 lg:w-1/6 flex-shrink-0"
                                 >
-                                    <a href={category.link} className="block group">
+                                    <a href={`/catalogo?category=${category.slug}`} className="block group">
                                         <div className="bg-secondary rounded-xl p-4 transition-transform duration-300 group-hover:scale-105">
                                             <div className="aspect-square relative mb-4">
                                                 <img

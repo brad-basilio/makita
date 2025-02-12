@@ -1,8 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+
 import CardHoverBtn from '../Products/Components/CardHoverBtn';
 import { ChevronDown, Filter, Search, Tag } from 'lucide-react';
 
-const CatalagoFiltros = ({ items, data, categories, brands, prices }) => {
+
+const CatalagoFiltros = ({ items, data, categories, brands, prices, cart, setCart }) => {
+
+
+
+
     const [sections, setSections] = useState({
         marca: true,
         precio: true,
@@ -16,6 +22,19 @@ const CatalagoFiltros = ({ items, data, categories, brands, prices }) => {
         subcategorias: [],
         precio: null,
     });
+
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const categoriaParam = params.get("category");
+
+        if (categoriaParam) {
+            setSelectedFilters((prev) => ({
+                ...prev,
+                categorias: [categoriaParam],
+            }));
+        }
+    }, []);
+
 
     const [searchBrand, setSearchBrand] = useState("");
     const [searchCategory, setSearchCategory] = useState("");
@@ -44,11 +63,11 @@ const CatalagoFiltros = ({ items, data, categories, brands, prices }) => {
     };
 
     const filteredBrands = brands.filter((brand) => brand.name.toLowerCase().includes(searchBrand.toLowerCase()));
-    const filteredCategories = categories.filter((category) => category.name.toLowerCase().includes(searchCategory.toLowerCase()));
+    const filteredCategories = categories.filter((category) => category.slug.toLowerCase().includes(searchCategory.toLowerCase()));
 
     let filteredItems = items.filter((item) => {
         const matchBrand = selectedFilters.marcas.length === 0 || selectedFilters.marcas.includes(item.brand?.name);
-        const matchCategory = selectedFilters.categorias.length === 0 || selectedFilters.categorias.includes(item.category?.name);
+        const matchCategory = selectedFilters.categorias.length === 0 || selectedFilters.categorias.includes(item.category?.slug);
         const matchSubcategory = selectedFilters.subcategorias.length === 0 || selectedFilters.subcategorias.includes(item.subcategory?.name);
         const matchPrice = !selectedFilters.precio || (item.price >= selectedFilters.precio.min && item.price <= selectedFilters.precio.max);
 
@@ -187,11 +206,11 @@ const CatalagoFiltros = ({ items, data, categories, brands, prices }) => {
                                                 <input
                                                     type="checkbox"
                                                     className="h-4 w-4 rounded border-gray-300"
-                                                    onChange={() => handleFilterChange("categorias", category.name)}
+                                                    onChange={() => handleFilterChange("categorias", category.slug)}
                                                 />
                                                 <span>{category.name}</span>
                                             </label>
-                                            {selectedFilters.categorias.includes(category.name) && (
+                                            {selectedFilters.categorias.includes(category.slug) && (
                                                 <ul className="ml-6 mt-2 space-y-2">
                                                     {category.subcategories.map((sub) => (
                                                         <label key={sub.id} className="flex items-center space-x-3">
@@ -221,7 +240,7 @@ const CatalagoFiltros = ({ items, data, categories, brands, prices }) => {
                         <div className="flex items-center flex-wrap gap-y-8 transition-all duration-300 ease-in-out">
                             {filteredItems.length > 0 ? (
                                 filteredItems.map((product) => (
-                                    <CardHoverBtn key={product.id} product={product} widthClass='lg:w-1/4' />
+                                    <CardHoverBtn key={product.id} product={product} widthClass='lg:w-1/4' setCart={setCart} />
                                 ))
                             ) : (
                                 <p>No hay productos que coincidan con los filtros seleccionados.</p>
