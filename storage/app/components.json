@@ -350,6 +350,11 @@
                 "id": "CheckoutCulqi",
                 "name": "Culqi",
                 "data": ["url_thanks"]
+            },
+            {
+                "id": "CheckoutSteps",
+                "name": "Steps",
+                "data": ["title"]
             }
         ]
     },

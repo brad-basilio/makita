@@ -426,9 +426,9 @@
       "_createLucideIcon-D0vxYqnu.js"
     ]
   },
-  "_swiper-!~{02K}~.js": {
+  "_swiper-!~{02O}~.js": {
     "file": "swiper.css",
-    "src": "_swiper-!~{02K}~.js"
+    "src": "_swiper-!~{02O}~.js"
   },
   "_tag-Cl_ZJWuw.js": {
     "file": "assets/tag-Cl_ZJWuw.js",
@@ -437,9 +437,9 @@
       "_createLucideIcon-D0vxYqnu.js"
     ]
   },
-  "_tippy-!~{02G}~.js": {
+  "_tippy-!~{02K}~.js": {
     "file": "tippy.css",
-    "src": "_tippy-!~{02G}~.js"
+    "src": "_tippy-!~{02K}~.js"
   },
   "_tippy-react.esm-HYwDmlWP.js": {
     "file": "assets/tippy-react.esm-HYwDmlWP.js",
@@ -1948,7 +1948,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Banner.jsx": {
-    "file": "assets/Banner-BQTR6w9O.js",
+    "file": "assets/Banner-pMkFfX5Y.js",
     "name": "Banner",
     "src": "resources/js/Components/Tailwind/Banner.jsx",
     "isEntry": true,
@@ -2129,7 +2129,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Checkout.jsx": {
-    "file": "assets/Checkout-BEg0cV3m.js",
+    "file": "assets/Checkout-CzTeRhyi.js",
     "name": "Checkout",
     "src": "resources/js/Components/Tailwind/Checkout.jsx",
     "isEntry": true,
@@ -2139,13 +2139,54 @@
       "_index-CqkZ-sT_.js"
     ],
     "dynamicImports": [
-      "resources/js/Components/Tailwind/Checkouts/CheckoutCulqi.jsx"
+      "resources/js/Components/Tailwind/Checkouts/CheckoutCulqi.jsx",
+      "resources/js/Components/Tailwind/Checkouts/CheckoutSteps.jsx"
     ]
   },
   "resources/js/Components/Tailwind/Checkouts/CheckoutCulqi.jsx": {
     "file": "assets/CheckoutCulqi-BPKy3FFd.js",
     "name": "CheckoutCulqi",
     "src": "resources/js/Components/Tailwind/Checkouts/CheckoutCulqi.jsx",
+    "isEntry": true,
+    "imports": [
+      "resources/js/Components/About/AboutHeader.jsx",
+      "_index-CqkZ-sT_.js"
+    ]
+  },
+  "resources/js/Components/Tailwind/Checkouts/CheckoutSteps.jsx": {
+    "file": "assets/CheckoutSteps-BPKy3FFd.js",
+    "name": "CheckoutSteps",
+    "src": "resources/js/Components/Tailwind/Checkouts/CheckoutSteps.jsx",
+    "isEntry": true,
+    "imports": [
+      "resources/js/Components/About/AboutHeader.jsx",
+      "_index-CqkZ-sT_.js"
+    ]
+  },
+  "resources/js/Components/Tailwind/Checkouts/Components/CartStep.jsx": {
+    "file": "assets/CartStep-BPKy3FFd.js",
+    "name": "CartStep",
+    "src": "resources/js/Components/Tailwind/Checkouts/Components/CartStep.jsx",
+    "isEntry": true,
+    "imports": [
+      "resources/js/Components/About/AboutHeader.jsx",
+      "_index-CqkZ-sT_.js"
+    ]
+  },
+  "resources/js/Components/Tailwind/Checkouts/Components/ConfirmationStep.jsx": {
+    "file": "assets/ConfirmationStep-BPKy3FFd.js",
+    "name": "ConfirmationStep",
+    "src": "resources/js/Components/Tailwind/Checkouts/Components/ConfirmationStep.jsx",
+    "isEntry": true,
+    "imports": [
+      "resources/js/Components/About/AboutHeader.jsx",
+      "_index-CqkZ-sT_.js"
+    ]
+  },
+  "resources/js/Components/Tailwind/Checkouts/Components/ShippingStep.jsx": {
+    "file": "assets/ShippingStep-BPKy3FFd.js",
+    "name": "ShippingStep",
+    "src": "resources/js/Components/Tailwind/Checkouts/Components/ShippingStep.jsx",
     "isEntry": true,
     "imports": [
       "resources/js/Components/About/AboutHeader.jsx",
@@ -3021,7 +3062,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-uVIznCal.js",
+    "file": "assets/System-BnEsxugx.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,
@@ -3067,6 +3108,7 @@
       "resources/js/Components/Tailwind/Frames/FrameSimple.jsx",
       "resources/js/Components/Tailwind/Frames/FrameFull.jsx",
       "resources/js/Components/Tailwind/Checkouts/CheckoutCulqi.jsx",
+      "resources/js/Components/Tailwind/Checkouts/CheckoutSteps.jsx",
       "resources/js/Components/Tailwind/Menu/MenuSimple.jsx",
       "resources/js/Components/Tailwind/Carrusel/CarruselBenefitsInifinite.jsx"
     ],
