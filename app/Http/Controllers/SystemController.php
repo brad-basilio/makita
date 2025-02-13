@@ -141,6 +141,7 @@ class SystemController extends BasicController
         $props['filteredData']['Brand'] = Brand::where('visible', true)->get();
         //$props['filteredData']['Color'] = Color::all();
         $props['filteredData']['PriceRange'] = [
+            ["label" => "S/ 0 - S/ 100", "min" => 0, "max" => 100],
             ["label" => "S/ 100 - S/ 250", "min" => 100, "max" => 250],
             ["label" => "S/ 250 - S/ 500", "min" => 250, "max" => 500],
             ["label" => "S/ 500 - S/ 1.000", "min" => 500, "max" => 1000],

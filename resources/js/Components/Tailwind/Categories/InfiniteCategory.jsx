@@ -53,7 +53,7 @@ const InfiniteCategory = ({ items, data }) => {
                         ref={prevSlideRef}
                         onClick={prevSlide}
                         disabled={currentSlide === 0}
-                        className="absolute -left-2 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center rounded-lg shadow-lg transition bg-primary"
+                        className="absolute -left-2 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center rounded-lg shadow-lg transition-all duration-300 bg-primary  disabled:opacity-50 disabled:cursor-not-allowed"
                         aria-label="Categoría anterior"
                     >
                         <ChevronLeft width={"1rem"} />
@@ -79,6 +79,7 @@ const InfiniteCategory = ({ items, data }) => {
                                                     src={`/api/categories/media/${category.image}`}
                                                     alt={category.name}
                                                     className="w-full h-full object-contain"
+                                                    loading="lazy"
                                                 />
                                             </div>
                                             <h3 className="text-center font-semibold text-base customtext-neutral-dark">
@@ -96,7 +97,7 @@ const InfiniteCategory = ({ items, data }) => {
                         ref={nextSlideRef}
                         onClick={nextSlide}
                         disabled={currentSlide >= maxSlide}
-                        className="absolute -right-2 top-1/2 -translate-y-1/2 z-10 w-8 h-8  flex items-center justify-center rounded-lg shadow-lg transition bg-primary"
+                        className="absolute -right-2 top-1/2 -translate-y-1/2 z-10 w-8 h-8  flex items-center justify-center rounded-lg shadow-lg transition-all duration-300 bg-primary disabled:opacity-50 disabled:cursor-not-allowed"
                         aria-label="Categoría siguiente"
                     >
                         <ChevronRight width={"1rem"} />

@@ -1,4 +1,4 @@
-import { ChevronDown } from "lucide-react"
+import { ChevronDown, ChevronUp } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 
 const MenuSimple = ({ pages = [], items }) => {
@@ -17,11 +17,6 @@ const MenuSimple = ({ pages = [], items }) => {
         return () => document.removeEventListener("mousedown", handleClickOutside)
     }, [])
 
-
-
-
-
-
     return (
 
         <nav className="bg-secondary font-font-secondary font-normal text-sm" >
@@ -30,19 +25,22 @@ const MenuSimple = ({ pages = [], items }) => {
                     <li className="relative py-3" >
                         <button className="customtext-neutral-dark flex items-center gap-2 hover:customtext-primary  border-r-2 border-neutral-dark pr-6 transition-colors duration-300" onClick={() => setIsMenuOpen(!isMenuOpen)}>
                             Categorias
-                            <ChevronDown width={"1rem"} />
+                            {isMenuOpen ?
+                                <ChevronUp width={"1rem"} />
+                                :
+                                <ChevronDown width={"1rem"} />}
                         </button>
                         {isMenuOpen && (
-                            <div className="absolute z-50 top-10 left-0 bg-white shadow-lg border-t rounded-xl transition-all duration-200 ease-in-out min-w-[900px] w-auto max-w-7xl">
+                            <div className="absolute z-50 top-12 left-0 bg-white shadow-xl border-t rounded-xl transition-all duration-500 ease-in-out min-w-[900px] w-auto ">
                                 <div className="p-6">
-                                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                                    <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                                         {items.map((category, index) => (
                                             <div key={index}>
-                                                <h3 className="customtext-neutral-dark font-bold text-sm mb-3 cursor-pointer">{category.name}</h3>
+                                                <h3 className="customtext-neutral-dark font-bold text-sm mb-3 cursor-pointer hover:customtext-primary transition-colors duration-300 ">{category.name}</h3>
                                                 <ul className="space-y-2">
                                                     {category.subcategories.map((item, itemIndex) => (
                                                         <li key={itemIndex}>
-                                                            <a href="#" className=" customtext-neutral-dark text-sm hover:customtext-primary transition-colors duration-200 cursor-pointer">
+                                                            <a href="#" className=" customtext-neutral-dark text-sm hover:customtext-primary transition-colors duration-300 cursor-pointer">
                                                                 {item.name}
                                                             </a>
                                                         </li>

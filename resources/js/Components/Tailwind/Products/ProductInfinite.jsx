@@ -67,15 +67,18 @@ const ProductInfinite = ({ items, data, setCart, cart }) => {
                 {/* Carousel */}
                 <div className="relative">
                     {/* Previous button */}
-                    <button
-                        onClick={prevSlide}
-                        ref={prevSlideRef}
-                        disabled={currentSlide === 0}
-                        className="absolute -left-2 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center bg-secondary rounded-lg "
-                        aria-label="Productos anteriores"
-                    >
-                        <ChevronLeft width={"1rem"} />
-                    </button>
+                    <div className="absolute h-full flex items-center z-10  -left-2  ">
+                        <button
+                            onClick={prevSlide}
+                            ref={prevSlideRef}
+                            disabled={currentSlide === 0}
+                            className=" w-8 h-8 flex items-center justify-center bg-secondary rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                            aria-label="Productos anteriores"
+                        >
+                            <ChevronLeft width={"1rem"} />
+                        </button>
+                    </div>
+
 
                     {/* Products container */}
                     <div className="overflow-hidden py-4">
@@ -92,15 +95,17 @@ const ProductInfinite = ({ items, data, setCart, cart }) => {
                     </div>
 
                     {/* Next button */}
-                    <button
-                        onClick={nextSlide}
-                        ref={nextSlideRef}
-                        disabled={currentSlide >= maxSlide}
-                        className="absolute  -right-2 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center bg-secondary rounded-lg  "
-                        aria-label="Siguientes productos"
-                    >
-                        <ChevronRight width={"1rem"} />
-                    </button>
+                    <div className="absolute h-full bottom-0 -right-2  z-10 flex items-center">
+                        <button
+                            onClick={nextSlide}
+                            ref={nextSlideRef}
+                            disabled={currentSlide >= maxSlide}
+                            className=" w-8 h-8 flex items-center justify-center bg-secondary rounded-lg disabled:opacity-50 disabled:cursor-not-allowed "
+                            aria-label="Siguientes productos"
+                        >
+                            <ChevronRight width={"1rem"} />
+                        </button>
+                    </div>
                 </div>
             </div>
         </section>

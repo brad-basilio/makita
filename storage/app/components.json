@@ -366,6 +366,11 @@
                 "id": "ContactSimple",
                 "name": "Simple",
                 "data": ["redirect"]
+            },
+             {
+                "id": "ContactGrid",
+                "name": "Grid",
+                "data": ["redirect"]
             }
         ]
     },
@@ -382,6 +387,55 @@
                 "id": "Full",
                 "name": "Full Width",
                 "data": ["code:html"]
+            }
+        ]
+    },
+      {
+        "id": "faq",
+        "name": "Faqs",
+        "options": [
+            {
+                "id": "FaqSimple",
+                "name": "Simple",
+                "data": ["title"]
+            }
+        ]
+    },
+    {
+        "id": "blog",
+        "name": "Blogs",
+        "options": [
+            {
+                "id": "BlogHeader",
+                "name": "Header Simple",
+                "data": ["title"]
+            },
+             {
+                "id": "BlogList",
+                "name": "Lista Simple",
+                "data": ["title"]
+            }
+        ]
+    },
+     {
+        "id": "post-detail",
+        "name": "Post Detalle",
+        "options": [
+            {
+                "id": "PostDetailSimple",
+                "name": "Simple",
+                "data": ["title"]
+            }
+        ]
+    },
+     {
+        "id": "about",
+        "name": "Acerca de Nosotros",
+        "options": [
+            {
+                "id": "AboutSimple",
+                "name": "Simple",
+                "data": ["title"]
             }
         ]
     },

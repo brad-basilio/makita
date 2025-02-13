@@ -22,6 +22,10 @@ import Frame from './Components/Tailwind/Frame';
 import Checkout from './Components/Tailwind/Checkout';
 import Menu from './Components/Tailwind/Menu';
 import Carrusel from './Components/Tailwind/Carrusel';
+import Faq from './Components/Tailwind/Faq';
+import PostDetail from './Components/Tailwind/PostDetail';
+import Blog from './Components/Tailwind/Blog';
+import AboutUs from './Components/Tailwind/AboutUs';
 
 const itemsRest = new ItemsRest();
 
@@ -83,7 +87,6 @@ const System = ({ page, pages, params, filteredData = {}, systems, generals = []
         return <Category which={value} data={data} items={getItems(itemsId)} />
       case 'slider':
         return <Slider which={value} data={data} sliders={getItems(itemsId)} />
-
       case 'carrusel':
         return <Carrusel which={value} data={data} items={getItems(itemsId)} />
 
@@ -92,13 +95,21 @@ const System = ({ page, pages, params, filteredData = {}, systems, generals = []
       case 'step':
         return <Step which={value} data={data} />
       case 'product-detail':
-        return <ProductDetail which={value} item={filteredData.Item ?? {}} cart={cart} setCart={setCart} />
+        return <ProductDetail which={value} item={filteredData.Item ?? {}} cart={cart} setCart={setCart} params={params} />
       case 'cart':
         return <Cart which={value} data={data} cart={cart} setCart={setCart} />
       case 'checkout':
         return <Checkout which={value} cart={cart} setCart={setCart} />
       case 'contact':
         return <Contact which={value} data={data} />
+      case 'faq':
+        return <Faq which={value} data={data} />
+      case 'blog':
+        return <Blog which={value} data={data} />
+      case 'post-detail':
+        return <PostDetail which={value} data={data} />
+      case 'about':
+        return <AboutUs which={value} data={data} />
       case 'frame':
         return <Frame which={value} data={data} />
       case 'footer':

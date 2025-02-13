@@ -69,7 +69,7 @@ const CatalagoFiltros = ({ items, data, categories, brands, prices, cart, setCar
         const matchBrand = selectedFilters.marcas.length === 0 || selectedFilters.marcas.includes(item.brand?.name);
         const matchCategory = selectedFilters.categorias.length === 0 || selectedFilters.categorias.includes(item.category?.slug);
         const matchSubcategory = selectedFilters.subcategorias.length === 0 || selectedFilters.subcategorias.includes(item.subcategory?.name);
-        const matchPrice = !selectedFilters.precio || (item.price >= selectedFilters.precio.min && item.price <= selectedFilters.precio.max);
+        const matchPrice = !selectedFilters.precio || (item.final_price >= selectedFilters.precio.min && item.final_price <= selectedFilters.precio.max);
 
         return matchBrand && matchCategory && matchSubcategory && matchPrice;
     });
@@ -78,9 +78,9 @@ const CatalagoFiltros = ({ items, data, categories, brands, prices, cart, setCar
     filteredItems = [...filteredItems].sort((a, b) => {
         switch (sortOption) {
             case "precio_mayor":
-                return b.price - a.price;
+                return b.final_price - a.final_price;
             case "precio_menor":
-                return a.price - b.price;
+                return a.final_price - b.final_price;
             case "reciente":
                 return new Date(b.created_at) - new Date(a.created_at);
             case "antiguo":
@@ -100,9 +100,9 @@ const CatalagoFiltros = ({ items, data, categories, brands, prices, cart, setCar
                 <div className="flex justify-between items-center mb-8 pb-4 border-b-2">
                     <h2 className="text-4xl font-bold">{data?.title}</h2>
                     <div className="flex items-center gap-4">
-                        <span>Productos seleccionados: {filteredItems.length}</span>
+                        <span>Productos seleccionados: <strong>{filteredItems.length}</strong></span>
                         <select
-                            className="bg-primary text-white px-6 py-3 text-base rounded-lg font-bold"
+                            className="bg-primary text-white px-3 py-3 text-sm rounded-xl font-semibold"
                             value={sortOption}
                             onChange={(e) => setSortOption(e.target.value)}
                         >
@@ -231,7 +231,7 @@ const CatalagoFiltros = ({ items, data, categories, brands, prices, cart, setCar
                                 </div>
                             )}
                         </div>
-                        <button className="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition-colors">
+                        <button className="w-full bg-primary text-white py-3 rounded-lg hover:brightness-90 transition-colors text-sm font-bold">
                             Aplicar Filtro
                         </button>
                     </div>

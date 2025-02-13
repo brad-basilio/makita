@@ -3,7 +3,8 @@
 import { useState } from "react"
 import { ShoppingCart, Store, Home, Phone, CircleUserRound, ChevronDown } from "lucide-react"
 
-export default function ProductDetail({ item, data }) {
+export default function ProductDetail({ item, data, params }) {
+    console.log(params)
     const [quantity, setQuantity] = useState("01")
     const [selectedImage, setSelectedImage] = useState(0)
 
@@ -14,7 +15,7 @@ export default function ProductDetail({ item, data }) {
             setQuantity(newValue.toString().padStart(2, "0"))
         }
     }
-
+    //NO OBTIENE DATOS SOLO PARAMETRO ENVIADO
 
     /*ESPECIFICACIONES */
     const [isExpanded, setIsExpanded] = useState(false)
@@ -72,7 +73,7 @@ export default function ProductDetail({ item, data }) {
                             {/* Main Image */}
                             <div className="flex-1">
                                 <img
-                                    src={`/api/items/media/${item.image}`}
+                                    src={`/api/items/media/${params.image}`}
                                     alt="Product main"
                                     className="w-full h-auto object-contain"
                                 />
@@ -113,7 +114,7 @@ export default function ProductDetail({ item, data }) {
                         {/* Brand and Title */}
                         <div className="mb-6">
                             <p className="text-gray-600">Marca: Samsung</p>
-                            <h1 className="text-[32px] font-medium mt-2">Galaxy Watch6 Classic 47mm Black</h1>
+                            <h1 className="text-[32px] font-medium mt-2">{item.name}</h1>
                         </div>
 
                         {/* SKU and Availability */}

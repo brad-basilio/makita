@@ -26,7 +26,7 @@ const CardHoverBtn = ({ product, widthClass = "lg:w-1/5", setCart, cart }) => {
     return (
         <div
             key={product.id}
-            className={`group w-full  px-2 sm:w-1/3 ${widthClass} flex-shrink-0 font-font-secondary"`}
+            className={`group w-full px-2 sm:w-1/3 ${widthClass} flex-shrink-0 font-font-secondary cursor-pointer`}
         >
             <div
                 className="bg-white rounded-xl shadow-md p-4"
@@ -44,18 +44,26 @@ const CardHoverBtn = ({ product, widthClass = "lg:w-1/5", setCart, cart }) => {
                             src={`/api/items/media/${product.image}`}
                             alt={product.name}
                             className="w-full h-full object-contain"
+                            loading='lazy'
                         />
                     </div>
                 </div>
 
                 {/* Botones de acción (ocultos por defecto, aparecen con hover) */}
-                <div className="h-0 opacity-0 overflow-hidden group-hover:h-auto group-hover:opacity-100 group-hover:translate-y-0 transition-[height,opacity,transform] duration-500 ease-out flex  gap-2 my-2">
+                <div
+                    className="overflow-hidden max-h-0 pb-4 opacity-0 group-hover:max-h-20 group-hover:opacity-100 transition-[max-height,opacity] duration-1000 ease-in-out flex gap-2 my-2 transform group-hover:translate-y-0 translate-y-4"
+                >
                     <a
                         href={`/product/${product.slug}`}
-                        className="flex-1 inline-flex items-center justify-center bg-primary text-white px-4 py-2 rounded-lg  transition-colors">
+                        className="flex-1 inline-flex items-center justify-center bg-primary text-white px-4 py-2 rounded-lg transition-colors"
+                    >
                         Ver detalle
                     </a>
-                    <button className="p-2 border border-primary rounded-lg customtext-primary transition-colors" disabled={inCart} onClick={() => onAddClicked(product)}>
+                    <button
+                        className="p-2 border border-primary rounded-lg customtext-primary transition-colors"
+                        disabled={inCart}
+                        onClick={() => onAddClicked(product)}
+                    >
                         <svg
                             className="w-5 h-5"
                             viewBox="0 0 24 24"
@@ -80,7 +88,6 @@ const CardHoverBtn = ({ product, widthClass = "lg:w-1/5", setCart, cart }) => {
                     <h3 className="customtext-neutral-dark text-sm font-semibold mb-2 line-clamp-2">
                         {product.name}
                     </h3>
-
                     {/* Precio */}
                     <div className="flex flex-col items-baseline gap-2 mb-4">
                         {product.discount != null && !isNaN(product.discount) && (
