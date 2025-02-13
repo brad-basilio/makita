@@ -4,7 +4,7 @@ import { useState } from "react"
 import { ShoppingCart, Store, Home, Phone, CircleUserRound, ChevronDown } from "lucide-react"
 
 export default function ProductDetail({ item, data, params }) {
-    console.log(params)
+    console.log(item)
     const [quantity, setQuantity] = useState("01")
     const [selectedImage, setSelectedImage] = useState(0)
 
@@ -62,7 +62,7 @@ export default function ProductDetail({ item, data, params }) {
                                             }`}
                                     >
                                         <img
-                                            src={`/api/items/media/${item.image}`}
+                                            src={`/api/items/media/`}
                                             alt={`Thumbnail ${index + 1}`}
                                             className="w-full h-full object-contain"
                                         />
@@ -73,7 +73,7 @@ export default function ProductDetail({ item, data, params }) {
                             {/* Main Image */}
                             <div className="flex-1">
                                 <img
-                                    src={`/api/items/media/${params.image}`}
+                                    src={`/api/items/media/${item.image}`}
                                     alt="Product main"
                                     className="w-full h-auto object-contain"
                                 />
@@ -113,7 +113,7 @@ export default function ProductDetail({ item, data, params }) {
                     <div>
                         {/* Brand and Title */}
                         <div className="mb-6">
-                            <p className="text-gray-600">Marca: Samsung</p>
+                            <p className="text-gray-600">Marca: {item.brand.name}</p>
                             <h1 className="text-[32px] font-medium mt-2">{item.name}</h1>
                         </div>
 
@@ -121,13 +121,15 @@ export default function ProductDetail({ item, data, params }) {
                         <div className="flex items-center gap-8 text-sm mb-6">
                             <span className="text-gray-500">SKU: 1826318d860u3e</span>
                             <span className="text-gray-500">
-                                Disponibilidad: <span className="text-gray-900">En stock</span>
+                                Disponibilidad: <span className="text-gray-900">
+                                    {item.stock > 0 ? "En stock" : "Agotado"}
+                                </span>
                             </span>
                         </div>
                         <div className="flex gap-8">
 
                             {/* Specifications */}
-                            <div className="flex-1">
+                            <div className="flex-1 w-6/12">
                                 <div className="bg-gray-50 rounded-lg p-6">
                                     <h3 className="font-medium mb-4">Especificaciones principales</h3>
                                     <ul className="space-y-2 ml-4 list-disc text-gray-600 mb-4">
@@ -140,13 +142,13 @@ export default function ProductDetail({ item, data, params }) {
                             </div>
 
                             {/* Price Section */}
-                            <div className="w-48">
+                            <div className=" w-6/12">
                                 <p className="text-sm text-gray-500 mb-1">
-                                    Precio: <span className="line-through">S/ 2.689</span>
+                                    Precio: <span className="line-through">S/ {item.price}</span>
                                 </p>
                                 <div className="flex items-center gap-2">
-                                    <span className="text-3xl font-medium">S/ 1.345</span>
-                                    <span className="bg-red-500 text-white text-sm px-2 py-0.5 rounded">-20%</span>
+                                    <span className="text-3xl font-medium">S/ {item.final_price}</span>
+                                    <span className="bg-red-500 text-white text-sm px-2 py-0.5 rounded">-{Number(item.discount_percent).toFixed(1)}%</span>
                                 </div>
 
                                 {/* Quantity */}
@@ -270,14 +272,9 @@ export default function ProductDetail({ item, data, params }) {
                     <h2 className="text-2xl font-semibold mb-4">Información adicional</h2>
                     <div className="space-y-6">
                         <h3 className="text-xl font-medium">Acerca de este artículo</h3>
-                        <p className="text-gray-600">
-                            Lleva tu sonido a todas partes. Con graves que puedes sentir, hasta 32 horas totales de duración de la
-                            batería y un diseño seguro y cómodo, el JBL Vibe Beam o Wave Beam resistente a las salpicaduras y al polvo
-                            está diseñado para tu entretenimiento diario. Ya sea que esté deambulando por las calles de la ciudad o
-                            relajándose en la playa, sus llamadas estéreo con manos libres siempre serán nítidas, mientras que la
-                            tecnología Smart Ambient lo mantiene al tanto de su entorno. Y cuando necesite un impulso adicional, puede
-                            acelerar la carga de dos horas adicionales de energía en solo 10 minutos.
-                        </p>
+                        <div dangerouslySetInnerHTML={{ __html: item.description }} >
+
+                        </div>
                         <div className={`space-y-4 ${!isExpanded && "max-h-[400px] overflow-hidden"}`}>
                             <ul className="list-disc pl-5 space-y-4">
                                 {features.map((feature, index) => (

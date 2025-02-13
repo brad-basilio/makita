@@ -45,7 +45,7 @@ const SliderImagen = ({ items, data }) => {
             <div className="bg-primary py-8">
                 <div className=" mx-auto px-primary">
 
-                    <div className="relative flex items-center">
+                    <div className="relative flex items-center justify-center">
                         <button
                             onClick={prevSlide}
                             ref={prevSlideRef}
@@ -58,9 +58,9 @@ const SliderImagen = ({ items, data }) => {
                             </svg>
                         </button>
 
-                        <div className="overflow-hidden">
+                        <div className="overflow-hidden w-full">
                             <div
-                                className="flex items-center transition-all duration-300   ease-in-out px-4"
+                                className="flex items-center transition-all duration-300   ease-in-out px-4 w-full"
                                 style={{
                                     transform: `translateX(-${currentSlide * (100 / slidesPerView)}%)`,
                                 }}

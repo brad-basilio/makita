@@ -95,7 +95,8 @@ const System = ({ page, pages, params, filteredData = {}, systems, generals = []
       case 'step':
         return <Step which={value} data={data} />
       case 'product-detail':
-        return <ProductDetail which={value} item={filteredData.Item ?? {}} cart={cart} setCart={setCart} params={params} />
+        console.log(filteredData.Item)
+        return <ProductDetail which={value} item={filteredData.Item} cart={cart} setCart={setCart} />
       case 'cart':
         return <Cart which={value} data={data} cart={cart} setCart={setCart} />
       case 'checkout':

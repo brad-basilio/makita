@@ -177,7 +177,6 @@
                 "data": ["path", "title", "description"],
                 "using": {
                     "model": "Item"
-                   
                 }
             },
             {
@@ -188,7 +187,7 @@
                 "using": {
                     "model": "Item",
                     "with": ["category", "subcategory", "brand"],
-                   
+
                     "relations": ["category", "tags"]
                 }
             }
@@ -323,11 +322,20 @@
         "options": [
             {
                 "id": "ProductDetailSimple",
-                "name": "Simple"
+                "name": "Simple",
+                "using": {
+                    "model": "Item",
+
+                    "with": ["category", "subcategory", "brand"]
+                }
             },
             {
                 "id": "ProductDetailB",
-                "name": "ProductDetailB"
+                "name": "ProductDetailB",
+                "using": {
+                    "model": "Item",
+                    "flied": "slug"
+                }
             }
         ]
     },
@@ -367,7 +375,7 @@
                 "name": "Simple",
                 "data": ["redirect"]
             },
-             {
+            {
                 "id": "ContactGrid",
                 "name": "Grid",
                 "data": ["redirect"]
@@ -390,7 +398,7 @@
             }
         ]
     },
-      {
+    {
         "id": "faq",
         "name": "Faqs",
         "options": [
@@ -410,14 +418,14 @@
                 "name": "Header Simple",
                 "data": ["title"]
             },
-             {
+            {
                 "id": "BlogList",
                 "name": "Lista Simple",
                 "data": ["title"]
             }
         ]
     },
-     {
+    {
         "id": "post-detail",
         "name": "Post Detalle",
         "options": [
@@ -428,7 +436,7 @@
             }
         ]
     },
-     {
+    {
         "id": "about",
         "name": "Acerca de Nosotros",
         "options": [
