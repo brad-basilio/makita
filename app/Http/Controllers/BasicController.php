@@ -35,6 +35,17 @@ class BasicController extends Controller
   public $prefix4filter = null;
   public $throwMediaError = false;
   public $reactData = null;
+  public $with4get = [];
+
+  public function get(Request $request, string $id)
+  {
+    $response = Response::simpleTryCatch(function () use ($id) {
+      $jpa  = $this->model::with($this->with4get)->find($id);
+      if (!$jpa) throw new Exception('El pedido que buscas no existe');
+      return $jpa;
+    });
+    return \response($response->toArray(), $response->status);
+  }
 
   public function media(Request $request, string $uuid)
   {
