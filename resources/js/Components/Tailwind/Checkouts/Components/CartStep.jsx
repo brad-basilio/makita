@@ -1,19 +1,28 @@
-export default function CartStep({ products, onContinue }) {
+import Number2Currency from "../../../../Utils/Number2Currency";
+
+export default function CartStep({ items, onContinue }) {
+
+    const totalPrice = items.reduce((acc, item) => {
+        const finalPrice = item.final_price;
+        return acc + (finalPrice * item.quantity); // Sumar el precio total por cantidad
+    }, 0);
+
+    const subTotal = (totalPrice * 100) / 118
     return (
         <div className="grid lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2">
                 <div className="space-y-6">
-                    {products.map((product) => (
-                        <div key={product.id} className="bg-white rounded-lg shadow p-4">
+                    {items.map((item) => (
+                        <div key={item.id} className="bg-white rounded-lg shadow p-4">
                             <div className="flex items-center gap-4">
                                 <img
-                                    src={`/api/items/media/${product.image}`}
-                                    alt={product.name}
+                                    src={`/api/items/media/${item.image}`}
+                                    alt={item.name}
                                     className="w-20 h-20 object-cover rounded"
                                 />
                                 <div className="flex-1">
-                                    <h3 className="font-medium">{product.name}</h3>
-                                    <p className="text-sm text-gray-500">SKU: {product.sku}</p>
+                                    <h3 className="font-medium">{item.name}</h3>
+                                    <p className="text-sm text-gray-500">SKU: {item.sku}</p>
                                     <p className="text-sm">Disponibilidad: En stock</p>
                                     <p className="text-sm">Marca: Samsung</p>
                                 </div>
@@ -43,8 +52,8 @@ export default function CartStep({ products, onContinue }) {
                                         </svg>
                                     </button>
                                     <div className="w-24 text-right">
-                                        <div className="text-sm text-gray-500">S/ {Number(product.price).toFixed(2)}</div>
-                                        <div className="font-medium">S/ {Number(product.price * product.quantity).toFixed(2)}</div>
+                                        <div className="text-sm text-gray-500">S/ {Number(item.price).toFixed(2)}</div>
+                                        <div className="font-medium">S/ {Number(item.price * item.quantity).toFixed(2)}</div>
                                     </div>
                                 </div>
                             </div>
@@ -52,7 +61,7 @@ export default function CartStep({ products, onContinue }) {
                     ))}
                 </div>
             </div>
-            <div className="bg-white rounded-lg shadow p-6">
+            <div className="bg-[#F7F9FB] rounded-lg shadow p-6">
                 <h3 className="text-lg font-semibold mb-4">Resumen de compra</h3>
                 <div className="space-y-4">
                     <div className="flex justify-between">
@@ -70,13 +79,13 @@ export default function CartStep({ products, onContinue }) {
                     <div className="pt-4 border-t">
                         <div className="flex justify-between font-medium">
                             <span>Total</span>
-                            <span>S/ 1,785.00</span>
+                            <span>S/. {Number2Currency(totalPrice)}</span>
                         </div>
                     </div>
                     <div className="space-y-2 pt-4">
                         <button
                             onClick={onContinue}
-                            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
+                            className="w-full bg-primary text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
                         >
                             Continuar
                         </button>

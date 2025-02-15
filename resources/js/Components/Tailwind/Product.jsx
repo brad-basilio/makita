@@ -6,6 +6,7 @@ const ProductInfinite = React.lazy(() => import('./Products/ProductInfinite'))
 
 const Product = ({ which, data, items, cart, setCart }) => {
   const getProduct = () => {
+
     switch (which) {
       case 'Carousel':
         return <ProductCarousel data={data} items={items} cart={cart} setCart={setCart} />

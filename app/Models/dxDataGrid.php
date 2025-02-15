@@ -47,6 +47,7 @@ class dxDataGrid
                 $selector = str_replace('!', '', $selector);
             }
             if ($flat) $selector = \str_replace('.', '__', $dxFilter[0]);
+
             switch ($dxFilter[1]) {
                 case 'contains':
                     $builder->where($selector, 'like', "%{$dxFilter[2]}%");
@@ -97,6 +98,7 @@ class dxDataGrid
                 case 'isnotnull':
                     $builder->whereNotNull($selector);
                     break;
+
                 default:
                     $builder->where($selector, $dxFilter[1], $dxFilter[2]);
                     break;

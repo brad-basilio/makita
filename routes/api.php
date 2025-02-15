@@ -28,6 +28,8 @@ use App\Http\Controllers\Admin\SystemController as AdminSystemController;
 use App\Http\Controllers\Admin\TagController as AdminTagController;
 use App\Http\Controllers\Admin\WebDetailController as AdminWebDetailController;
 
+use App\Http\Controllers\Admin\FaqController as AdminFaqController;
+
 // Public
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BlogController;
@@ -59,6 +61,7 @@ Route::get('/brands/media/{uuid}', [AdminBrandController::class, 'media']);
 Route::get('/testimonies/media/{uuid}', [AdminTestimonyController::class, 'media']);
 Route::get('/posts/media/{uuid}', [AdminPostController::class, 'media']);
 Route::get('/items/media/{uuid}', [AdminItemController::class, 'media']);
+Route::get('/items/gallery/media/{uuid}', [AdminItemController::class, 'mediaGallery']);
 
 Route::get('/indicators/media/{uuid}', [AdminIndicatorController::class, 'media']);
 
@@ -134,6 +137,13 @@ Route::middleware('auth')->group(function () {
     Route::patch('/indicators/status', [AdminIndicatorController::class, 'status']);
     Route::patch('/indicators/{field}', [AdminIndicatorController::class, 'boolean']);
     Route::delete('/indicators/{id}', [AdminIndicatorController::class, 'delete']);
+
+    Route::post('/faqs', [AdminFaqController::class, 'save']);
+    Route::post('/faqs/paginate', [AdminFaqController::class, 'paginate']);
+    Route::patch('/faqs/status', [AdminFaqController::class, 'status']);
+    Route::patch('/faqs/{field}', [AdminFaqController::class, 'boolean']);
+    Route::delete('/faqs/{id}', [AdminFaqController::class, 'delete']);
+
 
     Route::post('/banners', [AdminBannerController::class, 'save']);
     Route::post('/banners/paginate', [AdminBannerController::class, 'paginate']);

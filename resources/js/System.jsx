@@ -29,7 +29,7 @@ import AboutUs from './Components/Tailwind/AboutUs';
 
 const itemsRest = new ItemsRest();
 
-const System = ({ page, pages, params, filteredData = {}, systems, generals = [], systemItems = {} }) => {
+const System = ({ page, pages, params, filteredData = {}, systems, generals = [], systemItems = {}, contacts, faqs, headerPosts, posts }) => {
 
 
   const getItems = (itemsId) => {
@@ -80,7 +80,9 @@ const System = ({ page, pages, params, filteredData = {}, systems, generals = []
         }
         break
       case 'filter':
-        return <Filter which={value} data={data} items={getItems(itemsId)} prices={filteredData.PriceRange} category={filteredData.Category} brands={filteredData.Brand} subcategory={filteredData.SubCategory} cart={cart} setCart={setCart} />
+        //  return <Filter which={value} data={data} items={getItems(itemsId)} prices={filteredData.PriceRange} category={filteredData.Category} brands={filteredData.Brand} subcategory={filteredData.SubCategory} cart={cart} setCart={setCart} filteredData={filteredData} />
+        return <Filter which={value} data={data} items={getItems(itemsId)} filteredData={filteredData} cart={cart} setCart={setCart} />
+
       case 'product':
         return <Product which={value} data={data} items={getItems(itemsId)} cart={cart} setCart={setCart} />
       case 'category':
@@ -102,11 +104,11 @@ const System = ({ page, pages, params, filteredData = {}, systems, generals = []
       case 'checkout':
         return <Checkout which={value} cart={cart} setCart={setCart} />
       case 'contact':
-        return <Contact which={value} data={data} />
+        return <Contact which={value} data={data} contacts={contacts} />
       case 'faq':
-        return <Faq which={value} data={data} />
+        return <Faq which={value} data={data} faqs={faqs} />
       case 'blog':
-        return <Blog which={value} data={data} />
+        return <Blog which={value} data={data} headerPosts={headerPosts} posts={posts} />
       case 'post-detail':
         return <PostDetail which={value} data={data} />
       case 'about':

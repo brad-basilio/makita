@@ -1,42 +1,10 @@
-import { Plus, Minus } from "lucide-react"
+import { Plus, Minus, SquarePlus, SquareMinus } from "lucide-react"
 import { useState } from "react"
 
-const FaqSimple = () => {
+const FaqSimple = ({ faqs }) => {
 
 
-    const faqs = [
-        {
-            id: 1,
-            question: "Donec in pulvinar sem. Fusce condimentum orci eget metus ullamcorper?",
-            answer: "",
-        },
-        {
-            id: 2,
-            question: "Donec in pulvinar sem. Fusce condimentum orci eget metus ullamcorper?",
-            answer: "",
-        },
-        {
-            id: 3,
-            question: "Donec in pulvinar sem. Fusce condimentum orci eget metus ullamcorper?",
-            answer: "",
-        },
-        {
-            id: 4,
-            question: "Cras faucibus odio sem, vel pellentesque velit accumsan ut?",
-            answer:
-                "Curabitur vitae nisl felis. Sed vel luctus nunc. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Etiam ultricies sapien mauris, a consectetur sapien posuere eu.",
-        },
-        {
-            id: 5,
-            question: "Cras faucibus odio sem, vel pellentesque velit accumsan ut?",
-            answer: "",
-        },
-        {
-            id: 6,
-            question: "Cras faucibus odio sem, vel pellentesque velit accumsan ut?",
-            answer: "",
-        },
-    ]
+
 
 
     const [expandedFaqs, setExpandedFaqs] = useState(new Set([4])) // FAQ 4 starts expanded
@@ -55,29 +23,33 @@ const FaqSimple = () => {
 
 
     return (
-        <section className="container mx-auto px-4 mb-16">
-            <h1 className="text-4xl font-bold text-center mb-4">Preguntas frecuentes</h1>
-            <p className="text-center text-gray-600 mb-12 max-w-3xl mx-auto">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus eu fermentum justo, ac fermentum nulla. Sed
-                sed scelerisque urna, vitae ultricies libero. Pellentesque vehicula et urna in venenatis.
-            </p>
+        <section className="bg-[#F7F9FB] pb-12 px-primary">
+            <div className="mx-auto gap-12 bg-white rounded-xl px-8 py-8">
+                <h1 className="text-[40px] font-bold text-center mb-4 cusomtext-neutral-dark">Preguntas frecuentes</h1>
+                <p className="text-center  cusomtext-neutral-light mb-12 max-w-3xl mx-auto">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus eu fermentum justo, ac fermentum nulla. Sed
+                    sed scelerisque urna, vitae ultricies libero. Pellentesque vehicula et urna in venenatis.
+                </p>
 
-            <div className="grid md:grid-cols-2 gap-6 max-w-6xl mx-auto">
-                {faqs.map((faq) => (
-                    <div
-                        key={faq.id}
-                        className="bg-white rounded-lg shadow-sm p-6 cursor-pointer"
-                        onClick={() => toggleFaq(faq.id)}
-                    >
-                        <div className="flex justify-between items-start">
-                            <h3 className="text-lg font-medium pr-8">{faq.question}</h3>
-                            <button className="text-blue-500 flex-shrink-0">
-                                {expandedFaqs.has(faq.id) ? <Minus className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
-                            </button>
+                <div className="flex flex-wrap justify-between">
+                    {faqs.map((faq) => (
+                        <div
+                            key={faq.id}
+                            className="  p-2 cursor-pointer w-1/2"
+                            onClick={() => toggleFaq(faq.id)}
+                        >
+                            <div className="p-4 rounded-lg shadow-sm bg-[#F7F9FB]">
+                                <div className="flex justify-between items-start p-4">
+                                    <h3 className="text-xl font-semibold pr-8">{faq.question}</h3>
+                                    <button className="customtext-primary flex-shrink-0">
+                                        {expandedFaqs.has(faq.id) ? <SquareMinus className="w-6 h-6" /> : <SquarePlus className="w-6 h-6" />}
+                                    </button>
+                                </div>
+                                {expandedFaqs.has(faq.id) && faq.answer && <p className="mt-4 p-4 customtext-neutral-light text-lg">{faq.answer}</p>}
+                            </div>
                         </div>
-                        {expandedFaqs.has(faq.id) && faq.answer && <p className="mt-4 text-gray-600">{faq.answer}</p>}
-                    </div>
-                ))}
+                    ))}
+                </div>
             </div>
         </section>
     )

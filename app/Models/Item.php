@@ -34,6 +34,9 @@ class Item extends Model
         'featured',
         'visible',
         'status',
+        'sku',
+        'stock',
+        'is_combo'
     ];
 
     static function getForeign(Builder $builder, string $model, $relation)
@@ -85,7 +88,38 @@ class Item extends Model
         return $this->hasOne(Brand::class, 'id', 'brand_id');
     }
 
-    public function tags() {
+    public function tags()
+    {
         return $this->belongsToMany(Tag::class, 'item_tags', 'item_id', 'tag_id');
+    }
+
+    public function combos()
+    {
+        return $this->belongsToMany(Combo::class, 'combo_items')
+            ->withTimestamps();
+    }
+
+    public function images()
+    {
+        return $this->hasMany(ItemImage::class);
+    }
+
+    public function specifications()
+    {
+        return $this->hasMany(ItemSpecification::class);
+    }
+
+    public function features()
+    {
+        return $this->hasMany(ItemFeature::class);
+    }
+
+    protected static function booted()
+    {
+        static::creating(function ($item) {
+            if (empty($item->sku)) {
+                $item->sku = 'PROD-' . strtoupper(substr($item->categoria_id, 0, 3)) . '-' . strtoupper(substr($item->name, 0, 3)) . '-' . uniqid();
+            }
+        });
     }
 }

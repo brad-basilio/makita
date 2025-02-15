@@ -18,7 +18,7 @@ const CartModal = ({ data, cart, setCart, modalOpen, setModalOpen }) => {
   }, [modalOpen])
 
   const totalPrice = cart.reduce((acc, item) => {
-    const finalPrice = item.discount > 0 ? Math.min(item.price, item.discount) : item.price;
+    const finalPrice = item.final_price;
     return acc + (finalPrice * item.quantity); // Sumar el precio total por cantidad
   }, 0);
 

@@ -3,10 +3,12 @@
 import { useState } from "react"
 import { ShoppingCart, Store, Home, Phone, CircleUserRound, ChevronDown } from "lucide-react"
 
-export default function ProductDetail({ item, data, params }) {
-    console.log(item)
+export default function ProductDetail({ item, data, setCart, cart }) {
+
     const [quantity, setQuantity] = useState("01")
-    const [selectedImage, setSelectedImage] = useState(0)
+
+
+    const [selectedImage, setSelectedImage] = useState({ url: item.image, type: "main" });
 
     const handleQuantityChange = (value) => {
         const current = Number.parseInt(quantity)
@@ -20,18 +22,6 @@ export default function ProductDetail({ item, data, params }) {
     /*ESPECIFICACIONES */
     const [isExpanded, setIsExpanded] = useState(false)
 
-    const specifications = [
-        { label: "Año de lanzamiento", value: "2024" },
-        { label: "Detalle de la garantía", value: "3 mes por desperfecto de fábrica" },
-        {
-            label: "Resistente al agua",
-            value:
-                "IPX2 (Protegido contra el agua vertida: goteo, cuando está inclinado hasta 15 grados con respecto a su posición normal)",
-        },
-        { label: "10", value: "Nuevo" },
-        { label: "Dimensiones", value: "15 X 10 X 10" },
-        { label: "Detalle de la Condición", value: "Nuevo en caja original" },
-    ]
 
     const features = [
         "Sonido de graves profundos JBL",
@@ -42,11 +32,29 @@ export default function ProductDetail({ item, data, params }) {
         "Con 8 horas de duración de la batería en los auriculares y 24 en el estuche, los JBL Vibe Beam brindan audio durante todo el día. Y cuando necesite más energía, puede acelerar la carga dos horas más en solo 10 minutos.",
     ]
 
+    const onAddClicked = (product) => {
+        const newCart = structuredClone(cart)
+        const index = newCart.findIndex(x => x.id == product.id)
+        if (index == -1) {
+            newCart.push({ ...product, quantity: 1 })
+        } else {
+            newCart[index].quantity++
+        }
+        setCart(newCart)
+
+        Swal.fire({
+            title: 'Producto agregado',
+            text: `Se agregó ${product.name} al carrito`,
+            icon: 'success',
+            timer: 1500,
+        })
+    }
+
+    const inCart = cart?.find(x => x.id == item?.id)
+
     return (
-        <div className="px-primary mx-auto py-12">
-            <div>
-
-
+        <div className="px-primary mx-auto py-12 bg-[#F7F9FB] ">
+            <div className="bg-white rounded-xl p-4">
                 <div className="grid md:grid-cols-2 gap-8">
                     {/* Left Column - Images and Delivery Options */}
                     <div className="space-y-6">
@@ -54,15 +62,24 @@ export default function ProductDetail({ item, data, params }) {
                         <div className="flex gap-6">
                             {/* Thumbnails */}
                             <div className="flex flex-col gap-4">
-                                {[...Array(5)].map((_, index) => (
+                                <button
+                                    onClick={() => setSelectedImage({ url: item.image, type: "main" })}
+                                    className={`w-16 h-16 border rounded-lg p-2 ${selectedImage.url === item.image ? "border-blue-400" : "border-gray-200"}`}
+                                >
+                                    <img
+                                        src={`/api/items/media/${item.image}`}
+                                        alt="Main Thumbnail"
+                                        className="w-full h-full object-contain"
+                                    />
+                                </button>
+                                {item.images.map((image, index) => (
                                     <button
                                         key={index}
-                                        onClick={() => setSelectedImage(index)}
-                                        className={`w-16 h-16 border rounded-lg p-2 ${selectedImage === index ? "border-blue-400" : "border-gray-200"
-                                            }`}
+                                        onClick={() => setSelectedImage({ url: image.url, type: "gallery" })}
+                                        className={`w-16 h-16 border rounded-lg p-2 ${selectedImage.url === image.url ? "border-blue-400" : "border-gray-200"}`}
                                     >
                                         <img
-                                            src={`/api/items/media/`}
+                                            src={`/api/items/gallery/media/${image.url}`}
                                             alt={`Thumbnail ${index + 1}`}
                                             className="w-full h-full object-contain"
                                         />
@@ -73,7 +90,7 @@ export default function ProductDetail({ item, data, params }) {
                             {/* Main Image */}
                             <div className="flex-1">
                                 <img
-                                    src={`/api/items/media/${item.image}`}
+                                    src={selectedImage.type === "main" ? `/api/items/media/${selectedImage.url}` : `/api/items/gallery/media/${selectedImage.url}`}
                                     alt="Product main"
                                     className="w-full h-auto object-contain"
                                 />
@@ -119,36 +136,43 @@ export default function ProductDetail({ item, data, params }) {
 
                         {/* SKU and Availability */}
                         <div className="flex items-center gap-8 text-sm mb-6">
-                            <span className="text-gray-500">SKU: 1826318d860u3e</span>
+                            <span className="text-gray-500">SKU: {item.sku}</span>
                             <span className="text-gray-500">
                                 Disponibilidad: <span className="text-gray-900">
                                     {item.stock > 0 ? "En stock" : "Agotado"}
                                 </span>
                             </span>
                         </div>
-                        <div className="flex gap-8">
+                        <div className="flex gap-8 border-b-4 pb-8">
 
                             {/* Specifications */}
                             <div className="flex-1 w-6/12">
                                 <div className="bg-gray-50 rounded-lg p-6">
                                     <h3 className="font-medium mb-4">Especificaciones principales</h3>
                                     <ul className="space-y-2 ml-4 list-disc text-gray-600 mb-4">
-                                        <li>Quisque in luctus mi.</li>
-                                        <li>Maecenas varius rhoncus augue.</li>
-                                        <li>Vivamus congue commodo massa.</li>
+
+                                        {item.specifications.map((spec, index) =>
+                                            spec.type === "principal" && (
+
+                                                <li key={index}>{spec.description}</li>
+                                            )
+                                        )}
+
+
+
                                     </ul>
                                     <button className="text-blue-500 text-sm hover:underline">Ver más especificaciones</button>
                                 </div>
                             </div>
 
                             {/* Price Section */}
-                            <div className=" w-6/12">
+                            <div className=" w-6/12 ">
                                 <p className="text-sm text-gray-500 mb-1">
                                     Precio: <span className="line-through">S/ {item.price}</span>
                                 </p>
-                                <div className="flex items-center gap-2">
-                                    <span className="text-3xl font-medium">S/ {item.final_price}</span>
-                                    <span className="bg-red-500 text-white text-sm px-2 py-0.5 rounded">-{Number(item.discount_percent).toFixed(1)}%</span>
+                                <div className="flex items-center gap-4 ">
+                                    <span className="text-[40px] font-medium">S/ {item.final_price}</span>
+                                    <span className="bg-red-500 text-white text-sm px-2 py-0.5 rounded-full">-{Number(item.discount_percent).toFixed(1)}%</span>
                                 </div>
 
                                 {/* Quantity */}
@@ -156,56 +180,57 @@ export default function ProductDetail({ item, data, params }) {
                                     <div className="flex items-center gap-4 mb-2">
                                         <span className="text-sm">Cantidad</span>
                                         <div className="inline-flex border rounded">
-                                            <button onClick={() => handleQuantityChange(-1)} className="px-3 py-1 border-r">
-                                                -
-                                            </button>
-                                            <input type="text" value={quantity} readOnly className="w-12 text-center" />
-                                            <button onClick={() => handleQuantityChange(1)} className="px-3 py-1 border-l">
-                                                +
-                                            </button>
+
+                                            <input type="number" className="w-12 text-center" min="1" max="10" defaultValue="1" />
+
                                         </div>
+                                        <p className="text-sm text-gray-500">Máximo 10 unidades.</p>
                                     </div>
-                                    <p className="text-sm text-gray-500">Máximo 10 unidades.</p>
+
                                 </div>
 
                                 {/* Add to Cart */}
-                                <button className="w-full bg-[#19A7CE] text-white py-3 rounded-lg hover:bg-[#19A7CE]/90 transition-colors mt-4">
+                                <button onClick={() => onAddClicked(item)} className="w-full bg-primary text-white py-3 rounded-xl hover:brightness-90 transition-colors mt-4">
                                     Agregar al carrito
                                 </button>
                             </div>
                         </div>
 
                         {/* Complementary Products */}
-                        <div className="mt-8">
+                        <div className="mt-8 ">
                             <div className="flex items-center gap-2 mb-6">
                                 <ShoppingCart className="w-6 h-6 text-blue-500" />
                                 <h2 className="text-lg">Completa tu compra con estos productos</h2>
                             </div>
 
-                            <div className="space-y-4 flex gap-4">
-                                {[
-                                    {
-                                        name: "Este Producto: Audífonos Bluetooth JBL Vibe BEAM...",
-                                        price: "179,00",
-                                    },
-                                    {
-                                        name: "Audífonos Bluetooth JBL T280TWS X2 Rosa y Estuche",
-                                        price: "157,00",
-                                    },
-                                    {
-                                        name: "Mini Dron Profesional Portátil E88 Camara HD",
-                                        price: "108,00",
-                                    },
-                                ].map((product, index) => (
-                                    <div key={index} className="flex gap-4  border rounded-lg items-start">
-                                        <div className="w-24 h-full bg-gray-100 rounded-lg flex-shrink-0" />
-                                    </div>
-                                ))}
+                            <div className=" flex gap-4">
+                                <div className="w-2/3 flex gap-4">
+                                    {[
+                                        {
+                                            name: "Este Producto: Audífonos Bluetooth JBL Vibe BEAM...",
+                                            price: "179,00",
+                                        },
+                                        {
+                                            name: "Audífonos Bluetooth JBL T280TWS X2 Rosa y Estuche",
+                                            price: "157,00",
+                                        },
+                                        {
+                                            name: "Mini Dron Profesional Portátil E88 Camara HD",
+                                            price: "108,00",
+                                        },
+                                    ].map((product, index) => (
+                                        <div key={index} className="flex w-1/3 gap-4 items-center ">
+                                            <img src={`/api/items/media/${product}`} className=" border rounded-lg aspect-square w-full h-auto" />
+                                            <div>+</div>
+
+                                        </div>
+                                    ))}
+                                </div>
                                 <div className="flex flex-col justify-between items-end bg-gray-50 p-4 rounded-lg mt-4">
                                     <span>Total</span>
 
                                     <p className="font-bold mb-2">S/ 444,00</p>
-                                    <button className="bg-[#19A7CE] text-white px-6 py-2 rounded-lg hover:bg-[#19A7CE]/90 transition-colors">
+                                    <button className="bg-primary text-white px-4 py-2 rounded-xl hover:brightness-90 transition-colors">
                                         Agregar al carrito
                                     </button>
 
@@ -253,29 +278,32 @@ export default function ProductDetail({ item, data, params }) {
 
 
             </div>
-            <div className=" grid gap-8 md:grid-cols-2">
+            <div className=" grid gap-8 md:grid-cols-2 bg-white rounded-xl p-4 mt-12">
                 {/* Specifications Section */}
                 <div>
-                    <h2 className="text-2xl font-semibold mb-4">Especificaciones</h2>
+                    <h2 className="text-2xl font-semibold mb-4 border-b-4 pb-4">Especificaciones</h2>
                     <div className="space-y-1">
-                        {specifications.map((spec, index) => (
-                            <div key={index} className={`grid grid-cols-2 gap-4 p-4 ${index % 2 === 0 ? "bg-gray-50" : "bg-white"}`}>
-                                <div className="text-gray-600">{spec.label}</div>
-                                <div>{spec.value}</div>
-                            </div>
-                        ))}
+                        {item.specifications.map((spec, index) =>
+                            spec.type === "general" && (
+                                <div key={index} className={`grid grid-cols-2 gap-4 p-4 ${index % 2 === 0 ? "bg-gray-50" : "bg-white"}`}>
+                                    <div className="text-gray-600">{spec.title}</div>
+                                    <div>{spec.description}</div>
+                                </div>
+                            )
+                        )}
+
                     </div>
                 </div>
 
                 {/* Additional Information Section */}
                 <div>
-                    <h2 className="text-2xl font-semibold mb-4">Información adicional</h2>
-                    <div className="space-y-6">
+                    <h2 className="text-2xl font-semibold mb-4 border-b-4 pb-4">Información adicional</h2>
+                    <div className={`space-y-6 ${!isExpanded ? "max-h-[400px] overflow-hidden" : ''}`}>
                         <h3 className="text-xl font-medium">Acerca de este artículo</h3>
                         <div dangerouslySetInnerHTML={{ __html: item.description }} >
 
                         </div>
-                        <div className={`space-y-4 ${!isExpanded && "max-h-[400px] overflow-hidden"}`}>
+                        <div className={`space-y-4 `}>
                             <ul className="list-disc pl-5 space-y-4">
                                 {features.map((feature, index) => (
                                     <li key={index} className="text-gray-600">
@@ -284,11 +312,12 @@ export default function ProductDetail({ item, data, params }) {
                                 ))}
                             </ul>
                         </div>
-                        <botton variant="ghost" className="flex items-center gap-2" onClick={() => setIsExpanded(!isExpanded)}>
-                            Ver más
-                            <ChevronDown className={`transform transition-transform ${isExpanded ? "rotate-180" : ""}`} />
-                        </botton>
+
                     </div>
+                    <botton variant="ghost" className="border-2 border-primary w-max px-4 py-2  my-4  rounded-xl flex items-center gap-2 customtext-primary font-semibold cursor-pointer" onClick={() => setIsExpanded(!isExpanded)}>
+                        Ver más
+                        <ChevronDown className={`transform transition-transform ${isExpanded ? "rotate-180" : ""}`} />
+                    </botton>
                 </div>
             </div>
         </div>

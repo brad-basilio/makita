@@ -57,7 +57,7 @@ const ProductInfinite = ({ items, data, setCart, cart }) => {
                     <a
 
                         href={data.link_catalog}
-                        className="bg-primary text-white border-2 border-none flex flex-row items-center gap-3 px-3 md:px-6 py-3 text-base rounded-lg tracking-wide font-bold"
+                        className="bg-primary transition-all duration-300 text-white border-2 border-none flex flex-row items-center gap-3 px-3 md:px-6 py-3 text-base rounded-lg tracking-wide font-bold cursor-pointer hover:brightness-90"
                     >
                         Ver todos
                         <Tag width={"1rem"} className="rotate-90" />

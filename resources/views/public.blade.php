@@ -11,7 +11,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{{ $data['name'] ?? 'Página' }} | {{ env('APP_NAME', 'Kaori') }}</title>
+    <title>{{ $data['name'] ?? 'Página' }} | {{ env('APP_NAME', 'Stech Perú') }}</title>
 
     <link rel="shortcut icon" href="/assets/resources/icon.png?v={{ uniqid() }}" type="image/png">
     @isset($data['description'])

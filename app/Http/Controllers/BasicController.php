@@ -77,6 +77,7 @@ class BasicController extends Controller
 
   public function reactView(Request $request)
   {
+
     if (Auth::check()) Auth::user()->getAllPermissions();
 
     $properties = [
@@ -128,12 +129,14 @@ class BasicController extends Controller
           $instance->whereNotNull($this->prefix4filter ? $this->prefix4filter . '.status' : 'status');
         }
       }
-
+      dump('Filtros recibidos:',  $request->filter);
       if ($request->filter) {
         $instance->where(function ($query) use ($request) {
           dxDataGrid::filter($query, $request->filter ?? [], false, $this->prefix4filter);
         });
+        dump('Consulta SQL:', [$instance->toSql(), $instance->getBindings()]);
       }
+
 
       if ($request->group == null) {
         if ($request->sort != null) {

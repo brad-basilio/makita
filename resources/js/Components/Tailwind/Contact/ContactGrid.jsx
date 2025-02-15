@@ -1,66 +1,100 @@
 import { Mail, Phone, Building2, Store } from "lucide-react"
-import { useState } from "react"
+import { useRef, useState } from "react"
+import MessagesRest from "../../../Actions/MessagesRest"
+import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api"
+import Global from "../../../Utils/Global"
+const messagesRest = new MessagesRest()
 
-const ContactGrid = () => {
-    const [formData, setFormData] = useState({
-        name: "",
-        email: "",
-        message: "",
-    })
-    const handleSubmit = (e) => {
+const ContactGrid = ({ data, contacts }) => {
+    console.log(contacts)
+    const getContact = (correlative) => {
+        return contacts.find(contact => contact.correlative === correlative)?.description || 'No disponible';
+    };
+    const nameRef = useRef()
+
+    const emailRef = useRef()
+    const descriptionRef = useRef()
+
+    const [sending, setSending] = useState(false)
+
+    const onSubmit = async (e) => {
         e.preventDefault()
-        // Aquí iría la lógica para enviar el formulario
-        console.log("Form submitted:", formData)
-    }
+        if (sending) return
+        setSending(true)
 
-    const handleChange = (e) => {
-        const { name, value } = e.target
-        setFormData((prev) => ({
-            ...prev,
-            [name]: value,
-        }))
+        const request = {
+            name: nameRef.current.value,
+
+            email: emailRef.current.value,
+            description: descriptionRef.current.value
+        }
+
+        const result = await messagesRest.save(request);
+        setSending(false)
+
+        if (!result) return
+
+        Swal.fire({
+            icon: 'success',
+            title: 'Mensaje enviado',
+            text: 'Tu mensaje ha sido enviado correctamente. ¡Nos pondremos en contacto contigo pronto!',
+            showConfirmButton: false,
+            timer: 3000
+        })
+
+        if (data.redirect) {
+            location.href = data.redirect
+        }
+
+        nameRef.current.value = null
+
+        emailRef.current.value = null
+        descriptionRef.current.value = null
     }
     return (
 
-        <section section className="container mx-auto px-4" >
-            <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12">
+        <section section className=" bg-[#F7F9FB] py-12 px-primary" >
+            <div className=" mx-auto  flex gap-12 bg-white rounded-xl px-8 py-8">
                 {/* Contact Form */}
-                <div>
-                    <h2 className="text-3xl font-bold mb-4">Hablemos Hoy</h2>
-                    <p className="text-gray-600 mb-8">
+                <div className="w-10/12">
+                    <h2 className="text-3xl font-bold mb-4 customtext-neutral-dark">Hablemos Hoy</h2>
+                    <p className="customtext-neutral-light mb-8">
                         Etiam ultricies sapien mauris, a consectetur sapien posuere eu. Sed ac faucibus lorem. Integer sit amet
                         tempus sapien.
                     </p>
 
-                    <form onSubmit={handleSubmit} className="space-y-6">
+                    <form onSubmit={onSubmit} className="space-y-6">
                         <div>
                             <input
+                                ref={nameRef}
+                                disabled={sending}
                                 type="text"
                                 name="name"
                                 placeholder="Nombre completo"
-                                value={formData.name}
-                                onChange={handleChange}
+
                                 className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
                                 required
                             />
                         </div>
                         <div>
                             <input
+                                ref={emailRef}
+                                disabled={sending}
                                 type="email"
                                 name="email"
                                 placeholder="Correo Electrónico"
-                                value={formData.email}
-                                onChange={handleChange}
+
                                 className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
                                 required
                             />
                         </div>
                         <div>
                             <textarea
+                                ref={descriptionRef}
+                                disabled={sending}
                                 name="message"
                                 placeholder="Deja tu mensaje..."
-                                value={formData.message}
-                                onChange={handleChange}
+
                                 rows="6"
                                 className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none resize-none"
                                 required
@@ -68,7 +102,7 @@ const ContactGrid = () => {
                         </div>
                         <button
                             type="submit"
-                            className="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-colors"
+                            className="bg-primary text-base font-bold text-white px-6 py-3 rounded-xl hover:brightness-90 transition-all"
                         >
                             Enviar mensaje
                         </button>
@@ -77,48 +111,63 @@ const ContactGrid = () => {
 
                 {/* Contact Information */}
                 <div className="space-y-8">
-                    <div className="bg-white p-6 rounded-lg shadow-sm">
-                        <div className="flex items-center gap-3 text-blue-500 mb-2">
+                    <div className="bg-[#F7F9FB] p-6 rounded-xl shadow-lg">
+                        <div className="flex items-center gap-3 customtext-primary mb-2">
                             <Mail className="w-5 h-5" />
-                            <h3 className="font-medium">Email</h3>
+                            <h3 className=" customtext-neutral-dark font-bold text-lg">Email</h3>
                         </div>
-                        <p className="text-gray-600 mb-2">Escríbenos para recibir atención personalizada y resolver tus dudas.</p>
-                        <a href="mailto:hola@mail.com" className="text-blue-500 hover:underline">
-                            hola@mail.com
+                        <p className="customtext-neutral-light mb-2">Escríbenos para recibir atención personalizada y resolver tus dudas.</p>
+                        <a href="mailto:{getContact('email_contact')}" className="customtext-primary font-bold hover:no-underline">
+                            {getContact('email_contact')}
                         </a>
                     </div>
 
-                    <div className="bg-white p-6 rounded-lg shadow-sm">
-                        <div className="flex items-center gap-3 text-blue-500 mb-2">
+                    <div className="bg-[#F7F9FB] p-6 rounded-xl shadow-lg">
+                        <div className="flex items-center gap-3 customtext-primary mb-2">
                             <Phone className="w-5 h-5" />
-                            <h3 className="font-medium">Teléfono</h3>
+                            <h3 className="customtext-neutral-dark font-bold text-lg">Teléfono</h3>
                         </div>
-                        <p className="text-gray-600 mb-2">Llámanos para obtener soporte inmediato y asistencia profesional.</p>
-                        <a href="tel:+51987456324" className="text-blue-500 hover:underline">
-                            +51 987 456 324
+                        <p className="customtext-neutral-light mb-2">Llámanos para obtener soporte inmediato y asistencia profesional.</p>
+                        <a href="tel:+51987456324" className="customtext-primary hover:no-underline font-bold">
+                            {getContact('phone_contact')}
                         </a>
                     </div>
 
-                    <div className="bg-white p-6 rounded-lg shadow-sm">
-                        <div className="flex items-center gap-3 text-blue-500 mb-2">
+                    <div className="bg-[#F7F9FB] p-6 rounded-xl shadow-lg">
+                        <div className="flex items-center gap-3 customtext-primary mb-2">
                             <Building2 className="w-5 h-5" />
-                            <h3 className="font-medium">Oficinas</h3>
+                            <h3 className="customtext-neutral-dark font-bold text-lg">Oficinas</h3>
                         </div>
-                        <p className="text-gray-600 mb-2">
+                        <p className="customtext-neutral-light mb-2">
                             Visítanos en nuestra oficina para conocer nuestras soluciones de tratamiento en persona.
                         </p>
-                        <p className="text-blue-500">Av. Honorio Delgado 224 - San Martín de Porres - Lima</p>
+                        <p className="customtext-primary font-bold"> {getContact('address')}</p>
                     </div>
 
-                    <div className="bg-white p-6 rounded-lg shadow-sm">
-                        <div className="flex items-center gap-3 text-blue-500 mb-2">
+                    <div className="bg-[#F7F9FB] p-6 rounded-xl shadow-lg">
+                        <div className="flex items-center gap-3 customtext-primary mb-2">
                             <Store className="w-5 h-5" />
-                            <h3 className="font-medium">Tiendaa</h3>
+                            <h3 className="customtext-neutral-dark font-bold text-lg">Tienda</h3>
                         </div>
-                        <p className="text-blue-500">Av. Argentina 460 – Cercado de Lima - Lima, CC Malvitec Tienda H31</p>
+                        <p className="customtext-primary font-bold"> {getContact('address')}</p>
                     </div>
                 </div>
+
+
             </div>
+            <div className="mx-auto   gap-12 bg-white rounded-xl px-8 py-8">
+                <LoadScript googleMapsApiKey={Global.GMAPS_API_KEY} className="rounded-xl">
+                    <GoogleMap
+                        mapContainerStyle={{ width: '100%', height: '400px' }}
+                        zoom={10}
+
+                    >
+                        <Marker position={getContact('location')} />
+                    </GoogleMap>
+                </LoadScript>
+
+            </div>
+
         </section >
     )
 }

@@ -4,7 +4,8 @@ import CategoryFilter from "./Components/CategoryFilter"
 import DateFilter from "./Components/DateFilter"
 
 
-export default function BlogHeader() {
+export default function BlogHeader({ headerPosts }) {
+
     return (
         <main className="min-h-screen bg-white">
             {/* Hero Section */}
@@ -39,33 +40,25 @@ export default function BlogHeader() {
                 </div>
 
                 {/* Featured Posts */}
-                <div className="mt-12 grid md:grid-cols-2 gap-8">
-                    <BlogPostCard
-                        featured
-                        image="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Frame%20186-bYgd7YkTPH7WCN2neUI17oobpBLJtv.png"
-                        category="Tecnología"
-                        title="Phasellus vestibulum, lacus sed dictum"
-                        description="Praesent non euismod arcu, eu dignissim erat. Aliquam erat volutpat..."
-                        date="29 de julio de 2023"
-                        readTime="5 min"
-                    />
-                    <div className="space-y-8">
+                <div className="mt-12 flex gap-8 ">
+                    <div className="w-1/2">
+
                         <BlogPostCard
-                            image="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Frame%20186-bYgd7YkTPH7WCN2neUI17oobpBLJtv.png"
-                            category="Gadgets"
-                            title="Phasellus vestibulum, lacus sed dictum"
-                            description="Praesent non euismod arcu, eu dignissim erat. Aliquam erat volutpat..."
-                            date="29 de julio de 2023"
-                            readTime="5 min"
+                            featured
+                            post={headerPosts[0]}
+
                         />
-                        <BlogPostCard
-                            image="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Frame%20186-bYgd7YkTPH7WCN2neUI17oobpBLJtv.png"
-                            category="Software"
-                            title="Phasellus vestibulum, lacus sed dictum"
-                            description="Praesent non euismod arcu, eu dignissim erat. Aliquam erat volutpat..."
-                            date="29 de julio de 2023"
-                            readTime="5 min"
-                        />
+
+                    </div>
+                    <div className="space-y-4 flex flex-col w-1/2">
+                        {headerPosts.slice(1, 3).map((post) => (
+                            <BlogPostCard
+                                flex
+                                key={post.id}
+                                post={post}
+                            />
+
+                        ))}
                     </div>
                 </div>
             </section>

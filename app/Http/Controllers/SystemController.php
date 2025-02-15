@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Faq;
 use App\Models\General;
+use App\Models\Post;
 use App\Models\System;
 use App\Models\SystemColor;
 use Illuminate\Http\Request;
@@ -120,7 +122,7 @@ class SystemController extends BasicController
         $props['filteredData'] = [];
         $props['generals'] = General::whereIn('correlative', $generals)->get();
 
-        foreach ($page['using'] as $key => $using) {
+        /*  foreach ($page['using'] as $key => $using) {
             $model = $using['model'] ?? null;
             $field = $using['field'] ?? null;
             $value = $request->$key ?? null;
@@ -149,7 +151,38 @@ class SystemController extends BasicController
             ["label" => "S/ 2.000 - S/ 5.000", "min" => 2000, "max" => 5000],
             ["label" => "Desde S/ 5.000", "min" => 5000, "max" => null]
         ];
+        $props['contacts'] = General::where('status', true)->get();
+        $props['faqs'] = Faq::where('status', true)->get();
+        $props['headerPosts'] = Post::where('status', true)->latest()->take(3)->get();
+        $props['posts'] = Post::where('status', true)->get();
+*/
+        // Procesar el campo 'using'
+        foreach ($page['using'] as $key => $using) {
+            $model = $using['model'] ?? null;
+            $field = $using['field'] ?? null;
+            $value = $request->$key ?? null;
+            $relations = $using['relations'] ?? [];
 
+            if ($model && $field && $value) {
+                // Cargar un registro específico
+                $class = 'App\\Models\\' . $model;
+                $result = $class::with($relations)
+                    ->where($field, $value)
+                    ->first();
+                $props['filteredData'][$model] = $result;
+            } elseif ($model) {
+                // Cargar todos los registros
+                $class = 'App\\Models\\' . $model;
+                $query = $class::select($using['fields'] ?? ['*']);
+                if (isset($using['relations'])) {
+                    $query->with($using['relations']);
+                }
+                $props['filteredData'][$key] = $query->get();
+            } elseif (isset($using['static'])) {
+                // Datos estáticos
+                $props['filteredData'][$key] = $using['static'];
+            }
+        }
 
         return $props;
     }

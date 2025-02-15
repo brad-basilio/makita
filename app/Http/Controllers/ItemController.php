@@ -50,29 +50,29 @@ class ItemController extends BasicController
             ->leftJoin('item_tags AS item_tag', 'item_tag.item_id', 'items.id')
             ->where('items.status', true)
             ->where('items.visible', true)
-            ->where(function($query) {
+            ->where(function ($query) {
                 $query->where('category.status', true)
-                      ->orWhereNull('category.id'); // Ignorar si es null
+                    ->orWhereNull('category.id'); // Ignorar si es null
             })
-            ->where(function($query) {
+            ->where(function ($query) {
                 $query->where('category.visible', true)
-                      ->orWhereNull('category.id'); // Ignorar si es null
+                    ->orWhereNull('category.id'); // Ignorar si es null
             })
-            ->where(function($query) {
+            ->where(function ($query) {
                 $query->where('subcategory.status', true)
-                      ->orWhereNull('subcategory.id'); // Ignorar si es null
+                    ->orWhereNull('subcategory.id'); // Ignorar si es null
             })
-            ->where(function($query) {
+            ->where(function ($query) {
                 $query->where('subcategory.visible', true)
-                      ->orWhereNull('subcategory.id'); // Ignorar si es null
+                    ->orWhereNull('subcategory.id'); // Ignorar si es null
             })
-            ->where(function($query) {
+            ->where(function ($query) {
                 $query->where('brand.status', true)
-                      ->orWhereNull('brand.id'); // Ignorar si es null
+                    ->orWhereNull('brand.id'); // Ignorar si es null
             })
-            ->where(function($query) {
+            ->where(function ($query) {
                 $query->where('brand.visible', true)
-                      ->orWhereNull('brand.id'); // Ignorar si es null
+                    ->orWhereNull('brand.id'); // Ignorar si es null
             });
     }
 

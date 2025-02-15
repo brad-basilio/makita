@@ -91,6 +91,7 @@ const Menu = ({ session, hasRole }) => {
               <MenuItem href="/admin/banners" icon='mdi mdi-post-outline'>Banners</MenuItem>
               <MenuItem href="/admin/sliders" icon='mdi mdi-page-layout-body'>Sliders</MenuItem>
               {/* <MenuItem href="/admin/strengths" icon='mdi mdi-arm-flex'>Valores</MenuItem> */}
+              <MenuItem href="/admin/faqs" icon='mdi mdi-forum'>Preguntas Frecuentes</MenuItem>
               <MenuItem href="/admin/testimonies" icon='mdi mdi-forum'>Testimonios</MenuItem>
               <MenuItem href="/admin/socials" icon='mdi mdi-web'>Redes Sociales</MenuItem>
               <li className='menu-title'>Recursos</li>

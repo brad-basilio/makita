@@ -1,19 +1,7 @@
 import BlogPostCard from "./Components/BlogPostCard"
 
 
-export default function BlogList() {
-    const posts = [
-        {
-            image:
-                "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Frame%201618873187-W3Ut10SBptMaOa0xxnFRvwoWWx9q8F.png",
-            category: "Tecnología",
-            title: "Phasellus vestibulum, lacus sed dictum",
-            description: "Praesent non euismod arcu, eu dignissim erat. Aliquam erat volutpat...",
-            date: "29 de julio de 2023",
-            readTime: "5 min",
-        },
-        // Agrega más posts aquí
-    ]
+export default function BlogList({ posts }) {
 
     return (
         <section className="px-4 py-16 md:px-6 lg:px-8 bg-gray-50">
@@ -24,7 +12,7 @@ export default function BlogList() {
                 </p>
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {posts.map((post, index) => (
-                        <BlogPostCard key={index} {...post} />
+                        <BlogPostCard key={index} post={post} />
                     ))}
                 </div>
             </div>

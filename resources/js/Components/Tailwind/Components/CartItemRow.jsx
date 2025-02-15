@@ -60,9 +60,9 @@ const CartItemRow = ({ setCart, ...item }) => {
       <p className="font-semibold w-full text-end">
         {
           item?.discount > 0 &&
-          <span className="block text-xs line-through -mb-1">{Number2Currency(item?.discount)}</span>
+          <span className="block text-xs line-through -mb-1">{Number2Currency(item?.price)}</span>
         }
-        S/. {Number2Currency(item?.price)}
+        S/. {Number2Currency(item?.final_price)}
       </p>
       <Tippy content='Quitar'>
         <button type="button" onClick={() => onDeleteClicked(item?.id)} className="w-max h-6 flex justify-center items-center ms-auto">
