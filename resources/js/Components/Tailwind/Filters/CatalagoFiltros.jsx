@@ -21,7 +21,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
     const [selectedFilters, setSelectedFilters] = useState({
         category_id: [], // Array para múltiples categorías
         brand_id: [],    // Array para múltiples marcas
-
+        subcategory_id: [],
         price: null,
         sort_by: 'created_at',
         order: 'desc',
@@ -42,7 +42,11 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
             const categoryConditions = filters.category_id.map((id) => ['category_id', '=', id]);
             transformedFilters.push(['or', ...categoryConditions]);
         }
-
+        //subcategorias
+        if (filters.subcategory_id.length > 0) {
+            const subcategoryConditions = filters.subcategory_id.map((id) => ['subcategory_id', '=', id]);
+            transformedFilters.push(['and', ...subcategoryConditions]);
+        }
         // Marcas
         if (filters.brand_id.length > 0) {
             const brandConditions = filters.brand_id.map((id) => ['brand_id', '=', id]);
@@ -59,7 +63,6 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                 ],
             ]);
         }
-
         return transformedFilters;
     };
     // Obtener productos filtrados desde el backend
@@ -73,8 +76,9 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
 
             const params = {
                 filter: filters, // Envía los filtros transformados
-                page,
-                take: 20, // Número de productos por página
+                sort: selectedFilters.sort, // Enviar el parámetro de ordenación
+                // page,
+                // take: 20, // Número de productos por página
             };
 
             console.log(params)
@@ -85,6 +89,8 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                 currentPage: response.currentPage,
                 totalPages: response.lastPage,
             });
+
+
         } catch (error) {
             console.error('Error fetching products:', error);
         } finally {
@@ -227,20 +233,25 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                         <span>Productos seleccionados: <strong>{products?.length}</strong></span>
                         {/* Ordenación */}
                         <select
-                            value={selectedFilters.sort_by + ':' + selectedFilters.order}
+                            className="border p-2 rounded"
                             onChange={(e) => {
-                                const [sort_by, order] = e.target.value.split(':');
+                                const [selector, order] = e.target.value.split(':');
+                                const sort = [
+                                    {
+                                        selector: selector,
+                                        desc: order === 'desc',
+                                    },
+                                ];
                                 setSelectedFilters((prev) => ({
                                     ...prev,
-                                    sort_by,
-                                    order,
+                                    sort,
                                 }));
                             }}
                         >
                             <option value="created_at:desc">Más reciente</option>
                             <option value="created_at:asc">Más antiguo</option>
-                            <option value="price:asc">Precio: Menor a mayor</option>
-                            <option value="price:desc">Precio: Mayor a menor</option>
+                            <option value="final_price:asc">Precio: Menor a mayor</option>
+                            <option value="final_price:desc">Precio: Mayor a menor</option>
                             <option value="name:asc">Nombre: A-Z</option>
                             <option value="name:desc">Nombre: Z-A</option>
                         </select>
@@ -344,25 +355,27 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                                                     className="h-4 w-4 rounded border-gray-300"
 
                                                     onChange={() => handleFilterChange("category_id", category.id)}
-                                                // checked={categories.includes(category.slug)} // <-- Agregado
+                                                    checked={selectedFilters.category_id?.includes(category.id)}  // <-- Agregado
                                                 />
                                                 <span>{category.name}</span>
                                             </label>
-                                            {categories.includes(category.id) && (
+
+                                            {/* Mostrar subcategorías si la categoría está seleccionada */}
+                                            {selectedFilters.category_id?.includes(category.id) && category.subcategories?.length > 0 && (
                                                 <ul className="ml-6 mt-2 space-y-2">
                                                     {category.subcategories.map((sub) => (
                                                         <label key={sub.id} className="flex items-center space-x-3">
                                                             <input
                                                                 type="checkbox"
                                                                 className="h-4 w-4 rounded border-gray-300"
-                                                                onChange={() => handleFilterChange("subcategorias", sub.name)}
+                                                                onChange={() => handleFilterChange("subcategory_id", sub.id)} // <-- Corregido
+                                                                checked={selectedFilters.subcategory_id?.includes(sub.id)}
                                                             />
                                                             <span>{sub.name}</span>
                                                         </label>
                                                     ))}
                                                 </ul>
                                             )}
-
                                         </div>
 
                                     ))}
@@ -395,7 +408,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
 
 
                 </div>
-                {/* Paginación */}
+                {/* Paginación 
                 <div>
                     <button
                         disabled={pagination.currentPage === 1}
@@ -412,7 +425,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                     >
                         Siguiente
                     </button>
-                </div>
+                </div>*/}
             </div>
 
         </section >

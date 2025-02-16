@@ -134,7 +134,6 @@ class BasicController extends Controller
         $instance->where(function ($query) use ($request) {
           dxDataGrid::filter($query, $request->filter ?? [], false, $this->prefix4filter);
         });
-        dump('Consulta SQL:', [$instance->toSql(), $instance->getBindings()]);
       }
 
 

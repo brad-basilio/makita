@@ -5,10 +5,8 @@ const DynamicField = ({ label, structure, onChange, typeOptions = [] }) => {
 
     const handleAdd = () => {
         if (typeof structure === "object") {
-            // Especificaciones: Se agregan como objetos con valores vacíos
             setFields([...fields, { ...structure }]);
         } else {
-            // Características: Se agregan como strings vacíos
             setFields([...fields, ""]);
         }
     };
@@ -22,10 +20,8 @@ const DynamicField = ({ label, structure, onChange, typeOptions = [] }) => {
     const handleFieldChange = (index, key, value) => {
         const newFields = [...fields];
         if (typeof newFields[index] === "object") {
-            // Si es un objeto (especificaciones)
             newFields[index][key] = value;
         } else {
-            // Si es un string (características)
             newFields[index] = value;
         }
         setFields(newFields);
@@ -34,52 +30,57 @@ const DynamicField = ({ label, structure, onChange, typeOptions = [] }) => {
 
     return (
         <div className="mb-3">
-            <label>{label}</label>
-            {fields.map((field, index) => (
-                <div key={index} className="d-flex flex-column mb-2">
-                    {typeof field === "object" ? (
-                        // Para especificaciones (inputs con claves)
-                        Object.keys(structure).map((key) => (
-                            key === "type" ? (
-                                // Si el key es "type", mostrar un <select>
-                                <select
-                                    key={key}
-                                    className="form-control mb-1"
-                                    value={field[key]}
-                                    onChange={(e) => handleFieldChange(index, key, e.target.value)}
-                                >
-                                    <option value="">Seleccionar...</option>
-                                    {typeOptions.map((option) => (
-                                        <option key={option} value={option}>{option}</option>
-                                    ))}
-                                </select>
-                            ) : (
-                                // Para los demás campos, mostrar <input>
+            <label className="form-label">{label}</label>
+
+            {fields.map((field, index) => {
+                const isLastOdd = fields.length % 2 !== 0 && index === fields.length - 1;
+                return (
+                    <div key={index} className="row g-2 mb-2">
+                        {typeof field === "object" ? (
+                            Object.keys(structure).map((key) => (
+                                <div key={key} className={isLastOdd ? "col-9" : "col-6"}>
+                                    {key === "type" ? (
+                                        <select
+                                            className="form-select"
+                                            value={field[key]}
+                                            onChange={(e) => handleFieldChange(index, key, e.target.value)}
+                                        >
+                                            <option value="">Seleccionar...</option>
+                                            {typeOptions.map((option) => (
+                                                <option key={option} value={option}>{option}</option>
+                                            ))}
+                                        </select>
+                                    ) : (
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            value={field[key]}
+                                            onChange={(e) => handleFieldChange(index, key, e.target.value)}
+                                            placeholder={key}
+                                        />
+                                    )}
+                                </div>
+                            ))
+                        ) : (
+                            <div className={isLastOdd ? "col-9" : "col-6"}>
                                 <input
-                                    key={key}
                                     type="text"
-                                    className="form-control mb-1"
-                                    value={field[key]}
-                                    onChange={(e) => handleFieldChange(index, key, e.target.value)}
-                                    placeholder={key}
+                                    className="form-control"
+                                    value={field}
+                                    onChange={(e) => handleFieldChange(index, null, e.target.value)}
+                                    placeholder="Característica"
                                 />
-                            )
-                        ))
-                    ) : (
-                        // Para características (solo input de texto)
-                        <input
-                            type="text"
-                            className="form-control"
-                            value={field}
-                            onChange={(e) => handleFieldChange(index, null, e.target.value)}
-                            placeholder="Característica"
-                        />
-                    )}
-                    <button type="button" className="btn btn-danger" onClick={() => handleRemove(index)}>
-                        X
-                    </button>
-                </div>
-            ))}
+                            </div>
+                        )}
+                        <div className="col-3">
+                            <button type="button" className="btn btn-danger w-100" onClick={() => handleRemove(index)}>
+                                X
+                            </button>
+                        </div>
+                    </div>
+                );
+            })}
+
             <button type="button" className="btn btn-primary" onClick={handleAdd}>
                 + Agregar
             </button>

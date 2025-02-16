@@ -28,11 +28,6 @@ const Items = ({ categories, brands }) => {
 
   const [itemData, setItemData] = useState([]);
 
-
-
-
-
-
   const gridRef = useRef()
   const modalRef = useRef()
 
@@ -177,7 +172,6 @@ const Items = ({ categories, brands }) => {
       discount: discountRef.current.value,
       tags: $(tagsRef.current).val(),
       description: descriptionRef.current.value,
-
       sotck: stockRef.current.value,
       is_combo: isComboRef.current.checked ? 1 : 0,
 
@@ -219,9 +213,11 @@ const Items = ({ categories, brands }) => {
       formData.append('deleted_images', JSON.stringify(deletedImages)); // Imágenes eliminadas
     }
 
+    console.log(formData);
+
 
     const result = await itemsRest.save(formData)
-    if (!result) return
+    if (!result) return;
 
 
 

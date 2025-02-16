@@ -22,7 +22,7 @@ class ItemController extends BasicController
 {
     public $model = Item::class;
     public $reactView = 'Admin/Items';
-    public $imageFields = ['image'];
+    public $imageFields = ['image', 'banner'];
     public $prefix4filter = 'items';
 
     public function mediaGallery(Request $request, string $uuid)
@@ -48,11 +48,13 @@ class ItemController extends BasicController
             ]);
         }
     }
-
+    /*
     public function save(Request $request): HttpResponse|ResponseFactory
     {
 
+
         dump($request->all());
+
         DB::beginTransaction();
         try {
             // Validar los datos recibidos
@@ -150,7 +152,7 @@ class ItemController extends BasicController
             return response(['message' => 'Error al guardar el elemento: ' . $e->getMessage()], 500);
         }
     }
-
+*/
     public function setReactViewProperties(Request $request)
     {
         $categories = Category::all();
@@ -192,21 +194,34 @@ class ItemController extends BasicController
                     'tag_id' => $tagId
                 ]);
             }
-
-            // Manejo de la Galería de Imágenes
-            if ($request->hasFile('gallery')) {
-                foreach ($request->file('gallery') as $image) {
-                    $path = $image->store('gallery', 'public'); // Guarda en storage/app/public/gallery
-                    $jpa->images()->create(['path' => $path]); // Asocia la imagen al item
-                }
-            }
-            // ✅ ELIMINAR IMÁGENES MARCADAS
-            if ($request->has('deleted_images')) {
-                $deletedImages = json_decode($request->deleted_images, true);
-                if (!empty($deletedImages)) {
-                    \App\Models\ItemImage::whereIn('id', $deletedImages)->delete();
-                }
-            }
         });
+        if ($request->hasFile('gallery')) {
+            foreach ($request->file('gallery') as $file) {
+                if (!$file) continue;
+
+                $imageRequest = new Request();
+                $imageRequest->replace(['item_id' => $jpa->id]);
+                $imageRequest->files->set('url', $file);
+
+                (new ItemImageController())->save($imageRequest);
+            }
+        }
+
+        // Decodificar features y specifications
+        $features = json_decode($request->input('features'), true);
+        $specifications = json_decode($request->input('specifications'), true);
+
+        // Procesar features
+        if ($features && is_array($features)) {
+
+            (new ItemFeatureController())->saveFeatures($jpa, $features);
+        }
+
+        // Procesar specifications
+        if ($specifications && is_array($specifications)) {
+
+            // Guardar cada specification asociada al item
+            (new ItemSpecificationController())->saveSpecifications($jpa, $specifications);
+        }
     }
 }
