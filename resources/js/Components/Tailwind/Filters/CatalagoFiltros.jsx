@@ -71,9 +71,6 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
         try {
             // Transformar los filtros al formato esperado por el backend
             const filters = transformFilters(selectedFilters);
-
-
-
             const params = {
                 filter: filters, // Envía los filtros transformados
                 sort: selectedFilters.sort, // Enviar el parámetro de ordenación
@@ -81,9 +78,9 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                 // take: 20, // Número de productos por página
             };
 
-            console.log(params)
+
             const response = await itemsRest.paginate(params);
-            console.log(response);
+
             setProducts(response.data);
             setPagination({
                 currentPage: response.currentPage,

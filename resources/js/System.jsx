@@ -29,7 +29,7 @@ import AboutUs from './Components/Tailwind/AboutUs';
 
 const itemsRest = new ItemsRest();
 
-const System = ({ page, pages, params, filteredData = {}, systems, generals = [], systemItems = {}, contacts, faqs, headerPosts, posts }) => {
+const System = ({ page, pages, params, filteredData = {}, systems, generals = [], systemItems = {}, contacts, faqs, headerPosts, postsLatest }) => {
 
 
   const getItems = (itemsId) => {
@@ -97,7 +97,7 @@ const System = ({ page, pages, params, filteredData = {}, systems, generals = []
       case 'step':
         return <Step which={value} data={data} />
       case 'product-detail':
-        console.log(filteredData.Item)
+
         return <ProductDetail which={value} item={filteredData.Item} cart={cart} setCart={setCart} />
       case 'cart':
         return <Cart which={value} data={data} cart={cart} setCart={setCart} />
@@ -108,11 +108,11 @@ const System = ({ page, pages, params, filteredData = {}, systems, generals = []
       case 'faq':
         return <Faq which={value} data={data} faqs={faqs} />
       case 'blog':
-        return <Blog which={value} data={data} headerPosts={headerPosts} posts={posts} />
+        return <Blog which={value} data={data} headerPosts={headerPosts} postsLatest={postsLatest} filteredData={filteredData} />
       case 'post-detail':
         return <PostDetail which={value} data={data} />
       case 'about':
-        return <AboutUs which={value} data={data} />
+        return <AboutUs which={value} data={data} filteredData={filteredData} />
       case 'frame':
         return <Frame which={value} data={data} />
       case 'footer':

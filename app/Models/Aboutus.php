@@ -16,7 +16,9 @@ class Aboutus extends Model
     protected $fillable = [
         'correlative',
         'name',
+        'title',
         'description',
+        'image',
         'visible',
         'status'
     ];

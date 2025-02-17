@@ -1,7 +1,7 @@
 
 
-export default function BlogPostCard({ image, flex = false, post, featured = false }) {
-    console.log(post)
+export default function BlogPostCard({ flex = false, post, featured = false }) {
+
     return (
         <article className={`group relative ${featured ? "h-full" : ""}`}>
             <a href="#" className={`block ${flex && 'flex gap-4 '}`} >
@@ -14,7 +14,7 @@ export default function BlogPostCard({ image, flex = false, post, featured = fal
                     />
                 </div>
                 <div className={`mt-4 space-y-2 ${flex && 'w-1/2 mt-0 gap-6'}`} >
-                    <span className="customtext-primary font-medium">categoria</span>
+                    <span className="customtext-primary font-medium">{post?.category.name}</span>
                     <h3 className="text-xl font-semibold group-hover:customtext-primary">{post?.name}</h3>
                     <p className="text-gray-600 line-clamp-3">{post?.summary}</p>
                     <div className="flex items-center gap-2 text-sm text-gray-500">

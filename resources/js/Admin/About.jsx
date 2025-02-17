@@ -14,6 +14,9 @@ import InputFormGroup from '../Components/Adminto/form/InputFormGroup';
 import ArrayDetails2Object from '../Utils/ArrayDetails2Object';
 import CreateReactScript from '../Utils/CreateReactScript';
 import ReactAppend from '../Utils/ReactAppend';
+import { title } from 'framer-motion/client';
+import ImageFormGroup from '../Components/Adminto/form/ImageFormGroup';
+import QuillFormGroup from '../Components/Adminto/form/QuillFormGroup';
 
 const aboutusRest = new AboutusRest()
 const webDetailsRest = new WebDetailsRest()
@@ -27,6 +30,8 @@ const About = ({ details: detailsDB }) => {
   const idRef = useRef()
   const nameRef = useRef()
   const descriptionRef = useRef()
+  const titleRef = useRef()
+  const imageRef = useRef()
 
   const [isEditing, setIsEditing] = useState(false)
 
@@ -36,8 +41,10 @@ const About = ({ details: detailsDB }) => {
 
     idRef.current.value = data?.id ?? ''
     nameRef.current.value = data?.name ?? ''
-    descriptionRef.current.value = data?.description ?? ''
-
+    descriptionRef.editor.root.innerHTML = data?.description ?? ''
+    titleRef.current.value = data?.title ?? ''
+    imageRef.current.value = null
+    imageRef.image.src = `/api/aboutuses/media/${data?.image ?? 'undefined'}`
     $(modalRef.current).modal('show')
   }
 
@@ -48,9 +55,20 @@ const About = ({ details: detailsDB }) => {
       id: idRef.current.value || undefined,
       name: nameRef.current.value,
       description: descriptionRef.current.value,
+      title: titleRef.current.value,
     }
 
-    const result = await aboutusRest.save(request)
+    const formData = new FormData()
+    for (const key in request) {
+      formData.append(key, request[key])
+    }
+
+    const image = imageRef.current.files[0]
+    if (image) {
+      formData.append('image', image)
+    }
+
+    const result = await aboutusRest.save(formData)
     if (!result) return
 
     $(gridRef.current).dxDataGrid('instance').refresh()
@@ -135,7 +153,18 @@ const About = ({ details: detailsDB }) => {
         },
         {
           dataField: 'name',
+          caption: 'Sección',
+        },
+        {
+          dataField: 'title',
           caption: 'Titulo',
+        },
+        {
+          dataField: 'image',
+          caption: 'Imagen',
+          cellTemplate: (container, { data }) => {
+            ReactAppend(container, <img src={`/api/aboutuses/media/${data.image}`} style={{ width: '80px', height: '80px', objectFit: 'cover', objectPosition: 'center', borderRadius: '4px' }} onError={e => e.target.src = '/api/cover/thumbnail/null'} />)
+          }
         },
         {
           dataField: 'visible',
@@ -149,24 +178,7 @@ const About = ({ details: detailsDB }) => {
             })} />)
           }
         },
-        // {
-        //   dataField: 'status',
-        //   caption: 'Estado',
-        //   dataType: 'boolean',
-        //   cellTemplate: (container, { data }) => {
-        //     switch (data.status) {
-        //       case 1:
-        //         ReactAppend(container, <span className='badge bg-success rounded-pill'>Activo</span>)
-        //         break
-        //       case 0:
-        //         ReactAppend(container, <span className='badge bg-danger rounded-pill'>Inactivo</span>)
-        //         break
-        //       default:
-        //         ReactAppend(container, <span className='badge bg-dark rounded-pill'>Eliminado</span>)
-        //         break
-        //     }
-        //   }
-        // },
+
         {
           caption: 'Acciones',
           cellTemplate: (container, { data }) => {
@@ -176,22 +188,19 @@ const About = ({ details: detailsDB }) => {
               icon: 'fa fa-pen',
               onClick: () => onModalOpen(data)
             }))
-            // container.append(DxButton({
-            //   className: 'btn btn-xs btn-soft-danger',
-            //   title: 'Eliminar',
-            //   icon: 'fa fa-trash',
-            //   onClick: () => onDeleteClicked(data.id)
-            // }))
+
           },
           allowFiltering: false,
           allowExporting: false
         }
       ]} />
     <Modal modalRef={modalRef} title={isEditing ? 'Editar about' : 'Agregar about'} onSubmit={onModalSubmit} size='md'>
-      <div className='row' id='benefits-container'>
+      <div className='row' id='aboutuses-container'>
         <input ref={idRef} type='hidden' />
-        <InputFormGroup eRef={nameRef} label='Titulo' col='col-12' rows={2} required disabled />
-        <TextareaFormGroup eRef={descriptionRef} label='Descripción' rows={3} />
+        <InputFormGroup eRef={nameRef} label='Sección' col='col-12' rows={2} required disabled />
+        <InputFormGroup eRef={titleRef} label='Título' col='col-12' rows={2} />
+        <QuillFormGroup eRef={descriptionRef} label='Descripción' />
+        <ImageFormGroup eRef={imageRef} label='Imagen' col='col-12' rows={3} />
       </div>
     </Modal>
   </>

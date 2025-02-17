@@ -1,25 +1,29 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 
 
 
+const BlogSimple = React.lazy(() => import('./Blogs/BlogSimple'))
 
+const Blog = ({ data, which, headerPosts, filteredData, postsLatest }) => {
 
-const BlogHeader = React.lazy(() => import('./Blogs/BlogHeader'))
-const BlogList = React.lazy(() => import('./Blogs/BlogList'))
-
-const Blog = ({ data, which, items, generals = [], cart, setCart, pages, posts, headerPosts }) => {
   const getBlog = () => {
     switch (which) {
+      case 'BlogSimple':
+        return (
+          <BlogSimple
+            data={data}
+            headerPosts={headerPosts}
+            postsLatest={postsLatest}
+            filteredData={filteredData}
+          />
+        );
 
-      case 'BlogHeader':
-        return <BlogHeader data={data} headerPosts={headerPosts} />
-      case 'BlogList':
-        return <BlogList data={data} posts={posts} />
       default:
-        return <div className="w-full px-[5%] replace-max-w-here p-4 mx-auto">- No Hay componente <b>{which}</b> -</div>
+        return <div>No hay componente {which}</div>;
     }
-  }
-  return getBlog()
+  };
+
+  return getBlog();
 }
 
 export default Blog;

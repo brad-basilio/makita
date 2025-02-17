@@ -13,6 +13,7 @@ class StrengthController extends BasicController
 {
     public $model = Strength::class;
     public $reactView = 'Admin/Strength';
+    public $imageFields = ['image'];
 
     public function setReactViewProperties(Request $request)
     {

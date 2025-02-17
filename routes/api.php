@@ -67,6 +67,9 @@ Route::get('/item_images/media/{uuid}', [AdminItemImageController::class, 'media
 
 Route::get('/indicators/media/{uuid}', [AdminIndicatorController::class, 'media']);
 
+Route::get('/aboutuses/media/{uuid}', [AdminAboutusController::class, 'media']);
+Route::get('/strengths/media/{uuid}', [AdminStrengthController::class, 'media']);
+
 Route::post('/posts/paginate', [PostController::class, 'paginate']);
 Route::post('/items/paginate', [ItemController::class, 'paginate']);
 

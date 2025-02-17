@@ -109,7 +109,13 @@ class BasicController extends Controller
   {
     $response = new dxResponse();
     try {
-      $instance = $this->setPaginationInstance($this->model);
+
+      //$instance = $this->setPaginationInstance($this->model);
+      // Obtener los with desde el request (si no se envían, será un array vacío)
+      $withRelations = $request->has('with') ? explode(',', $request->with) : [];
+
+      // Aplicar with dinámicamente
+      $instance = $this->setPaginationInstance($this->model)->with($withRelations);
 
       if ($request->group != null) {
         [$grouping] = $request->group;
@@ -129,7 +135,7 @@ class BasicController extends Controller
           $instance->whereNotNull($this->prefix4filter ? $this->prefix4filter . '.status' : 'status');
         }
       }
-      dump('Filtros recibidos:',  $request->filter);
+
       if ($request->filter) {
         $instance->where(function ($query) use ($request) {
           dxDataGrid::filter($query, $request->filter ?? [], false, $this->prefix4filter);
@@ -146,8 +152,8 @@ class BasicController extends Controller
               $sorting['desc'] ? 'DESC' : 'ASC'
             );
           }
-        } else {
-          $instance->orderBy($this->prefix4filter ? $this->prefix4filter . '.id' : 'id', 'DESC');
+        } else { //MEJORAR IMPLMENTAR ASC O DESC DESDE EL REST, PARA MEJORARLO LA INTERACTIVIDAD CON OTRAS TABLAS
+          $instance->orderBy($this->prefix4filter ? $this->prefix4filter . '.id' : 'id', 'ASC');
         }
       }
 
@@ -203,8 +209,11 @@ class BasicController extends Controller
 
       $body = $this->beforeSave($request);
 
+
       $snake_case = Text::camelToSnakeCase(str_replace('App\\Models\\', '', $this->model));
+
       foreach ($this->imageFields as $field) {
+
         if (!$request->hasFile($field)) continue;
         $full = $request->file($field);
         $uuid = Crypto::randomUUID();

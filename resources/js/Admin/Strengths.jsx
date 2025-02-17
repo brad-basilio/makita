@@ -12,6 +12,7 @@ import Table from '../Components/Adminto/Table';
 import DxButton from '../Components/dx/DxButton';
 import CreateReactScript from '../Utils/CreateReactScript';
 import ReactAppend from '../Utils/ReactAppend';
+import ImageFormGroup from '../Components/Adminto/form/ImageFormGroup';
 
 const strengthsRest = new StrengthsRest()
 
@@ -24,6 +25,7 @@ const Strengths = ({ details }) => {
   const idRef = useRef()
   const nameRef = useRef()
   const descriptionRef = useRef()
+  const imageRef = useRef()
 
   const [isEditing, setIsEditing] = useState(false)
 
@@ -34,6 +36,9 @@ const Strengths = ({ details }) => {
     idRef.current.value = data?.id ?? ''
     nameRef.current.value = data?.name ?? ''
     descriptionRef.current.value = data?.description ?? ''
+
+    imageRef.current.value = null
+    imageRef.image.src = `/api/strengths/media/${data?.image ?? 'undefined'}`
 
     $(modalRef.current).modal('show')
   }
@@ -47,7 +52,17 @@ const Strengths = ({ details }) => {
       description: descriptionRef.current.value,
     }
 
-    const result = await strengthsRest.save(request)
+    const formData = new FormData()
+    for (const key in request) {
+      formData.append(key, request[key])
+    }
+
+    const image = imageRef.current.files[0]
+    if (image) {
+      formData.append('image', image)
+    }
+
+    const result = await strengthsRest.save(formData)
     if (!result) return
 
     $(gridRef.current).dxDataGrid('instance').refresh()
@@ -113,6 +128,13 @@ const Strengths = ({ details }) => {
           width: '50%',
         },
         {
+          dataField: 'image',
+          caption: 'Imagen',
+          cellTemplate: (container, { data }) => {
+            ReactAppend(container, <img src={`/api/strengths/media/${data.image}`} style={{ width: '80px', height: '80px', objectFit: 'cover', objectPosition: 'center', borderRadius: '4px' }} onError={e => e.target.src = '/api/cover/thumbnail/null'} />)
+          }
+        },
+        {
           dataField: 'visible',
           caption: 'Visible',
           dataType: 'boolean',
@@ -150,6 +172,7 @@ const Strengths = ({ details }) => {
         <input ref={idRef} type='hidden' />
         <InputFormGroup eRef={nameRef} label='Fortaleza' col='col-12' required />
         <TextareaFormGroup eRef={descriptionRef} label='Descripción' rows={3} />
+        <ImageFormGroup eRef={imageRef} label='Imagen' col='col-12' rows={3} />
       </div>
     </Modal>
   </>

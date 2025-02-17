@@ -151,11 +151,12 @@ class SystemController extends BasicController
             ["label" => "S/ 2.000 - S/ 5.000", "min" => 2000, "max" => 5000],
             ["label" => "Desde S/ 5.000", "min" => 5000, "max" => null]
         ];
-        $props['contacts'] = General::where('status', true)->get();
-        $props['faqs'] = Faq::where('status', true)->get();
+      
         $props['headerPosts'] = Post::where('status', true)->latest()->take(3)->get();
         $props['posts'] = Post::where('status', true)->get();
 */
+        $props['contacts'] = General::where('status', true)->get();
+        $props['faqs'] = Faq::where('status', true)->get();
         // Procesar el campo 'using'
         foreach ($page['using'] as $key => $using) {
             $model = $using['model'] ?? null;
@@ -183,7 +184,8 @@ class SystemController extends BasicController
                 $props['filteredData'][$key] = $using['static'];
             }
         }
-
+        $props['headerPosts'] = Post::with('category')->where('status', true)->latest()->take(3)->get();
+        $props['postsLatest'] = Post::with('category')->where('status', true)->latest()->take(6)->get();
         return $props;
     }
 }

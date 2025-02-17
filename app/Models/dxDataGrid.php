@@ -98,7 +98,6 @@ class dxDataGrid
                 case 'isnotnull':
                     $builder->whereNotNull($selector);
                     break;
-
                 default:
                     $builder->where($selector, $dxFilter[1], $dxFilter[2]);
                     break;

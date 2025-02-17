@@ -18,5 +18,6 @@ class Strength extends Model
         'description',
         'visible',
         'status',
+        'image',
     ];
 }

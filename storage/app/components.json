@@ -414,13 +414,8 @@
         "name": "Blogs",
         "options": [
             {
-                "id": "BlogHeader",
-                "name": "Header Simple",
-                "data": ["title"]
-            },
-            {
-                "id": "BlogList",
-                "name": "Lista Simple",
+                "id": "BlogSimple",
+                "name": "Blog Simple",
                 "data": ["title"]
             }
         ]
@@ -443,7 +438,10 @@
             {
                 "id": "AboutSimple",
                 "name": "Simple",
-                "data": ["title"]
+                "data": ["title"],
+                "using": {
+                    "model": "Aboutus"
+                }
             }
         ]
     },
