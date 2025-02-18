@@ -41,6 +41,15 @@ class User extends Authenticatable
         'summary',
         'description',
         'status',
+        'department',
+        'province',
+        'district',
+        'ubigeo',
+        'number',
+        'reference',
+        'alternate_phone'
+
+
     ];
 
     /**

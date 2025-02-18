@@ -47,6 +47,7 @@ class AuthController extends Controller
       }
     };
 
+
     if ($confirmation) {
       $userJpa = new User();
       try {

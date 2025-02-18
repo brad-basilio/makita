@@ -1,4 +1,18 @@
+import { processCulqiPayment } from "../../../../Functions/culqiPayment";
+
 export default function ShippingStep({ onContinue }) {
+    const handlePayment = async () => {
+        try {
+            const saleId = "ID_DE_LA_VENTA"; // Reemplázalo con el ID real de la venta
+            const total = 150; // Total de la compra
+            const email = "cliente@example.com"; // Email del cliente
+
+            const result = await processCulqiPayment(saleId, total, email);
+            alert("Pago exitoso: " + JSON.stringify(result));
+        } catch (error) {
+            alert("Error en el pago: " + error);
+        }
+    };
     return (
         <div className="grid lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2">

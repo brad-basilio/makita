@@ -16,6 +16,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
         precio: true,
         categoria: true,
         colores: false,
+
     });
 
     const [selectedFilters, setSelectedFilters] = useState({
@@ -23,6 +24,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
         brand_id: [],    // Array para múltiples marcas
         subcategory_id: [],
         price: null,
+        name: null,
         sort_by: 'created_at',
         order: 'desc',
     });
@@ -63,6 +65,11 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                 ],
             ]);
         }
+
+        // Búsqueda (asumiendo que se filtra por título o contenido)
+        if (filters.name) {
+            transformedFilters.push(["name", "contains", filters.name]);
+        }
         return transformedFilters;
     };
     // Obtener productos filtrados desde el backend
@@ -98,6 +105,34 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
     useEffect(() => {
         fetchProducts();
     }, [selectedFilters]);
+
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const categoriaParam = params.get("category");
+
+        if (categoriaParam) {
+            const category = categories.find(item => item.slug === categoriaParam); // Usa .find() en lugar de .filter()
+
+            if (category) {
+                setSelectedFilters((prev) => ({
+                    ...prev,
+                    category_id: [category.id], // Asegúrate de que `category.id` exista
+                }));
+            }
+        }
+
+        const searchParam = params.get("search");
+
+        if (searchParam) {
+
+            setSelectedFilters((prev) => ({
+                ...prev,
+                name: searchParam, // Asegúrate de que `category.id` exista
+            }));
+
+        }
+
+    }, [items]); // Agrega `items` como dependencia
 
     // Manejar cambios en los filtros
     const handleFilterChange = (type, value) => {

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Number2Currency from "../../../../Utils/Number2Currency";
 
 export default function CartStep({ items, onContinue }) {
@@ -7,7 +8,12 @@ export default function CartStep({ items, onContinue }) {
         return acc + (finalPrice * item.quantity); // Sumar el precio total por cantidad
     }, 0);
 
+
     const subTotal = (totalPrice * 100) / 118
+
+
+    const [envio, setEnvio] = useState(0);
+
     return (
         <div className="grid lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2">
@@ -66,11 +72,11 @@ export default function CartStep({ items, onContinue }) {
                 <div className="space-y-4">
                     <div className="flex justify-between">
                         <span className="text-gray-600">Subtotal</span>
-                        <span>S/ 1,344.00</span>
+                        <span>S/ {Number2Currency(totalPrice)}</span>
                     </div>
                     <div className="flex justify-between">
                         <span className="text-gray-600">Envío</span>
-                        <span>S/ 200.00</span>
+                        <span>S/ {envio}</span>
                     </div>
                     <div className="flex justify-between">
                         <span className="text-gray-600">IGV</span>
@@ -79,7 +85,7 @@ export default function CartStep({ items, onContinue }) {
                     <div className="pt-4 border-t">
                         <div className="flex justify-between font-medium">
                             <span>Total</span>
-                            <span>S/. {Number2Currency(totalPrice)}</span>
+                            <span>S/. {Number2Currency(totalPrice) + Number2Currency(envio)}</span>
                         </div>
                     </div>
                     <div className="space-y-2 pt-4">

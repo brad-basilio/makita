@@ -23,7 +23,7 @@ const MenuSimple = ({ pages = [], items }) => {
             <div className="px-primary mx-auto ">
                 <ul className="flex items-center gap-6 text-sm" ref={menuRef}>
                     <li className="relative py-3" >
-                        <button className="customtext-neutral-dark flex items-center gap-2 hover:customtext-primary  border-r-2 border-neutral-dark pr-6 transition-colors duration-300" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+                        <button className="customtext-neutral-dark flex items-center gap-2 hover:customtext-primary  pr-6 transition-colors duration-300 relative before:absolute before:right-0 before:top-1/2 before:-translate-y-1/2 before:h-3 before:w-[1px] before:bg-[#262624]" onClick={() => setIsMenuOpen(!isMenuOpen)}>
                             Categorias
                             {isMenuOpen ?
                                 <ChevronUp width={"1rem"} />
@@ -57,7 +57,7 @@ const MenuSimple = ({ pages = [], items }) => {
                     {pages.map((page, index) => (
                         page.menuable && ( // Simplified conditional rendering
                             <li key={index} className="py-3">
-                                <a href={page.path} className="hover:customtext-primary cursor-pointer transition-all duration-300 border-r-2 border-neutral-dark pr-6">
+                                <a href={page.path} className="hover:customtext-primary cursor-pointer transition-all duration-300 pr-6 relative before:absolute before:right-0 before:top-1/2 before:-translate-y-1/2 before:h-3 before:w-[1px] before:bg-[#262624]">
                                     {page.name}
                                 </a>
                             </li>

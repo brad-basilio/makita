@@ -446,6 +446,46 @@
         ]
     },
     {
+        "id": "login",
+        "name": "Login",
+        "options": [
+            {
+                "id": "LoginSimple",
+                "name": "Simple"
+            }
+        ]
+    },
+    {
+        "id": "signup",
+        "name": "Signup",
+        "options": [
+            {
+                "id": "SignupSimple",
+                "name": "Simple"
+            }
+        ]
+    },
+    {
+        "id": "forgot-password",
+        "name": "ForgotPassword",
+        "options": [
+            {
+                "id": "ForgotPasswordSimple",
+                "name": "Simple"
+            }
+        ]
+    },
+    {
+        "id": "reset-password",
+        "name": "ResetPassword",
+        "options": [
+            {
+                "id": "ResetPasswordSimple",
+                "name": "Simple"
+            }
+        ]
+    },
+    {
         "id": "footer",
         "name": "Footer",
         "options": [

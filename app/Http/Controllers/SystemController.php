@@ -10,6 +10,7 @@ use App\Models\Post;
 use App\Models\System;
 use App\Models\SystemColor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use SoDe\Extend\Crypto;
 use SoDe\Extend\File;
 use SoDe\Extend\JSON;
@@ -186,6 +187,9 @@ class SystemController extends BasicController
         }
         $props['headerPosts'] = Post::with('category')->where('status', true)->latest()->take(3)->get();
         $props['postsLatest'] = Post::with('category')->where('status', true)->latest()->take(6)->get();
+        // Verificar si hay una sesión activa
+        $props['isUser'] = Auth::user();
+
         return $props;
     }
 }

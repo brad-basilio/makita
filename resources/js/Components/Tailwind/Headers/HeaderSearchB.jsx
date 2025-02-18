@@ -1,17 +1,36 @@
 
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Global from "../../../Utils/Global";
-import { CircleUser, Search, ShoppingCart } from "lucide-react";
+import { CircleUser, DoorClosed, Search, ShoppingCart } from "lucide-react";
 import CartModal from "../Components/CartModal";
-
-const HeaderSearchB = ({ data, cart, setCart }) => {
+import AuthRest from '../../../Actions/AuthRest'
+import Logout from "../../../Actions/Logout";
+const HeaderSearchB = ({ data, cart, setCart, isUser }) => {
 
   const [modalOpen, setModalOpen] = useState(false)
 
   const totalCount = cart.reduce((acc, item) => {
     return Number(acc) + Number(item.quantity);
   }, 0);
+
+
+
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+
+  const menuRef = useRef(null)
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setIsOpen(false)
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => document.removeEventListener("mousedown", handleClickOutside)
+  }, [])
+  const [search, setSearch] = useState("");
   return (
     <header className="w-full">
       <div className="px-primary mx-auto py-4 font-font-secondary text-base font-semibold">
@@ -28,24 +47,55 @@ const HeaderSearchB = ({ data, cart, setCart }) => {
             <input
               type="search"
               placeholder="Buscar productos"
+              value={search} // Vincula el valor del input al estado
+              onChange={(e) => setSearch(e.target.value)} // Actualiza el estado cuando el usuario escribe
               className="w-full pr-14 py-4  pl-4 border rounded-full focus:ring-0 focus:outline-none"
             />
-            <button
+            <a
+              href={search.trim() ? `/catalogo?search=${encodeURIComponent(search)}` : "#"}
               className="absolute right-3 top-1/2 transform -translate-y-1/2 p-2 bg-primary text-white rounded-lg"
               aria-label="Buscar"
             >
               <Search />
-            </button>
+            </a>
           </div>
 
           {/* Account and Cart */}
-          <div className="flex items-center gap-4">
-            <a href="/account" className="hidden md:flex items-center gap-2 text-sm">
-              <div className="customtext-primary">
-                <CircleUser />
+          <div className="flex items-center gap-4 relative text-sm">
+            {isUser ? (
+              <button
+                className="customtext-neutral-dark flex items-center gap-2 hover:customtext-primary  pr-6 transition-colors duration-300"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+              >
+                <CircleUser className="customtext-primary" />
+                <span className="hidden md:inline">{isUser.name}</span>
+              </button>
+            ) : (
+              <a href="/iniciar-sesion" className="flex items-center gap-2 text-sm">
+                <CircleUser className="customtext-primary" />
+                <span className="hidden md:inline">Iniciar Sesión</span>
+              </a>
+            )}
+            {isMenuOpen && (
+              <div className="absolute z-50 top-full left-0 bg-white shadow-xl border-t rounded-xl transition-all duration-300 ease-in-out w-40 mt-2">
+                <div className="p-4">
+                  <ul className="space-y-2">
+                    <li>
+                      <a href="#" className="flex items-center gap-2 customtext-neutral-dark text-xs hover:customtext-primary transition-colors duration-300 cursor-pointer">
+                        <CircleUser className="customtext-primary" height="1rem" />
+                        <span>Mi cuenta</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#" onClick={Logout} className="flex items-center gap-2 customtext-neutral-dark text-xs hover:customtext-primary transition-colors duration-300 cursor-pointer">
+                        <DoorClosed className="customtext-primary" height="1rem" />
+                        <span>Cerrar sesión</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
               </div>
-              <span>Mi Cuenta</span>
-            </a>
+            )}
             <button onClick={() => setModalOpen(true)} className="flex items-center gap-2 text-sm relative">
               <div className="customtext-primary">
                 <ShoppingCart />

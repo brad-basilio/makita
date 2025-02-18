@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::table('items', function (Blueprint $table) {
             $table->string('sku')->nullable();
             $table->integer('stock')->default(0);
-            $table->boolean('is_combo')->default(false);
         });
     }
 

@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
 use App\Http\Controllers\Admin\AccountController as AdminAccountController;
 use App\Http\Controllers\Admin\BannerController as AdminBannerController;
 use App\Http\Controllers\Admin\BrandController as AdminBrandController;
+
 use App\Http\Controllers\Admin\DeliveryPriceController as AdminDeliveryPriceController;
 use App\Http\Controllers\Admin\GalleryController as AdminGalleryController;
 use App\Http\Controllers\Admin\ItemController as AdminItemController;
@@ -30,13 +31,15 @@ use App\Http\Controllers\Admin\WebDetailController as AdminWebDetailController;
 
 use App\Http\Controllers\Admin\ItemImageController as AdminItemImageController;
 use App\Http\Controllers\Admin\FaqController as AdminFaqController;
-
+use App\Http\Controllers\Admin\ComboController as AdminComboController;
+use App\Http\Controllers\AuthClientController;
 // Public
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CoverController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\SubscriptionController;
@@ -54,6 +57,13 @@ use App\Http\Controllers\SubscriptionController;
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/signup', [AuthController::class, 'signup']);
+
+Route::post('/login-client', [AuthClientController::class, 'login']);
+Route::post('/signup-client', [AuthClientController::class, 'signup']);
+Route::post('/forgot-password-client', [AuthClientController::class, 'forgotPassword']);
+Route::post('/reset-password-client', [AuthClientController::class, 'resetPassword']);
+
+
 Route::get('/banners/media/{uuid}', [AdminBannerController::class, 'media']);
 Route::get('/sliders/media/{uuid}', [AdminSliderController::class, 'media']);
 Route::get('/categories/media/{uuid}', [AdminCategoryController::class, 'media']);
@@ -83,6 +93,9 @@ Route::delete('/mailing/down/{id}', [SubscriptionController::class, 'delete'])->
 
 Route::post('/items/verify-stock', [ItemController::class, 'verifyStock']);
 
+Route::post('/pago', [PaymentController::class, 'charge']);
+Route::get('/pago/{sale_id}', [PaymentController::class, 'getPaymentStatus']);
+
 Route::middleware('auth')->group(function () {
   Route::delete('logout', [AuthController::class, 'destroy'])
     ->name('logout');
@@ -111,7 +124,12 @@ Route::middleware('auth')->group(function () {
 
     //Route::get('/items/filters', [AdminItemController::class, 'getFilters']);
 
-
+    Route::post('/combos', [AdminComboController::class, 'save']);
+    Route::post('/combos/paginate', [AdminComboController::class, 'paginate']);
+    Route::patch('/combos/status', [AdminComboController::class, 'status']);
+    Route::patch('/combos/{field}', [AdminComboController::class, 'boolean']);
+    Route::delete('/combos/{id}', [AdminComboController::class, 'delete']);
+    Route::get('/combos/{id}', [AdminComboController::class, 'show']);
 
 
 

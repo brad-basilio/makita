@@ -15,12 +15,19 @@ class Combo extends Model
     protected $keyType = 'string';
 
 
-    protected $fillable = ['name', 'visible', 'status'];
+    protected $fillable = ['name', 'price', 'discount', 'final_price', 'discount_percent', 'image', 'visible', 'status'];
 
     // Relación con los items que pertenecen al combo
     public function items()
     {
+        return $this->belongsToMany(Item::class, 'combo_items')->withPivot('is_main_item');
+    }
+
+
+
+    public function mainItem()
+    {
         return $this->belongsToMany(Item::class, 'combo_items')
-            ->withTimestamps();
+            ->wherePivot('is_main_item', true);
     }
 }

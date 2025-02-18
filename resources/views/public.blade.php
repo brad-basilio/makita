@@ -83,6 +83,10 @@
             .fill-{{ $color->name }} {
                 fill: {{ $color->description }};
             }
+
+            .before\:.bg-{{ $color->name }} {
+                background-color: {{ $color->description }};
+            }
         @endforeach
     </style>
 </head>

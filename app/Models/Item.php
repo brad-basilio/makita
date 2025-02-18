@@ -95,8 +95,8 @@ class Item extends Model
 
     public function combos()
     {
-        return $this->belongsToMany(Combo::class, 'combo_items')
-            ->withTimestamps();
+
+        return $this->belongsToMany(Combo::class, 'combo_items')->withPivot('is_main_item');
     }
 
     public function images()

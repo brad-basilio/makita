@@ -316,7 +316,7 @@ class BasicController extends Controller
     try {
       $deleted = $this->softDeletion
         ? $this->model::where('id', $id)
-        ->update(['status' => null])
+        ->update(['status' => false])
         : $this->model::where('id', $id)
         ->delete();
 

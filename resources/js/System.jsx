@@ -26,10 +26,14 @@ import Faq from './Components/Tailwind/Faq';
 import PostDetail from './Components/Tailwind/PostDetail';
 import Blog from './Components/Tailwind/Blog';
 import AboutUs from './Components/Tailwind/AboutUs';
+import Login from './Components/Tailwind/Login';
+import Signup from './Components/Tailwind/Signup';
+import ForgotPassword from './Components/Tailwind/ForgotPassword';
+import ResetPassword from './Components/Tailwind/ResetPassword';
 
 const itemsRest = new ItemsRest();
 
-const System = ({ page, pages, params, filteredData = {}, systems, generals = [], systemItems = {}, contacts, faqs, headerPosts, postsLatest }) => {
+const System = ({ page, isUser, pages, params, filteredData = {}, systems, generals = [], systemItems = {}, contacts, faqs, headerPosts, postsLatest }) => {
 
 
   const getItems = (itemsId) => {
@@ -65,7 +69,7 @@ const System = ({ page, pages, params, filteredData = {}, systems, generals = []
       case 'top_bar':
         return <TopBar data={data} which={value} items={getItems(itemsId)} />
       case 'header':
-        return <Header data={data} which={value} items={getItems(itemsId)} cart={cart} setCart={setCart} pages={pages} />
+        return <Header data={data} which={value} items={getItems(itemsId)} cart={cart} setCart={setCart} pages={pages} isUser={isUser} />
       case 'menu':
         return <Menu data={data} which={value} items={getItems(itemsId)} cart={cart} setCart={setCart} pages={pages} />
 
@@ -113,6 +117,14 @@ const System = ({ page, pages, params, filteredData = {}, systems, generals = []
         return <PostDetail which={value} data={data} />
       case 'about':
         return <AboutUs which={value} data={data} filteredData={filteredData} />
+      case 'login':
+        return <Login which={value} data={data} />
+      case 'signup':
+        return <Signup which={value} data={data} />
+      case 'forgot-password':
+        return <ForgotPassword which={value} data={data} />
+      case 'reset-password':
+        return <ResetPassword which={value} data={data} />
       case 'frame':
         return <Frame which={value} data={data} />
       case 'footer':

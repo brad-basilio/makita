@@ -15,7 +15,7 @@ class ComboItem extends Model
 
     protected $table = 'combo_items';
 
-    protected $fillable = ['combo_id', 'item_id', 'quantity'];
+    protected $fillable = ['combo_id', 'item_id', 'is_main_item'];
 
     public function combo()
     {
