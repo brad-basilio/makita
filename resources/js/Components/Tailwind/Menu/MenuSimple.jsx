@@ -12,7 +12,6 @@ const MenuSimple = ({ pages = [], items }) => {
                 setIsOpen(false)
             }
         }
-
         document.addEventListener("mousedown", handleClickOutside)
         return () => document.removeEventListener("mousedown", handleClickOutside)
     }, [])
