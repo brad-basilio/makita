@@ -26,9 +26,9 @@ const MenuSimple = ({ pages = [], items }) => {
                         <button className="customtext-neutral-dark flex items-center gap-2 hover:customtext-primary  pr-6 transition-colors duration-300 relative before:absolute before:right-0 before:top-1/2 before:-translate-y-1/2 before:h-3 before:w-[1px] before:bg-[#262624]" onClick={() => setIsMenuOpen(!isMenuOpen)}>
                             Categorias
                             {isMenuOpen ?
-                                <ChevronUp width={"1rem"} />
+                                <i class="mdi mdi-chevron-up"></i>
                                 :
-                                <ChevronDown width={"1rem"} />}
+                                <i class="mdi mdi-chevron-down"></i>}
                         </button>
                         {isMenuOpen && (
                             <div className="absolute z-50 top-12 left-0 bg-white shadow-xl border-t rounded-xl transition-all duration-500 ease-in-out min-w-[900px] w-auto ">
@@ -52,7 +52,6 @@ const MenuSimple = ({ pages = [], items }) => {
                                 </div>
                             </div>
                         )}
-
                     </li>
                     {pages.map((page, index) => (
                         page.menuable && ( // Simplified conditional rendering

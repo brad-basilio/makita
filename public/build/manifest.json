@@ -343,13 +343,6 @@
       "_createLucideIcon-D0vxYqnu.js"
     ]
   },
-  "_chevron-up-pTvdWUhf.js": {
-    "file": "assets/chevron-up-pTvdWUhf.js",
-    "name": "chevron-up",
-    "imports": [
-      "_createLucideIcon-D0vxYqnu.js"
-    ]
-  },
   "_createLucideIcon-D0vxYqnu.js": {
     "file": "assets/createLucideIcon-D0vxYqnu.js",
     "name": "createLucideIcon",
@@ -2864,7 +2857,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Menu.jsx": {
-    "file": "assets/Menu-BP8RH467.js",
+    "file": "assets/Menu-B5ru2vSa.js",
     "name": "Menu",
     "src": "resources/js/Components/Tailwind/Menu.jsx",
     "isEntry": true,
@@ -3355,7 +3348,7 @@
     ]
   },
   "resources/js/Courses.jsx": {
-    "file": "assets/Courses-DHSXLukB.js",
+    "file": "assets/Courses-ClTqgXYF.js",
     "name": "Courses",
     "src": "resources/js/Courses.jsx",
     "isEntry": true,
@@ -3369,7 +3362,7 @@
       "_ArrayJoin-D_Nev8Cd.js",
       "_CourseCard-DqqYZZQf.js",
       "resources/js/Components/Adminto/Basic/BasicEditing.jsx",
-      "_chevron-up-pTvdWUhf.js",
+      "_createLucideIcon-D0vxYqnu.js",
       "_chevron-down-CxOx8ByU.js",
       "_ArrayDetails2Object-DR0Igcn7.js",
       "_index-VLFqsz8m.js",
@@ -3381,8 +3374,7 @@
       "resources/js/Components/Tailwind/Base.jsx",
       "_preload-helper-DPi8upcZ.js",
       "_HtmlContent-CNWRwArS.js",
-      "_Number2Currency-e57Tgsuk.js",
-      "_createLucideIcon-D0vxYqnu.js"
+      "_Number2Currency-e57Tgsuk.js"
     ],
     "css": [
       "swiper.css",
@@ -3533,7 +3525,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-z0TcSQEi.js",
+    "file": "assets/System-D-H8_R6L.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,
