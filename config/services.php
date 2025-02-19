@@ -30,9 +30,14 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
+
     'culqi' => [
+        'api_url' => env(
+            'CULQI_API',
+            'https://api.culqi.com/v2'
+        ),
         'public_key' => env('CULQI_PUBLIC_KEY'),
-        'secret_key' => env('CULQI_SECRET_KEY'),
+        'secret_key' => env('CULQI_PRIVATE_KEY'),
     ],
 
 ];

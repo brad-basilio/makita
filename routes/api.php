@@ -37,12 +37,14 @@ use App\Http\Controllers\AuthClientController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CoverController;
+use App\Http\Controllers\DeliveryPriceController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\SubscriptionController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -62,6 +64,8 @@ Route::post('/login-client', [AuthClientController::class, 'login']);
 Route::post('/signup-client', [AuthClientController::class, 'signup']);
 Route::post('/forgot-password-client', [AuthClientController::class, 'forgotPassword']);
 Route::post('/reset-password-client', [AuthClientController::class, 'resetPassword']);
+
+Route::post('/delivery-prices', [DeliveryPriceController::class, 'getDeliveryPrice']);
 
 
 Route::get('/banners/media/{uuid}', [AdminBannerController::class, 'media']);

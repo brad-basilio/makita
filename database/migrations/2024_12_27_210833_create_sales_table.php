@@ -20,15 +20,15 @@ return new class extends Migration
             $table->string('lastname');
             $table->longText('fullname')->nullable();
             $table->longText('email');
-            $table->string('phone');
+            $table->string('phone')->nullable();
 
             $table->longText('country');
             $table->longText('department');
             $table->longText('province')->nullable();
             $table->longText('district')->nullable();
             $table->longText('ubigeo')->nullable();
-            $table->longText('address');
-            $table->longText('number');
+            $table->longText('address')->nullable();
+            $table->longText('number')->nullable();
             $table->longText('reference')->nullable();
 
             $table->longText('comment')->nullable();

@@ -106,7 +106,7 @@ const System = ({ page, isUser, pages, params, filteredData = {}, systems, gener
       case 'cart':
         return <Cart which={value} data={data} cart={cart} setCart={setCart} />
       case 'checkout':
-        return <Checkout which={value} cart={cart} setCart={setCart} />
+        return <Checkout which={value} cart={cart} setCart={setCart} isUser={isUser} />
       case 'contact':
         return <Contact which={value} data={data} contacts={contacts} />
       case 'faq':

@@ -2,65 +2,60 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Classes\EmailConfig;
+use App\Http\Services\ReCaptchaService;
+use App\Models\Constant;
 use App\Models\DeliveryPrice;
-use App\Http\Requests\StoreDeliveryPriceRequest;
-use App\Http\Requests\UpdateDeliveryPriceRequest;
+use App\Models\ModelHasRoles;
+use App\Models\User;
+use App\Models\Person;
+use App\Models\PreUser;
+use App\Models\SpecialtiesByUser;
+use App\Models\Specialty;
+use App\Providers\RouteServiceProvider;
+use Exception;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response as HttpResponse;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\View;
+use Inertia\Inertia;
+use SoDe\Extend\Crypto;
+use SoDe\Extend\JSON;
+use SoDe\Extend\Response;
+use SoDe\Extend\Trace;
+use Spatie\Permission\Models\Role;
 
-class DeliveryPriceController extends Controller
+class DeliveryPriceController extends BasicController
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreDeliveryPriceRequest $request)
+    public function getDeliveryPrice(Request $request): HttpResponse|ResponseFactory|RedirectResponse
     {
-        //
-    }
+        $response = Response::simpleTryCatch(function (Response $response) use ($request) {
+            // Verifica los datos recibidos
+            dump($request->all());
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(DeliveryPrice $deliveryPrice)
-    {
-        //
-    }
+            // Construye el nombre en el formato esperado por la base de datos
+            $name = "{$request->district}, {$request->department}";
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(DeliveryPrice $deliveryPrice)
-    {
-        //
-    }
+            // Busca el precio de envío en la base de datos
+            $price = DeliveryPrice::where('name', $name)->first();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateDeliveryPriceRequest $request, DeliveryPrice $deliveryPrice)
-    {
-        //
-    }
+            if ($price) {
+                // Si se encuentra el precio, devuelve los datos
+                $response->data = $price;
+                $response->status = 200;
+                $response->message = 'Operación Correcta. Precio de envío obtenido';
+            } else {
+                // Si no se encuentra, devuelve un error
+                $response->status = 400;
+                $response->message = 'Operación Incorrecta. No está registrado';
+            }
+        });
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(DeliveryPrice $deliveryPrice)
-    {
-        //
+        return response($response->toArray(), $response->status);
     }
 }
