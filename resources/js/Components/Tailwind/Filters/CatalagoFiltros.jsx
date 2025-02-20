@@ -82,7 +82,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                 filter: filters, // Envía los filtros transformados
                 sort: selectedFilters.sort, // Enviar el parámetro de ordenación
                 // page,
-                // take: 20, // Número de productos por página
+                take: 20, // Número de productos por página
             };
 
 

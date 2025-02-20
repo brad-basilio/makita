@@ -36,7 +36,7 @@ class Item extends Model
         'status',
         'sku',
         'stock',
-        'is_combo'
+
     ];
 
     static function getForeign(Builder $builder, string $model, $relation)

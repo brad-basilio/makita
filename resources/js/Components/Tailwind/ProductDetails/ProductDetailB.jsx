@@ -1,10 +1,12 @@
 
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { ShoppingCart, Store, Home, Phone, CircleUserRound, ChevronDown } from "lucide-react"
 
-export default function ProductDetail({ item, data, setCart, cart }) {
+import ItemsRest from "../../../Actions/ItemsRest";
 
+export default function ProductDetail({ item, data, setCart, cart }) {
+    const itemsRest = new ItemsRest()
     const [quantity, setQuantity] = useState("01")
 
 
@@ -50,7 +52,39 @@ export default function ProductDetail({ item, data, setCart, cart }) {
         })
     }
 
+    const [associatedItems, setAssociatedItems] = useState([])
     const inCart = cart?.find(x => x.id == item?.id)
+
+    useEffect(() => {
+        if (item?.id) {
+            obtenerCombo(item);
+        }
+    }, [item]); // Agregar `item` como dependencia
+
+    const obtenerCombo = async (item) => {
+        try {
+            // Preparar la solicitud
+            const request = {
+                id: item.id,
+            };
+
+            // Llamar al backend para verificar el combo
+            const response = await itemsRest.verifyCombo(request);
+
+            // Verificar si la respuesta es válida
+            if (!response) {
+                console.error('No se encontraron productos asociados.');
+                return;
+            }
+            // Actualizar el estado con los productos asociados
+            console.log('Productos asociados:', response);
+            //setAssociatedItems(response.data.associated_items);
+        } catch (error) {
+            console.error('Error al obtener el combo:', error.message);
+            // Mostrar un mensaje de error al usuario si es necesario
+        }
+    };
+
 
     return (
         <div className="px-primary mx-auto py-12 bg-[#F7F9FB] ">
@@ -79,7 +113,7 @@ export default function ProductDetail({ item, data, setCart, cart }) {
                                         className={`w-16 h-16 border rounded-lg p-2 ${selectedImage.url === image.url ? "border-blue-400" : "border-gray-200"}`}
                                     >
                                         <img
-                                            src={`/api/items/gallery/media/${image.url}`}
+                                            src={`/api/item_images/media/${image.url}`}
                                             alt={`Thumbnail ${index + 1}`}
                                             className="w-full h-full object-contain"
                                         />
@@ -90,7 +124,7 @@ export default function ProductDetail({ item, data, setCart, cart }) {
                             {/* Main Image */}
                             <div className="flex-1">
                                 <img
-                                    src={selectedImage.type === "main" ? `/api/items/media/${selectedImage.url}` : `/api/items/gallery/media/${selectedImage.url}`}
+                                    src={selectedImage.type === "main" ? `/api/items/media/${selectedImage.url}` : `/api/item_images/media/${selectedImage.url}`}
                                     alt="Product main"
                                     className="w-full h-auto object-contain"
                                 />

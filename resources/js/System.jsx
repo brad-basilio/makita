@@ -135,7 +135,7 @@ const System = ({ page, isUser, pages, params, filteredData = {}, systems, gener
   const systemsSorted = SortByAfterField(systems).filter(x => page.extends_base ? !x.page_id : true)
 
   return (
-    <main className='text-textPrimary'>
+    <main>
       {systemsSorted.map((system) => getSystem(system))}
     </main>
   );

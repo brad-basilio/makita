@@ -44,7 +44,7 @@ const InfiniteCategory = ({ items, data }) => {
     return (
         <section className="py-12">
             <div className="w-full px-primary mx-auto">
-                <h2 className="text-4xl font-bold pb-4 mb-8 font-font-secondary border-b-2 customborder-neutral-light">
+                <h2 className="text-4xl font-bold pb-4 mb-8 font-font-secondary border-b customborder-neutral-light">
                     {data?.title}
                 </h2>
                 <div className="relative">
@@ -70,15 +70,15 @@ const InfiniteCategory = ({ items, data }) => {
                             {items.map((category) => (
                                 <div
                                     key={category.id}
-                                    className="w-full min-w-[200px] px-2 sm:w-1/3 lg:w-1/6 flex-shrink-0"
+                                    className="group w-full min-w-[200px] px-2 sm:w-1/3 lg:w-1/6 flex-shrink-0 group-hover:shadow-xl"
                                 >
                                     <a href={`/catalogo?category=${category.slug}`} className="block group">
-                                        <div className="bg-secondary rounded-xl p-4 transition-transform duration-300 group-hover:scale-105">
+                                        <div className="bg-secondary rounded-xl p-4 transition-transform duration-300 ">
                                             <div className="aspect-square relative mb-4">
                                                 <img
                                                     src={`/api/categories/media/${category.image}`}
                                                     alt={category.name}
-                                                    className="w-full h-full object-contain"
+                                                    className="w-full h-full object-contain  transition-transform duration-300 group-hover:scale-110"
                                                     loading="lazy"
                                                 />
                                             </div>

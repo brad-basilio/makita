@@ -52,12 +52,12 @@ const ProductInfinite = ({ items, data, setCart, cart }) => {
         <section className="py-12 bg-[#F7F9FB]">
             <div className=" mx-auto px-primary">
                 {/* Header */}
-                <div className="flex justify-between items-center mb-8 pb-4 border-b-2 customborder-neutral-light">
+                <div className="flex justify-between items-center mb-8 pb-4 border-b customborder-neutral-light">
                     <h2 className="text-4xl font-bold  font-font-secondary ">{data?.title}</h2>
                     <a
 
-                        href={data.link_catalog}
-                        className="bg-primary transition-all duration-300 text-white border-2 border-none flex flex-row items-center gap-3 px-3 md:px-6 py-3 text-base rounded-lg tracking-wide font-bold cursor-pointer hover:brightness-90"
+                        href={data?.link_catalog}
+                        className="bg-primary transition-all duration-300 text-white border-none flex flex-row items-center gap-3   px-10  py-4 text-base rounded-xl tracking-wide font-bold cursor-pointer hover:opacity-90"
                     >
                         Ver todos
                         <Tag width={"1rem"} className="rotate-90" />
@@ -88,8 +88,8 @@ const ProductInfinite = ({ items, data, setCart, cart }) => {
                                 transform: `translateX(-${currentSlide * (100 / slidesPerView)}%)`,
                             }}
                         >
-                            {items.map((product) => (
-                                <CardHoverBtn product={product} setCart={setCart} cart={cart} />
+                            {items.map((product, index) => (
+                                <CardHoverBtn key={index} product={product} setCart={setCart} cart={cart} />
                             ))}
                         </div>
                     </div>

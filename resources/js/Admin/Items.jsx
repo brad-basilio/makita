@@ -48,7 +48,7 @@ const Items = ({ categories, brands }) => {
   // Nuevos campos
 
   const stockRef = useRef()
-  const isComboRef = useRef()
+
   const featuresRef = useRef([])
 
   const specificationsRef = useRef([]);
@@ -101,7 +101,7 @@ const Items = ({ categories, brands }) => {
     if (itemData && itemData.images) {
       const existingImages = itemData.images.map(img => ({
         id: img.id,  // ID de la imagen en la BD
-        url: `/api/items/gallery/media/${img.url}`, // Ruta de la imagen almacenada
+        url: `/api/item_images/media/${img.url}`, // Ruta de la imagen almacenada
       }));
       setGallery(existingImages);
     }
@@ -148,7 +148,7 @@ const Items = ({ categories, brands }) => {
     // Nuevos campos
 
     stockRef.current.value = data?.stock;
-    isComboRef.current.checked = !!data?.is_combo;
+
 
 
 
@@ -173,7 +173,7 @@ const Items = ({ categories, brands }) => {
       tags: $(tagsRef.current).val(),
       description: descriptionRef.current.value,
       sotck: stockRef.current.value,
-      is_combo: isComboRef.current.checked ? 1 : 0,
+
 
     }
 
@@ -450,7 +450,7 @@ const Items = ({ categories, brands }) => {
           <InputFormGroup eRef={discountRef} label='Descuento' type='number' step='0.01' />
 
           <SelectAPIFormGroup id='tags' eRef={tagsRef} searchAPI={'/api/admin/tags/paginate'} searchBy='name' label='Tags' dropdownParent='#principal-container' tags multiple />
-          <SwitchFormGroup label="Es Combo" eRef={isComboRef} />
+
         </div>
         <div className="col-md-4">
 
@@ -495,9 +495,9 @@ const Items = ({ categories, brands }) => {
             </div>
             <div className='col-md-12 col-sm-6'>
               <div className='d-flex flex-wrap gap-1  mt-2'>
-                {gallery.map((img, index) => (
+                {gallery.map((image, index) => (
                   <div key={index} className='position-relative' style={{ width: '80px', height: '80px' }}>
-                    <img src={img.url} alt='preview' style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '4px' }} />
+                    <img src={`${image.url}`} alt='preview' style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '4px' }} />
                     <button className='btn btn-xs btn-danger position-absolute' style={{ top: 0, right: 0 }} onClick={(e) => removeGalleryImage(e, index)}>
                       ×
                     </button>

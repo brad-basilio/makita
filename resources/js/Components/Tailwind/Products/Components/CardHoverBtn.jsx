@@ -36,7 +36,7 @@ const CardHoverBtn = ({ product, widthClass = "lg:w-1/5", setCart, cart }) => {
                 <div className="relative">
                     {product.discount != null && !isNaN(product.discount) && (
                         <span className="absolute top-2 left-2 bg-[#F93232] text-white text-base font-medium px-2 py-1 rounded-full">
-                            -{Number(100 - (product.discount * 100 / product.price)).toFixed(0)}%
+                            -{Number((product.discount * 100 / product.price)).toFixed(0)}%
                         </span>
                     )}
                     <div className="aspect-square rounded-lg overflow-hidden flex items-center justify-center p-4">
@@ -55,17 +55,17 @@ const CardHoverBtn = ({ product, widthClass = "lg:w-1/5", setCart, cart }) => {
                 >
                     <a
                         href={`/product/${product.slug}`}
-                        className="flex-1 inline-flex items-center justify-center bg-primary text-white px-4 py-2 rounded-lg transition-colors"
+                        className="flex-1 inline-flex items-center justify-center font-bold text-sm bg-primary text-white  py-3 rounded-xl shadow-lg transition-all duration-300 hover:opacity-90"
                     >
                         Ver detalle
                     </a>
                     <button
-                        className="p-2 border border-primary rounded-lg customtext-primary transition-colors"
+                        className="py-2 px-2.5 border border-primary rounded-lg customtext-primary transition-all duration-300  hover:opacity-90"
                         disabled={inCart}
                         onClick={() => onAddClicked(product)}
                     >
                         <svg
-                            className="w-5 h-5"
+                            className="w-6 h-6"
                             viewBox="0 0 24 24"
                             fill="none"
                             stroke="currentColor"
@@ -100,8 +100,8 @@ const CardHoverBtn = ({ product, widthClass = "lg:w-1/5", setCart, cart }) => {
                         </span>
                     </div>
                 </div>
-            </div>
-        </div>
+            </div >
+        </div >
     );
 };
 

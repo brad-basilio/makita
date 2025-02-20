@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Combo;
 use App\Models\Item;
 use App\Models\ItemTag;
 use App\Models\SubCategory;
@@ -104,5 +105,55 @@ class ItemController extends BasicController
                 ->get();
         });
         return response($response->toArray(), $response->status);
+    }
+    public function verifyCombo(Request $request)
+    {
+        dump($request->all());
+        try {
+            // Validar la solicitud
+            $validated = $request->validate([
+                'id' => 'required', // Asegúrate de que el producto exista
+            ]);
+
+            // Buscar combos donde el producto sea el principal
+            $combos = Combo::whereHas('items', function ($query) use ($validated) {
+                $query->where('item_id', $validated['id'])
+                    ->where('is_main_item', true);
+            })->with(['items' => function ($query) {
+                $query->orderBy('is_main_item', 'desc'); // Ordenar para que el principal aparezca primero
+            }])->get();
+
+            dump($combos);
+
+            // Verificar si hay combos
+            if ($combos->isEmpty()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'El producto no es un producto principal en ningún combo.',
+                ], 404);
+            }
+
+            // Formatear los datos de respuesta
+            $result = $combos->map(function ($combo) {
+                return [
+                    'combo_id' => $combo->id,
+                    'combo_name' => $combo->name,
+                    'main_product' => $combo->items->firstWhere('pivot.is_main_item', true),
+                    'associated_items' => $combo->items->filter(function ($item) {
+                        return !$item->pivot->is_main_item;
+                    }),
+                ];
+            });
+            dump($result);
+            return response()->json([
+                'status' => true,
+                'data' => $result,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+            ], 500);
+        }
     }
 }

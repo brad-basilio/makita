@@ -7,9 +7,9 @@ const TopBar = ({ which, items }) => {
   const getTopBar = () => {
     switch (which) {
       case 'TopBarSimple':
-        return <TopBarSimple />
+        return <TopBarSimple key="TopBarSimple" />
       case 'TopBarSocials':
-        return <TopBarSocials items={items} />
+        return <TopBarSocials key="TopBarSocials" items={items} />
       default:
         return <div className="w-full px-[5%] replace-max-w-here p-4 mx-auto">- No Hay componente <b>{which}</b> -</div>
     }

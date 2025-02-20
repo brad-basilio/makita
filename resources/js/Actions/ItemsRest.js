@@ -23,6 +23,26 @@ class ItemsRest extends BasicRest {
             return [];
         }
     };
+    verifyCombo = async (request) => {
+        try {
+            const { status, result } = await Fetch(
+                `/api/${this.path}/combo-items`,
+                {
+                    method: "POST",
+                    body: JSON.stringify(request),
+                }
+            );
+            if (!status)
+                throw new Error(
+                    result?.message ??
+                        "Ocurrió un error al consultar el combo de los productos"
+                );
+
+            return result.data ?? [];
+        } catch (error) {
+            return [];
+        }
+    };
 }
 
 export default ItemsRest;

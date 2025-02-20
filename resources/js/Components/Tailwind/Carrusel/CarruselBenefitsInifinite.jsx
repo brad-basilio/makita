@@ -5,109 +5,6 @@ import { adjustTextColor } from "../../../Functions/adjustTextColor";
 const CarruselBenefitsInifinite = ({ items }) => {
 
 
-    const benefits = [
-        {
-            icon: (
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-8 w-8"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                >
-                    <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"
-                    />
-                </svg>
-            ),
-            title: "Entrega fácil y gratuita",
-            subtitle: "En compras mayores a $100",
-        },
-        {
-            icon: (
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-8 w-8"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                >
-                    <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-                    />
-                </svg>
-            ),
-            title: "Garantía premium",
-            subtitle: "Hasta 2 años",
-        },
-        {
-            icon: (
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-8 w-8"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                >
-                    <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-                    />
-                </svg>
-            ),
-            title: "Garantía premium",
-            subtitle: "Hasta 2 años",
-        },
-        {
-            icon: (
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-8 w-8"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                >
-                    <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"
-                    />
-                </svg>
-            ),
-            title: "Soporte en línea 24/7",
-            subtitle: "Servicio premium",
-        },
-        {
-            icon: (
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-8 w-8"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                >
-                    <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"
-                    />
-                </svg>
-            ),
-            title: "Soporte en línea 24/7",
-            subtitle: "Servicio premium",
-        },
-    ]
-
     // Duplicamos los elementos para lograr el efecto infinito
     const infiniteBenefits = [...items, ...items];
     const sliderRef = useRef(null);
@@ -135,16 +32,18 @@ const CarruselBenefitsInifinite = ({ items }) => {
     useEffect(() => {
         adjustTextColor(benefitsRef.current)
     })
-
+    //infiniteBenefits si lo quiere infinito reemplaza
+    //va en el div incial ref = { benefitsRef }
+    // va en el div antes de hacer el map ref={sliderRef}
     return (
         <div ref={benefitsRef} className="bg-primary   py-6 overflow-hidden">
             <div className="px-[5%] mx-auto relative">
                 <div
-                    ref={sliderRef}
+
                     className="flex w-full gap-8 whitespace-nowrap transition-none"
                 >
-                    {infiniteBenefits.map((benefit, index) => (
-                        <div key={index} className="flex items-center gap-4 justify-start w-1/4 flex-shrink-0">
+                    {items.map((benefit, index) => (
+                        <div key={index} className="flex items-center gap-4 justify-start w-1/4 "> {/*para infinito usa esto flex-shrink-0*/}
                             <div className="relative w-16 h-16 flex items-center justify-center">
                                 {/* Hexágono SVG */}
 

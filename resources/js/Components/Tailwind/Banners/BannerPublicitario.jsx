@@ -5,7 +5,7 @@ const BannerPublicitario = ({ data }) => {
 
     return (
         <div className=" px-primary mx-auto py-32">
-            <div className="relative    rounded-xl h-[373px]"
+            <div className="relative    rounded-xl h-[500px]"
                 style={{
                     backgroundImage: `url(/api/banners/media/${data?.background})`,
                     backgroundSize: 'cover',
@@ -18,7 +18,7 @@ const BannerPublicitario = ({ data }) => {
                     <div className=" md:w-7/12 relative z-10">
                         <img
                             src={`/api/banners/media/${data?.image}`}
-                            className="w-full h-auto object-cover absolute scale-95 -translate-y-1/2"
+                            className="w-full h-auto object-cover absolute scale-110 -translate-y-1/2"
                         />
                     </div>
 
@@ -31,7 +31,7 @@ const BannerPublicitario = ({ data }) => {
                             </p>
                             <a
                                 href={data?.button_link}
-                                className="bg-white text-sm w-max font-bold customtext-neutral-dark px-6 py-3 rounded-xl  hover:bg-opacity-90 transition-all flex items-center gap-2">
+                                className="bg-white cursor-pointer text-sm w-max font-bold customtext-neutral-dark px-10 py-4 rounded-xl  hover:opacity-90 transition-all duration-300 flex items-center gap-2">
                                 {data?.button_text}
                                 <Tag width={"1rem"} className="rotate-90" />
                             </a>
