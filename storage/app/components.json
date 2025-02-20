@@ -283,6 +283,11 @@
                     "with": ["category", "subcategory", "brand"],
                     "limit": 8
                 }
+            },
+            {
+                "id": "Scraping",
+                "name": "Scraping Simple",
+                "image": "products-list.png"
             }
         ]
     },

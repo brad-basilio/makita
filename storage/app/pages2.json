@@ -1,0 +1,182 @@
+[
+    {
+        "id": "bf3dbee8-8b1e-4857-b3c4-1a673836bac6",
+        "name": "Home",
+        "path": "/",
+        "extends_base": true,
+        "menuable": false,
+        "pseudo_path": null
+    },
+    {
+        "id": "67e6d2b7-c6f2-4b86-b8c4-1cf9ecc7995e",
+        "name": "Catalogo",
+        "path": "/catalogo",
+        "extends_base": true,
+        "pseudo_path": "/catalogo",
+        "menuable": true,
+        "using": {
+            "categories": {
+                "model": "Category",
+                "fields": ["id", "name", "slug"],
+                "relations": ["subcategories"]
+            },
+            "brands": {
+                "model": "Brand",
+                "fields": ["id", "name"]
+            },
+            "priceRanges": {
+                "model": null,
+                "static": [
+                    {
+                        "label": "S/ 0 - S/ 100",
+                        "min": 0,
+                        "max": 100
+                    },
+                    {
+                        "label": "S/ 100 - S/ 250",
+                        "min": 100,
+                        "max": 250
+                    },
+                    {
+                        "label": "S/ 250 - S/ 500",
+                        "min": 250,
+                        "max": 500
+                    },
+                    {
+                        "label": "S/ 500 - S/ 1.000",
+                        "min": 500,
+                        "max": 1000
+                    },
+                    {
+                        "label": "S/ 1.000 - S/ 2.000",
+                        "min": 1000,
+                        "max": 2000
+                    },
+                    {
+                        "label": "S/ 2.000 - S/ 5.000",
+                        "min": 2000,
+                        "max": 5000
+                    },
+                    {
+                        "label": "Desde S/ 5.000",
+                        "min": 5000,
+                        "max": null
+                    }
+                ]
+            },
+            "subcategories": {
+                "model": "SubCategory",
+                "fields": ["id", "name", "category_id"]
+            }
+        }
+    },
+    {
+        "id": "a91d0f23-921a-4d6c-a4fb-1e641b5e51b9",
+        "name": "Producto",
+        "path": "/product/{slug}",
+        "extends_base": true,
+        "pseudo_path": "/product",
+        "using": {
+            "slug": {
+                "model": "Item",
+                "field": "slug",
+                "relations": [
+                    "category",
+                    "subcategory",
+                    "brand",
+                    "images",
+                    "specifications",
+                    "features"
+                ]
+            }
+        },
+        "menuable": false
+    },
+    {
+        "id": "af066082-6934-4cce-8477-0b85b24fb4c4",
+        "name": "Carrito",
+        "path": "/cart",
+        "extends_base": true,
+        "pseudo_path": "/cart"
+    },
+    {
+        "id": "e0712a5c-0f82-4746-bd81-148f5661a87e",
+        "name": "Nosotros",
+        "path": "/nosotros",
+        "extends_base": true,
+        "pseudo_path": "/nosotros",
+        "menuable": true,
+        "using": {
+            "aboutuses": {
+                "model": "Aboutus"
+            },
+            "webdetail": {
+                "model": "WebDetail"
+            },
+            "strengths": {
+                "model": "Strength"
+            }
+        }
+    },
+    {
+        "id": "37c3e21a-66dd-4572-b2c0-3c92f1d7bcf9",
+        "name": "Blogs",
+        "path": "/blogs",
+        "extends_base": true,
+        "pseudo_path": "/blogs",
+        "menuable": true,
+        "using": {
+            "posts": {
+                "model": "Post"
+            },
+            "categories": {
+                "model": "Category",
+                "fields": ["id", "name", "slug"]
+            }
+        }
+    },
+    {
+        "id": "02088b84-b0a2-42b5-befd-842991e219a0",
+        "name": "Contacto",
+        "path": "/contacto",
+        "extends_base": true,
+        "menuable": true,
+        "pseudo_path": "/contacto"
+    },
+    {
+        "id": "23f488b0-1d2f-496b-8339-cb588c6abc14",
+        "name": "Iniciar sesi\u00f3n",
+        "path": "/iniciar-sesion",
+        "extends_base": true,
+        "pseudo_path": "/iniciar-sesion"
+    },
+    {
+        "id": "df01d5fe-6b9d-4403-8e44-f89bd28e9061",
+        "name": "Crear cuenta",
+        "path": "/crear-cuenta",
+        "extends_base": true,
+        "pseudo_path": "/crear-cuenta"
+    },
+    {
+        "id": "c7d7c22f-a6e9-4467-956e-3f8dbe93cdaa",
+        "name": "Forgot Password",
+        "path": "/forgot-password",
+        "extends_base": true,
+        "pseudo_path": "/forgot-password"
+    },
+    {
+        "id": "b14cd5e7-8036-488f-8061-4683ec2e6fce",
+        "name": "Restablecer contrase\u00f1a",
+        "path": "/reset-password",
+        "extends_base": true,
+        "pseudo_path": "/reset-password",
+        "using": {
+            "token": {
+                "model": null
+            },
+            "email": {
+                "model": null
+            }
+        }
+    }
+]

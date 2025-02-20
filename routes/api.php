@@ -44,6 +44,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\ScrapController;
 
 
 /*
@@ -56,6 +57,10 @@ use App\Http\Controllers\SubscriptionController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
+
+Route::post('/scrap-nike', [ScrapController::class, 'scrapNike']);
+
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/signup', [AuthController::class, 'signup']);
