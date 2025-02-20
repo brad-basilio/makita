@@ -4,6 +4,9 @@ import CardHoverBtn from '../Products/Components/CardHoverBtn';
 import { ChevronDown, Filter, Search, Tag } from 'lucide-react';
 import ItemsRest from '../../../Actions/ItemsRest';
 import ArrayJoin from '../../../Utils/ArrayJoin';
+import { Loading } from '../Components/Resources/Loading';
+import { NoResults } from '../Components/Resources/NoResult';
+import SelectForm from './Components/SelectForm';
 
 const itemsRest = new ItemsRest();
 
@@ -168,7 +171,14 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
     };
     const [searchBrand, setSearchBrand] = useState("");
     const [searchCategory, setSearchCategory] = useState("");
-
+    const sortOptions = [
+        { value: 'created_at:desc', label: 'Más reciente' },
+        { value: 'created_at:asc', label: 'Mas antiguo' },
+        { value: 'final_price:asc', label: 'Precio: Menor a Mayor' },
+        { value: 'final_price:desc', label: 'Precio: Mayor a Menor' },
+        { value: 'name:asc', label: 'Nombre: A-Z' },
+        { value: 'name:desc', label: 'Nombre: Z-A' },
+    ];
     /* const [sections, setSections] = useState({
          marca: true,
          precio: true,
@@ -260,33 +270,32 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
         <section className="py-12 bg-[#F7F9FB]">
             <div className="mx-auto px-primary">
                 <div className="flex justify-between items-center mb-8 pb-4 border-b-2">
-                    <h2 className="text-4xl font-bold">{data?.title}</h2>
-                    <div className="flex items-center gap-4">
-                        <span>Productos seleccionados: <strong>{products?.length}</strong></span>
+                    <h2 className="text-4xl font-bold w-6/12">{data?.title}</h2>
+                    <div className="flex items-center gap-4 w-5/12">
+                        <span className='block w-6/12'>Productos seleccionados: <strong>{products?.length}</strong></span>
                         {/* Ordenación */}
-                        <select
-                            className="border p-2 rounded"
-                            onChange={(e) => {
-                                const [selector, order] = e.target.value.split(':');
-                                const sort = [
-                                    {
-                                        selector: selector,
-                                        desc: order === 'desc',
-                                    },
-                                ];
-                                setSelectedFilters((prev) => ({
-                                    ...prev,
-                                    sort,
-                                }));
-                            }}
-                        >
-                            <option value="created_at:desc">Más reciente</option>
-                            <option value="created_at:asc">Más antiguo</option>
-                            <option value="final_price:asc">Precio: Menor a mayor</option>
-                            <option value="final_price:desc">Precio: Mayor a menor</option>
-                            <option value="name:asc">Nombre: A-Z</option>
-                            <option value="name:desc">Nombre: Z-A</option>
-                        </select>
+                        <div className='w-6/12'>
+                            <SelectForm
+                                options={sortOptions}
+                                placeholder="Ordenar por"
+                                onChange={(value) => {
+                                    const [selector, order] = value.split(':');
+                                    const sort = [
+                                        {
+                                            selector: selector,
+                                            desc: order === 'desc',
+                                        },
+                                    ];
+                                    setSelectedFilters((prev) => ({
+                                        ...prev,
+                                        sort,
+                                    }));
+                                }}
+                                labelKey="label"
+                                valueKey="value"
+
+                            />
+                        </div>
                     </div>
                 </div>
 
@@ -424,7 +433,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
 
                         {/* Productos */}
                         {loading ? (
-                            <p>Cargando...</p>
+                            <Loading />
                         ) : (
                             <div className="flex items-center flex-wrap gap-y-8 transition-all duration-300 ease-in-out">
                                 {Array.isArray(products) && products.length > 0 ? (
@@ -432,7 +441,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                                         <CardHoverBtn key={product.id} product={product} widthClass='lg:w-1/4' cart={cart} setCart={setCart} />
                                     ))
                                 ) : (
-                                    <p>No hay productos que coincidan con los filtros seleccionados.</p>
+                                    <NoResults />
                                 )}
                             </div>
                         )}

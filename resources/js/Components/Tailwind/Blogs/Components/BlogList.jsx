@@ -1,11 +1,13 @@
 import { useEffect } from "react";
 import BlogPostCard from "./BlogPostCard";
+import { Loading } from "../../Components/Resources/Loading";
+import { NoResults } from "../../Components/Resources/NoResult";
 
 export default function BlogList({ posts, postsLatest, loading, isFilter }) {
     console.log("isFilter:", isFilter);
     console.log("posts:", posts);
     useEffect(() => {
-        console.log("BlogList - posts cambiaron:", posts);
+
     }, [posts]);
     return (
         <section className={` ${isFilter ? "pb-16" : "py-16"}`}>
@@ -22,21 +24,28 @@ export default function BlogList({ posts, postsLatest, loading, isFilter }) {
                                     <BlogPostCard key={index} post={post} />
                                 ))
                             ) : (
-                                <p>No hay publicaciones recientes.</p>
+                                <div className="col-span-3 my-8">
+                                    <NoResults />
+                                </div>
                             )}
                         </div>
                     </div>
                 ) : (
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
                         {loading ? (
-                            <p>Cargando...</p>
+                            <div className="col-span-3 my-8">
+                                <Loading />
+                            </div>
+
                         ) : (
                             Array.isArray(posts) && posts.length > 0 ? (
                                 posts.map((post, index) => (
                                     <BlogPostCard key={index} post={post} />
                                 ))
                             ) : (
-                                <p>No hay Posts que coincidan con los filtros seleccionados.</p>
+                                <div className="col-span-3 my-8">
+                                    <NoResults />
+                                </div>
                             )
                         )}
                     </div>

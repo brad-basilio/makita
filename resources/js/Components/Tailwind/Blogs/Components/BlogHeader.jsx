@@ -4,6 +4,7 @@ import BlogPostCard from "./BlogPostCard";
 import DateFilter from "./DateFilter";
 import { useEffect, useState } from "react";
 import PostsRest from "../../../../Actions/PostsRest";
+import SelectForm from "./SelectForm";
 
 const postsRest = new PostsRest();
 
@@ -115,35 +116,39 @@ export default function BlogHeader({
                 </div>
 
                 {/* Search and Filters */}
-                <div className="mt-8 flex flex-col md:flex-row gap-4">
-                    <div className="relative flex-1">
+                <div className="mt-8 flex gap-4 justify-between">
+                    <div className="relative w-6/12 flex items-center">
                         <input
                             type="search"
                             placeholder="Buscar publicación"
-                            className="w-full pl-4 pr-10 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500"
+                            className={`w-full px-4 relative py-3 border customtext-neutral-dark  border-neutral-ligth rounded-xl focus:ring-0 focus:outline-0   transition-all duration-300`}
+
                             onChange={(e) => handleFilterChange("name", e.target.value)}
                         />
-                        <Search className="absolute right-3 top-2.5 h-5 w-5 text-gray-400" />
+                        <div className="absolute right-3 p-2 rounded-xl bg-primary">
+                            <Search className=" h-5 w-5 text-white" />
+                        </div>
+
                     </div>
-                    <div className="flex gap-4">
-                        <select
-                            onChange={(e) => {
+                    <div className="flex gap-4 w-5/12">
+
+                        <SelectForm
+
+                            options={categories}
+                            placeholder="Todas las categorías"
+                            onChange={(value) => {
                                 setSelectedFilters((prev) => ({
                                     ...prev,
-                                    category_id: e.target.value,
+                                    category_id: value,
                                 }));
                             }}
-                            className="border p-2 rounded w-full mb-4"
-                        >
-                            <option value="">Todas las categorías</option>
-                            {categories.map((category) => (
-                                <option key={category.id} value={category.id}>
-                                    {category.name}
-                                </option>
-                            ))}
-                        </select>
+                            labelKey="name"
+                            valueKey="id"
+
+                        />
                         <input type="date"
-                            className="border p-2 rounded w-full mb-4"
+                            className={`w-full px-4 py-3 border customtext-neutral-dark  border-neutral-ligth rounded-xl focus:ring-0 focus:outline-0   transition-all duration-300`}
+
                             onChange={(e) => {
 
                                 handleFilterChange("post_date", e.target.value)
