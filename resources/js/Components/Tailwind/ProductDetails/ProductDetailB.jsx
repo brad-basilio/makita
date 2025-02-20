@@ -1,7 +1,7 @@
 
 
 import { useEffect, useState } from "react"
-import { ShoppingCart, Store, Home, Phone, CircleUserRound, ChevronDown } from "lucide-react"
+import { ShoppingCart, Store, Home, Phone, CircleUserRound, ChevronDown, CheckSquare, Plus, ChevronUp } from "lucide-react"
 
 import ItemsRest from "../../../Actions/ItemsRest";
 
@@ -76,16 +76,19 @@ export default function ProductDetail({ item, data, setCart, cart }) {
                 console.error('No se encontraron productos asociados.');
                 return;
             }
+            //  console.log('Productos asociados:', response);
             // Actualizar el estado con los productos asociados
-            console.log('Productos asociados:', response);
-            //setAssociatedItems(response.data.associated_items);
+            const associated = response[0].associated_items;
+            console.log('Productos asociados:', associated);
+            setAssociatedItems(Object.values(associated));
         } catch (error) {
             console.error('Error al obtener el combo:', error.message);
             // Mostrar un mensaje de error al usuario si es necesario
         }
     };
 
-
+    const total = associatedItems.reduce((sum, product) => sum + parseFloat(product.final_price), 0);
+    const [expandedSpecificationMain, setExpanded] = useState(false);
     return (
         <div className="px-primary mx-auto py-12 bg-[#F7F9FB] ">
             <div className="bg-white rounded-xl p-4">
@@ -150,7 +153,7 @@ export default function ProductDetail({ item, data, setCart, cart }) {
                         {/* Support */}
                         <div className="mt-8 bg-gray-50 rounded-lg p-4 space-y-3">
                             <div className="flex items-center gap-2 text-sm">
-                                <Phone className="w-5 h-5 text-blue-500" />
+                                <Phone className="w-5 h-5 customtext-primary" />
                                 <span>¿Necesitas ayuda? Llámanos al 012037074</span>
                             </div>
                             <div className="flex items-center gap-2 text-sm text-gray-500">
@@ -177,25 +180,24 @@ export default function ProductDetail({ item, data, setCart, cart }) {
                                 </span>
                             </span>
                         </div>
-                        <div className="flex gap-8 border-b-4 pb-8">
+                        <div className="flex gap-8 border-b-2 pb-8">
 
                             {/* Specifications */}
-                            <div className="flex-1 w-6/12">
-                                <div className="bg-gray-50 rounded-lg p-6">
+                            <div className="flex-1 w-6/12 mt-6">
+                                <div className="bg-[#F7F9FB] rounded-lg p-6">
                                     <h3 className="font-medium mb-4">Especificaciones principales</h3>
-                                    <ul className="space-y-2 ml-4 list-disc text-gray-600 mb-4">
-
+                                    <ul className={`space-y-2 ml-4 customtext-neutral-light mb-4 transition-all duration-300 ${expandedSpecificationMain ? "max-h-full" : "max-h-24 overflow-hidden"}`}>
                                         {item.specifications.map((spec, index) =>
-                                            spec.type === "principal" && (
-
-                                                <li key={index}>{spec.description}</li>
-                                            )
+                                            spec.type === "principal" && <li key={index}>{spec.description}</li>
                                         )}
-
-
-
                                     </ul>
-                                    <button className="text-blue-500 text-sm hover:underline">Ver más especificaciones</button>
+                                    <button
+                                        className="customtext-primary text-sm font-semibold hover:underline flex items-center gap-1 transition-all duration-300"
+                                        onClick={() => setExpanded(!expandedSpecificationMain)}
+                                    >
+                                        {expandedSpecificationMain ? "Ver menos" : "Ver más especificaciones"}
+                                        {expandedSpecificationMain ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                                    </button>
                                 </div>
                             </div>
 
@@ -233,38 +235,24 @@ export default function ProductDetail({ item, data, setCart, cart }) {
                         {/* Complementary Products */}
                         <div className="mt-8 ">
                             <div className="flex items-center gap-2 mb-6">
-                                <ShoppingCart className="w-6 h-6 text-blue-500" />
-                                <h2 className="text-lg">Completa tu compra con estos productos</h2>
+                                <ShoppingCart className="w-6 h-6 customtext-primary" />
+                                <h2 className="text-base font-semibold">Completa tu compra con estos productos</h2>
                             </div>
 
                             <div className=" flex gap-4">
-                                <div className="w-2/3 flex gap-4">
-                                    {[
-                                        {
-                                            name: "Este Producto: Audífonos Bluetooth JBL Vibe BEAM...",
-                                            price: "179,00",
-                                        },
-                                        {
-                                            name: "Audífonos Bluetooth JBL T280TWS X2 Rosa y Estuche",
-                                            price: "157,00",
-                                        },
-                                        {
-                                            name: "Mini Dron Profesional Portátil E88 Camara HD",
-                                            price: "108,00",
-                                        },
-                                    ].map((product, index) => (
-                                        <div key={index} className="flex w-1/3 gap-4 items-center ">
-                                            <img src={`/api/items/media/${product}`} className=" border rounded-lg aspect-square w-full h-auto" />
-                                            <div>+</div>
-
+                                <div className="w-2/3 flex gap-2">
+                                    {associatedItems.map((product, index) => (
+                                        <div key={index} className="flex items-center gap-2">
+                                            <img src={`/api/items/media/${product.image}`} className=" rounded-lg aspect-square w-24 h-24 object-cover bg-[#F7F9FB]" />
+                                            {index < associatedItems.length - 1 && <span className="text-2xl font-bold"><Plus /></span>}
                                         </div>
                                     ))}
                                 </div>
-                                <div className="flex flex-col justify-between items-end bg-gray-50 p-4 rounded-lg mt-4">
-                                    <span>Total</span>
+                                <div className=" w-1/3 flex flex-col justify-between items-end bg-gray-50 p-4 rounded-lg mt-4">
+                                    <span className="text-xs font-semibold customtext-neutral-light">Total</span>
 
-                                    <p className="font-bold mb-2">S/ 444,00</p>
-                                    <button className="bg-primary text-white px-4 py-2 rounded-xl hover:brightness-90 transition-colors">
+                                    <p className="font-bold mb-2 customtext-neutral-dark">S/ {total.toFixed(2)}</p>
+                                    <button className="bg-primary text-xs font-semibold text-white w-full py-3 rounded-xl hover:opacity-90 transition-all duration-300 hover:shadow-md">
                                         Agregar al carrito
                                     </button>
 
@@ -273,36 +261,18 @@ export default function ProductDetail({ item, data, setCart, cart }) {
 
 
 
-                            {[
-                                {
-                                    name: "Este Producto: Audífonos Bluetooth JBL Vibe BEAM...",
-                                    price: "179,00",
-                                },
-                                {
-                                    name: "Audífonos Bluetooth JBL T280TWS X2 Rosa y Estuche",
-                                    price: "157,00",
-                                },
-                                {
-                                    name: "Mini Dron Profesional Portátil E88 Camara HD",
-                                    price: "108,00",
-                                },
-                            ].map((product, index) => (
-                                <div key={index} className="flex mt-4 gap-4 p-4 border rounded-lg items-start">
+                            {associatedItems.map((product, index) => (
+                                <div key={index} className="flex mt-4 gap-4 p-4 border rounded-lg items-center">
 
-                                    <div className="flex-1 min-w-0">
-                                        <div className="flex gap-2">
-                                            <input
-                                                type="checkbox"
-                                                checked={index === 0}
-                                                readOnly
-                                                className="mt-1 rounded border-gray-300"
-                                            />
-                                            <div>
-                                                <p className="text-sm text-gray-600 mb-1">{product.name}</p>
-                                                <p className="font-medium">S/ {product.price}</p>
-                                            </div>
-                                        </div>
+                                    <CheckSquare className="w-5 h-5 customtext-primary" />
+                                    <div className="flex-1 font-semibold">
+                                        <span className="text-[10px] customtext-neutral-dark block">{product.brand.name}</span>
+                                        <p className="text-sm customtext-neutral-light font-medium">{product.name}</p>
                                     </div>
+                                    <p className="font-bold customtext-neutral-dark">S/ {parseFloat(product.final_price).toFixed(2)}</p>
+
+
+
                                 </div>
                             ))}
 

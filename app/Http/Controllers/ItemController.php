@@ -14,6 +14,10 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use SoDe\Extend\Response;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Http\RedirectResponse;
+
+use Illuminate\Http\Response as HttpResponse;
 
 class ItemController extends BasicController
 {
@@ -106,7 +110,7 @@ class ItemController extends BasicController
         });
         return response($response->toArray(), $response->status);
     }
-    public function verifyCombo(Request $request)
+    public function verifyCombo2(Request $request)
     {
         dump($request->all());
         try {
@@ -154,6 +158,67 @@ class ItemController extends BasicController
                 'status' => false,
                 'message' => $e->getMessage(),
             ], 500);
+        }
+    }
+
+    public function verifyCombo(Request $request): HttpResponse | ResponseFactory
+    {
+        $response = new Response();
+        try {
+            // Validar el correo electrónico
+            $request->validate([
+                'id' => 'required',
+            ]);
+
+            // Buscar al usuario por correo electrónico
+            // Buscar combos donde el producto sea el principal
+            $combos = Combo::whereHas('items', function ($query) use ($request) {
+                $query->where('item_id', $request->id)
+                    ->where('is_main_item', true);
+            })->with([
+                'items' => function ($query) {
+                    $query->orderBy('is_main_item', 'desc'); // Ordenar para que el principal aparezca primero
+                },
+                'items.category', // Incluir la categoría del item
+                'items.brand'     // Incluir la marca del item
+            ])->get();
+
+            dump($combos);
+
+            // Verificar si hay combos
+            if ($combos->isEmpty()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'El producto no es un producto principal en ningún combo.',
+                ], 404);
+            }
+
+            // Formatear los datos de respuesta
+            $result = $combos->map(function ($combo) {
+                return [
+                    'combo_id' => $combo->id,
+                    'combo_name' => $combo->name,
+                    'main_product' => $combo->items->firstWhere('pivot.is_main_item', true),
+                    'associated_items' => $combo->items->filter(function ($item) {
+                        return !$item->pivot->is_main_item;
+                    }),
+                ];
+            });
+
+            dump($result);
+
+            // Respuesta exitosa
+            $response->status = 200;
+            $response->message = 'Se ha enviado un enlace para restablecer tu contraseña.';
+            $response->data = $result;
+        } catch (\Throwable $th) {
+            $response->status = 400;
+            $response->message = $th->getMessage();
+        } finally {
+            return response(
+                $response->toArray(),
+                $response->status
+            );
         }
     }
 }
