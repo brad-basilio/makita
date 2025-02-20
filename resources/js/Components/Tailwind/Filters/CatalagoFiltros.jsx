@@ -169,8 +169,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
             [section]: !prev[section],
         }));
     };
-    const [searchBrand, setSearchBrand] = useState("");
-    const [searchCategory, setSearchCategory] = useState("");
+
     const sortOptions = [
         { value: 'created_at:desc', label: 'Más reciente' },
         { value: 'created_at:asc', label: 'Mas antiguo' },
@@ -179,6 +178,19 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
         { value: 'name:asc', label: 'Nombre: A-Z' },
         { value: 'name:desc', label: 'Nombre: Z-A' },
     ];
+
+    const [searchCategory, setSearchCategory] = useState("");
+    const [searchBrand, setSearchBrand] = useState("");
+
+    // Filtrar categorías según el input
+    const filteredCategories = categories.filter((category) =>
+        category.name.toLowerCase().includes(searchCategory.toLowerCase())
+    );
+
+    // Filtrar marcas según el input
+    const filteredBrands = brands.filter((brand) =>
+        brand.name.toLowerCase().includes(searchBrand.toLowerCase())
+    );
     /* const [sections, setSections] = useState({
          marca: true,
          precio: true,
@@ -319,13 +331,14 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                                         <input
                                             type="text"
                                             placeholder="Buscar"
-                                            className="w-full pl-10 pr-4 py-2 bg-gray-100 rounded-lg text-sm"
+                                            className={`w-full px-4 pl-10 py-3 border customtext-neutral-dark  border-neutral-ligth rounded-xl focus:ring-0 focus:outline-0   transition-all duration-300`}
+
                                             value={searchBrand}
                                             onChange={(e) => setSearchBrand(e.target.value)}
                                         />
                                     </div>
                                     <div className="space-y-3">
-                                        {brands.map((brand) => (
+                                        {filteredBrands.map((brand) => (
                                             <label key={brand.id} className="flex items-center space-x-3">
                                                 <input
                                                     type="checkbox"
@@ -382,13 +395,14 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                                         <input
                                             type="text"
                                             placeholder="Buscar"
-                                            className="w-full pl-10 pr-4 py-2 bg-gray-100 rounded-lg text-sm"
+                                            className={`w-full px-4 pl-10 py-3 border customtext-neutral-dark  border-neutral-ligth rounded-xl focus:ring-0 focus:outline-0   transition-all duration-300`}
+
                                             value={searchCategory}
                                             onChange={(e) => setSearchCategory(e.target.value)}
 
                                         />
                                     </div>
-                                    {categories.map((category) => (
+                                    {filteredCategories.map((category) => (
                                         <div key={category.id}>
                                             <label className="flex items-center space-x-3">
                                                 <input
