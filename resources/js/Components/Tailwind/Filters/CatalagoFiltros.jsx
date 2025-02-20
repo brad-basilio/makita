@@ -313,7 +313,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
 
 
                 <div className="relative flex gap-4">
-                    <div className='w-3/12 bg-white p-4 rounded-lg'>
+                    <div className='w-3/12 bg-white p-4 rounded-lg h-max'>
                         <div className="flex items-center justify-between mb-6">
                             <h2 className="text-xl font-bold">Filtros</h2>
                             <Filter className="h-5 w-5" />
@@ -437,7 +437,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                                 </div>
                             )}
                         </div>
-                        <button className="w-full bg-primary text-white py-3 rounded-lg hover:brightness-90 transition-colors text-sm font-bold">
+                        <button className="w-full bg-primary text-white py-3 rounded-xl hover:brightness-90 transition-colors text-sm font-bold">
                             Aplicar Filtro
                         </button>
                     </div>

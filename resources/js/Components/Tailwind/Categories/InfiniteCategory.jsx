@@ -73,7 +73,7 @@ const InfiniteCategory = ({ items, data }) => {
                                     className="group w-full min-w-[200px] px-2 sm:w-1/3 lg:w-1/6 flex-shrink-0 group-hover:shadow-xl"
                                 >
                                     <a href={`/catalogo?category=${category.slug}`} className="block group">
-                                        <div className="bg-secondary rounded-xl p-4 transition-transform duration-300 ">
+                                        <div className="bg-[#F7F9FB] rounded-xl p-4 transition-transform duration-300 ">
                                             <div className="aspect-square relative mb-4">
                                                 <img
                                                     src={`/api/categories/media/${category.image}`}
