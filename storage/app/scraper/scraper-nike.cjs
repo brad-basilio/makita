@@ -7,7 +7,11 @@ const searchQuery = args[0] || "mujer";
 (async () => {
     let browser;
     try {
-        browser = await puppeteer.launch({ headless: true });
+        browser = await puppeteer.launch({
+           headless: true,
+           args: ["--no-sandbox", "--disable-setuid-sandbox"],
+       });
+
         const page = await browser.newPage();
 
         // Configurar User-Agent
