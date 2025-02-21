@@ -8,9 +8,9 @@ const searchQuery = args[0] || "mujer";
     let browser;
     try {
         browser = await puppeteer.launch({
-           headless: true,
-           args: ["--no-sandbox", "--disable-setuid-sandbox"],
-       });
+            headless: true,
+            args: ["--no-sandbox", "--disable-setuid-sandbox"],
+        });
 
         const page = await browser.newPage();
 
@@ -30,6 +30,7 @@ const searchQuery = args[0] || "mujer";
 
         // Extraer los datos de los productos
         const products = await page.evaluate(() => {
+            const baseUrl = "https://www.nike.com.pe";
             return Array.from(document.querySelectorAll(".product")).map(
                 (product) => {
                     let name =
