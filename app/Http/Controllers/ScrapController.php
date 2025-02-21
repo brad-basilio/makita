@@ -47,9 +47,9 @@ class ScrapController extends BasicController
                 case 'invictastores':
                     $dataPath = "invictastores";
                     $storePath = storage_path('app/scraper/scraper-invictastores.cjs');
-                    dump("Aqui primero", $query);
+
                     $query = $traductor->translate($query);; // Traduce el término de búsqueda
-                    dump($query);
+
                     break;
                 case 'sephora':
                     $dataPath = "sephora";
@@ -71,7 +71,7 @@ class ScrapController extends BasicController
                 // Ejecutar Puppeteer con el parámetro
                 $command = "node {$storePath} " . escapeshellarg($query);
                 $output = shell_exec($command . ' 2>&1');
-                dump($output);
+
                 // Decodificar la salida JSON
                 $data = json_decode($output, true);
                 if (json_last_error() !== JSON_ERROR_NONE) {
@@ -89,7 +89,7 @@ class ScrapController extends BasicController
             ]);
         } catch (Exception $e) {
             // Registrar el error y devolver una respuesta de error
-            dump("Error en scrapNike: " . $e->getMessage());
+            //dump("Error en scrapNike: " . $e->getMessage());
             return response()->json([
                 'status' => 500,
                 'message' => 'Error al procesar la solicitud',

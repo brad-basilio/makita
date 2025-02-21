@@ -40,7 +40,7 @@ const searchQuery = args[0] || "mujer";
 
                     // Obtener la imagen del producto
                     let imgElement = product.querySelector(
-                        ".cat_product-image img"
+                        ".cat_product-image a img"
                     );
                     let relativeSrc = imgElement
                         ? imgElement.getAttribute("src")
