@@ -7,6 +7,7 @@ const searchQuery = args[0] || "mujer";
 (async () => {
     let browser;
     try {
+        // Configurar Puppeteer
         browser = await puppeteer.launch({
             headless: true,
             args: ["--no-sandbox", "--disable-setuid-sandbox"],
@@ -23,7 +24,7 @@ const searchQuery = args[0] || "mujer";
         const url = `https://invictastores.com/search/${encodeURIComponent(
             searchQuery
         )}`;
-        await page.goto(url, { waitUntil: "domcontentloaded" });
+        await page.goto(url, { waitUntil: "networkidle2", timeout: 30000 });
 
         // Esperar a que los productos se carguen
         await page.waitForSelector(".ProductCard", { timeout: 10000 });
@@ -36,7 +37,7 @@ const searchQuery = args[0] || "mujer";
                     let name =
                         product
                             .querySelector(".ProductCard-Name")
-                            ?.innerText?.trim() || "Sin Titulo";
+                            ?.innerText?.trim() || "Sin título";
                     let price =
                         product
                             .querySelector(".ProductPrice-HighPrice")
@@ -48,18 +49,27 @@ const searchQuery = args[0] || "mujer";
                         )?.src || "Sin imagen";
                     // Construir la URL absoluta de la imagen
                     let image = relativeSrc.startsWith("http")
-                        ? relativeSrc // Si ya es una URL absoluta, usarla tal cual
-                        : baseUrl + relativeSrc; // Si es relativa, concatenar con la URL base
-                    console.log(name, price, image);
+                        ? relativeSrc
+                        : baseUrl + relativeSrc;
+
                     return { name, price, image };
                 }
             );
         });
 
+        // Imprimir los productos en formato JSON
         console.log(JSON.stringify(products, null, 2));
     } catch (error) {
-        console.error("Error:", error.message);
+        // Manejar errores y devolver un JSON con el error
+        console.error(
+            JSON.stringify({
+                status: "error",
+                message: "Error en el scraping",
+                error: error.message,
+            })
+        );
     } finally {
+        // Cerrar el navegador
         if (browser) {
             await browser.close();
         }

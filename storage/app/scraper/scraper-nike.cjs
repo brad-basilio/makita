@@ -7,6 +7,7 @@ const searchQuery = args[0] || "mujer";
 (async () => {
     let browser;
     try {
+        // Configurar Puppeteer
         browser = await puppeteer.launch({
             headless: true,
             args: ["--no-sandbox", "--disable-setuid-sandbox"],
@@ -23,10 +24,10 @@ const searchQuery = args[0] || "mujer";
         const url = `https://www.nike.com.pe/search?q=${encodeURIComponent(
             searchQuery
         )}`;
-        await page.goto(url, { waitUntil: "domcontentloaded" });
+        await page.goto(url, { waitUntil: "networkidle2", timeout: 30000 });
 
         // Esperar a que los productos se carguen
-        await page.waitForSelector(".product", { timeout: 5000 });
+        await page.waitForSelector(".product", { timeout: 10000 });
 
         // Extraer los datos de los productos
         const products = await page.evaluate(() => {
@@ -46,17 +47,27 @@ const searchQuery = args[0] || "mujer";
                         "Sin imagen";
                     // Construir la URL absoluta de la imagen
                     let image = relativeSrc.startsWith("http")
-                        ? relativeSrc // Si ya es una URL absoluta, usarla tal cual
-                        : baseUrl + relativeSrc; // Si es relativa, concatenar con la URL base
+                        ? relativeSrc
+                        : baseUrl + relativeSrc;
+
                     return { name, price, image };
                 }
             );
         });
 
+        // Imprimir los productos en formato JSON
         console.log(JSON.stringify(products, null, 2));
     } catch (error) {
-        console.error("Error:", error.message);
+        // Manejar errores y devolver un JSON con el error
+        console.error(
+            JSON.stringify({
+                status: "error",
+                message: "Error en el scraping",
+                error: error.message,
+            })
+        );
     } finally {
+        // Cerrar el navegador
         if (browser) {
             await browser.close();
         }
