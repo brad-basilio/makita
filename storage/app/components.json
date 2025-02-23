@@ -17,6 +17,15 @@
                     "model": "Social"
                 },
                 "generals": ["cintillo"]
+            },
+            {
+                "id": "TopBarCart",
+                "name": "Con Carrito",
+                "image": "top-bar-socials.png",
+                "using": {
+                    "model": "Social"
+                },
+                "generals": ["cintillo"]
             }
         ]
     },
@@ -54,6 +63,12 @@
             {
                 "id": "HeaderSearchB",
                 "name": "HeaderSearchB",
+                "image": "header-with-search.png",
+                "data": ["class", "link_cart"]
+            },
+            {
+                "id": "HeaderSearchMenu",
+                "name": "Con busqueda y menu",
                 "image": "header-with-search.png",
                 "data": ["class", "link_cart"]
             },
@@ -307,6 +322,10 @@
             {
                 "id": "BannerFullWidth",
                 "name": "Full Width"
+            },
+            {
+                "id": "BannerFlex",
+                "name": "Flex"
             }
         ]
     },

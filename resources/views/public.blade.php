@@ -36,7 +36,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
         rel="stylesheet">
 
-
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
+        rel="stylesheet">
 
     @vite(['resources/css/app.css', 'resources/js/' . Route::currentRouteName()])
     @inertiaHead
@@ -76,6 +78,11 @@
 
             }
 
+            .placeholder\:customtext-{{ $color->name }}::placeholder {
+                color: {{ $color->description }};
+
+            }
+
             .border-{{ $color->name }} {
                 border-color: {{ $color->description }};
             }
@@ -91,7 +98,7 @@
     </style>
 </head>
 
-<body>
+<body class="font-general">
     @inertia
 
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.js"></script>
