@@ -95,6 +95,13 @@
                 "using": {
                     "model": "Indicator"
                 }
+            },
+            {
+                "id": "CarruselBenefitsSimple",
+                "name": "Beneficios Simple",
+                "using": {
+                    "model": "Indicator"
+                }
             }
         ]
     },
@@ -233,6 +240,16 @@
                 }
             },
             {
+                "id": "PaginationCategory",
+                "name": "paginacion",
+                "image": "categories-simple.png",
+                "data": ["title", "path"],
+                "using": {
+                    "model": "Category",
+                    "limit": 10
+                }
+            },
+            {
                 "id": "CategoryCarousel",
                 "name": "Carousel",
                 "image": "categories-carousel.png",
@@ -240,6 +257,17 @@
                 "using": {
                     "model": "Category",
                     "limit": 10,
+                    "filters": ["featured"]
+                }
+            },
+            {
+                "id": "CategoryFlex",
+                "name": "Flex",
+                "image": "categories-carousel.png",
+                "data": ["path", "title", "description", "link_catalog"],
+                "using": {
+                    "model": "Category",
+                    "limit": 3,
                     "filters": ["featured"]
                 }
             }
@@ -300,6 +328,23 @@
                 }
             },
             {
+                "id": "ProductNavigation",
+                "name": "Navegacion",
+                "image": "products-list.png",
+                "data": ["title", "path", "description", "link_catalog"],
+                "using": {
+                    "model": "Item",
+                    "filters": [
+                        "featured",
+                        "recommended",
+                        "offering",
+                        "is_new"
+                    ],
+                    "with": ["category", "subcategory", "brand"],
+                    "limit": 8
+                }
+            },
+            {
                 "id": "Scraping",
                 "name": "Scraping Simple",
                 "image": "products-list.png"
@@ -326,6 +371,10 @@
             {
                 "id": "BannerFlex",
                 "name": "Flex"
+            },
+            {
+                "id": "BannerStatic",
+                "name": "Estatico"
             }
         ]
     },
@@ -525,6 +574,24 @@
             {
                 "id": "FooterB",
                 "name": "FooterB",
+                "image": "footer-simple.png",
+                "using": {
+                    "model": "Social",
+                    "limit": 10
+                },
+                "generals": [
+                    "terms_conditions",
+                    "privacy_policy",
+                    "delivery_policy",
+                    "saleback_policy",
+                    "address",
+                    "support_phone",
+                    "support_email"
+                ]
+            },
+            {
+                "id": "FooterSalaFabulosa",
+                "name": "FooterSalaFabulosa",
                 "image": "footer-simple.png",
                 "using": {
                     "model": "Social",

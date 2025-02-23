@@ -4,6 +4,7 @@ import React from "react"
 const ProductCarousel = React.lazy(() => import('./Products/ProductCarousel'))
 const ProductList = React.lazy(() => import('./Products/ProductList'))
 const ProductInfinite = React.lazy(() => import('./Products/ProductInfinite'))
+const ProductNavigation = React.lazy(() => import('./Products/ProductNavigation'))
 const ScrapingSimple = React.lazy(() => import('./Scraping/ScrapingSimple'))
 const Product = ({ which, data, items, cart, setCart }) => {
   const getProduct = () => {
@@ -15,6 +16,8 @@ const Product = ({ which, data, items, cart, setCart }) => {
         return <ProductList data={data} items={items} cart={cart} setCart={setCart} />
       case 'ProductInfinite':
         return <ProductInfinite data={data} items={items} cart={cart} setCart={setCart} />
+      case 'ProductNavigation':
+        return <ProductNavigation data={data} items={items} cart={cart} setCart={setCart} />
       case 'Scraping':
         return <ScrapingSimple data={data} items={items} cart={cart} setCart={setCart} />
 

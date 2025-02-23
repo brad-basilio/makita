@@ -6,6 +6,8 @@ const BannerSimple = lazy(() => import('./Banners/BannerSimple'))
 const BannerFullWidth = lazy(() => import('./Banners/BannerFullWidth'))
 const BannerFlex = lazy(() => import('./Banners/BannerFlex'))
 const BannerPublicitario = lazy(() => import('./Banners/BannerPublicitario'))
+const BannerStatic = lazy(() => import('./Banners/BannerStatic'))
+
 const Banner = ({ which, data }) => {
   const getBanner = () => {
     switch (which) {
@@ -17,6 +19,9 @@ const Banner = ({ which, data }) => {
         return <BannerFullWidth data={data} />
       case 'BannerFlex':
         return <BannerFlex data={data} />
+      case 'BannerStatic':
+        return <BannerStatic data={data} />
+
 
       default:
         return <div className="w-full px-[5%] replace-max-w-here p-4 mx-auto">- No Hay componente <b>{which}</b> -</div>

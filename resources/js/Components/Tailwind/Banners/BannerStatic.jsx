@@ -1,0 +1,69 @@
+export default function BannerStatic() {
+    return (
+        <section className="px-primary mx-auto customtext-primary">
+            <div className="bg-secondary rounded-3xl overflow-hidden">
+                <div className="grid  md:grid-cols-2 lg:grid-cols-3 items-center gap-8 p-8 md:p-12">
+                    {/* Text Content */}
+                    <div className="space-y-4 py-14">
+                        <h2 className=" text-[56px] font-semibold leading-tight">
+                            Sala Fabulosa, Ahora Más Cerca de Ti
+                        </h2>
+                        <p className="text-xl font-normal">
+                            Compra nuestros productos de manera fácil y segura en las principales plataformas:
+                        </p>
+                    </div>
+
+                    {/* Center Image */}
+                    <div className="col-span-2 flex justify-end relative w-full h-full">
+
+                        <img
+                            src="https://s3-alpha-sig.figma.com/img/1985/ad0c/04d70e57f1295146612046153ed8302a?Expires=1740960000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=Tgx45gGf2~m6~-22Imc53ulHC5nqKXWWlmHnqL3s7w-uu3gNrNQjbH9D4nPZ5-cl3bZgAVp1w3AWUP7NxVpPOfE0DzAX-xX6~TuFFLrSoMo37sjv~yVkmwRMTLcnW1jrmfTeTqwHwY~B7LUwAy~VExCysWIXO7ULmRy4TrNCyfcgIYq6LYtRoXq-qRsMhjgrfK1cbSIQrQ0QOoy-1xEexz5MFKYSsEO1QHIOF-TvYcpxZe1UViBSOjmbT2xicy2xh6CF8SQq7k7~SOHuq0LBNGXg3cRIWBQK2b6nu8SVE1qZwc7jqoYMSGm~JDHskZ0kgkJ5EHBSoinfJuvvvWzdlA__"
+                            alt="Persona señalando las tiendas"
+                            className="absolute left-3 -top-6 h-[475px]  object-cover object-right -scale-x-[1]"
+                        />
+
+                        <div className="flex items-center">
+                            {/* Store Links */}
+                            <div className="space-y-6 bg-white p-6 rounded-[40px] w-96 h-max ">
+                                <p className="text-xl  font-semibold mb-6">Elige tu tienda favorita y lleva la elegancia a tu hogar.</p>
+
+                                {/* Store Buttons */}
+                                <div className="space-y-4">
+                                    <a
+                                        href="https://falabella.com"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex justify-center rounded-full items-center w-full p-4 bg-secondary transition-colors"
+                                    >
+                                        <img src="https://s3-alpha-sig.figma.com/img/9bcf/e339/1d9cfc35631beafed170a53beff6f4fb?Expires=1740960000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=dMox2Pj9Z9yk1O4jCWELR~wcZ5e4ejGatrIFF782nE5Eh2hablSmgmGUDgY5Oy7jq4H5s8XHKsJ8XQB0vs~EicXsa7UjsyiVca6xzuDhAvbQInYSU2df5Jrf1smiCCEr0T~VcM~7GXt8ZgHBBWlLfXKbPGE4tdOsD4fBwusEQeNTwgRu10U9u-roSDlhWsVbkZerHjJhtddVnc~vHl5PtIEgWKupNVUgMQ14R8VLNAAdQu6a30LqGtETDouuiXPCTXd3ZbfpY1GYSg9GYRMlSEcpj1SjCYHXkSOVS3gPBx7057GpYrVrBmaEN5JyfAYB0LMZwwldrCQ77SbMelXUcQ__" alt="Falabella" className="h-7 object-contain" />
+                                    </a>
+
+                                    <a
+                                        href="https://mercadolibre.com"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex justify-center rounded-full items-centerw-full p-4 bg-secondary  transition-colors"
+                                    >
+                                        <img src="https://s3-alpha-sig.figma.com/img/8ab8/ce6c/51b6169085e5684aa630758bc573e87b?Expires=1740960000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=LX2DBiK6H5pURyzYACwW6oWK5tKlpgAdXPlrQeM1amcawz~nWWzqZkJewRPW9rsy6q086RROI7HfdqmZ0PopaOpc63OCTPk8VdZIWTel-zXqcX3AK5aNs8QAbUd8ciIUoptWT~eHgDBbWE0acdPUHRWDx9OAQzqwsBkDEtELzc-R9Co4VRS6DAfz82Ty-shazxu5uyYtfKR9vz7jaoBrxlDJfo5bdybpGlVuU9dFtC8BVBN3CkHj41sdF4dKIK85GS5v0PX6PgKt9xKFrCHtX17UhhGyDn1AByX8TiAN~GhXFEqkZ88~LN68RH6hxNUmxkUtlRApwm9yaznLVhoRTw__" alt="Mercado Libre" className="h-7 object-contain" />
+                                    </a>
+
+                                    <a
+                                        href="https://ripley.com"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex justify-center rounded-full items-center w-full p-4 bg-secondary transition-colors"
+                                    >
+                                        <img src="https://s3-alpha-sig.figma.com/img/95b8/0f09/92f5504042a098175875c84937b611c9?Expires=1740960000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=CZx~Pg13MrE2QXm70gPtcP2sXNjsG09OAyVJWPx5x0Zkzda0AtG9dgxMt~x~y~OKjXDS~GrHdMhmemBsFWQZP6BFm9R0azX-1EdGUaRfU4B2vBmxiPhK4W~bCXxiJkGDbUHBGbWZyPMvExD7OnCRkyNlCeVbQlwoBXhJaRyiIArjSmslQU3EVE66O2AF7MgyVS~6YBfseOWLmAfIQaTBGhUg4UJX8Ib3KQ0TXSrGkLdqGmkJ6VZrtcLAn52tCBDtIvwg2a2d7WPsxRuZF0NZKEbrIyJbTV13xNupyc36EzCcSezyLOuzK61dfCTNzuW1SVkUjX-Twj1Mkb9poqNF5Q__" alt="Ripley" className="h-7 object-contain" />
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </section>
+    )
+}
+
