@@ -10,12 +10,12 @@ export default function BlogList({ posts, postsLatest, loading, isFilter }) {
 
     }, [posts]);
     return (
-        <section className={` ${isFilter ? "pb-16" : "py-16"}`}>
+        <section className={`font-font-general ${isFilter ? "pb-16" : "py-16"}`}>
             <div className="px-primary mx-auto">
                 {!isFilter ? (
                     <div>
-                        <h2 className="text-3xl font-bold mb-4">Últimas publicaciones</h2>
-                        <p className="text-gray-600 mb-8">
+                        <h2 className="text-5xl customtext-neutral-dark font-semibold mb-4">Últimas publicaciones</h2>
+                        <p className="customtext-neutral-dark opacity-80 mb-8">
                             Nam tempor diam quis urna maximus, ac laoreet arcu convallis. Aenean dignissim nec sem quis consequat.
                         </p>
                         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">

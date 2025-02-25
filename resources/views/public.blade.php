@@ -78,6 +78,11 @@
 
             }
 
+            .hover\:bg-{{ $color->name }}:hover {
+                background-color: {{ $color->description }};
+
+            }
+
             .placeholder\:customtext-{{ $color->name }}::placeholder {
                 color: {{ $color->description }};
 

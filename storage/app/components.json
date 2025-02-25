@@ -26,6 +26,15 @@
                     "model": "Social"
                 },
                 "generals": ["cintillo"]
+            },
+            {
+                "id": "TopBarCopyright",
+                "name": "Copyright",
+                "image": "top-bar-socials.png",
+                "using": {
+                    "model": "Social"
+                },
+                "generals": ["cintillo"]
             }
         ]
     },
@@ -204,6 +213,18 @@
             {
                 "id": "CatalagoFiltros",
                 "name": "Producto Catalogo Filtro",
+                "image": "products-list.png",
+                "data": ["path", "title", "description"],
+                "using": {
+                    "model": "Item",
+                    "with": ["category", "subcategory", "brand"],
+
+                    "relations": ["category", "tags"]
+                }
+            },
+            {
+                "id": "FilterSalaFabulosa",
+                "name": "Filtro SalaFabulosa",
                 "image": "products-list.png",
                 "data": ["path", "title", "description"],
                 "using": {

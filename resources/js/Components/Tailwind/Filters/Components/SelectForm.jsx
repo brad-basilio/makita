@@ -11,8 +11,10 @@ const SelectForm = ({
     labelKey,
     label,
     labelClass,
-    className,
-    disabled = false
+    className = "customtext-neutral-dark   rounded-xl ",
+    disabled = false,
+
+
 }) => {
     const [isOpen, setIsOpen] = useState(false)
     const [selectedOption, setSelectedOption] = useState(null)
@@ -62,7 +64,7 @@ const SelectForm = ({
                 </label>
             )}
             <button
-                className={`w-full relative text-start  px-4 py-3 border customtext-neutral-dark   rounded-xl focus:ring-0 focus:outline-0   transition-all duration-300 ${className}`}
+                className={`w-full relative text-start  px-4 py-3 border focus:ring-0 focus:outline-0   transition-all duration-300 customtext-primary ${className}`}
                 onClick={() => setIsOpen(!isOpen)}
                 aria-haspopup="listbox"
                 aria-expanded={isOpen}
@@ -83,7 +85,7 @@ const SelectForm = ({
                             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
                             <input
                                 type="text"
-                                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                className={`w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 `}
                                 placeholder="Search options..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
