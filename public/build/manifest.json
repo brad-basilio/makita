@@ -2634,6 +2634,16 @@
       "_index-CqkZ-sT_.js"
     ]
   },
+  "resources/js/Components/Tailwind/Checkouts/Components/CardItem.jsx": {
+    "file": "assets/CardItem-BPKy3FFd.js",
+    "name": "CardItem",
+    "src": "resources/js/Components/Tailwind/Checkouts/Components/CardItem.jsx",
+    "isEntry": true,
+    "imports": [
+      "resources/js/Components/About/AboutHeader.jsx",
+      "_index-CqkZ-sT_.js"
+    ]
+  },
   "resources/js/Components/Tailwind/Checkouts/Components/CartStep.jsx": {
     "file": "assets/CartStep-BPKy3FFd.js",
     "name": "CartStep",
@@ -2694,16 +2704,6 @@
       "_index-CqkZ-sT_.js",
       "_main-CkMzf7wF.js",
       "____vite-browser-external_commonjs-proxy-DA7w84js.js"
-    ]
-  },
-  "resources/js/Components/Tailwind/Checkouts/Components/nuevoItem.jsx": {
-    "file": "assets/nuevoItem-BPKy3FFd.js",
-    "name": "nuevoItem",
-    "src": "resources/js/Components/Tailwind/Checkouts/Components/nuevoItem.jsx",
-    "isEntry": true,
-    "imports": [
-      "resources/js/Components/About/AboutHeader.jsx",
-      "_index-CqkZ-sT_.js"
     ]
   },
   "resources/js/Components/Tailwind/Components/CartItemRow.jsx": {

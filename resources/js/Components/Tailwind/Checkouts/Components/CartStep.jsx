@@ -3,7 +3,8 @@ import Number2Currency from "../../../../Utils/Number2Currency";
 
 import ButtonPrimary from "./ButtonPrimary";
 import ButtonSecondary from "./ButtonSecondary";
-import CardItem from "./nuevoItem";
+import CardItem from "./CardItem";
+
 
 
 

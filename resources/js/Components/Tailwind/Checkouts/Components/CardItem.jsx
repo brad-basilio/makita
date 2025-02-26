@@ -1,6 +1,6 @@
 import { Minus, Plus, PlusCircle, Trash2 } from "lucide-react";
 
-const nuevoItem = ({ setCart, ...item }) => {
+const CardItem = ({ setCart, ...item }) => {
 
     const onDeleteClicked = () => {
         setCart(old => old.filter(x => x.id !== item.id));
@@ -87,4 +87,4 @@ const nuevoItem = ({ setCart, ...item }) => {
         </div>);
 }
 
-export default nuevoItem;
+export default CardItem;
