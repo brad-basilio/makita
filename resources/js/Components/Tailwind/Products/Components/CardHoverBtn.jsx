@@ -36,7 +36,7 @@ const CardHoverBtn = ({ product, widthClass = "lg:w-1/5", setCart, cart }) => {
                 <div className="relative">
                     {product.discount != null && !isNaN(product.discount) && (
                         <span className="absolute top-2 left-2 bg-[#F93232] text-white text-base font-medium px-2 py-1 rounded-full">
-                            -{Number((product.discount * 100 / product.price)).toFixed(0)}%
+                            -{Number(100 - Number((product?.discount * 100 / product?.price))).toFixed(0)}%
                         </span>
                     )}
                     <div className="aspect-square rounded-lg overflow-hidden flex items-center justify-center p-4">

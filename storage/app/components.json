@@ -35,6 +35,15 @@
                     "model": "Social"
                 },
                 "generals": ["cintillo"]
+            },
+            {
+                "id": "TopBarCopyrightSocials",
+                "name": "Copyright - Social",
+                "image": "top-bar-socials.png",
+                "using": {
+                    "model": "Social"
+                },
+                "generals": ["cintillo"]
             }
         ]
     },
@@ -72,6 +81,12 @@
             {
                 "id": "HeaderSearchB",
                 "name": "HeaderSearchB",
+                "image": "header-with-search.png",
+                "data": ["class", "link_cart"]
+            },
+            {
+                "id": "HeaderScraping",
+                "name": "HeaderScraping",
                 "image": "header-with-search.png",
                 "data": ["class", "link_cart"]
             },
@@ -222,6 +237,7 @@
                     "relations": ["category", "tags"]
                 }
             },
+
             {
                 "id": "FilterSalaFabulosa",
                 "name": "Filtro SalaFabulosa",
@@ -289,6 +305,17 @@
                 "using": {
                     "model": "Category",
                     "limit": 3,
+                    "filters": ["featured"]
+                }
+            },
+            {
+                "id": "CategoriesScraping",
+                "name": "CategoriesScraping",
+                "image": "categories-carousel.png",
+                "data": ["path", "title", "description", "link_catalog"],
+                "using": {
+                    "model": "Category",
+                    "limit": 10,
                     "filters": ["featured"]
                 }
             }
@@ -368,7 +395,18 @@
             {
                 "id": "Scraping",
                 "name": "Scraping Simple",
-                "image": "products-list.png"
+                "image": "products-list.png",
+                "using": {
+                    "model": "Item",
+                    "filters": [
+                        "featured",
+                        "recommended",
+                        "offering",
+                        "is_new"
+                    ],
+                    "with": ["category", "subcategory", "brand"],
+                    "limit": 8
+                }
             }
         ]
     },
@@ -613,6 +651,24 @@
             {
                 "id": "FooterSalaFabulosa",
                 "name": "FooterSalaFabulosa",
+                "image": "footer-simple.png",
+                "using": {
+                    "model": "Social",
+                    "limit": 10
+                },
+                "generals": [
+                    "terms_conditions",
+                    "privacy_policy",
+                    "delivery_policy",
+                    "saleback_policy",
+                    "address",
+                    "support_phone",
+                    "support_email"
+                ]
+            },
+            {
+                "id": "FooterPideloPe",
+                "name": "FooterPideloPe",
                 "image": "footer-simple.png",
                 "using": {
                     "model": "Social",

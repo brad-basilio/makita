@@ -11,7 +11,7 @@ const searchQuery = args[0] || "mujer";
         browser = await puppeteer.launch({
             headless: true,
             args: ["--no-sandbox", "--disable-setuid-sandbox"],
-            executablePath: "/usr/bin/chromium-browser",
+            // executablePath: "/usr/bin/chromium-browser",
         });
 
         const page = await browser.newPage();

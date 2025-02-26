@@ -88,7 +88,7 @@ const System = ({ page, isUser, pages, params, filteredData = {}, systems, gener
         return <Filter which={value} data={data} items={getItems(itemsId)} filteredData={filteredData} cart={cart} setCart={setCart} />
 
       case 'product':
-        return <Product which={value} data={data} items={getItems(itemsId)} cart={cart} setCart={setCart} />
+        return <Product which={value} data={data} items={getItems(itemsId)} filteredData={filteredData} cart={cart} setCart={setCart} pages={pages} />
       case 'category':
         return <Category which={value} data={data} items={getItems(itemsId)} />
       case 'slider':

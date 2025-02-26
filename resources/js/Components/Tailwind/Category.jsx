@@ -3,11 +3,13 @@ import React from "react"
 
 
 
+
 const CategorySimple = React.lazy(() => import('./Categories/CategorySimple'))
 const CategoryCarousel = React.lazy(() => import('./Categories/CategoryCarousel'))
 const InfiniteCategory = React.lazy(() => import('./Categories/InfiniteCategory'))
 const PaginationCategory = React.lazy(() => import('./Categories/PaginationCategory'))
 const CategoryFlex = React.lazy(() => import('./Categories/CategoryFlex'))
+const CategoriesScraping = React.lazy(() => import('./Scraping/Components/CategoriesScraping'))
 
 const Category = ({ which, data, items }) => {
   const getCategory = () => {
@@ -22,6 +24,8 @@ const Category = ({ which, data, items }) => {
         return <PaginationCategory data={data} items={items} />
       case 'CategoryFlex':
         return <CategoryFlex data={data} items={items} />
+      case 'CategoriesScraping':
+        return <CategoriesScraping data={data} items={items} />
       default:
         return <div className="w-full px-[5%] replace-max-w-here p-4 mx-auto">- No Hay componente <b>{which}</b> -</div>
     }

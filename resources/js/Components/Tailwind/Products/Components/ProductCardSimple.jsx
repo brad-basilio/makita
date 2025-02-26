@@ -36,7 +36,7 @@ const ProductCardSimple = ({ product, widthClass = "lg:w-1/5", setCart, cart }) 
                 <div className="relative">
                     {product.discount != null && !isNaN(product.discount) && (
                         <span className="absolute top-8 right-0 bg-[#F93232] text-white text-base font-bold px-2 py-1 rounded-l-full">
-                            -{Number((product.discount * 100 / product.price)).toFixed(0)}%
+                            -{Number(100 - Number((product?.discount * 100 / product?.price))).toFixed(0)}%
                         </span>
                     )}
                     <div className="aspect-square rounded-3xl overflow-hidden flex items-center justify-center  bg-secondary">
