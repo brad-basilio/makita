@@ -111,6 +111,8 @@ const searchQuery = args[0] || "mujer";
                     let image = relativeSrc.startsWith("http")
                         ? relativeSrc
                         : baseUrl + relativeSrc;
+                    let url =
+                        product.querySelector(".price-wrapper a")?.href || "";
 
                     return {
                         name,
@@ -120,6 +122,7 @@ const searchQuery = args[0] || "mujer";
                         final_price,
                         discount_percent,
                         image,
+                        url,
                     };
                 }
             );

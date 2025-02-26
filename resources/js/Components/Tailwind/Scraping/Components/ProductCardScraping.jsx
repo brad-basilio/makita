@@ -1,8 +1,12 @@
 import React from 'react';
 import { ShoppingCart } from 'lucide-react'; // Icono para la cesta
 import Swal from 'sweetalert2';
+import { router } from '@inertiajs/react'
+
 
 const ProductCardScraping = ({ product, widthClass = "lg:w-1/4", setCart, cart }) => {
+
+
     const onAddClicked = (product) => {
         const newCart = structuredClone(cart)
         const index = newCart.findIndex(x => x.id == product?.id)
@@ -23,8 +27,29 @@ const ProductCardScraping = ({ product, widthClass = "lg:w-1/4", setCart, cart }
 
     const inCart = cart?.find(x => x.id == product?.id)
     const finalPrice = product?.discount > 0 ? product?.discount : product?.price
+    function createSlug(name) {
+        return name
+            .toLowerCase()
+            .replace(/ /g, '-')
+            .normalize('NFD') // Normalizar caracteres
+            .replace(/[\u0300-\u036f]/g, ''); // Eliminar diacríticos
+    }
+    // Guardar el dato oculto en sessionStorage
+    sessionStorage.setItem("product_url", product?.url);
+
+    const handleClickGoTo = (name) => {
+        const slug = createSlug(name);
+        router.visit(`/product/${slug}`, {
+
+            method: "get",
+            preserveState: true, // Mantiene el estado
+            preserveScroll: true, // No recarga la página
+        });
+    };
     return (
         <div
+            onClick={() => handleClickGoTo(product?.name)}
+
             key={product?.id}
             className={`group font-font-general w-full transition-transform duration-300 hover:scale-105  sm:w-1/3 ${widthClass} flex-shrink-0 font-font-general customtext-primary cursor-pointer`}
         >

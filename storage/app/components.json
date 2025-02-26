@@ -468,6 +468,10 @@
                     "model": "Item",
                     "flied": "slug"
                 }
+            },
+            {
+                "id": "ScrapingProductDetail",
+                "name": "ScrapingProductDetail"
             }
         ]
     },
