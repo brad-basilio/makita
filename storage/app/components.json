@@ -580,7 +580,7 @@
         "name": "Signup",
         "options": [
             {
-                "id": "SignupSimple",
+                "id": "SignUpSimple",
                 "name": "Simple"
             }
         ]
