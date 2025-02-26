@@ -68,11 +68,6 @@
         "name": "Header",
         "options": [
             {
-                "id": "HeaderSimple",
-                "name": "Simple",
-                "image": "header-simple.png"
-            },
-            {
                 "id": "HeaderSearch",
                 "name": "Con barra de búsqueda",
                 "image": "header-with-search.png",
@@ -95,17 +90,6 @@
                 "name": "Con busqueda y menu",
                 "image": "header-with-search.png",
                 "data": ["class", "link_cart"]
-            },
-            {
-                "id": "HeaderWithMegaMenu",
-                "name": "Con megamenu (Categorías)",
-                "image": "header-with-mega-menu.png",
-                "using": {
-                    "model": "Category",
-                    "with": ["subcategories"],
-                    "fields": ["name", "slug", "image"],
-                    "filters": ["featured"]
-                }
             }
         ]
     },
