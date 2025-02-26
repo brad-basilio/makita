@@ -2578,7 +2578,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Checkout.jsx": {
-    "file": "assets/Checkout-BTe7Kr-u.js",
+    "file": "assets/Checkout-D-pm4IQH.js",
     "name": "Checkout",
     "src": "resources/js/Components/Tailwind/Checkout.jsx",
     "isEntry": true,
@@ -2628,16 +2628,6 @@
     "file": "assets/ButtonSecondary-BPKy3FFd.js",
     "name": "ButtonSecondary",
     "src": "resources/js/Components/Tailwind/Checkouts/Components/ButtonSecondary.jsx",
-    "isEntry": true,
-    "imports": [
-      "resources/js/Components/About/AboutHeader.jsx",
-      "_index-CqkZ-sT_.js"
-    ]
-  },
-  "resources/js/Components/Tailwind/Checkouts/Components/CardItem.jsx": {
-    "file": "assets/CardItem-BPKy3FFd.js",
-    "name": "CardItem",
-    "src": "resources/js/Components/Tailwind/Checkouts/Components/CardItem.jsx",
     "isEntry": true,
     "imports": [
       "resources/js/Components/About/AboutHeader.jsx",
@@ -2704,6 +2694,16 @@
       "_index-CqkZ-sT_.js",
       "_main-CkMzf7wF.js",
       "____vite-browser-external_commonjs-proxy-DA7w84js.js"
+    ]
+  },
+  "resources/js/Components/Tailwind/Checkouts/Components/nuevoItem.jsx": {
+    "file": "assets/nuevoItem-BPKy3FFd.js",
+    "name": "nuevoItem",
+    "src": "resources/js/Components/Tailwind/Checkouts/Components/nuevoItem.jsx",
+    "isEntry": true,
+    "imports": [
+      "resources/js/Components/About/AboutHeader.jsx",
+      "_index-CqkZ-sT_.js"
     ]
   },
   "resources/js/Components/Tailwind/Components/CartItemRow.jsx": {
@@ -4125,7 +4125,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-Ba0rmyrI.js",
+    "file": "assets/System-DvHMB80e.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,
