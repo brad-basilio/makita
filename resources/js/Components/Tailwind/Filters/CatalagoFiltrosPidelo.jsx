@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import CardHoverBtn from '../Products/Components/CardHoverBtn';
-import { ChevronDown, Filter, Search, Tag } from 'lucide-react';
+import { ChevronDown, ChevronLeft, ChevronRight, Filter, Search, Tag } from 'lucide-react';
 import ItemsRest from '../../../Actions/ItemsRest';
 import ArrayJoin from '../../../Utils/ArrayJoin';
 import { Loading } from '../Components/Resources/Loading';
@@ -108,9 +108,7 @@ const CatalagoFiltrosPidelo = ({ items, data, filteredData, cart, setCart }) => 
         }
     };
 
-    useEffect(() => {
-        fetchProducts();
-    }, [selectedFilters]);
+
 
     const fetchProductsScraping = async (query, provider) => {
         if (!query) {
@@ -214,36 +212,57 @@ const CatalagoFiltrosPidelo = ({ items, data, filteredData, cart, setCart }) => 
     );
 
 
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 12;
+
+    // Calcular los productos para la página actual
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = products.slice(indexOfFirstItem, indexOfLastItem);
+
+    // Calcular el total de páginas
+    const totalPages = Math.ceil(products.length / itemsPerPage);
+
+    // Cambiar de página
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+
     return (
         <section className="py-12 bg-[#F7F9FB] font-font-general">
             <div className="mx-auto px-primary">
                 <div className="flex justify-between items-center mb-8 pb-4 border-b-2">
                     <h2 className="text-4xl font-bold w-6/12">Todos los productos</h2>
                     <div className="flex items-center gap-4 w-5/12">
-                        <span className='block w-6/12'>Productos seleccionados: <strong>{products?.length}</strong></span>
-                        {/* Ordenación */}
-                        <div className='w-6/12'>
-                            <SelectForm
-                                options={sortOptions}
-                                placeholder="Ordenar por"
-                                onChange={(value) => {
-                                    const [selector, order] = value.split(':');
-                                    const sort = [
-                                        {
-                                            selector: selector,
-                                            desc: order === 'desc',
-                                        },
-                                    ];
-                                    setSelectedFilters((prev) => ({
-                                        ...prev,
-                                        sort,
-                                    }));
-                                }}
-                                labelKey="label"
-                                valueKey="value"
 
-                            />
+                        <div className='flex justify-end items-center mb-4 w-full'>
+                            {/* Ordenación <span className='block w-6/12'>Productos seleccionados: <strong>{products?.length}</strong></span>*/}
+
+                            <div className='customtext-neutral-dark font-semibold'>
+                                <nav class="flex items-center gap-x-2 min-w-max">
+                                    <button class=" p-4 inline-flex items-center" onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>
+                                        <ChevronLeft />
+                                    </button>
+
+                                    <ul className='list-none flex gap-2'>
+                                        {[...Array(totalPages).keys()].map((number) => (
+                                            <li
+                                                key={number + 1}
+                                                className={`page-item ${currentPage === number + 1 ? "active" : ""}`}
+                                            >
+                                                <button onClick={() => paginate(number + 1)} class={`w-10 h-10  p-2 inline-flex items-center justify-center rounded-full transition-all duration-300  hover:text-white hover:bg-primary ${currentPage === number + 1 ? "bg-primary text-white" : " bg-transparent"}`} aria-current="page">{number + 1}</button>
+                                            </li>
+                                        ))}
+                                    </ul>
+
+                                    <button class=" p-4 inline-flex items-center " onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === totalPages}>
+                                        <ChevronRight />
+                                    </button>
+                                </nav>
+                            </div>
                         </div>
+
+
                     </div>
                 </div>
 
@@ -379,13 +398,14 @@ const CatalagoFiltrosPidelo = ({ items, data, filteredData, cart, setCart }) => 
                     </div>
 
                     <div className="w-9/12">
+
                         {/* Productos */}
                         {loading ? (
                             <Loading />
                         ) : (
                             <div className="flex items-center flex-wrap gap-y-8 transition-all duration-300 ease-in-out">
                                 {Array.isArray(products) && products.length > 0 ? (
-                                    products.map((product) => (
+                                    currentItems.map((product) => (
                                         <ProductCardScraping key={product.id} product={product} widthClass='lg:w-1/3' cart={cart} setCart={setCart} />
                                     ))
                                 ) : (

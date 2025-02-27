@@ -60,7 +60,7 @@ use App\Http\Controllers\ScrapController;
 
 
 Route::post('/scrap-nike', [ScrapController::class, 'scrapNike']);
-
+Route::post('/scrap-nike-paginate', [ScrapController::class, 'getPaginatedData']);
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/signup', [AuthController::class, 'signup']);
