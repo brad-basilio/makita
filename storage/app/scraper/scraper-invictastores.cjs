@@ -34,6 +34,8 @@ const exchangeRate = parseFloat(args[3]) || 1;
                 "--disable-background-networking",
                 "--remote-debugging-port=9222",
                 "--user-data-dir=/var/www/.chrome", // 🔥 Esto soluciona el problema
+                "--disable-web-security",
+                "--disable-features=IsolateOrigins,site-per-process",
             ],
         });
 
