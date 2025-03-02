@@ -63,8 +63,9 @@ const exchangeRate = parseFloat(args[3]) || 1;
             );
             console.log("🖥 LOG DESDE EL NAVEGADOR:", msg.text(), ...args);
         });*/
-
-        await page.goto(url, { waitUntil: "networkidle2", timeout: 120000 });
+        // Captura una captura de pantalla para depuración
+        await page.screenshot({ path: "debug.png" });
+        await page.goto(url, { waitUntil: "networkidle0", timeout: 120000 });
 
         // Esperar a que los productos se carguen
         await page.waitForSelector(".ProductCard", { timeout: 30000 });
