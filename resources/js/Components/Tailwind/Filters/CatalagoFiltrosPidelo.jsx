@@ -362,6 +362,10 @@ const CatalagoFiltrosPidelo = ({
                                                 nextPage
                                             );
                                         }}
+                                        disabled={
+                                            currentPage === totalPages &&
+                                            providerParam === "invictastores"
+                                        }
                                     >
                                         <ChevronRight />
                                     </button>

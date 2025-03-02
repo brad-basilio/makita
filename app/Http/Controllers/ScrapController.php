@@ -2,14 +2,78 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ExchangeRate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Exception;
+use Illuminate\Support\Facades\Http;
 use Stichoza\GoogleTranslate\GoogleTranslate;
 use Illuminate\Support\Facades\Log;
 
 class ScrapController extends BasicController
 {
+
+
+
+    public function getExchangeRate($currency)
+    {
+        $today = date('Y-m-d');
+
+        // Verificar si ya existe el tipo de cambio en la base de datos
+        $exchangeRate = ExchangeRate::where('date', $today)
+            ->where('currency', $currency)
+            ->first();
+
+        if ($exchangeRate) {
+            return $exchangeRate->rate; // Retornar el tipo de cambio guardado
+        }
+
+        // Si no está en la BD, obtenerlo de la API
+        $token = "apis-token-13455.UMuwGmnJWOoWR4SHhbdCM3guWeP4iwme";
+
+        $ch = curl_init();
+        curl_setopt_array($ch, [
+            CURLOPT_URL => 'https://api.apis.net.pe/v2/sunat/tipo-cambio?date=' . $today,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_SSL_VERIFYPEER => 0,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 2,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_HTTPHEADER => array(
+                'Referer: https://apis.net.pe/tipo-de-cambio-sunat-api',
+                'Authorization: Bearer ' . $token
+            ),
+        ]);
+
+        $response = curl_exec($ch);
+        $error = curl_error($ch);
+        curl_close($ch);
+
+        if ($error) {
+            return null; // Si hay un error con cURL
+        }
+
+        $data = json_decode($response, true);
+        //dump($data);
+
+        if (!isset($data['precioVenta'])) {
+            return null; // Si la API no responde correctamente
+        }
+
+        // Guardar en la base de datos
+        $exchangeRate = ExchangeRate::create([
+            'currency' => $currency,
+            'rate' => $data['precioVenta'],
+            'date' => $today
+        ]);
+
+        return $exchangeRate->rate;
+    }
+
+
     public function scrapProviders(Request $request)
     {
         $traductor = new GoogleTranslate('en');
@@ -96,6 +160,7 @@ class ScrapController extends BasicController
         $traductor->setOptions(['verify' => false]);
 
         try {
+            $exchangeRate = 0;
             // Parámetros de búsqueda
             $query = $request->input('query', 'mujer');
             $proveedor = $request->input('proveedor', 'nike');
@@ -114,6 +179,9 @@ class ScrapController extends BasicController
                     $storePath = storage_path('app/scraper/scraper-gapfactory.cjs');
                     break;
                 case 'invictastores':
+                    $currency = 'USD';
+                    $exchangeRate = $this->getExchangeRate($currency);
+                    //dump($exchangeRate);
                     $dataPath = "invictastores";
                     $storePath = storage_path('app/scraper/scraper-invictastores.cjs');
                     try {
@@ -140,7 +208,10 @@ class ScrapController extends BasicController
                 set_time_limit(60); // Evitar timeout en la ejecución
 
                 // Ejecutar Puppeteer con paginación
-                $command = "node {$storePath} " . escapeshellarg($query) . " " . escapeshellarg($offset) . " " . escapeshellarg($limit);
+                $command = "node {$storePath} " . escapeshellarg($query) . " " . escapeshellarg($offset) . " " . escapeshellarg($limit) . " " . escapeshellarg($exchangeRate);
+                // dump($command);
+
+
                 $output = shell_exec($command . ' 2>&1');
                 Log::info($output);
                 if (!$output) {
