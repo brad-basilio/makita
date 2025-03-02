@@ -59,7 +59,7 @@ const exchangeRate = parseFloat(args[3]) || 1;
         await page.goto(url, { waitUntil: "networkidle2", timeout: 120000 });
 
         // Esperar a que los productos se carguen
-        await page.waitForSelector(".ProductCard", { timeout: 40000 });
+        await page.waitForSelector(".ProductCard", { timeout: 120000 });
         // Asegurar que todos los precios con descuento se carguen antes de continuar
 
         // Extraer los datos de los productos
