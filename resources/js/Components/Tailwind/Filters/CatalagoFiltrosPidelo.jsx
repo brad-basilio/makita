@@ -574,9 +574,9 @@ const CatalagoFiltrosPidelo = ({
                             <div className="flex items-center flex-wrap gap-y-8 transition-all duration-300 ease-in-out">
                                 {Array.isArray(products) &&
                                 products.length > 0 ? (
-                                    currentItems.map((product) => (
+                                    currentItems.map((product, index) => (
                                         <ProductCardScraping
-                                            key={product.id}
+                                            key={index}
                                             product={product}
                                             widthClass="lg:w-1/3"
                                             cart={cart}

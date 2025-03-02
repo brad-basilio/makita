@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Exception;
 use Stichoza\GoogleTranslate\GoogleTranslate;
+use Illuminate\Support\Facades\Log;
 
 class ScrapController extends BasicController
 {
@@ -141,15 +142,15 @@ class ScrapController extends BasicController
                 // Ejecutar Puppeteer con paginación
                 $command = "node {$storePath} " . escapeshellarg($query) . " " . escapeshellarg($offset) . " " . escapeshellarg($limit);
                 $output = shell_exec($command . ' 2>&1');
-                dump($output);
+                Log::info($output);
                 if (!$output) {
-                    dump("Error al ejecutar el script de Node.js.");
+                    Log::info("Error al ejecutar el script de Node.js.");
                 }
 
                 // Decodificar JSON de la salida
                 $data = json_decode($output, true);
                 if (json_last_error() !== JSON_ERROR_NONE) {
-                    dump("Error JSON: " . json_last_error_msg() . ". Salida: " . $output);
+                    Log::info("Error JSON: " . json_last_error_msg() . ". Salida: " . $output);
                 }
 
                 // Guardar en caché (1 hora)
@@ -165,7 +166,7 @@ class ScrapController extends BasicController
                 'limit' => $limit
             ]);
         } catch (Exception $e) {
-            dump("Error: " . $e->getMessage());
+            Log::info("Error: " . $e->getMessage());
             return response()->json([
                 'status' => 500,
                 'message' => 'Error en el scraping',
