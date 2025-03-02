@@ -42,9 +42,17 @@ const exchangeRate = parseFloat(args[3]) || 1;
         const page = await browser.newPage();
 
         // Configurar User-Agent
-        await page.setUserAgent(
+        /* await page.setUserAgent(
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36"
+        );*/
+
+        await page.setUserAgent(
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
         );
+        await page.setExtraHTTPHeaders({
+            "Accept-Language": "en-US,en;q=0.9",
+            Referer: "https://www.google.com/",
+        });
 
         // Construir la URL dinámica
         const url = `https://invictastores.com/search/${encodeURIComponent(
@@ -61,7 +69,7 @@ const exchangeRate = parseFloat(args[3]) || 1;
         await page.goto(url, { waitUntil: "networkidle2", timeout: 120000 });
 
         // Esperar a que los productos se carguen
-        await page.waitForSelector(".ProductCard", { timeout: 120000 });
+        await page.waitForSelector(".ProductCard", { timeout: 10000 });
         // Asegurar que todos los precios con descuento se carguen antes de continuar
 
         // Extraer los datos de los productos
