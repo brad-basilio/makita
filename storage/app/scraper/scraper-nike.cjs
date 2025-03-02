@@ -9,9 +9,26 @@ const limit = parseInt(args[2]) || 12;
 (async () => {
     let browser;
     try {
+        /*
+               browser = await puppeteer.launch({
+                   headless: true,
+                   args: ["--no-sandbox", "--disable-setuid-sandbox"],
+               });*/
         browser = await puppeteer.launch({
+            executablePath: "/usr/bin/google-chrome-stable",
             headless: true,
-            args: ["--no-sandbox", "--disable-setuid-sandbox"],
+            args: [
+                "--no-sandbox",
+                "--disable-setuid-sandbox",
+                "--disable-dev-shm-usage",
+                "--disable-gpu",
+                "--disable-crashpad",
+                "--disable-software-rasterizer",
+                "--disable-extensions",
+                "--disable-background-networking",
+                "--remote-debugging-port=9222",
+                "--user-data-dir=/var/www/.chrome", // 🔥 Esto soluciona el problema
+            ],
         });
 
         const page = await browser.newPage();
