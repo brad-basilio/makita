@@ -9,12 +9,11 @@ const limit = parseInt(args[2]) || 12;
 (async () => {
     let browser;
     try {
-        /*
-               browser = await puppeteer.launch({
-                   headless: true,
-                   args: ["--no-sandbox", "--disable-setuid-sandbox"],
-               });*/
         browser = await puppeteer.launch({
+            headless: true,
+            args: ["--no-sandbox", "--disable-setuid-sandbox"],
+        });
+        /*  browser = await puppeteer.launch({
             executablePath: "/usr/bin/google-chrome-stable",
             headless: true,
             args: [
@@ -30,7 +29,7 @@ const limit = parseInt(args[2]) || 12;
                 "--user-data-dir=/var/www/.chrome", // 🔥 Esto soluciona el problema
             ],
         });
-
+*/
         const page = await browser.newPage();
         await page.setUserAgent(
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36"
