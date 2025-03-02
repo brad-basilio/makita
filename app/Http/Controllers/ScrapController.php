@@ -9,7 +9,7 @@ use Stichoza\GoogleTranslate\GoogleTranslate;
 
 class ScrapController extends BasicController
 {
-    public function scrapNike(Request $request)
+    public function scrapProviders(Request $request)
     {
         $traductor = new GoogleTranslate('en');
         $traductor->setOptions(['verify' => false]);
@@ -84,6 +84,91 @@ class ScrapController extends BasicController
             return response()->json([
                 'status' => 500,
                 'message' => 'Error al procesar la solicitud',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function scrap(Request $request)
+    {
+        $traductor = new GoogleTranslate('en');
+        $traductor->setOptions(['verify' => false]);
+
+        try {
+            // Parámetros de búsqueda
+            $query = $request->input('query', 'mujer');
+            $proveedor = $request->input('proveedor', 'nike');
+            $page = max(1, intval($request->input('page', 1))); // Página mínima 1
+            $limit = max(1, intval($request->input('limit', 12))); // Mínimo 1 producto por página
+            $offset = ($page - 1) * $limit;
+
+            // Determinar el script según el proveedor
+            switch ($proveedor) {
+                case 'nike':
+                    $dataPath = "nike";
+                    $storePath = storage_path('app/scraper/scraper-nike.cjs');
+                    break;
+                case 'gapfactory':
+                    $dataPath = "gapfactory";
+                    $storePath = storage_path('app/scraper/scraper-gapfactory.cjs');
+                    break;
+                case 'invictastores':
+                    $dataPath = "invictastores";
+                    $storePath = storage_path('app/scraper/scraper-invictastores.cjs');
+                    try {
+                        $query = $traductor->translate($query);
+                    } catch (Exception $e) {
+                        $query = $request->input('query', 'mujer');
+                    }
+                    break;
+                case 'sephora':
+                    $dataPath = "sephora";
+                    $storePath = storage_path('app/scraper/scraper-sephora.cjs');
+                    break;
+                default:
+                    $dataPath = "nike";
+                    $storePath = storage_path('app/scraper/scraper-nike.cjs');
+                    break;
+            }
+
+            // Clave de caché con paginación
+            $cacheKey = "{$dataPath}_products_{$query}_page_{$page}_limit_{$limit}";
+            $data = Cache::get($cacheKey);
+
+            if (!$data) {
+                set_time_limit(60); // Evitar timeout en la ejecución
+
+                // Ejecutar Puppeteer con paginación
+                $command = "node {$storePath} " . escapeshellarg($query) . " " . escapeshellarg($offset) . " " . escapeshellarg($limit);
+                $output = shell_exec($command . ' 2>&1');
+                dump($output);
+                if (!$output) {
+                    dump("Error al ejecutar el script de Node.js.");
+                }
+
+                // Decodificar JSON de la salida
+                $data = json_decode($output, true);
+                if (json_last_error() !== JSON_ERROR_NONE) {
+                    dump("Error JSON: " . json_last_error_msg() . ". Salida: " . $output);
+                }
+
+                // Guardar en caché (1 hora)
+                Cache::put($cacheKey, $data, now()->addHour());
+            }
+
+            // Retornar datos con paginación
+            return response()->json([
+                'status' => 200,
+                'message' => 'Datos extraídos correctamente',
+                'data' => $data,
+                'page' => $page,
+                'limit' => $limit
+            ]);
+        } catch (Exception $e) {
+            dump("Error: " . $e->getMessage());
+            return response()->json([
+                'status' => 500,
+                'message' => 'Error en el scraping',
                 'error' => $e->getMessage(),
             ], 500);
         }

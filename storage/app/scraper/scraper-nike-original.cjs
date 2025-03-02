@@ -3,32 +3,59 @@ const puppeteer = require("puppeteer");
 // Obtener argumentos desde la línea de comandos
 const args = process.argv.slice(2);
 const searchQuery = args[0] || "mujer";
-const offset = parseInt(args[1]) || 0;
-const limit = parseInt(args[2]) || 12;
 
 (async () => {
     let browser;
     try {
+        // Configurar Puppeteer
         browser = await puppeteer.launch({
             headless: true,
             args: ["--no-sandbox", "--disable-setuid-sandbox"],
         });
 
         const page = await browser.newPage();
+
+        // Configurar User-Agent
         await page.setUserAgent(
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36"
         );
 
+        // Construir la URL dinámica
         const url = `https://www.nike.com.pe/search?q=${encodeURIComponent(
             searchQuery
-        )}&start=${encodeURIComponent(offset)}&sz=${encodeURIComponent(limit)}`;
-
+        )}`;
         await page.goto(url, { waitUntil: "networkidle2", timeout: 120000 });
 
         // Esperar a que los productos se carguen
-        await page.waitForSelector(".product", { timeout: 10000 });
+        // await page.waitForSelector(".product", { timeout: 10000 });
+        // Función para hacer scroll hasta el final de la página
+        async function autoScroll(page) {
+            await page.evaluate(async () => {
+                await new Promise((resolve) => {
+                    let totalHeight = 0;
+                    const distance = 100; // Distancia de scroll en cada paso
+                    const timer = setInterval(() => {
+                        const scrollHeight = document.body.scrollHeight;
+                        window.scrollBy(0, distance);
+                        totalHeight += distance;
 
-        // Extraer los datos de los productos con paginación
+                        if (totalHeight >= scrollHeight) {
+                            clearInterval(timer);
+                            resolve();
+                        }
+                    }, 100); // Intervalo entre scrolls
+                });
+            });
+        }
+
+        // Hacer scroll para cargar más productos
+        await autoScroll(page);
+        await page.waitForFunction(
+            () => document.querySelector(".product") !== null,
+            { timeout: 120000 }
+        ); // Esperar a que se carguen los nuevos productos
+
+        // Extraer los datos de los productos
         const products = await page.evaluate(() => {
             const baseUrl = "https://www.nike.com.pe";
             return Array.from(document.querySelectorAll(".product")).map(
@@ -67,7 +94,7 @@ const limit = parseInt(args[2]) || 12;
                         ? parseFloat(discountMatch[0], 10)
                         : null;
                     let final_price = 0;
-
+                    console.log(discount, price);
                     if (price === null) {
                         price = discount;
                     }
@@ -104,6 +131,7 @@ const limit = parseInt(args[2]) || 12;
         // Imprimir los productos en formato JSON
         console.log(JSON.stringify(products, null, 2));
     } catch (error) {
+        // Manejar errores y devolver un JSON con el error
         console.error(
             JSON.stringify({
                 status: "error",
@@ -112,6 +140,7 @@ const limit = parseInt(args[2]) || 12;
             })
         );
     } finally {
+        // Cerrar el navegador
         if (browser) {
             await browser.close();
         }
