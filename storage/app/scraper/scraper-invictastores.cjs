@@ -56,10 +56,10 @@ const exchangeRate = parseFloat(args[3]) || 1;
             console.log("🖥 LOG DESDE EL NAVEGADOR:", msg.text(), ...args);
         });*/
 
-        await page.goto(url, { waitUntil: "networkidle2", timeout: 30000 });
+        await page.goto(url, { waitUntil: "networkidle2", timeout: 120000 });
 
         // Esperar a que los productos se carguen
-        await page.waitForSelector(".ProductCard", { timeout: 10000 });
+        await page.waitForSelector(".ProductCard", { timeout: 40000 });
         // Asegurar que todos los precios con descuento se carguen antes de continuar
 
         // Extraer los datos de los productos
