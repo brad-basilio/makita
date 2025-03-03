@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Global from "../../../../Utils/Global";
 import { Search } from "lucide-react";
 import ScrapRest from "../../../../Actions/Scraping/ScrapRest";
@@ -69,7 +69,7 @@ const HeaderScraping = ({
                         <div className="w-2/6 relative pl-2 before:absolute before:right-0 before:top-1/2 before:-translate-y-1/2 before:h-6 before:w-[1px] before:bg-[#E4E4E4]">
                             <SelectFormScraping
                                 options={options}
-                                placeholder="Nike"
+                                placeholder={proveedor || `Nike`}
                                 onChange={(value) => setProveedor(value)}
                                 labelKey="label"
                                 valueKey="value"
