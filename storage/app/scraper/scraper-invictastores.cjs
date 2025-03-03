@@ -51,10 +51,6 @@ puppeteer.use(StealthPlugin());
 
         const page = await browser.newPage();
 
-        // Configurar User-Agent
-        /*   await page.setUserAgent(
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36"
-        );*/
         await page.setCookie(
             {
                 name: "cf_clearance",
@@ -87,28 +83,17 @@ puppeteer.use(StealthPlugin());
 
         // Simular resolución de pantalla
         await page.setViewport({ width: 1920, height: 1080 });
-        /* await page.setUserAgent(
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-        );*/
-        /* await page.setExtraHTTPHeaders({
-            "Accept-Language": "en-US,en;q=0.9",
-            Referer: "https://www.google.com/",
-        });*/
 
         // Construir la URL dinámica
         const url = `https://invictastores.com/search/${encodeURIComponent(
             searchQuery
         )}`;
-        // Capturar logs de la consola del navegador
-        /*    page.on("console", async (msg) => {
-            const args = await Promise.all(
-                msg.args().map((arg) => arg.jsonValue())
-            );
-            console.log("🖥 LOG DESDE EL NAVEGADOR:", msg.text(), ...args);
-        });*/
+
         // Captura una captura de pantalla para depuración
         // await page.screenshot({ path: "debug.png" });
         await page.goto(url, { waitUntil: "networkidle2", timeout: 120000 });
+
+        console.log("🖥 LOG DESDE EL NAVEGADOR:", await page.content());
         //await page.waitForNavigation({ waitUntil: "networkidle2" });
         // Simular interacciones humanas
         await page.mouse.move(300, 300);
