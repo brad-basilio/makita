@@ -114,7 +114,7 @@ puppeteer.use(StealthPlugin());
         await page.mouse.move(300, 300);
         await page.mouse.down();
         await page.mouse.up();
-        await page.waitForTimeout(Math.random() * 2000 + 1000); // Espera entre 1 y 3 segundos
+        //await page.waitForTimeout(Math.random() * 2000 + 1000); // Espera entre 1 y 3 segundos
 
         // Simular scroll en la página
         await page.evaluate(() => {
