@@ -1,13 +1,11 @@
 const puppeteer = require("puppeteer");
-const StealthPlugin = require("puppeteer-extra-plugin-stealth");
+
 // Obtener argumentos desde la línea de comandos
 const args = process.argv.slice(2);
 const searchQuery = args[0] || "mujer";
 const offset = parseInt(args[1]) || 0;
 const limit = parseInt(args[2]) || 12;
 const exchangeRate = parseFloat(args[3]) || 1;
-
-puppeteer.use(StealthPlugin());
 (async () => {
     let browser;
     try {
@@ -74,8 +72,6 @@ puppeteer.use(StealthPlugin());
         // Captura una captura de pantalla para depuración
         // await page.screenshot({ path: "debug.png" });
         await page.goto(url, { waitUntil: "networkidle2", timeout: 120000 });
-        await page.waitForNavigation({ waitUntil: "networkidle2" });
-
         const html = await page.content();
         console.log(html);
         // Esperar a que los productos se carguen
