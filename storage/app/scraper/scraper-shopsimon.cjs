@@ -11,7 +11,7 @@ const paginate = parseInt(args[4]) || 1;
     let browser;
     try {
         // Configurar Puppeteer
-        /* browser = await puppeteer.launch({
+        /*browser = await puppeteer.launch({
             headless: true,
             args: ["--no-sandbox", "--disable-setuid-sandbox"],
             //executablePath: "/usr/bin/chromium-browser",
@@ -93,17 +93,27 @@ const paginate = parseInt(args[4]) || 1;
                         discount = null;
                     }
 
-                    const imageElement = product.querySelector(
+                    let imageElement = product.querySelector(
                         ".grid-product__image"
                     );
-
-                    // Obtener el valor del atributo 'style'
-                    const style = imageElement.getAttribute("style");
-                    let image = "";
-                    // Usar una expresión regular para extraer la URL del background-image
-                    image = style.match(/url\((.*?)\)/);
-                    if (image && image[1]) {
-                        image = image[1].replace(/['"]/g, ""); // Eliminar comillas si existen
+                    let image = "Sin imagen";
+                    if (imageElement) {
+                        // Intentar obtener la URL desde data-background-image-url
+                        let backgroundImageUrl = imageElement.getAttribute(
+                            "data-background-image-url"
+                        );
+                        if (backgroundImageUrl) {
+                            image = backgroundImageUrl;
+                        } else {
+                            // Si no hay data-background-image-url, usar style
+                            const style = imageElement.getAttribute("style");
+                            const match = style.match(
+                                /url\(\s*(['"]?)(.*?)\1\s*\)/
+                            );
+                            if (match && match[2]) {
+                                image = match[2]; // URL limpia sin comillas
+                            }
+                        }
                     }
 
                     return {
