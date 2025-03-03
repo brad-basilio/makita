@@ -47,10 +47,10 @@ const HeaderScraping = ({
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
         if (params.get("search")) {
-            setSearch("search");
+            setSearch(params.get("search"));
         }
         if (params.get("provider")) {
-            setProveedor("provider");
+            setProveedor(params.get("provider"));
         }
     }, []); // Agrega `items` como dependencia
     return (

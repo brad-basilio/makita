@@ -46,7 +46,7 @@ const paginate = parseInt(args[4]) || 1;
         await page.goto(url, { waitUntil: "networkidle2", timeout: 120000 });
 
         // Esperar a que los productos se carguen
-        await page.waitForSelector(".product-item", { timeout: 10000 });
+        await page.waitForSelector(".product-item", { timeout: 30000 });
 
         // Extraer los datos de los productos
         const products = await page.evaluate((exchangeRate) => {
