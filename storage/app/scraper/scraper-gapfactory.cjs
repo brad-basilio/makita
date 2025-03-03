@@ -8,12 +8,27 @@ const searchQuery = args[0] || "mujer";
     let browser;
     try {
         // Configurar Puppeteer
-        browser = await puppeteer.launch({
+        /* browser = await puppeteer.launch({
             headless: true,
             args: ["--no-sandbox", "--disable-setuid-sandbox"],
             //executablePath: "/usr/bin/chromium-browser",
+        });*/
+        browser = await puppeteer.launch({
+            executablePath: "/usr/bin/google-chrome-stable",
+            headless: true,
+            args: [
+                "--no-sandbox",
+                "--disable-setuid-sandbox",
+                "--disable-dev-shm-usage",
+                "--disable-gpu",
+                "--disable-crashpad",
+                "--disable-software-rasterizer",
+                "--disable-extensions",
+                "--disable-background-networking",
+                "--remote-debugging-port=9222",
+                "--user-data-dir=/var/www/.chrome", // 🔥 Esto soluciona el problema
+            ],
         });
-
         const page = await browser.newPage();
 
         // Configurar User-Agent

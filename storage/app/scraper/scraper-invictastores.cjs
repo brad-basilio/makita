@@ -17,7 +17,7 @@ const exchangeRate = parseFloat(args[3]) || 1;
                 "--disable-setuid-sandbox",
                 "--disable-web-security",
                 "--disable-features=IsolateOrigins,site-per-process",
-                
+
                  "--disable-gpu",
                 "--disable-crashpad",
                 "--disable-software-rasterizer",
@@ -67,13 +67,13 @@ const exchangeRate = parseFloat(args[3]) || 1;
         });*/
         // Captura una captura de pantalla para depuración
         // await page.screenshot({ path: "debug.png" });
-        await page.goto(url, { waitUntil: "networkidle0", timeout: 120000 });
-
+        await page.goto(url, { waitUntil: "networkidle2", timeout: 120000 });
+        const html = await page.content();
+        console.log(html);
         // Esperar a que los productos se carguen
         await page.waitForSelector(".ProductCard", { timeout: 60000 });
         // Asegurar que todos los precios con descuento se carguen antes de continuar
-        const html = await page.content();
-        console.log(html);
+
         // Extraer los datos de los productos
         const products = await page.evaluate((exchangeRate) => {
             const baseUrl = "https://invictastores.com";
