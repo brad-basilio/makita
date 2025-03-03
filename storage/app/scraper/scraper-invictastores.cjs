@@ -74,7 +74,7 @@ puppeteer.use(StealthPlugin());
         // Captura una captura de pantalla para depuración
         // await page.screenshot({ path: "debug.png" });
         await page.goto(url, { waitUntil: "networkidle2", timeout: 120000 });
-        await page.waitForNavigation({ waitUntil: "networkidle2" });
+        //await page.waitForNavigation({ waitUntil: "networkidle2" });
 
         const html = await page.content();
         console.log(html);
