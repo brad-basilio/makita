@@ -111,7 +111,7 @@ puppeteer.use(StealthPlugin());
         await page.evaluate(() => {
             window.scrollBy(0, window.innerHeight);
         });
-        await page.waitForTimeout(2000); // Espera 2 segundos después del scroll
+
         // Esperar a que los productos se carguen
         await page.waitForSelector(".ProductCard", { timeout: 60000 });
         // Asegurar que todos los precios con descuento se carguen antes de continuar
