@@ -47,8 +47,7 @@ const paginate = parseInt(args[4]) || 1;
 
         // Esperar a que los productos se carguen
         await page.waitForSelector(".product-item", { timeout: 30000 });
-        const content = await page.content();
-        console.log(content);
+
         // Extraer los datos de los productos
         const products = await page.evaluate((exchangeRate) => {
             const baseUrl = "https://shop.simon.com";
