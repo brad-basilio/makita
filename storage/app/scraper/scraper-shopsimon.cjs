@@ -47,7 +47,8 @@ const paginate = parseInt(args[4]) || 1;
 
         // Esperar a que los productos se carguen
         await page.waitForSelector(".product-item", { timeout: 30000 });
-
+        const content = await page.content();
+        console.log(content);
         // Extraer los datos de los productos
         const products = await page.evaluate((exchangeRate) => {
             const baseUrl = "https://shop.simon.com";
@@ -96,7 +97,8 @@ const paginate = parseInt(args[4]) || 1;
                     let imageElement = product.querySelector(
                         ".grid-product__image"
                     );
-                    let image = "Sin imagen";
+                    let image = null;
+
                     if (imageElement) {
                         // Intentar obtener la URL desde data-background-image-url
                         let backgroundImageUrl = imageElement.getAttribute(
@@ -106,15 +108,19 @@ const paginate = parseInt(args[4]) || 1;
                             image = backgroundImageUrl;
                         } else {
                             // Si no hay data-background-image-url, usar style
-                            const style = imageElement.getAttribute("style");
+                            const style =
+                                imageElement.getAttribute("style") || "";
                             const match = style.match(
-                                /url\(\s*(['"]?)(.*?)\1\s*\)/
+                                /url\(\s*['"]?(.*?)['"]?\s*\)/
                             );
-                            if (match && match[2]) {
-                                image = match[2]; // URL limpia sin comillas
+                            if (match && match[1]) {
+                                image = match[1]; // URL limpia
                             }
                         }
                     }
+                    // Obtener la URL del producto
+                    let urlElement = product.querySelector("a");
+                    let url = null;
 
                     return {
                         name,
