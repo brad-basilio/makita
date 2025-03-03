@@ -68,6 +68,10 @@ puppeteer.use(StealthPlugin());
                 domain: "invictastores.com",
             }
         );
+        await page.setExtraHTTPHeaders({
+            "Accept-Language": "en-US,en;q=0.9",
+            Referer: "https://invictastores.com/",
+        });
 
         // Configurar User-Agent real
         await page.setUserAgent(

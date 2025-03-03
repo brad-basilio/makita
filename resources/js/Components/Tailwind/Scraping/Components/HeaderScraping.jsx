@@ -44,6 +44,12 @@ const HeaderScraping = ({
                                             setLoading(false);
                                         }
                                     }} */
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+
+        setSearch(params.get("search"));
+        setProveedor(params.get("provider"));
+    }, []); // Agrega `items` como dependencia
     return (
         <header className="w-full font-font-general">
             <div className="px-primary mx-auto py-4 font-font-general customtext-primary text-base font-semibold">
