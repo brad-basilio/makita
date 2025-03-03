@@ -17,6 +17,13 @@ const exchangeRate = parseFloat(args[3]) || 1;
                 "--disable-setuid-sandbox",
                 "--disable-web-security",
                 "--disable-features=IsolateOrigins,site-per-process",
+                
+                 "--disable-gpu",
+                "--disable-crashpad",
+                "--disable-software-rasterizer",
+                "--disable-extensions",
+                "--disable-background-networking",
+                "--remote-debugging-port=9222",
             ],
         });*/
         browser = await puppeteer.launch({
@@ -26,12 +33,7 @@ const exchangeRate = parseFloat(args[3]) || 1;
                 "--no-sandbox",
                 "--disable-setuid-sandbox",
                 "--disable-dev-shm-usage",
-                "--disable-gpu",
-                "--disable-crashpad",
-                "--disable-software-rasterizer",
-                "--disable-extensions",
-                "--disable-background-networking",
-                "--remote-debugging-port=9222",
+
                 "--user-data-dir=/var/www/.chrome", // 🔥 Esto soluciona el problema
             ],
         });
@@ -64,13 +66,14 @@ const exchangeRate = parseFloat(args[3]) || 1;
             console.log("🖥 LOG DESDE EL NAVEGADOR:", msg.text(), ...args);
         });*/
         // Captura una captura de pantalla para depuración
-        await page.screenshot({ path: "debug.png" });
+        // await page.screenshot({ path: "debug.png" });
         await page.goto(url, { waitUntil: "networkidle0", timeout: 120000 });
 
         // Esperar a que los productos se carguen
-        await page.waitForSelector(".ProductCard", { timeout: 30000 });
+        await page.waitForSelector(".ProductCard", { timeout: 60000 });
         // Asegurar que todos los precios con descuento se carguen antes de continuar
-
+        const html = await page.content();
+        console.log(html);
         // Extraer los datos de los productos
         const products = await page.evaluate((exchangeRate) => {
             const baseUrl = "https://invictastores.com";
