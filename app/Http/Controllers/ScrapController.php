@@ -194,6 +194,17 @@ class ScrapController extends BasicController
                     $dataPath = "sephora";
                     $storePath = storage_path('app/scraper/scraper-sephora.cjs');
                     break;
+                case 'shopsimon':
+                    $currency = 'USD';
+                    $exchangeRate = $this->getExchangeRate($currency);
+                    $dataPath = "shopsimon";
+                    $storePath = storage_path('app/scraper/scraper-shopsimon.cjs');
+                    try {
+                        $query = $traductor->translate($query);
+                    } catch (Exception $e) {
+                        $query = $request->input('query', 'mujer');
+                    }
+                    break;
                 default:
                     $dataPath = "nike";
                     $storePath = storage_path('app/scraper/scraper-nike.cjs');
@@ -208,7 +219,7 @@ class ScrapController extends BasicController
                 set_time_limit(60); // Evitar timeout en la ejecución
 
                 // Ejecutar Puppeteer con paginación
-                $command = "node {$storePath} " . escapeshellarg($query) . " " . escapeshellarg($offset) . " " . escapeshellarg($limit) . " " . escapeshellarg($exchangeRate);
+                $command = "node {$storePath} " . escapeshellarg($query) . " " . escapeshellarg($offset) . " " . escapeshellarg($limit) . " " . escapeshellarg($exchangeRate) . " " . escapeshellarg($page);
                 // dump($command);
 
 
