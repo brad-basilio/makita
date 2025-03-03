@@ -75,7 +75,23 @@ puppeteer.use(StealthPlugin());
         // await page.screenshot({ path: "debug.png" });
         await page.goto(url, { waitUntil: "networkidle2", timeout: 120000 });
         //await page.waitForNavigation({ waitUntil: "networkidle2" });
-
+        await page.setCookie(
+            {
+                name: "DSID",
+                value: "ABY2FK6BE5tLyW2GKTN-rpZRdt45flufO6y-P7NvT1XBr-2nHzMNJcr-qR022qzADOLouhHjrMQWpml0jN5XCu1SikEvFBwZI5B0C1bHc82JCy_0jTetU5S2Aq_mu2bhdQzRnRfz5uhfGaNoFp_dSUCShOvTe8MMz_-KCuEAkfsh3dEKspYX-H0FhZ4y3Yr6j20blo7ZZFJWUJ6wx6pbJeFM2QMY7HxJ3F42ll9D3fGaT6uZkw8JkoCqdKCWFPtE0MsiOYC3N7oz9qvD5LdvBCNmTThZ9vCtqkmT7zgePOlM8wmvqbXSUtI",
+                domain: ".doubleclick.net",
+            },
+            {
+                name: "PHPSESSID",
+                value: "87a1c02e895b3cfa24462e894945095d",
+                domain: ".invictastores.com",
+            },
+            {
+                name: "CookieConsent",
+                value: "{stamp:%274Bvzadxlnuo5xSv9c4PSOeZG705O1wRr8oOgNh+IQXFU348a78QYiw==%27%2Cnecessary:true%2Cpreferences:true%2Cstatistics:true%2Cmarketing:true%2Cmethod:%27explicit%27%2Cver:1%2Cutc:1740068934608%2Cregion:%27pe%27}",
+                domain: "invictastores.com",
+            }
+        );
         const html = await page.content();
         console.log(html);
         // Esperar a que los productos se carguen
