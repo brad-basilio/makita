@@ -1,5 +1,7 @@
 const puppeteer = require("puppeteer-extra");
 const StealthPlugin = require("puppeteer-extra-plugin-stealth");
+const AnonymizeUAPLugin = require("puppeteer-extra-plugin-anonymize-ua");
+
 const os = require("os");
 const path = require("path");
 // Obtener argumentos desde la línea de comandos
@@ -10,6 +12,7 @@ const limit = parseInt(args[2]) || 12;
 const exchangeRate = parseFloat(args[3]) || 1;
 
 puppeteer.use(StealthPlugin());
+puppeteer.use(AnonymizeUAPLugin());
 (async () => {
     let browser;
     try {
