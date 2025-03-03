@@ -46,12 +46,38 @@ puppeteer.use(StealthPlugin());
         /*   await page.setUserAgent(
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36"
         );*/
-        await page.setUserAgent(
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36"
+        await page.setCookie(
+            {
+                name: "cf_clearance",
+                value: "X5TAc77eB9Ywx.BHKDTIYzah5Er8Fv2IfK5kGEsdv4M-1741028405-1.2.1.1-zjMK18OcbQGhCRo0kUTbzZEQrHirhfASG0SJ.ITA1FqF0B46AtyGpvE296a.uB56LukTPUL29zlfXKSv40SQLQjxp8PB1.3UQ8Iuz6uUgEB40dGM9TXe5HHvHUS_rlr5OWio31XZUPyyQd8EgGBn89oVwh9MxAOyiDDKoLC2wG077zJU5zRHZEIPt3XeiqRefJGYBfCJKErfHQZj0PTd._i79u5xTmXlXK55b5P3rEaZvwYBTCY3R03mwYTIIGcM3lGBeAK_f_TNXKBUqUyQ4vIbDFl2Pj7NnIPNt9TZ6wajuk9EnDkIgME9JTpdvMEkyVQQDS81MLQa__o8NtblX_dBlqR49WUpomyyyY7KaGHnkX_k342Y7ncS_U68G17bWkWoj3_FAUGWzE.IRd2t3bncTlEgLGn4R2vPD2AxxpI",
+                domain: ".invictastores.com",
+            },
+            {
+                name: "PHPSESSID",
+                value: "87a1c02e895b3cfa24462e894945095d",
+                domain: ".invictastores.com",
+            },
+            {
+                name: "CookieConsent",
+                value: "{stamp:%274Bvzadxlnuo5xSv9c4PSOeZG705O1wRr8oOgNh+IQXFU348a78QYiw==%27%2Cnecessary:true%2Cpreferences:true%2Cstatistics:true%2Cmarketing:true%2Cmethod:%27explicit%27%2Cver:1%2Cutc:1740068934608%2Cregion:%27pe%27}",
+                domain: "invictastores.com",
+            }
         );
 
-        await page.mouse.move(100, 100);
-        await page.mouse.move(200, 200);
+        // Configurar User-Agent real
+        await page.setUserAgent(
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        );
+
+        // Desactivar detección de WebDriver
+        await page.evaluateOnNewDocument(() => {
+            Object.defineProperty(navigator, "webdriver", {
+                get: () => undefined,
+            });
+        });
+
+        // Simular resolución de pantalla
+        await page.setViewport({ width: 1920, height: 1080 });
         /* await page.setUserAgent(
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
         );*/
@@ -75,25 +101,17 @@ puppeteer.use(StealthPlugin());
         // await page.screenshot({ path: "debug.png" });
         await page.goto(url, { waitUntil: "networkidle2", timeout: 120000 });
         //await page.waitForNavigation({ waitUntil: "networkidle2" });
-        await page.setCookie(
-            {
-                name: "DSID",
-                value: "ABY2FK6BE5tLyW2GKTN-rpZRdt45flufO6y-P7NvT1XBr-2nHzMNJcr-qR022qzADOLouhHjrMQWpml0jN5XCu1SikEvFBwZI5B0C1bHc82JCy_0jTetU5S2Aq_mu2bhdQzRnRfz5uhfGaNoFp_dSUCShOvTe8MMz_-KCuEAkfsh3dEKspYX-H0FhZ4y3Yr6j20blo7ZZFJWUJ6wx6pbJeFM2QMY7HxJ3F42ll9D3fGaT6uZkw8JkoCqdKCWFPtE0MsiOYC3N7oz9qvD5LdvBCNmTThZ9vCtqkmT7zgePOlM8wmvqbXSUtI",
-                domain: ".doubleclick.net",
-            },
-            {
-                name: "PHPSESSID",
-                value: "87a1c02e895b3cfa24462e894945095d",
-                domain: ".invictastores.com",
-            },
-            {
-                name: "CookieConsent",
-                value: "{stamp:%274Bvzadxlnuo5xSv9c4PSOeZG705O1wRr8oOgNh+IQXFU348a78QYiw==%27%2Cnecessary:true%2Cpreferences:true%2Cstatistics:true%2Cmarketing:true%2Cmethod:%27explicit%27%2Cver:1%2Cutc:1740068934608%2Cregion:%27pe%27}",
-                domain: "invictastores.com",
-            }
-        );
-        const html = await page.content();
-        console.log(html);
+        // Simular interacciones humanas
+        await page.mouse.move(300, 300);
+        await page.mouse.down();
+        await page.mouse.up();
+        await page.waitForTimeout(Math.random() * 2000 + 1000); // Espera entre 1 y 3 segundos
+
+        // Simular scroll en la página
+        await page.evaluate(() => {
+            window.scrollBy(0, window.innerHeight);
+        });
+        await page.waitForTimeout(2000); // Espera 2 segundos después del scroll
         // Esperar a que los productos se carguen
         await page.waitForSelector(".ProductCard", { timeout: 60000 });
         // Asegurar que todos los precios con descuento se carguen antes de continuar
