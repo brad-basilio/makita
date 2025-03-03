@@ -17,8 +17,11 @@ const HeaderScraping = ({
 
     const options = [
         { value: "nike", label: "Nike" },
-
         { value: "shopsimon", label: "Shop Simon" },
+
+        /* { value: "invictastores", label: "Invicta Stores" },
+        { value: "gapfactory", label: "Gap Factory" },
+        { value: "sephora", label: "Sephora" },*/
     ];
     const [search, setSearch] = useState("");
     const [proveedor, setProveedor] = useState("nike");

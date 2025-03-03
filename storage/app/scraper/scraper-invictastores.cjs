@@ -1,5 +1,7 @@
 const puppeteer = require("puppeteer-extra");
 const StealthPlugin = require("puppeteer-extra-plugin-stealth");
+const os = require("os");
+const path = require("path");
 // Obtener argumentos desde la línea de comandos
 const args = process.argv.slice(2);
 const searchQuery = args[0] || "mujer";
@@ -23,6 +25,13 @@ puppeteer.use(StealthPlugin());
                 
             ],
         });*/
+        // Generar un directorio temporal único para los datos del usuario
+        const userDataDir = path.join(
+            os.tmpdir(),
+            `puppeteer-user-data-${Date.now()}`
+        );
+
+        // Configurar Puppeteer
         browser = await puppeteer.launch({
             executablePath: "/usr/bin/google-chrome-stable",
             headless: true,
@@ -36,7 +45,7 @@ puppeteer.use(StealthPlugin());
                 "--disable-extensions",
                 "--disable-background-networking",
                 "--remote-debugging-port=9222",
-                "--user-data-dir=/var/www/.chrome", // 🔥 Esto soluciona el problema
+                `--user-data-dir=${userDataDir}`, // Directorio temporal único
             ],
         });
 
