@@ -73,6 +73,7 @@ const HeaderScraping = ({
                             <SelectFormScraping
                                 options={options}
                                 placeholder="Nike"
+                                defaultValue={proveedor}
                                 onChange={(value) => setProveedor(value)}
                                 labelKey="label"
                                 valueKey="value"
