@@ -33,12 +33,42 @@ class ScrapRest {
     static getProducts = async (request) => {
         console.log(request);
         try {
-            const { query, proveedor, page, limit = 12 } = request;
+            const { query, proveedor, filters, page, limit = 12 } = request;
 
+            if (proveedor === "shopsimon") {
+                const { status, result } = await Fetch(
+                    "./api/scrap-shopsimon",
+                    {
+                        method: "POST",
+                        body: JSON.stringify({ query, proveedor, page, limit }),
+                    }
+                );
+                if (!status) {
+                    console.log(result?.message || "Error al obtener datos");
+                    return { data: [], hasMore: false };
+                }
+
+                Notify.add({
+                    icon: "/assets/img/icon.svg",
+                    title: "Operación correcta",
+                    body: "Se obtuvieron los productos correctamente",
+                });
+
+                return {
+                    data: result.data || [],
+                    hasMore: result.data.length === limit, // Si la cantidad recibida es menor al límite, no hay más datos
+                };
+            }
             // Petición al backend con paginación
             const { status, result } = await Fetch("./api/scrap", {
                 method: "POST",
-                body: JSON.stringify({ query, proveedor, page, limit }),
+                body: JSON.stringify({
+                    query,
+                    proveedor,
+                    filters,
+                    page,
+                    limit,
+                }),
             });
 
             if (!status) {
@@ -54,6 +84,7 @@ class ScrapRest {
 
             return {
                 data: result.data || [],
+                filters: result.filters || [],
                 hasMore: result.data.length === limit, // Si la cantidad recibida es menor al límite, no hay más datos
             };
         } catch (error) {
@@ -63,7 +94,7 @@ class ScrapRest {
                 body: error.message,
                 type: "danger",
             });
-            return { data: [], hasMore: false };
+            return { data: [], filters: [], hasMore: false };
         }
     };
 

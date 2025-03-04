@@ -2,13 +2,11 @@ const puppeteer = require("puppeteer");
 
 // Obtener argumentos desde la línea de comandos
 const args = process.argv.slice(2);
-//const searchQuery = args[0] || "mujer";
-//const offset = parseInt(args[1]) || 0;
-//const limit = parseInt(args[2]) || 12;
-//const rawFilters = process.argv[3];
+const searchQuery = args[0] || "mujer";
+const offset = parseInt(args[1]) || 0;
+const limit = parseInt(args[2]) || 12;
 
 (async () => {
-    const url = args[0] || "";
     let browser;
     try {
         browser = await puppeteer.launch({
@@ -38,9 +36,9 @@ const args = process.argv.slice(2);
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36"
         );
 
-        /*   const url = `https://www.nike.com.pe/search?q=${encodeURIComponent(
+        const url = `https://www.nike.com.pe/search?q=${encodeURIComponent(
             searchQuery
-        )}&start=${encodeURIComponent(offset)}&sz=${encodeURIComponent(limit)}`;*/
+        )}&start=${encodeURIComponent(offset)}&sz=${encodeURIComponent(limit)}`;
 
         await page.goto(url, { waitUntil: "networkidle2", timeout: 120000 });
 
@@ -120,84 +118,8 @@ const args = process.argv.slice(2);
             );
         });
 
-        // Extraer los filtros
-        const filters = await page.evaluate(() => {
-            const extractFilters = () => {
-                const filters = {};
-
-                // Encontrar todos los contenedores de filtros
-                const filterContainers =
-                    document.querySelectorAll(".card.refinement");
-
-                filterContainers.forEach((container) => {
-                    // Extraer el título del filtro
-                    const titleElement = container.querySelector(
-                        ".card-header .title"
-                    );
-                    if (!titleElement) return;
-
-                    const categoryName = titleElement.textContent.trim();
-
-                    // Extraer las opciones del filtro
-                    const options = [];
-                    const optionElements = container.querySelectorAll(
-                        ".values.content.flex-wrap li"
-                    );
-
-                    optionElements.forEach((option) => {
-                        const labelElement = option.querySelector(
-                            "label span[aria-hidden='true']"
-                        );
-                        const inputElement = option.querySelector(
-                            "input[type='checkbox']"
-                        );
-
-                        if (labelElement && inputElement) {
-                            const label = labelElement.textContent.trim();
-                            const value = inputElement.id; // Puedes usar el ID o el texto como valor
-                            const selected = inputElement.checked || false;
-
-                            options.push({
-                                label,
-                                value,
-                                selected,
-                            });
-                        }
-                    });
-
-                    // Si no hay opciones con checkboxes, intentar extraer texto plano
-                    if (options.length === 0) {
-                        const rawOptions = Array.from(
-                            container.querySelectorAll(".card-body *")
-                        ).filter(
-                            (element) =>
-                                element.textContent.trim() &&
-                                !element.textContent.includes("Filtrar por")
-                        );
-
-                        rawOptions.forEach((rawOption) => {
-                            const label = rawOption.textContent.trim();
-                            const selected =
-                                rawOption.textContent.includes("seleccionado");
-
-                            options.push({
-                                label,
-                                selected,
-                            });
-                        });
-                    }
-
-                    filters[categoryName] = options;
-                });
-
-                return filters;
-            };
-
-            return extractFilters();
-        });
-
         // Imprimir los productos en formato JSON
-        console.log(JSON.stringify({ products, filters }, null, 2));
+        console.log(JSON.stringify(products, null, 2));
     } catch (error) {
         console.error(
             JSON.stringify({

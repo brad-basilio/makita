@@ -154,7 +154,85 @@ class ScrapController extends BasicController
         }
     }
 
-    public function scrap(Request $request)
+    public function scraporiginal(Request $request)
+    {
+        $traductor = new GoogleTranslate('en');
+        $traductor->setOptions(['verify' => false]);
+
+        try {
+            $exchangeRate = 0;
+            // Parámetros de búsqueda
+            $query = $request->input('query', 'mujer');
+            $proveedor = $request->input('proveedor', 'nike');
+            $filters = $request->input('filters', []); // Recibir los filtros como array
+            dump($filters);
+            $page = max(1, intval($request->input('page', 1))); // Página mínima 1
+            $limit = max(1, intval($request->input('limit', 12))); // Mínimo 1 producto por página
+            $offset = ($page - 1) * $limit;
+
+            // Convertir filtros a JSON para pasarlo al comando
+            $jsonFilters = json_encode($filters, JSON_UNESCAPED_UNICODE);
+
+            // Asegurar que el JSON se escapa correctamente para el shell
+            $escapedFilters = escapeshellarg($jsonFilters);
+
+
+            // Resultado limpio y compatible con Node.js
+            dump($escapedFilters);
+
+            $dataPath = "nike";
+            $storePath = storage_path('app/scraper/scraper-nike.cjs');
+
+
+
+            // Clave de caché con paginación
+            $cacheKey = "{$dataPath}_products_{$query}_page_{$page}_limit_{$limit}";
+            $data = Cache::get($cacheKey);
+
+            if (!$data) {
+                set_time_limit(60); // Evitar timeout en la ejecución
+
+                // Ejecutar Puppeteer con paginación
+                $command = "node {$storePath} " . escapeshellarg($query) . " " . escapeshellarg($offset) . " " . escapeshellarg($limit) . " " . $escapedFilters;
+                dump($command);
+
+
+                $output = shell_exec($command . ' 2>&1');
+                dump($output);
+                if (!$output) {
+                    Log::info("Error al ejecutar el script de Node.js.");
+                }
+
+                // Decodificar JSON de la salida
+                $data = json_decode($output, true);
+                if (json_last_error() !== JSON_ERROR_NONE) {
+                    Log::info("Error JSON: " . json_last_error_msg() . ". Salida: " . $output);
+                }
+
+                // Guardar en caché (1 hora)
+                Cache::put($cacheKey, $data, now()->addHour());
+            }
+
+            // Retornar datos con paginación
+            return response()->json([
+                'status' => 200,
+                'message' => 'Datos extraídos correctamente',
+                'data' => $data['products'],
+                'filters' => $data['filters'],
+                'page' => $page,
+                'limit' => $limit
+            ]);
+        } catch (Exception $e) {
+            Log::info("Error: " . $e->getMessage());
+            return response()->json([
+                'status' => 500,
+                'message' => 'Error en el scraping',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function scrapShopSimon(Request $request)
     {
         $traductor = new GoogleTranslate('en');
         $traductor->setOptions(['verify' => false]);
@@ -169,46 +247,15 @@ class ScrapController extends BasicController
             $offset = ($page - 1) * $limit;
 
             // Determinar el script según el proveedor
-            switch ($proveedor) {
-                case 'nike':
-                    $dataPath = "nike";
-                    $storePath = storage_path('app/scraper/scraper-nike.cjs');
-                    break;
-                case 'gapfactory':
-                    $dataPath = "gapfactory";
-                    $storePath = storage_path('app/scraper/scraper-gapfactory.cjs');
-                    break;
-                case 'invictastores':
-                    $currency = 'USD';
-                    $exchangeRate = $this->getExchangeRate($currency);
-                    //dump($exchangeRate);
-                    $dataPath = "invictastores";
-                    $storePath = storage_path('app/scraper/scraper-invictastores.cjs');
-                    try {
-                        $query = $traductor->translate($query);
-                    } catch (Exception $e) {
-                        $query = $request->input('query', 'mujer');
-                    }
-                    break;
-                case 'sephora':
-                    $dataPath = "sephora";
-                    $storePath = storage_path('app/scraper/scraper-sephora.cjs');
-                    break;
-                case 'shopsimon':
-                    $currency = 'USD';
-                    $exchangeRate = $this->getExchangeRate($currency);
-                    $dataPath = "shopsimon";
-                    $storePath = storage_path('app/scraper/scraper-shopsimon.cjs');
-                    try {
-                        $query = $traductor->translate($query);
-                    } catch (Exception $e) {
-                        $query = $request->input('query', 'mujer');
-                    }
-                    break;
-                default:
-                    $dataPath = "nike";
-                    $storePath = storage_path('app/scraper/scraper-nike.cjs');
-                    break;
+
+            $currency = 'USD';
+            $exchangeRate = $this->getExchangeRate($currency);
+            $dataPath = "shopsimon";
+            $storePath = storage_path('app/scraper/scraper-shopsimon.cjs');
+            try {
+                $query = $traductor->translate($query);
+            } catch (Exception $e) {
+                $query = $request->input('query', 'mujer');
             }
 
             // Clave de caché con paginación
@@ -220,11 +267,11 @@ class ScrapController extends BasicController
 
                 // Ejecutar Puppeteer con paginación
                 $command = "node {$storePath} " . escapeshellarg($query) . " " . escapeshellarg($offset) . " " . escapeshellarg($limit) . " " . escapeshellarg($exchangeRate) . " " . escapeshellarg($page);
-                // dump($command);
+                dump($command);
 
 
                 $output = shell_exec($command . ' 2>&1');
-                Log::info($output);
+                dump($output);
                 if (!$output) {
                     Log::info("Error al ejecutar el script de Node.js.");
                 }
@@ -244,6 +291,158 @@ class ScrapController extends BasicController
                 'status' => 200,
                 'message' => 'Datos extraídos correctamente',
                 'data' => $data,
+                'page' => $page,
+                'limit' => $limit
+            ]);
+        } catch (Exception $e) {
+            Log::info("Error: " . $e->getMessage());
+            return response()->json([
+                'status' => 500,
+                'message' => 'Error en el scraping',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+    function buildNikeUrl($filters, $query = 'mujer', $offset = 0, $limit = 12)
+    {
+        $baseUrl = "https://www.nike.com.pe/search";
+        $pathSegments = [];
+
+        // 🔹 Función para limpiar texto (minúsculas, sin tildes, sin espacios)
+        $limpiarTexto = function ($texto) {
+            $texto = strtolower($texto); // Convertir a minúsculas
+            $texto = str_replace(
+                ['á', 'é', 'í', 'ó', 'ú', 'ñ'],
+                ['a', 'e', 'i', 'o', 'u', 'n'],
+                $texto
+            ); // Quitar tildes y ñ
+            return str_replace(' ', '_', $texto); // Reemplazar espacios por "_"
+        };
+
+
+        if (!empty($filters['Deporte'])) {
+            $deporteLimpio = array_map($limpiarTexto, $filters['Deporte']);
+            $pathSegments[] = implode("_", $deporteLimpio);
+        }
+
+        if (!empty($filters['Género'])) {
+            $pathSegments[] = implode("_", array_map('strtolower', $filters['Género']));
+        }
+
+        if (!empty($filters['Línea'])) {
+            $pathSegments[] = implode("_", array_map('strtolower', $filters['Línea']));
+        }
+
+        if (!empty($filters['Ícono'])) {
+            $pathSegments[] = implode("_", array_map('strtolower', $filters['Ícono']));
+        }
+
+        if (!empty($filters['Color'])) {
+            $pathSegments[] = implode("_", array_map('strtolower', $filters['Color']));
+        }
+
+        $path = !empty($pathSegments) ? "/" . implode("/", $pathSegments) : "";
+
+        // 🟢 Construir los parámetros en el ORDEN CORRECTO
+        $queryParts = [];
+
+        // 1️⃣ Parámetro de búsqueda
+        $queryParts[] = "q=" . urlencode($query);
+
+        // 2️⃣ Paginación y límite
+        $queryParts[] = "start={$offset}";
+        $queryParts[] = "sz={$limit}";
+
+        // 3️⃣ Filtros de precios
+        if (!empty($filters['Precio'])) {
+            $precios = [];
+            foreach ($filters['Precio'] as $rango) {
+                preg_match('/S\/\.(\d+\.\d+)\s*-\s*S\/\.(\d+\.\d+)/', $rango, $matches);
+                if ($matches) {
+                    $precios[] = [(float)$matches[1], (float)$matches[2]];
+                }
+            }
+            if (!empty($precios)) {
+                $pmin = min(array_column($precios, 0));
+                $pmax = max(array_column($precios, 1));
+                $queryParts[] = "pmin=" . $pmin;
+                $queryParts[] = "pmax=" . $pmax;
+            }
+        }
+
+        // 4️⃣ Filtro de tallas (si existe)
+        if (!empty($filters['Talla'])) {
+            $queryParts[] = "prefn1=size";
+            $queryParts[] = "prefv1=" . strtolower(implode("|", $filters['Talla']));
+        }
+
+        // 📌 Convertir a string de URL
+        $queryString = implode("&", $queryParts);
+
+        // 🔹 Retornar URL final con el orden correcto
+        return "{$baseUrl}{$path}?{$queryString}";
+    }
+
+
+
+
+    public function scrap(Request $request)
+    {
+        $traductor = new GoogleTranslate('en');
+        $traductor->setOptions(['verify' => false]);
+
+        try {
+            $exchangeRate = 0;
+
+            // 🔹 Parámetros de búsqueda
+            $query = $request->input('query', 'mujer');
+            $proveedor = $request->input('proveedor', 'nike');
+            $filters = $request->input('filters', []); // Recibir los filtros como array
+            dump($filters);
+            $page = max(1, intval($request->input('page', 1))); // Página mínima 1
+            $limit = max(1, intval($request->input('limit', 12))); // Mínimo 1 producto por página
+            $offset = ($page - 1) * $limit;
+
+            // 🔹 Construir la URL con los filtros
+            $nikeUrl = $this->buildNikeUrl($filters, $query, $offset, $limit);
+            dump($nikeUrl);
+
+            $dataPath = "nike";
+            $storePath = storage_path('app/scraper/scraper-nike.cjs');
+            $data = [];
+            // 🔹 Clave de caché con paginación
+            // $cacheKey = "{$dataPath}_products_{$query}_page_{$page}_limit_{$limit}";
+            // $data = Cache::get($cacheKey);
+
+            if (!$data) {
+                set_time_limit(60); // Evitar timeout en la ejecución
+
+                // 🔹 Ejecutar Puppeteer con la URL generada
+                $command = "node {$storePath} " . escapeshellarg($nikeUrl);
+                dump($command);
+
+                $output = shell_exec($command . ' 2>&1');
+                dump($output);
+                if (!$output) {
+                    Log::info("Error al ejecutar el script de Node.js.");
+                }
+
+                // 🔹 Decodificar JSON de la salida
+                $data = json_decode($output, true);
+                if (json_last_error() !== JSON_ERROR_NONE) {
+                    Log::info("Error JSON: " . json_last_error_msg() . ". Salida: " . $output);
+                }
+
+                // 🔹 Guardar en caché (1 hora)
+                // Cache::put($cacheKey, $data, now()->addHour());
+            }
+
+            // 🔹 Retornar datos con paginación
+            return response()->json([
+                'status' => 200,
+                'message' => 'Datos extraídos correctamente',
+                'data' => $data['products'],
+                'filters' => $data['filters'],
                 'page' => $page,
                 'limit' => $limit
             ]);

@@ -11,12 +11,12 @@ const paginate = parseInt(args[4]) || 1;
     let browser;
     try {
         // Configurar Puppeteer
-        /*browser = await puppeteer.launch({
+        browser = await puppeteer.launch({
             headless: true,
             args: ["--no-sandbox", "--disable-setuid-sandbox"],
             //executablePath: "/usr/bin/chromium-browser",
-        });*/
-        browser = await puppeteer.launch({
+        });
+        /*  browser = await puppeteer.launch({
             executablePath: "/usr/bin/google-chrome-stable",
             headless: true,
             args: [
@@ -31,7 +31,7 @@ const paginate = parseInt(args[4]) || 1;
                 "--remote-debugging-port=9222",
                 "--user-data-dir=/var/www/.chrome", // 🔥 Esto soluciona el problema
             ],
-        });
+        });*/
         const page = await browser.newPage();
 
         // Configurar User-Agent
@@ -63,7 +63,9 @@ const paginate = parseInt(args[4]) || 1;
                             .querySelector(".grid-product__price--original")
                             ?.innerText?.trim() || "Sin precio";
                     let priceFloat =
-                        parseFloat(priceText.match(/\d+(\.\d+)?/)?.[0]) || null;
+                        parseFloat(
+                            priceText.replace(/[^0-9.]/g, "").replace(/,/g, "")
+                        ) || null;
                     let price = (priceFloat * exchangeRate).toFixed(2);
 
                     let discountText =
@@ -72,8 +74,11 @@ const paginate = parseInt(args[4]) || 1;
                             ?.innerText?.trim() || "Sin precio";
 
                     let discountFloat =
-                        parseFloat(discountText.match(/\d+(\.\d+)?/)?.[0]) ||
-                        null;
+                        parseFloat(
+                            discountText
+                                .replace(/[^0-9.]/g, "")
+                                .replace(/,/g, "")
+                        ) || null;
                     let discount = (discountFloat * exchangeRate).toFixed(2);
 
                     let discount_percent =

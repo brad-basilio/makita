@@ -7,11 +7,11 @@ const SelectFormScraping = ({
     onChange,
     valueKey,
     labelKey,
-    defaultValue,
     label,
     labelClass,
     className = "customtext-neutral-dark rounded-xl",
     disabled = false,
+    defaultValue, // Agregamos defaultValue
 }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedOption, setSelectedOption] = useState(null);
@@ -36,17 +36,18 @@ const SelectFormScraping = ({
             : { value: option, label: option }
     );
 
+    // ✅ Se inicializa el valor por defecto SOLO UNA VEZ
     useEffect(() => {
         if (defaultValue) {
             const defaultOption = normalizedOptions.find(
-                (opt) => opt.value === defaultValue
+                (option) => option.value === defaultValue
             );
             if (defaultOption) {
                 setSelectedOption(defaultOption);
-                onChange && onChange(defaultOption.value);
+                onChange(defaultOption.value); // Emitimos el cambio solo una vez
             }
         }
-    }, [defaultValue, normalizedOptions, onChange]);
+    }, [defaultValue, options]); // Solo depende de `defaultValue` y `options`
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -67,10 +68,6 @@ const SelectFormScraping = ({
         onChange(option.value);
         setIsOpen(false);
     };
-
-    const filteredOptions = normalizedOptions.filter((option) =>
-        option.label.toLowerCase().includes(searchTerm.toLowerCase())
-    );
 
     return (
         <div className="relative w-full" ref={selectRef}>
@@ -99,6 +96,7 @@ const SelectFormScraping = ({
                     />
                 </span>
             </button>
+
             {isOpen && (
                 <div className="absolute z-10 w-full mt-1 bg-white rounded-lg shadow-lg max-h-60 overflow-auto">
                     <div className="sticky top-0 bg-white p-2">
@@ -117,32 +115,39 @@ const SelectFormScraping = ({
                         </div>
                     </div>
                     <ul className="py-1" role="listbox">
-                        {filteredOptions.map((option) => (
-                            <li
-                                key={option.value}
-                                className={`px-4 py-2 cursor-pointer flex items-center justify-between 
+                        {normalizedOptions
+                            .filter((option) =>
+                                option.label
+                                    .toLowerCase()
+                                    .includes(searchTerm.toLowerCase())
+                            )
+                            .map((option) => (
+                                <li
+                                    key={option.value}
+                                    className={`px-4 py-2 cursor-pointer flex items-center justify-between 
                                     ${
                                         selectedOption &&
                                         selectedOption.value === option.value
                                             ? "bg-blue-500 text-white"
                                             : "hover:bg-gray-100"
                                     }`}
-                                onClick={() => handleSelect(option)}
-                                role="option"
-                                aria-selected={
-                                    selectedOption &&
-                                    selectedOption.value === option.value
-                                }
-                            >
-                                <span className="block truncate">
-                                    {option.label}
-                                </span>
-                                {selectedOption &&
-                                    selectedOption.value === option.value && (
-                                        <Check className="w-5 h-5" />
-                                    )}
-                            </li>
-                        ))}
+                                    onClick={() => handleSelect(option)}
+                                    role="option"
+                                    aria-selected={
+                                        selectedOption &&
+                                        selectedOption.value === option.value
+                                    }
+                                >
+                                    <span className="block truncate">
+                                        {option.label}
+                                    </span>
+                                    {selectedOption &&
+                                        selectedOption.value ===
+                                            option.value && (
+                                            <Check className="w-5 h-5" />
+                                        )}
+                                </li>
+                            ))}
                     </ul>
                 </div>
             )}
