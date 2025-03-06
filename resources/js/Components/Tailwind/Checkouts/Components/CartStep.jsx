@@ -1,8 +1,12 @@
 import { useState } from "react";
 import Number2Currency from "../../../../Utils/Number2Currency";
-import CardItem from "./cardItem";
+
 import ButtonPrimary from "./ButtonPrimary";
 import ButtonSecondary from "./ButtonSecondary";
+import CardItem from "./CardItem";
+
+
+
 
 export default function CartStep({ cart, setCart, onContinue, subTotal, envio, igv, totalFinal }) {
 

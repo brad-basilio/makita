@@ -1,7 +1,10 @@
 import React from "react"
 
+
 const FilterSimple = React.lazy(() => import('./Filters/FilterSimple'))
 const CatalagoFiltros = React.lazy(() => import('./Filters/CatalagoFiltros'))
+const CatalagoFiltrosPidelo = React.lazy(() => import('./Filters/CatalagoFiltrosPidelo'))
+const FilterSalaFabulosa = React.lazy(() => import('./Filters/FilterSalaFabulosa'))//
 //const Filter = ({ which, items, data, category, brands, subcategory, cart, setCart, prices }) => {
 const Filter = ({ which, items, data, cart, setCart, filteredData }) => {
   console.log("Filter props:", { which, items, data, filteredData });
@@ -15,6 +18,12 @@ const Filter = ({ which, items, data, cart, setCart, filteredData }) => {
       case 'CatalagoFiltros':
         // return <CatalagoFiltros data={data} items={items} prices={prices} categories={category} brands={brands} cart={cart} setCart={setCart} />
         return <CatalagoFiltros data={data} items={items} cart={cart} setCart={setCart} filteredData={filteredData} />
+      case 'CatalagoFiltrosPidelo':
+        // return <CatalagoFiltros data={data} items={items} prices={prices} categories={category} brands={brands} cart={cart} setCart={setCart} />
+        return <CatalagoFiltrosPidelo data={data} items={items} cart={cart} setCart={setCart} filteredData={filteredData} />
+      case 'FilterSalaFabulosa':
+        // return <CatalagoFiltros data={data} items={items} prices={prices} categories={category} brands={brands} cart={cart} setCart={setCart} />
+        return <FilterSalaFabulosa data={data} items={items} cart={cart} setCart={setCart} filteredData={filteredData} />
 
       default:
         return <div className="w-full px-[5%] replace-max-w-here p-4 mx-auto">- No Hay componente <b>{which}</b> -</div>

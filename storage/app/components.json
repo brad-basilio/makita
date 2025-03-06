@@ -17,6 +17,33 @@
                     "model": "Social"
                 },
                 "generals": ["cintillo"]
+            },
+            {
+                "id": "TopBarCart",
+                "name": "Con Carrito",
+                "image": "top-bar-socials.png",
+                "using": {
+                    "model": "Social"
+                },
+                "generals": ["cintillo"]
+            },
+            {
+                "id": "TopBarCopyright",
+                "name": "Copyright",
+                "image": "top-bar-socials.png",
+                "using": {
+                    "model": "Social"
+                },
+                "generals": ["cintillo"]
+            },
+            {
+                "id": "TopBarCopyrightSocials",
+                "name": "Copyright - Social",
+                "image": "top-bar-socials.png",
+                "using": {
+                    "model": "Social"
+                },
+                "generals": ["cintillo"]
             }
         ]
     },
@@ -41,11 +68,6 @@
         "name": "Header",
         "options": [
             {
-                "id": "HeaderSimple",
-                "name": "Simple",
-                "image": "header-simple.png"
-            },
-            {
                 "id": "HeaderSearch",
                 "name": "Con barra de búsqueda",
                 "image": "header-with-search.png",
@@ -62,15 +84,16 @@
                 }
             },
             {
-                "id": "HeaderWithMegaMenu",
-                "name": "Con megamenu (Categorías)",
-                "image": "header-with-mega-menu.png",
-                "using": {
-                    "model": "Category",
-                    "with": ["subcategories"],
-                    "fields": ["name", "slug", "image"],
-                    "filters": ["featured"]
-                }
+                "id": "HeaderScraping",
+                "name": "HeaderScraping",
+                "image": "header-with-search.png",
+                "data": ["class", "link_cart"]
+            },
+            {
+                "id": "HeaderSearchMenu",
+                "name": "Con busqueda y menu",
+                "image": "header-with-search.png",
+                "data": ["class", "link_cart"]
             }
         ]
     },
@@ -81,6 +104,13 @@
             {
                 "id": "CarruselBenefitsInifinite",
                 "name": "Beneficios",
+                "using": {
+                    "model": "Indicator"
+                }
+            },
+            {
+                "id": "CarruselBenefitsSimple",
+                "name": "Beneficios Simple",
                 "using": {
                     "model": "Indicator"
                 }
@@ -194,6 +224,19 @@
 
                     "relations": ["category", "tags"]
                 }
+            },
+
+            {
+                "id": "FilterSalaFabulosa",
+                "name": "Filtro SalaFabulosa",
+                "image": "products-list.png",
+                "data": ["path", "title", "description"],
+                "using": {
+                    "model": "Item",
+                    "with": ["category", "subcategory", "brand"],
+
+                    "relations": ["category", "tags"]
+                }
             }
         ]
     },
@@ -222,8 +265,40 @@
                 }
             },
             {
+                "id": "PaginationCategory",
+                "name": "paginacion",
+                "image": "categories-simple.png",
+                "data": ["title", "path"],
+                "using": {
+                    "model": "Category",
+                    "limit": 10
+                }
+            },
+            {
                 "id": "CategoryCarousel",
                 "name": "Carousel",
+                "image": "categories-carousel.png",
+                "data": ["path", "title", "description", "link_catalog"],
+                "using": {
+                    "model": "Category",
+                    "limit": 10,
+                    "filters": ["featured"]
+                }
+            },
+            {
+                "id": "CategoryFlex",
+                "name": "Flex",
+                "image": "categories-carousel.png",
+                "data": ["path", "title", "description", "link_catalog"],
+                "using": {
+                    "model": "Category",
+                    "limit": 3,
+                    "filters": ["featured"]
+                }
+            },
+            {
+                "id": "CategoriesScraping",
+                "name": "CategoriesScraping",
                 "image": "categories-carousel.png",
                 "data": ["path", "title", "description", "link_catalog"],
                 "using": {
@@ -289,9 +364,37 @@
                 }
             },
             {
+                "id": "ProductNavigation",
+                "name": "Navegacion",
+                "image": "products-list.png",
+                "data": ["title", "path", "description", "link_catalog"],
+                "using": {
+                    "model": "Item",
+                    "filters": [
+                        "featured",
+                        "recommended",
+                        "offering",
+                        "is_new"
+                    ],
+                    "with": ["category", "subcategory", "brand"],
+                    "limit": 8
+                }
+            },
+            {
                 "id": "Scraping",
                 "name": "Scraping Simple",
-                "image": "products-list.png"
+                "image": "products-list.png",
+                "using": {
+                    "model": "Item",
+                    "filters": [
+                        "featured",
+                        "recommended",
+                        "offering",
+                        "is_new"
+                    ],
+                    "with": ["category", "subcategory", "brand"],
+                    "limit": 8
+                }
             }
         ]
     },
@@ -311,6 +414,14 @@
             {
                 "id": "BannerFullWidth",
                 "name": "Full Width"
+            },
+            {
+                "id": "BannerFlex",
+                "name": "Flex"
+            },
+            {
+                "id": "BannerStatic",
+                "name": "Estatico"
             }
         ]
     },
@@ -345,6 +456,10 @@
                     "model": "Item",
                     "flied": "slug"
                 }
+            },
+            {
+                "id": "ScrapingProductDetail",
+                "name": "ScrapingProductDetail"
             }
         ]
     },
@@ -469,7 +584,7 @@
         "name": "Signup",
         "options": [
             {
-                "id": "SignupSimple",
+                "id": "SignUpSimple",
                 "name": "Simple"
             }
         ]
@@ -510,6 +625,42 @@
             {
                 "id": "FooterB",
                 "name": "FooterB",
+                "image": "footer-simple.png",
+                "using": {
+                    "model": "Social",
+                    "limit": 10
+                },
+                "generals": [
+                    "terms_conditions",
+                    "privacy_policy",
+                    "delivery_policy",
+                    "saleback_policy",
+                    "address",
+                    "support_phone",
+                    "support_email"
+                ]
+            },
+            {
+                "id": "FooterSalaFabulosa",
+                "name": "FooterSalaFabulosa",
+                "image": "footer-simple.png",
+                "using": {
+                    "model": "Social",
+                    "limit": 10
+                },
+                "generals": [
+                    "terms_conditions",
+                    "privacy_policy",
+                    "delivery_policy",
+                    "saleback_policy",
+                    "address",
+                    "support_phone",
+                    "support_email"
+                ]
+            },
+            {
+                "id": "FooterPideloPe",
+                "name": "FooterPideloPe",
                 "image": "footer-simple.png",
                 "using": {
                     "model": "Social",

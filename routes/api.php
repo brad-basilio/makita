@@ -59,7 +59,8 @@ use App\Http\Controllers\ScrapController;
 */
 
 
-Route::post('/scrap-nike', [ScrapController::class, 'scrapNike']);
+Route::post('/scrap', [ScrapController::class, 'scrap']);
+Route::post('/scrap-shopsimon', [ScrapController::class, 'scrapShopSimon']);
 
 
 Route::post('/login', [AuthController::class, 'login']);

@@ -20,7 +20,7 @@ export default function BlogPostCard({ flex = false, post, featured = false }) {
                     <span className="customtext-primary font-medium">
                         {post?.category.name}
                     </span>
-                    <h3 className="text-xl font-semibold group-hover:customtext-primary line-clamp-3">
+                    <h3 className="text-xl font-semibold group-hover:customtext-primary">
                         {post?.name}
                     </h3>
                     <p className="text-gray-600 line-clamp-3">
@@ -29,7 +29,8 @@ export default function BlogPostCard({ flex = false, post, featured = false }) {
                     <div className="flex items-center gap-2 text-sm text-gray-500">
                         <time>{post?.post_date}</time>
 
-                        {/* <span>•</span><span>Leído hace 5 minutos</span> */}
+                        <span>•</span>
+                        <span>Leído hace 5 minutos</span>
                     </div>
                 </div>
             </a>

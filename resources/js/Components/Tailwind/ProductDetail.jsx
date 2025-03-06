@@ -1,8 +1,10 @@
 import React from "react"
 
 
+
 const ProductDetailSimple = React.lazy(() => import('./ProductDetails/ProductDetailSimple'))
 const ProductDetailB = React.lazy(() => import('./ProductDetails/ProductDetailB'))
+const ScrapingProductDetail = React.lazy(() => import('./Scraping/ScrapingProductDetail'))
 
 const ProductDetail = ({ which, item, cart, setCart }) => {
   const getProductDetail = () => {
@@ -11,6 +13,8 @@ const ProductDetail = ({ which, item, cart, setCart }) => {
         return <ProductDetailSimple item={item} cart={cart} setCart={setCart} />
       case 'ProductDetailB':
         return <ProductDetailB item={item} cart={cart} setCart={setCart} />
+      case 'ScrapingProductDetail':
+        return <ScrapingProductDetail cart={cart} setCart={setCart} />
       default:
         return <div className="w-full px-[5%] replace-max-w-here p-4 mx-auto">- No Hay componente <b>{which}</b> -</div>
     }

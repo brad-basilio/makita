@@ -5,6 +5,7 @@ import Global from "../../../Utils/Global"
 import image from "../../../../sources/images/signup.png"
 import AuthClientRest from '../../../Actions/AuthClientRest'
 import Swal from "sweetalert2"
+
 export default function SignUpSimple() {
   const jsEncrypt = new JSEncrypt()
   jsEncrypt.setPublicKey(Global.PUBLIC_RSA_KEY)

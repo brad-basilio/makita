@@ -7,7 +7,28 @@ const searchQuery = args[0] || "mujer";
 (async () => {
     let browser;
     try {
-        browser = await puppeteer.launch({ headless: true });
+        // Configurar Puppeteer
+        /* browser = await puppeteer.launch({
+            headless: true,
+            args: ["--no-sandbox", "--disable-setuid-sandbox"],
+            //executablePath: "/usr/bin/chromium-browser",
+        });*/
+        browser = await puppeteer.launch({
+            executablePath: "/usr/bin/google-chrome-stable",
+            headless: true,
+            args: [
+                "--no-sandbox",
+                "--disable-setuid-sandbox",
+                "--disable-dev-shm-usage",
+                "--disable-gpu",
+                "--disable-crashpad",
+                "--disable-software-rasterizer",
+                "--disable-extensions",
+                "--disable-background-networking",
+                "--remote-debugging-port=9222",
+                "--user-data-dir=/var/www/.chrome", // 🔥 Esto soluciona el problema
+            ],
+        });
         const page = await browser.newPage();
 
         // Configurar User-Agent
@@ -19,7 +40,7 @@ const searchQuery = args[0] || "mujer";
         const url = `https://www.gapfactory.com/browse/search.do?searchText=${encodeURIComponent(
             searchQuery
         )}`;
-        await page.goto(url, { waitUntil: "domcontentloaded" });
+        await page.goto(url, { waitUntil: "networkidle2", timeout: 30000 });
 
         // Esperar a que los productos se carguen
         await page.waitForSelector(".product-card", { timeout: 10000 });
@@ -32,34 +53,38 @@ const searchQuery = args[0] || "mujer";
                     let name =
                         product
                             .querySelector(".sitewide-0")
-                            ?.innerText?.trim() || "Sin Titulo";
+                            ?.innerText?.trim() || "Sin título";
                     let price =
                         product
                             .querySelector(".product-price__highlight")
                             ?.innerText?.trim() || "Sin precio";
 
-                    // Obtener la imagen del producto
-                    let imgElement = product.querySelector(
-                        ".cat_product-image img"
-                    );
-                    let relativeSrc = imgElement
-                        ? imgElement.getAttribute("src")
-                        : null;
-
+                    let relativeSrc =
+                        product.querySelector(".cat_product-image a img")
+                            ?.src || "Sin imagen";
                     // Construir la URL absoluta de la imagen
-                    let image = relativeSrc
-                        ? new URL(relativeSrc, baseUrl).href
-                        : "Sin imagen";
+                    let image = relativeSrc.startsWith("http")
+                        ? relativeSrc
+                        : baseUrl + relativeSrc;
 
                     return { name, price, image };
                 }
             );
         });
 
+        // Imprimir los productos en formato JSON
         console.log(JSON.stringify(products, null, 2));
     } catch (error) {
-        console.error("Error:", error.message);
+        // Manejar errores y devolver un JSON con el error
+        console.error(
+            JSON.stringify({
+                status: "error",
+                message: "Error en el scraping",
+                error: error.message,
+            })
+        );
     } finally {
+        // Cerrar el navegador
         if (browser) {
             await browser.close();
         }

@@ -9,7 +9,8 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                "font-primary": ["Rajdhani", "sans-serif"],
+                "font-general": ["Mulish", "serif"], //"Lato" "serif" usado para Sala Fabulosa
+                "font-primary": ["Rajdhani", "sans-serif"], // usado para Stech Peru
                 "font-secondary": ["Open Sans", "serif"],
             },
             margin: {

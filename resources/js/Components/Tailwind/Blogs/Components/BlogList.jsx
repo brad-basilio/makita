@@ -8,7 +8,9 @@ export default function BlogList({ posts, postsLatest, loading, isFilter }) {
     console.log("posts:", posts);
     useEffect(() => {}, [posts]);
     return (
-        <section className={` ${isFilter ? "pb-16" : "py-16"}`}>
+        <section
+            className={`font-font-general ${isFilter ? "pb-16" : "py-16"}`}
+        >
             <div className="px-primary mx-auto">
                 {!isFilter ? (
                     <div>
