@@ -77,7 +77,11 @@
                 "id": "HeaderSearchB",
                 "name": "HeaderSearchB",
                 "image": "header-with-search.png",
-                "data": ["class", "link_cart"]
+                "data": ["class", "link_cart"],
+                "using": {
+                    "model": "Category",
+                    "with": ["subcategories"]
+                }
             },
             {
                 "id": "HeaderScraping",

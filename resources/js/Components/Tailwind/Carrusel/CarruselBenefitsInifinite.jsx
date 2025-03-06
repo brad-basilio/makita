@@ -3,8 +3,6 @@ import { useEffect, useRef, useState } from "react";
 import { adjustTextColor } from "../../../Functions/adjustTextColor";
 
 const CarruselBenefitsInifinite = ({ items }) => {
-
-
     // Duplicamos los elementos para lograr el efecto infinito
     const infiniteBenefits = [...items, ...items];
     const sliderRef = useRef(null);
@@ -30,31 +28,41 @@ const CarruselBenefitsInifinite = ({ items }) => {
 
     const benefitsRef = useRef(null);
     useEffect(() => {
-        adjustTextColor(benefitsRef.current)
-    })
+        adjustTextColor(benefitsRef.current);
+    });
     //infiniteBenefits si lo quiere infinito reemplaza
     //va en el div incial ref = { benefitsRef }
     // va en el div antes de hacer el map ref={sliderRef}
     return (
         <div ref={benefitsRef} className="bg-primary   py-6 overflow-hidden">
-            <div className="px-[5%] mx-auto relative">
-                <div
-
-                    className="flex w-full gap-8 whitespace-nowrap transition-none"
-                >
+            <div className="px-primary 2xl:px-0  2xl:max-w-7xl mx-auto relative">
+                <div className="flex w-full gap-8 whitespace-nowrap transition-none">
                     {items.map((benefit, index) => (
-                        <div key={index} className="flex items-center gap-4 justify-start w-1/4 "> {/*para infinito usa esto flex-shrink-0*/}
+                        <div
+                            key={index}
+                            className="flex items-center gap-4 justify-start w-full md:w-1/4 "
+                        >
+                            {" "}
+                            {/*para infinito usa esto flex-shrink-0*/}
                             <div className="relative w-16 h-16 flex items-center justify-center">
                                 {/* Hexágono SVG */}
 
-                                <Hexagon className="absolute w-full h-full" strokeWidth={"1.5px"} />
+                                <Hexagon
+                                    className="absolute w-full h-full"
+                                    strokeWidth={"1.5px"}
+                                />
                                 {/* Ícono */}
                                 <div className="relative z-10 text-3xl">
-                                    <img src={`/api/indicators/media/${benefit.symbol}`} className="w-full h-auto" />
+                                    <img
+                                        src={`/api/indicators/media/${benefit.symbol}`}
+                                        className="w-full h-auto"
+                                    />
                                 </div>
                             </div>
                             <div className="">
-                                <h3 className="font-bold text-lg">{benefit.name}</h3>
+                                <h3 className="font-bold text-lg">
+                                    {benefit.name}
+                                </h3>
                                 <p className="text-sm">{benefit.description}</p>
                             </div>
                         </div>
@@ -62,7 +70,7 @@ const CarruselBenefitsInifinite = ({ items }) => {
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default CarruselBenefitsInifinite;

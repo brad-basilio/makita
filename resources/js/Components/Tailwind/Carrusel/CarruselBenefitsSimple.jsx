@@ -3,8 +3,6 @@ import { useEffect, useRef, useState } from "react";
 import { adjustTextColor } from "../../../Functions/adjustTextColor";
 
 const CarruselBenefitsSimple = ({ items }) => {
-
-
     // Duplicamos los elementos para lograr el efecto infinito
     const infiniteBenefits = [...items, ...items];
     const sliderRef = useRef(null);
@@ -28,35 +26,41 @@ const CarruselBenefitsSimple = ({ items }) => {
         }
     }, []);
 
-
     //infiniteBenefits si lo quiere infinito reemplaza
     //va en el div incial ref = { benefitsRef }
     // va en el div antes de hacer el map ref={sliderRef}
     return (
         <div className="bg-secondary   py-6 overflow-hidden customtext-primary font-font-general">
-            <div className="px-[5%] mx-auto relative">
-                <div
-                    className="flex w-full gap-8 whitespace-nowrap transition-none"
-                >
+            <div className="px-primary 2xl:px-0  2xl:max-w-7xl mx-auto relative">
+                <div className="flex w-full gap-8 whitespace-nowrap transition-none">
                     {items.map((benefit, index) => (
-                        <div key={index} className="flex items-center gap-4 justify-start w-1/3 "> {/*para infinito usa esto flex-shrink-0*/}
+                        <div
+                            key={index}
+                            className="flex items-center gap-4 justify-start w-1/3 "
+                        >
+                            {" "}
+                            {/*para infinito usa esto flex-shrink-0*/}
                             <div className="relative w-16 h-16 rounded-full bg-white flex items-center justify-center">
-
                                 {/* Ícono */}
                                 <div className="relative z-10 text-3xl">
-                                    <img src={`/api/indicators/media/${benefit.symbol}`} className="w-full h-auto " />
+                                    <img
+                                        src={`/api/indicators/media/${benefit.symbol}`}
+                                        className="w-full h-auto "
+                                    />
                                 </div>
                             </div>
-
-
-                            <p className="text-lg break-words whitespace-normal w-full max-w-[250px]"><span className="font-bold">{benefit.name}</span> {benefit.description}</p>
-
+                            <p className="text-lg break-words whitespace-normal w-full max-w-[250px]">
+                                <span className="font-bold">
+                                    {benefit.name}
+                                </span>{" "}
+                                {benefit.description}
+                            </p>
                         </div>
                     ))}
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default CarruselBenefitsSimple;
