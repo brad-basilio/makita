@@ -10,7 +10,7 @@ const InfiniteCategory = ({ items, data }) => {
     useEffect(() => {
         const updateSlidesPerView = () => {
             const width = window.innerWidth;
-            if (width < 640) setSlidesPerView(1); // Móvil
+            if (width < 640) setSlidesPerView(2); // Móvil
             else if (width < 1024) setSlidesPerView(3); // Tablet
             else setSlidesPerView(6); // Desktop
         };
@@ -44,7 +44,7 @@ const InfiniteCategory = ({ items, data }) => {
     return (
         <section className="py-12">
             <div className="w-full px-primary mx-auto">
-                <h2 className="text-4xl font-bold pb-4 mb-8 font-font-secondary border-b customborder-neutral-light">
+                <h2 className="text-[28px] md:text-4xl font-bold pb-4 mb-8 font-font-secondary border-b customborder-neutral-light">
                     {data?.title}
                 </h2>
                 <div className="relative">
@@ -64,15 +64,20 @@ const InfiniteCategory = ({ items, data }) => {
                         <div
                             className="flex transition-transform duration-300 ease-in-out"
                             style={{
-                                transform: `translateX(-${currentSlide * (100 / slidesPerView)}%)`,
+                                transform: `translateX(-${
+                                    currentSlide * (100 / slidesPerView)
+                                }%)`,
                             }}
                         >
                             {items.map((category) => (
                                 <div
                                     key={category.id}
-                                    className="group w-full min-w-[200px] px-2 sm:w-1/3 lg:w-1/6 flex-shrink-0 group-hover:shadow-xl"
+                                    className="group   px-2 w-1/2 sm:w-1/3 lg:w-1/6 flex-shrink-0 group-hover:shadow-xl"
                                 >
-                                    <a href={`/catalogo?category=${category.slug}`} className="block group">
+                                    <a
+                                        href={`/catalogo?category=${category.slug}`}
+                                        className="block group"
+                                    >
                                         <div className="bg-[#F7F9FB] rounded-xl p-4 transition-transform duration-300 ">
                                             <div className="aspect-square relative mb-4">
                                                 <img

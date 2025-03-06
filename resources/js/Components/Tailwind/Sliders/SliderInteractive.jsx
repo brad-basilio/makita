@@ -3,7 +3,6 @@ import React, { useState, useRef, useEffect } from "react";
 import { adjustTextColor } from "../../../Functions/adjustTextColor";
 
 const SliderInteractive = ({ items, data }) => {
-
     //TODO: Validación y conversión de infiniteLoop
     const parseInfiniteLoop = (value) => {
         const validTrueValues = ["true", "si"];
@@ -17,7 +16,6 @@ const SliderInteractive = ({ items, data }) => {
     };
 
     const infiniteLoop = parseInfiniteLoop(data?.infiniteLoop);
-
 
     const [currentIndex, setCurrentIndex] = useState(1); // Empezamos en 1 para evitar el salto brusco
     const sliderRef = useRef(null);
@@ -77,7 +75,7 @@ const SliderInteractive = ({ items, data }) => {
         const threshold = 20;
         const deltaX = Math.abs(
             (currentTranslate.current + currentIndex * 100) *
-            (window.innerWidth / 100)
+                (window.innerWidth / 100)
         );
 
         if (deltaX > threshold) {
@@ -90,8 +88,9 @@ const SliderInteractive = ({ items, data }) => {
             setCurrentIndex(currentIndex);
         }
 
-        sliderRef.current.style.transform = `translateX(-${currentIndex * 100
-            }%)`;
+        sliderRef.current.style.transform = `translateX(-${
+            currentIndex * 100
+        }%)`;
     };
 
     const handleMouseLeave = () => {
@@ -117,9 +116,12 @@ const SliderInteractive = ({ items, data }) => {
                 sliderRef.current.style.transition = "none"; // Desactivar transición
                 setCurrentIndex(duplicatedItems.length - 2); // Ir al penúltimo elemento
                 requestAnimationFrame(() => {
-                    sliderRef.current.style.transform = `translateX(-${(duplicatedItems.length - 2) * 100}%)`;
+                    sliderRef.current.style.transform = `translateX(-${
+                        (duplicatedItems.length - 2) * 100
+                    }%)`;
                     setTimeout(() => {
-                        sliderRef.current.style.transition = "transform 0.5s ease-in-out"; // Reactivar transición
+                        sliderRef.current.style.transition =
+                            "transform 0.5s ease-in-out"; // Reactivar transición
                     }, 50); // Pequeño retraso para evitar saltos visibles
                 });
             }, 500);
@@ -128,16 +130,17 @@ const SliderInteractive = ({ items, data }) => {
                 sliderRef.current.style.transition = "none"; // Desactivar transición
                 setCurrentIndex(1); // Ir al segundo elemento
                 requestAnimationFrame(() => {
-                    sliderRef.current.style.transform = `translateX(-${1 * 100}%)`;
+                    sliderRef.current.style.transform = `translateX(-${
+                        1 * 100
+                    }%)`;
                     setTimeout(() => {
-                        sliderRef.current.style.transition = "transform 0.5s ease-in-out"; // Reactivar transición
+                        sliderRef.current.style.transition =
+                            "transform 0.5s ease-in-out"; // Reactivar transición
                     }, 50); // Pequeño retraso para evitar saltos visibles
                 });
             }, 500);
         }
     }, [currentIndex]);
-
-
 
     const buttonsRef = useRef([]);
 
@@ -166,18 +169,19 @@ const SliderInteractive = ({ items, data }) => {
                     {duplicatedItems.map((item, index) => (
                         <div
                             key={`slide-${index}`}
-                            className="w-full flex-shrink-0 relative"
+                            className="w-full  flex-shrink-0 relative"
                         >
                             <img
-                                src={`/api/sliders/media/${item.bg_image || "undefined"
-                                    }`}
+                                src={`/api/sliders/media/${
+                                    item.bg_image || "undefined"
+                                }`}
                                 alt={item.name}
-                                className="absolute top-0 left-0 w-full h-full object-cover object-center z-0"
+                                className="absolute top-0 left-0 w-full h-full object-cover  object-bottom md:object-center z-0"
                             />
                             <div className="relative w-full px-[5%]  mx-auto p-4 h-[480px] md:h-[600px] flex flex-col items-start justify-center">
                                 <div className="flex flex-col gap-5 lg:gap-10 items-start">
                                     <h2
-                                        className="max-w-md font-font-primary customtext-neutral-dark text-3xl sm:text-5xl md:text-6xl tracking-normal font-bold "
+                                        className="w-11/12 md:w-full md:max-w-md font-font-primary customtext-neutral-dark text-[40px] leading-tight sm:text-5xl md:text-6xl tracking-normal font-bold "
                                         style={{
                                             textShadow:
                                                 "0 0 20px rgba(0, 0, 0, .25)",
@@ -186,7 +190,7 @@ const SliderInteractive = ({ items, data }) => {
                                         {item.name}
                                     </h2>
                                     <p
-                                        className="max-w-md customtext-neutral-dark text-lg  font-font-secondary
+                                        className="w-9/12 md:w-full md:max-w-md customtext-neutral-dark text-lg leading-tight font-font-secondary
                                          font-normal"
                                         style={{
                                             textShadow:
@@ -197,16 +201,18 @@ const SliderInteractive = ({ items, data }) => {
                                     </p>
                                     <div className="flex flex-row gap-5 md:gap-10 justify-center items-start">
                                         <a
-
                                             href={item.button_link}
-                                            ref={(el) => (buttonsRef.current[index] = el)}
+                                            ref={(el) =>
+                                                (buttonsRef.current[index] = el)
+                                            }
                                             className="bg-primary   border-none flex flex-row items-center gap-3 px-10  py-4 text-base rounded-xl tracking-wide font-bold hover:opacity-90 transition-all duration-300"
                                         >
                                             {item.button_text}
 
-                                            <Tag width={"1.25rem"} className="transform rotate-90" />
-
-
+                                            <Tag
+                                                width={"1.25rem"}
+                                                className="transform rotate-90"
+                                            />
                                         </a>
                                     </div>
                                 </div>
@@ -216,65 +222,63 @@ const SliderInteractive = ({ items, data }) => {
                 </div>
             </div>
 
-            {
-                showNavigation && (
-                    <>
-                        <div
-                            className={`absolute top-1/2 left-4 transform -translate-y-1/2 `}
+            {showNavigation && (
+                <>
+                    <div
+                        className={`absolute top-1/2 left-4 transform -translate-y-1/2 `}
+                    >
+                        <button
+                            onClick={prevSlide}
+                            className="bg-accent  rounded-lg customtext-neutral-light w-8 h-8 flex items-center justify-center  transition-colors duration-300"
                         >
-                            <button
-                                onClick={prevSlide}
-                                className="bg-accent  rounded-lg customtext-neutral-light w-8 h-8 flex items-center justify-center  transition-colors duration-300"
-                            >
-                                <ChevronLeft width={"1rem"} />
-                            </button>
-                        </div>
-                        <div
-                            className={`absolute top-1/2 right-4 transform -translate-y-1/2 `}
+                            <ChevronLeft width={"1rem"} />
+                        </button>
+                    </div>
+                    <div
+                        className={`absolute top-1/2 right-4 transform -translate-y-1/2 `}
+                    >
+                        <button
+                            onClick={nextSlide}
+                            className="bg-accent rounded-lg customtext-neutral-light w-8 h-8 flex items-center justify-center  transition-colors duration-300"
                         >
-                            <button
-                                onClick={nextSlide}
-                                className="bg-accent rounded-lg customtext-neutral-light w-8 h-8 flex items-center justify-center  transition-colors duration-300"
-                            >
-                                <ChevronRight width={"1rem"} />
-                            </button>
-                        </div>
-                    </>
-                )
-            }
+                            <ChevronRight width={"1rem"} />
+                        </button>
+                    </div>
+                </>
+            )}
 
-            {
-                showPagination && (
-                    <div className="px-[5%] mx-auto ">
-                        <div className="relative">
-                            <div
-                                className={`absolute bottom-4 ${alignmentClassPagination === "left"
+            {showPagination && (
+                <div className="px-[5%] mx-auto ">
+                    <div className="relative">
+                        <div
+                            className={`absolute bottom-4 ${
+                                alignmentClassPagination === "left"
                                     ? "inset-x-0 left-0"
                                     : alignmentClassPagination === "right"
-                                        ? "right-0"
-                                        : "left-1/2 transform -translate-x-1/2"
-                                    }`}
-                            >
-                                {items.map((_, index) => (
-                                    <div
-                                        key={`dot-${index}`}
-                                        className={`inline-flex mx-1 w-3 h-3 rounded-full ${currentIndex === index + 1
+                                    ? "right-0"
+                                    : "left-1/2 transform -translate-x-1/2"
+                            }`}
+                        >
+                            {items.map((_, index) => (
+                                <div
+                                    key={`dot-${index}`}
+                                    className={`inline-flex mx-1 w-3 h-3 rounded-full ${
+                                        currentIndex === index + 1
                                             ? "bg-white h-5 w-5 lg:w-6 lg:h-6 items-center justify-center border-2 border-primary"
                                             : "bg-secondary"
-                                            }`}
-                                        onClick={() => setCurrentIndex(index + 1)}
-                                    >
-                                        {currentIndex === index + 1 && (
-                                            <div className="w-3 h-3 bg-primary rounded-full items-center justify-center"></div>
-                                        )}
-                                    </div>
-                                ))}
-                            </div>
+                                    }`}
+                                    onClick={() => setCurrentIndex(index + 1)}
+                                >
+                                    {currentIndex === index + 1 && (
+                                        <div className="w-3 h-3 bg-primary rounded-full items-center justify-center"></div>
+                                    )}
+                                </div>
+                            ))}
                         </div>
                     </div>
-                )
-            }
-        </div >
+                </div>
+            )}
+        </div>
     );
 };
 

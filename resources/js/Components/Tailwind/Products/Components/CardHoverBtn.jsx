@@ -1,42 +1,47 @@
-import React from 'react';
-import { ShoppingCart } from 'lucide-react'; // Icono para la cesta
-import Swal from 'sweetalert2';
+import React from "react";
+import { ShoppingCart } from "lucide-react"; // Icono para la cesta
+import Swal from "sweetalert2";
 
 const CardHoverBtn = ({ product, widthClass = "lg:w-1/5", setCart, cart }) => {
     const onAddClicked = (product) => {
-        const newCart = structuredClone(cart)
-        const index = newCart.findIndex(x => x.id == product.id)
+        const newCart = structuredClone(cart);
+        const index = newCart.findIndex((x) => x.id == product.id);
         if (index == -1) {
-            newCart.push({ ...product, quantity: 1 })
+            newCart.push({ ...product, quantity: 1 });
         } else {
-            newCart[index].quantity++
+            newCart[index].quantity++;
         }
-        setCart(newCart)
+        setCart(newCart);
 
         Swal.fire({
-            title: 'Producto agregado',
+            title: "Producto agregado",
             text: `Se agregó ${product.name} al carrito`,
-            icon: 'success',
+            icon: "success",
             timer: 1500,
-        })
-    }
+        });
+    };
 
-    const inCart = cart?.find(x => x.id == product?.id)
-    const finalPrice = product?.discount > 0 ? product?.discount : product?.price
+    const inCart = cart?.find((x) => x.id == product?.id);
+    const finalPrice =
+        product?.discount > 0 ? product?.discount : product?.price;
     return (
         <div
             key={product.id}
-            className={`group w-full px-2 sm:w-1/3 ${widthClass} flex-shrink-0 font-font-secondary cursor-pointer`}
+            className={`group px-1 md:px-2 w-1/2 sm:w-1/3 ${widthClass} flex-shrink-0 font-font-secondary cursor-pointer`}
         >
             <div
-                className="bg-white rounded-xl shadow-md p-4"
+                className="bg-white rounded-xl shadow-md p-2 md:p-4"
                 style={{ boxShadow: "0px 0px 6px 0px #00000040" }}
             >
                 {/* Imagen del producto y etiqueta de descuento */}
                 <div className="relative">
                     {product.discount != null && !isNaN(product.discount) && (
                         <span className="absolute top-2 left-2 bg-[#F93232] text-white text-base font-medium px-2 py-1 rounded-full">
-                            -{Number((product.discount * 100 / product.price)).toFixed(0)}%
+                            -
+                            {Number(
+                                (product.discount * 100) / product.price
+                            ).toFixed(0)}
+                            %
                         </span>
                     )}
                     <div className="aspect-square rounded-lg overflow-hidden flex items-center justify-center p-4">
@@ -44,18 +49,16 @@ const CardHoverBtn = ({ product, widthClass = "lg:w-1/5", setCart, cart }) => {
                             src={`/api/items/media/${product.image}`}
                             alt={product.name}
                             className="w-full h-full object-contain"
-                            loading='lazy'
+                            loading="lazy"
                         />
                     </div>
                 </div>
 
                 {/* Botones de acción (ocultos por defecto, aparecen con hover) */}
-                <div
-                    className="overflow-hidden max-h-0 pb-4 opacity-0 group-hover:max-h-20 group-hover:opacity-100 transition-[max-height,opacity] duration-1000 ease-in-out flex gap-2 my-2 transform group-hover:translate-y-0 translate-y-4"
-                >
+                <div className="overflow-hidden max-h-20  md:max-h-0 pb-4 md:opacity-0 group-hover:max-h-20 group-hover:opacity-100 transition-[max-height,opacity] duration-1000 ease-in-out flex gap-2 my-2 transform group-hover:translate-y-0 translate-y-4">
                     <a
                         href={`/product/${product.slug}`}
-                        className="flex-1 inline-flex items-center justify-center font-bold text-sm bg-primary text-white  py-3 rounded-xl shadow-lg transition-all duration-300 hover:opacity-90"
+                        className="flex-1 inline-flex items-center justify-center font-bold  text-sm bg-primary text-white  py-3 rounded-xl shadow-lg transition-all duration-300 hover:opacity-90"
                     >
                         Ver detalle
                     </a>
@@ -89,19 +92,20 @@ const CardHoverBtn = ({ product, widthClass = "lg:w-1/5", setCart, cart }) => {
                         {product.name}
                     </h3>
                     {/* Precio */}
-                    <div className="flex flex-col items-baseline gap-2 mb-4">
-                        {product.discount != null && !isNaN(product.discount) && (
-                            <span className="text-xs customtext-neutral-light font-semibold1 line-through">
-                                S/ {product.price}
-                            </span>
-                        )}
-                        <span className="customtext-neutral-dark text-2xl font-bold">
+                    <div className="flex flex-col items-baseline gap-2 md:mb-4">
+                        {product.discount != null &&
+                            !isNaN(product.discount) && (
+                                <span className="text-xs customtext-neutral-light font-semibold1 line-through">
+                                    S/ {product.price}
+                                </span>
+                            )}
+                        <span className="customtext-neutral-dark text-[20px] md:text-2xl font-bold">
                             S/ {product.final_price}
                         </span>
                     </div>
                 </div>
-            </div >
-        </div >
+            </div>
+        </div>
     );
 };
 

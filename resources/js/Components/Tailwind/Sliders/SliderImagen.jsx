@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react";
 import { adjustTextColor } from "../../../Functions/adjustTextColor";
 
 const SliderImagen = ({ items, data }) => {
@@ -41,10 +41,11 @@ const SliderImagen = ({ items, data }) => {
     }, []);
     return (
         <div>
-            <h2 className="text-5xl text-center font-bold  font-font-primary py-8 bg-[#F7F9FB]">{data?.title}</h2>
-            <div className="bg-primary py-8">
+            <h2 className=" text-[36px] leading-tight md:text-5xl text-center font-bold  font-font-primary py-4 md:py-8 bg-[#F7F9FB]">
+                {data?.title}
+            </h2>
+            <div className="bg-primary py-6 md:py-8">
                 <div className=" mx-auto px-primary">
-
                     <div className="relative flex items-center justify-center">
                         <button
                             onClick={prevSlide}
@@ -53,25 +54,40 @@ const SliderImagen = ({ items, data }) => {
                             className="absolute -left-2 z-10 p-2 bg-white rounded-lg shadow-lg"
                             aria-label="Previous brand"
                         >
-                            <svg className="h-4 w-4 customtext-neutral-dark" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                            <svg
+                                className="h-4 w-4 customtext-neutral-dark"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M15 19l-7-7 7-7"
+                                />
                             </svg>
                         </button>
 
-                        <div className="overflow-hidden w-full">
+                        <div className="overflow-hidden w-full px-4">
+                            {/* Movemos px-4 aquí */}
                             <div
-                                className="flex items-center transition-all duration-300   ease-in-out px-4 w-full"
+                                className="flex items-center transition-all duration-300 ease-in-out w-full"
                                 style={{
-                                    transform: `translateX(-${currentSlide * (100 / slidesPerView)}%)`,
+                                    transform: `translateX(-${
+                                        currentSlide * (100 / slidesPerView)
+                                    }%)`,
                                 }}
                             >
                                 {items.map((brand, index) => (
-                                    <div key={index} className="group w-full flex   px-2 sm:w-1/3 lg:w-1/5 flex-shrink-0 font-font-secondary">
+                                    <div
+                                        key={index}
+                                        className="group w-full flex items-center justify-center md:items-center md:justify-start px-2 sm:w-1/3 lg:w-1/5 flex-shrink-0 font-font-secondary"
+                                    >
                                         <img
                                             src={`/api/brands/media/${brand.image}`}
                                             alt={brand.name}
                                             className="h-10 w-full object-contain grayscale brightness-0 invert"
-
                                         />
                                     </div>
                                 ))}
@@ -85,15 +101,25 @@ const SliderImagen = ({ items, data }) => {
                             className="absolute -right-2 z-10 p-2 bg-white rounded-lg shadow-lg "
                             aria-label="Next brand"
                         >
-                            <svg className="h-4 w-4 customtext-neutral-dark" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                            <svg
+                                className="h-4 w-4 customtext-neutral-dark"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M9 5l7 7-7 7"
+                                />
                             </svg>
                         </button>
                     </div>
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default SliderImagen;
