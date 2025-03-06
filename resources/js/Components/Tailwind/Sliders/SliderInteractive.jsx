@@ -178,7 +178,7 @@ const SliderInteractive = ({ items, data }) => {
                                 alt={item.name}
                                 className="absolute top-0 left-0 w-full h-full object-cover  object-bottom md:object-center z-0"
                             />
-                            <div className="relative w-full px-[5%]  mx-auto p-4 h-[480px] md:h-[600px] flex flex-col items-start justify-center">
+                            <div className="relative w-full px-primary 2xl:px-0 2xl:max-w-7xl  mx-auto p-4 h-[480px] md:h-[600px] flex flex-col items-start justify-center">
                                 <div className="flex flex-col gap-5 lg:gap-10 items-start">
                                     <h2
                                         className="w-11/12 md:w-full md:max-w-md font-font-primary customtext-neutral-dark text-[40px] leading-tight sm:text-5xl md:text-6xl tracking-normal font-bold "
@@ -248,7 +248,7 @@ const SliderInteractive = ({ items, data }) => {
             )}
 
             {showPagination && (
-                <div className="px-[5%] mx-auto ">
+                <div className="px-primary 2xl:px-0 2xl:max-w-7xl mx-auto ">
                     <div className="relative">
                         <div
                             className={`absolute bottom-4 ${

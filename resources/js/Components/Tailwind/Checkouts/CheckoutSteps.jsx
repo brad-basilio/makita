@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react"
-import CartStep from "./Components/CartStep"
-import ShippingStep from "./Components/ShippingStep"
-import ConfirmationStep from "./Components/ConfirmationStep"
-
+import { useEffect, useState } from "react";
+import CartStep from "./Components/CartStep";
+import ShippingStep from "./Components/ShippingStep";
+import ConfirmationStep from "./Components/ConfirmationStep";
 
 export default function CheckoutSteps({ cart, setCart, user }) {
-    const [currentStep, setCurrentStep] = useState(1)
+    const [currentStep, setCurrentStep] = useState(1);
     // Calcular el precio total incluyendo IGV
     const totalPrice = cart.reduce((acc, item) => {
         const finalPrice = item.final_price;
@@ -22,12 +21,12 @@ export default function CheckoutSteps({ cart, setCart, user }) {
     const [envio, setEnvio] = useState(0);
 
     // Calcular el total final (subtotal sin IGV + IGV + envío)
-    const totalFinal = parseFloat(subTotal) + parseFloat(igv) + parseFloat(envio);
-    const [sale, setSale] = useState([])
-    const [code, setCode] = useState([])
-    const [delivery, setDelivery] = useState([])
+    const totalFinal =
+        parseFloat(subTotal) + parseFloat(igv) + parseFloat(envio);
+    const [sale, setSale] = useState([]);
+    const [code, setCode] = useState([]);
+    const [delivery, setDelivery] = useState([]);
     useEffect(() => {
-
         const script = document.createElement("script");
         script.src = "https://checkout.culqi.com/js/v4";
         script.async = true;
@@ -54,43 +53,94 @@ export default function CheckoutSteps({ cart, setCart, user }) {
         };
 
         return null; // No renderiza nada, solo carga Culqi en el contexto de la app
-
-
-
-
     }, []);
     return (
-        <div className="min-h-screen bg-[#F7F9FB] py-12 px-primary mx-auto">
+        <div className="min-h-screen bg-[#F7F9FB] py-12 px-primary 2xl:px-0 2xl:max-w-7xl mx-auto">
             <div className="bg-white   p-8 rounded-xl">
                 {/* Steps indicator */}
                 <div className="mb-8">
                     <div className="flex items-center justify-between max-w-3xl mx-auto">
-                        <div className={`text-sm ${currentStep === 1 ? "customtext-primary font-medium" : "customtext-neutral-dark"}`}>
+                        <div
+                            className={`text-sm ${
+                                currentStep === 1
+                                    ? "customtext-primary font-medium"
+                                    : "customtext-neutral-dark"
+                            }`}
+                        >
                             1. Carrito de compra
                         </div>
-                        <div className={`text-sm ${currentStep === 2 ? "customtext-primary font-medium" : "customtext-neutral-dark"}`}>
+                        <div
+                            className={`text-sm ${
+                                currentStep === 2
+                                    ? "customtext-primary font-medium"
+                                    : "customtext-neutral-dark"
+                            }`}
+                        >
                             2. Detalles de envío
                         </div>
-                        <div className={`text-sm ${currentStep === 3 ? "customtext-primary font-medium" : "customtext-neutral-dark"}`}>
+                        <div
+                            className={`text-sm ${
+                                currentStep === 3
+                                    ? "customtext-primary font-medium"
+                                    : "customtext-neutral-dark"
+                            }`}
+                        >
                             3. Orden confirmada
                         </div>
                     </div>
                     <div className="mt-4 h-1 max-w-3xl mx-auto bg-gray-200">
                         <div
                             className="h-1 bg-primary transition-all duration-500"
-                            style={{ width: `${((currentStep - 1) / 2) * 100}%` }}
+                            style={{
+                                width: `${((currentStep - 1) / 2) * 100}%`,
+                            }}
                         />
                     </div>
                 </div>
 
                 {/* Steps content */}
-                {currentStep === 1 && <CartStep cart={cart} setCart={setCart} onContinue={() => setCurrentStep(2)} subTotal={subTotal} envio={envio} igv={igv} totalFinal={totalFinal} />}
+                {currentStep === 1 && (
+                    <CartStep
+                        cart={cart}
+                        setCart={setCart}
+                        onContinue={() => setCurrentStep(2)}
+                        subTotal={subTotal}
+                        envio={envio}
+                        igv={igv}
+                        totalFinal={totalFinal}
+                    />
+                )}
 
-                {currentStep === 2 && <ShippingStep setCode={setCode} setDelivery={setDelivery} cart={cart} setSale={setSale} setCart={setCart} onContinue={() => setCurrentStep(3)} noContinue={() => setCurrentStep(1)} subTotal={subTotal} envio={envio} setEnvio={setEnvio} igv={igv} totalFinal={totalFinal} user={user} />}
+                {currentStep === 2 && (
+                    <ShippingStep
+                        setCode={setCode}
+                        setDelivery={setDelivery}
+                        cart={cart}
+                        setSale={setSale}
+                        setCart={setCart}
+                        onContinue={() => setCurrentStep(3)}
+                        noContinue={() => setCurrentStep(1)}
+                        subTotal={subTotal}
+                        envio={envio}
+                        setEnvio={setEnvio}
+                        igv={igv}
+                        totalFinal={totalFinal}
+                        user={user}
+                    />
+                )}
 
-                {currentStep === 3 && <ConfirmationStep code={code} delivery={delivery} cart={sale} subTotal={subTotal} envio={envio} igv={igv} totalFinal={totalFinal} />}
+                {currentStep === 3 && (
+                    <ConfirmationStep
+                        code={code}
+                        delivery={delivery}
+                        cart={sale}
+                        subTotal={subTotal}
+                        envio={envio}
+                        igv={igv}
+                        totalFinal={totalFinal}
+                    />
+                )}
             </div>
         </div>
-    )
+    );
 }
-

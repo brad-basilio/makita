@@ -22,7 +22,7 @@ const BannerPublicitario = ({ data }) => {
                     </div>
 
                     {/* Right side - Content */}
-                    <div className=" md:w-5/12 text-white z-10 ">
+                    <div className="md:order-1 md:w-5/12 text-white z-10 ">
                         <div className="max-w-sm">
                             <h1 className="text-[40px] leading-tight md:text-6xl font-bold mb-4 font-font-primary">
                                 {data?.name}

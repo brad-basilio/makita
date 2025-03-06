@@ -22,3 +22,5 @@ composer.lock
 /storage/profile
 /storage/public
 /storage/app/pages.json
+/public/resources/logo.png
+/public/resources/icon.png

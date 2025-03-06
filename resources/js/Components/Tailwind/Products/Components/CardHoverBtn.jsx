@@ -27,10 +27,10 @@ const CardHoverBtn = ({ product, widthClass = "lg:w-1/5", setCart, cart }) => {
     return (
         <div
             key={product.id}
-            className={`group px-1 md:px-2 w-1/2 sm:w-1/3 ${widthClass} flex-shrink-0 font-font-secondary cursor-pointer`}
+            className={`group px-1 md:px-2 w-1/2 sm:w-1/3 ${widthClass} flex-shrink-0 font-font-secondary cursor-pointer relative`}
         >
             <div
-                className="bg-white rounded-xl shadow-md p-2 md:p-4"
+                className="bg-white rounded-xl shadow-md p-2 md:p-4 "
                 style={{ boxShadow: "0px 0px 6px 0px #00000040" }}
             >
                 {/* Imagen del producto y etiqueta de descuento */}
