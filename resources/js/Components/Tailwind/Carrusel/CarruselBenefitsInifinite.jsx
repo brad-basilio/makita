@@ -35,7 +35,7 @@ const CarruselBenefitsInifinite = ({ items }) => {
     // va en el div antes de hacer el map ref={sliderRef}
     return (
         <div ref={benefitsRef} className="bg-primary   py-6 overflow-hidden">
-            <div className="px-[5%] mx-auto relative">
+            <div className="px-primary 2xl:px-0  2xl:max-w-7xl mx-auto relative">
                 <div className="flex w-full gap-8 whitespace-nowrap transition-none">
                     {items.map((benefit, index) => (
                         <div

@@ -19,7 +19,7 @@ const MenuSimple = ({ pages = [], items }) => {
 
     return (
         <nav className="hidden md:block bg-secondary font-font-secondary font-normal text-sm">
-            <div className="px-primary mx-auto ">
+            <div className="px-primary 2xl:px-0 2xl:max-w-7xl mx-auto ">
                 <ul className="flex items-center gap-6 text-sm" ref={menuRef}>
                     <li className="relative py-3">
                         <button

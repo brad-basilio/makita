@@ -16,7 +16,7 @@ const FaqSimple = ({ faqs }) => {
 
     return (
         <section className="bg-[#F7F9FB] pb-12 px-primary">
-            <div className="mx-auto gap-12 bg-white rounded-xl p-4 md:px-8 md:py-8">
+            <div className="mx-auto    2xl:max-w-7xl gap-12 bg-white rounded-xl p-4 md:p-8">
                 <h1 className="text-[40px] font-bold text-center mb-4 cusomtext-neutral-dark">
                     Preguntas frecuentes
                 </h1>

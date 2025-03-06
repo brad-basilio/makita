@@ -2,9 +2,9 @@ import { Tag } from "lucide-react";
 
 const BannerPublicitario = ({ data }) => {
     return (
-        <div className=" px-primary mx-auto py-4 md:py-32">
+        <div className=" px-primary 2xl:px-0 2xl:max-w-7xl mx-auto py-4 md:py-32">
             <div
-                className="relative rounded-2xl md:rounded-xl h-[600px] md:h-[500px] p-4 md:p-0"
+                className="relative rounded-3xl md:rounded-2xl h-[600px] md:h-[500px] p-4 md:p-0"
                 style={{
                     backgroundImage: `url(/api/banners/media/${data?.background})`,
                     backgroundSize: "cover",
@@ -14,7 +14,7 @@ const BannerPublicitario = ({ data }) => {
             >
                 <div className="flex flex-col md:flex-row items-center justify-between h-full gap-8 ">
                     {/* Left side - Image */}
-                    <div className="order-1 w-full md:w-7/12 relative z-10">
+                    <div className="order-1 md:order-none w-full md:w-7/12 relative z-10">
                         <img
                             src={`/api/banners/media/${data?.image}`}
                             className="w-full h-auto object-cover md:absolute scale-110 md:-translate-y-1/2"

@@ -1,7 +1,12 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState, useEffect, useMemo } from "react";
 
-const PaginationCategory = ({ items, data, showPagination = true, alignmentClassPagination = "center" }) => {
+const PaginationCategory = ({
+    items,
+    data,
+    showPagination = true,
+    alignmentClassPagination = "center",
+}) => {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [slidesPerView, setSlidesPerView] = useState(6); // Default en desktop
 
@@ -35,10 +40,11 @@ const PaginationCategory = ({ items, data, showPagination = true, alignmentClass
             dots.push(
                 <div
                     key={`dot-${i}`}
-                    className={`inline-flex mx-1 w-3 h-3 rounded-full cursor-pointer ${currentSlide === i
-                        ? "bg-white h-5 w-5 lg:w-6 lg:h-6 items-center justify-center border-2 border-primary"
-                        : "bg-secondary"
-                        }`}
+                    className={`inline-flex mx-1 w-3 h-3 rounded-full cursor-pointer ${
+                        currentSlide === i
+                            ? "bg-white h-5 w-5 lg:w-6 lg:h-6 items-center justify-center border-2 border-primary"
+                            : "bg-secondary"
+                    }`}
                     onClick={() => handleDotClick(i)}
                     aria-label={`Ir a la página ${i + 1}`}
                 >
@@ -53,7 +59,7 @@ const PaginationCategory = ({ items, data, showPagination = true, alignmentClass
 
     return (
         <section className="py-12 font-font-general">
-            <div className="w-full px-primary mx-auto">
+            <div className="w-full px-primary 2xl:px-0  2xl:max-w-7xl mx-auto">
                 <h2 className="text-[52px] font-semibold pb-4 mb-8 text-center">
                     {data?.title}
                 </h2>
@@ -63,7 +69,9 @@ const PaginationCategory = ({ items, data, showPagination = true, alignmentClass
                         <div
                             className="flex transition-transform duration-300 ease-in-out"
                             style={{
-                                transform: `translateX(-${currentSlide * (100 / slidesPerView)}%)`,
+                                transform: `translateX(-${
+                                    currentSlide * (100 / slidesPerView)
+                                }%)`,
                             }}
                         >
                             {items.map((category) => (
@@ -71,7 +79,10 @@ const PaginationCategory = ({ items, data, showPagination = true, alignmentClass
                                     key={category.id}
                                     className="group w-full min-w-[200px] px-2 sm:w-1/3 lg:w-1/6 flex-shrink-0 group-hover:shadow-xl"
                                 >
-                                    <a href={`/catalogo?category=${category.slug}`} className="block group">
+                                    <a
+                                        href={`/catalogo?category=${category.slug}`}
+                                        className="block group"
+                                    >
                                         <div className="bg-transparent rounded-xl p-4 transition-transform duration-300 ">
                                             <div className="aspect-square relative mb-4 rounded-full overflow-hidden">
                                                 <img
@@ -95,12 +106,13 @@ const PaginationCategory = ({ items, data, showPagination = true, alignmentClass
                     <div className="px-[5%] mx-auto mt-16">
                         <div className="relative">
                             <div
-                                className={`absolute bottom-4 ${alignmentClassPagination === "left"
-                                    ? "inset-x-0 left-0"
-                                    : alignmentClassPagination === "right"
+                                className={`absolute bottom-4 ${
+                                    alignmentClassPagination === "left"
+                                        ? "inset-x-0 left-0"
+                                        : alignmentClassPagination === "right"
                                         ? "right-0"
                                         : "left-1/2 transform -translate-x-1/2"
-                                    }`}
+                                }`}
                             >
                                 {renderPaginationDots()}
                             </div>

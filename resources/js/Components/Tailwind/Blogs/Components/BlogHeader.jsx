@@ -100,7 +100,9 @@ export default function BlogHeader({
         <main className="bg-white font-font-general">
             {/* Hero Section */}
             <section
-                className={`px-primary mx-auto ${isFilter ? "pt-8" : "py-8"}`}
+                className={`px-primary 2xl:px-0 2xl:max-w-7xl mx-auto ${
+                    isFilter ? "pt-8" : "py-8"
+                }`}
             >
                 <div className="space-y-4">
                     <span className="customtext-neutral-light  font-bold ">

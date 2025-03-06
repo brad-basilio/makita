@@ -290,7 +290,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
 
     return (
         <section className="py-12 bg-[#F7F9FB]">
-            <div className="mx-auto px-primary">
+            <div className="mx-auto px-primary 2xl:px-0 2xl:max-w-7xl">
                 <div className="flex flex-col md:flex-row md:justify-between items-center mb-8 pb-4 border-b-2">
                     <h2 className="text-[32px] md:text-4xl font-bold md:w-6/12">
                         {data?.title}

@@ -1,16 +1,17 @@
-
-
-import { ArrowLeft, ArrowLeftIcon, ArrowRight, ChevronLeft, ChevronRight, Tag } from "lucide-react"
-import { useEffect, useMemo, useRef, useState } from "react"
-import CardHoverBtn from "./Components/CardHoverBtn"
+import {
+    ArrowLeft,
+    ArrowLeftIcon,
+    ArrowRight,
+    ChevronLeft,
+    ChevronRight,
+    Tag,
+} from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import CardHoverBtn from "./Components/CardHoverBtn";
 import { adjustTextColor } from "../../../Functions/adjustTextColor";
 import ProductCardSimple from "./Components/ProductCardSimple";
 
 const ProductNavigation = ({ items, data, setCart, cart }) => {
-
-
-
-
     const [currentSlide, setCurrentSlide] = useState(0);
     const [slidesPerView, setSlidesPerView] = useState(6); // Default en desktop
 
@@ -51,23 +52,21 @@ const ProductNavigation = ({ items, data, setCart, cart }) => {
 
     return (
         <section className="py-12">
-            <div className=" mx-auto px-primary font-font-general">
+            <div className=" mx-auto px-primary 2xl:px-0 2xl:max-w-7xl font-font-general">
                 {/* Header */}
-                {
-                    data?.title && (
-                        <div className="flex justify-between items-center mb-8 pb-4 ">
-                            <h2 className="text-5xl font-semibold   ">{data?.title}</h2>
-                            <a
-
-                                href={data?.link_catalog}
-                                className="bg-primary transition-all duration-300 text-white border-none items-center   px-10  py-3 text-base rounded-full font-semibold cursor-pointer hover:opacity-90"
-                            >
-                                Ver todos
-
-                            </a>
-                        </div>
-                    )
-                }
+                {data?.title && (
+                    <div className="flex justify-between items-center mb-8 pb-4 ">
+                        <h2 className="text-5xl font-semibold   ">
+                            {data?.title}
+                        </h2>
+                        <a
+                            href={data?.link_catalog}
+                            className="bg-primary transition-all duration-300 text-white border-none items-center   px-10  py-3 text-base rounded-full font-semibold cursor-pointer hover:opacity-90"
+                        >
+                            Ver todos
+                        </a>
+                    </div>
+                )}
 
                 {/* Carousel */}
                 <div className="relative">
@@ -80,21 +79,31 @@ const ProductNavigation = ({ items, data, setCart, cart }) => {
                             className=" w-16 h-16 flex items-center justify-center bg-secondary rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
                             aria-label="Productos anteriores"
                         >
-                            <ArrowLeft width={"2rem"} className=" customtext-primary" />
+                            <ArrowLeft
+                                width={"2rem"}
+                                className=" customtext-primary"
+                            />
                         </button>
                     </div>
-
 
                     {/* Products container */}
                     <div className="overflow-hidden py-4">
                         <div
                             className="flex items-center transition-all duration-300   ease-in-out "
                             style={{
-                                transform: `translateX(-${currentSlide * (100 / slidesPerView)}%)`,
+                                transform: `translateX(-${
+                                    currentSlide * (100 / slidesPerView)
+                                }%)`,
                             }}
                         >
                             {items.map((product, index) => (
-                                <ProductCardSimple key={index} product={product} setCart={setCart} cart={cart} widthClass="lg:w-1/4" />
+                                <ProductCardSimple
+                                    key={index}
+                                    product={product}
+                                    setCart={setCart}
+                                    cart={cart}
+                                    widthClass="lg:w-1/4"
+                                />
                             ))}
                         </div>
                     </div>
@@ -108,13 +117,16 @@ const ProductNavigation = ({ items, data, setCart, cart }) => {
                             className="w-16 h-16 flex items-center justify-center bg-secondary rounded-full disabled:opacity-50 disabled:cursor-not-allowed "
                             aria-label="Siguientes productos"
                         >
-                            <ArrowRight width={"2rem"} className=" customtext-primary" />
+                            <ArrowRight
+                                width={"2rem"}
+                                className=" customtext-primary"
+                            />
                         </button>
                     </div>
                 </div>
             </div>
         </section>
-    )
-}
+    );
+};
 
 export default ProductNavigation;

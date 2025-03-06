@@ -11,7 +11,7 @@ export default function BlogList({ posts, postsLatest, loading, isFilter }) {
         <section
             className={`font-font-general ${isFilter ? "pb-16" : "py-16"}`}
         >
-            <div className="px-primary mx-auto">
+            <div className="px-primary 2xl:px-0 2xl:max-w-7xl mx-auto">
                 {!isFilter ? (
                     <div>
                         <h2 className="text-3xl font-bold mb-4">

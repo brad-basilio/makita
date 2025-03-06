@@ -55,8 +55,8 @@ const ContactGrid = ({ data, contacts }) => {
         descriptionRef.current.value = null;
     };
     return (
-        <section section className=" bg-[#F7F9FB] py-12 px-primary">
-            <div className=" mx-auto  flex flex-col md:flex-row gap-12 bg-white rounded-xl p-4 md:px-8 md:py-8">
+        <section section className=" bg-[#F7F9FB] py-12 px-primary ">
+            <div className=" mx-auto  2xl:max-w-7xl  flex flex-col md:flex-row gap-12 bg-white rounded-xl p-4 md:px-8 md:py-8">
                 {/* Contact Form */}
                 <div className="w-full md:w-10/12">
                     <h2 className="text-3xl font-bold mb-4 customtext-neutral-dark">
@@ -182,7 +182,7 @@ const ContactGrid = ({ data, contacts }) => {
                     </div>
                 </div>
             </div>
-            <div className="mx-auto   gap-12 bg-white rounded-xl px-8 py-8">
+            <div className="mx-auto 2xl:max-w-7xl   gap-12 bg-white rounded-xl px-8 py-8">
                 <LoadScript
                     googleMapsApiKey={Global.GMAPS_API_KEY}
                     className="rounded-xl"

@@ -45,7 +45,7 @@ const SliderImagen = ({ items, data }) => {
                 {data?.title}
             </h2>
             <div className="bg-primary py-6 md:py-8">
-                <div className=" mx-auto px-primary">
+                <div className=" mx-auto px-primary 2xl:px-0 2xl:max-w-7xl">
                     <div className="relative flex items-center justify-center">
                         <button
                             onClick={prevSlide}

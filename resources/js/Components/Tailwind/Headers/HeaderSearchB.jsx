@@ -29,8 +29,8 @@ const HeaderSearchB = ({ items, data, cart, setCart, isUser, pages }) => {
     }, []);
     const [search, setSearch] = useState("");
     return (
-        <header className="w-full relative">
-            <div className="px-primary mx-auto py-4 font-font-secondary text-base font-semibold">
+        <header className="w-full relative ">
+            <div className="px-primary 2xl:px-0 2xl:max-w-7xl mx-auto py-4 font-font-secondary text-base font-semibold">
                 <div className=" flex items-center justify-between gap-4 ">
                     {/* Logo */}
                     <a href="/" className="flex items-center gap-2">
