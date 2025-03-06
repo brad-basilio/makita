@@ -33,9 +33,9 @@ class ScrapRest {
     static getProducts = async (request) => {
         console.log(request);
         try {
-            const { query, proveedor, filters, page, limit = 12 } = request;
+            const { query, proveedor, page, limit = 12 } = request;
 
-            if (proveedor === "shopsimon") {
+            /*if (proveedor === "shopsimon") {
                 const { status, result } = await Fetch(
                     "./api/scrap-shopsimon",
                     {
@@ -58,14 +58,13 @@ class ScrapRest {
                     data: result.data || [],
                     hasMore: result.data.length === limit, // Si la cantidad recibida es menor al límite, no hay más datos
                 };
-            }
+            }*/
             // Petición al backend con paginación
             const { status, result } = await Fetch("./api/scrap", {
                 method: "POST",
                 body: JSON.stringify({
                     query,
                     proveedor,
-                    filters,
                     page,
                     limit,
                 }),

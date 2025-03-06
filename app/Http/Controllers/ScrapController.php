@@ -154,7 +154,7 @@ class ScrapController extends BasicController
         }
     }
 
-    public function scraporiginal(Request $request)
+    public function scrap(Request $request)
     {
         $traductor = new GoogleTranslate('en');
         $traductor->setOptions(['verify' => false]);
@@ -164,26 +164,70 @@ class ScrapController extends BasicController
             // Parámetros de búsqueda
             $query = $request->input('query', 'mujer');
             $proveedor = $request->input('proveedor', 'nike');
-            $filters = $request->input('filters', []); // Recibir los filtros como array
-            dump($filters);
             $page = max(1, intval($request->input('page', 1))); // Página mínima 1
             $limit = max(1, intval($request->input('limit', 12))); // Mínimo 1 producto por página
             $offset = ($page - 1) * $limit;
 
-            // Convertir filtros a JSON para pasarlo al comando
-            $jsonFilters = json_encode($filters, JSON_UNESCAPED_UNICODE);
+            // Determinar el script según el proveedor
+            switch ($proveedor) {
+                case 'nike':
+                    $dataPath = "nike";
+                    $storePath = storage_path('app/scraper/scraper-nike.cjs');
+                    break;
+                case 'gapfactory':
+                    $dataPath = "gapfactory";
+                    $storePath = storage_path('app/scraper/scraper-gapfactory.cjs');
+                    break;
+                case 'invictastores':
+                    $currency = 'USD';
+                    $exchangeRate = $this->getExchangeRate($currency);
+                    //dump($exchangeRate);
+                    $dataPath = "invictastores";
+                    $storePath = storage_path('app/scraper/scraper-invictastores.cjs');
+                    try {
+                        $query = $traductor->translate($query);
+                    } catch (Exception $e) {
+                        $query = $request->input('query', 'mujer');
+                    }
+                    break;
+                case 'sephora':
+                    $dataPath = "sephora";
+                    $storePath = storage_path('app/scraper/scraper-sephora.cjs');
+                    break;
+                case 'shopsimon':
 
-            // Asegurar que el JSON se escapa correctamente para el shell
-            $escapedFilters = escapeshellarg($jsonFilters);
+                    $currency = 'USD';
+                    $exchangeRate = $this->getExchangeRate($currency);
+                    //dump($exchangeRate);
+                    $dataPath = "shopsimon";
+                    $storePath = storage_path('app/scraper/scraper-shopsimon.cjs');
+                    try {
+                        $query = $traductor->translate($query);
+                    } catch (Exception $e) {
+                        $query = $request->input('query', 'mujer');
+                    }
 
+                    break;
+                case 'ashford':
 
-            // Resultado limpio y compatible con Node.js
-            dump($escapedFilters);
+                    $currency = 'USD';
+                    $exchangeRate = $this->getExchangeRate($currency);
+                    //dump($exchangeRate);
+                    $dataPath = "ashford";
+                    $storePath = storage_path('app/scraper/scraper-ashford.cjs');
+                    try {
+                        $query = $traductor->translate($query);
+                    } catch (Exception $e) {
+                        $query = $request->input('query', 'mujer');
+                    }
 
-            $dataPath = "nike";
-            $storePath = storage_path('app/scraper/scraper-nike.cjs');
+                    break;
 
-
+                default:
+                    $dataPath = "nike";
+                    $storePath = storage_path('app/scraper/scraper-nike.cjs');
+                    break;
+            }
 
             // Clave de caché con paginación
             $cacheKey = "{$dataPath}_products_{$query}_page_{$page}_limit_{$limit}";
@@ -193,12 +237,12 @@ class ScrapController extends BasicController
                 set_time_limit(60); // Evitar timeout en la ejecución
 
                 // Ejecutar Puppeteer con paginación
-                $command = "node {$storePath} " . escapeshellarg($query) . " " . escapeshellarg($offset) . " " . escapeshellarg($limit) . " " . $escapedFilters;
-                dump($command);
+                $command = "node {$storePath} " . escapeshellarg($query) . " " . escapeshellarg($offset) . " " . escapeshellarg($limit) . " " . escapeshellarg($exchangeRate) . " " . escapeshellarg($page);
+                // dump($command);
 
 
                 $output = shell_exec($command . ' 2>&1');
-                dump($output);
+                Log::info($output);
                 if (!$output) {
                     Log::info("Error al ejecutar el script de Node.js.");
                 }
@@ -217,8 +261,7 @@ class ScrapController extends BasicController
             return response()->json([
                 'status' => 200,
                 'message' => 'Datos extraídos correctamente',
-                'data' => $data['products'],
-                'filters' => $data['filters'],
+                'data' => $data,
                 'page' => $page,
                 'limit' => $limit
             ]);
@@ -232,7 +275,10 @@ class ScrapController extends BasicController
         }
     }
 
-    public function scrapShopSimon(Request $request)
+
+
+
+    /* public function scrapShopSimon(Request $request)
     {
         $traductor = new GoogleTranslate('en');
         $traductor->setOptions(['verify' => false]);
@@ -386,7 +432,7 @@ class ScrapController extends BasicController
 
 
 
-    public function scrap(Request $request)
+    public function scrapFilter(Request $request)
     {
         $traductor = new GoogleTranslate('en');
         $traductor->setOptions(['verify' => false]);
@@ -454,5 +500,5 @@ class ScrapController extends BasicController
                 'error' => $e->getMessage(),
             ], 500);
         }
-    }
+    } */
 }

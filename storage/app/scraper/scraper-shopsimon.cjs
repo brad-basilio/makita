@@ -14,7 +14,6 @@ const paginate = parseInt(args[4]) || 1;
         browser = await puppeteer.launch({
             headless: true,
             args: ["--no-sandbox", "--disable-setuid-sandbox"],
-            //executablePath: "/usr/bin/chromium-browser",
         });
         /*  browser = await puppeteer.launch({
             executablePath: "/usr/bin/google-chrome-stable",

@@ -18,7 +18,7 @@ const HeaderScraping = ({
     const options = [
         { value: "nike", label: "Nike" },
         { value: "shopsimon", label: "Shop Simon" },
-
+        { value: "ashford", label: "Ashford" },
         /* { value: "invictastores", label: "Invicta Stores" },
         { value: "gapfactory", label: "Gap Factory" },
         { value: "sephora", label: "Sephora" },*/

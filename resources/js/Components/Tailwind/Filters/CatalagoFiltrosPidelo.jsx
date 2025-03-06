@@ -14,10 +14,9 @@ import ArrayJoin from "../../../Utils/ArrayJoin";
 import { Loading } from "../Components/Resources/Loading";
 import { NoResults } from "../Components/Resources/NoResult";
 import SelectForm from "./Components/SelectForm";
-import ProductCardScraping from "./../Scraping/Components/ProductCardScraping";
+import ProductCardScraping from "../Scraping/Components/ProductCardScraping";
 import { set } from "sode-extend-react/sources/cookies";
 import ScrapRest from "../../../Actions/Scraping/ScrapRest";
-import FiltersScraping from "./Components/FiltersScraping";
 
 const itemsRest = new ItemsRest();
 
@@ -57,15 +56,106 @@ const CatalagoFiltrosPidelo = ({
     setCart,
 }) => {
     const { categories, brands, priceRanges } = filteredData;
-    const [selectedFilters, setSelectedFilters] = useState({});
+    const [sections, setSections] = useState({
+        marca: true,
+        precio: true,
+        categoria: true,
+        colores: false,
+    });
 
-    const [filters, setFilters] = useState({});
+    const [selectedFilters, setSelectedFilters] = useState({
+        category_id: [], // Array para múltiples categorías
+        brand_id: [], // Array para múltiples marcas
+        subcategory_id: [],
+        price: null,
+        name: null,
+        sort_by: "created_at",
+        order: "desc",
+    });
+
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(false);
     const [pagination, setPagination] = useState({
         currentPage: 1,
         totalPages: 1,
     });
+
+    const transformFilters = (filters) => {
+        const transformedFilters = [];
+
+        // Categorías
+        if (filters.category_id.length > 0) {
+            const categoryConditions = filters.category_id.map((id) => [
+                "category_id",
+                "=",
+                id,
+            ]);
+            transformedFilters.push(["or", ...categoryConditions]);
+        }
+        //subcategorias
+        if (filters.subcategory_id.length > 0) {
+            const subcategoryConditions = filters.subcategory_id.map((id) => [
+                "subcategory_id",
+                "=",
+                id,
+            ]);
+            transformedFilters.push(["and", ...subcategoryConditions]);
+        }
+        // Marcas
+        if (filters.brand_id.length > 0) {
+            const brandConditions = filters.brand_id.map((id) => [
+                "brand_id",
+                "=",
+                id,
+            ]);
+            transformedFilters.push(["or", ...brandConditions]);
+        }
+
+        // Precio
+        if (filters.price) {
+            transformedFilters.push([
+                "and",
+                [
+                    ["final_price", ">=", filters.price.min],
+                    "and",
+                    ["final_price", "<=", filters.price.max],
+                ],
+            ]);
+        }
+
+        // Búsqueda (asumiendo que se filtra por título o contenido)
+        if (filters.name) {
+            transformedFilters.push(["name", "contains", filters.name]);
+        }
+        return transformedFilters;
+    };
+    // Obtener productos filtrados desde el backend
+    const fetchProducts = async (page = 1) => {
+        setLoading(true);
+        try {
+            // Transformar los filtros al formato esperado por el backend
+            const filters = transformFilters(selectedFilters);
+            const params = {
+                filter: filters, // Envía los filtros transformados
+                sort: selectedFilters.sort, // Enviar el parámetro de ordenación
+                // page,
+                take: 20, // Número de productos por página
+            };
+
+            const response = await itemsRest.paginate(params);
+
+            setProducts(response.data);
+            setPagination({
+                currentPage: response.currentPage,
+                totalPages: response.lastPage,
+            });
+        } catch (error) {
+            console.error("Error fetching products:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     /* const fetchProductsScraping = async (query, provider) => {
         if (!query) {
             alert("Por favor, ingresa un término de búsqueda");
@@ -98,7 +188,6 @@ const CatalagoFiltrosPidelo = ({
             const response = await ScrapRest.getProducts({
                 query: query,
                 proveedor: provider,
-                filters: selectedFilters, // Envía los filtros seleccionados al backend
                 page: page, // Agregamos la paginación a la consulta
             });
 
@@ -115,8 +204,7 @@ const CatalagoFiltrosPidelo = ({
                 currentPage: response.currentPage,
                 totalPages: response.lastPage,
             });
-            console.log(response.filters);
-            setFilters(response.filters);
+
             console.log(response.data);
         } catch (error) {
             console.error("Error:", error);
@@ -154,6 +242,42 @@ const CatalagoFiltrosPidelo = ({
         }
     }, [items]); // Agrega `items` como dependencia
 
+    // Manejar cambios en los filtros
+    const handleFilterChange = (type, value) => {
+        setSelectedFilters((prev) => {
+            if (type === "price") {
+                // Si el mismo rango ya está seleccionado, lo deseleccionamos; de lo contrario, lo asignamos
+                return {
+                    ...prev,
+                    price:
+                        prev.price &&
+                        prev.price.min === value.min &&
+                        prev.price.max === value.max
+                            ? null
+                            : value,
+                };
+            }
+
+            // Asegúrate de que prev[type] sea un array antes de usar .includes()
+            const currentValues = Array.isArray(prev[type]) ? prev[type] : [];
+
+            // Manejar múltiples valores para categorías y marcas
+            const newValues = currentValues.includes(value)
+                ? currentValues.filter((item) => item !== value) // Eliminar si ya está seleccionado
+                : [...currentValues, value]; // Agregar si no está seleccionado
+
+            return { ...prev, [type]: newValues };
+        });
+    };
+
+    // Alternar secciones de filtros
+    const toggleSection = (section) => {
+        setSections((prev) => ({
+            ...prev,
+            [section]: !prev[section],
+        }));
+    };
+
     const sortOptions = [
         { value: "created_at:desc", label: "Más reciente" },
         { value: "created_at:asc", label: "Mas antiguo" },
@@ -163,8 +287,22 @@ const CatalagoFiltrosPidelo = ({
         { value: "name:desc", label: "Nombre: Z-A" },
     ];
 
+    const [searchCategory, setSearchCategory] = useState("");
+    const [searchBrand, setSearchBrand] = useState("");
+
+    // Filtrar categorías según el input
+    const filteredCategories = categories.filter((category) =>
+        category.name.toLowerCase().includes(searchCategory.toLowerCase())
+    );
+
+    // Filtrar marcas según el input
+    const filteredBrands = brands.filter((brand) =>
+        brand.name.toLowerCase().includes(searchBrand.toLowerCase())
+    );
+
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 12;
+
     // Calcular los productos para la página actual
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -177,30 +315,6 @@ const CatalagoFiltrosPidelo = ({
 
     // Cambiar de página
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
-    const handleFilterChange = (filterKey, value) => {
-        setSelectedFilters((prevFilters) => {
-            const prevValues = prevFilters[filterKey] || []; // Obtener valores previos del filtro
-            let newValues;
-
-            if (prevValues.includes(value)) {
-                // Si el valor ya está en la lista, lo quitamos (deseleccionar)
-                newValues = prevValues.filter((v) => v !== value);
-            } else {
-                // Si no está, lo agregamos
-                newValues = [...prevValues, value];
-            }
-
-            return {
-                ...prevFilters,
-                [filterKey]: newValues,
-            };
-        });
-    };
-
-    const filteredProducts = () => {
-        fetchProductsScraping(searchParam, providerParam);
-    };
 
     return (
         <section className="py-12 bg-[#F7F9FB] font-font-general">
@@ -295,28 +409,190 @@ const CatalagoFiltrosPidelo = ({
                             <Filter className="h-5 w-5" />
                         </div>
 
-                        {Object.entries(filters).map(([filterKey, options]) => (
-                            <FiltersScraping
-                                key={filterKey}
-                                title={
-                                    filterKey.charAt(0).toUpperCase() +
-                                    filterKey.slice(1)
-                                }
-                                options={options}
-                                onFilterChange={(selectedValues) =>
-                                    handleFilterChange(
-                                        filterKey,
-                                        selectedValues
-                                    )
-                                }
-                            />
-                        ))}
-                        {/*NUEVOS FILTROS POR CONSULTA */}
+                        <div className="mb-6">
+                            <button
+                                onClick={() => toggleSection("marca")}
+                                className="flex items-center justify-between w-full mb-4"
+                            >
+                                <span className="font-medium">Marca</span>
+                                <ChevronDown
+                                    className={`h-5 w-5 transform transition-transform ${
+                                        sections.marca ? "" : "-rotate-180"
+                                    }`}
+                                />
+                            </button>
+                            {sections.marca && (
+                                <div className="space-y-4">
+                                    <div className="relative">
+                                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                                        <input
+                                            type="text"
+                                            placeholder="Buscar"
+                                            className={`w-full px-4 pl-10 py-3 border customtext-neutral-dark  border-neutral-ligth rounded-xl focus:ring-0 focus:outline-0   transition-all duration-300`}
+                                            value={searchBrand}
+                                            onChange={(e) =>
+                                                setSearchBrand(e.target.value)
+                                            }
+                                        />
+                                    </div>
+                                    <div className="space-y-3">
+                                        {filteredBrands.map((brand) => (
+                                            <label
+                                                key={brand.id}
+                                                className="flex items-center space-x-3"
+                                            >
+                                                <input
+                                                    type="checkbox"
+                                                    className="h-4 w-4 rounded border-gray-300"
+                                                    onChange={() =>
+                                                        handleFilterChange(
+                                                            "brand_id",
+                                                            brand.id
+                                                        )
+                                                    }
+                                                />
+                                                <span>{brand.name}</span>
+                                            </label>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
 
-                        <button
-                            onClick={() => filteredProducts()}
-                            className="w-full bg-primary text-white py-3 rounded-xl hover:brightness-90 transition-colors text-sm font-bold"
-                        >
+                        {/* Precio Section */}
+                        <div className="mb-6">
+                            <button
+                                onClick={() => toggleSection("precio")}
+                                className="flex items-center justify-between w-full mb-4"
+                            >
+                                <span className="font-medium">Precio</span>
+                                <ChevronDown
+                                    className={`h-5 w-5 transform transition-transform ${
+                                        sections.precio ? "" : "-rotate-180"
+                                    }`}
+                                />
+                            </button>
+                            {sections.precio && (
+                                <div className="space-y-3">
+                                    {priceRanges.map((range) => (
+                                        <label
+                                            key={`${range.min}-${range.max}`}
+                                            className="flex items-center space-x-3"
+                                        >
+                                            <input
+                                                type="checkbox"
+                                                name="precio"
+                                                className="h-4 w-4 rounded border-gray-300"
+                                                onChange={() =>
+                                                    handleFilterChange(
+                                                        "price",
+                                                        range
+                                                    )
+                                                }
+                                                checked={
+                                                    selectedFilters.price &&
+                                                    selectedFilters.price
+                                                        .min === range.min &&
+                                                    selectedFilters.price
+                                                        .max === range.max
+                                                }
+                                            />
+                                            <span>{`S/ ${range.min} - S/ ${range.max}`}</span>
+                                        </label>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="mb-6">
+                            <button
+                                onClick={() => toggleSection("categoria")}
+                                className="flex items-center justify-between w-full mb-4"
+                            >
+                                <span className="font-medium">Categoría</span>
+                                <ChevronDown
+                                    className={`h-5 w-5 transform transition-transform ${
+                                        sections.categoria ? "" : "-rotate-180"
+                                    }`}
+                                />
+                            </button>
+                            {sections.categoria && (
+                                <div className="space-y-4">
+                                    <div className="relative">
+                                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                                        <input
+                                            type="text"
+                                            placeholder="Buscar"
+                                            className={`w-full px-4 pl-10 py-3 border customtext-neutral-dark  border-neutral-ligth rounded-xl focus:ring-0 focus:outline-0   transition-all duration-300`}
+                                            value={searchCategory}
+                                            onChange={(e) =>
+                                                setSearchCategory(
+                                                    e.target.value
+                                                )
+                                            }
+                                        />
+                                    </div>
+                                    {filteredCategories.map((category) => (
+                                        <div key={category.id}>
+                                            <label className="flex items-center space-x-3">
+                                                <input
+                                                    type="checkbox"
+                                                    className="h-4 w-4 rounded border-gray-300"
+                                                    onChange={() =>
+                                                        handleFilterChange(
+                                                            "category_id",
+                                                            category.id
+                                                        )
+                                                    }
+                                                    checked={selectedFilters.category_id?.includes(
+                                                        category.id
+                                                    )} // <-- Agregado
+                                                />
+                                                <span>{category.name}</span>
+                                            </label>
+
+                                            {/* Mostrar subcategorías si la categoría está seleccionada */}
+                                            {selectedFilters.category_id?.includes(
+                                                category.id
+                                            ) &&
+                                                category.subcategories?.length >
+                                                    0 && (
+                                                    <ul className="ml-6 mt-2 space-y-2">
+                                                        {category.subcategories.map(
+                                                            (sub) => (
+                                                                <label
+                                                                    key={sub.id}
+                                                                    className="flex items-center space-x-3"
+                                                                >
+                                                                    <input
+                                                                        type="checkbox"
+                                                                        className="h-4 w-4 rounded border-gray-300"
+                                                                        onChange={() =>
+                                                                            handleFilterChange(
+                                                                                "subcategory_id",
+                                                                                sub.id
+                                                                            )
+                                                                        } // <-- Corregido
+                                                                        checked={selectedFilters.subcategory_id?.includes(
+                                                                            sub.id
+                                                                        )}
+                                                                    />
+                                                                    <span>
+                                                                        {
+                                                                            sub.name
+                                                                        }
+                                                                    </span>
+                                                                </label>
+                                                            )
+                                                        )}
+                                                    </ul>
+                                                )}
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                        <button className="w-full bg-primary text-white py-3 rounded-xl hover:brightness-90 transition-colors text-sm font-bold">
                             Aplicar Filtro
                         </button>
                     </div>
@@ -351,6 +627,24 @@ const CatalagoFiltrosPidelo = ({
                         )}
                     </div>
                 </div>
+                {/* Paginación 
+                <div>
+                    <button
+                        disabled={pagination.currentPage === 1}
+                        onClick={() => fetchProducts(pagination.currentPage - 1)}
+                    >
+                        Anterior
+                    </button>
+                    <span>
+                        Página {pagination.currentPage} de {pagination.totalPages}
+                    </span>
+                    <button
+                        disabled={pagination.currentPage === pagination.totalPages}
+                        onClick={() => fetchProducts(pagination.currentPage + 1)}
+                    >
+                        Siguiente
+                    </button>
+                </div>*/}
             </div>
         </section>
     );
