@@ -11,11 +11,11 @@ const paginate = parseInt(args[4]) || 1;
     let browser;
     try {
         // Configurar Puppeteer
-        browser = await puppeteer.launch({
+        /*browser = await puppeteer.launch({
             headless: true,
             args: ["--no-sandbox", "--disable-setuid-sandbox"],
-        });
-        /*  browser = await puppeteer.launch({
+        });*/
+        browser = await puppeteer.launch({
             executablePath: "/usr/bin/google-chrome-stable",
             headless: true,
             args: [
@@ -30,7 +30,7 @@ const paginate = parseInt(args[4]) || 1;
                 "--remote-debugging-port=9222",
                 "--user-data-dir=/var/www/.chrome", // 🔥 Esto soluciona el problema
             ],
-        });*/
+        });
         const page = await browser.newPage();
 
         // Configurar User-Agent
