@@ -1,522 +1,755 @@
-import BaseAdminto from '@Adminto/Base';
-import SwitchFormGroup from '@Adminto/form/SwitchFormGroup';
-import TextareaFormGroup from '@Adminto/form/TextareaFormGroup';
-import React, { useEffect, useRef, useState } from 'react';
-import { createRoot } from 'react-dom/client';
-import { renderToString } from 'react-dom/server';
-import Swal from 'sweetalert2';
-import ItemsRest from '../Actions/Admin/ItemsRest';
-import Modal from '../Components/Adminto/Modal';
-import Table from '../Components/Adminto/Table';
-import ImageFormGroup from '../Components/Adminto/form/ImageFormGroup';
-import InputFormGroup from '../Components/Adminto/form/InputFormGroup';
-import QuillFormGroup from '../Components/Adminto/form/QuillFormGroup';
-import SelectAPIFormGroup from '../Components/Adminto/form/SelectAPIFormGroup';
-import SelectFormGroup from '../Components/Adminto/form/SelectFormGroup';
-import DxButton from '../Components/dx/DxButton';
-import CreateReactScript from '../Utils/CreateReactScript';
-import Number2Currency from '../Utils/Number2Currency';
-import ReactAppend from '../Utils/ReactAppend';
-import SetSelectValue from '../Utils/SetSelectValue';
-import ItemsGalleryRest from '../Actions/Admin/ItemsGalleryRest';
-import DynamicField from '../Components/Adminto/form/DynamicField';
+import BaseAdminto from "@Adminto/Base";
+import SwitchFormGroup from "@Adminto/form/SwitchFormGroup";
+import TextareaFormGroup from "@Adminto/form/TextareaFormGroup";
+import React, { useEffect, useRef, useState } from "react";
+import { createRoot } from "react-dom/client";
+import { renderToString } from "react-dom/server";
+import Swal from "sweetalert2";
+import ItemsRest from "../Actions/Admin/ItemsRest";
+import Modal from "../Components/Adminto/Modal";
+import Table from "../Components/Adminto/Table";
+import ImageFormGroup from "../Components/Adminto/form/ImageFormGroup";
+import InputFormGroup from "../Components/Adminto/form/InputFormGroup";
+import QuillFormGroup from "../Components/Adminto/form/QuillFormGroup";
+import SelectAPIFormGroup from "../Components/Adminto/form/SelectAPIFormGroup";
+import SelectFormGroup from "../Components/Adminto/form/SelectFormGroup";
+import DxButton from "../Components/dx/DxButton";
+import CreateReactScript from "../Utils/CreateReactScript";
+import Number2Currency from "../Utils/Number2Currency";
+import ReactAppend from "../Utils/ReactAppend";
+import SetSelectValue from "../Utils/SetSelectValue";
+import ItemsGalleryRest from "../Actions/Admin/ItemsGalleryRest";
+import DynamicField from "../Components/Adminto/form/DynamicField";
 
-const itemsRest = new ItemsRest()
+const itemsRest = new ItemsRest();
 
 const Items = ({ categories, brands }) => {
-  //!FALTA EDIT AND DELETEDE GALERIA
+    //!FALTA EDIT AND DELETEDE GALERIA
 
-  const [itemData, setItemData] = useState([]);
+    const [itemData, setItemData] = useState([]);
 
-  const gridRef = useRef()
-  const modalRef = useRef()
+    const gridRef = useRef();
+    const modalRef = useRef();
 
-  // Form elements ref
+    // Form elements ref
 
-  const idRef = useRef()
-  const categoryRef = useRef()
-  const subcategoryRef = useRef()
-  const brandRef = useRef()
-  const nameRef = useRef()
-  const summaryRef = useRef()
-  const priceRef = useRef()
-  const discountRef = useRef()
-  const tagsRef = useRef()
-  const bannerRef = useRef()
-  const imageRef = useRef()
-  const descriptionRef = useRef()
-  // Nuevos campos
-
-  const stockRef = useRef()
-
-  const featuresRef = useRef([])
-
-  const specificationsRef = useRef([]);
-
-  const [isEditing, setIsEditing] = useState(false)
-  const [selectedCategory, setSelectedCategory] = useState(null);
-
-
-  /*ADD NEW LINES GALLERY */
-
-  const [gallery, setGallery] = useState([]);
-  const galleryRef = useRef();
-
-  const handleGalleryChange = (e) => {
-    const files = Array.from(e.target.files);
-    const newImages = files.map(file => ({ file, url: URL.createObjectURL(file) }));
-    setGallery(prev => [...prev, ...newImages]);
-  };
-
-  const handleDrop = (e) => {
-    e.preventDefault();
-    const files = Array.from(e.dataTransfer.files);
-    const newImages = files.map(file => ({ file, url: URL.createObjectURL(file) }));
-    setGallery(prev => [...prev, ...newImages]);
-  };
-
-  const handleDragOver = (e) => {
-    e.preventDefault();
-  };
-
-  const removeGalleryImage = (e, index) => {
-    e.preventDefault();
-    const image = gallery[index];
-    if (image.id) {
-      // Si la imagen tiene ID, significa que está guardada en la base de datos.
-      setGallery(prev => prev.map((img, i) =>
-        i === index ? { ...img, toDelete: true } : img
-      ));
-    } else {
-      // Si es una imagen nueva, simplemente la eliminamos.
-      setGallery(prev => prev.filter((_, i) => i !== index));
-    }
-  };
-
-
-  /*************************/
-
-
-  useEffect(() => {
-    if (itemData && itemData.images) {
-      const existingImages = itemData.images.map(img => ({
-        id: img.id,  // ID de la imagen en la BD
-        url: `/api/item_images/media/${img.url}`, // Ruta de la imagen almacenada
-      }));
-      setGallery(existingImages);
-    }
-  }, [itemData]);
-
-
-  const onModalOpen = (data) => {
-    console.log(data);
-    setItemData(data || null); // Guardamos los datos en el estado
-    if (data?.id) setIsEditing(true)
-    else setIsEditing(false)
-
-    idRef.current.value = data?.id || ''
-    $(categoryRef.current).val(data?.category_id || null).trigger('change')
-    SetSelectValue(subcategoryRef.current, data?.subcategory?.id, data?.subcategory?.name)
-    $(brandRef.current).val(data?.brand_id || null).trigger('change')
-    nameRef.current.value = data?.name || ''
-    summaryRef.current.value = data?.summary || ''
-    priceRef.current.value = data?.price || 0
-    discountRef.current.value = data?.discount || 0
-
-    SetSelectValue(tagsRef.current, data?.tags ?? [], 'id', 'name')
-
-    bannerRef.current.value = null
-    imageRef.current.value = null
-    bannerRef.image.src = `/api/items/media/${data?.banner ?? 'undefined'}`
-    imageRef.image.src = `/api/items/media/${data?.image ?? 'undefined'}`
-
-    descriptionRef.editor.root.innerHTML = data?.description ?? ''
-
-    //TODO: Cargar las imágenes existentes de la galería
-
-    // Cargar las imágenes de la galería
-    if (data?.images) {
-      const existingImages = data.images.map(img => ({
-        id: img.id, // ID de la imagen en la base de datos
-        url: `/api/items/gallery/media/${img.url}`, // Ruta de la imagen almacenada
-      }));
-      setGallery(existingImages);
-    } else {
-      setGallery([]); // Limpiar la galería si no hay imágenes
-    }
-
+    const idRef = useRef();
+    const categoryRef = useRef();
+    const subcategoryRef = useRef();
+    const brandRef = useRef();
+    const nameRef = useRef();
+    const summaryRef = useRef();
+    const priceRef = useRef();
+    const discountRef = useRef();
+    const tagsRef = useRef();
+    const bannerRef = useRef();
+    const imageRef = useRef();
+    const descriptionRef = useRef();
     // Nuevos campos
 
-    stockRef.current.value = data?.stock;
+    const stockRef = useRef();
 
+    const featuresRef = useRef([]);
 
+    const specificationsRef = useRef([]);
 
+    const [isEditing, setIsEditing] = useState(false);
+    const [selectedCategory, setSelectedCategory] = useState(null);
 
+    /*ADD NEW LINES GALLERY */
 
-    $(modalRef.current).modal('show')
-  }
+    const [gallery, setGallery] = useState([]);
+    const galleryRef = useRef();
 
+    const handleGalleryChange = (e) => {
+        const files = Array.from(e.target.files);
+        const newImages = files.map((file) => ({
+            file,
+            url: URL.createObjectURL(file),
+        }));
+        setGallery((prev) => [...prev, ...newImages]);
+    };
 
+    const handleDrop = (e) => {
+        e.preventDefault();
+        const files = Array.from(e.dataTransfer.files);
+        const newImages = files.map((file) => ({
+            file,
+            url: URL.createObjectURL(file),
+        }));
+        setGallery((prev) => [...prev, ...newImages]);
+    };
 
-  const onModalSubmit = async (e) => {
-    e.preventDefault()
+    const handleDragOver = (e) => {
+        e.preventDefault();
+    };
 
-    const request = {
-      id: idRef.current.value || undefined,
-      category_id: categoryRef.current.value,
-      subcategory_id: subcategoryRef.current.value,
-      brand_id: brandRef.current.value,
-      name: nameRef.current.value,
-      summary: summaryRef.current.value,
-      price: priceRef.current.value,
-      discount: discountRef.current.value,
-      tags: $(tagsRef.current).val(),
-      description: descriptionRef.current.value,
-      sotck: stockRef.current.value,
-
-
-    }
-
-    const formData = new FormData()
-    for (const key in request) {
-      formData.append(key, request[key])
-    }
-    formData.append("features", JSON.stringify(features)); // Características (array de strings)
-    formData.append("specifications", JSON.stringify(specifications)); // Especificaciones (array de objetos)
-
-    const image = imageRef.current.files[0]
-    if (image) {
-      formData.append('image', image)
-    }
-    const banner = bannerRef.current.files[0]
-    if (banner) {
-      formData.append('banner', banner)
-    }
-
-    //TODO: Preparar los datos de la galería
-
-    // Galería
-    gallery.forEach((img, index) => {
-      if (!img.toDelete) {
-        if (img.file) {
-          formData.append(`gallery[${index}]`, img.file); // Imágenes nuevas
+    const removeGalleryImage = (e, index) => {
+        e.preventDefault();
+        const image = gallery[index];
+        if (image.id) {
+            // Si la imagen tiene ID, significa que está guardada en la base de datos.
+            setGallery((prev) =>
+                prev.map((img, i) =>
+                    i === index ? { ...img, toDelete: true } : img
+                )
+            );
         } else {
-          formData.append(`gallery_ids[${index}]`, img.id); // IDs de imágenes existentes
+            // Si es una imagen nueva, simplemente la eliminamos.
+            setGallery((prev) => prev.filter((_, i) => i !== index));
         }
-      }
-    });
+    };
 
-    const deletedImages = gallery
-      .filter(img => img.toDelete)
-      .map(img => parseInt(img.id, 10)); // Asegurar que sean enteros
-    if (deletedImages.length > 0) {
-      formData.append('deleted_images', JSON.stringify(deletedImages)); // Imágenes eliminadas
-    }
+    /*************************/
 
-    console.log(formData);
-
-
-    const result = await itemsRest.save(formData)
-    if (!result) return;
-
-
-
-
-    $(gridRef.current).dxDataGrid('instance').refresh()
-    $(modalRef.current).modal('hide')
-    setGallery([]);
-  }
-
-  const onVisibleChange = async ({ id, value }) => {
-    const result = await itemsRest.boolean({ id, field: 'visible', value })
-    if (!result) return
-    $(gridRef.current).dxDataGrid('instance').refresh()
-  }
-
-  const onBooleanChange = async ({ id, field, value }) => {
-    const result = await itemsRest.boolean({ id, field, value })
-    if (!result) return
-    $(gridRef.current).dxDataGrid('instance').refresh()
-  }
-
-  const onDeleteClicked = async (id) => {
-    const { isConfirmed } = await Swal.fire({
-      title: 'Eliminar curso',
-      text: '¿Estás seguro de eliminar este curso?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Sí, eliminar',
-      cancelButtonText: 'Cancelar'
-    })
-    if (!isConfirmed) return
-    const result = await itemsRest.delete(id)
-    if (!result) return
-    $(gridRef.current).dxDataGrid('instance').refresh()
-  }
-  const [features, setFeatures] = useState([]); // Características
-  const [specifications, setSpecifications] = useState([]); // Especificaciones
-
-  // Opciones del campo "type"
-  const typeOptions = ["General", "Principal", "Otro"];
-
-
-  return (<>
-    <Table gridRef={gridRef} title='Items' rest={itemsRest}
-      toolBar={(container) => {
-        container.unshift({
-          widget: 'dxButton', location: 'after',
-          options: {
-            icon: 'refresh',
-            hint: 'Refrescar tabla',
-            onClick: () => $(gridRef.current).dxDataGrid('instance').refresh()
-          }
-        });
-        container.unshift({
-          widget: 'dxButton', location: 'after',
-          options: {
-            icon: 'plus',
-            text: 'Nuevo curso',
-            hint: 'Nuevo curso',
-            onClick: () => onModalOpen()
-          }
-        });
-      }}
-      exportable={true}
-      exportableName='Items'
-      columns={[
-        {
-          dataField: 'id',
-          caption: 'ID',
-          visible: false
-        },
-        {
-          dataField: 'category.name',
-          caption: 'Categoría',
-          width: '120px',
-          cellTemplate: (container, { data }) => {
-            container.html(renderToString(<>
-              <b className='d-block'>{data.category?.name}</b>
-              <small className='text-muted'>{data.subcategory?.name}</small>
-            </>))
-          }
-        },
-        {
-          dataField: 'subcategory.name',
-          caption: 'Subcategoría',
-          visible: false
-        },
-        {
-          dataField: 'brand.name',
-          caption: 'Marca',
-          width: '120px'
-        },
-        {
-          dataField: 'name',
-          caption: 'Nombre',
-          width: '300px',
-          cellTemplate: (container, { data }) => {
-            container.html(renderToString(<>
-              <b>{data.name}</b><br />
-              <span className='truncate'>{data.summary}</span>
-            </>))
-          }
-        },
-        {
-          dataField: 'final_price',
-          caption: 'Precio',
-          dataType: 'number',
-          width: '75px',
-          cellTemplate: (container, { data }) => {
-
-            container.html(renderToString(<>
-              {data.discount > 0 && <small className='d-block text-muted' style={{ textDecoration: 'line-through' }}>S/.{Number2Currency(data.price)}</small>}
-              <span>S/.{Number2Currency(data.discount > 0 ? data.discount : data.price)}</span>
-            </>))
-          }
-        },
-        {
-          dataField: 'image',
-          caption: 'Imagen',
-          width: '90px',
-          allowFiltering: false,
-          cellTemplate: (container, { data }) => {
-            ReactAppend(container, <img src={`/api/items/media/${data.image}`} style={{ width: '80px', height: '48px', objectFit: 'cover', objectPosition: 'center', borderRadius: '4px' }} onError={e => e.target.src = '/api/cover/thumbnail/null'} />)
-          }
-        },
-        {
-          dataField: 'is_new',
-          caption: 'Nuevo',
-          dataType: 'boolean',
-          width: '80px',
-          cellTemplate: (container, { data }) => {
-            ReactAppend(container, <SwitchFormGroup checked={data.is_new} onChange={(e) => onBooleanChange({
-              id: data.id,
-              field: 'is_new',
-              value: e.target.checked
-            })} />)
-          }
-        },
-        {
-          dataField: 'offering',
-          caption: 'En oferta',
-          dataType: 'boolean',
-          width: '80px',
-          cellTemplate: (container, { data }) => {
-            ReactAppend(container, <SwitchFormGroup checked={data.offering} onChange={(e) => onBooleanChange({
-              id: data.id,
-              field: 'offering',
-              value: e.target.checked
-            })} />)
-          }
-        },
-        {
-          dataField: 'recommended',
-          caption: 'Recomendado',
-          dataType: 'boolean',
-          width: '80px',
-          cellTemplate: (container, { data }) => {
-            ReactAppend(container, <SwitchFormGroup checked={data.recommended} onChange={(e) => onBooleanChange({
-              id: data.id,
-              field: 'recommended',
-              value: e.target.checked
-            })} />)
-          }
-        },
-        {
-          dataField: 'featured',
-          caption: 'Destacado',
-          dataType: 'boolean',
-          width: '80px',
-          cellTemplate: (container, { data }) => {
-            ReactAppend(container, <SwitchFormGroup checked={data.featured} onChange={(e) => onBooleanChange({
-              id: data.id,
-              field: 'featured',
-              value: e.target.checked
-            })} />)
-          }
-        },
-        {
-          dataField: 'visible',
-          caption: 'Visible',
-          dataType: 'boolean',
-          width: '80px',
-          cellTemplate: (container, { data }) => {
-            ReactAppend(container, <SwitchFormGroup checked={data.visible} onChange={(e) => onVisibleChange({ id: data.id, value: e.target.checked })} />)
-          }
-        },
-        {
-          caption: 'Acciones',
-          width: '100px',
-          cellTemplate: (container, { data }) => {
-            container.css('text-overflow', 'unset')
-            container.append(DxButton({
-              className: 'btn btn-xs btn-soft-primary',
-              title: 'Editar',
-              icon: 'fa fa-pen',
-              onClick: () => onModalOpen(data)
-            }))
-            container.append(DxButton({
-              className: 'btn btn-xs btn-soft-danger',
-              title: 'Eliminar',
-              icon: 'fa fa-trash',
-              onClick: () => onDeleteClicked(data.id)
-            }))
-          },
-          allowFiltering: false,
-          allowExporting: false
+    useEffect(() => {
+        if (itemData && itemData.images) {
+            const existingImages = itemData.images.map((img) => ({
+                id: img.id, // ID de la imagen en la BD
+                url: `/api/item_images/media/${img.url}`, // Ruta de la imagen almacenada
+            }));
+            setGallery(existingImages);
         }
-      ]} />
-    <Modal modalRef={modalRef} title={isEditing ? 'Editar curso' : 'Agregar curso'} onSubmit={onModalSubmit} size='xl'>
-      <div className='row' id='principal-container'>
-        <input ref={idRef} type='hidden' />
-        <div className="col-md-3">
-          <SelectFormGroup eRef={categoryRef} label='Categoría' required dropdownParent='#principal-container' onChange={(e) => setSelectedCategory(e.target.value)}>
-            {
-              categories.map((item, index) => (<option key={index} value={item.id}>{item.name}</option>))
+    }, [itemData]);
+
+    const onModalOpen = (data) => {
+        console.log(data);
+        setItemData(data || null); // Guardamos los datos en el estado
+        if (data?.id) setIsEditing(true);
+        else setIsEditing(false);
+
+        idRef.current.value = data?.id || "";
+        $(categoryRef.current)
+            .val(data?.category_id || null)
+            .trigger("change");
+        SetSelectValue(
+            subcategoryRef.current,
+            data?.subcategory?.id,
+            data?.subcategory?.name
+        );
+        $(brandRef.current)
+            .val(data?.brand_id || null)
+            .trigger("change");
+        nameRef.current.value = data?.name || "";
+        summaryRef.current.value = data?.summary || "";
+        priceRef.current.value = data?.price || 0;
+        discountRef.current.value = data?.discount || 0;
+
+        SetSelectValue(tagsRef.current, data?.tags ?? [], "id", "name");
+
+        bannerRef.current.value = null;
+        imageRef.current.value = null;
+        bannerRef.image.src = `/api/items/media/${data?.banner ?? "undefined"}`;
+        imageRef.image.src = `/api/items/media/${data?.image ?? "undefined"}`;
+
+        descriptionRef.editor.root.innerHTML = data?.description ?? "";
+
+        //TODO: Cargar las imágenes existentes de la galería
+
+        // Cargar las imágenes de la galería
+        if (data?.images) {
+            const existingImages = data.images.map((img) => ({
+                id: img.id, // ID de la imagen en la base de datos
+                url: `/api/items/gallery/media/${img.url}`, // Ruta de la imagen almacenada
+            }));
+            setGallery(existingImages);
+        } else {
+            setGallery([]); // Limpiar la galería si no hay imágenes
+        }
+
+        // Nuevos campos
+
+        stockRef.current.value = data?.stock;
+
+        $(modalRef.current).modal("show");
+    };
+
+    const onModalSubmit = async (e) => {
+        e.preventDefault();
+
+        const request = {
+            id: idRef.current.value || undefined,
+            category_id: categoryRef.current.value,
+            subcategory_id: subcategoryRef.current.value,
+            brand_id: brandRef.current.value,
+            name: nameRef.current.value,
+            summary: summaryRef.current.value,
+            price: priceRef.current.value,
+            discount: discountRef.current.value,
+            tags: $(tagsRef.current).val(),
+            description: descriptionRef.current.value,
+            sotck: stockRef.current.value,
+        };
+
+        const formData = new FormData();
+        for (const key in request) {
+            formData.append(key, request[key]);
+        }
+        formData.append("features", JSON.stringify(features)); // Características (array de strings)
+        formData.append("specifications", JSON.stringify(specifications)); // Especificaciones (array de objetos)
+
+        const image = imageRef.current.files[0];
+        if (image) {
+            formData.append("image", image);
+        }
+        const banner = bannerRef.current.files[0];
+        if (banner) {
+            formData.append("banner", banner);
+        }
+
+        //TODO: Preparar los datos de la galería
+
+        // Galería
+        gallery.forEach((img, index) => {
+            if (!img.toDelete) {
+                if (img.file) {
+                    formData.append(`gallery[${index}]`, img.file); // Imágenes nuevas
+                } else {
+                    formData.append(`gallery_ids[${index}]`, img.id); // IDs de imágenes existentes
+                }
             }
-          </SelectFormGroup>
-          <SelectAPIFormGroup eRef={subcategoryRef} label='Subcategoría' searchAPI='/api/admin/subcategories/paginate' searchBy='name' filter={['category_id', '=', selectedCategory]} dropdownParent='#principal-container' />
+        });
 
-          <SelectFormGroup eRef={brandRef} label='Marca' required dropdownParent='#principal-container'>
-            {
-              brands.map((item, index) => (<option key={index} value={item.id}>{item.name}</option>))
-            }
-          </SelectFormGroup>
-          <InputFormGroup label="Stock" eRef={stockRef} type="number" />
+        const deletedImages = gallery
+            .filter((img) => img.toDelete)
+            .map((img) => parseInt(img.id, 10)); // Asegurar que sean enteros
+        if (deletedImages.length > 0) {
+            formData.append("deleted_images", JSON.stringify(deletedImages)); // Imágenes eliminadas
+        }
 
+        console.log(formData);
 
+        const result = await itemsRest.save(formData);
+        if (!result) return;
 
-          <InputFormGroup eRef={priceRef} label='Precio' type='number' step='0.01' required />
-          <InputFormGroup eRef={discountRef} label='Descuento' type='number' step='0.01' />
+        $(gridRef.current).dxDataGrid("instance").refresh();
+        $(modalRef.current).modal("hide");
+        setGallery([]);
+    };
 
-          <SelectAPIFormGroup id='tags' eRef={tagsRef} searchAPI={'/api/admin/tags/paginate'} searchBy='name' label='Tags' dropdownParent='#principal-container' tags multiple />
+    const onVisibleChange = async ({ id, value }) => {
+        const result = await itemsRest.boolean({ id, field: "visible", value });
+        if (!result) return;
+        $(gridRef.current).dxDataGrid("instance").refresh();
+    };
 
-        </div>
-        <div className="col-md-4">
+    const onBooleanChange = async ({ id, field, value }) => {
+        const result = await itemsRest.boolean({ id, field, value });
+        if (!result) return;
+        $(gridRef.current).dxDataGrid("instance").refresh();
+    };
 
-          {/*Agregar aqui lo que falta */}
-          <InputFormGroup eRef={nameRef} label='Nombre' required />
-          <TextareaFormGroup eRef={summaryRef} label='Resumen' rows={3} required />
-          {/* Sección de Características */}
+    const onDeleteClicked = async (id) => {
+        const { isConfirmed } = await Swal.fire({
+            title: "Eliminar curso",
+            text: "¿Estás seguro de eliminar este curso?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Sí, eliminar",
+            cancelButtonText: "Cancelar",
+        });
+        if (!isConfirmed) return;
+        const result = await itemsRest.delete(id);
+        if (!result) return;
+        $(gridRef.current).dxDataGrid("instance").refresh();
+    };
+    const [features, setFeatures] = useState([]); // Características
+    const [specifications, setSpecifications] = useState([]); // Especificaciones
 
+    // Opciones del campo "type"
+    const typeOptions = ["General", "Principal", "Otro"];
 
-          {/* Características (Lista de textos) */}
-          <DynamicField ref={featuresRef} label="Características" structure="" onChange={setFeatures} />
+    return (
+        <>
+            <form
+                action="/upload-zip"
+                method="POST"
+                enctype="multipart/form-data"
+            >
+                <input type="file" name="zip_file" required />
+                <button type="submit">Subir ZIP</button>
+            </form>
 
-          {/* Especificaciones (Objetos con campos, con "type" como <select>) */}
-          <DynamicField
-            ref={specificationsRef}
-            label="Especificaciones"
-            structure={{ type: "", title: "", description: "" }}
-            onChange={setSpecifications}
-            typeOptions={typeOptions}
-          />
+            <Table
+                gridRef={gridRef}
+                title="Items"
+                rest={itemsRest}
+                toolBar={(container) => {
+                    container.unshift({
+                        widget: "dxButton",
+                        location: "after",
+                        options: {
+                            icon: "refresh",
+                            hint: "Refrescar tabla",
+                            onClick: () =>
+                                $(gridRef.current)
+                                    .dxDataGrid("instance")
+                                    .refresh(),
+                        },
+                    });
+                    container.unshift({
+                        widget: "dxButton",
+                        location: "after",
+                        options: {
+                            icon: "plus",
+                            text: "Agregar",
+                            hint: "Agregar",
+                            onClick: () => onModalOpen(),
+                        },
+                    });
+                }}
+                exportable={true}
+                exportableName="Items"
+                columns={[
+                    {
+                        dataField: "id",
+                        caption: "ID",
+                        visible: false,
+                    },
+                    {
+                        dataField: "category.name",
+                        caption: "Categoría",
+                        width: "120px",
+                        cellTemplate: (container, { data }) => {
+                            container.html(
+                                renderToString(
+                                    <>
+                                        <b className="d-block">
+                                            {data.category?.name}
+                                        </b>
+                                        <small className="text-muted">
+                                            {data.subcategory?.name}
+                                        </small>
+                                    </>
+                                )
+                            );
+                        },
+                    },
+                    {
+                        dataField: "subcategory.name",
+                        caption: "Subcategoría",
+                        visible: false,
+                    },
+                    {
+                        dataField: "brand.name",
+                        caption: "Marca",
+                        width: "120px",
+                    },
+                    {
+                        dataField: "name",
+                        caption: "Nombre",
+                        width: "300px",
+                        cellTemplate: (container, { data }) => {
+                            container.html(
+                                renderToString(
+                                    <>
+                                        <b>{data.name}</b>
+                                        <br />
+                                        <span className="truncate">
+                                            {data.summary}
+                                        </span>
+                                    </>
+                                )
+                            );
+                        },
+                    },
+                    {
+                        dataField: "final_price",
+                        caption: "Precio",
+                        dataType: "number",
+                        width: "75px",
+                        cellTemplate: (container, { data }) => {
+                            container.html(
+                                renderToString(
+                                    <>
+                                        {data.discount > 0 && (
+                                            <small
+                                                className="d-block text-muted"
+                                                style={{
+                                                    textDecoration:
+                                                        "line-through",
+                                                }}
+                                            >
+                                                S/.{Number2Currency(data.price)}
+                                            </small>
+                                        )}
+                                        <span>
+                                            S/.
+                                            {Number2Currency(
+                                                data.discount > 0
+                                                    ? data.discount
+                                                    : data.price
+                                            )}
+                                        </span>
+                                    </>
+                                )
+                            );
+                        },
+                    },
+                    {
+                        dataField: "image",
+                        caption: "Imagen",
+                        width: "90px",
+                        allowFiltering: false,
+                        cellTemplate: (container, { data }) => {
+                            ReactAppend(
+                                container,
+                                <img
+                                    src={`/api/items/media/${data.image}`}
+                                    style={{
+                                        width: "80px",
+                                        height: "48px",
+                                        objectFit: "cover",
+                                        objectPosition: "center",
+                                        borderRadius: "4px",
+                                    }}
+                                    onError={(e) =>
+                                        (e.target.src =
+                                            "/api/cover/thumbnail/null")
+                                    }
+                                />
+                            );
+                        },
+                    },
+                    {
+                        dataField: "is_new",
+                        caption: "Nuevo",
+                        dataType: "boolean",
+                        width: "80px",
+                        cellTemplate: (container, { data }) => {
+                            ReactAppend(
+                                container,
+                                <SwitchFormGroup
+                                    checked={data.is_new}
+                                    onChange={(e) =>
+                                        onBooleanChange({
+                                            id: data.id,
+                                            field: "is_new",
+                                            value: e.target.checked,
+                                        })
+                                    }
+                                />
+                            );
+                        },
+                    },
+                    {
+                        dataField: "offering",
+                        caption: "En oferta",
+                        dataType: "boolean",
+                        width: "80px",
+                        cellTemplate: (container, { data }) => {
+                            ReactAppend(
+                                container,
+                                <SwitchFormGroup
+                                    checked={data.offering}
+                                    onChange={(e) =>
+                                        onBooleanChange({
+                                            id: data.id,
+                                            field: "offering",
+                                            value: e.target.checked,
+                                        })
+                                    }
+                                />
+                            );
+                        },
+                    },
+                    {
+                        dataField: "recommended",
+                        caption: "Recomendado",
+                        dataType: "boolean",
+                        width: "80px",
+                        cellTemplate: (container, { data }) => {
+                            ReactAppend(
+                                container,
+                                <SwitchFormGroup
+                                    checked={data.recommended}
+                                    onChange={(e) =>
+                                        onBooleanChange({
+                                            id: data.id,
+                                            field: "recommended",
+                                            value: e.target.checked,
+                                        })
+                                    }
+                                />
+                            );
+                        },
+                    },
+                    {
+                        dataField: "featured",
+                        caption: "Destacado",
+                        dataType: "boolean",
+                        width: "80px",
+                        cellTemplate: (container, { data }) => {
+                            ReactAppend(
+                                container,
+                                <SwitchFormGroup
+                                    checked={data.featured}
+                                    onChange={(e) =>
+                                        onBooleanChange({
+                                            id: data.id,
+                                            field: "featured",
+                                            value: e.target.checked,
+                                        })
+                                    }
+                                />
+                            );
+                        },
+                    },
+                    {
+                        dataField: "visible",
+                        caption: "Visible",
+                        dataType: "boolean",
+                        width: "80px",
+                        cellTemplate: (container, { data }) => {
+                            ReactAppend(
+                                container,
+                                <SwitchFormGroup
+                                    checked={data.visible}
+                                    onChange={(e) =>
+                                        onVisibleChange({
+                                            id: data.id,
+                                            value: e.target.checked,
+                                        })
+                                    }
+                                />
+                            );
+                        },
+                    },
+                    {
+                        caption: "Acciones",
+                        width: "100px",
+                        cellTemplate: (container, { data }) => {
+                            container.css("text-overflow", "unset");
+                            container.append(
+                                DxButton({
+                                    className: "btn btn-xs btn-soft-primary",
+                                    title: "Editar",
+                                    icon: "fa fa-pen",
+                                    onClick: () => onModalOpen(data),
+                                })
+                            );
+                            container.append(
+                                DxButton({
+                                    className: "btn btn-xs btn-soft-danger",
+                                    title: "Eliminar",
+                                    icon: "fa fa-trash",
+                                    onClick: () => onDeleteClicked(data.id),
+                                })
+                            );
+                        },
+                        allowFiltering: false,
+                        allowExporting: false,
+                    },
+                ]}
+            />
+            <Modal
+                modalRef={modalRef}
+                title={isEditing ? "Editar curso" : "Agregar curso"}
+                onSubmit={onModalSubmit}
+                size="xl"
+            >
+                <div className="row" id="principal-container">
+                    <input ref={idRef} type="hidden" />
+                    <div className="col-md-3">
+                        <SelectFormGroup
+                            eRef={categoryRef}
+                            label="Categoría"
+                            required
+                            dropdownParent="#principal-container"
+                            onChange={(e) =>
+                                setSelectedCategory(e.target.value)
+                            }
+                        >
+                            {categories.map((item, index) => (
+                                <option key={index} value={item.id}>
+                                    {item.name}
+                                </option>
+                            ))}
+                        </SelectFormGroup>
+                        <SelectAPIFormGroup
+                            eRef={subcategoryRef}
+                            label="Subcategoría"
+                            searchAPI="/api/admin/subcategories/paginate"
+                            searchBy="name"
+                            filter={["category_id", "=", selectedCategory]}
+                            dropdownParent="#principal-container"
+                        />
 
+                        <SelectFormGroup
+                            eRef={brandRef}
+                            label="Marca"
+                            required
+                            dropdownParent="#principal-container"
+                        >
+                            {brands.map((item, index) => (
+                                <option key={index} value={item.id}>
+                                    {item.name}
+                                </option>
+                            ))}
+                        </SelectFormGroup>
+                        <InputFormGroup
+                            label="Stock"
+                            eRef={stockRef}
+                            type="number"
+                        />
 
-        </div>
-        <div className='col-md-5'>
-          <div className='row'>
-            <ImageFormGroup eRef={bannerRef} label='Banner' aspect={2 / 1} col='col-12' />
-            <ImageFormGroup eRef={imageRef} label='Imagen' aspect={1} col='col-lg-6 col-md-12 col-sm-6' />
+                        <InputFormGroup
+                            eRef={priceRef}
+                            label="Precio"
+                            type="number"
+                            step="0.01"
+                            required
+                        />
+                        <InputFormGroup
+                            eRef={discountRef}
+                            label="Descuento"
+                            type="number"
+                            step="0.01"
+                        />
 
-            <div className='col-lg-6 col-md-12 col-sm-6'>
-              <label className='form-label'>Galeria</label>
-              <input id='input-item-gallery' ref={galleryRef} type='file' multiple accept='image/*' hidden onChange={handleGalleryChange} />
-              <div
-                style={{ border: '2px dashed #ccc', padding: '20px', textAlign: 'center', cursor: 'pointer', borderRadius: '4px', boxShadow: '2.5px 2.5px 5px rgba(0,0,0,.125)', aspectRatio: '21/9', height: "209px", width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}
-                onClick={() => galleryRef.current.click()}
-                onDrop={handleDrop}
-                onDragOver={handleDragOver}
+                        <SelectAPIFormGroup
+                            id="tags"
+                            eRef={tagsRef}
+                            searchAPI={"/api/admin/tags/paginate"}
+                            searchBy="name"
+                            label="Tags"
+                            dropdownParent="#principal-container"
+                            tags
+                            multiple
+                        />
+                    </div>
+                    <div className="col-md-4">
+                        {/*Agregar aqui lo que falta */}
+                        <InputFormGroup
+                            eRef={nameRef}
+                            label="Nombre"
+                            required
+                        />
+                        <TextareaFormGroup
+                            eRef={summaryRef}
+                            label="Resumen"
+                            rows={3}
+                            required
+                        />
+                        {/* Sección de Características */}
 
-              >
-                <span className='form-label d-block mb-1'>Arrastra y suelta imágenes aquí o haz clic para agregar</span>
-              </div>
+                        {/* Características (Lista de textos) */}
+                        <DynamicField
+                            ref={featuresRef}
+                            label="Características"
+                            structure=""
+                            onChange={setFeatures}
+                        />
 
-            </div>
-            <div className='col-md-12 col-sm-6'>
-              <div className='d-flex flex-wrap gap-1  mt-2'>
-                {gallery.map((image, index) => (
-                  <div key={index} className='position-relative' style={{ width: '80px', height: '80px' }}>
-                    <img src={`${image.url}`} alt='preview' style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '4px' }} />
-                    <button className='btn btn-xs btn-danger position-absolute' style={{ top: 0, right: 0 }} onClick={(e) => removeGalleryImage(e, index)}>
-                      ×
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <hr className='my-1' />
-      <QuillFormGroup eRef={descriptionRef} label='Descripcion' />
-    </Modal>
-  </>
-  )
-}
+                        {/* Especificaciones (Objetos con campos, con "type" como <select>) */}
+                        <DynamicField
+                            ref={specificationsRef}
+                            label="Especificaciones"
+                            structure={{ type: "", title: "", description: "" }}
+                            onChange={setSpecifications}
+                            typeOptions={typeOptions}
+                        />
+                    </div>
+                    <div className="col-md-5">
+                        <div className="row">
+                            <ImageFormGroup
+                                eRef={bannerRef}
+                                label="Banner"
+                                aspect={2 / 1}
+                                col="col-12"
+                            />
+                            <ImageFormGroup
+                                eRef={imageRef}
+                                label="Imagen"
+                                aspect={1}
+                                col="col-lg-6 col-md-12 col-sm-6"
+                            />
+
+                            <div className="col-lg-6 col-md-12 col-sm-6">
+                                <label className="form-label">Galeria</label>
+                                <input
+                                    id="input-item-gallery"
+                                    ref={galleryRef}
+                                    type="file"
+                                    multiple
+                                    accept="image/*"
+                                    hidden
+                                    onChange={handleGalleryChange}
+                                />
+                                <div
+                                    style={{
+                                        border: "2px dashed #ccc",
+                                        padding: "20px",
+                                        textAlign: "center",
+                                        cursor: "pointer",
+                                        borderRadius: "4px",
+                                        boxShadow:
+                                            "2.5px 2.5px 5px rgba(0,0,0,.125)",
+                                        aspectRatio: "21/9",
+                                        height: "209px",
+                                        width: "100%",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                    }}
+                                    onClick={() => galleryRef.current.click()}
+                                    onDrop={handleDrop}
+                                    onDragOver={handleDragOver}
+                                >
+                                    <span className="form-label d-block mb-1">
+                                        Arrastra y suelta imágenes aquí o haz
+                                        clic para agregar
+                                    </span>
+                                </div>
+                            </div>
+                            <div className="col-md-12 col-sm-6">
+                                <div className="d-flex flex-wrap gap-1  mt-2">
+                                    {gallery.map((image, index) => (
+                                        <div
+                                            key={index}
+                                            className="position-relative"
+                                            style={{
+                                                width: "80px",
+                                                height: "80px",
+                                            }}
+                                        >
+                                            <img
+                                                src={`${image.url}`}
+                                                alt="preview"
+                                                style={{
+                                                    width: "100%",
+                                                    height: "100%",
+                                                    objectFit: "cover",
+                                                    borderRadius: "4px",
+                                                }}
+                                            />
+                                            <button
+                                                className="btn btn-xs btn-danger position-absolute"
+                                                style={{ top: 0, right: 0 }}
+                                                onClick={(e) =>
+                                                    removeGalleryImage(e, index)
+                                                }
+                                            >
+                                                ×
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr className="my-1" />
+                <QuillFormGroup eRef={descriptionRef} label="Descripcion" />
+            </Modal>
+        </>
+    );
+};
 
 CreateReactScript((el, properties) => {
-  createRoot(el).render(<BaseAdminto {...properties} title='Items'>
-    <Items {...properties} />
-  </BaseAdminto>);
-})
+    createRoot(el).render(
+        <BaseAdminto {...properties} title="Items">
+            <Items {...properties} />
+        </BaseAdminto>
+    );
+});

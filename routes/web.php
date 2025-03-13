@@ -98,3 +98,78 @@ Route::middleware(['can:Admin', 'auth'])->prefix('admin')->group(function () {
     Route::get('/profile', [AdminProfileController::class, 'reactView'])->name('Admin/Profile.jsx');
     Route::get('/account', [AdminAccountController::class, 'reactView'])->name('Admin/Account.jsx');
 });
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use ZipArchive;
+use App\Models\Item;
+use App\Models\ItemImage;
+
+Route::post('/upload-zip', function (Request $request) {
+    $request->validate([
+        'zip_file' => 'required|mimes:zip|max:10240', // Máximo 10MB
+    ]);
+
+    // Guardar el ZIP en una carpeta temporal
+    $path = $request->file('zip_file')->store('temp_zip');
+
+    // Ruta absoluta al archivo ZIP
+    $zipPath = storage_path('app/' . $path);
+
+    // Crear una carpeta para extraer el ZIP
+    $extractPath = storage_path('app/temp_zip_extract/');
+    if (!file_exists($extractPath)) {
+        mkdir($extractPath, 0777, true);
+    }
+
+    // Descomprimir el archivo ZIP
+    $zip = new ZipArchive;
+    if ($zip->open($zipPath) === TRUE) {
+        $zip->extractTo($extractPath);
+        $zip->close();
+    } else {
+        return response()->json(['error' => 'No se pudo abrir el archivo ZIP'], 400);
+    }
+
+    // Procesar imágenes
+    $files = glob($extractPath . '*.{jpg,jpeg,png,webp}', GLOB_BRACE);
+
+    foreach ($files as $file) {
+        $filename = pathinfo($file, PATHINFO_BASENAME);
+
+        // Validar el formato SKU
+        if (preg_match('/^(sku_\d+)(?:_(\d+))?\.(jpg|jpeg|png|webp)$/', $filename, $matches)) {
+            $sku = $matches[1];
+            $is_gallery = isset($matches[2]);
+
+            // Buscar el producto por SKU
+            $item = Item::where('sku', $sku)->first();
+
+            if ($item) {
+                // Definir carpeta de destino
+                $destination = $is_gallery ? "images/item_image/" : "images/item/";
+
+                // Mover la imagen a la carpeta correcta
+                $newName = $filename; // Se mantiene el mismo nombre
+                Storage::move('temp_zip_extract/' . $filename, 'app/' . $destination . $newName);
+
+                if ($is_gallery) {
+                    // Guardar en la galería
+                    ItemImage::create([
+                        'item_id' => $item->id,
+                        'url' => $newName, // Solo guardamos el nombre del archivo
+                    ]);
+                } else {
+                    // Actualizar el campo `image` en Item
+                    $item->update(['image' => $newName]);
+                }
+            }
+        }
+    }
+
+    // Limpiar archivos temporales
+    Storage::deleteDirectory('temp_zip');
+    Storage::deleteDirectory('temp_zip_extract');
+
+    return response()->json(['message' => 'Imágenes cargadas correctamente']);
+});
