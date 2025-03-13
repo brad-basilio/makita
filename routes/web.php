@@ -101,7 +101,7 @@ Route::middleware(['can:Admin', 'auth'])->prefix('admin')->group(function () {
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use ZipArchive;
+
 use App\Models\Item;
 use App\Models\ItemImage;
 
@@ -139,29 +139,34 @@ Route::post('/upload-zip', function (Request $request) {
 
         // Validar el formato SKU
         if (preg_match('/^(sku_\d+)(?:_(\d+))?\.(jpg|jpeg|png|webp)$/', $filename, $matches)) {
-            $sku = $matches[1];
-            $is_gallery = isset($matches[2]);
+            $sku = $matches[1]; // SKU base
+            $is_gallery = isset($matches[2]); // Es imagen de galería si tiene `_01`, `_02`, etc.
 
             // Buscar el producto por SKU
             $item = Item::where('sku', $sku)->first();
 
             if ($item) {
-                // Definir carpeta de destino
-                $destination = $is_gallery ? "images/item_image/" : "images/item/";
+                // Si es la imagen principal (no tiene "_01", "_02")
+                if (!$is_gallery && !isset($processedSkus[$sku])) {
+                    $destination = "images/item/"; // Carpeta para la imagen principal
+                    $newName = $filename; // Mantiene el mismo nombre
+                    Storage::move('temp_zip_extract/' . $filename, 'app/' . $destination . $newName);
 
-                // Mover la imagen a la carpeta correcta
-                $newName = $filename; // Se mantiene el mismo nombre
-                Storage::move('temp_zip_extract/' . $filename, 'app/' . $destination . $newName);
+                    // Guardar en el campo image del item
+                    $item->update(['image' => $newName]);
+                    $processedSkus[$sku] = true; // Marca que ya se procesó la imagen principal
+                }
+                // Si es una imagen de galería
+                else if ($is_gallery) {
+                    $destination = "images/item_image/"; // Carpeta para galería
+                    $newName = $filename;
+                    Storage::move('temp_zip_extract/' . $filename, 'app/' . $destination . $newName);
 
-                if ($is_gallery) {
-                    // Guardar en la galería
+                    // Guardar en la tabla ItemImage
                     ItemImage::create([
                         'item_id' => $item->id,
-                        'url' => $newName, // Solo guardamos el nombre del archivo
+                        'url' => $newName, // Solo guardamos el nombre
                     ]);
-                } else {
-                    // Actualizar el campo `image` en Item
-                    $item->update(['image' => $newName]);
                 }
             }
         }
