@@ -51,6 +51,7 @@ const CardHoverBtn = ({ product, widthClass = "lg:w-1/5", setCart, cart }) => {
                     <div className="aspect-square rounded-lg overflow-hidden flex items-center justify-center p-4">
                         <img
                             src={`/api/items/media/${product.image}`}
+                            onError="/api/cover/thumbnail/null"
                             alt={product.name}
                             className="w-full h-full object-contain"
                             loading="lazy"

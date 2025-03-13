@@ -33,9 +33,9 @@ export default function MobileMenu({ search, setSearch, pages, items }) {
         if (menuLevel === "main") {
             return (
                 <>
-                    <div className="py-4 customtext-neutral-dark">
+                    <div className=" customtext-neutral-dark">
                         <button
-                            className=" border-b border-gray-100 w-full flex justify-between items-center"
+                            className="py-4 border-b border-gray-100 w-full flex justify-between items-center"
                             onClick={() =>
                                 handleMainMenuItemClick("categories")
                             }
