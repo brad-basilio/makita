@@ -358,7 +358,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                                             }
                                         />
                                     </div>
-                                    <div className="space-y-3">
+                                    <div className="space-y-3 max-h-80 overflow-y-auto">
                                         {filteredBrands.map((brand) => (
                                             <label
                                                 key={brand.id}
@@ -455,63 +455,67 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                                             }
                                         />
                                     </div>
-                                    {filteredCategories.map((category) => (
-                                        <div key={category.id}>
-                                            <label className="flex items-center space-x-3">
-                                                <input
-                                                    type="checkbox"
-                                                    className="h-4 w-4 rounded border-gray-300"
-                                                    onChange={() =>
-                                                        handleFilterChange(
-                                                            "category_id",
-                                                            category.id
-                                                        )
-                                                    }
-                                                    checked={selectedFilters.category_id?.includes(
-                                                        category.id
-                                                    )} // <-- Agregado
-                                                />
-                                                <span>{category.name}</span>
-                                            </label>
-
-                                            {/* Mostrar subcategorías si la categoría está seleccionada */}
-                                            {selectedFilters.category_id?.includes(
-                                                category.id
-                                            ) &&
-                                                category.subcategories?.length >
-                                                    0 && (
-                                                    <ul className="ml-6 mt-2 space-y-2">
-                                                        {category.subcategories.map(
-                                                            (sub) => (
-                                                                <label
-                                                                    key={sub.id}
-                                                                    className="flex items-center space-x-3"
-                                                                >
-                                                                    <input
-                                                                        type="checkbox"
-                                                                        className="h-4 w-4 rounded border-gray-300"
-                                                                        onChange={() =>
-                                                                            handleFilterChange(
-                                                                                "subcategory_id",
-                                                                                sub.id
-                                                                            )
-                                                                        } // <-- Corregido
-                                                                        checked={selectedFilters.subcategory_id?.includes(
-                                                                            sub.id
-                                                                        )}
-                                                                    />
-                                                                    <span>
-                                                                        {
-                                                                            sub.name
-                                                                        }
-                                                                    </span>
-                                                                </label>
+                                    <div className="space-y-3 max-h-80 overflow-y-auto">
+                                        {filteredCategories.map((category) => (
+                                            <div key={category.id}>
+                                                <label className="flex items-center space-x-3">
+                                                    <input
+                                                        type="checkbox"
+                                                        className="h-4 w-4 rounded border-gray-300"
+                                                        onChange={() =>
+                                                            handleFilterChange(
+                                                                "category_id",
+                                                                category.id
                                                             )
-                                                        )}
-                                                    </ul>
-                                                )}
-                                        </div>
-                                    ))}
+                                                        }
+                                                        checked={selectedFilters.category_id?.includes(
+                                                            category.id
+                                                        )} // <-- Agregado
+                                                    />
+                                                    <span>{category.name}</span>
+                                                </label>
+
+                                                {/* Mostrar subcategorías si la categoría está seleccionada */}
+                                                {selectedFilters.category_id?.includes(
+                                                    category.id
+                                                ) &&
+                                                    category.subcategories
+                                                        ?.length > 0 && (
+                                                        <ul className="ml-6 mt-2 space-y-2">
+                                                            {category.subcategories.map(
+                                                                (sub) => (
+                                                                    <label
+                                                                        key={
+                                                                            sub.id
+                                                                        }
+                                                                        className="flex items-center space-x-3"
+                                                                    >
+                                                                        <input
+                                                                            type="checkbox"
+                                                                            className="h-4 w-4 rounded border-gray-300"
+                                                                            onChange={() =>
+                                                                                handleFilterChange(
+                                                                                    "subcategory_id",
+                                                                                    sub.id
+                                                                                )
+                                                                            } // <-- Corregido
+                                                                            checked={selectedFilters.subcategory_id?.includes(
+                                                                                sub.id
+                                                                            )}
+                                                                        />
+                                                                        <span>
+                                                                            {
+                                                                                sub.name
+                                                                            }
+                                                                        </span>
+                                                                    </label>
+                                                                )
+                                                            )}
+                                                        </ul>
+                                                    )}
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
                             )}
                         </div>
