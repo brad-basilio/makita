@@ -19,7 +19,7 @@ import { Notify } from "sode-extend-react";
 export default function ProductDetail({ item, data, setCart, cart }) {
     const itemsRest = new ItemsRest();
     const [selectedImage, setSelectedImage] = useState({
-        url: item.image,
+        url: item?.image,
         type: "main",
     });
 
@@ -64,7 +64,7 @@ export default function ProductDetail({ item, data, setCart, cart }) {
         try {
             // Preparar la solicitud
             const request = {
-                id: item.id,
+                id: item?.id,
             };
 
             // Llamar al backend para verificar el combo
@@ -122,11 +122,11 @@ export default function ProductDetail({ item, data, setCart, cart }) {
                             <p className="customtext-neutral-light text-sm">
                                 Marca:{" "}
                                 <span className="customtext-neutral-dark">
-                                    {item.brand.name}
+                                    {item?.brand.name}
                                 </span>
                             </p>
                             <h1 className="customtext-neutral-dark text-[28px] md:text-[40px] font-bold mt-2">
-                                {item.name}
+                                {item?.name}
                             </h1>
                         </div>
 
@@ -137,23 +137,23 @@ export default function ProductDetail({ item, data, setCart, cart }) {
                                 <button
                                     onClick={() =>
                                         setSelectedImage({
-                                            url: item.image,
+                                            url: item?.image,
                                             type: "main",
                                         })
                                     }
                                     className={`w-16 h-16 border rounded-lg p-2 ${
-                                        selectedImage.url === item.image
+                                        selectedImage.url === item?.image
                                             ? "border-blue-400"
                                             : "border-gray-200"
                                     }`}
                                 >
                                     <img
-                                        src={`/api/items/media/${item.image}`}
+                                        src={`/api/items/media/${item?.image}`}
                                         alt="Main Thumbnail"
                                         className="w-full h-full object-contain"
                                     />
                                 </button>
-                                {item.images.map((image, index) => (
+                                {item?.images.map((image, index) => (
                                     <button
                                         key={index}
                                         onClick={() =>
@@ -195,13 +195,13 @@ export default function ProductDetail({ item, data, setCart, cart }) {
                             <span className="customtext-neutral-light text-sm">
                                 SKU:{" "}
                                 <span className="customtext-neutral-dark">
-                                    {item.sku}
+                                    {item?.sku}
                                 </span>
                             </span>
                             <span className="ustomtext-neutral-light text-sm">
                                 Disponibilidad:{" "}
                                 <span className="customtext-neutral-dark">
-                                    {item.stock > 0 ? "En stock" : "Agotado"}
+                                    {item?.stock > 0 ? "En stock" : "Agotado"}
                                 </span>
                             </span>
                         </div>
@@ -211,16 +211,16 @@ export default function ProductDetail({ item, data, setCart, cart }) {
                                 <p className="text-sm customtext-neutral-light mb-1">
                                     Precio:{" "}
                                     <span className="line-through">
-                                        S/ {item.price}
+                                        S/ {item?.price}
                                     </span>
                                 </p>
                                 <div className="flex items-center gap-4 ">
                                     <span className="text-[40px] font-bold">
-                                        S/ {item.final_price}
+                                        S/ {item?.final_price}
                                     </span>
                                     <span className="bg-[#F93232] text-white font-bold px-3 py-2 rounded-xl">
                                         -
-                                        {Number(item.discount_percent).toFixed(
+                                        {Number(item?.discount_percent).toFixed(
                                             1
                                         )}
                                         %
@@ -273,7 +273,7 @@ export default function ProductDetail({ item, data, setCart, cart }) {
                                     }`}
                                     style={{ listStyleType: "disc" }}
                                 >
-                                    {item.specifications.map(
+                                    {item?.specifications.map(
                                         (spec, index) =>
                                             spec.type === "principal" && (
                                                 <li
@@ -427,11 +427,11 @@ export default function ProductDetail({ item, data, setCart, cart }) {
                             <p className="customtext-neutral-light text-sm">
                                 Marca:{" "}
                                 <span className="customtext-neutral-dark">
-                                    {item.brand.name}
+                                    {item?.brand.name}
                                 </span>
                             </p>
                             <h1 className="customtext-neutral-dark text-[40px] font-bold mt-2">
-                                {item.name}
+                                {item?.name}
                             </h1>
                         </div>
 
@@ -440,13 +440,13 @@ export default function ProductDetail({ item, data, setCart, cart }) {
                             <span className="customtext-neutral-light text-sm">
                                 SKU:{" "}
                                 <span className="customtext-neutral-dark">
-                                    {item.sku}
+                                    {item?.sku}
                                 </span>
                             </span>
                             <span className="ustomtext-neutral-light text-sm">
                                 Disponibilidad:{" "}
                                 <span className="customtext-neutral-dark">
-                                    {item.stock > 0 ? "En stock" : "Agotado"}
+                                    {item?.stock > 0 ? "En stock" : "Agotado"}
                                 </span>
                             </span>
                         </div>
@@ -465,7 +465,7 @@ export default function ProductDetail({ item, data, setCart, cart }) {
                                         }`}
                                         style={{ listStyleType: "disc" }}
                                     >
-                                        {item.specifications.map(
+                                        {item?.specifications.map(
                                             (spec, index) =>
                                                 spec.type === "principal" && (
                                                     <li
@@ -503,16 +503,16 @@ export default function ProductDetail({ item, data, setCart, cart }) {
                                 <p className="text-sm customtext-neutral-light mb-1">
                                     Precio:{" "}
                                     <span className="line-through">
-                                        S/ {item.price}
+                                        S/ {item?.price}
                                     </span>
                                 </p>
                                 <div className="flex items-center gap-4 ">
                                     <span className="text-[40px] font-bold">
-                                        S/ {item.final_price}
+                                        S/ {item?.final_price}
                                     </span>
                                     <span className="bg-[#F93232] text-white font-bold px-3 py-2 rounded-xl">
                                         -
-                                        {Number(item.discount_percent).toFixed(
+                                        {Number(item?.discount_percent).toFixed(
                                             1
                                         )}
                                         %
@@ -630,7 +630,7 @@ export default function ProductDetail({ item, data, setCart, cart }) {
                         Especificaciones
                     </h2>
                     <div className="space-y-1">
-                        {item.specifications.map(
+                        {item?.specifications.map(
                             (spec, index) =>
                                 spec.type === "general" && (
                                     <div
@@ -669,12 +669,12 @@ export default function ProductDetail({ item, data, setCart, cart }) {
                         <div
                             className="customtext-neutral-dark"
                             dangerouslySetInnerHTML={{
-                                __html: item.description,
+                                __html: item?.description,
                             }}
                         ></div>
                         <div className={`pl-10`}>
                             <ul className="list-disc pl-5 space-y-2">
-                                {item.features.map((feature, index) => (
+                                {item?.features.map((feature, index) => (
                                     <li
                                         key={index}
                                         className="customtext-neutral-dark"
