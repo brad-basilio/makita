@@ -1,9 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import Global from "../../../Utils/Global";
-import { CircleUser, DoorClosed, Search, ShoppingCart } from "lucide-react";
+import {
+    CircleUser,
+    DoorClosed,
+    Search,
+    ShoppingCart,
+    XIcon,
+} from "lucide-react";
 import CartModal from "../Components/CartModal";
 import AuthRest from "../../../Actions/AuthRest";
 import Logout from "../../../Actions/Logout";
+import MobileMenu from "./Components/MobileMenu";
 const HeaderSearchB = ({ items, data, cart, setCart, isUser, pages }) => {
     const [modalOpen, setModalOpen] = useState(false);
     const [openMenu, setOpenMenu] = useState(false);
@@ -42,37 +49,41 @@ const HeaderSearchB = ({ items, data, cart, setCart, isUser, pages }) => {
                     </a>
                     <button
                         onClick={() => setOpenMenu(!openMenu)}
-                        className="flex  md:hidden items-center justify-center bg-primary rounded-lg w-auto h-auto p-2 text-white fill-white"
+                        className="flex  md:hidden items-center justify-center bg-primary rounded-lg w-auto h-auto p-2 text-white fill-white transition-all duration-300"
                     >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                        >
-                            <path
-                                d="M10 5H20"
-                                stroke="white"
-                                stroke-width="1.5"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                            />
-                            <path
-                                d="M4 12H20"
-                                stroke="white"
-                                stroke-width="1.5"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                            />
-                            <path
-                                d="M4 19H14"
-                                stroke="white"
-                                stroke-width="1.5"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                            />
-                        </svg>
+                        {!openMenu ? (
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                            >
+                                <path
+                                    d="M10 5H20"
+                                    stroke="white"
+                                    stroke-width="1.5"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+                                <path
+                                    d="M4 12H20"
+                                    stroke="white"
+                                    stroke-width="1.5"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+                                <path
+                                    d="M4 19H14"
+                                    stroke="white"
+                                    stroke-width="1.5"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+                            </svg>
+                        ) : (
+                            <XIcon />
+                        )}
                     </button>
                     {/* Navigation */}
 
@@ -301,52 +312,12 @@ const HeaderSearchB = ({ items, data, cart, setCart, isUser, pages }) => {
                     openMenu ? "block" : "hidden"
                 }  lg:hidden bg-white text-textWhite shadow-lg w-full min-h-screen absolute z-10 top-20`}
             >
-                <nav className="mb-8 flex flex-col justify-center items-center gap-10 text-center w-11/12 md:max-w-6xl mx-auto">
-                    <ul className="flex space-y-4 flex-col">
-                        <li className="relative py-3 ">
-                            <div className="flex gap-6 items-center justify-center">
-                                {pages.map(
-                                    (page, index) =>
-                                        page.menuable && ( // Simplified conditional rendering
-                                            <li key={index} className="">
-                                                <a
-                                                    href={page.path}
-                                                    className="text-sm  customtext-primary hover:customtext-primary font-bold cursor-pointer transition-all duration-300 relative  "
-                                                >
-                                                    {page.name}
-                                                </a>
-                                            </li>
-                                        )
-                                )}
-                            </div>
-                            <div className="p-6">
-                                <div className="grid grid-cols-3 gap-8">
-                                    {items.map((category, index) => (
-                                        <div key={index}>
-                                            <h3 className="customtext-neutral-dark font-bold text-sm mb-3 cursor-pointer hover:customtext-primary transition-colors duration-300 ">
-                                                {category.name}
-                                            </h3>
-                                            <ul className="space-y-2">
-                                                {category.subcategories.map(
-                                                    (item, itemIndex) => (
-                                                        <li key={itemIndex}>
-                                                            <a
-                                                                href="#"
-                                                                className=" customtext-neutral-dark text-xs hover:customtext-primary transition-colors duration-300 cursor-pointer"
-                                                            >
-                                                                {item.name}
-                                                            </a>
-                                                        </li>
-                                                    )
-                                                )}
-                                            </ul>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </nav>
+                <MobileMenu
+                    search={search}
+                    setSearch={setSearch}
+                    pages={pages}
+                    items={items}
+                />
             </div>
             <CartModal
                 data={data}
