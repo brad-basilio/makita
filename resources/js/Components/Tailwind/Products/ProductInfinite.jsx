@@ -44,7 +44,7 @@ const ProductInfinite = ({ items, data, setCart, cart }) => {
 
     return (
         <section className="py-12 bg-[#F7F9FB]">
-            <div className=" mx-auto px-primary 2xl:px-0 2xl:max-w-7xl h-[500px] max-h-[500px]">
+            <div className=" mx-auto px-primary 2xl:px-0 2xl:max-w-7xl h-[600px] max-h-[600px]">
                 {/* Header */}
                 <div className="md:flex justify-between items-center mb-8 pb-4 border-b customborder-neutral-light">
                     <h2 className="text-[28px] md:text-4xl font-bold  font-font-secondary mb-4 md:mb-0">
@@ -96,7 +96,7 @@ const ProductInfinite = ({ items, data, setCart, cart }) => {
                     </div>
                     <div className="overflow-hidden py-4 md:hidden">
                         <div
-                            className="flex items-center gap-y-4 transition-all duration-300 ease-in-out flex-wrap flex-shrink"
+                            className="flex items-center  gap-y-4 transition-all duration-300 ease-in-out flex-wrap flex-shrink"
                             style={{
                                 transform: `translateX(-${
                                     currentSlide * (100 / slidesPerView)
