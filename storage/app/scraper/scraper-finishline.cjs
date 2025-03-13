@@ -5,16 +5,17 @@ const args = process.argv.slice(2);
 const searchQuery = args[0] || "mujer";
 const offset = parseInt(args[1]) || 0;
 const limit = parseInt(args[2]) || 12;
-
+const exchangeRate = parseFloat(args[3]) || 1;
+const paginate = parseInt(args[4]) || 1;
 (async () => {
     let browser;
     try {
+        // Configurar Puppeteer
         browser = await puppeteer.launch({
             headless: true,
             args: ["--no-sandbox", "--disable-setuid-sandbox"],
         });
-
-        /*     browser = await puppeteer.launch({
+        /*  browser = await puppeteer.launch({
             executablePath: "/usr/bin/google-chrome-stable",
             headless: true,
             args: [
@@ -30,59 +31,73 @@ const limit = parseInt(args[2]) || 12;
                 "--user-data-dir=/var/www/.chrome", // 🔥 Esto soluciona el problema
             ],
         });*/
-
         const page = await browser.newPage();
+
+        // Configurar User-Agent
         await page.setUserAgent(
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36"
         );
 
-        const url = `https://www.nike.com.pe/search?q=${encodeURIComponent(
+        // Construir la URL dinámica
+        const url = `https://www.finishline.com/store/_/N-/Ntt-${encodeURIComponent(
             searchQuery
-        )}&start=${encodeURIComponent(offset)}&sz=${encodeURIComponent(limit)}`;
-
+        )}?page=${encodeURIComponent(paginate)}`;
         await page.goto(url, { waitUntil: "networkidle2", timeout: 120000 });
 
         // Esperar a que los productos se carguen
-        await page.waitForSelector(".product", { timeout: 10000 });
+        await page.waitForSelector(".product-card", { timeout: 60000 });
 
-        // Extraer los datos de los productos con paginación
-        const products = await page.evaluate(() => {
-            const baseUrl = "https://www.nike.com.pe";
-            return Array.from(document.querySelectorAll(".product")).map(
+        // Extraer los datos de los productos
+        const products = await page.evaluate((exchangeRate) => {
+            const baseUrl = "https://www.finishline.com";
+            return Array.from(document.querySelectorAll(".product-card")).map(
                 (product) => {
                     let name =
                         product
-                            .querySelector(".product-title")
-                            ?.innerText?.trim() || "";
-                    let summary =
-                        product
-                            .querySelector(".product-subtitle")
-                            ?.innerText?.trim() || "";
-                    // Extraer precio sin denominación
+                            .querySelector(
+                                ".product-card__details .product-name"
+                            )
+                            ?.innerText?.trim() || "Sin título";
 
                     let priceText =
                         product
-                            .querySelector(".price del .value")
+                            .querySelector(".product-card__details .fullPrice")
                             ?.innerText?.trim() || "Sin precio";
-                    let price =
-                        parseFloat(priceText.match(/\d+(\.\d+)?/)?.[0]) || null;
+                    let priceFloat =
+                        parseFloat(
+                            priceText.replace(/[^0-9.]/g, "").replace(/,/g, "")
+                        ) || null;
+                    if (priceFloat === null) {
+                        priceText =
+                            product
+                                .querySelector(
+                                    ".product-card__details .wasPrice"
+                                )
+                                ?.innerText?.trim() || "Sin precio";
+                        priceFloat =
+                            parseFloat(
+                                priceText
+                                    .replace(/[^0-9.]/g, "")
+                                    .replace(/, /g, "")
+                            ) || null;
+                    }
+                    let price = (priceFloat * exchangeRate).toFixed(2);
 
-                    let discountPriceElement = product.querySelector(
-                        ".price .sales .value"
-                    );
+                    let discountText =
+                        product
+                            .querySelector(".product-card__details .nowPrice")
+                            ?.innerText?.trim() || "Sin precio";
 
-                    let discount = discountPriceElement
-                        ? parseFloat(
-                              discountPriceElement.getAttribute("content")
-                          ) || null
-                        : null;
+                    let discountFloat =
+                        parseFloat(
+                            discountText
+                                .replace(/[^0-9.]/g, "")
+                                .replace(/,/g, "")
+                        ) || null;
+                    let discount = (discountFloat * exchangeRate).toFixed(2);
 
-                    let discountElement = product.querySelector(".discount");
-                    let discountText = discountElement?.innerText?.trim() || ""; // Usa encadenamiento opcional
-                    let discountMatch = discountText.match(/\d+/);
-                    let discount_percent = discountMatch
-                        ? parseFloat(discountMatch[0], 10)
-                        : null;
+                    let discount_percent = null;
+
                     let final_price = 0;
 
                     if (price === null) {
@@ -96,17 +111,18 @@ const limit = parseInt(args[2]) || 12;
                     }
 
                     let relativeSrc =
-                        product.querySelector(".tile-image")?.src || "";
+                        product.querySelector(".productImage")?.src || "";
                     // Construir la URL absoluta de la imagen
                     let image = relativeSrc.startsWith("http")
                         ? relativeSrc
                         : baseUrl + relativeSrc;
-                    let url =
-                        product.querySelector(".price-wrapper a")?.href || "";
+                    // Obtener la URL del producto
+                    let urlElement = product.querySelector("a");
+                    let url = null;
 
                     return {
                         name,
-                        summary,
+
                         price,
                         discount,
                         final_price,
@@ -116,11 +132,12 @@ const limit = parseInt(args[2]) || 12;
                     };
                 }
             );
-        });
+        }, exchangeRate);
 
         // Imprimir los productos en formato JSON
         console.log(JSON.stringify(products, null, 2));
     } catch (error) {
+        // Manejar errores y devolver un JSON con el error
         console.error(
             JSON.stringify({
                 status: "error",
@@ -129,6 +146,7 @@ const limit = parseInt(args[2]) || 12;
             })
         );
     } finally {
+        // Cerrar el navegador
         if (browser) {
             await browser.close();
         }

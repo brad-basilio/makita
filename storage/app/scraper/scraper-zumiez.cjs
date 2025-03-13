@@ -11,11 +11,11 @@ const paginate = parseInt(args[4]) || 1;
     let browser;
     try {
         // Configurar Puppeteer
-        /*browser = await puppeteer.launch({
+        browser = await puppeteer.launch({
             headless: true,
             args: ["--no-sandbox", "--disable-setuid-sandbox"],
-        });*/
-        browser = await puppeteer.launch({
+        });
+        /*  browser = await puppeteer.launch({
             executablePath: "/usr/bin/google-chrome-stable",
             headless: true,
             args: [
@@ -30,7 +30,7 @@ const paginate = parseInt(args[4]) || 1;
                 "--remote-debugging-port=9222",
                 "--user-data-dir=/var/www/.chrome", // 🔥 Esto soluciona el problema
             ],
-        });
+        });*/
         const page = await browser.newPage();
 
         // Configurar User-Agent
@@ -39,37 +39,38 @@ const paginate = parseInt(args[4]) || 1;
         );
 
         // Construir la URL dinámica
-        const url = `https://shop.simon.com/pages/search-results-page?q=${encodeURIComponent(
+        const url = `https://www.zumiez.com/search/${encodeURIComponent(
             searchQuery
-        )}&page=${encodeURIComponent(paginate)}`;
+        )}`;
         await page.goto(url, { waitUntil: "networkidle2", timeout: 120000 });
 
         // Esperar a que los productos se carguen
-        await page.waitForSelector(".product-item", { timeout: 30000 });
+        await page.waitForSelector(".ProductCard", { timeout: 30000 });
 
         // Extraer los datos de los productos
         const products = await page.evaluate((exchangeRate) => {
-            const baseUrl = "https://shop.simon.com";
-            return Array.from(document.querySelectorAll(".product-item")).map(
+            const baseUrl = "https://www.finishline.com";
+            return Array.from(document.querySelectorAll(".ProductCard")).map(
                 (product) => {
                     let name =
                         product
-                            .querySelector(".grid-product__title")
+                            .querySelector(".ProductCard-Name")
                             ?.innerText?.trim() || "Sin título";
 
                     let priceText =
                         product
-                            .querySelector(".grid-product__price--original")
+                            .querySelector(".ProductCardPrice-HighPrice")
                             ?.innerText?.trim() || "Sin precio";
                     let priceFloat =
                         parseFloat(
                             priceText.replace(/[^0-9.]/g, "").replace(/,/g, "")
                         ) || null;
+
                     let price = (priceFloat * exchangeRate).toFixed(2);
 
                     let discountText =
                         product
-                            .querySelector(".grid-product__price b")
+                            .querySelector(".ProductPrice-PriceValue")
                             ?.innerText?.trim() || "Sin precio";
 
                     let discountFloat =
@@ -80,10 +81,7 @@ const paginate = parseInt(args[4]) || 1;
                         ) || null;
                     let discount = (discountFloat * exchangeRate).toFixed(2);
 
-                    let discount_percent =
-                        product
-                            .querySelector(".grid-product__price--savings")
-                            ?.innerText?.trim() || "Sin precio";
+                    let discount_percent = null;
 
                     let final_price = 0;
 
@@ -97,30 +95,12 @@ const paginate = parseInt(args[4]) || 1;
                         discount = null;
                     }
 
-                    let imageElement = product.querySelector(
-                        ".grid-product__image"
-                    );
-                    let image = null;
-
-                    if (imageElement) {
-                        // Intentar obtener la URL desde data-background-image-url
-                        let backgroundImageUrl = imageElement.getAttribute(
-                            "data-background-image-url"
-                        );
-                        if (backgroundImageUrl) {
-                            image = backgroundImageUrl;
-                        } else {
-                            // Si no hay data-background-image-url, usar style
-                            const style =
-                                imageElement.getAttribute("style") || "";
-                            const match = style.match(
-                                /url\(\s*['"]?(.*?)['"]?\s*\)/
-                            );
-                            if (match && match[1]) {
-                                image = match[1]; // URL limpia
-                            }
-                        }
-                    }
+                    let relativeSrc =
+                        product.querySelector(".Image-Image")?.src || "";
+                    // Construir la URL absoluta de la imagen
+                    let image = relativeSrc.startsWith("http")
+                        ? relativeSrc
+                        : baseUrl + relativeSrc;
                     // Obtener la URL del producto
                     let urlElement = product.querySelector("a");
                     let url = null;
