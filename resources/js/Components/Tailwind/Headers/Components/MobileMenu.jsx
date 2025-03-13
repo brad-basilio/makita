@@ -88,50 +88,54 @@ export default function MobileMenu({ search, setSearch, pages, items }) {
     };
 
     return (
-        <div className="w-full customtext-neutral-dark max-w-md mx-auto bg-white shadow-lg rounded-lg overflow-hidden z-[999]">
-            <div className="p-4 bg-white flex justify-between items-center border-b border-gray-200">
-                <h1 className="text-xl font-medium customtext-neutral-dark">
-                    Menú principal
-                </h1>
-            </div>
-
-            <div className="p-4">
-                <div className="relative mb-4">
-                    <div className={` relative w-full max-w-xl mx-auto`}>
-                        <input
-                            type="search"
-                            placeholder="Buscar productos"
-                            value={search} // Vincula el valor del input al estado
-                            onChange={(e) => setSearch(e.target.value)} // Actualiza el estado cuando el usuario escribe
-                            className="w-full pr-14 py-4  pl-4 border rounded-full focus:ring-0 focus:outline-none"
-                        />
-                        <a
-                            href={
-                                search.trim()
-                                    ? `/catalogo?search=${encodeURIComponent(
-                                          search
-                                      )}`
-                                    : "#"
-                            }
-                            className="absolute right-3 top-1/2 transform -translate-y-1/2 p-2 bg-primary text-white rounded-lg"
-                            aria-label="Buscar"
-                        >
-                            <Search />
-                        </a>
-                    </div>
+        <div className="w-full fixed h-screen customtext-neutral-dark bg-black/20  max-w-md mx-auto  ">
+            <div className="bg-white shadow-lg rounded-lg z-[999]">
+                <div className="p-4 bg-white flex justify-between items-center border-b border-gray-200">
+                    <h1 className="text-xl font-medium customtext-neutral-dark">
+                        Menú principal
+                    </h1>
                 </div>
 
-                {menuLevel !== "main" && (
-                    <button
-                        onClick={handleBackClick}
-                        className="flex items-center customtext-primary mb-4 font-semibold"
-                    >
-                        <ChevronLeft className="h-5 w-5 mr-1" />
-                        <span>Atrás</span>
-                    </button>
-                )}
+                <div className="p-4">
+                    <div className="relative mb-4">
+                        <div className={` relative w-full max-w-xl mx-auto`}>
+                            <input
+                                type="search"
+                                placeholder="Buscar productos"
+                                value={search} // Vincula el valor del input al estado
+                                onChange={(e) => setSearch(e.target.value)} // Actualiza el estado cuando el usuario escribe
+                                className="w-full pr-14 py-4  pl-4 border rounded-full focus:ring-0 focus:outline-none"
+                            />
+                            <a
+                                href={
+                                    search.trim()
+                                        ? `/catalogo?search=${encodeURIComponent(
+                                              search
+                                          )}`
+                                        : "#"
+                                }
+                                className="absolute right-3 top-1/2 transform -translate-y-1/2 p-2 bg-primary text-white rounded-lg"
+                                aria-label="Buscar"
+                            >
+                                <Search />
+                            </a>
+                        </div>
+                    </div>
 
-                <div className="space-y-0">{renderMenuItems()}</div>
+                    {menuLevel !== "main" && (
+                        <button
+                            onClick={handleBackClick}
+                            className="flex items-center customtext-primary mb-4 font-semibold"
+                        >
+                            <ChevronLeft className="h-5 w-5 mr-1" />
+                            <span>Atrás</span>
+                        </button>
+                    )}
+
+                    <div className="space-y-0 max-h-[350px]  overflow-scroll">
+                        {renderMenuItems()}
+                    </div>
+                </div>
             </div>
         </div>
     );

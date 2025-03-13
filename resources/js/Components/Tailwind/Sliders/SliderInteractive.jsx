@@ -169,19 +169,23 @@ const SliderInteractive = ({ items, data }) => {
                     {duplicatedItems.map((item, index) => (
                         <div
                             key={`slide-${index}`}
-                            className="w-full  flex-shrink-0 relative"
+                            className="w-full h-[589px] lg:h-auto  flex-shrink-0 relative"
                         >
                             <img
                                 src={`/api/sliders/media/${
                                     item.bg_image || "undefined"
                                 }`}
                                 alt={item.name}
-                                className="absolute top-0 left-0 w-full h-full object-cover  object-bottom md:object-center z-0"
+                                loading="lazy"
+                                className="absolute top-0  left-0 h-full md:h-full  w-screen md:w-full object-cover object-right-25  md:object-center  z-0  md:mr-20 lg:mr-0"
                             />
-                            <div className="relative w-full px-primary 2xl:px-0 2xl:max-w-7xl  mx-auto p-4 h-[480px] md:h-[600px] flex flex-col items-start justify-center">
+
+                            <div className="md:hidden absolute inset-0 bg-gradient-to-b from-transparent to-white"></div>
+
+                            <div className=" relative w-full px-primary 2xl:px-0 2xl:max-w-7xl  mx-auto  h-[530px] md:h-[600px] flex flex-col items-start justify-end md:justify-center">
                                 <div className="flex flex-col gap-5 lg:gap-10 items-start">
                                     <h2
-                                        className="w-11/12 md:w-full md:max-w-md font-font-primary customtext-neutral-dark text-[40px] leading-tight sm:text-5xl md:text-6xl tracking-normal font-bold "
+                                        className="w-9/12 md:w-full md:max-w-md font-font-primary customtext-neutral-dark text-[40px] leading-tight sm:text-5xl md:text-6xl tracking-normal font-bold "
                                         style={{
                                             textShadow:
                                                 "0 0 20px rgba(0, 0, 0, .25)",
@@ -190,7 +194,7 @@ const SliderInteractive = ({ items, data }) => {
                                         {item.name}
                                     </h2>
                                     <p
-                                        className="w-9/12 md:w-full md:max-w-md customtext-neutral-dark text-lg leading-tight font-font-secondary
+                                        className="w-8/12 md:w-full md:max-w-md customtext-neutral-dark text-lg leading-tight font-font-secondary
                                          font-normal"
                                         style={{
                                             textShadow:
