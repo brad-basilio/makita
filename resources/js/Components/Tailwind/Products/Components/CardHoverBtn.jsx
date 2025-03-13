@@ -62,7 +62,7 @@ const CardHoverBtn = ({ product, widthClass = "lg:w-1/5", setCart, cart }) => {
                 </div>
 
                 {/* Botones de acción (ocultos por defecto, aparecen con hover) */}
-                <div className="overflow-hidden max-h-20  md:max-h-0 pb-4 md:opacity-0 group-hover:max-h-20 group-hover:opacity-100 transition-[max-height,opacity] duration-1000 ease-in-out flex gap-2 my-2 transform group-hover:translate-y-0 translate-y-4">
+                <div className="overflow-hidden max-h-20  lg:max-h-0 pb-4 lg:opacity-0 group-hover:max-h-20 group-hover:opacity-100 transition-[max-height,opacity] duration-1000 ease-in-out flex gap-2 my-2 transform group-hover:translate-y-0 translate-y-4">
                     <a
                         href={`/product/${product.slug}`}
                         className="flex-1 inline-flex items-center justify-center font-bold  text-sm bg-primary text-white  py-3 rounded-xl shadow-lg transition-all duration-300 hover:opacity-90"

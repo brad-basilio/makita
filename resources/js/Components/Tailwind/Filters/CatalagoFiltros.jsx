@@ -529,13 +529,17 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                                 {Array.isArray(products) &&
                                 products.length > 0 ? (
                                     products.map((product) => (
-                                        <CardHoverBtn
+                                        <div
+                                            className=" lg:h-[460px] lg:max-h-[460px]  xl:h-[400px] xl:max-h-[400px] 2xl:h-[430px] 2xl:max-h-[430px]  w-1/2 lg:w-1/3 xl:w-1/4"
                                             key={product.id}
-                                            product={product}
-                                            widthClass="lg:w-1/4"
-                                            cart={cart}
-                                            setCart={setCart}
-                                        />
+                                        >
+                                            <CardHoverBtn
+                                                product={product}
+                                                widthClass="w-full sm:w-full lg:w-full"
+                                                cart={cart}
+                                                setCart={setCart}
+                                            />
+                                        </div>
                                     ))
                                 ) : (
                                     <NoResults />
