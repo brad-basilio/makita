@@ -40,13 +40,16 @@ const CarruselBenefitsInifinite = ({ items }) => {
                     {items.map((benefit, index) => (
                         <div
                             key={index}
-                            className="flex items-center gap-4 justify-start w-full md:w-1/4 "
+                            className={`flex items-center gap-4 justify-start w-full md:w-1/4 relative 
+            ${
+                index !== items.length - 1
+                    ? "lg:before:absolute lg:before:-right-2 lg:before:top-1/2 lg:before:-translate-y-1/2 lg:before:h-14 lg:before:w-[2px] lg:before:bg-white"
+                    : ""
+            }`}
                         >
-                            {" "}
                             {/*para infinito usa esto flex-shrink-0*/}
                             <div className="relative w-16 h-16 flex items-center justify-center">
                                 {/* Hexágono SVG */}
-
                                 <Hexagon
                                     className="absolute w-full h-full"
                                     strokeWidth={"1.5px"}
@@ -59,7 +62,7 @@ const CarruselBenefitsInifinite = ({ items }) => {
                                     />
                                 </div>
                             </div>
-                            <div className="">
+                            <div>
                                 <h3 className="font-bold text-lg">
                                     {benefit.name}
                                 </h3>
