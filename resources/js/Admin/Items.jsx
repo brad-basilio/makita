@@ -261,16 +261,6 @@ const Items = ({ categories, brands }) => {
 
     return (
         <>
-            <form
-                action="/upload-zip"
-                method="POST"
-                enctype="multipart/form-data"
-                className="h-24 bg-black"
-            >
-                <input type="file" name="zip_file" required />
-                <button type="submit">Subir ZIP</button>
-            </form>
-
             <Table
                 gridRef={gridRef}
                 title="Items"

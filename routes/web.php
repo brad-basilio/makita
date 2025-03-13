@@ -99,7 +99,7 @@ Route::middleware(['can:Admin', 'auth'])->prefix('admin')->group(function () {
     Route::get('/account', [AdminAccountController::class, 'reactView'])->name('Admin/Account.jsx');
 });
 
-use Illuminate\Http\Request;
+/*use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 use App\Models\Item;
@@ -177,4 +177,4 @@ Route::post('/upload-zip', function (Request $request) {
     Storage::deleteDirectory('temp_zip_extract');
 
     return response()->json(['message' => 'Imágenes cargadas correctamente']);
-});
+});*/
