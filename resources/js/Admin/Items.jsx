@@ -20,6 +20,7 @@ import ReactAppend from "../Utils/ReactAppend";
 import SetSelectValue from "../Utils/SetSelectValue";
 import ItemsGalleryRest from "../Actions/Admin/ItemsGalleryRest";
 import DynamicField from "../Components/Adminto/form/DynamicField";
+import ModalImportItem from "./Components/ModalImportItem";
 
 const itemsRest = new ItemsRest();
 
@@ -258,6 +259,7 @@ const Items = ({ categories, brands }) => {
 
     // Opciones del campo "type"
     const typeOptions = ["General", "Principal", "Otro"];
+    const [showImportModal, setShowImportModal] = useState(false);
 
     return (
         <>
@@ -285,7 +287,17 @@ const Items = ({ categories, brands }) => {
                             icon: "plus",
                             text: "Agregar",
                             hint: "Agregar",
-                            onClick: () => onModalOpen(),
+                            onClick: () => setShowImportModal(!showImportModal),
+                        },
+                    });
+                    container.unshift({
+                        widget: "dxButton",
+                        location: "after",
+                        options: {
+                            icon: "upload",
+                            text: "Importar Datos",
+                            hint: "Importar Datos",
+                            onClick: () => onModalImportOpen(),
                         },
                     });
                 }}
