@@ -91,6 +91,9 @@ class SystemController extends BasicController
 
                 if ($system->filters) {
                     foreach ($system->filters as $field) {
+                        if ($field === 'views') {
+                            $query->orderBy('views', 'desc');
+                        };
                         $query->where($field, true);
                     }
                 }
