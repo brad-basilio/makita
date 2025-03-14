@@ -330,7 +330,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                                                         )} // <-- Agregado
                                                     />
                                                     <img
-                                                        src={`/storage/images/categories/${category.image}`}
+                                                        src={`/storage/images/category/${category.image}`}
                                                         alt={category.name}
                                                         className="w-8 h-8 rounded-full object-cover"
                                                         loading="lazy"
