@@ -24,7 +24,7 @@ const ModalImportItem = () => {
         setLoading(true);
         try {
             const response = await axios.post(
-                `${API_URL}/import-items`,
+                `https://builder1.alohaperu.com/api/import-items`,
                 formData,
                 { headers: { "Content-Type": "multipart/form-data" } }
             );
