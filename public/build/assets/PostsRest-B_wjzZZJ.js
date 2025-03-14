@@ -1,1 +1,0 @@
-var o=Object.defineProperty;var p=(t,s,a)=>s in t?o(t,s,{enumerable:!0,configurable:!0,writable:!0,value:a}):t[s]=a;var e=(t,s,a)=>p(t,typeof s!="symbol"?s+"":s,a);import{B as r}from"./BasicEditing-C8Y1Q7ZD.js";class m extends r{constructor(){super(...arguments);e(this,"path","posts")}}export{m as P};
