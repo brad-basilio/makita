@@ -297,7 +297,7 @@ const Items = ({ categories, brands }) => {
                             icon: "upload",
                             text: "Importar Datos",
                             hint: "Importar Datos",
-                            onClick: () => onModalImportOpen(),
+                            onClick: () => setShowImportModal(!showImportModal),
                         },
                     });
                 }}
@@ -745,6 +745,11 @@ const Items = ({ categories, brands }) => {
                 <hr className="my-1" />
                 <QuillFormGroup eRef={descriptionRef} label="Descripcion" />
             </Modal>
+
+            <ModalImportItem
+                show={showImportModal}
+                onClose={() => setShowImportModal(false)}
+            />
         </>
     );
 };
