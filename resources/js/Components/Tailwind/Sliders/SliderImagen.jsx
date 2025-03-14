@@ -85,7 +85,7 @@ const SliderImagen = ({ items, data }) => {
                                         className="group w-full flex items-center justify-center md:items-center md:justify-start px-2 sm:w-1/3 lg:w-1/5 flex-shrink-0 font-font-secondary"
                                     >
                                         <img
-                                            src={`/api/brands/media/${brand.image}`}
+                                            src={`/storage/images/brand/${brand.image}`}
                                             alt={brand.name}
                                             className="h-10 w-full object-contain grayscale brightness-0 invert"
                                         />

@@ -1,0 +1,1 @@
+import{j as e}from"./ModalImportItem-ClKiNAEV.js";import"./index-DFv2mRv-.js";const s=({})=>e.jsx("div",{className:"bg-white text-xs customtext-primary font-medium py-3  px-primary flex justify-center items-center font-font-general",children:e.jsx("p",{children:"Copyright © 2025 Sala Fabulosa. Reservados todos los derechos."})});export{s as default};
