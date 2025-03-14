@@ -290,16 +290,6 @@ const Items = ({ categories, brands }) => {
                             onClick: () => setShowImportModal(!showImportModal),
                         },
                     });
-                    container.unshift({
-                        widget: "dxButton",
-                        location: "after",
-                        options: {
-                            icon: "upload",
-                            text: "Importar Datos",
-                            hint: "Importar Datos",
-                            onClick: () => setShowImportModal(!showImportModal),
-                        },
-                    });
                 }}
                 exportable={true}
                 exportableName="Items"
@@ -745,11 +735,6 @@ const Items = ({ categories, brands }) => {
                 <hr className="my-1" />
                 <QuillFormGroup eRef={descriptionRef} label="Descripcion" />
             </Modal>
-
-            <ModalImportItem
-                show={showImportModal}
-                onClose={() => setShowImportModal(false)}
-            />
         </>
     );
 };
