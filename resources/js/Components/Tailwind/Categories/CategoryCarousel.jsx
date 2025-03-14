@@ -61,7 +61,7 @@ const CategoryCarousel = ({ data, items }) => {
                         >
                             <img
                                 className="absolute w-full h-full rounded-2xl top-0 left-0 object-cover object-center"
-                                src={`/storage/images/categories/${item.image}`}
+                                src={`/storage/images/category/${item.image}`}
                                 alt=""
                             />
                             <div className="relative block">

@@ -16,7 +16,7 @@ export default function CategoryCard({
                     } `}
                 >
                     <img
-                        src={`/storage/images/categories/${category?.image}`}
+                        src={`/storage/images/category/${category?.image}`}
                         //  src={`${category?.image}`}
                         alt={category?.name}
                         fill

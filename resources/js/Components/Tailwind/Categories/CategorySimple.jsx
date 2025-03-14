@@ -18,7 +18,7 @@ const CategorySimple = ({ data = {}, items = [] }) => {
                                 <div className="flex flex-col max-w-[450px] mx-auto relative">
                                     <img
                                         className="w-full h-auto object-cover aspect-square"
-                                        src={`/storage/images/categories/${item.image}`}
+                                        src={`/storage/images/category/${item.image}`}
                                         alt={item.name}
                                     />
 

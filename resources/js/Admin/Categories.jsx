@@ -34,7 +34,7 @@ const Categories = () => {
         idRef.current.value = data?.id ?? "";
         nameRef.current.value = data?.name ?? "";
         descriptionRef.current.value = data?.description ?? "";
-        imageRef.image.src = `/storage/images/categories/${data?.image}`;
+        imageRef.image.src = `/storage/images/category/${data?.image}`;
         imageRef.current.value = null;
 
         $(modalRef.current).modal("show");
@@ -155,7 +155,7 @@ const Categories = () => {
                             ReactAppend(
                                 container,
                                 <img
-                                    src={`/storage/images/categories/${data.image}`}
+                                    src={`/storage/images/category/${data.image}`}
                                     style={{
                                         width: "80px",
                                         height: "48px",
