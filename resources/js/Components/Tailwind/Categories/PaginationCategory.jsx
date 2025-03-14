@@ -86,7 +86,7 @@ const PaginationCategory = ({
                                         <div className="bg-transparent rounded-xl p-4 transition-transform duration-300 ">
                                             <div className="aspect-square relative mb-4 rounded-full overflow-hidden">
                                                 <img
-                                                    src={`/storage/images/categorie/${category.image}`}
+                                                    src={`/storage/images/categories/${category.image}`}
                                                     alt={category.name}
                                                     className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-110"
                                                     loading="lazy"
