@@ -40,7 +40,7 @@ export default function AboutSimple({ data, filteredData }) {
                 </div>
                 <div className="mt-12 max-w-5xl mx-auto rounded-2xl overflow-hidden">
                     <img
-                        src={`/storage/images/aboutuses/${sectionOne?.image}`}
+                        src={`/storage/images/aboutus/${sectionOne?.image}`}
                         onError={(e) =>
                             (e.target.src = "/api/cover/thumbnail/null")
                         }
@@ -76,7 +76,7 @@ export default function AboutSimple({ data, filteredData }) {
                 <div className="max-w-7xl mx-auto">
                     <div className="grid md:grid-cols-2 gap-12 items-center">
                         <img
-                            src={`/storage/images/aboutuses/${sectionThree?.image}`}
+                            src={`/storage/images/aboutus/${sectionThree?.image}`}
                             onError={(e) =>
                                 (e.target.src = "/api/cover/thumbnail/null")
                             }
@@ -114,7 +114,7 @@ export default function AboutSimple({ data, filteredData }) {
                             />
                         </div>
                         <img
-                            src={`/storage/images/aboutuses/${sectionFour?.image}`}
+                            src={`/storage/images/aboutus/${sectionFour?.image}`}
                             onError={(e) =>
                                 (e.target.src = "/api/cover/thumbnail/null")
                             }

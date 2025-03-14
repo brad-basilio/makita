@@ -43,7 +43,7 @@ const About = ({ details: detailsDB }) => {
         descriptionRef.editor.root.innerHTML = data?.description ?? "";
         titleRef.current.value = data?.title ?? "";
         imageRef.current.value = null;
-        imageRef.image.src = `/storage/images/aboutuses/${
+        imageRef.image.src = `/storage/images/aboutus/${
             data?.image ?? "undefined"
         }`;
         $(modalRef.current).modal("show");
@@ -190,7 +190,7 @@ const About = ({ details: detailsDB }) => {
                             ReactAppend(
                                 container,
                                 <img
-                                    src={`/storage/images/aboutuses/${data.image}`}
+                                    src={`/storage/images/aboutus/${data.image}`}
                                     style={{
                                         width: "80px",
                                         height: "80px",
