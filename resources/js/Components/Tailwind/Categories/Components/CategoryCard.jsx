@@ -8,7 +8,7 @@ export default function CategoryCard({ flex = false, category, featured = false 
             <a href="#" className={` ${flex && 'flex gap-4 h-full'}`} >
                 <div className={`relative  w-full h-full overflow-hidden rounded-3xl ${flex && '   h-full'} `}>
                     <img
-                        src={`/api/categories/media/${category?.image}`}
+                        src={`/storage/images/categorie/${category?.image}`}
                         //  src={`${category?.image}`}
                         alt={category?.name}
                         fill

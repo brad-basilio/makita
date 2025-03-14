@@ -26,7 +26,7 @@ function CategoriesScraping({ items }) {
                     >
                         <div className="aspect-square relative ">
                             <img
-                                src={`/api/categories/media/${category.image}`}
+                                src={`/storage/images/categorie/${category.image}`}
                                 alt={category.name}
                                 className="w-[120px] h-[120px] object-contain"
                             />

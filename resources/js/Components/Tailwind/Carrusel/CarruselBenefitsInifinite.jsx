@@ -57,7 +57,7 @@ const CarruselBenefitsInifinite = ({ items }) => {
                                 {/* Ícono */}
                                 <div className="relative z-10 text-3xl">
                                     <img
-                                        src={`/api/indicators/media/${benefit.symbol}`}
+                                        src={`/storage/images/indicator/${benefit.symbol}`}
                                         className="w-full h-auto"
                                     />
                                 </div>

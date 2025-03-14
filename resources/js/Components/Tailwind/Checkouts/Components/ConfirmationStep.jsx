@@ -39,7 +39,7 @@ export default function ConfirmationStep({ cart, code, delivery }) {
                                     <div className="flex   gap-4">
                                         <div className="bg-white p-2 rounded-xl w-max">
                                             <img
-                                                src={`/api/items/media/${item.image}`}
+                                                src={`/storage/images/item/${item.image}`}
                                                 alt={item.name}
                                                 className="w-20 h-20 object-cover rounded  "
                                             />

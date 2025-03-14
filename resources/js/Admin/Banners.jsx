@@ -40,9 +40,9 @@ const Banners = ({ pages }) => {
     nameRef.current.value = banner?.data?.name ?? ''
     descriptionRef.current.value = banner?.data?.description ?? ''
     backgroundRef.current.value = null
-    backgroundRef.image.src = `/api/banners/media/${banner?.data?.background}`
+    backgroundRef.image.src = `/storage/images/banner/${banner?.data?.background}`
     imageRef.current.value = null
-    imageRef.image.src = `/api/banners/media/${banner?.data?.image}`
+    imageRef.image.src = `/storage/images/banner/${banner?.data?.image}`
     buttonTextRef.current.value = banner?.data?.button_text ?? ''
     buttonLinkRef.current.value = banner?.data?.button_link ?? ''
 
@@ -150,7 +150,7 @@ const Banners = ({ pages }) => {
           width: '90px',
           allowFiltering: false,
           cellTemplate: (container, { data }) => {
-            ReactAppend(container, <img src={`/api/banners/media/${data?.data?.background}`} style={{ width: '80px', height: '48px', objectFit: 'cover', objectPosition: 'center', borderRadius: '4px' }} onError={e => e.target.src = '/api/cover/thumbnail/null'} />)
+            ReactAppend(container, <img src={`/storage/images/banner/${data?.data?.background}`} style={{ width: '80px', height: '48px', objectFit: 'cover', objectPosition: 'center', borderRadius: '4px' }} onError={e => e.target.src = '/api/cover/thumbnail/null'} />)
           }
         },
         {
@@ -159,7 +159,7 @@ const Banners = ({ pages }) => {
           width: '90px',
           allowFiltering: false,
           cellTemplate: (container, { data }) => {
-            ReactAppend(container, <img src={`/api/banners/media/${data?.data?.image}`} style={{ width: '80px', height: '48px', objectFit: 'cover', objectPosition: 'center', borderRadius: '4px' }} onError={e => e.target.src = '/api/cover/thumbnail/null'} />)
+            ReactAppend(container, <img src={`/storage/images/banner/${data?.data?.image}`} style={{ width: '80px', height: '48px', objectFit: 'cover', objectPosition: 'center', borderRadius: '4px' }} onError={e => e.target.src = '/api/cover/thumbnail/null'} />)
           }
         },
         {

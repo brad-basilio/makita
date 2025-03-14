@@ -40,7 +40,7 @@ export default function AboutSimple({ data, filteredData }) {
                 </div>
                 <div className="mt-12 max-w-5xl mx-auto rounded-2xl overflow-hidden">
                     <img
-                        src={`/api/aboutuses/media/${sectionOne?.image}`}
+                        src={`/storage/images/aboutuse/${sectionOne?.image}`}
                         onError={(e) =>
                             (e.target.src = "/api/cover/thumbnail/null")
                         }
@@ -76,7 +76,7 @@ export default function AboutSimple({ data, filteredData }) {
                 <div className="max-w-7xl mx-auto">
                     <div className="grid md:grid-cols-2 gap-12 items-center">
                         <img
-                            src={`/api/aboutuses/media/${sectionThree?.image}`}
+                            src={`/storage/images/aboutuse/${sectionThree?.image}`}
                             onError={(e) =>
                                 (e.target.src = "/api/cover/thumbnail/null")
                             }
@@ -114,7 +114,7 @@ export default function AboutSimple({ data, filteredData }) {
                             />
                         </div>
                         <img
-                            src={`/api/aboutuses/media/${sectionFour?.image}`}
+                            src={`/storage/images/aboutuse/${sectionFour?.image}`}
                             onError={(e) =>
                                 (e.target.src = "/api/cover/thumbnail/null")
                             }
@@ -133,7 +133,7 @@ function FeatureCard({ icon, title, description }) {
         <div className="group p-6 hover:bg-white rounded-xl  hover:shadow-md transition-all duration-300">
             <div className="w-12 h-12  rounded-xl flex items-center justify-center bg-primary mb-4 p-2">
                 <img
-                    src={`/api/strengths/media/${icon}`}
+                    src={`/storage/images/strength/${icon}`}
                     onError={(e) =>
                         (e.target.src = "/api/cover/thumbnail/null")
                     }

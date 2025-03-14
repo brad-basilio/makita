@@ -48,7 +48,7 @@ const BlogArticle = ({ previousArticle, article, nextArticle }) => {
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.4 }}
-          src={`/api/posts/media/${article.image}`}
+          src={`/storage/images/post/${article.image}`}
           alt="Article main image"
           className="w-full h-auto rounded-lg shadow-lg mb-8 object-cover object-center aspect-video"
         />

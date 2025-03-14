@@ -35,7 +35,7 @@ const Brands = () => {
     idRef.current.value = data?.id ?? ''
     nameRef.current.value = data?.name ?? ''
     descriptionRef.current.value = data?.description ?? ''
-    imageRef.image.src = `/api/brands/media/${data?.image}`
+    imageRef.image.src = `/storage/images/brand/${data?.image}`
     imageRef.current.value = null
 
     $(modalRef.current).modal('show')
@@ -136,7 +136,7 @@ const Brands = () => {
           width: '90px',
           allowFiltering: false,
           cellTemplate: (container, { data }) => {
-            ReactAppend(container, <img src={`/api/brands/media/${data.image}`} style={{ width: '80px', height: '48px', objectFit: 'cover', objectPosition: 'center', borderRadius: '4px' }} onError={e => e.target.src = '/api/cover/thumbnail/null'} />)
+            ReactAppend(container, <img src={`/storage/images/brand/${data.image}`} style={{ width: '80px', height: '48px', objectFit: 'cover', objectPosition: 'center', borderRadius: '4px' }} onError={e => e.target.src = '/api/cover/thumbnail/null'} />)
           }
         },
         {

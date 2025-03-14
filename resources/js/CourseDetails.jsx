@@ -57,7 +57,7 @@ const CourseDetails = ({ course }) => {
       <div className="lg:col-span-2 w-full">
         <img
           className="w-full aspect-video rounded-lg object-cover object-center"
-          src={`/api/courses/media/${course.image}`}
+          src={`/storage/images/course/${course.image}`}
           alt={course.name}
           onError={e => e.target.src = `https://placehold.co/?text=${slider.name}`}
         />

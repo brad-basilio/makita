@@ -13,7 +13,7 @@ const PostCard = ({id, name, summary, category, image, post_date, firstImage = f
         </p>
       </div>
       <div className="flex flex-col w-full">
-        <img src={`/api/posts/media/${image}`} alt={name} className="w-full object-cover h-40 sm:h-44 md:h-48 rounded-md" />
+        <img src={`/storage/images/post/${image}`} alt={name} className="w-full object-cover h-40 sm:h-44 md:h-48 rounded-md" />
       </div>
     </div>
     <div className="grid grid-cols-2 justify-between items-center mt-4 sm:mt-5 md:mt-6 w-full gap-4">

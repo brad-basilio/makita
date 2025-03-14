@@ -38,7 +38,7 @@ const Strengths = ({ details }) => {
     descriptionRef.current.value = data?.description ?? ''
 
     imageRef.current.value = null
-    imageRef.image.src = `/api/strengths/media/${data?.image ?? 'undefined'}`
+    imageRef.image.src = `/storage/images/strength/${data?.image ?? 'undefined'}`
 
     $(modalRef.current).modal('show')
   }
@@ -131,7 +131,7 @@ const Strengths = ({ details }) => {
           dataField: 'image',
           caption: 'Imagen',
           cellTemplate: (container, { data }) => {
-            ReactAppend(container, <img src={`/api/strengths/media/${data.image}`} style={{ width: '80px', height: '80px', objectFit: 'cover', objectPosition: 'center', borderRadius: '4px' }} onError={e => e.target.src = '/api/cover/thumbnail/null'} />)
+            ReactAppend(container, <img src={`/storage/images/strength/${data.image}`} style={{ width: '80px', height: '80px', objectFit: 'cover', objectPosition: 'center', borderRadius: '4px' }} onError={e => e.target.src = '/api/cover/thumbnail/null'} />)
           }
         },
         {

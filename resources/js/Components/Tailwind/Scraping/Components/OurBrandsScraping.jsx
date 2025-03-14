@@ -13,7 +13,7 @@ const OurBrandsScraping = ({ brands }) => {
                     {
                         brands &&
                         brands.slice(0, 5).map((brand, index) => (
-                            <img key={index} src={`/api/brands/media/${brand.image}`} alt={brand.name} className="w-auto h-10 object-contain grayscale brightness-0 invert-0" />
+                            <img key={index} src={`/storage/images/brand/${brand.image}`} alt={brand.name} className="w-auto h-10 object-contain grayscale brightness-0 invert-0" />
                         ))
                     }
 

@@ -34,7 +34,7 @@ const CartItemRow = ({ setCart, ...item }) => {
 
   return <tr className="border-b">
     <td className="p-2 w-24">
-      <img src={`/api/items/media/${item.image}`} className="block bg-white shadow rounded-md p-0 aspect-[4/3] w-20 h-auto object-cover object-center" alt={item.name} />
+      <img src={`/storage/images/item/${item.image}`} className="block bg-white shadow rounded-md p-0 aspect-[4/3] w-20 h-auto object-cover object-center" alt={item.name} />
     </td>
     <td className="p-2">
       <p className="font-semibold mb-1">

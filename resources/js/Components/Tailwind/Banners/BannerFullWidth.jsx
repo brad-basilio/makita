@@ -2,7 +2,7 @@ import React from "react"
 
 const BannerFullWidth = ({ data }) => {
   return <section className="bg-gray-50" style={{
-    backgroundImage: `url('/api/banners/media/${data?.background}')`,
+    backgroundImage: `url('/storage/images/banner/${data?.background}')`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
@@ -23,7 +23,7 @@ const BannerFullWidth = ({ data }) => {
         <div className="flex items-center justify-center">
           {
             data?.image &&
-            <img src={`/api/banners/media/${data?.image}`} className="w-full aspect-auto object-contain object-bottom" alt="" />
+            <img src={`/storage/images/banner/${data?.image}`} className="w-full aspect-auto object-contain object-bottom" alt="" />
           }
         </div>
       </div>

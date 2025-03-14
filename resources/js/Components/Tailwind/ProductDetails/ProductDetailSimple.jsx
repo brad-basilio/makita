@@ -31,17 +31,17 @@ const ProductDetailSimple = ({ item, cart, setCart }) => {
       <div className="flex flex-col md:flex-row justify-center items-center gap-5">
         <div className="flex flex-row justify-between md:flex-col md:justify-start md:items-center h-full gap-4 md:gap-10 md:basis-1/4 order-2 md:order-1 w-full">
 
-          <img src={`/api/items/media/${item.image}`} alt={item?.name} className="w-full aspect-square  aos-init aos-animate object-cover object-center rounded-lg" data-aos="fade-up" data-aos-offset="150" />
+          <img src={`/storage/images/item/${item.image}`} alt={item?.name} className="w-full aspect-square  aos-init aos-animate object-cover object-center rounded-lg" data-aos="fade-up" data-aos-offset="150" />
           {
             item.gallery?.map((image, index) => (
-              <img key={index} src={`/api/items/media/${image}`} alt={`imagen-${index}`} className="w-full aspect-square aos-init aos-animate object-cover object-center rounded-lg" data-aos="fade-up" data-aos-offset="150" />
+              <img key={index} src={`/storage/images/item/${image}`} alt={`imagen-${index}`} className="w-full aspect-square aos-init aos-animate object-cover object-center rounded-lg" data-aos="fade-up" data-aos-offset="150" />
             ))
           }
 
         </div>
 
         <div className="md:basis-3/4 flex justify-center items-center order-1 md:order-2 w-full">
-          <img src={`/api/items/media/${item.image}`} alt={item?.name} className="w-full aspect-square aos-init aos-animate object-cover object-center rounded-lg" data-aos="fade-up" data-aos-offset="150" />
+          <img src={`/storage/images/item/${item.image}`} alt={item?.name} className="w-full aspect-square aos-init aos-animate object-cover object-center rounded-lg" data-aos="fade-up" data-aos-offset="150" />
         </div>
       </div>
 

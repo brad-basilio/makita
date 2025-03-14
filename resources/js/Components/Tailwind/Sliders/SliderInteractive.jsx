@@ -172,7 +172,7 @@ const SliderInteractive = ({ items, data }) => {
                             className="w-full h-[589px] lg:h-auto  flex-shrink-0 relative"
                         >
                             <img
-                                src={`/api/sliders/media/${
+                                src={`/storage/images/slider/${
                                     item.bg_image || "undefined"
                                 }`}
                                 alt={item.name}

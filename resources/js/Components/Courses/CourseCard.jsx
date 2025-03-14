@@ -26,7 +26,7 @@ const CourseCard = ({id, name, category, created_at, summary, image, price, firs
       }
     </div>
     <img
-      src={`/api/courses/media/${image}`}
+      src={`/storage/images/course/${image}`}
       alt={name}
       className={`w-full object-cover aspect-[1.1] ${clickable && 'cursor-pointer'}`}
       onError={e => e.target.src = `https://placehold.co/600x400?text=${name}`}

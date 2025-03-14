@@ -50,7 +50,7 @@ const CategoryCarousel = ({ data, items }) => {
       >
         {items?.map((item, index) => (
           <SwiperSlide key={index} className="p-4 shadow-md rounded-2xl bg-white w-full aspect-[4/3] !grid items-center justify-start">
-            <img className="absolute w-full h-full rounded-2xl top-0 left-0 object-cover object-center" src={`/api/categories/media/${item.image}`} alt="" />
+            <img className="absolute w-full h-full rounded-2xl top-0 left-0 object-cover object-center" src={`/storage/images/categorie/${item.image}`} alt="" />
             <div className="relative block">
               <h2 className="text-2xl text-white font-bold line-clamp-1 text-ellipsis mb-2" style={{
                 textShadow: '0 0 10px rgba(0,0,0,.5)'

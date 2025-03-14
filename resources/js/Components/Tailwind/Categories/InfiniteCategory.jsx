@@ -81,7 +81,7 @@ const InfiniteCategory = ({ items, data }) => {
                                         <div className="bg-[#F7F9FB] rounded-xl p-4 transition-transform duration-300 ">
                                             <div className="aspect-square relative mb-4">
                                                 <img
-                                                    src={`/api/categories/media/${category.image}`}
+                                                    src={`/storage/images/categorie/${category.image}`}
                                                     alt={category.name}
                                                     className="w-full h-full object-contain  transition-transform duration-300 group-hover:scale-110"
                                                     loading="lazy"

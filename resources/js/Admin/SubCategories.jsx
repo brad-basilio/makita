@@ -39,7 +39,7 @@ const SubCategories = () => {
     SetSelectValue(categoryRef.current, data?.category?.id, data?.category?.name)
     nameRef.current.value = data?.name ?? ''
     descriptionRef.current.value = data?.description ?? ''
-    imageRef.image.src = `/api/subcategories/media/${data?.image}`
+    imageRef.image.src = `/storage/images/subcategorie/${data?.image}`
     imageRef.current.value = null
 
     $(modalRef.current).modal('show')
@@ -144,7 +144,7 @@ const SubCategories = () => {
           width: '90px',
           allowFiltering: false,
           cellTemplate: (container, { data }) => {
-            ReactAppend(container, <img src={`/api/subcategories/media/${data.image}`} style={{ width: '80px', height: '48px', objectFit: 'cover', objectPosition: 'center', borderRadius: '4px' }} onError={e => e.target.src = '/api/cover/thumbnail/null'} />)
+            ReactAppend(container, <img src={`/storage/images/subcategorie/${data.image}`} style={{ width: '80px', height: '48px', objectFit: 'cover', objectPosition: 'center', borderRadius: '4px' }} onError={e => e.target.src = '/api/cover/thumbnail/null'} />)
           }
         },
         {

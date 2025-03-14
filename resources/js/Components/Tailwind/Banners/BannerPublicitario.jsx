@@ -6,7 +6,7 @@ const BannerPublicitario = ({ data }) => {
             <div
                 className="relative rounded-3xl md:rounded-2xl h-[600px] md:h-[500px] p-4 md:p-0"
                 style={{
-                    backgroundImage: `url(/api/banners/media/${data?.background})`,
+                    backgroundImage: `url(/storage/images/banner/${data?.background})`,
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                     backgroundRepeat: "no-repeat",
@@ -16,7 +16,7 @@ const BannerPublicitario = ({ data }) => {
                     {/* Left side - Image */}
                     <div className="order-1 md:order-none w-full md:w-7/12 relative z-10">
                         <img
-                            src={`/api/banners/media/${data?.image}`}
+                            src={`/storage/images/banner/${data?.image}`}
                             className="w-full h-auto object-cover md:absolute scale-110 md:-translate-y-1/2"
                         />
                     </div>

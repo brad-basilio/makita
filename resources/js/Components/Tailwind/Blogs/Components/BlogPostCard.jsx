@@ -8,7 +8,7 @@ export default function BlogPostCard({ flex = false, post, featured = false }) {
                     } `}
                 >
                     <img
-                        src={`/api/posts/media/${post?.image}`}
+                        src={`/storage/images/post/${post?.image}`}
                         alt={post?.name}
                         fill
                         className={`object-cover transition-transform duration-300 group-hover:scale-105 ${

@@ -4,7 +4,7 @@ const BannerSimple = ({ data }) => {
   return <section className="bg-gray-50">
     <div className="px-primary replace-max-w-here w-full mx-auto py-[5%] md:py-[2.5%]">
       <div className="w-full aspect-[5/2] rounded-2xl flex flex-col items-center justify-center bg-white shadow-lg" style={{
-        backgroundImage: `url('/api/banners/media/${data?.background}')`,
+        backgroundImage: `url('/storage/images/banner/${data?.background}')`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat'

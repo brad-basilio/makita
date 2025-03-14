@@ -42,7 +42,7 @@ const Posts = ({ details }) => {
     nameRef.current.value = data?.name ?? ''
     SetSelectValue(categoryRef.current, data?.category?.id, data?.category?.name);
     descriptionRef.editor.root.innerHTML = data?.description ?? ''
-    imageRef.image.src = `/api/posts/media/${data?.image}`
+    imageRef.image.src = `/storage/images/post/${data?.image}`
     imageRef.current.value = null
     SetSelectValue(tagsRef.current, data?.tags ?? [], 'id', 'name')
     postDateRef.current.value = data?.post_date ?? moment().format('YYYY-MM-DD')
@@ -146,7 +146,7 @@ const Posts = ({ details }) => {
           caption: 'Imagen',
           width: '90px',
           cellTemplate: (container, { data }) => {
-            ReactAppend(container, <img src={`/api/sliders/media/${data.image}`} style={{ width: '80px', height: '48px', objectFit: 'cover', objectPosition: 'center', borderRadius: '4px' }} onError={e => e.target.src = '/api/cover/thumbnail/null'} />)
+            ReactAppend(container, <img src={`/storage/images/slider/${data.image}`} style={{ width: '80px', height: '48px', objectFit: 'cover', objectPosition: 'center', borderRadius: '4px' }} onError={e => e.target.src = '/api/cover/thumbnail/null'} />)
           }
         },
         {

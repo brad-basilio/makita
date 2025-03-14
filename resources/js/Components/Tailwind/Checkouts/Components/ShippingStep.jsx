@@ -372,7 +372,7 @@ export default function ShippingStep({ cart, setSale, setCode, setDelivery, setC
                             <div className="flex items-center gap-4">
                                 <div className="bg-white p-2 rounded-xl">
                                     <img
-                                        src={`/api/items/media/${item.image}`}
+                                        src={`/storage/images/item/${item.image}`}
                                         alt={item.name}
                                         className="w-20 h-20 object-cover rounded  "
                                     />

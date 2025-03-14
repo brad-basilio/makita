@@ -35,7 +35,7 @@ const Categories = () => {
     idRef.current.value = data?.id ?? ''
     nameRef.current.value = data?.name ?? ''
     descriptionRef.current.value = data?.description ?? ''
-    imageRef.image.src = `/api/categories/media/${data?.image}`
+    imageRef.image.src = `/storage/images/categorie/${data?.image}`
     imageRef.current.value = null
 
     $(modalRef.current).modal('show')
@@ -136,7 +136,7 @@ const Categories = () => {
           width: '90px',
           allowFiltering: false,
           cellTemplate: (container, { data }) => {
-            ReactAppend(container, <img src={`/api/categories/media/${data.image}`} style={{ width: '80px', height: '48px', objectFit: 'cover', objectPosition: 'center', borderRadius: '4px' }} onError={e => e.target.src = '/api/cover/thumbnail/null'} />)
+            ReactAppend(container, <img src={`/storage/images/categorie/${data.image}`} style={{ width: '80px', height: '48px', objectFit: 'cover', objectPosition: 'center', borderRadius: '4px' }} onError={e => e.target.src = '/api/cover/thumbnail/null'} />)
           }
         },
         {

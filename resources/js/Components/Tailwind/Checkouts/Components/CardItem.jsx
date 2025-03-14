@@ -34,7 +34,7 @@ const CardItem = ({ setCart, ...item }) => {
         <div key={item.id} className="bg-white rounded-lg shadow p-4">
             <div className="flex items-center gap-4">
                 <img
-                    src={`/api/items/media/${item.image}`}
+                    src={`/storage/images/item/${item.image}`}
                     alt={item.name}
                     className="w-20 h-20 object-cover rounded"
                 />

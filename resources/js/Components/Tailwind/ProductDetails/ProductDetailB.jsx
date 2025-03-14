@@ -148,7 +148,7 @@ export default function ProductDetail({ item, data, setCart, cart }) {
                                     }`}
                                 >
                                     <img
-                                        src={`/api/items/media/${item?.image}`}
+                                        src={`/storage/images/item/${item?.image}`}
                                         alt="Main Thumbnail"
                                         className="w-full h-full object-contain"
                                     />
@@ -169,7 +169,7 @@ export default function ProductDetail({ item, data, setCart, cart }) {
                                         }`}
                                     >
                                         <img
-                                            src={`/api/item_images/media/${image.url}`}
+                                            src={`/storage/images/item_image/${image.url}`}
                                             alt={`Thumbnail ${index + 1}`}
                                             className="w-full h-full object-contain"
                                         />
@@ -182,8 +182,8 @@ export default function ProductDetail({ item, data, setCart, cart }) {
                                 <img
                                     src={
                                         selectedImage.type === "main"
-                                            ? `/api/items/media/${selectedImage.url}`
-                                            : `/api/item_images/media/${selectedImage.url}`
+                                            ? `/storage/images/item/${selectedImage.url}`
+                                            : `/storage/images/item_image/${selectedImage.url}`
                                     }
                                     alt="Product main"
                                     className="w-full h-auto object-contain"
@@ -320,7 +320,7 @@ export default function ProductDetail({ item, data, setCart, cart }) {
                                             className="flex items-center gap-2"
                                         >
                                             <img
-                                                src={`/api/items/media/${product.image}`}
+                                                src={`/storage/images/item/${product.image}`}
                                                 className=" rounded-lg aspect-square w-24 h-24 object-cover bg-[#F7F9FB]"
                                             />
                                             {index <
@@ -568,7 +568,7 @@ export default function ProductDetail({ item, data, setCart, cart }) {
                                             className="flex items-center gap-2"
                                         >
                                             <img
-                                                src={`/api/items/media/${product.image}`}
+                                                src={`/storage/images/item/${product.image}`}
                                                 className=" rounded-lg aspect-square w-24 h-24 object-cover bg-[#F7F9FB]"
                                             />
                                             {index <

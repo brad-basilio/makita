@@ -41,7 +41,7 @@ const ProductCard = ({ data, cart, item, setCart }) => {
   </div>
 
   return <div className="w-full relative">
-    <img src={`/api/items/media/${item?.image}`} alt={item?.name} className="border w-full object-cover mb-4 aspect-square rounded-3xl shadow-lg" />
+    <img src={`/storage/images/item/${item?.image}`} alt={item?.name} className="border w-full object-cover mb-4 aspect-square rounded-3xl shadow-lg" />
     {
       item?.tags &&
       <div className="absolute top-2 left-2 flex flex-col gap-1 text-xs font-bold">

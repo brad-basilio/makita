@@ -37,7 +37,7 @@ const Indicators = () => {
     nameRef.current.value = data?.name ?? ''
     descriptionRef.current.value = data?.description ?? ''
     symbolRef.current.value = null
-    symbolRef.image.src = `/api/indicators/media/${data?.symbol ?? 'undefined'}`
+    symbolRef.image.src = `/storage/images/indicator/${data?.symbol ?? 'undefined'}`
 
     $(modalRef.current).modal('show')
   }
@@ -132,7 +132,7 @@ const Indicators = () => {
           dataField: 'symbol',
           caption: 'Símbolo',
           cellTemplate: (container, { data }) => {
-            ReactAppend(container, <img src={`/api/indicators/media/${data.symbol}`} style={{ width: '80px', height: '48px', objectFit: 'cover', objectPosition: 'center', borderRadius: '4px' }} onError={e => e.target.src = '/api/cover/thumbnail/null'} />)
+            ReactAppend(container, <img src={`/storage/images/indicator/${data.symbol}`} style={{ width: '80px', height: '48px', objectFit: 'cover', objectPosition: 'center', borderRadius: '4px' }} onError={e => e.target.src = '/api/cover/thumbnail/null'} />)
           }
         },
         {

@@ -77,7 +77,7 @@ const ProductCardScraping = ({
                                 src={
                                     product?.image?.startsWith("http")
                                         ? product?.image
-                                        : `/api/items/media/${product?.image}`
+                                        : `/storage/images/item/${product?.image}`
                                 }
                                 alt={product?.name}
                                 className="w-auto h-full object-contain object-center"

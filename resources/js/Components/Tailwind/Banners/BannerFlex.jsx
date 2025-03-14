@@ -16,7 +16,7 @@ const BannerFlex = ({ data }) => {
             <div className=" flex rounded-3xl gap-8  bg-[#F5F5F5] overflow-hidden">
 
                 <img
-                    src={`/api/banners/media/${data?.image}`}
+                    src={`/storage/images/banner/${data?.image}`}
                     className="w-6/12 h-full object-cover rounded-3xl"
                 />
 

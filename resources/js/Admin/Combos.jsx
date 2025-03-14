@@ -322,7 +322,7 @@ const Combos = ({ items }) => {
                   <div class="card mb-3">
                     <div class="row g-0">
                       <div class="col-md-4">
-                        <img src={`/api/items/media/${product?.image ?? 'undefined'}`} class="img-thumbnail rounded-start" alt={product.name} />
+                        <img src={`/storage/images/item/${product?.image ?? 'undefined'}`} class="img-thumbnail rounded-start" alt={product.name} />
                       </div>
                       <div class="col-md-8">
                         <div class="card-body">

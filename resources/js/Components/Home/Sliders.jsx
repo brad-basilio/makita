@@ -26,7 +26,7 @@ const Sliders = ({ sliders }) => {
     <section className="relative h-screen pt-16">
       <img
         className="absolute top-0 left-0 w-full h-full object-cover"
-        src={`/api/sliders/media/${slider.bg_image}`}
+        src={`/storage/images/slider/${slider.bg_image}`}
         alt={slider.name}
         onError={e => e.target.src = `https://placehold.co/600x400?text=${slider.name}`}
       />

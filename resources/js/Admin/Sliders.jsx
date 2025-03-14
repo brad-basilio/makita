@@ -40,7 +40,7 @@ const Sliders = () => {
     nameRef.current.value = data?.name ?? ''
     descriptionRef.current.value = data?.description ?? ''
     bgImageRef.current.value = null
-    bgImageRef.image.src = `/api/sliders/media/${data?.bg_image}`
+    bgImageRef.image.src = `/storage/images/slider/${data?.bg_image}`
     buttonTextRef.current.value = data?.button_text ?? ''
     buttonLinkRef.current.value = data?.button_link ?? ''
 
@@ -139,7 +139,7 @@ const Sliders = () => {
           caption: 'Imagen',
           width: '90px',
           cellTemplate: (container, { data }) => {
-            ReactAppend(container, <img src={`/api/sliders/media/${data.bg_image}`} style={{ width: '80px', height: '48px', objectFit: 'cover', objectPosition: 'center', borderRadius: '4px' }} onError={e => e.target.src = '/api/cover/thumbnail/null'} />)
+            ReactAppend(container, <img src={`/storage/images/slider/${data.bg_image}`} style={{ width: '80px', height: '48px', objectFit: 'cover', objectPosition: 'center', borderRadius: '4px' }} onError={e => e.target.src = '/api/cover/thumbnail/null'} />)
           }
         },
         {

@@ -274,7 +274,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                                                         checked={selectedFilters.category_id?.includes(category.id)}  // <-- Agregado
                                                     />
                                                     <img
-                                                        src={`/api/categories/media/${category.image}`}
+                                                        src={`/storage/images/categorie/${category.image}`}
                                                         alt={category.name}
                                                         className="w-8 h-8 rounded-full object-cover"
                                                         loading='lazy' />

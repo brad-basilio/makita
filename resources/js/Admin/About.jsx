@@ -44,7 +44,7 @@ const About = ({ details: detailsDB }) => {
     descriptionRef.editor.root.innerHTML = data?.description ?? ''
     titleRef.current.value = data?.title ?? ''
     imageRef.current.value = null
-    imageRef.image.src = `/api/aboutuses/media/${data?.image ?? 'undefined'}`
+    imageRef.image.src = `/storage/images/aboutus/${data?.image ?? 'undefined'}`
     $(modalRef.current).modal('show')
   }
 
@@ -163,7 +163,7 @@ const About = ({ details: detailsDB }) => {
           dataField: 'image',
           caption: 'Imagen',
           cellTemplate: (container, { data }) => {
-            ReactAppend(container, <img src={`/api/aboutuses/media/${data.image}`} style={{ width: '80px', height: '80px', objectFit: 'cover', objectPosition: 'center', borderRadius: '4px' }} onError={e => e.target.src = '/api/cover/thumbnail/null'} />)
+            ReactAppend(container, <img src={`/storage/images/aboutus/${data.image}`} style={{ width: '80px', height: '80px', objectFit: 'cover', objectPosition: 'center', borderRadius: '4px' }} onError={e => e.target.src = '/api/cover/thumbnail/null'} />)
           }
         },
         {

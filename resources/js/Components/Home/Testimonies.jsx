@@ -54,7 +54,7 @@ const Testimonies = ({ testimonies, background = '#fbbf24', details }) => {
               <div className="flex flex-col mt-4 items-center">
                 {testimony.image && (
                   <img
-                    src={`/api/testimonies/media/${testimony.image}`}
+                    src={`/storage/images/testimonie/${testimony.image}`}
                     alt="testimony"
                     className="w-16 h-16 object-cover object-center rounded-full"
                     onError={e => e.target.src = `https://ui-avatars.com/api/?name=${testimony.name}&color=7F9CF5&background=EBF4FF`}

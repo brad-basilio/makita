@@ -107,7 +107,7 @@ const Items = ({ categories, brands }) => {
         if (itemData && itemData.images) {
             const existingImages = itemData.images.map((img) => ({
                 id: img.id, // ID de la imagen en la BD
-                url: `/api/item_images/media/${img.url}`, // Ruta de la imagen almacenada
+                url: `/storage/images/item_image/${img.url}`, // Ruta de la imagen almacenada
             }));
             setGallery(existingImages);
         }
@@ -140,8 +140,8 @@ const Items = ({ categories, brands }) => {
 
         bannerRef.current.value = null;
         imageRef.current.value = null;
-        bannerRef.image.src = `/api/items/media/${data?.banner ?? "undefined"}`;
-        imageRef.image.src = `/api/items/media/${data?.image ?? "undefined"}`;
+        bannerRef.image.src = `/storage/images/item/${data?.banner ?? "undefined"}`;
+        imageRef.image.src = `/storage/images/item/${data?.image ?? "undefined"}`;
 
         descriptionRef.editor.root.innerHTML = data?.description ?? "";
 
@@ -401,7 +401,7 @@ const Items = ({ categories, brands }) => {
                             ReactAppend(
                                 container,
                                 <img
-                                    src={`/api/items/media/${data.image}`}
+                                    src={`/storage/images/item/${data.image}`}
                                     style={{
                                         width: "80px",
                                         height: "48px",

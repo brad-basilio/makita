@@ -15,7 +15,7 @@ const CategorySimple = ({ data = {}, items = [] }) => {
           <SwiperSlide key={item.slug}>
             <a href={`/${data?.path}/${item.slug}`}>
               <div className="flex flex-col max-w-[450px] mx-auto relative">
-                <img className="w-full h-auto object-cover aspect-square" src={`/api/categories/media/${item.image}`} alt={item.name} />
+                <img className="w-full h-auto object-cover aspect-square" src={`/storage/images/categorie/${item.image}`} alt={item.name} />
 
                 <div className="absolute inset-x-0 bottom-0 h-[150px] bg-gradient-to-t from-black/95 to-transparent"></div>
                 <div className="flex flex-row w-full absolute bottom-5">

@@ -22,7 +22,7 @@ const CarruselBenefitsScraping = ({ items }) => {
 
                                 {/* Ícono */}
                                 <div className="relative z-10 text-3xl">
-                                    <img src={`/api/indicators/media/${benefit.symbol}`} className="w-auto h-[40px] " />
+                                    <img src={`/storage/images/indicator/${benefit.symbol}`} className="w-auto h-[40px] " />
                                 </div>
                             </div>
 

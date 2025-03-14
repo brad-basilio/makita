@@ -40,7 +40,7 @@ const Testimonies = ({ countries, details }) => {
     nameRef.current.value = data?.name ?? ''
     $(countryRef.current).val(data?.country_id ?? '89').trigger('change');
     descriptionRef.current.value = data?.description ?? ''
-    imageRef.image.src = `/api/testimonies/media/${data?.image}`
+    imageRef.image.src = `/storage/images/testimonie/${data?.image}`
     imageRef.current.value = null
 
     $(modalRef.current).modal('show')
@@ -129,7 +129,7 @@ const Testimonies = ({ countries, details }) => {
             container.append(DxBox([
               <img
                 className='avatar-xs rounded-circle'
-                src={`/api/testimonies/media/${data.image}`}
+                src={`/storage/images/testimonie/${data.image}`}
                 alt={data.name}
               />,
               <p className='mb-0' style={{ fontSize: "14px" }}>{data.name}</p>
