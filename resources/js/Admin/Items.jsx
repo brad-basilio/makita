@@ -260,7 +260,10 @@ const Items = ({ categories, brands }) => {
     // Opciones del campo "type"
     const typeOptions = ["General", "Principal", "Otro"];
     const [showImportModal, setShowImportModal] = useState(false);
-
+    const modalImportRef = useRef();
+    const onModalImportOpen = () => {
+        $(modalImportRef.current).modal("show");
+    };
     return (
         <>
             <Table
@@ -287,7 +290,17 @@ const Items = ({ categories, brands }) => {
                             icon: "plus",
                             text: "Agregar",
                             hint: "Agregar",
-                            onClick: () => setShowImportModal(!showImportModal),
+                            onClick: () => onModalOpen(),
+                        },
+                    });
+                    container.unshift({
+                        widget: "dxButton",
+                        location: "after",
+                        options: {
+                            icon: "plus",
+                            text: "Importar Datos",
+                            hint: "Importar Datos",
+                            onClick: () => onModalImportOpen(),
                         },
                     });
                 }}
@@ -625,7 +638,6 @@ const Items = ({ categories, brands }) => {
                             required
                         />
                         {/* Sección de Características */}
-
                         {/* Características (Lista de textos) */}
                         <DynamicField
                             ref={featuresRef}
@@ -734,6 +746,9 @@ const Items = ({ categories, brands }) => {
                 </div>
                 <hr className="my-1" />
                 <QuillFormGroup eRef={descriptionRef} label="Descripcion" />
+            </Modal>
+            <Modal modalRef={modalImportRef} title={"Importar Datos"} size="xl">
+                <ModalImportItem />
             </Modal>
         </>
     );

@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import axios from "axios";
+import Modal from "../../Components/Adminto/Modal";
 
-const ModalImportItem = ({ show, onClose }) => {
+const ModalImportItem = () => {
     const API_URL = import.meta.env.VITE_API_URL;
     const [file, setFile] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -37,8 +38,8 @@ const ModalImportItem = ({ show, onClose }) => {
         setLoading(false);
     };
 
-    return show ? (
-        <div className="modal">
+    return (
+        <div className="bg-white">
             <div className="modal-content">
                 <h2>Importar Datos</h2>
                 <input
@@ -50,9 +51,8 @@ const ModalImportItem = ({ show, onClose }) => {
                     {loading ? "Subiendo..." : "Subir Archivo"}
                 </button>
                 {message && <p>{message}</p>}
-                <button onClick={onClose}>Cerrar</button>
             </div>
         </div>
-    ) : null;
+    );
 };
 export default ModalImportItem;

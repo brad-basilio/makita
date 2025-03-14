@@ -39,6 +39,7 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CoverController;
 use App\Http\Controllers\DeliveryPriceController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\ItemImportController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PostController;
@@ -61,7 +62,7 @@ use App\Http\Controllers\ScrapController;
 
 Route::post('/scrap', [ScrapController::class, 'scrap']);
 Route::post('/scrap-shopsimon', [ScrapController::class, 'scrapShopSimon']);
-
+Route::post('/import-items', [ItemImportController::class, 'import']);
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/signup', [AuthController::class, 'signup']);
