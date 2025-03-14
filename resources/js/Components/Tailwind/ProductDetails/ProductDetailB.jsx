@@ -169,7 +169,7 @@ export default function ProductDetail({ item, data, setCart, cart }) {
                                         }`}
                                     >
                                         <img
-                                            src={`/storage/images/item_image/${image.url}`}
+                                            src={`/storage/images/item/${image.url}`}
                                             alt={`Thumbnail ${index + 1}`}
                                             className="w-full h-full object-contain"
                                         />
@@ -183,7 +183,7 @@ export default function ProductDetail({ item, data, setCart, cart }) {
                                     src={
                                         selectedImage.type === "main"
                                             ? `/storage/images/item/${selectedImage.url}`
-                                            : `/storage/images/item_image/${selectedImage.url}`
+                                            : `/storage/images/item/${selectedImage.url}`
                                     }
                                     alt="Product main"
                                     className="w-full h-auto object-contain"
@@ -191,7 +191,7 @@ export default function ProductDetail({ item, data, setCart, cart }) {
                             </div>
                         </div>
 
-                        <div className="flex flex-col customtext-neutral-light justify-start items-start gap-2 text-sm mb-6">
+                        <div className="flex lg:hidden flex-col customtext-neutral-light justify-start items-start gap-2 text-sm mb-6">
                             <span className="customtext-neutral-light text-sm">
                                 SKU:{" "}
                                 <span className="customtext-neutral-dark">
@@ -205,7 +205,7 @@ export default function ProductDetail({ item, data, setCart, cart }) {
                                 </span>
                             </span>
                         </div>
-                        <div className="flex gap-8 border-b-2 pb-8">
+                        <div className="flex lg:hidden gap-8 border-b-2 pb-8">
                             {/* Price Section */}
                             <div className=" w-full ">
                                 <p className="text-sm customtext-neutral-light mb-1">
@@ -260,7 +260,7 @@ export default function ProductDetail({ item, data, setCart, cart }) {
                         </div>
 
                         {/* Specifications */}
-                        <div className="flex-1 w-full ">
+                        <div className="block lg:hidden flex-1 w-full ">
                             <div className="bg-[#F7F9FB] rounded-lg p-6">
                                 <h3 className="font-medium text-sm mb-4">
                                     Especificaciones principales
@@ -304,7 +304,7 @@ export default function ProductDetail({ item, data, setCart, cart }) {
                             </div>
                         </div>
 
-                        <div className="mt-8 ">
+                        <div className="block lg:hidden mt-8 ">
                             <div className="flex items-center gap-2 mb-6">
                                 <ShoppingCart className="w-6 h-6 customtext-primary" />
                                 <h2 className="text-base font-semibold">
