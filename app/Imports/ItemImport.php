@@ -8,6 +8,7 @@ use App\Models\SubCategory;
 use App\Models\Brand;
 use App\Models\ItemSpecification;
 use App\Models\ItemImage;
+use Exception;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -26,7 +27,7 @@ class ItemImport implements ToModel, WithHeadingRow
 
     public function model(array $row)
     {
-        dump($row); // 🔍 Ver qué datos se están importando
+        //dump($row); // 🔍 Ver qué datos se están importando
 
         // 🔍 1️⃣ Si la fila está vacía, detener la importación
         if ($this->isRowEmpty($row)) {
@@ -78,7 +79,7 @@ class ItemImport implements ToModel, WithHeadingRow
             // 6️⃣ Guardar imágenes en la galería
             $this->saveGalleryImages($item, $row['sku']);
         } else {
-            dump("No se pudo obtener el ID del producto con SKU: " . $row['sku']);
+            throw new Exception("No se pudo obtener el ID del producto con SKU: " . $row['sku']);
         }
     }
 
