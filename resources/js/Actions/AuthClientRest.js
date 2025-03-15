@@ -1,22 +1,31 @@
-import { Fetch, Notify } from "sode-extend-react";
-
+import { Cookies, Fetch, Notify } from "sode-extend-react";
 class AuthClientRest {
     static login = async (request) => {
+        console.log(request);
         try {
             const { status, result } = await Fetch("./api/login-client", {
                 method: "POST",
+
                 body: JSON.stringify(request),
             });
-            if (!status)
-                throw new Error(result?.message || "Error al iniciar sesion");
+
+            if (!status || result.status !== 200) {
+                Notify.add({
+                    icon: "/assets/img/icon.svg",
+                    title: "Operación incorrecta",
+                    body: result?.message || "Error al iniciar sesión",
+                    type: "danger",
+                });
+                return false;
+            }
 
             Notify.add({
                 icon: "/assets/img/icon.svg",
-                title: "Operacion correcta",
-                body: "Se inicio sesion correctamente",
+                title: "Operación correcta",
+                body: "Se inició sesión correctamente",
             });
 
-            return result;
+            return result; // Devuelve el resultado para que el frontend decida qué hacer
         } catch (error) {
             Notify.add({
                 icon: "/assets/img/icon.svg",

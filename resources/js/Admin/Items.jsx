@@ -140,8 +140,12 @@ const Items = ({ categories, brands }) => {
 
         bannerRef.current.value = null;
         imageRef.current.value = null;
-        bannerRef.image.src = `/storage/images/item/${data?.banner ?? "undefined"}`;
-        imageRef.image.src = `/storage/images/item/${data?.image ?? "undefined"}`;
+        bannerRef.image.src = `/storage/images/item/${
+            data?.banner ?? "undefined"
+        }`;
+        imageRef.image.src = `/storage/images/item/${
+            data?.image ?? "undefined"
+        }`;
 
         descriptionRef.editor.root.innerHTML = data?.description ?? "";
 
@@ -297,7 +301,7 @@ const Items = ({ categories, brands }) => {
                         widget: "dxButton",
                         location: "after",
                         options: {
-                            icon: "plus",
+                            icon: "upload",
                             text: "Importar Datos",
                             hint: "Importar Datos",
                             onClick: () => onModalImportOpen(),
@@ -747,8 +751,8 @@ const Items = ({ categories, brands }) => {
                 <hr className="my-1" />
                 <QuillFormGroup eRef={descriptionRef} label="Descripcion" />
             </Modal>
-            <Modal modalRef={modalImportRef} title={"Importar Datos"} size="xl">
-                <ModalImportItem />
+            <Modal modalRef={modalImportRef} title={"Importar Datos"} size="sm">
+                <ModalImportItem gridRef={gridRef} />
             </Modal>
         </>
     );

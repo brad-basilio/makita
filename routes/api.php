@@ -104,6 +104,7 @@ Route::delete('/mailing/down/{id}', [SubscriptionController::class, 'delete'])->
 
 Route::post('/items/verify-stock', [ItemController::class, 'verifyStock']);
 Route::post('/items/combo-items', [ItemController::class, 'verifyCombo']);
+Route::post('/item/{id}/update-views', [ItemController::class, 'updateViews']);
 
 Route::post('/pago', [PaymentController::class, 'charge']);
 Route::get('/pago/{sale_id}', [PaymentController::class, 'getPaymentStatus']);

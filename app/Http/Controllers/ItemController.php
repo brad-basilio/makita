@@ -221,4 +221,13 @@ class ItemController extends BasicController
             );
         }
     }
+    public function updateViews($id)
+    {
+        $product = Item::findOrFail($id); // Asegúrate de que el modelo sea el correcto
+        if (!$product) {
+            return response()->json(['error' => 'Producto no encontrado'], 404);
+        }
+        $product->increment('views'); // Incrementa en 1
+        return response()->json(['success' => true, 'views' => $product->views]);
+    }
 }

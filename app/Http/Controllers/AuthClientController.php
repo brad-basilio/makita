@@ -38,24 +38,35 @@ class AuthClientController extends BasicController
 
     public function login(Request $request): HttpResponse | ResponseFactory | RedirectResponse
     {
-        $response = Response::simpleTryCatch(function (Response $response) use ($request) {
-            $email = $request->email;
-            $password = $request->password;
+        dump($request->all());
 
-            if (!Auth::attempt([
-                'email' => Controller::decode($email),
-                'password' => Controller::decode($password)
-            ])) {
+        $response = Response::simpleTryCatch(function (Response $response) use ($request) {
+            $email = Controller::decode($request->email);
+            $password = Controller::decode($request->password);
+
+            if (!Auth::attempt(['email' => $email, 'password' => $password])) {
                 $response->status = 400;
-                $response->message = 'Operación Incorrecta. Por favor, ingresar credenciales validas';
+                $response->message = 'Operación Incorrecta. Por favor, ingresar credenciales válidas';
+                return;
             }
 
+            // 🔴 Regenerar sesión
             $request->session()->regenerate();
+
+            // ✅ Agregar usuario autenticado a la respuesta
             $response->status = 200;
             $response->message = 'Operación Correcta. Has iniciado sesión';
+            $response->data = [
+                'user' => Auth::user(),
+            ];
         });
+
+        dump($response->toArray(), $response->status);
         return response($response->toArray(), $response->status);
     }
+
+
+
 
     public function signup(Request $request): HttpResponse | ResponseFactory | RedirectResponse
     {

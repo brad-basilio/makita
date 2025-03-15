@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import axios from "axios";
 import Modal from "../../Components/Adminto/Modal";
 
-const ModalImportItem = () => {
+const ModalImportItem = ({ gridRef }) => {
     const API_URL = import.meta.env.VITE_API_URL;
     const [file, setFile] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -24,11 +24,12 @@ const ModalImportItem = () => {
         setLoading(true);
         try {
             const response = await axios.post(
-                `https://builder1.alohaperu.com/api/import-items`,
+                `${API_URL}/import-items`,
                 formData,
                 { headers: { "Content-Type": "multipart/form-data" } }
             );
-            setMessage(response.data.message);
+            $(gridRef.current).dxDataGrid("instance").refresh(),
+                setMessage(response.data.message);
         } catch (error) {
             setMessage(
                 "Error al importar: " + error.response?.data?.error ||

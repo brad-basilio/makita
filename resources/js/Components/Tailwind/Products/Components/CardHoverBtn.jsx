@@ -1,6 +1,7 @@
 import React from "react";
 import { ShoppingCart } from "lucide-react"; // Icono para la cesta
 import Swal from "sweetalert2";
+import axios from "axios";
 
 const CardHoverBtn = ({ product, widthClass = "lg:w-1/5", setCart, cart }) => {
     const onAddClicked = (product) => {
@@ -24,6 +25,14 @@ const CardHoverBtn = ({ product, widthClass = "lg:w-1/5", setCart, cart }) => {
     const inCart = cart?.find((x) => x.id == product?.id);
     const finalPrice =
         product?.discount > 0 ? product?.discount : product?.price;
+
+    const handleViewUpdate = async (id) => {
+        try {
+            await axios.post(`api/item/${id}/update-views`);
+        } catch (error) {
+            console.error("Error al actualizar vistas:", error);
+        }
+    };
     return (
         <div
             key={product.id}
@@ -65,6 +74,7 @@ const CardHoverBtn = ({ product, widthClass = "lg:w-1/5", setCart, cart }) => {
                 <div className="overflow-hidden max-h-20  lg:max-h-0 pb-4 lg:opacity-0 group-hover:max-h-20 group-hover:opacity-100 transition-[max-height,opacity] duration-1000 ease-in-out flex gap-2 my-2 transform group-hover:translate-y-0 translate-y-4">
                     <a
                         href={`/product/${product.slug}`}
+                        onClick={() => handleViewUpdate(product.id)}
                         className="flex-1 inline-flex items-center justify-center font-bold  text-sm bg-primary text-white  py-3 rounded-xl shadow-lg transition-all duration-300 hover:opacity-90"
                     >
                         Ver detalle
