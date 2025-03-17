@@ -42,7 +42,7 @@ const CardHoverBtn = ({ product, widthClass = "lg:w-1/5", setCart, cart }) => {
                     style={{ boxShadow: "0px 0px 6px 0px #00000040" }}
                 >
                     {/* Imagen del producto y etiqueta de descuento */}
-                    <div className="relative pb-4">
+                    <div className="relative ">
                         {product.discount != null &&
                             !isNaN(product.discount) && (
                                 <span className="absolute top-2 left-2 bg-[#F93232] text-white text-base font-medium px-2 py-1 rounded-full">
