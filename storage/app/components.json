@@ -721,7 +721,8 @@
             {
                 "id": "ComplaintSimple",
                 "name": "Simple",
-                "data": ["steps", "selected"]
+                "data": ["steps", "selected"],
+                "generals": ["terms_conditions"]
             }
         ]
     }

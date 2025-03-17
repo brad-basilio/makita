@@ -569,6 +569,15 @@
       "_index-CqkZ-sT_.js"
     ]
   },
+  "_recaptcha-wrapper-BlePWYmZ.js": {
+    "file": "assets/recaptcha-wrapper-BlePWYmZ.js",
+    "name": "recaptcha-wrapper",
+    "imports": [
+      "_index-CqkZ-sT_.js",
+      "_index-D7Vukm9p.js",
+      "_hoist-non-react-statics.cjs-Dse_xkNE.js"
+    ]
+  },
   "_search-DhoFIDMi.js": {
     "file": "assets/search-DhoFIDMi.js",
     "name": "search",
@@ -2749,7 +2758,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Complaint.jsx": {
-    "file": "assets/Complaint-CfgXHcT7.js",
+    "file": "assets/Complaint-CjT2Lln5.js",
     "name": "Complaint",
     "src": "resources/js/Components/Tailwind/Complaint.jsx",
     "isEntry": true,
@@ -2764,15 +2773,28 @@
     ]
   },
   "resources/js/Components/Tailwind/Complaints/ComplaintSimple.jsx": {
-    "file": "assets/ComplaintSimple-C516LY_E.js",
+    "file": "assets/ComplaintSimple-Cy5TTenp.js",
     "name": "ComplaintSimple",
     "src": "resources/js/Components/Tailwind/Complaints/ComplaintSimple.jsx",
-    "isEntry": true,
+    "isDynamicEntry": true,
     "imports": [
       "resources/js/Components/About/AboutHeader.jsx",
+      "_recaptcha-wrapper-BlePWYmZ.js",
       "_index-CqkZ-sT_.js",
+      "_InputForm-Bi0MO6kS.js",
+      "_SelectForm-Dn2CGkP4.js",
+      "_main-MmatxeHN.js",
+      "_index-BdiKzPHY.js",
+      "_HtmlContent-CNWRwArS.js",
+      "_x-B-ubJNMX.js",
       "_index-D7Vukm9p.js",
-      "_hoist-non-react-statics.cjs-Dse_xkNE.js"
+      "_hoist-non-react-statics.cjs-Dse_xkNE.js",
+      "_chevron-down-CxOx8ByU.js",
+      "_createLucideIcon-D0vxYqnu.js",
+      "_search-DhoFIDMi.js",
+      "_check-CvqheCNB.js",
+      "____vite-browser-external_commonjs-proxy-DA7w84js.js",
+      "_index-VLFqsz8m.js"
     ]
   },
   "resources/js/Components/Tailwind/Complaints/ComplaintStech.jsx": {
@@ -4250,7 +4272,7 @@
     ]
   },
   "resources/js/Register.jsx": {
-    "file": "assets/Register-DFGWq_j8.js",
+    "file": "assets/Register-3aaBw2ht.js",
     "name": "Register",
     "src": "resources/js/Register.jsx",
     "isEntry": true,
@@ -4260,7 +4282,7 @@
       "_JSEncrypt-C1v_2CZY.js",
       "_index-CqkZ-sT_.js",
       "resources/js/Utils/ReactAppend.jsx",
-      "resources/js/Components/Tailwind/Complaints/ComplaintSimple.jsx",
+      "_recaptcha-wrapper-BlePWYmZ.js",
       "resources/js/Components/Tailwind/Components/ProductCard.jsx",
       "_AuthRest-DU3Tn8iC.js",
       "_SelectFormGroup-CHmG_gm0.js",
@@ -4326,7 +4348,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-DqvUEPxw.js",
+    "file": "assets/System-CMtOKqz8.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,

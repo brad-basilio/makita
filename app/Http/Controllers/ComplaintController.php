@@ -24,7 +24,87 @@ class ComplaintController extends BasicController
     }
 
 
-    /* public function saveComplaint(Request $request)
+
+    public function saveComplaint(Request $request)
+    {
+        //  dump($request->all());
+        try {
+
+            $request->validate([
+                'nombre' => 'required|string|max:255',
+                'tipo_documento' => 'required|string|in:ruc,dni,ce,pasaporte',
+                'numero_identidad' => 'required|string|max:20',
+                'celular' => 'nullable|string|max:20',
+                'correo_electronico' => 'required|email|max:255',
+                'departamento' => 'required|string|max:100',
+                'provincia' => 'required|string|max:100',
+                'distrito' => 'required|string|max:100',
+                'direccion' => 'required|string|max:255',
+                'tipo_producto' => 'required|string|in:producto,servicio',
+                'monto_reclamado' => 'nullable|numeric',
+                'descripcion_producto' => 'required|string',
+                'tipo_reclamo' => 'required|string|in:reclamo,queja',
+                'fecha_ocurrencia' => 'nullable|date',
+                'numero_pedido' => 'nullable|string|max:50',
+                'detalle_reclamo' => 'required|string',
+                'acepta_terminos' => 'required|boolean',
+                'recaptcha_token' => 'required|string',
+            ]);
+
+            if ($request->acepta_terminos != true) {
+                return response()->json([
+                    'type' => 'error',
+                    'message' => 'Por favor aceptar los términos y condiciones'
+                ], 400);
+            }
+            // Verificar reCAPTCHA
+            if (!$this->verifyRecaptcha($request->recaptcha_token)) {
+                return response()->json([
+                    'type' => 'error',
+                    'message' => 'reCAPTCHA no válido'
+                ], 400);
+            }
+
+            // Guardar en la base de datos
+            $complaint = Complaint::create(
+                [
+                    'nombre' => $request->nombre,
+                    'tipo_documento' => $request->tipo_documento,
+                    'numero_identidad' => $request->numero_identidad,
+                    'celular' => $request->celular,
+                    'correo_electronico' => $request->correo_electronico,
+                    'departamento' => $request->departamento,
+                    'provincia' => $request->provincia,
+                    'distrito' => $request->distrito,
+                    'direccion' => $request->direccion,
+                    'tipo_producto' => $request->tipo_producto,
+                    'monto_reclamado' => $request->monto_reclamado,
+                    'descripcion_producto' => $request->descripcion_producto,
+                    'tipo_reclamo' => $request->tipo_reclamo,
+                    'fecha_ocurrencia' => $request->fecha_ocurrencia,
+                    'numero_pedido' => $request->numero_pedido,
+                    'detalle_reclamo' => $request->detalle_reclamo,
+                    'acepta_terminos' => $request->acepta_terminos,
+                    'recaptcha_token' => $request->recaptcha_token,
+                ]
+            );
+            //dump(DB::getQueryLog());
+            // dump($complaint);
+
+            return response()->json([
+                'type' => 'success',
+                'message' => 'Reclamo registrado con éxito',
+                'data' => $complaint
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'type' => 'error',
+                'message' => 'Error al registrar el reclamo' . $e->getMessage(),
+            ], 500);
+        }
+    }
+}
+ /* public function saveComplaint(Request $request)
     {
         //dump($request->all());
         $request->validate([
@@ -70,37 +150,3 @@ class ComplaintController extends BasicController
 
         return response()->json(['message' => 'Reclamo registrado con éxito', 'data' => $complaint], 201);
     }*/
-    public function saveComplaint(Request $request)
-    {
-        $request->validate([
-            'nombre' => 'required|string|max:255',
-            'tipo_documento' => 'required|string|in:RUC,DNI,CE,Pasaporte',
-            'numero_identidad' => 'required|string|max:20',
-            'celular' => 'nullable|string|max:20',
-            'correo_electronico' => 'required|email|max:255',
-            'departamento' => 'required|string|max:100',
-            'provincia' => 'required|string|max:100',
-            'distrito' => 'required|string|max:100',
-            'direccion' => 'required|string|max:255',
-            'tipo_producto' => 'required|string|in:producto,servicio',
-            'monto_reclamado' => 'nullable|numeric',
-            'descripcion_producto' => 'required|string',
-            'tipo_reclamo' => 'required|string|in:reclamo,queja',
-            'fecha_ocurrencia' => 'nullable|date',
-            'numero_pedido' => 'nullable|string|max:50',
-            'detalle_reclamo' => 'required|string',
-            'acepta_terminos' => 'required|boolean',
-            'recaptcha_token' => 'required|string',
-        ]);
-
-        // Verificar reCAPTCHA
-        if (!$this->verifyRecaptcha($request->recaptcha_token)) {
-            return response()->json(['message' => 'reCAPTCHA no válido'], 400);
-        }
-
-        // Guardar en la base de datos
-        $complaint = Complaint::create($request->all());
-
-        return response()->json(['message' => 'Reclamo registrado con éxito', 'data' => $complaint], 201);
-    }
-}

@@ -31,7 +31,7 @@ return new class extends Migration
             $table->string('numero_pedido')->nullable();
             $table->text('detalle_reclamo');
             $table->boolean('acepta_terminos');
-            $table->string('recaptcha_token');
+            $table->text('recaptcha_token');
             $table->timestamps();
         });
     }

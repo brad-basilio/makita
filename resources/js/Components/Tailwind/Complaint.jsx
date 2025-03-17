@@ -4,13 +4,13 @@ const ComplaintStech = React.lazy(() => import("./Complaints/ComplaintStech"));
 const ComplaintSimple = React.lazy(() =>
     import("./Complaints/ComplaintSimple")
 );
-const Complaint = ({ which, data }) => {
+const Complaint = ({ which, data, generals }) => {
     const getComplaint = () => {
         switch (which) {
             case "ComplaintStech":
                 return <ComplaintStech data={data} />;
             case "ComplaintSimple":
-                return <ComplaintSimple data={data} />;
+                return <ComplaintSimple data={data} generals={generals} />;
 
             default:
                 return (

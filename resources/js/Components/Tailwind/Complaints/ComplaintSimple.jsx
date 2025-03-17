@@ -3,9 +3,13 @@ import { useEffect, useRef, useState } from "react";
 import InputForm from "../Checkouts/Components/InputForm";
 import ubigeoData from "../../../../../storage/app/utils/ubigeo.json";
 import SelectForm from "../Checkouts/Components/SelectForm";
-export default function ComplaintSimple() {
+import { Notify } from "sode-extend-react";
+import ReactModal from "react-modal";
+import HtmlContent from "../../../Utils/HtmlContent";
+import { X } from "lucide-react";
+export default function ComplaintSimple({ generals }) {
     const recaptchaRef = useRef(null);
-
+    const [messageCaptcha, setMessageCaptcha] = useState("");
     const [formData, setFormData] = useState({
         nombre: "",
         tipo_documento: "RUC",
@@ -16,7 +20,7 @@ export default function ComplaintSimple() {
         provincia: "",
         distrito: "",
         direccion: "",
-        tipo_roducto: "",
+        tipo_producto: "",
         monto_reclamado: "",
         descripcion_producto: "",
         tipo_reclamo: "",
@@ -38,7 +42,7 @@ export default function ComplaintSimple() {
         e.preventDefault();
         const recaptchaValue = recaptchaRef.current.getValue();
         if (!recaptchaValue) {
-            alert("Por favor, verifica el reCAPTCHA.");
+            setMessageCaptcha("Por favor, verifica el reCAPTCHA.");
             return;
         }
 
@@ -52,8 +56,32 @@ export default function ComplaintSimple() {
             body: JSON.stringify(updatedFormData),
         })
             .then((response) => response.json())
-            .then((data) => console.log("Respuesta del servidor:", data))
-            .catch((error) => console.error("Error:", error));
+            .then((data) => {
+                console.log(data);
+                if (data.type === "success")
+                    Notify.add({
+                        type: "success",
+                        icon: "/assets/img/icon.svg",
+                        title: "Solitud enviada con éxito",
+                        body: data.message,
+                    });
+                else {
+                    Notify.add({
+                        type: "danger",
+                        icon: "/assets/img/icon.svg",
+                        title: "Envio Fallido",
+                        body: data.message,
+                    });
+                }
+            })
+            .catch((error) =>
+                Notify.add({
+                    type: "danger",
+                    icon: "/assets/img/icon.svg",
+                    title: "Error",
+                    body: error,
+                })
+            );
     };
 
     // Estados para manejar los valores seleccionados
@@ -138,6 +166,15 @@ export default function ComplaintSimple() {
         { value: "reclamo", label: "Reclamo" },
         { value: "queja", label: "Queja" },
     ];
+
+    const [modalOpen, setModalOpen] = useState(false);
+
+    const policyItems = {
+        terms_conditions: "Términos y condiciones",
+    };
+
+    const openModal = (index) => setModalOpen(index);
+    const closeModal = () => setModalOpen(null);
     return (
         <div className=" w-full px-primary mx-auto py-16 bg-[#F7F9FB]">
             <div className="max-w-7xl mx-auto  bg-white shadow-lg rounded-2xl customtext-neutral-dark p-8">
@@ -225,7 +262,7 @@ export default function ComplaintSimple() {
                                     setDepartamento(value);
                                     setFormData((prev) => ({
                                         ...prev,
-                                        departmento: departamento,
+                                        departmento: value,
                                     }));
                                 }}
                             />
@@ -241,7 +278,7 @@ export default function ComplaintSimple() {
                                     setProvincia(value);
                                     setFormData((prev) => ({
                                         ...prev,
-                                        provincia: provincia,
+                                        provincia: value,
                                     }));
                                 }}
                             />
@@ -257,7 +294,7 @@ export default function ComplaintSimple() {
                                     setDistrito(value);
                                     setFormData((prev) => ({
                                         ...prev,
-                                        distrito: distrito,
+                                        distrito: value,
                                     }));
                                 }}
                             />
@@ -292,7 +329,7 @@ export default function ComplaintSimple() {
                                     onChange={(value) => {
                                         setFormData((prev) => ({
                                             ...prev,
-                                            tipo_roducto: value,
+                                            tipo_producto: value,
                                         }));
                                     }}
                                 />
@@ -398,7 +435,7 @@ export default function ComplaintSimple() {
                             <label htmlFor="terminos" className="text-sm">
                                 Estoy de acuerdo con los{" "}
                                 <a
-                                    href="#"
+                                    onClick={() => openModal(0)}
                                     className="customtext-primary underline"
                                 >
                                     términos y condiciones
@@ -413,6 +450,11 @@ export default function ComplaintSimple() {
                             ref={recaptchaRef}
                             sitekey="6LfAcfcqAAAAACc7tfKbaBFc1X5I9V4fewWoVf-9"
                         />
+                        {messageCaptcha && (
+                            <p className="text-red-500 mt-2">
+                                {messageCaptcha}
+                            </p>
+                        )}
                     </div>
 
                     {/* Botón de envío */}
@@ -426,6 +468,31 @@ export default function ComplaintSimple() {
                     </div>
                 </form>
             </div>
+            {Object.keys(policyItems).map((key, index) => {
+                const title = policyItems[key];
+                const content =
+                    generals.find((x) => x.correlative == key)?.description ??
+                    "";
+                return (
+                    <ReactModal
+                        key={index}
+                        isOpen={modalOpen === index}
+                        onRequestClose={closeModal}
+                        contentLabel={title}
+                        className="absolute left-1/2 -translate-x-1/2 bg-white p-6 rounded-xl shadow-lg w-[95%] max-w-4xl my-8"
+                        overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-50"
+                    >
+                        <button
+                            onClick={closeModal}
+                            className="float-right text-red-500 hover:text-red-700 transition-all duration-300 "
+                        >
+                            <X width="2rem" strokeWidth="4px" />
+                        </button>
+                        <h2 className="text-2xl font-bold mb-4">{title}</h2>
+                        <HtmlContent className="prose" html={content} />
+                    </ReactModal>
+                );
+            })}
         </div>
     );
 }
