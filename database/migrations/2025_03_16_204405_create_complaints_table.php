@@ -14,18 +14,24 @@ return new class extends Migration
     {
         Schema::create('complaints', function (Blueprint $table) {
             $table->uuid('id')->default(DB::raw('(UUID())'))->primary();
-            $table->string('name'); // Nombre del usuario
-            $table->string('email'); // Correo del usuario
-            $table->string('phone')->nullable(); // Teléfono
-            $table->string('dni')->nullable(); // DNI o identificación
-            $table->string('type')->default('queja'); // Tipo de reclamo
-            $table->date('incident_date')->nullable(); // Fecha del incidente
-            $table->string('order_number')->nullable(); // Número de pedido o factura
-
-            $table->string('priority')->default('media'); // Prioridad
-            $table->text('description'); // Descripción del reclamo
-            $table->json('file_paths')->nullable(); // Rutas de archivos adjuntos (JSON)
-            $table->string('status')->default('pendiente'); // Estado del reclamo
+            $table->string('nombre');
+            $table->string('tipo_documento');
+            $table->string('numero_identidad');
+            $table->string('celular')->nullable();
+            $table->string('correo_electronico');
+            $table->string('departamento');
+            $table->string('provincia');
+            $table->string('distrito');
+            $table->string('direccion');
+            $table->string('tipo_producto');
+            $table->decimal('monto_reclamado', 10, 2)->nullable();
+            $table->text('descripcion_producto');
+            $table->string('tipo_reclamo');
+            $table->date('fecha_ocurrencia')->nullable();
+            $table->string('numero_pedido')->nullable();
+            $table->text('detalle_reclamo');
+            $table->boolean('acepta_terminos');
+            $table->string('recaptcha_token');
             $table->timestamps();
         });
     }

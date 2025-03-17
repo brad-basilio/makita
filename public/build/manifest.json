@@ -475,8 +475,8 @@
       "_createLucideIcon-D0vxYqnu.js"
     ]
   },
-  "_hoist-non-react-statics.cjs-Cb3TewI0.js": {
-    "file": "assets/hoist-non-react-statics.cjs-Cb3TewI0.js",
+  "_hoist-non-react-statics.cjs-Dse_xkNE.js": {
+    "file": "assets/hoist-non-react-statics.cjs-Dse_xkNE.js",
     "name": "hoist-non-react-statics.cjs",
     "imports": [
       "_index-CqkZ-sT_.js"
@@ -2749,7 +2749,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Complaint.jsx": {
-    "file": "assets/Complaint-fwniFW2_.js",
+    "file": "assets/Complaint-CfgXHcT7.js",
     "name": "Complaint",
     "src": "resources/js/Components/Tailwind/Complaint.jsx",
     "isEntry": true,
@@ -2764,13 +2764,15 @@
     ]
   },
   "resources/js/Components/Tailwind/Complaints/ComplaintSimple.jsx": {
-    "file": "assets/ComplaintSimple-BPKy3FFd.js",
+    "file": "assets/ComplaintSimple-C516LY_E.js",
     "name": "ComplaintSimple",
     "src": "resources/js/Components/Tailwind/Complaints/ComplaintSimple.jsx",
     "isEntry": true,
     "imports": [
       "resources/js/Components/About/AboutHeader.jsx",
-      "_index-CqkZ-sT_.js"
+      "_index-CqkZ-sT_.js",
+      "_index-D7Vukm9p.js",
+      "_hoist-non-react-statics.cjs-Dse_xkNE.js"
     ]
   },
   "resources/js/Components/Tailwind/Complaints/ComplaintStech.jsx": {
@@ -2905,7 +2907,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Filter.jsx": {
-    "file": "assets/Filter-DCrqfasc.js",
+    "file": "assets/Filter-CDDsMIvb.js",
     "name": "Filter",
     "src": "resources/js/Components/Tailwind/Filter.jsx",
     "isEntry": true,
@@ -4248,7 +4250,7 @@
     ]
   },
   "resources/js/Register.jsx": {
-    "file": "assets/Register-C2bC_w-S.js",
+    "file": "assets/Register-DFGWq_j8.js",
     "name": "Register",
     "src": "resources/js/Register.jsx",
     "isEntry": true,
@@ -4258,8 +4260,7 @@
       "_JSEncrypt-C1v_2CZY.js",
       "_index-CqkZ-sT_.js",
       "resources/js/Utils/ReactAppend.jsx",
-      "_index-D7Vukm9p.js",
-      "_hoist-non-react-statics.cjs-Cb3TewI0.js",
+      "resources/js/Components/Tailwind/Complaints/ComplaintSimple.jsx",
       "resources/js/Components/Tailwind/Components/ProductCard.jsx",
       "_AuthRest-DU3Tn8iC.js",
       "_SelectFormGroup-CHmG_gm0.js",
@@ -4268,6 +4269,8 @@
       "_HtmlContent-CNWRwArS.js",
       "____vite-browser-external_commonjs-proxy-DA7w84js.js",
       "_index-VLFqsz8m.js",
+      "_index-D7Vukm9p.js",
+      "_hoist-non-react-statics.cjs-Dse_xkNE.js",
       "_main-MmatxeHN.js",
       "_Global-BM4Id4Pw.js",
       "_General-BmbBKdsB.js"
@@ -4323,7 +4326,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-CFo7dKny.js",
+    "file": "assets/System-DqvUEPxw.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,

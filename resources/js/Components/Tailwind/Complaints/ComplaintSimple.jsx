@@ -1,28 +1,29 @@
-"use client";
-
-import { useEffect, useState } from "react";
+import ReCAPTCHA from "react-google-recaptcha";
+import { useEffect, useRef, useState } from "react";
 import InputForm from "../Checkouts/Components/InputForm";
 import ubigeoData from "../../../../../storage/app/utils/ubigeo.json";
 import SelectForm from "../Checkouts/Components/SelectForm";
 export default function ComplaintSimple() {
+    const recaptchaRef = useRef(null);
+
     const [formData, setFormData] = useState({
         nombre: "",
-        tipoDocumento: "RUC",
-        numeroIdentidad: "",
+        tipo_documento: "RUC",
+        numero_identidad: "",
         celular: "",
-        correoElectronico: "",
+        correo_electronico: "",
         departamento: "",
         provincia: "",
         distrito: "",
         direccion: "",
-        tipoProducto: "",
-        montoReclamado: "",
-        descripcionProducto: "",
-        tipoReclamo: "",
-        fechaOcurrencia: "",
-        numeroPedido: "",
-        detalleReclamo: "",
-        aceptaTerminos: false,
+        tipo_roducto: "",
+        monto_reclamado: "",
+        descripcion_producto: "",
+        tipo_reclamo: "",
+        fecha_ocurrencia: "",
+        numero_pedido: "",
+        detalle_reclamo: "",
+        acepta_terminos: false,
     });
 
     const handleChange = (e) => {
@@ -35,8 +36,24 @@ export default function ComplaintSimple() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("Formulario enviado:", formData);
-        // Aquí iría la lógica para enviar el formulario
+        const recaptchaValue = recaptchaRef.current.getValue();
+        if (!recaptchaValue) {
+            alert("Por favor, verifica el reCAPTCHA.");
+            return;
+        }
+
+        const updatedFormData = {
+            ...formData,
+            recaptcha_token: recaptchaValue,
+        };
+        fetch("/api/complaints", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(updatedFormData),
+        })
+            .then((response) => response.json())
+            .then((data) => console.log("Respuesta del servidor:", data))
+            .catch((error) => console.error("Error:", error));
     };
 
     // Estados para manejar los valores seleccionados
@@ -48,9 +65,6 @@ export default function ComplaintSimple() {
     const [departamentos, setDepartamentos] = useState([]);
     const [provincias, setProvincias] = useState([]);
     const [distritos, setDistritos] = useState([]);
-
-    // Estado para el precio de envío
-    const [shippingCost, setShippingCost] = useState(0);
 
     // Cargar los departamentos al iniciar el componente
     useEffect(() => {
@@ -76,9 +90,9 @@ export default function ComplaintSimple() {
             setDistritos([]); // Limpiar distritos
             setFormData((prev) => ({
                 ...prev,
-                department: departamento,
-                province: "",
-                district: "",
+                departamento: departamento,
+                provincia: "",
+                distrito: "",
             }));
         }
     }, [departamento]);
@@ -97,8 +111,8 @@ export default function ComplaintSimple() {
             setDistrito(""); // Reiniciar distrito
             setFormData((prev) => ({
                 ...prev,
-                province: provincia,
-                district: "",
+                provincia: provincia,
+                distrito: "",
             }));
         }
     }, [provincia]);
@@ -106,7 +120,7 @@ export default function ComplaintSimple() {
     // Consultar el precio de envío cuando se selecciona un distrito
     useEffect(() => {
         if (distrito) {
-            setFormData((prev) => ({ ...prev, district: distrito }));
+            setFormData((prev) => ({ ...prev, distrito: distrito }));
         }
     }, [distrito]);
 
@@ -143,8 +157,8 @@ export default function ComplaintSimple() {
                                 <InputForm
                                     type="text"
                                     label="Nombres"
-                                    name="name"
-                                    value={formData.name}
+                                    name="nombre"
+                                    value={formData.nombre}
                                     onChange={handleChange}
                                     placeholder="Nombres"
                                 />
@@ -158,7 +172,7 @@ export default function ComplaintSimple() {
                                     onChange={(value) => {
                                         setFormData((prev) => ({
                                             ...prev,
-                                            tipoDocumento: value,
+                                            tipo_documento: value,
                                         }));
                                     }}
                                 />
@@ -168,8 +182,8 @@ export default function ComplaintSimple() {
                                 <InputForm
                                     type="text"
                                     label="Número de identidad"
-                                    name="numeroIdentidad"
-                                    value={formData.numeroIdentidad}
+                                    name="numero_identidad"
+                                    value={formData.numero_identidad}
                                     onChange={handleChange}
                                     placeholder="Número de identidad"
                                 />
@@ -192,8 +206,8 @@ export default function ComplaintSimple() {
                                 <InputForm
                                     type="text"
                                     label=" Correo Electrónico"
-                                    name="correoElectronico"
-                                    value={formData.correoElectronico}
+                                    name="correo_electronico"
+                                    value={formData.correo_electronico}
                                     onChange={handleChange}
                                     placeholder=" Correo Electrónico"
                                 />
@@ -211,7 +225,7 @@ export default function ComplaintSimple() {
                                     setDepartamento(value);
                                     setFormData((prev) => ({
                                         ...prev,
-                                        department: departamento,
+                                        departmento: departamento,
                                     }));
                                 }}
                             />
@@ -227,7 +241,7 @@ export default function ComplaintSimple() {
                                     setProvincia(value);
                                     setFormData((prev) => ({
                                         ...prev,
-                                        province: provincia,
+                                        provincia: provincia,
                                     }));
                                 }}
                             />
@@ -243,7 +257,7 @@ export default function ComplaintSimple() {
                                     setDistrito(value);
                                     setFormData((prev) => ({
                                         ...prev,
-                                        district: distrito,
+                                        distrito: distrito,
                                     }));
                                 }}
                             />
@@ -254,8 +268,8 @@ export default function ComplaintSimple() {
                                 <InputForm
                                     type="text"
                                     label="Dirección"
-                                    name="Dirección"
-                                    value={formData.dirección}
+                                    name="direccion"
+                                    value={formData.direccion}
                                     onChange={handleChange}
                                     placeholder=" Dirección"
                                 />
@@ -278,7 +292,7 @@ export default function ComplaintSimple() {
                                     onChange={(value) => {
                                         setFormData((prev) => ({
                                             ...prev,
-                                            tipoProducto: value,
+                                            tipo_roducto: value,
                                         }));
                                     }}
                                 />
@@ -290,10 +304,10 @@ export default function ComplaintSimple() {
                                 <InputForm
                                     type="number"
                                     label=" Monto reclamado"
-                                    name=" Monto reclamado"
-                                    value={formData.montoReclamado}
+                                    name="monto_reclamado"
+                                    value={formData.monto_reclamado}
                                     onChange={handleChange}
-                                    placeholder="  Monto reclamado"
+                                    placeholder="Monto reclamado"
                                 />
                             </div>
 
@@ -301,8 +315,8 @@ export default function ComplaintSimple() {
                                 <InputForm
                                     type="text"
                                     label=" Descripción de producto"
-                                    name=" Descripción de producto"
-                                    value={formData.descripcionProducto}
+                                    name="descripcion_producto"
+                                    value={formData.descripcion_producto}
                                     onChange={handleChange}
                                     placeholder="Nombre de producto y/o servicios, código(opcional)"
                                 />
@@ -324,7 +338,7 @@ export default function ComplaintSimple() {
                                 onChange={(value) => {
                                     setFormData((prev) => ({
                                         ...prev,
-                                        tipoProducto: value,
+                                        tipo_reclamo: value,
                                     }));
                                 }}
                             />
@@ -335,8 +349,8 @@ export default function ComplaintSimple() {
                                 <InputForm
                                     type="date"
                                     label="  Fecha de ocurrencia"
-                                    name=" fechaOcurrencia"
-                                    value={formData.fechaOcurrencia}
+                                    name="fecha_ocurrencia"
+                                    value={formData.fecha_ocurrencia}
                                     onChange={handleChange}
                                     placeholder="dd/mm/aaaa"
                                 />
@@ -346,8 +360,8 @@ export default function ComplaintSimple() {
                                 <InputForm
                                     type="text"
                                     label="Número de Pedido"
-                                    name="numeroPedido"
-                                    value={formData.numeroPedido}
+                                    name="numero_pedido"
+                                    value={formData.numero_pedido}
                                     onChange={handleChange}
                                     placeholder="Número de pedido: #95825548"
                                 />
@@ -360,10 +374,10 @@ export default function ComplaintSimple() {
                                     Detalle de reclamo o queja
                                 </label>
                                 <textarea
-                                    name="detalleReclamo"
+                                    name="detalle_reclamo"
                                     placeholder="Detalle de reclamo"
                                     className="w-full min-h-32  px-4 py-3 border customtext-neutral-dark  border-neutral-ligth rounded-xl focus:ring-0 focus:outline-0   transition-all duration-300"
-                                    value={formData.detalleReclamo}
+                                    value={formData.detalle_reclamo}
                                     onChange={handleChange}
                                 ></textarea>
                             </div>
@@ -376,46 +390,31 @@ export default function ComplaintSimple() {
                             <input
                                 type="checkbox"
                                 id="terminos"
-                                name="aceptaTerminos"
+                                name="acepta_terminos"
                                 className="mt-1 mr-2"
-                                checked={formData.aceptaTerminos}
+                                checked={formData.acepta_terminos}
                                 onChange={handleChange}
                             />
                             <label htmlFor="terminos" className="text-sm">
                                 Estoy de acuerdo con los{" "}
-                                <a href="#" className="text-blue-600 underline">
+                                <a
+                                    href="#"
+                                    className="customtext-primary underline"
+                                >
                                     términos y condiciones
                                 </a>
                             </label>
                         </div>
                     </div>
 
-                    {/* reCAPTCHA 
+                    {/* reCAPTCHA */}
                     <div className="mb-8">
-                        <div className="border border-gray-300 rounded w-fit p-2">
-                            <div className="flex items-center">
-                                <input
-                                    type="checkbox"
-                                    id="recaptcha"
-                                    className="mr-2"
-                                />
-                                <label htmlFor="recaptcha" className="text-sm">
-                                    No soy un robot
-                                </label>
-                            </div>
-                            <div className="flex justify-end mt-2">
-                                <div className="flex items-center">
-                                    <div className="text-xs text-gray-500 mr-1">
-                                        reCAPTCHA
-                                    </div>
-                                    <div className="text-xs text-gray-500">
-                                        Privacidad - Términos
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <ReCAPTCHA
+                            ref={recaptchaRef}
+                            sitekey="6LfAcfcqAAAAACc7tfKbaBFc1X5I9V4fewWoVf-9"
+                        />
                     </div>
-*/}
+
                     {/* Botón de envío */}
                     <div>
                         <button

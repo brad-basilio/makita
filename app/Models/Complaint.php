@@ -13,20 +13,23 @@ class Complaint extends Model
     public $incrementing = false;
     protected $keyType = 'string';
     protected $fillable = [
-        'name',
-        'email',
-        'phone',
-        'dni',
-        'type',
-        'incident_date',
-        'order_number',
-        'priority',
-        'description',
-        'file_paths',
-        'status'
-    ];
-
-    protected $casts = [
-        'file_paths' => 'array',
+        'nombre',
+        'tipo_documento',
+        'numero_identidad',
+        'celular',
+        'correo_electronico',
+        'departamento',
+        'provincia',
+        'distrito',
+        'direccion',
+        'tipo_producto',
+        'monto_reclamado',
+        'descripcion_producto',
+        'tipo_reclamo',
+        'fecha_ocurrencia',
+        'numero_pedido',
+        'detalle_reclamo',
+        'acepta_terminos',
+        'recaptcha_token',
     ];
 }

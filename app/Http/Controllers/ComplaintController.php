@@ -14,8 +14,17 @@ class ComplaintController extends BasicController
     public $model = Complaint::class;
     public $reactView = 'Complaint';
     public $reactRootView = 'public';
+    private function verifyRecaptcha($recaptchaToken)
+    {
+        $secretKey = env('RECAPTCHA_SECRET_KEY');
+        $response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret={$secretKey}&response={$recaptchaToken}");
+        $result = json_decode($response);
 
-    public function saveComplaint(Request $request)
+        return $result->success;
+    }
+
+
+    /* public function saveComplaint(Request $request)
     {
         //dump($request->all());
         $request->validate([
@@ -58,6 +67,39 @@ class ComplaintController extends BasicController
         //dump(DB::getQueryLog());
 
         //dump($complaint);
+
+        return response()->json(['message' => 'Reclamo registrado con éxito', 'data' => $complaint], 201);
+    }*/
+    public function saveComplaint(Request $request)
+    {
+        $request->validate([
+            'nombre' => 'required|string|max:255',
+            'tipo_documento' => 'required|string|in:RUC,DNI,CE,Pasaporte',
+            'numero_identidad' => 'required|string|max:20',
+            'celular' => 'nullable|string|max:20',
+            'correo_electronico' => 'required|email|max:255',
+            'departamento' => 'required|string|max:100',
+            'provincia' => 'required|string|max:100',
+            'distrito' => 'required|string|max:100',
+            'direccion' => 'required|string|max:255',
+            'tipo_producto' => 'required|string|in:producto,servicio',
+            'monto_reclamado' => 'nullable|numeric',
+            'descripcion_producto' => 'required|string',
+            'tipo_reclamo' => 'required|string|in:reclamo,queja',
+            'fecha_ocurrencia' => 'nullable|date',
+            'numero_pedido' => 'nullable|string|max:50',
+            'detalle_reclamo' => 'required|string',
+            'acepta_terminos' => 'required|boolean',
+            'recaptcha_token' => 'required|string',
+        ]);
+
+        // Verificar reCAPTCHA
+        if (!$this->verifyRecaptcha($request->recaptcha_token)) {
+            return response()->json(['message' => 'reCAPTCHA no válido'], 400);
+        }
+
+        // Guardar en la base de datos
+        $complaint = Complaint::create($request->all());
 
         return response()->json(['message' => 'Reclamo registrado con éxito', 'data' => $complaint], 201);
     }
