@@ -112,7 +112,7 @@ class ItemController extends BasicController
     }
     public function verifyCombo2(Request $request)
     {
-        dump($request->all());
+        //dump($request->all());
         try {
             // Validar la solicitud
             $validated = $request->validate([
@@ -127,7 +127,7 @@ class ItemController extends BasicController
                 $query->orderBy('is_main_item', 'desc'); // Ordenar para que el principal aparezca primero
             }])->get();
 
-            dump($combos);
+            //dump($combos);
 
             // Verificar si hay combos
             if ($combos->isEmpty()) {
@@ -148,7 +148,7 @@ class ItemController extends BasicController
                     }),
                 ];
             });
-            dump($result);
+            //dump($result);
             return response()->json([
                 'status' => true,
                 'data' => $result,
@@ -183,7 +183,7 @@ class ItemController extends BasicController
                 'items.brand'     // Incluir la marca del item
             ])->get();
 
-            dump($combos);
+            //dump($combos);
 
             // Verificar si hay combos
             if ($combos->isEmpty()) {
@@ -203,7 +203,7 @@ class ItemController extends BasicController
                 ];
             });
 
-            dump($result);
+            //dump($result);
 
             // Respuesta exitosa
             $response->status = 200;
@@ -221,7 +221,7 @@ class ItemController extends BasicController
     }
     public function updateViews(Request $request)
     {
-        dump($request->all());
+        //dump($request->all());
         $product = Item::findOrFail($request->id); // Asegúrate de que el modelo sea el correcto
         if (!$product) {
             return response()->json(['error' => 'Producto no encontrado'], 404);
@@ -232,7 +232,7 @@ class ItemController extends BasicController
 
     public function relationsItems(Request $request): HttpResponse | ResponseFactory
     {
-        dump($request->all());
+        //dump($request->all());
         $response = new Response();
         try {
             // Validar el ID del producto
@@ -242,14 +242,14 @@ class ItemController extends BasicController
 
             // Obtener el producto principal
             $product = Item::findOrFail($request->id);
-            dump($product);
+            //dump($product);
             // Obtener productos de la misma categoría (excluyendo el producto principal)
             $relatedItems = Item::where('category_id', $product->category_id)
                 ->where('id', '!=', $product->id) // Excluir el producto actual
                 ->with(['category', 'brand']) // Cargar relaciones necesarias
                 ->take(10) // Limitar a 10 productos
                 ->get();
-            dump($relatedItems);
+            //dump($relatedItems);
 
             // Verificar si hay productos relacionados
             if ($relatedItems->isEmpty()) {

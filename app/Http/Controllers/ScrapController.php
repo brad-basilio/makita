@@ -313,11 +313,11 @@ class ScrapController extends BasicController
 
                 // Ejecutar Puppeteer con paginación
                 $command = "node {$storePath} " . escapeshellarg($query) . " " . escapeshellarg($offset) . " " . escapeshellarg($limit) . " " . escapeshellarg($exchangeRate) . " " . escapeshellarg($page);
-                dump($command);
+//dump($command);
 
 
                 $output = shell_exec($command . ' 2>&1');
-                dump($output);
+//dump($output);
                 if (!$output) {
                     Log::info("Error al ejecutar el script de Node.js.");
                 }
@@ -444,14 +444,14 @@ class ScrapController extends BasicController
             $query = $request->input('query', 'mujer');
             $proveedor = $request->input('proveedor', 'nike');
             $filters = $request->input('filters', []); // Recibir los filtros como array
-            dump($filters);
+//dump($filters);
             $page = max(1, intval($request->input('page', 1))); // Página mínima 1
             $limit = max(1, intval($request->input('limit', 12))); // Mínimo 1 producto por página
             $offset = ($page - 1) * $limit;
 
             // 🔹 Construir la URL con los filtros
             $nikeUrl = $this->buildNikeUrl($filters, $query, $offset, $limit);
-            dump($nikeUrl);
+//dump($nikeUrl);
 
             $dataPath = "nike";
             $storePath = storage_path('app/scraper/scraper-nike.cjs');
@@ -465,10 +465,10 @@ class ScrapController extends BasicController
 
                 // 🔹 Ejecutar Puppeteer con la URL generada
                 $command = "node {$storePath} " . escapeshellarg($nikeUrl);
-                dump($command);
+//dump($command);
 
                 $output = shell_exec($command . ' 2>&1');
-                dump($output);
+//dump($output);
                 if (!$output) {
                     Log::info("Error al ejecutar el script de Node.js.");
                 }

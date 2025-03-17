@@ -25,4 +25,8 @@ class Complaint extends Model
         'file_paths',
         'status'
     ];
+
+    protected $casts = [
+        'file_paths' => 'array',
+    ];
 }

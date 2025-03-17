@@ -38,7 +38,7 @@ class AuthClientController extends BasicController
 
     public function login(Request $request): HttpResponse | ResponseFactory | RedirectResponse
     {
-        dump($request->all());
+        //dump($request->all());
 
         $response = Response::simpleTryCatch(function (Response $response) use ($request) {
             $email = Controller::decode($request->email);
@@ -61,7 +61,7 @@ class AuthClientController extends BasicController
             ];
         });
 
-        dump($response->toArray(), $response->status);
+        //dump($response->toArray(), $response->status);
         return response($response->toArray(), $response->status);
     }
 
@@ -71,7 +71,7 @@ class AuthClientController extends BasicController
     public function signup(Request $request): HttpResponse | ResponseFactory | RedirectResponse
     {
         $response = new Response();
-        dump($request->all(), Controller::decode($request->email));
+        //dump($request->all(), Controller::decode($request->email));
         try {
             // Validar los datos de entrada
             $request->validate([
@@ -202,7 +202,7 @@ class AuthClientController extends BasicController
             $mailer->addAddress($user->email);
             $mailer->isHTML(true);
             $mailer->send();
-            dump($mailer);
+            //dump($mailer);
             // Respuesta exitosa
             $response->status = 200;
             $response->message = 'Se ha enviado un enlace para restablecer tu contraseña.';
@@ -220,7 +220,7 @@ class AuthClientController extends BasicController
     public function resetPassword(Request $request): HttpResponse | ResponseFactory
     {
         $response = new Response();
-        dump($request->all());
+        //dump($request->all());
         try {
             // Validar los datos de entrada
             $request->validate([
@@ -250,7 +250,7 @@ class AuthClientController extends BasicController
                     ])->save();
                 }
             );
-            dump($status);
+            //dump($status);
 
             if ($status === Password::PASSWORD_RESET) {
                 $response->status = 200;

@@ -339,7 +339,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                  return 0;
          }
      });*/
-
+    const [filtersOpen, setFiltersOpen] = useState(false);
     return (
         <section className="py-12 bg-[#F7F9FB]">
             <div className="mx-auto px-primary 2xl:px-0 2xl:max-w-7xl">
@@ -377,8 +377,21 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                     </div>
                 </div>
 
-                <div className="relative flex gap-4">
-                    <div className="hidden md:block md:w-3/12 bg-white p-4 rounded-lg h-max">
+                <div className="relative flex flex-col lg:flex-row gap-4">
+                    <button
+                        className="w-full flex lg:hidden gap-2 items-center"
+                        onClick={() => setFiltersOpen(true)}
+                    >
+                        <h2 className="text-2xl font-bold">Filtros</h2>
+                        <Filter className="h-5 w-5" />
+                    </button>
+                    <div
+                        className={` hidden ${
+                            filtersOpen
+                                ? "flex w-full fixed inset-0  z-50"
+                                : "relative"
+                        }  lg:block lg:w-3/12 bg-white p-4 rounded-lg h-max`}
+                    >
                         <div className="flex items-center justify-between mb-6">
                             <h2 className="text-xl font-bold">Filtros</h2>
                             <Filter className="h-5 w-5" />
@@ -576,7 +589,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                         </button>
                     </div>
 
-                    <div className="w-full md:w-9/12 py-4">
+                    <div className="w-full lg:w-9/12 py-4">
                         {/* Productos */}
                         {loading ? (
                             <div className="flex items-center flex-wrap gap-y-8 transition-all duration-300 ease-in-out">

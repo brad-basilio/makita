@@ -2738,7 +2738,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Complaint.jsx": {
-    "file": "assets/Complaint-ClMvr5K2.js",
+    "file": "assets/Complaint-CESIF3rk.js",
     "name": "Complaint",
     "src": "resources/js/Components/Tailwind/Complaint.jsx",
     "isEntry": true,
@@ -2752,13 +2752,15 @@
     ]
   },
   "resources/js/Components/Tailwind/Complaints/ComplaintStech.jsx": {
-    "file": "assets/ComplaintStech-BPKy3FFd.js",
+    "file": "assets/ComplaintStech-B4qaYbDV.js",
     "name": "ComplaintStech",
     "src": "resources/js/Components/Tailwind/Complaints/ComplaintStech.jsx",
     "isEntry": true,
     "imports": [
       "resources/js/Components/About/AboutHeader.jsx",
-      "_index-CqkZ-sT_.js"
+      "_index-CqkZ-sT_.js",
+      "_main-MmatxeHN.js",
+      "____vite-browser-external_commonjs-proxy-DA7w84js.js"
     ]
   },
   "resources/js/Components/Tailwind/Components/CartItemRow.jsx": {
@@ -2881,7 +2883,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Filter.jsx": {
-    "file": "assets/Filter-D-4SRoRQ.js",
+    "file": "assets/Filter-R4xk135d.js",
     "name": "Filter",
     "src": "resources/js/Components/Tailwind/Filter.jsx",
     "isEntry": true,
@@ -2898,7 +2900,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Filters/CatalagoFiltros.jsx": {
-    "file": "assets/CatalagoFiltros-C720Wc5m.js",
+    "file": "assets/CatalagoFiltros-D-NMG07E.js",
     "name": "CatalagoFiltros",
     "src": "resources/js/Components/Tailwind/Filters/CatalagoFiltros.jsx",
     "isDynamicEntry": true,
@@ -4298,7 +4300,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-Dc7WwOkO.js",
+    "file": "assets/System-CcoUu9e5.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,

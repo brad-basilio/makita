@@ -54,7 +54,7 @@ class BasicController extends Controller
       if ($snake_case === 'item_image') {
         $snake_case = 'item';
       }
-      dump($snake_case);
+      //dump($snake_case);
       if (Text::has($uuid, '.')) {
         $route = "images/{$snake_case}/{$uuid}";
       } else {

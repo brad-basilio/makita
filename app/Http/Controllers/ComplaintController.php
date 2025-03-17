@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Complaint;
 use App\Models\General;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use SoDe\Extend\Crypto;
 
 class ComplaintController extends BasicController
 {
@@ -14,7 +17,7 @@ class ComplaintController extends BasicController
 
     public function saveComplaint(Request $request)
     {
-        dump($request->all());
+        //dump($request->all());
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
@@ -25,16 +28,21 @@ class ComplaintController extends BasicController
             'order_number' => 'nullable|string|max:50',
             'priority' => 'required|in:baja,media,alta',
             'description' => 'required|string',
-            'files.*' => 'nullable|file', // Múltiples archivos (2MB máximo cada uno)
+            'files.*' => 'nullable|file',
         ]);
 
         $filePaths = [];
         if ($request->hasFile('files')) {
             foreach ($request->file('files') as $file) {
-                $filePaths[] = $file->store('complaints', 'public');
+                $full = $file;
+                $uuid = Crypto::randomUUID();
+                $ext = $full->getClientOriginalExtension();
+                $path = "images/complaint/{$uuid}.{$ext}";
+                Storage::put($path, file_get_contents($full));
+                $filePaths[] = "{$uuid}.{$ext}";
             }
         }
-
+        //dump($filePaths);
         $complaint = Complaint::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -43,12 +51,13 @@ class ComplaintController extends BasicController
             'type' => $request->type,
             'incident_date' => $request->incident_date,
             'order_number' => $request->order_number,
-
             'priority' => $request->priority,
             'description' => $request->description,
             'file_paths' => $filePaths,
         ]);
-        dump($complaint);
+        //dump(DB::getQueryLog());
+
+        //dump($complaint);
 
         return response()->json(['message' => 'Reclamo registrado con éxito', 'data' => $complaint], 201);
     }
