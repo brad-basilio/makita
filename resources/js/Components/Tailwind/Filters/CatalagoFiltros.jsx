@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import CardHoverBtn from "../Products/Components/CardHoverBtn";
-import { ChevronDown, Filter, Search, Tag } from "lucide-react";
+import { ChevronDown, Filter, Search, Tag, X } from "lucide-react";
 import ItemsRest from "../../../Actions/ItemsRest";
 import ArrayJoin from "../../../Utils/ArrayJoin";
 import { Loading } from "../Components/Resources/Loading";
@@ -386,15 +386,21 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                         <Filter className="h-5 w-5" />
                     </button>
                     <div
-                        className={` hidden ${
+                        className={`${
                             filtersOpen
-                                ? "flex w-full fixed inset-0  z-50"
-                                : "relative"
-                        }  lg:block lg:w-3/12 bg-white p-4 rounded-lg h-max`}
+                                ? "fixed inset-0 z-50 bg-white p-4 overflow-y-auto"
+                                : "hidden"
+                        } lg:block lg:w-3/12 bg-white p-4 rounded-lg h-max`}
                     >
                         <div className="flex items-center justify-between mb-6">
                             <h2 className="text-xl font-bold">Filtros</h2>
-                            <Filter className="h-5 w-5" />
+                            <Filter className="hidden lg:block h-5 w-5" />
+                            <button
+                                className=" lg:hidden "
+                                onClick={() => setFiltersOpen(!filtersOpen)}
+                            >
+                                <X className="h-5 w-5" />
+                            </button>
                         </div>
 
                         <div className="mb-6">
