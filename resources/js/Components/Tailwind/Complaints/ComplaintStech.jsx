@@ -82,9 +82,9 @@ const ComplaintStech = () => {
                 </h1>
                 <form
                     onSubmit={handleSubmit}
-                    className="gap-6 grid grid-cols-3"
+                    className="gap-6 grid lg:grid-cols-3"
                 >
-                    <div className="col-span-3 grid grid-cols-2 gap-6">
+                    <div className="lg:col-span-3 grid lg:grid-cols-2 gap-6">
                         {/* Campo: Nombre */}
                         <InputForm
                             label="Nombre Completo *"
@@ -183,7 +183,7 @@ const ComplaintStech = () => {
                             <option value="alta">Alta</option>
                         </select>
                     </div>
-                    <div className="col-span-3 grid grid-cols-2 gap-6">
+                    <div className="lg:col-span-3 grid lg:grid-cols-2 gap-6">
                         {/* Campo: Descripción */}
                         <div>
                             <label className="block text-sm mb-1 customtext-neutral-dark">
@@ -213,7 +213,7 @@ const ComplaintStech = () => {
                         </div>
                     </div>
                     {/* Botón de Envío */}
-                    <div className="col-span-3 grid grid-cols-2 gap-6">
+                    <div className="lg:col-span-3 grid lg:grid-cols-2 gap-6">
                         <div>
                             <button
                                 type="submit"
