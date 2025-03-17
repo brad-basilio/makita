@@ -265,7 +265,7 @@ const HeaderSearchB = ({ items, data, cart, setCart, isUser, pages }) => {
                             <div className="absolute z-50 top-full left-0 bg-white shadow-xl border-t rounded-xl transition-all duration-300 ease-in-out w-40 mt-2">
                                 <div className="p-4">
                                     <ul className="space-y-2">
-                                        <li>
+                                        {/* <li>
                                             <a
                                                 href="#"
                                                 className="flex items-center gap-2 customtext-neutral-dark text-xs hover:customtext-primary transition-colors duration-300 cursor-pointer"
@@ -276,7 +276,8 @@ const HeaderSearchB = ({ items, data, cart, setCart, isUser, pages }) => {
                                                 />
                                                 <span>Mi cuenta</span>
                                             </a>
-                                        </li>
+                                        </li> */}
+
                                         <li>
                                             <a
                                                 href="#"
