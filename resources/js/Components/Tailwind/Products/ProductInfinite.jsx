@@ -96,7 +96,7 @@ const ProductInfinite = ({ items, data, setCart, cart }) => {
                     </div>
                     <div className="overflow-hidden py-4 md:hidden">
                         <div
-                            className="flex items-center  gap-y-4 transition-all duration-300 ease-in-out flex-wrap flex-shrink"
+                            className="flex items-center  gap-y-4 transition-all duration-300 ease-in-out flex-wrap flex-shrink lg:h-[460px] lg:max-h-[460px]  xl:h-[400px] xl:max-h-[400px] 2xl:h-[430px] 2xl:max-h-[430px]"
                             style={{
                                 transform: `translateX(-${
                                     currentSlide * (100 / slidesPerView)

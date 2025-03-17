@@ -361,7 +361,7 @@
                         "views"
                     ],
                     "with": ["category", "subcategory", "brand"],
-                    "limit": 8
+                    "limit": 10
                 }
             },
             {

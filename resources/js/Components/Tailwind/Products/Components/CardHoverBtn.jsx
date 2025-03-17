@@ -68,7 +68,7 @@ const CardHoverBtn = ({ product, widthClass = "lg:w-1/5", setCart, cart }) => {
                                 loading="lazy"
                             />
                         </div>
-                        <div className="hidden    pb-4 lg:opacity-0 absolute -bottom-5 w-full  group-hover:opacity-100   group-hover:flex gap-2 my-2 transition-all  duration-500 ">
+                        {/* <div className="hidden    pb-4 lg:opacity-0 absolute -bottom-5 w-full  group-hover:opacity-100   group-hover:flex gap-2 my-2 transition-all  duration-500 ">
                             <a
                                 href={`/product/${product.slug}`}
                                 className="flex-1 inline-flex items-center justify-center font-bold  text-sm bg-primary text-white  rounded-lg shadow-lg transition-all duration-300 hover:opacity-90 "
@@ -98,36 +98,37 @@ const CardHoverBtn = ({ product, widthClass = "lg:w-1/5", setCart, cart }) => {
                                 </svg>
                             </button>
                         </div>
+                        */}
                     </div>
 
-                    {/* Botones de acción (ocultos por defecto, aparecen con hover) 
-                <div className="overflow-hidden max-h-20  lg:max-h-0 pb-4 lg:opacity-0 group-hover:max-h-20 group-hover:opacity-100 transition-[max-height,opacity] duration-1000 ease-in-out flex gap-2 my-2 transform group-hover:translate-y-0 translate-y-4">
-                    <a
-                        href={`/product/${product.slug}`}
-                        className="flex-1 inline-flex items-center justify-center font-bold  text-sm bg-primary text-white  py-3 rounded-xl shadow-lg transition-all duration-300 hover:opacity-90"
-                    >
-                        Ver detalle
-                    </a>
-                    <button
-                        className="py-2 px-2.5 border border-primary rounded-lg customtext-primary transition-all duration-300  hover:opacity-90"
-                        disabled={inCart}
-                        onClick={() => onAddClicked(product)}
-                    >
-                        <svg
-                            className="w-5 h-5"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
+                    {/* Botones de acción (ocultos por defecto, aparecen con hover) */}
+                    <div className="overflow-hidden max-h-20  lg:max-h-0 pb-4 lg:opacity-0 group-hover:max-h-20 group-hover:opacity-100 transition-[max-height,opacity] duration-1000 ease-in-out flex gap-2 my-2 transform group-hover:translate-y-0 translate-y-4">
+                        <a
+                            href={`/product/${product.slug}`}
+                            className="flex-1 inline-flex items-center justify-center font-bold  text-sm bg-primary text-white  py-3 rounded-xl shadow-lg transition-all duration-300 hover:opacity-90"
                         >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                            />
-                        </svg>
-                    </button>
-                </div>*/}
+                            Ver detalle
+                        </a>
+                        <button
+                            className="py-2 px-2.5 border border-primary rounded-lg customtext-primary transition-all duration-300  hover:opacity-90"
+                            disabled={inCart}
+                            onClick={() => onAddClicked(product)}
+                        >
+                            <svg
+                                className="w-5 h-5"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+                                />
+                            </svg>
+                        </button>
+                    </div>
 
                     {/* Información del producto */}
                     <div>
