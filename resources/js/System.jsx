@@ -101,6 +101,7 @@ const System = ({
                         setCart={setCart}
                         pages={pages}
                         isUser={isUser}
+                        generals={generals}
                     />
                 );
             case "menu":

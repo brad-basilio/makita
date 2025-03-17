@@ -11,7 +11,29 @@ import CartModal from "../Components/CartModal";
 import AuthRest from "../../../Actions/AuthRest";
 import Logout from "../../../Actions/Logout";
 import MobileMenu from "./Components/MobileMenu";
-const HeaderSearchB = ({ items, data, cart, setCart, isUser, pages }) => {
+const HeaderSearchB = ({
+    items,
+    data,
+    cart,
+    setCart,
+    isUser,
+    pages,
+    generals = [],
+}) => {
+    const phoneWhatsappObj = generals.find(
+        (item) => item.correlative === "phone_whatsapp"
+    );
+    const messageWhatsappObj = generals.find(
+        (item) => item.correlative === "message_whatsapp"
+    );
+
+    const phoneWhatsapp = phoneWhatsappObj
+        ? phoneWhatsappObj.description
+        : null;
+    const messageWhatsapp = messageWhatsappObj
+        ? messageWhatsappObj.description
+        : null;
+
     const [modalOpen, setModalOpen] = useState(false);
     const [openMenu, setOpenMenu] = useState(false);
     const [searchMobile, setSearchMobile] = useState(false);
@@ -331,6 +353,21 @@ const HeaderSearchB = ({ items, data, cart, setCart, isUser, pages }) => {
                 modalOpen={modalOpen}
                 setModalOpen={setModalOpen}
             />
+            <div className="flex justify-end w-full mx-auto z-[100] relative">
+                <div className="fixed bottom-6 sm:bottom-[2rem] lg:bottom-[4rem] z-20 cursor-pointer">
+                    <a
+                        target="_blank"
+                        id="whatsapp-toggle"
+                        href={`https://api.whatsapp.com/send?phone=${phoneWhatsapp}&text=${messageWhatsapp}`}
+                    >
+                        <img
+                            src="/assets/img/whatsapp.svg"
+                            alt="whatsapp"
+                            className="mr-3 w-16 h-16 md:w-[100px] md:h-[100px]  animate-bounce duration-300"
+                        />
+                    </a>
+                </div>
+            </div>
         </header>
     );
 };

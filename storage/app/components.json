@@ -81,7 +81,8 @@
                 "using": {
                     "model": "Category",
                     "with": ["subcategories"]
-                }
+                },
+                "generals": ["phone_whatsapp", "message_whatsapp"]
             },
             {
                 "id": "HeaderScraping",
