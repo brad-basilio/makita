@@ -1,12 +1,16 @@
 import React from "react";
 
 const ComplaintStech = React.lazy(() => import("./Complaints/ComplaintStech"));
-
+const ComplaintSimple = React.lazy(() =>
+    import("./Complaints/ComplaintSimple")
+);
 const Complaint = ({ which, data }) => {
     const getComplaint = () => {
         switch (which) {
             case "ComplaintStech":
                 return <ComplaintStech data={data} />;
+            case "ComplaintSimple":
+                return <ComplaintSimple data={data} />;
 
             default:
                 return (

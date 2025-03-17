@@ -717,6 +717,11 @@
                 "id": "ComplaintStech",
                 "name": "Stech",
                 "data": ["steps", "selected"]
+            },
+            {
+                "id": "ComplaintSimple",
+                "name": "Simple",
+                "data": ["steps", "selected"]
             }
         ]
     }

@@ -76,7 +76,7 @@ const ComplaintStech = () => {
 
     return (
         <div className=" w-full px-primary mx-auto py-16 bg-[#F7F9FB]">
-            <div className="max-w-3xl mx-auto  bg-white shadow-lg rounded-2xl customtext-neutral-dark p-8">
+            <div className="max-w-7xl mx-auto  bg-white shadow-lg rounded-2xl customtext-neutral-dark p-8">
                 <h1 className="text-2xl font-bold mb-10 text-center uppercase">
                     Libro de Reclamaciones
                 </h1>
