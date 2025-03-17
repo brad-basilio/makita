@@ -39,15 +39,18 @@ const MenuSimple = ({ pages = [], items }) => {
                                     <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                                         {items.map((category, index) => (
                                             <div key={index}>
-                                                <h3 className="customtext-neutral-dark font-bold text-sm mb-3 cursor-pointer hover:customtext-primary transition-colors duration-300 ">
+                                                <a
+                                                    href={`/catalogo?category=${category.slug}`}
+                                                    className="customtext-neutral-dark font-bold text-sm mb-3 cursor-pointer hover:customtext-primary transition-colors duration-300 "
+                                                >
                                                     {category.name}
-                                                </h3>
+                                                </a>
                                                 <ul className="space-y-2">
                                                     {category.subcategories.map(
                                                         (item, itemIndex) => (
                                                             <li key={itemIndex}>
                                                                 <a
-                                                                    href="#"
+                                                                    href={`/catalogo?subcategory=${item.slug}`}
                                                                     className=" customtext-neutral-dark text-sm hover:customtext-primary transition-colors duration-300 cursor-pointer"
                                                                 >
                                                                     {item.name}

@@ -94,7 +94,7 @@ export default function LoginSimple() {
                                     label="Email"
                                     type="email"
                                     name="email"
-                                    value={formData.lastname}
+                                    value={formData.email}
                                     onChange={handleChange}
                                     placeholder="hola@mail.com"
                                 />

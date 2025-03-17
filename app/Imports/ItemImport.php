@@ -10,11 +10,17 @@ use App\Models\ItemSpecification;
 use App\Models\ItemImage;
 use Exception;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Concerns\SkipsOnError;
+use Maatwebsite\Excel\Concerns\SkipsOnFailure;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Validators\Failure;
+use Throwable;
 
-class ItemImport implements ToModel, WithHeadingRow
+class ItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsOnFailure
 {
+    use \Maatwebsite\Excel\Concerns\Importable;
+    private $errors = [];
     public function __construct()
     {
         \DB::statement('SET FOREIGN_KEY_CHECKS=0;'); // ⚠️ Desactiva las claves foráneas
@@ -28,58 +34,63 @@ class ItemImport implements ToModel, WithHeadingRow
     public function model(array $row)
     {
         //dump($row); // 🔍 Ver qué datos se están importando
+        try {
+            // 🔍 1️⃣ Si la fila está vacía, detener la importación
+            if ($this->isRowEmpty($row)) {
+                return null; // 🚫 Ignorar la fila y no procesarla
+            }
 
-        // 🔍 1️⃣ Si la fila está vacía, detener la importación
-        if ($this->isRowEmpty($row)) {
-            return null; // 🚫 Ignorar la fila y no procesarla
-        }
+            // 1️⃣ Obtener o crear la categoría
+            $category = Category::firstOrCreate(
+                ['name' => $row['categoria']],
+                ['slug' => str()->slug($row['categoria'])]
+            );
 
-        // 1️⃣ Obtener o crear la categoría
-        $category = Category::firstOrCreate(
-            ['name' => $row['categoria']],
-            ['slug' => str()->slug($row['categoria'])]
-        );
+            // 2️⃣ Obtener o crear la subcategoría
+            $subCategory = SubCategory::firstOrCreate(
+                ['name' => $row['subcategoria'], 'category_id' => $category->id],
+                ['slug' => str()->slug($row['subcategoria'])]
+            );
 
-        // 2️⃣ Obtener o crear la subcategoría
-        $subCategory = SubCategory::firstOrCreate(
-            ['name' => $row['subcategoria'], 'category_id' => $category->id],
-            ['slug' => str()->slug($row['subcategoria'])]
-        );
+            // 3️⃣ Obtener o crear la marca
+            $brand = Brand::firstOrCreate(
+                ['name' => $row['marca']],
+                ['slug' => str()->slug($row['marca'])]
+            );
 
-        // 3️⃣ Obtener o crear la marca
-        $brand = Brand::firstOrCreate(
-            ['name' => $row['marca']],
-            ['slug' => str()->slug($row['marca'])]
-        );
+            // 4️⃣ Crear el producto
+            $item = Item::create([
+                'sku' => $row['sku'],
+                'name' => $row['nombre_de_producto'],
+                //'summary' => $row['resumen'],
+                'description' => $row['descripcion'],
+                'price' => $row['precio'],
+                'discount' => $row['descuento'],
+                //final price = price > discount ? discount : discount ===NULL?price:discount;
+                'final_price' => isset($row['descuento']) && $row['descuento'] > 0 ? $row['descuento'] : $row['precio'],
+                'discount_percent' => isset($row['descuento']) && $row['descuento'] > 0 ? round((100 - ($row['descuento'] / $row['precio']) * 100)) : NULL,
+                'category_id' => $category->id,
+                'subcategory_id' => $subCategory->id,
+                'brand_id' => $brand->id,
+                'image' => $this->getMainImage($row['sku']),
+                'slug' => str()->slug($row['nombre_de_producto']),
+                'stock' =>  isset($row['stock']) && $row['stock'] > 0 ? $row['stock'] : 10,
+            ]);
 
-        // 4️⃣ Crear el producto
-        $item = Item::create([
-            'sku' => $row['sku'],
-            'name' => $row['nombre_de_producto'],
-            //'summary' => $row['resumen'],
-            'description' => $row['descripcion'],
-            'price' => $row['precio'],
-            'discount' => $row['descuento'],
-            //final price = price > discount ? discount : discount ===NULL?price:discount;
-            'final_price' => isset($row['descuento']) && $row['descuento'] > 0 ? $row['descuento'] : $row['precio'],
-            'discount_percent' => isset($row['descuento']) && $row['descuento'] > 0 ? round((100 - ($row['descuento'] / $row['precio']) * 100)) : NULL,
-            'category_id' => $category->id,
-            'subcategory_id' => $subCategory->id,
-            'brand_id' => $brand->id,
-            'image' => $this->getMainImage($row['sku']),
-            'slug' => str()->slug($row['nombre_de_producto']),
-            'stock' =>  isset($row['stock']) && $row['stock'] > 0 ? $row['stock'] : 10,
-        ]);
+            if ($item) {
+                // 5️⃣ Guardar las especificaciones
+                $this->saveSpecifications($item, $row['especificaciones_principales_separadas_por_comas'], 'principal');
+                $this->saveSpecifications($item, $row['especificaciones_generales_separado_por_comas_y_dos_puntos'], 'general');
 
-        if ($item) {
-            // 5️⃣ Guardar las especificaciones
-            $this->saveSpecifications($item, $row['especificaciones_principales_separadas_por_comas'], 'principal');
-            $this->saveSpecifications($item, $row['especificaciones_generales_separado_por_comas_y_dos_puntos'], 'general');
-
-            // 6️⃣ Guardar imágenes en la galería
-            $this->saveGalleryImages($item, $row['sku']);
-        } else {
-            throw new Exception("No se pudo obtener el ID del producto con SKU: " . $row['sku']);
+                // 6️⃣ Guardar imágenes en la galería
+                $this->saveGalleryImages($item, $row['sku']);
+            } else {
+                throw new Exception("No se pudo obtener el ID del producto con SKU: " . $row['sku']);
+            }
+        } catch (\Exception $e) {
+            \Log::error("Error al procesar fila: " . $e->getMessage());
+            $this->addError($e->getMessage());
+            return null; // Continuar con la siguiente fila
         }
     }
 
@@ -167,5 +178,34 @@ class ItemImport implements ToModel, WithHeadingRow
         }
 
         return true; // La fila está completamente vacía
+    }
+
+
+
+    public function onError(Throwable $e)
+    {
+        $this->addError("Error general: " . $e->getMessage());
+    }
+
+    public function onFailure(Failure ...$failures)
+    {
+        foreach ($failures as $failure) {
+            $this->addError(sprintf(
+                "Fila %d, Columna '%s': %s",
+                $failure->row(),
+                $failure->attribute(),
+                implode(', ', $failure->errors())
+            ));
+        }
+    }
+
+    public function getErrors()
+    {
+        return $this->errors;
+    }
+
+    private function addError($message)
+    {
+        $this->errors[] = $message;
     }
 }

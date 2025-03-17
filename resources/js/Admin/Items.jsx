@@ -752,7 +752,7 @@ const Items = ({ categories, brands }) => {
                 <QuillFormGroup eRef={descriptionRef} label="Descripcion" />
             </Modal>
             <Modal modalRef={modalImportRef} title={"Importar Datos"} size="sm">
-                <ModalImportItem gridRef={gridRef} />
+                <ModalImportItem gridRef={gridRef} modalRef={modalImportRef} />
             </Modal>
         </>
     );

@@ -18,13 +18,22 @@ class ItemImportController extends Controller
 
     public function import(Request $request)
     {
-        $request->validate([
-            'file' => 'required|mimes:xlsx,csv,xls'
-        ]);
-
         try {
-            Excel::import(new ItemImport($this->importService), $request->file('file'));
-            return response()->json(['message' => 'Importación exitosa']);
+            $request->validate([
+                'file' => 'required|mimes:xlsx'
+            ]);
+
+            $import = new ItemImport();
+            Excel::import($import, $request->file('file'));
+
+            $errors = $import->getErrors();
+            if (!empty($errors)) {
+                return response()->json(['error' => $errors], 400); // Código 400 para errores específicos
+            }
+
+            return response()->json(['message' => 'Importación exitosa'], 200);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json(['error' => $e->errors()], 422); // Código 422 para errores de validación
         } catch (\Exception $e) {
             return response()->json(['error' => 'Error al importar: ' . $e->getMessage()], 500);
         }

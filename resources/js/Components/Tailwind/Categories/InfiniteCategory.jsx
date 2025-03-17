@@ -85,6 +85,10 @@ const InfiniteCategory = ({ items, data }) => {
                                                     alt={category.name}
                                                     className="w-full h-full object-contain  transition-transform duration-300 group-hover:scale-110"
                                                     loading="lazy"
+                                                    onError={(e) =>
+                                                        (e.target.src =
+                                                            "/api/cover/thumbnail/null")
+                                                    }
                                                 />
                                             </div>
                                             <h3 className="text-center font-semibold text-base customtext-neutral-dark">

@@ -10,6 +10,33 @@ import SelectForm from "./Components/SelectForm";
 
 const itemsRest = new ItemsRest();
 
+const SkeletonCard = () => {
+    return (
+        <div
+            className={`group  animate-pulse  transition-transform duration-300 hover:scale-105 w-1/2 lg:w-1/4 flex-shrink-0 font-font-general customtext-primary cursor-pointer`}
+        >
+            <div className=" px-4">
+                <div className="bg-white rounded-3xl">
+                    {/* Imagen del producto y etiqueta de descuento */}
+                    <div className="relative">
+                        <div className="aspect-square bg-gray-300 rounded-3xl overflow-hidden flex items-center justify-center  bg-secondary">
+                            <svg
+                                class="w-10 h-10 text-gray-200 "
+                                aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="currentColor"
+                                viewBox="0 0 20 18"
+                            >
+                                <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
 //const CatalagoFiltros = ({ items, data, categories, brands, prices, cart, setCart }) => {
 const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
     const { categories, brands, priceRanges } = filteredData;
@@ -96,7 +123,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                 filter: filters, // Envía los filtros transformados
                 sort: selectedFilters.sort, // Enviar el parámetro de ordenación
                 // page,
-                take: 20, // Número de productos por página
+                take: 1000, // Número de productos por página
             };
 
             const response = await itemsRest.paginate(params);
@@ -120,6 +147,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
         const categoriaParam = params.get("category");
+        const subCategoriaParam = params.get("subcategory");
 
         if (categoriaParam) {
             const category = categories.find(
@@ -130,6 +158,30 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                 setSelectedFilters((prev) => ({
                     ...prev,
                     category_id: [category.id], // Asegúrate de que `category.id` exista
+                }));
+            }
+        }
+
+        if (subCategoriaParam) {
+            // Buscar la subcategoría en todas las categorías y obtener su categoría padre
+            let subCategoryFound = null;
+            let parentCategoryFound = null;
+
+            categories.forEach((category) => {
+                const subCategory = category.subcategories.find(
+                    (item) => item.slug === subCategoriaParam
+                );
+                if (subCategory) {
+                    subCategoryFound = subCategory;
+                    parentCategoryFound = category; // Guardamos la categoría padre
+                }
+            });
+
+            if (subCategoryFound && parentCategoryFound) {
+                setSelectedFilters((prev) => ({
+                    ...prev,
+                    category_id: [parentCategoryFound.id], // Actualiza con el ID de la categoría padre
+                    subcategory_id: [subCategoryFound.id], // Actualiza con el ID de la subcategoría
                 }));
             }
         }
@@ -527,14 +579,21 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                     <div className="w-full md:w-9/12 py-4">
                         {/* Productos */}
                         {loading ? (
-                            <Loading />
+                            <div className="flex items-center flex-wrap gap-y-8 transition-all duration-300 ease-in-out">
+                                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(
+                                    (index) => (
+                                        <SkeletonCard key={index} />
+                                    )
+                                )}
+                            </div>
                         ) : (
                             <div className="flex items-center flex-wrap gap-y-8 transition-all duration-300 ease-in-out">
                                 {Array.isArray(products) &&
                                 products.length > 0 ? (
                                     products.map((product) => (
                                         <div
-                                            className=" lg:h-[460px] lg:max-h-[460px]  xl:h-[400px] xl:max-h-[400px] 2xl:h-[430px] 2xl:max-h-[430px]  w-1/2 lg:w-1/3 xl:w-1/4"
+                                            // className=" lg:h-[460px] lg:max-h-[460px]  xl:h-[400px] xl:max-h-[400px] 2xl:h-[430px] 2xl:max-h-[430px]  w-1/2 lg:w-1/3 xl:w-1/4"
+                                            className="   w-1/2 lg:w-1/3 xl:w-1/4"
                                             key={product.id}
                                         >
                                             <CardHoverBtn

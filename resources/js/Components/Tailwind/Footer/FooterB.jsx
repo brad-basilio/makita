@@ -120,8 +120,8 @@ const FooterB = ({ pages, generals }) => {
                             </li>
                             <li>
                                 <a
-                                    href="#"
-                                    className="cursor-not-allowed flex flex-col gap-2 items-start  "
+                                    href="/libro-reclamaciones"
+                                    className="cursor-pointer flex flex-col gap-2 items-start  "
                                 >
                                     <span className="hover:customtext-primary hover:font-bold transition-all duration-300">
                                         Libro de reclamaciones

@@ -30,6 +30,7 @@ import Login from "./Components/Tailwind/Login";
 import Signup from "./Components/Tailwind/Signup";
 import ForgotPassword from "./Components/Tailwind/ForgotPassword";
 import ResetPassword from "./Components/Tailwind/ResetPassword";
+import Complaint from "./Components/Tailwind/Complaint";
 
 const itemsRest = new ItemsRest();
 
@@ -254,6 +255,8 @@ const System = ({
                         generals={generals}
                     />
                 );
+            case "complaints":
+                return <Complaint which={value} generals={generals} />;
         }
     };
 

@@ -708,5 +708,16 @@
                 ]
             }
         ]
+    },
+    {
+        "id": "complaints",
+        "name": "Complaints",
+        "options": [
+            {
+                "id": "ComplaintStech",
+                "name": "Stech",
+                "data": ["steps", "selected"]
+            }
+        ]
     }
 ]

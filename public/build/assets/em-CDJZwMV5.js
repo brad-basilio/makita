@@ -1,1 +1,0 @@
-import{j as r}from"./ModalImportItem-COUW3Uy_.js";import{H as e}from"./HtmlContent-CsL6K_SP.js";const m=(t="")=>r.jsx(e,{html:String(t).replace(/\*(.*?)\*/g,'<span style="color: #ec4899">$1</span>')});export{m as e};

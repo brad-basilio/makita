@@ -36,6 +36,7 @@ use App\Http\Controllers\AuthClientController;
 // Public
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\CoverController;
 use App\Http\Controllers\DeliveryPriceController;
 use App\Http\Controllers\ItemController;
@@ -62,8 +63,9 @@ use App\Http\Controllers\ScrapController;
 
 Route::post('/scrap', [ScrapController::class, 'scrap']);
 Route::post('/scrap-shopsimon', [ScrapController::class, 'scrapShopSimon']);
-Route::post('/import-items', [ItemImportController::class, 'import']);
 
+Route::post('/import-items', [ItemImportController::class, 'import']);
+Route::post('/complaints', [ComplaintController::class, 'saveComplaint']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/signup', [AuthController::class, 'signup']);
 
@@ -104,7 +106,8 @@ Route::delete('/mailing/down/{id}', [SubscriptionController::class, 'delete'])->
 
 Route::post('/items/verify-stock', [ItemController::class, 'verifyStock']);
 Route::post('/items/combo-items', [ItemController::class, 'verifyCombo']);
-Route::post('/item/{id}/update-views', [ItemController::class, 'updateViews']);
+Route::post('/items/update-items', [ItemController::class, 'updateViews']);
+Route::post('/items/relations-items', [ItemController::class, 'relationsItems']);
 
 Route::post('/pago', [PaymentController::class, 'charge']);
 Route::get('/pago/{sale_id}', [PaymentController::class, 'getPaymentStatus']);

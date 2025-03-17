@@ -1,12 +1,15 @@
 import React, { useRef, useState } from "react";
 import axios from "axios";
 import Modal from "../../Components/Adminto/Modal";
+import ItemsRest from "../../Actions/Admin/ItemsRest";
+const itemsRest = new ItemsRest();
 
-const ModalImportItem = ({ gridRef }) => {
+const ModalImportItem = ({ gridRef, modalRef }) => {
     const API_URL = import.meta.env.VITE_API_URL;
     const [file, setFile] = useState(null);
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
+    const [isError, setIsError] = useState(false);
 
     const handleFileChange = (e) => {
         setFile(e.target.files[0]);
@@ -15,6 +18,7 @@ const ModalImportItem = ({ gridRef }) => {
     const handleUpload = async () => {
         if (!file) {
             setMessage("Por favor, selecciona un archivo.");
+            setIsError(true);
             return;
         }
 
@@ -23,18 +27,31 @@ const ModalImportItem = ({ gridRef }) => {
 
         setLoading(true);
         try {
-            const response = await axios.post(
-                `${API_URL}/import-items`,
-                formData,
-                { headers: { "Content-Type": "multipart/form-data" } }
-            );
-            $(gridRef.current).dxDataGrid("instance").refresh(),
-                setMessage(response.data.message);
+            const result = await itemsRest.importData(formData);
+            console.log(result);
+
+            if (result.error) {
+                const errors = Array.isArray(result.error)
+                    ? result.error.join("\n")
+                    : result.error;
+
+                setMessage(`Error en la importación:\n${errors}`);
+                setIsError(true);
+            } else {
+                setMessage(result.message);
+                setIsError(false);
+                $(gridRef.current).dxDataGrid("instance").refresh();
+                // Cerrar el modal si la importación es exitosa
+                if (modalRef.current) {
+                    modalRef.current.close();
+                }
+            }
         } catch (error) {
             setMessage(
-                "Error al importar: " + error.response?.data?.error ||
-                    error.message
+                "Error al importar: " +
+                    (error.response?.data?.error || error.message)
             );
+            setIsError(true);
         }
         setLoading(false);
     };
@@ -42,18 +59,37 @@ const ModalImportItem = ({ gridRef }) => {
     return (
         <div className="bg-white">
             <div className="modal-content">
-                <h2>Importar Datos</h2>
-                <input
-                    type="file"
-                    accept=".xlsx,.xls,.csv"
-                    onChange={handleFileChange}
-                />
-                <button onClick={handleUpload} disabled={loading}>
+                <div>
+                    <input
+                        className="form-control"
+                        type="file"
+                        accept=".xlsx"
+                        onChange={handleFileChange}
+                    />
+                </div>
+
+                <button
+                    onClick={handleUpload}
+                    disabled={loading}
+                    className="btn btn-primary mt-2"
+                    type="button"
+                >
                     {loading ? "Subiendo..." : "Subir Archivo"}
                 </button>
-                {message && <p>{message}</p>}
+
+                {message && (
+                    <div
+                        className={`alert ${
+                            isError ? "alert-danger" : "alert-success"
+                        } mt-2`}
+                        role="alert"
+                    >
+                        <div className="alert-message">{message}</div>
+                    </div>
+                )}
             </div>
         </div>
     );
 };
+
 export default ModalImportItem;

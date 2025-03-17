@@ -59,6 +59,10 @@ const CarruselBenefitsInifinite = ({ items }) => {
                                     <img
                                         src={`/storage/images/indicator/${benefit.symbol}`}
                                         className="w-full h-auto"
+                                        onError={(e) =>
+                                            (e.target.src =
+                                                "/api/cover/thumbnail/null")
+                                        }
                                     />
                                 </div>
                             </div>
