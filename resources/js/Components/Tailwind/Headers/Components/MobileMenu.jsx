@@ -60,16 +60,17 @@ export default function MobileMenu({ search, setSearch, pages, items }) {
             );
         } else if (menuLevel === "categories") {
             return items.map((category) => (
-                <a
+                <div
                     key={category.id}
                     className=" py-4 border-b customtext-neutral-dark border-gray-100 flex justify-between items-center"
                     onClick={() => handleCategoryClick(category.name)}
-                    href={`/catalogo?category=${category.slug}`}
                 >
-                    <span>{category.name}</span>
+                    <a href={`/catalogo?category=${category.slug}`}>
+                        {category.name}
+                    </a>
 
                     <ChevronRight className="h-5 w-5 customtext-neutral-dark" />
-                </a>
+                </div>
             ));
         } else if (menuLevel === "subcategories" && selectedCategory) {
             // Por simplicidad, solo mostramos subcategorías para "audio"

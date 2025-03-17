@@ -2,7 +2,7 @@ import { Tag } from "lucide-react";
 
 const BannerPublicitario = ({ data }) => {
     return (
-        <div className=" px-primary 2xl:px-0 2xl:max-w-7xl mx-auto py-4 md:py-32">
+        <div className=" px-primary 2xl:px-0 2xl:max-w-7xl mx-auto py-4 md:py-12">
             <div
                 className="relative rounded-3xl md:rounded-2xl h-[600px] md:h-[500px] p-4 md:p-0"
                 style={{
