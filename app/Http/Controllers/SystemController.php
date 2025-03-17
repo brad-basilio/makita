@@ -92,9 +92,12 @@ class SystemController extends BasicController
                 if ($system->filters) {
                     foreach ($system->filters as $field) {
                         if ($field === 'views') {
+                            // Ordenar por vistas de manera descendente
                             $query->orderBy('views', 'desc');
-                        };
-                        $query->where($field, true);
+                        } else {
+                            // Aplicar filtro booleano para otros campos
+                            $query->where($field, true);
+                        }
                     }
                 }
 
