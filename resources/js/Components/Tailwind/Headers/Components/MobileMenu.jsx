@@ -60,15 +60,16 @@ export default function MobileMenu({ search, setSearch, pages, items }) {
             );
         } else if (menuLevel === "categories") {
             return items.map((category) => (
-                <div
+                <a
                     key={category.id}
-                    className="py-4 border-b customtext-neutral-dark border-gray-100 flex justify-between items-center"
+                    className=" py-4 border-b customtext-neutral-dark border-gray-100 flex justify-between items-center"
                     onClick={() => handleCategoryClick(category.name)}
+                    href={`/catalogo?category=${category.slug}`}
                 >
                     <span>{category.name}</span>
 
                     <ChevronRight className="h-5 w-5 customtext-neutral-dark" />
-                </div>
+                </a>
             ));
         } else if (menuLevel === "subcategories" && selectedCategory) {
             // Por simplicidad, solo mostramos subcategorías para "audio"
@@ -77,12 +78,13 @@ export default function MobileMenu({ search, setSearch, pages, items }) {
                 (category) => category.name === selectedCategory
             );
             return selectedSubcategory.subcategories.map((subcat, index) => (
-                <div
+                <a
+                    href={`/catalogo?subcategory=${subcat.slug}`}
                     key={index}
-                    className="py-4 customtext-neutral-dark border-b border-gray-100"
+                    className="block py-4 customtext-neutral-dark border-b border-gray-100"
                 >
                     <span>{subcat.name}</span>
-                </div>
+                </a>
             ));
         }
     };
