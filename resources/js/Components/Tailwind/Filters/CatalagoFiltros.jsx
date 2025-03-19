@@ -341,7 +341,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
      });*/
     const [filtersOpen, setFiltersOpen] = useState(false);
     return (
-        <section className="py-12 bg-[#F7F9FB]">
+        <section className="py-12 bg-sections-color customtext-neutral-dark">
             <div className="mx-auto px-primary 2xl:px-0 2xl:max-w-7xl">
                 <div className="flex flex-col md:flex-row md:justify-between items-center mb-8 pb-4 border-b-2">
                     <h2 className="text-[32px] md:text-4xl font-bold md:w-6/12">
@@ -433,7 +433,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                                         {filteredBrands.map((brand) => (
                                             <label
                                                 key={brand.id}
-                                                className="flex items-center space-x-3"
+                                                className="flex items-center space-x-3 customtext-neutral-light"
                                             >
                                                 <input
                                                     type="checkbox"
@@ -471,7 +471,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                                     {priceRanges.map((range) => (
                                         <label
                                             key={`${range.min}-${range.max}`}
-                                            className="flex items-center space-x-3"
+                                            className="flex items-center space-x-3 customtext-neutral-light"
                                         >
                                             <input
                                                 type="checkbox"
@@ -529,7 +529,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                                     <div className="space-y-3 max-h-80 overflow-y-auto">
                                         {filteredCategories.map((category) => (
                                             <div key={category.id}>
-                                                <label className="flex items-center space-x-3">
+                                                <label className="flex items-center space-x-3 customtext-neutral-light">
                                                     <input
                                                         type="checkbox"
                                                         className="h-4 w-4 rounded border-gray-300"
@@ -559,7 +559,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                                                                         key={
                                                                             sub.id
                                                                         }
-                                                                        className="flex items-center space-x-3"
+                                                                        className="flex items-center space-x-3 customtext-neutral-light"
                                                                     >
                                                                         <input
                                                                             type="checkbox"

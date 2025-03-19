@@ -43,7 +43,7 @@ const ProductInfinite = ({ items, data, setCart, cart }) => {
     }, []);
 
     return (
-        <section className="py-12 bg-[#F7F9FB]">
+        <section className="py-12 bg-sections-color">
             <div className=" mx-auto px-primary 2xl:px-0 2xl:max-w-7xl ">
                 {/* Header */}
                 <div className="md:flex justify-between items-center mb-8 pb-4 border-b customborder-neutral-light">

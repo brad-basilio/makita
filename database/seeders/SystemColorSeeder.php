@@ -34,6 +34,10 @@ class SystemColorSeeder extends Seeder
                 'name' => 'neutral-dark',
                 'description' => '#343A40',
             ],
+            [
+                'name' => 'sections-color',
+                'description' => '#313A40',
+            ],
 
         ];
 

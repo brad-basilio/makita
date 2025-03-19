@@ -2610,7 +2610,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Category.jsx": {
-    "file": "assets/Category-BqE6mn31.js",
+    "file": "assets/Category-BpusTUum.js",
     "name": "Category",
     "src": "resources/js/Components/Tailwind/Category.jsx",
     "isEntry": true,
@@ -2929,7 +2929,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Filter.jsx": {
-    "file": "assets/Filter-CDDsMIvb.js",
+    "file": "assets/Filter-DGvdqICp.js",
     "name": "Filter",
     "src": "resources/js/Components/Tailwind/Filter.jsx",
     "isEntry": true,
@@ -2946,7 +2946,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Filters/CatalagoFiltros.jsx": {
-    "file": "assets/CatalagoFiltros-BIkp3FDN.js",
+    "file": "assets/CatalagoFiltros-CCj7gxGV.js",
     "name": "CatalagoFiltros",
     "src": "resources/js/Components/Tailwind/Filters/CatalagoFiltros.jsx",
     "isDynamicEntry": true,
@@ -3457,7 +3457,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Product.jsx": {
-    "file": "assets/Product-gv2xmNbu.js",
+    "file": "assets/Product-6flD6ePv.js",
     "name": "Product",
     "src": "resources/js/Components/Tailwind/Product.jsx",
     "isEntry": true,
@@ -3475,7 +3475,7 @@
     ]
   },
   "resources/js/Components/Tailwind/ProductDetail.jsx": {
-    "file": "assets/ProductDetail-DmDdSSw9.js",
+    "file": "assets/ProductDetail-CwcaWlLB.js",
     "name": "ProductDetail",
     "src": "resources/js/Components/Tailwind/ProductDetail.jsx",
     "isEntry": true,
@@ -4348,7 +4348,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-DApiLR0Y.js",
+    "file": "assets/System-kIOaWLnt.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,
