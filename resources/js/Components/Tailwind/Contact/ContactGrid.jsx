@@ -10,9 +10,18 @@ const ContactGrid = ({ data, contacts }) => {
     const getContact = (correlative) => {
         return (
             contacts.find((contact) => contact.correlative === correlative)
-                ?.description || "No disponible"
+                ?.description || ""
         );
     };
+
+    const location =
+        contacts.find((x) => x.correlative == "location")?.description ?? "0,0";
+
+    const locationGps = {
+        lat: Number(location.split(",").map((x) => x.trim())[0]),
+        lng: Number(location.split(",").map((x) => x.trim())[1]),
+    };
+
     const nameRef = useRef();
 
     const emailRef = useRef();
@@ -183,6 +192,7 @@ const ContactGrid = ({ data, contacts }) => {
                 </div>
             </div>
             <div className="mx-auto 2xl:max-w-7xl   gap-12 bg-white rounded-xl px-8 py-8">
+                {console.log(getContact("location"))}
                 <LoadScript
                     googleMapsApiKey={Global.GMAPS_API_KEY}
                     className="rounded-xl"
@@ -190,8 +200,9 @@ const ContactGrid = ({ data, contacts }) => {
                     <GoogleMap
                         mapContainerStyle={{ width: "100%", height: "400px" }}
                         zoom={10}
+                        center={locationGps}
                     >
-                        <Marker position={getContact("location")} />
+                        <Marker position={locationGps} />
                     </GoogleMap>
                 </LoadScript>
             </div>

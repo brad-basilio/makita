@@ -1,125 +1,169 @@
-import { useEffect, useRef, useState } from "react"
-import image from "../../../../sources/images/login.png"
-import JSEncrypt from "jsencrypt"
-import Global from "../../../Utils/Global"
-import Swal from "sweetalert2"
-import { GET } from "sode-extend-react"
-import AuthClientRest from '../../../Actions/AuthClientRest'
+import { useEffect, useRef, useState } from "react";
+import image from "../../../../sources/images/login.png";
+import JSEncrypt from "jsencrypt";
+import Global from "../../../Utils/Global";
+import Swal from "sweetalert2";
+import { GET } from "sode-extend-react";
+import AuthClientRest from "../../../Actions/AuthClientRest";
+import InputForm from "../Checkouts/Components/InputForm";
 export default function LoginSimple() {
+    const jsEncrypt = new JSEncrypt();
+    jsEncrypt.setPublicKey(Global.PUBLIC_RSA_KEY);
 
-  const jsEncrypt = new JSEncrypt()
-  jsEncrypt.setPublicKey(Global.PUBLIC_RSA_KEY)
+    // Estados
+    const [loading, setLoading] = useState(true);
 
-  // Estados
-  const [loading, setLoading] = useState(true)
+    const emailRef = useRef();
+    const passwordRef = useRef();
+    const rememberRef = useRef();
+    const [formData, setFormData] = useState({
+        email: "",
+        password: "",
+        remember: "",
+    });
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
+    };
 
-  const emailRef = useRef()
-  const passwordRef = useRef()
-  const rememberRef = useRef()
+    useEffect(() => {
+        if (GET.message)
+            Swal.fire({
+                icon: "info",
+                title: "Mensaje",
+                text: GET.message,
+                showConfirmButton: false,
+                timer: 3000,
+            });
+    }, [null]);
 
-  useEffect(() => {
-    if (GET.message) Swal.fire({
-      icon: 'info',
-      title: 'Mensaje',
-      text: GET.message,
-      showConfirmButton: false,
-      timer: 3000
-    })
-  }, [null])
+    const onLoginSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
 
-  const onLoginSubmit = async (e) => {
-    e.preventDefault()
-    setLoading(true)
-    const email = emailRef.current.value
-    const password = passwordRef.current.value
+        const email = formData?.email;
+        const password = formData?.password;
 
-    const request = {
-      email: jsEncrypt.encrypt(email),
-      password: jsEncrypt.encrypt(password)
-    }
-    const result = await AuthClientRest.login(request)
+        const request = {
+            email: jsEncrypt.encrypt(email),
+            password: jsEncrypt.encrypt(password),
+        };
 
-    if (!result) return setLoading(false)
-    window.location.href = "/"
+        const result = await AuthClientRest.login(request);
 
-  }
-  return (
-    <div className=" w-full px-primary mx-auto py-16 bg-[#F7F9FB]">
-      <div className="p-8 lg:grid lg:grid-cols-2 gap-8 bg-white rounded-xl">
-        <div className="hidden lg:block">
-          <img
-            src={image}
-            alt="Imagen decorativa"
-            className="h-[600px] w-full object-cover rounded-xl"
-          />
-        </div>
-        <div className="flex items-center justify-center p-8">
-          <div className="mx-auto w-full max-w-md space-y-6">
-            <div className="space-y-2">
-              <h5 className="text-sky-500 font-medium">Hola</h5>
-              <h1 className="text-3xl font-bold">Bienvenido</h1>
-              <p className="text-gray-500">
-                Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
-              </p>
-            </div>
-            <form className="space-y-4" onSubmit={onLoginSubmit}>
-              <div className="space-y-2">
-                <label className="text-sm font-medium" htmlFor="email">
-                  Email
-                </label>
-                <input
-                  id="email"
-                  ref={emailRef}
-                  name="email"
-                  type="email"
-                  placeholder="hola@mail.com"
-                  className="w-full rounded-md border border-gray-200 px-4 py-2 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium" htmlFor="password">
-                  Contraseña
-                </label>
-                <input
-                  id="password"
-                  ref={passwordRef}
-                  name="password"
-                  type="password"
-                  className="w-full rounded-md border border-gray-200 px-4 py-2 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
-                  required
-                />
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    id="remember"
-                    ref={rememberRef}
-                    className="h-4 w-4 rounded border-gray-300 text-sky-500 focus:ring-sky-500"
-                  />
-                  <label htmlFor="remember" className="text-sm text-gray-600">
-                    Guardar mis datos
-                  </label>
+        setLoading(false); // Deja de mostrar el loading
+
+        // 🔴 Verifica si la autenticación fue exitosa antes de redirigir
+        if (!result || result.status !== 200) {
+            Notify.add({
+                icon: "/assets/img/icon.svg",
+                title: "Error",
+                body: result?.message || "Credenciales incorrectas",
+                type: "danger",
+            });
+            return; // 🔴 DETIENE la redirección
+        }
+
+        // ✅ Si el login fue exitoso, redirige
+        window.location.href = "/";
+    };
+
+    return (
+        <div className=" w-full px-primary mx-auto py-16 bg-[#F7F9FB]">
+            <div className="p-8 lg:grid lg:grid-cols-2 gap-8 bg-white rounded-xl">
+                <div className="hidden lg:block">
+                    <img
+                        src={image}
+                        alt="Imagen decorativa"
+                        className="h-[600px] w-full object-cover rounded-xl"
+                    />
                 </div>
-                <a href="/forgot-password" className="text-sm text-sky-500 hover:underline">
-                  Olvidé mi contraseña
-                </a>
-              </div>
-              <button
-                type="submit"
-                className="w-full rounded-md bg-sky-500 px-4 py-2 text-white hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
-              >
-                Ingresar
-              </button>
-              <div>  <div className="row mt-3">
-                <div className="col-12 text-center">
-
-                  <a href="/crear-cuenta" className="text-muted">No tienes una cuenta aun? </a>
-                </div>
-              </div>
-
-                {/*   <div className="relative">
+                <div className="flex items-center justify-center p-8">
+                    <div className="mx-auto w-full max-w-md space-y-6">
+                        <div className="space-y-2">
+                            <h5 className="text-sky-500 font-medium">Hola</h5>
+                            <h1 className="text-3xl font-bold">Bienvenido</h1>
+                            <p className="text-gray-500">
+                                Class aptent taciti sociosqu ad litora torquent
+                                per conubia nostra, per inceptos himenaeos.
+                            </p>
+                        </div>
+                        <form className="space-y-4" onSubmit={onLoginSubmit}>
+                            <div className="space-y-2">
+                                <InputForm
+                                    label="Email"
+                                    type="email"
+                                    name="email"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    placeholder="hola@mail.com"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <InputForm
+                                    label="Contraseña"
+                                    type="password"
+                                    name="password"
+                                    value={formData.password}
+                                    onChange={handleChange}
+                                    placeholder="password"
+                                />
+                            </div>
+                            <div className="flex items-center justify-between pb-6">
+                                <div className="flex items-center space-x-2">
+                                    <input
+                                        type="checkbox"
+                                        id="remember"
+                                        ref={rememberRef}
+                                        className="h-4 w-4 rounded border-gray-300 text-sky-500 focus:ring-sky-500"
+                                    />
+                                    <label
+                                        htmlFor="remember"
+                                        className="text-sm text-gray-600"
+                                    >
+                                        Guardar mis datos
+                                    </label>
+                                </div>
+                                <a
+                                    href="/forgot-password"
+                                    className="text-sm flex gap-2
+                                    items-center justify-center customtext-primary font-semibold  fill-primary"
+                                >
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="14"
+                                        height="17"
+                                        viewBox="0 0 14 17"
+                                        fill="current"
+                                    >
+                                        <path
+                                            d="M5.79167 11H8.20833L7.75 8.3125C7.98256 8.18831 8.16569 8.00822 8.29942 7.77223C8.43314 7.53626 8.5 7.27544 8.5 6.98979C8.5 6.57993 8.35269 6.22917 8.05808 5.9375C7.76346 5.64583 7.40929 5.5 6.99558 5.5C6.58186 5.5 6.22917 5.64688 5.9375 5.94063C5.64583 6.23438 5.5 6.5875 5.5 7C5.5 7.28344 5.56686 7.54225 5.70058 7.77642C5.83431 8.01057 6.01744 8.18926 6.25 8.3125L5.79167 11ZM7 16.5C5.125 16.0417 3.57292 14.9803 2.34375 13.3158C1.11458 11.6513 0.5 9.80297 0.5 7.77083V3L7 0.5L13.5 3V7.77083C13.5 9.80297 12.8854 11.6513 11.6562 13.3158C10.4271 14.9803 8.875 16.0417 7 16.5ZM7 14.9375C8.44444 14.4896 9.63889 13.5938 10.5833 12.25C11.5278 10.9062 12 9.41319 12 7.77083V4.02083L7 2.10417L2 4.02083V7.77083C2 9.41319 2.47222 10.9062 3.41667 12.25C4.36111 13.5938 5.55556 14.4896 7 14.9375Z"
+                                            fill="current"
+                                        />
+                                    </svg>
+                                    Olvidé mi contraseña
+                                </a>
+                            </div>
+                            <button
+                                type="submit"
+                                className="w-full rounded-xl font-semibold  bg-primary px-4 py-3 text-white hover:opacity-90 focus:outline-none focus:ring-2 transition-all duration-300"
+                            >
+                                Ingresar
+                            </button>
+                            <div>
+                                {" "}
+                                <div className="row mt-3">
+                                    <div className="text-sm text-center customtext-neutral-light">
+                                        <a
+                                            href="/crear-cuenta"
+                                            className="text-muted"
+                                        >
+                                            ¿Eres nuevo por aquí? Crea una
+                                            cuenta.{" "}
+                                        </a>
+                                    </div>
+                                </div>
+                                {/*   <div className="relative">
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-gray-200"></div>
                 </div>
@@ -162,12 +206,11 @@ export default function LoginSimple() {
                   Ingresar con mi cuenta de Facebook
                 </button>
               </div>*/}
-              </div>
-            </form>
-          </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  )
+    );
 }
-

@@ -31,6 +31,7 @@ use App\Http\Controllers\Admin\FaqController as AdminFaqController;
 use App\Http\Controllers\AuthClientController;
 // Public 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\SystemController;
 use SoDe\Extend\File;
 

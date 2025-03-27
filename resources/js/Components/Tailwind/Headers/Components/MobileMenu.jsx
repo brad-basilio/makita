@@ -62,10 +62,12 @@ export default function MobileMenu({ search, setSearch, pages, items }) {
             return items.map((category) => (
                 <div
                     key={category.id}
-                    className="py-4 border-b customtext-neutral-dark border-gray-100 flex justify-between items-center"
+                    className=" py-4 border-b customtext-neutral-dark border-gray-100 flex justify-between items-center"
                     onClick={() => handleCategoryClick(category.name)}
                 >
-                    <span>{category.name}</span>
+                    <a href={`/catalogo?category=${category.slug}`}>
+                        {category.name}
+                    </a>
 
                     <ChevronRight className="h-5 w-5 customtext-neutral-dark" />
                 </div>
@@ -77,12 +79,13 @@ export default function MobileMenu({ search, setSearch, pages, items }) {
                 (category) => category.name === selectedCategory
             );
             return selectedSubcategory.subcategories.map((subcat, index) => (
-                <div
+                <a
+                    href={`/catalogo?subcategory=${subcat.slug}`}
                     key={index}
-                    className="py-4 customtext-neutral-dark border-b border-gray-100"
+                    className="block py-4 customtext-neutral-dark border-b border-gray-100"
                 >
                     <span>{subcat.name}</span>
-                </div>
+                </a>
             ));
         }
     };

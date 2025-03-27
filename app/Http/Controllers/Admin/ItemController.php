@@ -53,7 +53,7 @@ class ItemController extends BasicController
     {
 
 
-        dump($request->all());
+//dump($request->all());
 
         DB::beginTransaction();
         try {

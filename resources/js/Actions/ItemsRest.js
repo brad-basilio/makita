@@ -43,6 +43,47 @@ class ItemsRest extends BasicRest {
             return [];
         }
     };
+    updateViews = async (request) => {
+        try {
+            const { status, result } = await Fetch(
+                `/api/${this.path}/update-items`,
+                {
+                    method: "POST",
+                    body: JSON.stringify(request),
+                }
+            );
+            if (!status)
+                throw new Error(
+                    result?.message ?? "Ocurrió un error al actualizar"
+                );
+
+            return result.data ?? [];
+        } catch (error) {
+            return [];
+        }
+    };
+
+    productsRelations = async (request) => {
+        try {
+            const { status, result } = await Fetch(
+                `/api/${this.path}/relations-items`,
+                {
+                    method: "POST",
+                    body: JSON.stringify(request),
+                }
+            );
+            if (!status)
+                throw new Error(
+                    result?.message ??
+                        "Ocurrió un error al consultar los productos"
+                );
+            console.log(result.data);
+
+            return result.data ?? [];
+        } catch (error) {
+            return [];
+        }
+    };
 }
 
 export default ItemsRest;

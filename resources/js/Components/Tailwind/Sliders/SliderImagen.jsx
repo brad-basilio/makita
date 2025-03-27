@@ -69,7 +69,7 @@ const SliderImagen = ({ items, data }) => {
                             </svg>
                         </button>
 
-                        <div className="overflow-hidden w-full px-4">
+                        <div className="overflow-hidden w-full mx-10 2xl:px-4">
                             {/* Movemos px-4 aquí */}
                             <div
                                 className="flex items-center transition-all duration-300 ease-in-out w-full"

@@ -1,0 +1,498 @@
+import ReCAPTCHA from "react-google-recaptcha";
+import { useEffect, useRef, useState } from "react";
+import InputForm from "../Checkouts/Components/InputForm";
+import ubigeoData from "../../../../../storage/app/utils/ubigeo.json";
+import SelectForm from "../Checkouts/Components/SelectForm";
+import { Notify } from "sode-extend-react";
+import ReactModal from "react-modal";
+import HtmlContent from "../../../Utils/HtmlContent";
+import { X } from "lucide-react";
+export default function ComplaintSimple({ generals }) {
+    const recaptchaRef = useRef(null);
+    const [messageCaptcha, setMessageCaptcha] = useState("");
+    const [formData, setFormData] = useState({
+        nombre: "",
+        tipo_documento: "RUC",
+        numero_identidad: "",
+        celular: "",
+        correo_electronico: "",
+        departamento: "",
+        provincia: "",
+        distrito: "",
+        direccion: "",
+        tipo_producto: "",
+        monto_reclamado: "",
+        descripcion_producto: "",
+        tipo_reclamo: "",
+        fecha_ocurrencia: "",
+        numero_pedido: "",
+        detalle_reclamo: "",
+        acepta_terminos: false,
+    });
+
+    const handleChange = (e) => {
+        const { name, value, type, checked } = e.target;
+        setFormData({
+            ...formData,
+            [name]: type === "checkbox" ? checked : value,
+        });
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const recaptchaValue = recaptchaRef.current.getValue();
+        if (!recaptchaValue) {
+            setMessageCaptcha("Por favor, verifica el reCAPTCHA.");
+            return;
+        }
+
+        const updatedFormData = {
+            ...formData,
+            recaptcha_token: recaptchaValue,
+        };
+        fetch("/api/complaints", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(updatedFormData),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data);
+                if (data.type === "success")
+                    Notify.add({
+                        type: "success",
+                        icon: "/assets/img/icon.svg",
+                        title: "Solitud enviada con éxito",
+                        body: data.message,
+                    });
+                else {
+                    Notify.add({
+                        type: "danger",
+                        icon: "/assets/img/icon.svg",
+                        title: "Envio Fallido",
+                        body: data.message,
+                    });
+                }
+            })
+            .catch((error) =>
+                Notify.add({
+                    type: "danger",
+                    icon: "/assets/img/icon.svg",
+                    title: "Error",
+                    body: error,
+                })
+            );
+    };
+
+    // Estados para manejar los valores seleccionados
+    const [departamento, setDepartamento] = useState("");
+    const [provincia, setProvincia] = useState("");
+    const [distrito, setDistrito] = useState("");
+
+    // Estados para las opciones dinámicas
+    const [departamentos, setDepartamentos] = useState([]);
+    const [provincias, setProvincias] = useState([]);
+    const [distritos, setDistritos] = useState([]);
+
+    // Cargar los departamentos al iniciar el componente
+    useEffect(() => {
+        const uniqueDepartamentos = [
+            ...new Set(ubigeoData.map((item) => item.departamento)),
+        ];
+        setDepartamentos(uniqueDepartamentos);
+    }, []);
+
+    // Filtrar provincias cuando se selecciona un departamento
+    useEffect(() => {
+        if (departamento) {
+            const filteredProvincias = [
+                ...new Set(
+                    ubigeoData
+                        .filter((item) => item.departamento === departamento)
+                        .map((item) => item.provincia)
+                ),
+            ];
+            setProvincias(filteredProvincias);
+            setProvincia(""); // Reiniciar provincia
+            setDistrito(""); // Reiniciar distrito
+            setDistritos([]); // Limpiar distritos
+            setFormData((prev) => ({
+                ...prev,
+                departamento: departamento,
+                provincia: "",
+                distrito: "",
+            }));
+        }
+    }, [departamento]);
+
+    // Filtrar distritos cuando se selecciona una provincia
+    useEffect(() => {
+        if (provincia) {
+            const filteredDistritos = ubigeoData
+                .filter(
+                    (item) =>
+                        item.departamento === departamento &&
+                        item.provincia === provincia
+                )
+                .map((item) => item.distrito);
+            setDistritos(filteredDistritos);
+            setDistrito(""); // Reiniciar distrito
+            setFormData((prev) => ({
+                ...prev,
+                provincia: provincia,
+                distrito: "",
+            }));
+        }
+    }, [provincia]);
+
+    // Consultar el precio de envío cuando se selecciona un distrito
+    useEffect(() => {
+        if (distrito) {
+            setFormData((prev) => ({ ...prev, distrito: distrito }));
+        }
+    }, [distrito]);
+
+    const typesDocument = [
+        { value: "ruc", label: "RUC" },
+        { value: "dni", label: "DNI" },
+        { value: "ce", label: "CE" },
+        { value: "pasaporte", label: "Pasaporte" },
+    ];
+    const typesContract = [
+        { value: "producto", label: "Producto" },
+        { value: "servicio", label: "Servicio" },
+    ];
+    const typesClaim = [
+        { value: "reclamo", label: "Reclamo" },
+        { value: "queja", label: "Queja" },
+    ];
+
+    const [modalOpen, setModalOpen] = useState(false);
+
+    const policyItems = {
+        terms_conditions: "Términos y condiciones",
+    };
+
+    const openModal = (index) => setModalOpen(index);
+    const closeModal = () => setModalOpen(null);
+    return (
+        <div className=" w-full px-primary mx-auto py-16 bg-[#F7F9FB]">
+            <div className="max-w-7xl mx-auto  bg-white shadow-lg rounded-2xl customtext-neutral-dark p-8">
+                <h1 className="text-2xl font-bold mb-10 text-center uppercase">
+                    Libro de Reclamaciones
+                </h1>
+
+                <form onSubmit={handleSubmit}>
+                    {/* Identificación del Consumidor */}
+                    <div className="mb-8">
+                        <h2 className="text-xl font-medium mb-4">
+                            Identificación del Consumidor
+                        </h2>
+
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div className="space-y-1">
+                                <InputForm
+                                    type="text"
+                                    label="Nombres"
+                                    name="nombre"
+                                    value={formData.nombre}
+                                    onChange={handleChange}
+                                    placeholder="Nombres"
+                                />
+                            </div>
+                            {/*TIPO DOCUMENTO */}
+                            <div className="space-y-1">
+                                <SelectForm
+                                    label="Tipo de documento"
+                                    options={typesDocument}
+                                    placeholder="Selecciona  documento"
+                                    onChange={(value) => {
+                                        setFormData((prev) => ({
+                                            ...prev,
+                                            tipo_documento: value,
+                                        }));
+                                    }}
+                                />
+                            </div>
+
+                            <div className="space-y-1">
+                                <InputForm
+                                    type="text"
+                                    label="Número de identidad"
+                                    name="numero_identidad"
+                                    value={formData.numero_identidad}
+                                    onChange={handleChange}
+                                    placeholder="Número de identidad"
+                                />
+                            </div>
+                        </div>
+                        {/*CELULAR */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                            <div className="space-y-1">
+                                <InputForm
+                                    type="text"
+                                    label="Número de celular"
+                                    name="celular"
+                                    value={formData.celular}
+                                    onChange={handleChange}
+                                    placeholder="Número de celular"
+                                />
+                            </div>
+                            {/*CORREO */}
+                            <div className="space-y-1">
+                                <InputForm
+                                    type="text"
+                                    label=" Correo Electrónico"
+                                    name="correo_electronico"
+                                    value={formData.correo_electronico}
+                                    onChange={handleChange}
+                                    placeholder=" Correo Electrónico"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                            {/* Departamento */}
+
+                            <SelectForm
+                                label="Departamento"
+                                options={departamentos}
+                                placeholder="Selecciona un Departamento"
+                                onChange={(value) => {
+                                    setDepartamento(value);
+                                    setFormData((prev) => ({
+                                        ...prev,
+                                        departmento: value,
+                                    }));
+                                }}
+                            />
+
+                            {/* Provincia */}
+
+                            <SelectForm
+                                disabled={!departamento}
+                                label="Provincia"
+                                options={provincias}
+                                placeholder="Selecciona una Provincia"
+                                onChange={(value) => {
+                                    setProvincia(value);
+                                    setFormData((prev) => ({
+                                        ...prev,
+                                        provincia: value,
+                                    }));
+                                }}
+                            />
+
+                            {/* Distrito */}
+
+                            <SelectForm
+                                disabled={!provincia}
+                                label="Distrito"
+                                options={distritos}
+                                placeholder="Selecciona un Distrito"
+                                onChange={(value) => {
+                                    setDistrito(value);
+                                    setFormData((prev) => ({
+                                        ...prev,
+                                        distrito: value,
+                                    }));
+                                }}
+                            />
+                        </div>
+
+                        <div className="mt-4">
+                            <div className="space-y-1">
+                                <InputForm
+                                    type="text"
+                                    label="Dirección"
+                                    name="direccion"
+                                    value={formData.direccion}
+                                    onChange={handleChange}
+                                    placeholder=" Dirección"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Identificación del bien contratado */}
+                    <div className="mb-8">
+                        <h2 className="text-xl font-medium mb-4">
+                            Identificación del bien contratado
+                        </h2>
+
+                        <div className="mb-4">
+                            <div className="relative mt-1">
+                                <SelectForm
+                                    label=" ¿Fue un producto o Servicio?"
+                                    options={typesContract}
+                                    placeholder="Selecciona..."
+                                    onChange={(value) => {
+                                        setFormData((prev) => ({
+                                            ...prev,
+                                            tipo_producto: value,
+                                        }));
+                                    }}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                            <div className="space-y-1">
+                                <InputForm
+                                    type="number"
+                                    label=" Monto reclamado"
+                                    name="monto_reclamado"
+                                    value={formData.monto_reclamado}
+                                    onChange={handleChange}
+                                    placeholder="Monto reclamado"
+                                />
+                            </div>
+
+                            <div className="space-y-1">
+                                <InputForm
+                                    type="text"
+                                    label=" Descripción de producto"
+                                    name="descripcion_producto"
+                                    value={formData.descripcion_producto}
+                                    onChange={handleChange}
+                                    placeholder="Nombre de producto y/o servicios, código(opcional)"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Detalle del reclamo del pedido del consumidor */}
+                    <div className="mb-8">
+                        <h2 className="text-xl font-medium mb-4">
+                            Detalle del reclamo del pedido del consumidor
+                        </h2>
+
+                        <div className="mb-4">
+                            <SelectForm
+                                label="¿Es un reclamo o queja?"
+                                options={typesClaim}
+                                placeholder="Selecciona..."
+                                onChange={(value) => {
+                                    setFormData((prev) => ({
+                                        ...prev,
+                                        tipo_reclamo: value,
+                                    }));
+                                }}
+                            />
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                            <div className="space-y-1">
+                                <InputForm
+                                    type="date"
+                                    label="  Fecha de ocurrencia"
+                                    name="fecha_ocurrencia"
+                                    value={formData.fecha_ocurrencia}
+                                    onChange={handleChange}
+                                    placeholder="dd/mm/aaaa"
+                                />
+                            </div>
+
+                            <div className="space-y-1">
+                                <InputForm
+                                    type="text"
+                                    label="Número de Pedido"
+                                    name="numero_pedido"
+                                    value={formData.numero_pedido}
+                                    onChange={handleChange}
+                                    placeholder="Número de pedido: #95825548"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="mt-4">
+                            <div className="space-y-1">
+                                <label className="block text-sm mb-1 customtext-neutral-dark">
+                                    Detalle de reclamo o queja
+                                </label>
+                                <textarea
+                                    name="detalle_reclamo"
+                                    placeholder="Detalle de reclamo"
+                                    className="w-full min-h-32  px-4 py-3 border customtext-neutral-dark  border-neutral-ligth rounded-xl focus:ring-0 focus:outline-0   transition-all duration-300"
+                                    value={formData.detalle_reclamo}
+                                    onChange={handleChange}
+                                ></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Términos y condiciones */}
+                    <div className="mb-8">
+                        <div className="flex items-start">
+                            <input
+                                type="checkbox"
+                                id="terminos"
+                                name="acepta_terminos"
+                                className="mt-1 mr-2"
+                                checked={formData.acepta_terminos}
+                                onChange={handleChange}
+                            />
+                            <label htmlFor="terminos" className="text-sm">
+                                Estoy de acuerdo con los{" "}
+                                <a
+                                    onClick={() => openModal(0)}
+                                    className="customtext-primary underline"
+                                >
+                                    términos y condiciones
+                                </a>
+                            </label>
+                        </div>
+                    </div>
+
+                    {/* reCAPTCHA */}
+                    <div className="mb-8">
+                        <ReCAPTCHA
+                            ref={recaptchaRef}
+                            sitekey="6LfAcfcqAAAAACc7tfKbaBFc1X5I9V4fewWoVf-9"
+                        />
+                        {messageCaptcha && (
+                            <p className="text-red-500 mt-2">
+                                {messageCaptcha}
+                            </p>
+                        )}
+                    </div>
+
+                    {/* Botón de envío */}
+                    <div>
+                        <button
+                            type="submit"
+                            className="bg-primary text-white px-6 py-3 font-medium rounded-lg"
+                        >
+                            Enviar a libro de reclamaciones
+                        </button>
+                    </div>
+                </form>
+            </div>
+            {Object.keys(policyItems).map((key, index) => {
+                const title = policyItems[key];
+                const content =
+                    generals.find((x) => x.correlative == key)?.description ??
+                    "";
+                return (
+                    <ReactModal
+                        key={index}
+                        isOpen={modalOpen === index}
+                        onRequestClose={closeModal}
+                        contentLabel={title}
+                        className="absolute left-1/2 -translate-x-1/2 bg-white p-6 rounded-xl shadow-lg w-[95%] max-w-4xl my-8"
+                        overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-50"
+                    >
+                        <button
+                            onClick={closeModal}
+                            className="float-right text-red-500 hover:text-red-700 transition-all duration-300 "
+                        >
+                            <X width="2rem" strokeWidth="4px" />
+                        </button>
+                        <h2 className="text-2xl font-bold mb-4">{title}</h2>
+                        <HtmlContent className="prose" html={content} />
+                    </ReactModal>
+                );
+            })}
+        </div>
+    );
+}

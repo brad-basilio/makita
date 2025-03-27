@@ -40,7 +40,7 @@ export default function AboutSimple({ data, filteredData }) {
                 </div>
                 <div className="mt-12 max-w-5xl mx-auto rounded-2xl overflow-hidden">
                     <img
-                        src={`/storage/images/aboutuse/${sectionOne?.image}`}
+                        src={`/storage/images/aboutus/${sectionOne?.image}`}
                         onError={(e) =>
                             (e.target.src = "/api/cover/thumbnail/null")
                         }
@@ -76,7 +76,7 @@ export default function AboutSimple({ data, filteredData }) {
                 <div className="max-w-7xl mx-auto">
                     <div className="grid md:grid-cols-2 gap-12 items-center">
                         <img
-                            src={`/storage/images/aboutuse/${sectionThree?.image}`}
+                            src={`/storage/images/aboutus/${sectionThree?.image}`}
                             onError={(e) =>
                                 (e.target.src = "/api/cover/thumbnail/null")
                             }
@@ -114,7 +114,7 @@ export default function AboutSimple({ data, filteredData }) {
                             />
                         </div>
                         <img
-                            src={`/storage/images/aboutuse/${sectionFour?.image}`}
+                            src={`/storage/images/aboutus/${sectionFour?.image}`}
                             onError={(e) =>
                                 (e.target.src = "/api/cover/thumbnail/null")
                             }
@@ -142,7 +142,7 @@ function FeatureCard({ icon, title, description }) {
                 />
             </div>
             <h3 className="text-xl font-semibold mb-2">{title}</h3>
-            <p className="text-gray-600">{description}</p>
+            <p className="customtext-neutral-light">{description}</p>
         </div>
     );
 }

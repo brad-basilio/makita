@@ -37,7 +37,7 @@ class MailingController extends Controller
     static function simpleNotify(string $view, string $email, array $data)
     {
         try {
-            dump($data);
+            //dump($data);
             $content = View::make($view, $data)->render();
 
             $mail = EmailConfig::config();
@@ -48,7 +48,7 @@ class MailingController extends Controller
             $mail->send();
         } catch (\Throwable $th) {
             if (\env('APP_ENV') == 'local') {
-                dump($th->getMessage());
+                //dump($th->getMessage());
             }
         }
     }

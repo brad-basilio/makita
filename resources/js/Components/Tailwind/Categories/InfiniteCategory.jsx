@@ -78,13 +78,17 @@ const InfiniteCategory = ({ items, data }) => {
                                         href={`/catalogo?category=${category.slug}`}
                                         className="block group"
                                     >
-                                        <div className="bg-[#F7F9FB] rounded-xl p-4 transition-transform duration-300 ">
+                                        <div className="bg-sections-color rounded-xl p-4 transition-transform duration-300 ">
                                             <div className="aspect-square relative mb-4">
                                                 <img
-                                                    src={`/storage/images/categorie/${category.image}`}
+                                                    src={`/storage/images/category/${category.image}`}
                                                     alt={category.name}
                                                     className="w-full h-full object-contain  transition-transform duration-300 group-hover:scale-110"
                                                     loading="lazy"
+                                                    onError={(e) =>
+                                                        (e.target.src =
+                                                            "/api/cover/thumbnail/null")
+                                                    }
                                                 />
                                             </div>
                                             <h3 className="text-center font-semibold text-base customtext-neutral-dark">

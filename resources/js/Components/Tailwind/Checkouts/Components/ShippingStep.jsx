@@ -11,7 +11,21 @@ import OptionCard from "./OptionCard";
 import { InfoIcon } from "lucide-react";
 import { Notify } from "sode-extend-react";
 
-export default function ShippingStep({ cart, setSale, setCode, setDelivery, setCart, onContinue, noContinue, subTotal, igv, totalFinal, user, setEnvio, envio }) {
+export default function ShippingStep({
+    cart,
+    setSale,
+    setCode,
+    setDelivery,
+    setCart,
+    onContinue,
+    noContinue,
+    subTotal,
+    igv,
+    totalFinal,
+    user,
+    setEnvio,
+    envio,
+}) {
     const [formData, setFormData] = useState({
         name: user?.name || "",
         lastname: user?.lastname || "",
@@ -46,7 +60,9 @@ export default function ShippingStep({ cart, setSale, setCode, setDelivery, setC
 
     // Cargar los departamentos al iniciar el componente
     useEffect(() => {
-        const uniqueDepartamentos = [...new Set(ubigeoData.map((item) => item.departamento))];
+        const uniqueDepartamentos = [
+            ...new Set(ubigeoData.map((item) => item.departamento)),
+        ];
         setDepartamentos(uniqueDepartamentos);
     }, []);
 
@@ -64,7 +80,12 @@ export default function ShippingStep({ cart, setSale, setCode, setDelivery, setC
             setProvincia(""); // Reiniciar provincia
             setDistrito(""); // Reiniciar distrito
             setDistritos([]); // Limpiar distritos
-            setFormData((prev) => ({ ...prev, department: departamento, province: "", district: "" }));
+            setFormData((prev) => ({
+                ...prev,
+                department: departamento,
+                province: "",
+                district: "",
+            }));
         }
     }, [departamento]);
 
@@ -72,11 +93,19 @@ export default function ShippingStep({ cart, setSale, setCode, setDelivery, setC
     useEffect(() => {
         if (provincia) {
             const filteredDistritos = ubigeoData
-                .filter((item) => item.departamento === departamento && item.provincia === provincia)
+                .filter(
+                    (item) =>
+                        item.departamento === departamento &&
+                        item.provincia === provincia
+                )
                 .map((item) => item.distrito);
             setDistritos(filteredDistritos);
             setDistrito(""); // Reiniciar distrito
-            setFormData((prev) => ({ ...prev, province: provincia, district: "" }));
+            setFormData((prev) => ({
+                ...prev,
+                province: provincia,
+                district: "",
+            }));
         }
     }, [provincia]);
 
@@ -94,9 +123,9 @@ export default function ShippingStep({ cart, setSale, setCode, setDelivery, setC
                     });
                     setEnvio(response.data.price);
                     if (Number2Currency(response.data.price) > 0) {
-                        setSelectedOption('express')
+                        setSelectedOption("express");
                     } else {
-                        setSelectedOption('free')
+                        setSelectedOption("free");
                     }
                 } catch (error) {
                     console.error("Error fetching shipping cost:", error);
@@ -109,8 +138,8 @@ export default function ShippingStep({ cart, setSale, setCode, setDelivery, setC
     }, [distrito]);
 
     const handlePayment = async (e) => {
-        e.preventDefault()
-        if (!user.id) {
+        e.preventDefault();
+        if (!user) {
             Notify.add({
                 icon: "/assets/img/icon.svg",
                 title: "Iniciar Sesión",
@@ -118,16 +147,18 @@ export default function ShippingStep({ cart, setSale, setCode, setDelivery, setC
                 type: "danger",
             });
 
-            return
+            return;
         }
-        if (!formData.department ||
+        if (
+            !formData.department ||
             !formData.province ||
             !formData.district ||
             !formData.name ||
             !formData.lastname ||
             !formData.email ||
             !formData.address ||
-            !formData.reference) {
+            !formData.reference
+        ) {
             Notify.add({
                 icon: "/assets/img/icon.svg",
                 title: "Error en el Formulario",
@@ -135,7 +166,7 @@ export default function ShippingStep({ cart, setSale, setCode, setDelivery, setC
                 type: "danger",
             });
 
-            return
+            return;
         }
 
         if (!window.Culqi) {
@@ -161,8 +192,8 @@ export default function ShippingStep({ cart, setSale, setCode, setDelivery, setC
                 reference: formData?.reference || "",
                 amount: totalFinal || 0,
                 delivery: envio,
-                cart: cart
-            }
+                cart: cart,
+            };
 
             const response = await processCulqiPayment(request);
             const data = response;
@@ -170,9 +201,9 @@ export default function ShippingStep({ cart, setSale, setCode, setDelivery, setC
             if (data.status) {
                 setSale(data.sale);
                 setDelivery(data.delivery);
-                setCode(data.code)
+                setCode(data.code);
                 setCart([]);
-                onContinue()
+                onContinue();
             } else {
                 Notify.add({
                     icon: "/assets/img/icon.svg",
@@ -182,19 +213,14 @@ export default function ShippingStep({ cart, setSale, setCode, setDelivery, setC
                 });
             }
         } catch (error) {
-            console.log(error)
+            console.log(error);
             Notify.add({
-
                 icon: "/assets/img/icon.svg",
                 title: "Error en el Pago",
                 body: "No se llegó a procesar el pago",
                 type: "danger",
             });
-
         }
-
-
-
     };
 
     const [selectedOption, setSelectedOption] = useState("free");
@@ -202,8 +228,10 @@ export default function ShippingStep({ cart, setSale, setCode, setDelivery, setC
         <div className="grid lg:grid-cols-5 gap-8">
             <div className="lg:col-span-3">
                 {/* Formulario */}
-                <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
-
+                <form
+                    className="space-y-6"
+                    onSubmit={(e) => e.preventDefault()}
+                >
                     <div className="grid grid-cols-2 gap-4">
                         {/* Nombres */}
                         <InputForm
@@ -233,27 +261,25 @@ export default function ShippingStep({ cart, setSale, setCode, setDelivery, setC
                         name="email"
                         value={formData.email}
                         onChange={handleChange}
-                        placeholder="Ej. hola@gmail.com" />
-
+                        placeholder="Ej. hola@gmail.com"
+                    />
 
                     {/* Departamento */}
-
 
                     <SelectForm
                         label="Departamento"
                         options={departamentos}
                         placeholder="Selecciona un Departamento"
-
                         onChange={(value) => {
                             setDepartamento(value);
-                            setFormData((prev) => ({ ...prev, department: departamento }));
+                            setFormData((prev) => ({
+                                ...prev,
+                                department: departamento,
+                            }));
                         }}
-
                     />
 
-
                     {/* Provincia */}
-
 
                     <SelectForm
                         disabled={!departamento}
@@ -262,13 +288,14 @@ export default function ShippingStep({ cart, setSale, setCode, setDelivery, setC
                         placeholder="Selecciona una Provincia"
                         onChange={(value) => {
                             setProvincia(value);
-                            setFormData((prev) => ({ ...prev, province: provincia }));
+                            setFormData((prev) => ({
+                                ...prev,
+                                province: provincia,
+                            }));
                         }}
-
                     />
 
                     {/* Distrito */}
-
 
                     <SelectForm
                         disabled={!provincia}
@@ -277,9 +304,11 @@ export default function ShippingStep({ cart, setSale, setCode, setDelivery, setC
                         placeholder="Selecciona un Distrito"
                         onChange={(value) => {
                             setDistrito(value);
-                            setFormData((prev) => ({ ...prev, district: distrito }));
+                            setFormData((prev) => ({
+                                ...prev,
+                                district: distrito,
+                            }));
                         }}
-
                     />
 
                     {/* Dirección */}
@@ -289,7 +318,8 @@ export default function ShippingStep({ cart, setSale, setCode, setDelivery, setC
                         name="address"
                         value={formData.address}
                         onChange={handleChange}
-                        placeholder="Ingresa el nombre de la calle" />
+                        placeholder="Ingresa el nombre de la calle"
+                    />
 
                     <div className="grid grid-cols-2 gap-4">
                         <InputForm
@@ -298,7 +328,8 @@ export default function ShippingStep({ cart, setSale, setCode, setDelivery, setC
                             name="number"
                             value={formData.number}
                             onChange={handleChange}
-                            placeholder="Ingresa el número de la calle" />
+                            placeholder="Ingresa el número de la calle"
+                        />
 
                         <InputForm
                             label="Dpto./ Interior/ Piso/ Lote/ Bloque (opcional)"
@@ -306,12 +337,11 @@ export default function ShippingStep({ cart, setSale, setCode, setDelivery, setC
                             name="comment"
                             value={formData.comment}
                             onChange={handleChange}
-                            placeholder="Ej. Casa 3, Dpto 101" />
+                            placeholder="Ej. Casa 3, Dpto 101"
+                        />
                     </div>
 
-
                     {/* Referencia */}
-
 
                     <InputForm
                         label="Referencia"
@@ -319,8 +349,8 @@ export default function ShippingStep({ cart, setSale, setCode, setDelivery, setC
                         name="reference"
                         value={formData.reference}
                         onChange={handleChange}
-                        placeholder="Ejem. Altura de la avenida..." />
-
+                        placeholder="Ejem. Altura de la avenida..."
+                    />
                 </form>
                 <div className="flex gap-4 mt-4">
                     <OptionCard
@@ -340,14 +370,26 @@ export default function ShippingStep({ cart, setSale, setCode, setDelivery, setC
                     </div>
                     <div className="text-xs font-medium customtext-neutral-dark flex flex-col gap-2">
                         <p>
-                            Solo Lima Metropolitana: Dentro de las 24 horas después de efectuado el pago, solo algunos distritos de Lima Metropolitana.
+                            Solo Lima Metropolitana: Dentro de las 24 horas
+                            después de efectuado el pago, solo algunos distritos
+                            de Lima Metropolitana.
                         </p>
-                        <p>  Distritos No incluidos: Santa María del Mar,  Pucusana, San Bartolo, Punta Hermosa, Lurín, Pachacamac, Chorrillos, Villa el Salvador, Villa María del Triunfo, San Juan de Miraflores, Cieneguilla, Ate, Chosica, Huaycan, San Juan de Lurigancho (hasta el Metro), Ancón, Santa Rosa, Carabayllo, Puente Piedra.
+                        <p>
+                            {" "}
+                            Distritos No incluidos: Santa María del Mar,
+                            Pucusana, San Bartolo, Punta Hermosa, Lurín,
+                            Pachacamac, Chorrillos, Villa el Salvador, Villa
+                            María del Triunfo, San Juan de Miraflores,
+                            Cieneguilla, Ate, Chosica, Huaycan, San Juan de
+                            Lurigancho (hasta el Metro), Ancón, Santa Rosa,
+                            Carabayllo, Puente Piedra.
                         </p>
-                        <p> Same Day: Solo para compras efectuadas hasta las 1pm del día.
+                        <p>
+                            {" "}
+                            Same Day: Solo para compras efectuadas hasta las 1pm
+                            del día.
                         </p>
                     </div>
-
                 </div>
                 <div className="flex gap-4 mt-4 bg-[#F7F9FB] p-3 rounded-xl">
                     <div className="w-5">
@@ -355,11 +397,10 @@ export default function ShippingStep({ cart, setSale, setCode, setDelivery, setC
                     </div>
                     <div className="text-xs font-medium customtext-neutral-dark flex flex-col gap-2">
                         <p>
-                            Lima: 3 a 4 dias hábiles | Provincia: de 4 a 10 dias hábiles
+                            Lima: 3 a 4 dias hábiles | Provincia: de 4 a 10 dias
+                            hábiles
                         </p>
-
                     </div>
-
                 </div>
             </div>
             {/* Resumen de compra */}
@@ -378,31 +419,54 @@ export default function ShippingStep({ cart, setSale, setCode, setDelivery, setC
                                     />
                                 </div>
                                 <div className="flex-1">
-                                    <h3 className="font-medium text-lg mb-2">{item.name}</h3>
+                                    <h3 className="font-medium text-lg mb-2">
+                                        {item.name}
+                                    </h3>
 
-                                    <p className="text-sm customtext-neutral-light">Marca: <span className="customtext-neutral-dark">{item.brand.name}</span></p>
-                                    <p className="text-sm customtext-neutral-light">Cantidad: <span className="customtext-neutral-dark">{item.quantity} </span></p>
-                                    <p className="text-sm customtext-neutral-light">SKU: <span className="customtext-neutral-dark">{item.sku}</span></p>
+                                    <p className="text-sm customtext-neutral-light">
+                                        Marca:{" "}
+                                        <span className="customtext-neutral-dark">
+                                            {item.brand.name}
+                                        </span>
+                                    </p>
+                                    <p className="text-sm customtext-neutral-light">
+                                        Cantidad:{" "}
+                                        <span className="customtext-neutral-dark">
+                                            {item.quantity}{" "}
+                                        </span>
+                                    </p>
+                                    <p className="text-sm customtext-neutral-light">
+                                        SKU:{" "}
+                                        <span className="customtext-neutral-dark">
+                                            {item.sku}
+                                        </span>
+                                    </p>
                                 </div>
-
                             </div>
                         </div>
                     ))}
                 </div>
 
-
                 <div className="space-y-4 mt-6">
                     <div className="flex justify-between">
-                        <span className="customtext-neutral-dark">Subtotal</span>
-                        <span className="font-semibold">S/ {Number2Currency(subTotal)}</span>
+                        <span className="customtext-neutral-dark">
+                            Subtotal
+                        </span>
+                        <span className="font-semibold">
+                            S/ {Number2Currency(subTotal)}
+                        </span>
                     </div>
                     <div className="flex justify-between">
                         <span className="customtext-neutral-dark">IGV</span>
-                        <span className="font-semibold">S/ {Number2Currency(igv)}</span>
+                        <span className="font-semibold">
+                            S/ {Number2Currency(igv)}
+                        </span>
                     </div>
                     <div className="flex justify-between">
                         <span className="customtext-neutral-dark">Envío</span>
-                        <span className="font-semibold">S/ {Number2Currency(envio)}</span>
+                        <span className="font-semibold">
+                            S/ {Number2Currency(envio)}
+                        </span>
                     </div>
                     <div className="py-3 border-y-2 mt-6">
                         <div className="flex justify-between font-bold text-[20px] items-center">
@@ -411,19 +475,32 @@ export default function ShippingStep({ cart, setSale, setCode, setDelivery, setC
                         </div>
                     </div>
                     <div className="space-y-2 pt-4">
+                        <ButtonPrimary onClick={handlePayment}>
+                            {" "}
+                            Continuar
+                        </ButtonPrimary>
 
-                        <ButtonPrimary onClick={handlePayment}>  Continuar</ButtonPrimary>
-
-                        <ButtonSecondary onClick={noContinue}> Cancelar</ButtonSecondary>
+                        <ButtonSecondary onClick={noContinue}>
+                            {" "}
+                            Cancelar
+                        </ButtonSecondary>
                     </div>
                     <div>
                         <p className="text-sm customtext-neutral-dark">
-                            Al realizar tu pedido, aceptas los <a className="customtext-primary font-bold">Términos y Condiciones</a>, y que nosotros usaremos sus datos personales de acuerdo con nuestra <a className="customtext-primary font-bold">Política de Privacidad</a>.
+                            Al realizar tu pedido, aceptas los 
+                            <a className="customtext-primary font-bold">
+                                Términos y Condiciones
+                            </a>
+                            , y que nosotros usaremos sus datos personales de
+                            acuerdo con nuestra 
+                            <a className="customtext-primary font-bold">
+                                Política de Privacidad
+                            </a>
+                            .
                         </p>
                     </div>
                 </div>
             </div>
-
-        </div >
+        </div>
     );
 }

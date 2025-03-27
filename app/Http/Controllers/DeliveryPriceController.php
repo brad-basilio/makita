@@ -36,7 +36,7 @@ class DeliveryPriceController extends BasicController
     {
         $response = Response::simpleTryCatch(function (Response $response) use ($request) {
             // Verifica los datos recibidos
-            dump($request->all());
+            //dump($request->all());
 
             // Construye el nombre en el formato esperado por la base de datos
             $name = "{$request->district}, {$request->department}";

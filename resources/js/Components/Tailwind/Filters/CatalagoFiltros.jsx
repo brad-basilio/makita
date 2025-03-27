@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import CardHoverBtn from "../Products/Components/CardHoverBtn";
-import { ChevronDown, Filter, Search, Tag } from "lucide-react";
+import { ChevronDown, Filter, Search, Tag, X } from "lucide-react";
 import ItemsRest from "../../../Actions/ItemsRest";
 import ArrayJoin from "../../../Utils/ArrayJoin";
 import { Loading } from "../Components/Resources/Loading";
@@ -9,6 +9,33 @@ import { NoResults } from "../Components/Resources/NoResult";
 import SelectForm from "./Components/SelectForm";
 
 const itemsRest = new ItemsRest();
+
+const SkeletonCard = () => {
+    return (
+        <div
+            className={`group  animate-pulse  transition-transform duration-300 hover:scale-105 w-1/2 lg:w-1/4 flex-shrink-0 font-font-general customtext-primary cursor-pointer`}
+        >
+            <div className=" px-4">
+                <div className="bg-white rounded-3xl">
+                    {/* Imagen del producto y etiqueta de descuento */}
+                    <div className="relative">
+                        <div className="aspect-square bg-gray-300 rounded-3xl overflow-hidden flex items-center justify-center  bg-secondary">
+                            <svg
+                                class="w-10 h-10 text-gray-200 "
+                                aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="currentColor"
+                                viewBox="0 0 20 18"
+                            >
+                                <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
 
 //const CatalagoFiltros = ({ items, data, categories, brands, prices, cart, setCart }) => {
 const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
@@ -96,7 +123,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                 filter: filters, // Envía los filtros transformados
                 sort: selectedFilters.sort, // Enviar el parámetro de ordenación
                 // page,
-                take: 20, // Número de productos por página
+                take: 1000, // Número de productos por página
             };
 
             const response = await itemsRest.paginate(params);
@@ -120,6 +147,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
         const categoriaParam = params.get("category");
+        const subCategoriaParam = params.get("subcategory");
 
         if (categoriaParam) {
             const category = categories.find(
@@ -130,6 +158,30 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                 setSelectedFilters((prev) => ({
                     ...prev,
                     category_id: [category.id], // Asegúrate de que `category.id` exista
+                }));
+            }
+        }
+
+        if (subCategoriaParam) {
+            // Buscar la subcategoría en todas las categorías y obtener su categoría padre
+            let subCategoryFound = null;
+            let parentCategoryFound = null;
+
+            categories.forEach((category) => {
+                const subCategory = category.subcategories.find(
+                    (item) => item.slug === subCategoriaParam
+                );
+                if (subCategory) {
+                    subCategoryFound = subCategory;
+                    parentCategoryFound = category; // Guardamos la categoría padre
+                }
+            });
+
+            if (subCategoryFound && parentCategoryFound) {
+                setSelectedFilters((prev) => ({
+                    ...prev,
+                    category_id: [parentCategoryFound.id], // Actualiza con el ID de la categoría padre
+                    subcategory_id: [subCategoryFound.id], // Actualiza con el ID de la subcategoría
                 }));
             }
         }
@@ -287,9 +339,9 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                  return 0;
          }
      });*/
-
+    const [filtersOpen, setFiltersOpen] = useState(false);
     return (
-        <section className="py-12 bg-[#F7F9FB]">
+        <section className="py-12 bg-sections-color customtext-neutral-dark">
             <div className="mx-auto px-primary 2xl:px-0 2xl:max-w-7xl">
                 <div className="flex flex-col md:flex-row md:justify-between items-center mb-8 pb-4 border-b-2">
                     <h2 className="text-[32px] md:text-4xl font-bold md:w-6/12">
@@ -325,11 +377,30 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                     </div>
                 </div>
 
-                <div className="relative flex gap-4">
-                    <div className="hidden md:block md:w-3/12 bg-white p-4 rounded-lg h-max">
+                <div className="relative flex flex-col lg:flex-row gap-4">
+                    <button
+                        className="w-full flex lg:hidden gap-2 items-center"
+                        onClick={() => setFiltersOpen(true)}
+                    >
+                        <h2 className="text-2xl font-bold">Filtros</h2>
+                        <Filter className="h-5 w-5" />
+                    </button>
+                    <div
+                        className={`${
+                            filtersOpen
+                                ? "fixed inset-0 z-50 bg-white p-4 overflow-y-auto"
+                                : "hidden"
+                        } lg:block lg:w-3/12 bg-white p-4 rounded-lg h-max`}
+                    >
                         <div className="flex items-center justify-between mb-6">
                             <h2 className="text-xl font-bold">Filtros</h2>
-                            <Filter className="h-5 w-5" />
+                            <Filter className="hidden lg:block h-5 w-5" />
+                            <button
+                                className=" lg:hidden "
+                                onClick={() => setFiltersOpen(!filtersOpen)}
+                            >
+                                <X className="h-5 w-5" />
+                            </button>
                         </div>
 
                         <div className="mb-6">
@@ -362,7 +433,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                                         {filteredBrands.map((brand) => (
                                             <label
                                                 key={brand.id}
-                                                className="flex items-center space-x-3"
+                                                className="flex items-center space-x-3 customtext-neutral-light"
                                             >
                                                 <input
                                                     type="checkbox"
@@ -400,7 +471,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                                     {priceRanges.map((range) => (
                                         <label
                                             key={`${range.min}-${range.max}`}
-                                            className="flex items-center space-x-3"
+                                            className="flex items-center space-x-3 customtext-neutral-light"
                                         >
                                             <input
                                                 type="checkbox"
@@ -458,7 +529,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                                     <div className="space-y-3 max-h-80 overflow-y-auto">
                                         {filteredCategories.map((category) => (
                                             <div key={category.id}>
-                                                <label className="flex items-center space-x-3">
+                                                <label className="flex items-center space-x-3 customtext-neutral-light">
                                                     <input
                                                         type="checkbox"
                                                         className="h-4 w-4 rounded border-gray-300"
@@ -488,7 +559,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                                                                         key={
                                                                             sub.id
                                                                         }
-                                                                        className="flex items-center space-x-3"
+                                                                        className="flex items-center space-x-3 customtext-neutral-light"
                                                                     >
                                                                         <input
                                                                             type="checkbox"
@@ -524,17 +595,24 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                         </button>
                     </div>
 
-                    <div className="w-full md:w-9/12 py-4">
+                    <div className="w-full lg:w-9/12 py-4">
                         {/* Productos */}
                         {loading ? (
-                            <Loading />
+                            <div className="flex items-center flex-wrap gap-y-8 transition-all duration-300 ease-in-out">
+                                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(
+                                    (index) => (
+                                        <SkeletonCard key={index} />
+                                    )
+                                )}
+                            </div>
                         ) : (
                             <div className="flex items-center flex-wrap gap-y-8 transition-all duration-300 ease-in-out">
                                 {Array.isArray(products) &&
                                 products.length > 0 ? (
                                     products.map((product) => (
                                         <div
-                                            className=" lg:h-[460px] lg:max-h-[460px]  xl:h-[400px] xl:max-h-[400px] 2xl:h-[430px] 2xl:max-h-[430px]  w-1/2 lg:w-1/3 xl:w-1/4"
+                                            className="   w-1/2 lg:w-1/3 xl:w-1/4 lg:h-[460px] lg:max-h-[460px]  xl:h-[400px] xl:max-h-[400px] 2xl:h-[430px] 2xl:max-h-[430px] flex items-center justify-center"
+                                            // className="   w-1/2 lg:w-1/3 xl:w-1/4"
                                             key={product.id}
                                         >
                                             <CardHoverBtn

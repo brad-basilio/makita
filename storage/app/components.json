@@ -81,7 +81,8 @@
                 "using": {
                     "model": "Category",
                     "with": ["subcategories"]
-                }
+                },
+                "generals": ["phone_whatsapp", "message_whatsapp"]
             },
             {
                 "id": "HeaderScraping",
@@ -361,7 +362,7 @@
                         "views"
                     ],
                     "with": ["category", "subcategory", "brand"],
-                    "limit": 8
+                    "limit": 10
                 }
             },
             {
@@ -423,6 +424,10 @@
             {
                 "id": "BannerStatic",
                 "name": "Estatico"
+            },
+            {
+                "id": "BannerSimpleSF",
+                "name": "SimpleSF"
             }
         ]
     },
@@ -587,6 +592,10 @@
             {
                 "id": "SignUpSimple",
                 "name": "Simple"
+            },
+            {
+                "id": "SignUpSimpleSF",
+                "name": "SimpleSF"
             }
         ]
     },
@@ -706,6 +715,23 @@
                     "support_phone",
                     "support_email"
                 ]
+            }
+        ]
+    },
+    {
+        "id": "complaints",
+        "name": "Complaints",
+        "options": [
+            {
+                "id": "ComplaintStech",
+                "name": "Stech",
+                "data": ["steps", "selected"]
+            },
+            {
+                "id": "ComplaintSimple",
+                "name": "Simple",
+                "data": ["steps", "selected"],
+                "generals": ["terms_conditions"]
             }
         ]
     }
