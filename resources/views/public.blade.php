@@ -87,7 +87,6 @@
 
             .placeholder\:customtext-{{ $color->name }}::placeholder {
                 color: {{ $color->description }};
-
             }
 
             .border-{{ $color->name }} {
