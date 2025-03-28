@@ -311,6 +311,22 @@
         ]
     },
     {
+        "id": "collection",
+        "name": "Colecciones",
+        "options": [
+            {
+                "id": "PaginationCollection",
+                "name": "paginacion",
+                "image": "categories-simple.png",
+                "data": ["title", "path"],
+                "using": {
+                    "model": "Collection",
+                    "limit": 10
+                }
+            }
+        ]
+    },
+    {
         "id": "product",
         "name": "Productos",
         "options": [
