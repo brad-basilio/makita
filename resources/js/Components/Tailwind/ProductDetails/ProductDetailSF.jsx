@@ -10,6 +10,7 @@ import {
     Plus,
     ChevronUp,
     CircleCheckIcon,
+    DotIcon,
 } from "lucide-react";
 
 import ItemsRest from "../../../Actions/ItemsRest";
@@ -160,19 +161,20 @@ export default function ProductDetailSF({ item, data, setCart, cart }) {
     };
     return (
         <>
-            <div className="px-primary mx-auto py-12 bg-[#F7F9FB]">
+            <div className="px-primary mx-auto py-12 bg-white">
                 <div className="bg-white rounded-xl p-4 md:p-8">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         {/* Left Column - Images and Delivery Options */}
                         <div className="space-y-6">
-                            <div className="mb-6 md:hidden">
-                                <p className="customtext-neutral-light text-sm">
+                           
+                            <div className="mb-6 font-font-general md:hidden">
+                                <p className="customtext-neutral-light text-sm 2xl:text-lg">
                                     Marca:{" "}
                                     <span className="customtext-neutral-dark">
                                         {item?.brand.name}
                                     </span>
                                 </p>
-                                <h1 className="customtext-neutral-dark text-[28px] md:text-[40px] font-bold mt-2">
+                                <h1 className="customtext-neutral-dark text-3xl lg:text-4xl 2xl:text-5xl font-bold mt-2">
                                     {item?.name}
                                 </h1>
                             </div>
@@ -250,16 +252,16 @@ export default function ProductDetailSF({ item, data, setCart, cart }) {
                                 </div>
                             </div>
 
-                            <div className="flex lg:hidden flex-col customtext-neutral-light justify-start items-start gap-2 text-sm mb-6">
-                                <span className="customtext-neutral-light text-sm">
+                            <div className="flex flex-wrap lg:hidden customtext-neutral-light items-center gap-2 text-sm mb-6 font-font-general">
+                                <span className="customtext-neutral-light text-sm 2xl:text-base">
                                     SKU:{" "}
-                                    <span className="customtext-neutral-dark">
+                                    <span className="customtext-neutral-dark font-bold">
                                         {item?.sku}
                                     </span>
                                 </span>
-                                <span className="ustomtext-neutral-light text-sm">
+                                <span className="customtext-neutral-light text-sm 2xl:text-base">
                                     Disponibilidad:{" "}
-                                    <span className="customtext-neutral-dark">
+                                    <span className="customtext-neutral-dark font-bold">
                                         {item?.stock > 0
                                             ? "En stock"
                                             : "Agotado"}
@@ -326,50 +328,51 @@ export default function ProductDetailSF({ item, data, setCart, cart }) {
                             </div>
 
                             {/* Specifications */}
-                            <div className="block lg:hidden flex-1 w-full ">
-                                <div className="bg-[#F7F9FB] rounded-lg p-6">
-                                    <h3 className="font-medium text-sm mb-4">
-                                        Especificaciones principales
-                                    </h3>
-                                    <ul
-                                        className={`space-y-2  customtext-neutral-light mb-4 transition-all duration-300 ${
-                                            expandedSpecificationMain
-                                                ? "max-h-full"
-                                                : "max-h-24 overflow-hidden"
-                                        }`}
-                                        style={{ listStyleType: "disc" }}
-                                    >
-                                        {item?.specifications.map(
-                                            (spec, index) =>
-                                                spec.type === "principal" && (
-                                                    <li
-                                                        key={index}
-                                                        className="flex gap-2"
-                                                    >
-                                                        <CircleCheckIcon className="customtext-primary" />
-                                                        {spec.description}
-                                                    </li>
+                            <div className="w-full flex lg:hidden">
+                                    <div className="bg-[#F7F9FB] rounded-xl p-6 w-full">
+                                        <h3 className="font-semibold text-lg xl:text-xl 2xl:text-2xl mb-4 customtext-neutral-dark font-font-general">
+                                            Especificaciones principales
+                                        </h3>
+                                        <ul
+                                            className={`space-y-1  customtext-neutral-light  mb-4 list-disc transition-all duration-300 ${
+                                                expandedSpecificationMain
+                                                    ? "max-h-full"
+                                                    : "max-h-20 overflow-hidden"
+                                            }`}
+                                            style={{ listStyleType: "disc" }}
+                                        >
+                                            {item?.specifications.map(
+                                                (spec, index) =>
+                                                    spec.type ===
+                                                        "principal" && (
+                                                        <li
+                                                            key={index}
+                                                            className="gap-2 customtext-primary opacity-85 flex flex-row items-center"
+                                                        >   
+                                                            <CircleCheckIcon className="customtext-primary w-4 h-4" />
+                                                            {spec.description}
+                                                        </li>
+                                                    )
+                                            )}
+                                        </ul>
+                                        <button
+                                            className="font-semibold flex flex-row gap-2 items-center text-base xl:text-[17px] 2xl:text-xl mb-4 customtext-neutral-dark font-font-general pb-2 border-b border-neutral-dark"
+                                            onClick={() =>
+                                                setExpanded(
+                                                    !expandedSpecificationMain
                                                 )
-                                        )}
-                                    </ul>
-                                    <button
-                                        className="customtext-primary text-sm font-semibold hover:underline flex items-center gap-1 transition-all duration-300"
-                                        onClick={() =>
-                                            setExpanded(
-                                                !expandedSpecificationMain
-                                            )
-                                        }
-                                    >
-                                        {expandedSpecificationMain
-                                            ? "Ver menos"
-                                            : "Ver más especificaciones"}
-                                        {expandedSpecificationMain ? (
-                                            <ChevronUp className="w-4 h-4" />
-                                        ) : (
-                                            <ChevronDown className="w-4 h-4" />
-                                        )}
-                                    </button>
-                                </div>
+                                            }
+                                        >
+                                            {expandedSpecificationMain
+                                                ? "Ver menos"
+                                                : "Ver más especificaciones"}
+                                            {expandedSpecificationMain ? (
+                                                <ChevronUp className="w-4 h-4" />
+                                            ) : (
+                                                <ChevronDown className="w-4 h-4" />
+                                            )}
+                                        </button>
+                                    </div>
                             </div>
 
                             {/* <div className="block lg:hidden mt-8 ">
@@ -451,49 +454,117 @@ export default function ProductDetailSF({ item, data, setCart, cart }) {
                         </div>
 
                         {/* Right Column - Product Info */}
-                        <div className="hidden md:block">
+                        <div className="hidden lg:flex flex-col">
                             {/* Brand and Title */}
-                            <div className="mb-6">
-                                <p className="customtext-neutral-light text-sm">
+                            <div className="mb-6 font-font-general">
+                                <p className="customtext-neutral-light text-sm 2xl:text-lg">
                                     Marca:{" "}
                                     <span className="customtext-neutral-dark">
                                         {item?.brand.name}
                                     </span>
                                 </p>
-                                <h1 className="customtext-neutral-dark text-[40px] font-bold mt-2">
+                                <h1 className="customtext-neutral-dark text-3xl lg:text-4xl 2xl:text-5xl font-bold mt-2">
                                     {item?.name}
                                 </h1>
                             </div>
 
                             {/* SKU and Availability */}
-                            <div className="flex customtext-neutral-light items-center gap-8 text-sm mb-6">
-                                <span className="customtext-neutral-light text-sm">
+                            <div className="flex customtext-neutral-light items-center gap-8 text-sm mb-6 font-font-general">
+                                <span className="customtext-neutral-light text-sm 2xl:text-base">
                                     SKU:{" "}
-                                    <span className="customtext-neutral-dark">
+                                    <span className="customtext-neutral-dark font-bold">
                                         {item?.sku}
                                     </span>
                                 </span>
-                                <span className="ustomtext-neutral-light text-sm">
+                                <span className="customtext-neutral-light text-sm 2xl:text-base">
                                     Disponibilidad:{" "}
-                                    <span className="customtext-neutral-dark">
+                                    <span className="customtext-neutral-dark font-bold">
                                         {item?.stock > 0
                                             ? "En stock"
                                             : "Agotado"}
                                     </span>
                                 </span>
                             </div>
-                            <div className="flex gap-8 border-b-2 pb-8">
-                                {/* Specifications */}
-                                <div className="flex-1 w-6/12 ">
-                                    <div className="bg-[#F7F9FB] rounded-lg p-6">
-                                        <h3 className="font-medium text-sm mb-4">
+
+                            <div className="flex flex-col gap-3 pb-8">
+
+                                {/* Price Section */}
+                                <div className="w-1/2 !font-font-general">
+                                    <p className="text-sm 2xl:text-base customtext-neutral-light mb-1">
+                                        Precio:{" "}
+                                        <span className="line-through">
+                                            S/ {item?.price}
+                                        </span>
+                                    </p>
+                                    <div className="flex items-center gap-4 relative">
+                                        <span className="text-[40px] font-bold customtext-neutral-dark">
+                                            S/ {item?.final_price}
+                                        </span>
+                                        <span className="absolute -top-0 right-0 bg-[#F93232] text-white font-bold px-3 py-2 rounded-xl text-base">
+                                            -
+                                            {Number(
+                                                item?.discount_percent
+                                            ).toFixed(1)}
+                                            %
+                                        </span>
+                                    </div>
+
+                                    {/* Quantity */}
+                                    <div className="mt-4">
+                                        <div className="flex items-center gap-4 mb-2">
+                                            <div className="flex items-center space-x-4 customtext-neutral-light text-sm 2xl:text-base">
+                                                <span className="opacity-85">
+                                                    Cantidad
+                                                </span>
+                                                <div className="relative flex items-center border rounded-md px-2 py-1">
+                                                    <input
+                                                        type="number"
+                                                        value={quantity}
+                                                        onChange={handleChange}
+                                                        min="1"
+                                                        max="10"
+                                                        className="w-10 py-1 customtext-neutral-dark text-center bg-transparent outline-none appearance-none"
+                                                    />
+                                                </div>
+                                                <span className="opacity-85">
+                                                    Máximo 10 unidades.
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Add to Cart */}                
+                                <div className="flex flex-col">
+                                    <button
+                                        onClick={() => {
+                                            onAddClicked(item);
+                                            setModalOpen(!modalOpen);
+                                        }}
+                                        className="w-full font-font-general text-base 2xl:text-lg bg-primary text-white py-3 font-semibold rounded-3xl hover:opacity-90 transition-all duration-300 mt-4"
+                                    >
+                                        Agregar al carrito
+                                    </button>
+                                    <button
+                                        className="w-full font-font-general text-base 2xl:text-lg customtext-neutral-dark border border-neutral-dark py-3 font-semibold rounded-3xl hover:opacity-90 transition-all duration-300 mt-4"
+                                    >
+                                        Comprar
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Specifications */}
+                                
+                            <div className="flex-1 w-full">
+                                    <div className="bg-[#F7F9FB] rounded-xl p-6">
+                                        <h3 className="font-semibold text-lg xl:text-xl 2xl:text-2xl mb-4 customtext-neutral-dark font-font-general">
                                             Especificaciones principales
                                         </h3>
                                         <ul
-                                            className={`space-y-2  customtext-neutral-light mb-4 transition-all duration-300 ${
+                                            className={`space-y-1  customtext-neutral-light  mb-4 list-disc transition-all duration-300 ${
                                                 expandedSpecificationMain
                                                     ? "max-h-full"
-                                                    : "max-h-24 overflow-hidden"
+                                                    : "max-h-20 overflow-hidden"
                                             }`}
                                             style={{ listStyleType: "disc" }}
                                         >
@@ -503,16 +574,16 @@ export default function ProductDetailSF({ item, data, setCart, cart }) {
                                                         "principal" && (
                                                         <li
                                                             key={index}
-                                                            className="flex gap-2"
-                                                        >
-                                                            <CircleCheckIcon className="customtext-primary" />
+                                                            className="gap-2 customtext-primary opacity-85 flex flex-row items-center"
+                                                        >   
+                                                            <CircleCheckIcon className="customtext-primary w-4 h-4" />
                                                             {spec.description}
                                                         </li>
                                                     )
                                             )}
                                         </ul>
                                         <button
-                                            className="customtext-primary text-sm font-semibold hover:underline flex items-center gap-1 transition-all duration-300"
+                                            className="font-semibold flex flex-row gap-2 items-center text-base xl:text-[17px] 2xl:text-xl mb-4 customtext-neutral-dark font-font-general pb-2 border-b border-neutral-dark"
                                             onClick={() =>
                                                 setExpanded(
                                                     !expandedSpecificationMain
@@ -529,151 +600,29 @@ export default function ProductDetailSF({ item, data, setCart, cart }) {
                                             )}
                                         </button>
                                     </div>
-                                </div>
-
-                                {/* Price Section */}
-                                <div className=" w-6/12 ">
-                                    <p className="text-sm customtext-neutral-light mb-1">
-                                        Precio:{" "}
-                                        <span className="line-through">
-                                            S/ {item?.price}
-                                        </span>
-                                    </p>
-                                    <div className="flex items-center gap-4 relative ">
-                                        <span className="text-[40px] font-bold ">
-                                            S/ {item?.final_price}
-                                        </span>
-                                        <span className=" absolute -top-8 right-0 bg-[#F93232] text-white font-bold px-3 py-2 rounded-xl">
-                                            -
-                                            {Number(
-                                                item?.discount_percent
-                                            ).toFixed(1)}
-                                            %
-                                        </span>
-                                    </div>
-
-                                    {/* Quantity */}
-                                    <div className="mt-4">
-                                        <div className="flex items-center gap-4 mb-2">
-                                            <div className="flex items-center space-x-4 customtext-neutral-light text-sm">
-                                                <span className="">
-                                                    Cantidad
-                                                </span>
-                                                <div className="relative flex items-center border rounded-md px-2 py-1">
-                                                    <input
-                                                        type="number"
-                                                        value={quantity}
-                                                        onChange={handleChange}
-                                                        min="1"
-                                                        max="10"
-                                                        className="w-10 py-1 customtext-neutral-dark text-center bg-transparent outline-none appearance-none"
-                                                    />
-                                                </div>
-                                                <span className="">
-                                                    Máximo 10 unidades.
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {/* Add to Cart */}
-                                    <button
-                                        onClick={() => {
-                                            onAddClicked(item);
-                                            setModalOpen(!modalOpen);
-                                        }}
-                                        className="w-full bg-primary text-white py-3 font-bold shadow-lg rounded-xl hover:opacity-90 transition-all duration-300 mt-4"
-                                    >
-                                        Agregar al carrito
-                                    </button>
-                                </div>
                             </div>
 
-                            {/* Complementary Products */}
-                            {associatedItems && associatedItems.length > 0 && (
-                                <div className="mt-8 ">
-                                    <div className="flex items-center gap-2 mb-6">
-                                        <ShoppingCart className="w-6 h-6 customtext-primary" />
-                                        <h2 className="text-base font-semibold">
-                                            Completa tu compra con estos
-                                            productos
-                                        </h2>
+                            {/* Whatsapp */}
+                            <div className="w-full mt-5">
+                                <div className="bg-[#F7F9FB] flex flex-row rounded-xl p-5 gap-3">
+                                    <img
+                                        src="/assets/img/salafabulosa/whatsapp.png"
+                                        onError={e => e.target.src = 'assets/img/noimage/no_imagen_circular.png'}
+                                        className="w-12 h-12 object-contain"
+                                        loading="lazy"
+                                    />
+                                    <div className="customtext-neutral-dark font-font-general text-base  2xl:text-xl font-semibold">
+                                        <p>¿Tienes dudas sobre este producto? Haz  <span className="underline">clic aquí</span> y chatea con nosotros por WhatsApp</p>
                                     </div>
-
-                                    <div className=" flex gap-4">
-                                        <div className="w-2/3 flex gap-2">
-                                            {associatedItems.map(
-                                                (product, index) => (
-                                                    <div
-                                                        key={index}
-                                                        className="flex items-center gap-2"
-                                                    >
-                                                        <img
-                                                            src={`/storage/images/item/${product.image}`}
-                                                            className=" rounded-lg aspect-square w-24 h-24 object-cover bg-[#F7F9FB]"
-                                                            onError={(e) =>
-                                                                (e.target.src =
-                                                                    "/api/cover/thumbnail/null")
-                                                            }
-                                                        />
-                                                        {index <
-                                                            associatedItems.length -
-                                                                1 && (
-                                                            <span className="text-2xl font-bold">
-                                                                <Plus />
-                                                            </span>
-                                                        )}
-                                                    </div>
-                                                )
-                                            )}
-                                        </div>
-                                        <div className=" w-1/3 flex flex-col justify-between items-end bg-gray-50 p-4 rounded-lg mt-4">
-                                            <span className="text-xs font-semibold customtext-neutral-light">
-                                                Total
-                                            </span>
-
-                                            <p className="font-bold mb-2 customtext-neutral-dark">
-                                                S/ {total.toFixed(2)}
-                                            </p>
-                                            <button
-                                                onClick={() =>
-                                                    addAssociatedItems()
-                                                }
-                                                className="bg-primary text-xs font-semibold text-white w-full py-3 rounded-xl hover:opacity-90 transition-all duration-300 hover:shadow-md"
-                                            >
-                                                Agregar al carrito
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    {associatedItems.map((product, index) => (
-                                        <div
-                                            key={index}
-                                            className="flex mt-4 gap-4 p-4 border rounded-lg items-center"
-                                        >
-                                            <CheckSquare className="w-5 h-5 customtext-primary" />
-                                            <div className="flex-1 font-semibold">
-                                                <span className="text-[10px] customtext-neutral-dark block">
-                                                    {product.brand.name}
-                                                </span>
-                                                <p className="text-sm customtext-neutral-light font-medium">
-                                                    {product.name}
-                                                </p>
-                                            </div>
-                                            <p className="font-bold customtext-neutral-dark">
-                                                S/{" "}
-                                                {parseFloat(
-                                                    product.final_price
-                                                ).toFixed(2)}
-                                            </p>
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
+                                </div>           
+                            </div>     
+                                      
                         </div>
                     </div>
                 </div>
-                <div className="grid gap-20 md:grid-cols-2 bg-white rounded-xl p-8 mt-12">
+
+
+                <div className="grid gap-20 md:grid-cols-2 bg-white rounded-xl p-8 font-font-general">
                     {/* Specifications Section */}
                     <div>
                         <h2 className="text-2xl font-bold customtext-neutral-dark mb-4 border-b pb-4">
@@ -685,13 +634,13 @@ export default function ProductDetailSF({ item, data, setCart, cart }) {
                                     spec.type === "general" && (
                                         <div
                                             key={index}
-                                            className={`grid grid-cols-2 gap-4 p-4 ${
+                                            className={`grid grid-cols-2 gap-4 p-3 ${
                                                 index % 2 === 0
                                                     ? "bg-[#F7F9FB]"
                                                     : "bg-white"
                                             }`}
                                         >
-                                            <div className="customtext-neutral-light">
+                                            <div className="customtext-neutral-light opacity-85">
                                                 {spec.title}
                                             </div>
                                             <div className="customtext-neutral-dark">
@@ -739,6 +688,7 @@ export default function ProductDetailSF({ item, data, setCart, cart }) {
                         </div>
                     </div>
                 </div>
+
             </div>
             <CartModal
                 cart={cart}
