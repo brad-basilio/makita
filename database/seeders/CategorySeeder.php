@@ -16,9 +16,11 @@ class CategorySeeder extends Seeder
     {
         for ($i=1; $i <= 6; $i++) { 
             $name = 'Categoría ' . $i;
-            Category::create([
+            $slug = Str::slug($name);
+            Category::updateOrCreate([
+                'slug' => $slug
+            ],[
                 'name' => 'Categoría ' . $i,
-                'slug' => Str::slug($name),
                 'featured' => true
             ]);
         }

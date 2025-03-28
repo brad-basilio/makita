@@ -252,6 +252,12 @@ const Menu = ({ session, hasRole }) => {
                                 >
                                     Galeria
                                 </MenuItem>
+                                <MenuItem
+                                    href="/admin/repository"
+                                    icon="mdi mdi-database"
+                                >
+                                    Repositorio
+                                </MenuItem>
                                 <li className="menu-title">Configuraciones</li>
                                 {hasRole("Root") && (
                                     <MenuItem

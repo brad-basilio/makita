@@ -58,6 +58,10 @@
     @inertiaHead
 
     <style>
+        .cursor-pointer {
+            cursor: pointer;
+        }
+
         .tippy-tooltip {
             padding: 0;
         }

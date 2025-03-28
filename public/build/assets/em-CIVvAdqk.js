@@ -1,0 +1,1 @@
+import{j as r}from"./AboutHeader-CCjYJYRa.js";import{H as e}from"./HtmlContent-DpANbyBm.js";const m=(t="")=>r.jsx(e,{html:String(t).replace(/\*(.*?)\*/g,'<span style="color: #ec4899">$1</span>')});export{m as e};

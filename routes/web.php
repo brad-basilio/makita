@@ -29,10 +29,12 @@ use App\Http\Controllers\Admin\SaleController as AdminSaleController;
 use App\Http\Controllers\Admin\SubCategoryController as AdminSubCategoryController;
 
 use App\Http\Controllers\Admin\FaqController as AdminFaqController;
+use App\Http\Controllers\Admin\RepositoryController as AdminRepositoryController;
 use App\Http\Controllers\AuthClientController;
 // Public 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ComplaintController;
+use App\Http\Controllers\RepositoryController;
 use App\Http\Controllers\SystemController;
 use SoDe\Extend\File;
 
@@ -97,9 +99,14 @@ Route::middleware(['can:Admin', 'auth'])->prefix('admin')->group(function () {
 
 
     Route::get('/gallery', [AdminGalleryController::class, 'reactView'])->name('Admin/Gallery.jsx');
+    Route::get('/repository', [AdminRepositoryController::class, 'reactView'])->name('Admin/Repository.jsx');
 
     Route::middleware(['can:Root'])->get('/system', [AdminSystemController::class, 'reactView'])->name('Admin/System.jsx');
 
     Route::get('/profile', [AdminProfileController::class, 'reactView'])->name('Admin/Profile.jsx');
     Route::get('/account', [AdminAccountController::class, 'reactView'])->name('Admin/Account.jsx');
 });
+
+if (env('APP_ENV') === 'local') {
+    Route::get('/cloud/{uuid}', [RepositoryController::class, 'media']);
+}

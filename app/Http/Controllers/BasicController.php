@@ -8,6 +8,7 @@ use App\Models\dxDataGrid;
 use App\Models\General;
 use App\Models\Slider;
 use App\Models\Social;
+use App\Models\User;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -75,7 +76,7 @@ class BasicController extends Controller
     }
   }
 
-  public function setPaginationInstance(string $model)
+  public function setPaginationInstance(Request $request, string $model)
   {
     return $model::select();
   }
@@ -93,10 +94,14 @@ class BasicController extends Controller
   public function reactView(Request $request)
   {
 
-    if (Auth::check()) Auth::user()->getAllPermissions();
+    $session = null;
+    if (Auth::check()) {
+      $session = User::find(Auth::id());
+      $session->getAllPermissions();
+    }
 
     $properties = [
-      'session' => Auth::user(),
+      'session' => $session,
       'global' => [
         'PUBLIC_RSA_KEY' => Controller::$PUBLIC_RSA_KEY,
         'APP_NAME' => env('APP_NAME', 'Trasciende'),
@@ -130,7 +135,7 @@ class BasicController extends Controller
       $withRelations = $request->has('with') ? explode(',', $request->with) : [];
 
       // Aplicar with dinámicamente
-      $instance = $this->setPaginationInstance($this->model)->with($withRelations);
+      $instance = $this->setPaginationInstance($request, $this->model)->with($withRelations);
 
       if ($request->group != null) {
         [$grouping] = $request->group;
@@ -246,8 +251,10 @@ class BasicController extends Controller
       if (!$jpa) {
         $body['slug'] = Crypto::randomUUID();
         $jpa = $this->model::create($body);
+        $isNew = true;
       } else {
         $jpa->update($body);
+        $isNew = false;
       }
 
       $table = (new $this->model)->getTable();
@@ -260,7 +267,7 @@ class BasicController extends Controller
         $jpa->update(['slug' => $slug]);
       }
 
-      $data = $this->afterSave($request, $jpa);
+      $data = $this->afterSave($request, $jpa, $isNew);
       if ($data) {
         $response->data = $data;
       }
@@ -278,7 +285,7 @@ class BasicController extends Controller
     }
   }
 
-  public function afterSave(Request $request, object $jpa)
+  public function afterSave(Request $request, object $jpa, ?bool $isNew)
   {
     return null;
   }
@@ -334,7 +341,7 @@ class BasicController extends Controller
     try {
       $deleted = $this->softDeletion
         ? $this->model::where('id', $id)
-        ->update(['status' => false])
+        ->update(['status' => null])
         : $this->model::where('id', $id)
         ->delete();
 

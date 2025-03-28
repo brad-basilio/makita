@@ -11,7 +11,7 @@ class SystemColorController extends BasicController
 {
     public $model = SystemColor::class;
 
-    public function afterSave(Request $request, object $jpa)
+    public function afterSave(Request $request, object $jpa, ?bool $isNew)
     {
         return $jpa;
     }

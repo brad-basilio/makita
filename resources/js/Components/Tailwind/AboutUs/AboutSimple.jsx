@@ -3,20 +3,20 @@ import { Award, ListChecks, Headphones, Shield } from "lucide-react";
 
 export default function AboutSimple({ data, filteredData }) {
     const { aboutuses, webdetail, strengths } = filteredData;
-    const webAboutTitle = webdetail.find(
+    const webAboutTitle = webdetail?.find(
         (item) => item.name === "title" && item.page === "about"
     );
     console.log(webAboutTitle);
-    const sectionOne = aboutuses.find(
+    const sectionOne = aboutuses?.find(
         (item) => item.correlative === "section-1-about"
     );
-    const sectionTwo = aboutuses.find(
+    const sectionTwo = aboutuses?.find(
         (item) => item.correlative === "section-2-about"
     );
-    const sectionThree = aboutuses.find(
+    const sectionThree = aboutuses?.find(
         (item) => item.correlative === "section-3-about"
     );
-    const sectionFour = aboutuses.find(
+    const sectionFour = aboutuses?.find(
         (item) => item.correlative === "section-4-about"
     );
     return (
@@ -56,7 +56,7 @@ export default function AboutSimple({ data, filteredData }) {
                     {sectionTwo?.title}
                 </h2>
                 <div className="mt-12 grid md:grid-cols-2  gap-8">
-                    {strengths.map(
+                    {strengths?.map(
                         (item, index) =>
                             item.visible &&
                             item.status && (
