@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\SliderController as AdminSliderController;
 use App\Http\Controllers\Admin\TestimonyController as AdminTestimonyController;
 use App\Http\Controllers\Admin\SubscriptionController as AdminSubscriptionController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
+use App\Http\Controllers\Admin\CollectionController as AdminCollectionController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\SocialController as AdminSocialController;
 use App\Http\Controllers\Admin\StrengthController as AdminStrengthController;
@@ -80,6 +81,7 @@ Route::post('/delivery-prices', [DeliveryPriceController::class, 'getDeliveryPri
 Route::get('/banners/media/{uuid}', [AdminBannerController::class, 'media']);
 Route::get('/sliders/media/{uuid}', [AdminSliderController::class, 'media']);
 Route::get('/categories/media/{uuid}', [AdminCategoryController::class, 'media']);
+Route::get('/collections/media/{uuid}', [AdminCollectionController::class, 'media']);
 Route::get('/subcategories/media/{uuid}', [AdminSubCategoryController::class, 'media']);
 Route::get('/brands/media/{uuid}', [AdminBrandController::class, 'media']);
 Route::get('/testimonies/media/{uuid}', [AdminTestimonyController::class, 'media']);
@@ -207,6 +209,12 @@ Route::middleware('auth')->group(function () {
     Route::patch('/categories/status', [AdminCategoryController::class, 'status']);
     Route::patch('/categories/{field}', [AdminCategoryController::class, 'boolean']);
     Route::delete('/categories/{id}', [AdminCategoryController::class, 'delete']);
+
+    Route::post('/collections', [AdminCollectionController::class, 'save']);
+    Route::post('/collections/paginate', [AdminCollectionController::class, 'paginate']);
+    Route::patch('/collections/status', [AdminCollectionController::class, 'status']);
+    Route::patch('/collections/{field}', [AdminCollectionController::class, 'boolean']);
+    Route::delete('/collections/{id}', [AdminCollectionController::class, 'delete']);
 
     Route::post('/subcategories', [AdminSubCategoryController::class, 'save']);
     Route::post('/subcategories/paginate', [AdminSubCategoryController::class, 'paginate']);

@@ -49,7 +49,7 @@ const System = ({
     headerPosts,
     postsLatest,
 }) => {
-    console.log(session);
+    // console.log(session);
     const getItems = (itemsId) => {
         return systemItems[itemsId] ?? [];
     };

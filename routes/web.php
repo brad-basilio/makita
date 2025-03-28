@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\SliderController as AdminSliderController;
 use App\Http\Controllers\Admin\TestimonyController as AdminTestimonyController;
 use App\Http\Controllers\Admin\SubscriptionController as AdminSubscriptionController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
+use App\Http\Controllers\Admin\CollectionController as AdminCollectionController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\SocialController as AdminSocialController;
 use App\Http\Controllers\Admin\StrengthController as AdminStrengthController;
@@ -46,6 +47,8 @@ use SoDe\Extend\File;
 |
 */
 
+Route::get('/', fn() => view('coming-soon'));
+
 // Verificar si el archivo existe, si no, crear uno vacío
 $filePath = storage_path('app/pages.json');
 if (!file_exists($filePath)) {
@@ -72,6 +75,7 @@ Route::middleware(['can:Admin', 'auth'])->prefix('admin')->group(function () {
     Route::get('/combos', [AdminComboController::class, 'reactView'])->name('Admin/Combos.jsx');
 
     Route::get('/categories', [AdminCategoryController::class, 'reactView'])->name('Admin/Categories.jsx');
+    Route::get('/collections', [AdminCollectionController::class, 'reactView'])->name('Admin/Collections.jsx');
     Route::get('/subcategories', [AdminSubCategoryController::class, 'reactView'])->name('Admin/SubCategories.jsx');
     Route::get('/brands', [AdminBrandController::class, 'reactView'])->name('Admin/Brands.jsx');
     Route::get('/tags', [AdminTagController::class, 'reactView'])->name('Admin/Tags.jsx');

@@ -60,7 +60,7 @@ const HeaderSearchB = ({
     return (
         <header
             className={`w-full ${
-                openMenu ? "fixed h-screen bg-white  z-50" : "relative"
+                openMenu ? "fixed w-screen h-screen bg-white  z-50" : "relative"
             } `}
         >
             <div className="px-primary 2xl:px-0 2xl:max-w-7xl mx-auto py-4 font-font-secondary text-base font-semibold">

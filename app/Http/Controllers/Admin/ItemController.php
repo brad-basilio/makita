@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\BasicController;
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Collection;
 use App\Models\Item;
 use App\Models\ItemTag;
 use App\Models\Tag;
@@ -157,17 +158,19 @@ class ItemController extends BasicController
     {
         $categories = Category::all();
         $brands = Brand::all();
+        $collections = Collection::all();
 
         return [
             'categories' => $categories,
-            'brands' => $brands
+            'brands' => $brands,
+            'collections' => $collections
         ];
     }
 
     public function setPaginationInstance(string $model)
     {
         return $model::select(['items.*'])
-            ->with(['category', 'subcategory', 'brand', 'images'])
+            ->with(['category', 'subcategory', 'brand', 'images', 'collection'])
             ->leftJoin('categories AS category', 'category.id', 'items.category_id');
     }
 
