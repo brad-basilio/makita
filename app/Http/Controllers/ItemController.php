@@ -10,6 +10,7 @@ use App\Models\ItemTag;
 use App\Models\SubCategory;
 use App\Models\Tag;
 use App\Models\WebDetail;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -25,6 +26,37 @@ class ItemController extends BasicController
     public $reactView = 'Courses';
     public $reactRootView = 'public';
     public $prefix4filter = 'items';
+
+    public function variationsItems(Request $request)
+    {
+        $response = new Response();
+
+
+        try {
+            // Obtener el producto principal por slug
+            $product = Item::with(['category', 'brand', 'images', 'specifications'])
+                ->where('slug', $request->slug)
+                ->firstOrFail();
+
+            // Obtener las variantes (productos con el mismo nombre pero diferente ID)
+            $variants = Item::where('name', $product->name)
+                ->where('id', '!=', $product->id)
+                ->get(['id', 'slug', 'color', 'texture', 'image', 'final_price']);
+
+            // Agregar las variantes al producto principal
+            $product->variants = $variants;
+
+            $response->status = 200;
+            $response->message = 'Producto obtenido correctamente';
+            $response->data = $product;
+        } catch (\Throwable $th) {
+            $response->status = 404;
+            $response->message = 'Producto no encontrado';
+        }
+
+        return response($response->toArray(), $response->status);
+    }
+
 
     public function setReactViewProperties(Request $request)
     {
@@ -44,10 +76,11 @@ class ItemController extends BasicController
             'details' => $details
         ];
     }
-
+    /*aqui agregar el codigo*/
     public function setPaginationInstance(string $model)
     {
-        return $model::select(['items.*'])
+        dump('Estamos aqui');
+        $query = $model::select(['items.*'])
             ->with(['category', 'subcategory', 'brand', 'tags'])
             ->leftJoin('categories AS category', 'category.id', 'items.category_id')
             ->leftJoin('sub_categories AS subcategory', 'subcategory.id', 'items.subcategory_id')
@@ -57,28 +90,40 @@ class ItemController extends BasicController
             ->where('items.visible', true)
             ->where(function ($query) {
                 $query->where('category.status', true)
-                    ->orWhereNull('category.id'); // Ignorar si es null
+                    ->orWhereNull('category.id');
             })
             ->where(function ($query) {
                 $query->where('category.visible', true)
-                    ->orWhereNull('category.id'); // Ignorar si es null
+                    ->orWhereNull('category.id');
             })
             ->where(function ($query) {
                 $query->where('subcategory.status', true)
-                    ->orWhereNull('subcategory.id'); // Ignorar si es null
+                    ->orWhereNull('subcategory.id');
             })
             ->where(function ($query) {
                 $query->where('subcategory.visible', true)
-                    ->orWhereNull('subcategory.id'); // Ignorar si es null
+                    ->orWhereNull('subcategory.id');
             })
             ->where(function ($query) {
                 $query->where('brand.status', true)
-                    ->orWhereNull('brand.id'); // Ignorar si es null
+                    ->orWhereNull('brand.id');
             })
             ->where(function ($query) {
                 $query->where('brand.visible', true)
-                    ->orWhereNull('brand.id'); // Ignorar si es null
+                    ->orWhereNull('brand.id');
             });
+
+        // Solo aplica agrupación para la página específica
+
+        $query->join(
+            DB::raw('(SELECT MIN(id) as min_id FROM items GROUP BY name) as grouped'),
+            function ($join) {
+                $join->on('items.id', '=', 'grouped.min_id');
+            }
+        );
+
+
+        return $query;
     }
 
     public function setPaginationSummary(Request $request, Builder $builder)

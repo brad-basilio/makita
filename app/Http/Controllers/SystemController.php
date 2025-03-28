@@ -11,6 +11,7 @@ use App\Models\System;
 use App\Models\SystemColor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use SoDe\Extend\Crypto;
 use SoDe\Extend\File;
 use SoDe\Extend\JSON;
@@ -114,6 +115,19 @@ class SystemController extends BasicController
                     $query->where('status', true);
                 }
 
+                // MODIFICACIÓN PARA MANEJAR VARIANTES DE COLOR:
+                // Si es el modelo Item, agrupar por nombre y tomar solo un representante
+                if ($component['using']['model'] === 'Item') {
+                    $query->selectRaw('items.*')
+                        ->join(
+                            DB::raw('(SELECT MIN(id) as min_id FROM items GROUP BY name) as grouped'),
+                            function ($join) {
+                                $join->on('items.id', '=', 'grouped.min_id');
+                            }
+                        );
+                }
+
+
                 $shortID = Crypto::short();
                 $system->itemsId = $shortID;
                 $props['systemItems'][$shortID] = $query->get();
@@ -129,39 +143,7 @@ class SystemController extends BasicController
         $props['filteredData'] = [];
         $props['generals'] = General::whereIn('correlative', $generals)->get();
 
-        /*  foreach ($page['using'] as $key => $using) {
-            $model = $using['model'] ?? null;
-            $field = $using['field'] ?? null;
-            $value = $request->$key ?? null;
-            $relations = $using['relations'] ?? [];
 
-            if ($model && $field && $value) {
-                $class = 'App\\Models\\' . $model;
-                $result = $class::with($relations)
-                    ->where($field, $value)
-                    ->first();
-                $props['filteredData'][$model] = $result;
-            }
-        }
-
-
-        // Obtener todas las categorías, marcas y otros filtros dinámicamente
-        $props['filteredData']['Category'] = Category::where('visible', true)->with('subcategories')->get();
-        $props['filteredData']['Brand'] = Brand::where('visible', true)->get();
-        //$props['filteredData']['Color'] = Color::all();
-        $props['filteredData']['PriceRange'] = [
-            ["label" => "S/ 0 - S/ 100", "min" => 0, "max" => 100],
-            ["label" => "S/ 100 - S/ 250", "min" => 100, "max" => 250],
-            ["label" => "S/ 250 - S/ 500", "min" => 250, "max" => 500],
-            ["label" => "S/ 500 - S/ 1.000", "min" => 500, "max" => 1000],
-            ["label" => "S/ 1.000 - S/ 2.000", "min" => 1000, "max" => 2000],
-            ["label" => "S/ 2.000 - S/ 5.000", "min" => 2000, "max" => 5000],
-            ["label" => "Desde S/ 5.000", "min" => 5000, "max" => null]
-        ];
-      
-        $props['headerPosts'] = Post::where('status', true)->latest()->take(3)->get();
-        $props['posts'] = Post::where('status', true)->get();
-*/
         $props['contacts'] = General::where('status', true)->get();
         $props['faqs'] = Faq::where('status', true)->get();
         // Procesar el campo 'using'

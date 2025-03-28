@@ -19,6 +19,7 @@ import ProductInfinite from "../Products/ProductInfinite";
 import CartModal from "../Components/CartModal";
 
 export default function ProductDetailSF({ item, data, setCart, cart }) {
+    console.log("VENIMOS DESDE ITEM DE PRODUCTDETAIL SF:", item);
     const itemsRest = new ItemsRest();
     const [modalOpen, setModalOpen] = useState(false);
     const [selectedImage, setSelectedImage] = useState({
@@ -56,6 +57,7 @@ export default function ProductDetailSF({ item, data, setCart, cart }) {
 
     const [associatedItems, setAssociatedItems] = useState([]);
     const [relationsItems, setRelationsItems] = useState([]);
+    const [variationsItems, setVariationsItems] = useState([]);
     const inCart = cart?.find((x) => x.id == item?.id);
 
     useEffect(() => {
@@ -63,6 +65,7 @@ export default function ProductDetailSF({ item, data, setCart, cart }) {
             productosRelacionados(item);
             obtenerCombo(item);
             handleViewUpdate(item);
+            handleVariations(item);
         }
     }, [item]); // Agregar `item` como dependencia
     const handleViewUpdate = async (item) => {
@@ -126,6 +129,31 @@ export default function ProductDetailSF({ item, data, setCart, cart }) {
 
             setRelationsItems(Object.values(relations));
             console.log(relations);
+        } catch (error) {
+            return;
+            // Mostrar un mensaje de error al usuario si es necesario
+        }
+    };
+    const handleVariations = async (item) => {
+        try {
+            // Preparar la solicitud
+            const request = {
+                slug: item?.slug,
+            };
+
+            // Llamar al backend para verificar el combo
+            const response = await itemsRest.getVariations(request);
+
+            // Verificar si la respuesta es válida
+            if (!response) {
+                return;
+            }
+
+            // Actualizar el estado con los productos asociados
+            const variations = response;
+
+            setVariationsItems(variations.variants);
+            console.log(variations);
         } catch (error) {
             return;
             // Mostrar un mensaje de error al usuario si es necesario
@@ -371,83 +399,6 @@ export default function ProductDetailSF({ item, data, setCart, cart }) {
                                     </button>
                                 </div>
                             </div>
-
-                            {/* <div className="block lg:hidden mt-8 ">
-                                <div className="flex items-center gap-2 mb-6">
-                                    <ShoppingCart className="w-6 h-6 customtext-primary" />
-                                    <h2 className="text-base font-semibold">
-                                        Completa tu compra con estos productos
-                                    </h2>
-                                </div>
-
-                                <div className=" flex gap-4">
-                                    <div className="w-2/3 flex gap-2">
-                                        {associatedItems.map(
-                                            (product, index) => (
-                                                <div
-                                                    key={index}
-                                                    className="flex items-center gap-2"
-                                                >
-                                                    <img
-                                                        src={`/storage/images/item/${product.image}`}
-                                                        className=" rounded-lg aspect-square w-24 h-24 object-cover bg-[#F7F9FB]"
-                                                        onError={(e) =>
-                                                            (e.target.src =
-                                                                "/api/cover/thumbnail/null")
-                                                        }
-                                                    />
-                                                    {index <
-                                                        associatedItems.length -
-                                                            1 && (
-                                                        <span className="text-2xl font-bold">
-                                                            <Plus />
-                                                        </span>
-                                                    )}
-                                                </div>
-                                            )
-                                        )}
-                                    </div>
-                                </div>
-
-                                {associatedItems.map((product, index) => (
-                                    <div
-                                        key={index}
-                                        className="flex mt-4 gap-4 p-4 border rounded-lg items-center"
-                                    >
-                                        <CheckSquare className="w-5 h-5 customtext-primary" />
-                                        <div className="flex-1 font-semibold">
-                                            <span className="text-[10px] customtext-neutral-dark block">
-                                                {product.brand.name}
-                                            </span>
-                                            <p className="text-sm customtext-neutral-light font-medium">
-                                                {product.name}
-                                            </p>
-                                        </div>
-                                        <p className="font-bold customtext-neutral-dark">
-                                            S/{" "}
-                                            {parseFloat(
-                                                product.final_price
-                                            ).toFixed(2)}
-                                        </p>
-                                    </div>
-                                ))}
-
-                                <div className=" w-full flex flex-col justify-start items-start bg-gray-50 p-4 rounded-lg mt-4">
-                                    <span className="text-xs font-semibold customtext-neutral-light">
-                                        Total
-                                    </span>
-
-                                    <p className="font-bold mb-2 customtext-neutral-dark">
-                                        S/ {total.toFixed(2)}
-                                    </p>
-                                    <button
-                                        onClick={() => addAssociatedItems()}
-                                        className="bg-primary text-xs font-semibold text-white w-max py-3 px-6 rounded-xl hover:opacity-90 transition-all duration-300 hover:shadow-md"
-                                    >
-                                        Agregar al carrito
-                                    </button>
-                                </div>
-                            </div> */}
                         </div>
 
                         {/* Right Column - Product Info */}
@@ -528,6 +479,50 @@ export default function ProductDetailSF({ item, data, setCart, cart }) {
                                                 <ChevronDown className="w-4 h-4" />
                                             )}
                                         </button>
+                                    </div>
+
+                                    {/* Selector de variantes */}
+                                    <div className="variants-selector ">
+                                        <h3 className="w-full block">
+                                            Selecciona un color:
+                                        </h3>
+
+                                        <div className="flex gap-5 w-full">
+                                            {/* Variante actual (principal) */}
+                                            <a
+                                                href={`/product/${item.slug}`}
+                                                className={`variant-option w-auto rounded-full h-6  object-fit-cover  ${
+                                                    !variationsItems.some(
+                                                        (v) =>
+                                                            v.slug === item.slug
+                                                    )
+                                                        ? "active"
+                                                        : ""
+                                                }`}
+                                            >
+                                                <img
+                                                    className="color-box rounded-full h-6 w-6 object-fit-cover "
+                                                    src={`/storage/images/item/${item.texture}`}
+                                                />
+                                                <span>Actual</span>
+                                            </a>
+
+                                            {/* Otras variantes */}
+
+                                            {variationsItems.map((variant) => (
+                                                <a
+                                                    key={variant.slug}
+                                                    href={`/product/${variant.slug}`}
+                                                    className="variant-option  rounded-full h-6 w-auto object-fit-cover "
+                                                >
+                                                    <img
+                                                        className="color-box rounded-full h-6 w-6 object-fit-cover "
+                                                        src={`/storage/images/item/${variant.texture}`}
+                                                    />
+                                                    <span>{variant.color}</span>
+                                                </a>
+                                            ))}
+                                        </div>
                                     </div>
                                 </div>
 
