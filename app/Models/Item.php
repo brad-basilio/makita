@@ -27,6 +27,7 @@ class Item extends Model
         'banner',
         'image',
         'category_id',
+        'collection_id',
         'subcategory_id',
         'brand_id',
         'is_new',
@@ -72,6 +73,11 @@ class Item extends Model
                 $jpa->id = $item->id;
                 return $jpa;
             });
+    }
+
+    public function collection()
+    {
+        return $this->hasOne(Collection::class, 'id', 'collection_id');
     }
 
     public function category()

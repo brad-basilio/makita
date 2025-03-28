@@ -24,7 +24,7 @@ import ModalImportItem from "./Components/ModalImportItem";
 
 const itemsRest = new ItemsRest();
 
-const Items = ({ categories, brands }) => {
+const Items = ({ categories, brands, collections }) => {
     //!FALTA EDIT AND DELETEDE GALERIA
 
     const [itemData, setItemData] = useState([]);
@@ -36,6 +36,7 @@ const Items = ({ categories, brands }) => {
 
     const idRef = useRef();
     const categoryRef = useRef();
+    const collectionRef = useRef();
     const subcategoryRef = useRef();
     const brandRef = useRef();
     const nameRef = useRef();
@@ -56,7 +57,7 @@ const Items = ({ categories, brands }) => {
 
     const [isEditing, setIsEditing] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState(null);
-
+    const [selectedCollection, setSelectedCollection] = useState(null);
     /*ADD NEW LINES GALLERY */
 
     const [gallery, setGallery] = useState([]);
@@ -123,6 +124,9 @@ const Items = ({ categories, brands }) => {
         $(categoryRef.current)
             .val(data?.category_id || null)
             .trigger("change");
+        $(collectionRef.current)
+            .val(data?.collection_id || null)
+            .trigger("change");
         SetSelectValue(
             subcategoryRef.current,
             data?.subcategory?.id,
@@ -175,6 +179,7 @@ const Items = ({ categories, brands }) => {
         const request = {
             id: idRef.current.value || undefined,
             category_id: categoryRef.current.value,
+            collection_id: collectionRef.current.value || null,
             subcategory_id: subcategoryRef.current.value,
             brand_id: brandRef.current.value,
             name: nameRef.current.value,
@@ -324,6 +329,9 @@ const Items = ({ categories, brands }) => {
                             container.html(
                                 renderToString(
                                     <>
+                                        <b className="d-block fst-italic text-muted">
+                                            {data.collection?.name}
+                                        </b>
                                         <b className="d-block">
                                             {data.category?.name}
                                         </b>
@@ -571,6 +579,20 @@ const Items = ({ categories, brands }) => {
                             }
                         >
                             {categories.map((item, index) => (
+                                <option key={index} value={item.id}>
+                                    {item.name}
+                                </option>
+                            ))}
+                        </SelectFormGroup>
+                        <SelectFormGroup
+                            eRef={collectionRef}
+                            label="Colección"
+                            dropdownParent="#principal-container"
+                            onChange={(e) =>
+                                setSelectedCollection(e.target.value)
+                            }
+                        >
+                            {collections.map((item, index) => (
                                 <option key={index} value={item.id}>
                                     {item.name}
                                 </option>
