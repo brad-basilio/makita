@@ -215,8 +215,8 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
     return (
         <section className="py-12  font-font-general customtext-primary">
             <div className="mx-auto px-primary">
-                <div className="relative flex gap-4">
-                    <div className="w-1/5 bg-white p-4 rounded-lg h-max">
+                <div className="relative flex flex-col sm:flex-row gap-4">
+                    <div className="w-full sm:w-1/5 bg-white p-4 rounded-lg h-max">
                         <p className="customtext-primary text-2xl font-bold pb-4 mb-4 border-b">
                             Combina como desees tu sala
                         </p>
@@ -327,10 +327,11 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                                                         }
                                                         checked={selectedFilters.category_id?.includes(
                                                             category.id
-                                                        )} // <-- Agregado
+                                                        )}
                                                     />
                                                     <img
                                                         src={`/storage/images/category/${category.image}`}
+                                                        onError={e => e.target.src = 'assets/img/noimage/no_imagen_circular.png'}
                                                         alt={category.name}
                                                         className="w-8 h-8 rounded-full object-cover"
                                                         loading="lazy"
@@ -390,7 +391,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                         </div>
                     </div>
 
-                    <div className="w-4/5 py-4">
+                    <div className="w-full sm:w-4/5 py-4">
                         <div className="flex justify-between items-center mb-4 w-full">
                             {/* Ordenación <span className='block w-6/12'>Productos seleccionados: <strong>{products?.length}</strong></span>*/}
                             <div className="flex gap-4 items-center">
@@ -473,7 +474,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                         {loading ? (
                             <Loading />
                         ) : (
-                            <div className="flex items-center flex-wrap gap-y-8 transition-all duration-300 ease-in-out">
+                            <div className="flex items-center flex-wrap gap-y-2 lg:gap-y-3 transition-all duration-300 ease-in-out">
                                 {Array.isArray(products) &&
                                 products.length > 0 ? (
                                     products.map((product) => (

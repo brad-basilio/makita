@@ -464,6 +464,14 @@
                 }
             },
             {
+                "id": "ProductDetailSF",
+                "name": "ProductDetailSF",
+                "using": {
+                    "model": "Item",
+                    "flied": "slug"
+                }
+            },
+            {
                 "id": "ScrapingProductDetail",
                 "name": "ScrapingProductDetail"
             }
@@ -582,6 +590,10 @@
             {
                 "id": "LoginSimple",
                 "name": "Simple"
+            },
+            {
+                "id": "LoginSimpleSF",
+                "name": "SimpleSF"
             }
         ]
     },

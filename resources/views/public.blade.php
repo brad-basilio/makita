@@ -77,7 +77,6 @@
             /* Variantes de hover */
             .hover\:customtext-{{ $color->name }}:hover {
                 color: {{ $color->description }};
-
             }
 
             .hover\:bg-{{ $color->name }}:hover {
