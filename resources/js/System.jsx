@@ -10,6 +10,7 @@ import Slider from "./Components/Tailwind/Slider";
 import Product from "./Components/Tailwind/Product";
 import Banner from "./Components/Tailwind/Banner";
 import Category from "./Components/Tailwind/Category";
+import Collection from "./Components/Tailwind/Collection";
 import Cart from "./Components/Tailwind/Cart";
 import Step from "./Components/Tailwind/Step";
 import { Local } from "sode-extend-react";
@@ -158,6 +159,14 @@ const System = ({
             case "category":
                 return (
                     <Category
+                        which={value}
+                        data={data}
+                        items={getItems(itemsId)}
+                    />
+                );
+            case "collection":
+                return (
+                    <Collection
                         which={value}
                         data={data}
                         items={getItems(itemsId)}

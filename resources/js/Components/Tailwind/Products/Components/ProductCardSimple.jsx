@@ -2,7 +2,7 @@ import React from 'react';
 import { ShoppingCart } from 'lucide-react'; // Icono para la cesta
 import Swal from 'sweetalert2';
 
-const ProductCardSimple = ({ product, widthClass = "lg:w-1/5", setCart, cart }) => {
+const ProductCardSimple = ({ product, widthClass = "xl:w-1/5", setCart, cart }) => {
     const onAddClicked = (product) => {
         const newCart = structuredClone(cart)
         const index = newCart.findIndex(x => x.id == product.id)
@@ -26,8 +26,8 @@ const ProductCardSimple = ({ product, widthClass = "lg:w-1/5", setCart, cart }) 
     return (
         <div
             key={product.id}
-            className={`group w-full transition-transform duration-300 hover:scale-105  sm:w-1/3 ${widthClass} flex-shrink-0 font-font-general customtext-primary cursor-pointer`}
-        >
+            className={`group w-full transition-transform duration-300 hover:scale-105 sm:w-1/2 lg:w-1/3  ${widthClass} flex-shrink-0 font-font-general customtext-primary cursor-pointer`}
+        >   <a href={`/product/${product.slug}`}>
             <div
                 className="bg-white p-4"
 
@@ -42,6 +42,7 @@ const ProductCardSimple = ({ product, widthClass = "lg:w-1/5", setCart, cart }) 
                     <div className="aspect-square rounded-3xl overflow-hidden flex items-center justify-center  bg-secondary">
                         <img
                             src={`/storage/images/item/${product.image}`}
+                            onError={e => e.target.src = 'assets/img/noimage/no_img.jpg'}
                             alt={product.name}
                             className="w-full h-full object-cover"
                             loading='lazy'
@@ -54,7 +55,7 @@ const ProductCardSimple = ({ product, widthClass = "lg:w-1/5", setCart, cart }) 
                 {/* Información del producto */}
                 <div className='py-4'>
                     <p className="text-base  font-bold mb-1">
-                        {product.brand.name}
+                        {product.category.name}
                     </p>
                     <h3 className=" text-xl font-bold mb-2 line-clamp-2">
                         {product.name}
@@ -73,6 +74,7 @@ const ProductCardSimple = ({ product, widthClass = "lg:w-1/5", setCart, cart }) 
                     </div>
                 </div>
             </div >
+            </a>
         </div >
     );
 };

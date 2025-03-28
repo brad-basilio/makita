@@ -62,12 +62,12 @@ export default function SignUpSimple() {
     };
     return (
         <div className="w-full px-primary mx-auto py-16 bg-white">
-            <div className="lg:grid lg:grid-cols-2 gap-0 bg-[#f9f9f9] rounded-xl max-w-xl lg:max-w-none mx-auto">
-                <div className="hidden lg:block">
+            <div className="lg:grid grid-cols-1 lg:grid-cols-2 gap-0 bg-[#f9f9f9] rounded-xl max-w-xl lg:max-w-none mx-auto">
+                <div className="flex">
                     <img
                         src={image}
                         alt="Imagen decorativa"
-                        className="h-full w-full object-cover rounded-xl transform "
+                        className="h-full min-h-[400px] w-full object-cover rounded-xl transform "
                     />
                 </div>
                 <div className="flex items-center justify-center p-8 ">
@@ -168,13 +168,13 @@ export default function SignUpSimple() {
                             </div>
                             <button
                                 type="submit"
-                                className="w-full lg:col-span-2 rounded-3xl font-semibold mt-3 bg-primary px-4 py-3 text-white hover:opacity-90 focus:outline-none focus:ring-2 transition-all duration-300"
+                                className="w-full lg:col-span-2 rounded-3xl font-medium mt-3 bg-primary px-4 py-3 text-white hover:opacity-90 focus:outline-none focus:ring-2 transition-all duration-300"
                             >
                                 Crear cuenta
                             </button>
                             <button
                                 type="submit"
-                                className="w-full flex flex-row justify-center items-center border border-neutral-dark gap-3 lg:col-span-2 rounded-3xl font-semibold mt-3 px-4 py-3 customtext-primary hover:opacity-90 focus:outline-none focus:ring-2 transition-all duration-300"
+                                className="w-full flex flex-row justify-center items-center border border-neutral-dark gap-3 lg:col-span-2 rounded-3xl font-semibold px-4 py-3 customtext-primary hover:opacity-90 focus:outline-none focus:ring-2 transition-all duration-300"
                             >
                                 <span>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 20 21" fill="none">
@@ -185,6 +185,17 @@ export default function SignUpSimple() {
                                     </svg>
                                 </span>
                                 Ingresar con mi cuenta de Google
+                            </button>
+                            <button
+                                type="submit"
+                                className="w-full flex flex-row justify-center items-center border border-neutral-dark gap-3 lg:col-span-2 rounded-3xl font-semibold px-4 py-3 customtext-primary hover:opacity-90 focus:outline-none focus:ring-2 transition-all duration-300"
+                            >
+                                <span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none">
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M23.9727 12.5625C23.9727 6.76406 19.2711 2.0625 13.4727 2.0625C7.67422 2.0625 2.97266 6.76406 2.97266 12.5625C2.97266 17.8031 6.81172 22.147 11.832 22.9355V15.5986H9.16531V12.5625H11.832V10.2492C11.832 7.61812 13.4 6.16359 15.7981 6.16359C16.947 6.16359 18.1489 6.36891 18.1489 6.36891V8.95312H16.8242C15.5206 8.95312 15.1128 9.76219 15.1128 10.5937V12.5625H18.0247L17.5597 15.5986H15.1133V22.9364C20.1336 22.1484 23.9727 17.8045 23.9727 12.5625Z" fill="#3353DF"/>
+                                </svg>
+                                </span>
+                                Ingresar con mi cuenta de Facebook
                             </button>
                         </form>
                     </div>

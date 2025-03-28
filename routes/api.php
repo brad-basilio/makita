@@ -112,6 +112,7 @@ Route::post('/items/verify-stock', [ItemController::class, 'verifyStock']);
 Route::post('/items/combo-items', [ItemController::class, 'verifyCombo']);
 Route::post('/items/update-items', [ItemController::class, 'updateViews']);
 Route::post('/items/relations-items', [ItemController::class, 'relationsItems']);
+Route::post('/items/variations-items', [ItemController::class, 'variationsItems']);
 
 Route::post('/pago', [PaymentController::class, 'charge']);
 Route::get('/pago/{sale_id}', [PaymentController::class, 'getPaymentStatus']);

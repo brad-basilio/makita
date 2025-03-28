@@ -45,6 +45,10 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
     const [pagination, setPagination] = useState({
         currentPage: 1,
         totalPages: 1,
+        totalItems: 0,
+        itemsPerPage: 21,
+        from: 0,
+        to: 0,
     });
 
     const transformFilters = (filters) => {
@@ -106,15 +110,26 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                 filter: filters, // Envía los filtros transformados
                 sort: selectedFilters.sort, // Enviar el parámetro de ordenación
                 // page,
-                take: 20, // Número de productos por página
+                skip: (page - 1) * pagination.itemsPerPage,
+                take: pagination.itemsPerPage,
+                requireTotalCount: true, // Número de productos por página
             };
 
             const response = await itemsRest.paginate(params);
 
             setProducts(response.data);
             setPagination({
-                currentPage: response.currentPage,
-                totalPages: response.lastPage,
+                currentPage: page,
+                totalPages: Math.ceil(
+                    response.totalCount / pagination.itemsPerPage
+                ),
+                totalItems: response.totalCount,
+                itemsPerPage: pagination.itemsPerPage,
+                from: (page - 1) * pagination.itemsPerPage + 1,
+                to: Math.min(
+                    page * pagination.itemsPerPage,
+                    response.totalCount
+                ),
             });
         } catch (error) {
             console.error("Error fetching products:", error);
@@ -124,8 +139,39 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
     };
 
     useEffect(() => {
-        fetchProducts();
+        fetchProducts(pagination.currentPage);
     }, [selectedFilters]);
+
+    // Función para manejar el cambio de página
+    const handlePageChange = (page) => {
+        if (page >= 1 && page <= pagination.totalPages) {
+            fetchProducts(page);
+        }
+    };
+
+    // Función para generar los números de página a mostrar
+    const getPageNumbers = () => {
+        const pages = [];
+        const total = pagination.totalPages;
+        const current = pagination.currentPage;
+        const delta = 2; // Número de páginas a mostrar alrededor de la actual
+
+        for (let i = 1; i <= total; i++) {
+            if (
+                i === 1 ||
+                i === total ||
+                (i >= current - delta && i <= current + delta)
+            ) {
+                pages.push(i);
+            } else if (i === current - delta - 1 || i === current + delta + 1) {
+                pages.push("...");
+            }
+        }
+
+        return pages.filter((page, index, array) => {
+            return page !== "..." || array[index - 1] !== "...";
+        });
+    };
 
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
@@ -215,8 +261,8 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
     return (
         <section className="py-12  font-font-general customtext-primary">
             <div className="mx-auto px-primary">
-                <div className="relative flex gap-4">
-                    <div className="w-1/5 bg-white p-4 rounded-lg h-max">
+                <div className="relative flex flex-col sm:flex-row gap-4">
+                    <div className="w-full sm:w-1/5 bg-white p-4 rounded-lg h-max">
                         <p className="customtext-primary text-2xl font-bold pb-4 mb-4 border-b">
                             Combina como desees tu sala
                         </p>
@@ -327,10 +373,14 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                                                         }
                                                         checked={selectedFilters.category_id?.includes(
                                                             category.id
-                                                        )} // <-- Agregado
+                                                        )}
                                                     />
                                                     <img
                                                         src={`/storage/images/category/${category.image}`}
+                                                        onError={(e) =>
+                                                            (e.target.src =
+                                                                "assets/img/noimage/no_imagen_circular.png")
+                                                        }
                                                         alt={category.name}
                                                         className="w-8 h-8 rounded-full object-cover"
                                                         loading="lazy"
@@ -390,7 +440,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                         </div>
                     </div>
 
-                    <div className="w-4/5 py-4">
+                    <div className="w-full sm:w-4/5 py-4">
                         <div className="flex justify-between items-center mb-4 w-full">
                             {/* Ordenación <span className='block w-6/12'>Productos seleccionados: <strong>{products?.length}</strong></span>*/}
                             <div className="flex gap-4 items-center">
@@ -420,52 +470,86 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                                 />
                             </div>
                             <div className="customtext-primary font-semibold">
-                                <nav class="flex items-center gap-x-2 min-w-max">
-                                    <a
-                                        class=" p-4 inline-flex items-center  "
-                                        href="javascript:;"
-                                    >
-                                        <ChevronLeft />
-                                    </a>
-                                    <a
-                                        class="w-10 h-10  bg-transparent p-2 inline-flex items-center justify-center rounded-full transition-all duration-300  hover:text-white hover:bg-primary"
-                                        href="javascript:;"
-                                        aria-current="page"
-                                    >
-                                        1
-                                    </a>
-                                    <a
-                                        class="w-10 h-10 bg-primary text-white p-2 inline-flex items-center justify-center rounded-full transition-all duration-300  hover:text-white hover:bg-primary"
-                                        href="javascript:;"
-                                    >
-                                        2
-                                    </a>
-                                    <a
-                                        class="w-10 h-10 bg-transparent  p-2 inline-flex items-center justify-center rounded-full transition-all duration-300  hover:text-white hover:bg-primary"
-                                        href="javascript:;"
-                                    >
-                                        3
-                                    </a>
+                                <div className="flex justify-between items-center mb-4 w-full mt-8">
+                                    <div className="customtext-primary font-semibold">
+                                        <nav className="flex items-center gap-x-2 min-w-max">
+                                            <button
+                                                className={`p-4 inline-flex items-center ${
+                                                    pagination.currentPage === 1
+                                                        ? "opacity-50 cursor-not-allowed"
+                                                        : ""
+                                                }`}
+                                                onClick={() =>
+                                                    handlePageChange(
+                                                        pagination.currentPage -
+                                                            1
+                                                    )
+                                                }
+                                                disabled={
+                                                    pagination.currentPage === 1
+                                                }
+                                            >
+                                                <ChevronLeft />
+                                            </button>
 
-                                    <a
-                                        class="w-10 h-10 bg-transparent p-2 inline-flex items-center justify-center rounded-full transition-all duration-300  hover:text-white hover:bg-primary"
-                                        href="javascript:;"
-                                    >
-                                        ...
-                                    </a>
-                                    <a
-                                        class="w-10 h-10 bg-transparent  p-2 inline-flex items-center justify-center rounded-full transition-all duration-300  hover:text-white hover:bg-primary"
-                                        href="javascript:;"
-                                    >
-                                        5
-                                    </a>
-                                    <a
-                                        class=" p-4 inline-flex items-center "
-                                        href="javascript:;"
-                                    >
-                                        <ChevronRight />
-                                    </a>
-                                </nav>
+                                            {getPageNumbers().map(
+                                                (page, index) => (
+                                                    <React.Fragment key={index}>
+                                                        {page === "..." ? (
+                                                            <span className="w-10 h-10 bg-transparent p-2 inline-flex items-center justify-center rounded-full">
+                                                                ...
+                                                            </span>
+                                                        ) : (
+                                                            <button
+                                                                className={`w-10 h-10 p-2 inline-flex items-center justify-center rounded-full transition-all duration-300 
+                                            ${
+                                                page === pagination.currentPage
+                                                    ? "bg-primary text-white"
+                                                    : "bg-transparent hover:text-white hover:bg-primary"
+                                            }`}
+                                                                onClick={() =>
+                                                                    handlePageChange(
+                                                                        page
+                                                                    )
+                                                                }
+                                                            >
+                                                                {page}
+                                                            </button>
+                                                        )}
+                                                    </React.Fragment>
+                                                )
+                                            )}
+
+                                            <button
+                                                className={`p-4 inline-flex items-center ${
+                                                    pagination.currentPage ===
+                                                    pagination.totalPages
+                                                        ? "opacity-50 cursor-not-allowed"
+                                                        : ""
+                                                }`}
+                                                onClick={() =>
+                                                    handlePageChange(
+                                                        pagination.currentPage +
+                                                            1
+                                                    )
+                                                }
+                                                disabled={
+                                                    pagination.currentPage ===
+                                                    pagination.totalPages
+                                                }
+                                            >
+                                                <ChevronRight />
+                                            </button>
+                                        </nav>
+                                    </div>
+                                    <div>
+                                        <p className="font-semibold">
+                                            {pagination.from} - {pagination.to}{" "}
+                                            de {pagination.totalItems}{" "}
+                                            Resultados
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -473,7 +557,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                         {loading ? (
                             <Loading />
                         ) : (
-                            <div className="flex items-center flex-wrap gap-y-8 transition-all duration-300 ease-in-out">
+                            <div className="flex items-center flex-wrap gap-y-2 lg:gap-y-3 transition-all duration-300 ease-in-out">
                                 {Array.isArray(products) &&
                                 products.length > 0 ? (
                                     products.map((product) => (
@@ -492,56 +576,84 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                         )}
                         <div className="flex justify-between items-center mb-4 w-full mt-8">
                             <div className="customtext-primary font-semibold">
-                                <nav class="flex items-center gap-x-2 min-w-max">
-                                    <a
-                                        class=" p-4 inline-flex items-center  "
-                                        href="javascript:;"
-                                    >
-                                        <ChevronLeft />
-                                    </a>
-                                    <a
-                                        class="w-10 h-10  bg-transparent p-2 inline-flex items-center justify-center rounded-full transition-all duration-300  hover:text-white hover:bg-primary"
-                                        href="javascript:;"
-                                        aria-current="page"
-                                    >
-                                        1
-                                    </a>
-                                    <a
-                                        class="w-10 h-10 bg-primary text-white p-2 inline-flex items-center justify-center rounded-full transition-all duration-300  hover:text-white hover:bg-primary"
-                                        href="javascript:;"
-                                    >
-                                        2
-                                    </a>
-                                    <a
-                                        class="w-10 h-10 bg-transparent  p-2 inline-flex items-center justify-center rounded-full transition-all duration-300  hover:text-white hover:bg-primary"
-                                        href="javascript:;"
-                                    >
-                                        3
-                                    </a>
+                                <div className="flex justify-between items-center mb-4 w-full mt-8">
+                                    <div className="customtext-primary font-semibold">
+                                        <nav className="flex items-center gap-x-2 min-w-max">
+                                            <button
+                                                className={`p-4 inline-flex items-center ${
+                                                    pagination.currentPage === 1
+                                                        ? "opacity-50 cursor-not-allowed"
+                                                        : ""
+                                                }`}
+                                                onClick={() =>
+                                                    handlePageChange(
+                                                        pagination.currentPage -
+                                                            1
+                                                    )
+                                                }
+                                                disabled={
+                                                    pagination.currentPage === 1
+                                                }
+                                            >
+                                                <ChevronLeft />
+                                            </button>
 
-                                    <a
-                                        class="w-10 h-10 bg-transparent p-2 inline-flex items-center justify-center rounded-full transition-all duration-300  hover:text-white hover:bg-primary"
-                                        href="javascript:;"
-                                    >
-                                        ...
-                                    </a>
-                                    <a
-                                        class="w-10 h-10 bg-transparent  p-2 inline-flex items-center justify-center rounded-full transition-all duration-300  hover:text-white hover:bg-primary"
-                                        href="javascript:;"
-                                    >
-                                        5
-                                    </a>
-                                    <a
-                                        class=" p-4 inline-flex items-center "
-                                        href="javascript:;"
-                                    >
-                                        <ChevronRight />
-                                    </a>
-                                </nav>
+                                            {getPageNumbers().map(
+                                                (page, index) => (
+                                                    <React.Fragment key={index}>
+                                                        {page === "..." ? (
+                                                            <span className="w-10 h-10 bg-transparent p-2 inline-flex items-center justify-center rounded-full">
+                                                                ...
+                                                            </span>
+                                                        ) : (
+                                                            <button
+                                                                className={`w-10 h-10 p-2 inline-flex items-center justify-center rounded-full transition-all duration-300 
+                                            ${
+                                                page === pagination.currentPage
+                                                    ? "bg-primary text-white"
+                                                    : "bg-transparent hover:text-white hover:bg-primary"
+                                            }`}
+                                                                onClick={() =>
+                                                                    handlePageChange(
+                                                                        page
+                                                                    )
+                                                                }
+                                                            >
+                                                                {page}
+                                                            </button>
+                                                        )}
+                                                    </React.Fragment>
+                                                )
+                                            )}
+
+                                            <button
+                                                className={`p-4 inline-flex items-center ${
+                                                    pagination.currentPage ===
+                                                    pagination.totalPages
+                                                        ? "opacity-50 cursor-not-allowed"
+                                                        : ""
+                                                }`}
+                                                onClick={() =>
+                                                    handlePageChange(
+                                                        pagination.currentPage +
+                                                            1
+                                                    )
+                                                }
+                                                disabled={
+                                                    pagination.currentPage ===
+                                                    pagination.totalPages
+                                                }
+                                            >
+                                                <ChevronRight />
+                                            </button>
+                                        </nav>
+                                    </div>
+                                </div>
                             </div>
                             <div>
                                 <p className="font-semibold">
-                                    1 - 48 de 255 Resultados
+                                    {pagination.from} - {pagination.to} de{" "}
+                                    {pagination.totalItems} Resultados
                                 </p>
                             </div>
                         </div>

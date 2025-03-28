@@ -58,9 +58,9 @@ const PaginationCategory = ({
     };
 
     return (
-        <section className="py-12 font-font-general">
-            <div className="w-full px-primary 2xl:px-0  2xl:max-w-7xl mx-auto">
-                <h2 className="text-[52px] font-semibold pb-4 mb-8 text-center">
+        <section className="pt-10 lg:pt-16 font-font-general">
+            <div className="w-full px-primary 2xl:px-0 2xl:max-w-7xl mx-auto">
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl 2xl:text-6xl font-semibold pb-4 sm:pb-8 text-left sm:text-center tracking-normal customtext-neutral-dark max-w-5xl mx-auto 2xl:max-w-7xl">
                     {data?.title}
                 </h2>
                 <div className="relative">
@@ -77,22 +77,23 @@ const PaginationCategory = ({
                             {items.map((category) => (
                                 <div
                                     key={category.id}
-                                    className="group w-full min-w-[200px] px-2 sm:w-1/3 lg:w-1/6 flex-shrink-0 group-hover:shadow-xl"
+                                    className="group  min-w-[150px] px-2 w-1/2 sm:w-1/3 lg:w-1/6 flex-shrink-0 group-hover:shadow-xl"
                                 >
                                     <a
                                         href={`/catalogo?category=${category.slug}`}
                                         className="block group"
                                     >
-                                        <div className="bg-transparent rounded-xl p-4 transition-transform duration-300 ">
+                                        <div className="bg-transparent rounded-xl p-0 sm:p-4 transition-transform duration-300 ">
                                             <div className="aspect-square relative mb-4 rounded-full overflow-hidden">
                                                 <img
                                                     src={`/storage/images/category/${category.image}`}
+                                                    onError={e => e.target.src = 'assets/img/noimage/no_imagen_circular.png'}
                                                     alt={category.name}
                                                     className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-110"
                                                     loading="lazy"
                                                 />
                                             </div>
-                                            <h3 className="text-center font-semibold text-base customtext-neutral-dark">
+                                            <h3 className="text-center font-semibold text-base lg:text-lg 2xl:text-xl customtext-neutral-dark font-font-general">
                                                 {category.name}
                                             </h3>
                                         </div>

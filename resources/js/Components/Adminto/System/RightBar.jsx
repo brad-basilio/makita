@@ -55,6 +55,7 @@ const RigthBar = ({ colors, setColors }) => {
 
   return (<div className="right-bar" style={{
     width: '400px',
+    right: '-300px'
   }}>
 
     <div data-simplebar className="h-100">

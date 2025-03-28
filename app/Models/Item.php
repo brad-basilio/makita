@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Item extends Model
 {
@@ -38,6 +39,8 @@ class Item extends Model
         'status',
         'sku',
         'stock',
+        'color',
+        'texture'
 
     ];
 
@@ -128,5 +131,36 @@ class Item extends Model
                 $item->sku = 'PROD-' . strtoupper(substr($item->categoria_id, 0, 3)) . '-' . strtoupper(substr($item->name, 0, 3)) . '-' . uniqid();
             }
         });
+    }
+
+
+    // Método para obtener variantes del mismo producto (mismo nombre)
+
+    // En tu modelo Item.php
+    public function variants()
+    {
+        return $this->hasMany(Item::class, 'name', 'name')
+            ->where('id', '!=', $this->id)
+            ->select(['id', 'slug', 'name', 'color', 'texture', 'image', 'final_price']);
+    }
+
+    // Scope para obtener un producto representante de cada grupo
+    public function scopeGroupRepresentatives($query)
+    {
+        return $query->select('items.*')
+            ->join(
+                DB::raw('(SELECT MIN(id) as min_id FROM items GROUP BY name) as grouped'),
+                function ($join) {
+                    $join->on('items.id', '=', 'grouped.min_id');
+                }
+            );
+    }
+
+    // En tu modelo Item.php
+    public function getVariantsAttribute()
+    {
+        return self::where('name', $this->name)
+            ->where('id', '!=', $this->id)
+            ->get(['id', 'color', 'texture', 'slug', 'image']);
     }
 }

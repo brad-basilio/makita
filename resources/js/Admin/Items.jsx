@@ -40,12 +40,14 @@ const Items = ({ categories, brands, collections }) => {
     const subcategoryRef = useRef();
     const brandRef = useRef();
     const nameRef = useRef();
+    const colorRef = useRef();
     const summaryRef = useRef();
     const priceRef = useRef();
     const discountRef = useRef();
     const tagsRef = useRef();
     const bannerRef = useRef();
     const imageRef = useRef();
+    const textureRef = useRef();
     const descriptionRef = useRef();
     // Nuevos campos
 
@@ -136,6 +138,7 @@ const Items = ({ categories, brands, collections }) => {
             .val(data?.brand_id || null)
             .trigger("change");
         nameRef.current.value = data?.name || "";
+        colorRef.current.value = data?.color || "";
         summaryRef.current.value = data?.summary || "";
         priceRef.current.value = data?.price || 0;
         discountRef.current.value = data?.discount || 0;
@@ -149,6 +152,9 @@ const Items = ({ categories, brands, collections }) => {
         }`;
         imageRef.image.src = `/storage/images/item/${
             data?.image ?? "undefined"
+        }`;
+        textureRef.image.src = `/storage/images/item/${
+            data?.texture ?? "undefined"
         }`;
 
         descriptionRef.editor.root.innerHTML = data?.description ?? "";
@@ -183,6 +189,7 @@ const Items = ({ categories, brands, collections }) => {
             subcategory_id: subcategoryRef.current.value,
             brand_id: brandRef.current.value,
             name: nameRef.current.value,
+            color: colorRef.current.value,
             summary: summaryRef.current.value,
             price: priceRef.current.value,
             discount: discountRef.current.value,
@@ -201,6 +208,10 @@ const Items = ({ categories, brands, collections }) => {
         const image = imageRef.current.files[0];
         if (image) {
             formData.append("image", image);
+        }
+        const texture = textureRef.current.files[0];
+        if (texture) {
+            formData.append("texture", texture);
         }
         const banner = bannerRef.current.files[0];
         if (banner) {
@@ -619,6 +630,7 @@ const Items = ({ categories, brands, collections }) => {
                                 </option>
                             ))}
                         </SelectFormGroup>
+
                         <InputFormGroup
                             label="Stock"
                             eRef={stockRef}
@@ -656,6 +668,17 @@ const Items = ({ categories, brands, collections }) => {
                             eRef={nameRef}
                             label="Nombre"
                             required
+                        />
+                        <InputFormGroup
+                            eRef={colorRef}
+                            label="Color"
+                            required
+                        />
+                        <ImageFormGroup
+                            eRef={textureRef}
+                            label="Imagen Textura"
+                            aspect={1}
+                            col="col-lg-6 col-md-12 col-sm-6"
                         />
                         <TextareaFormGroup
                             eRef={summaryRef}

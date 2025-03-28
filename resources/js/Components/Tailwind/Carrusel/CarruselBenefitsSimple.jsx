@@ -30,13 +30,13 @@ const CarruselBenefitsSimple = ({ items }) => {
     //va en el div incial ref = { benefitsRef }
     // va en el div antes de hacer el map ref={sliderRef}
     return (
-        <div className="bg-secondary   py-6 overflow-hidden customtext-primary font-font-general">
+        <div className="bg-secondary py-6 overflow-hidden customtext-primary !font-font-general mt-5 lg:mt-10">
             <div className="px-primary 2xl:px-0  2xl:max-w-7xl mx-auto relative">
-                <div className="flex w-full gap-8 whitespace-nowrap transition-none">
+                <div className="flex flex-col md:flex-row w-full gap-8 whitespace-nowrap transition-none">
                     {items.map((benefit, index) => (
                         <div
                             key={index}
-                            className="flex items-center gap-4 justify-start w-1/3 "
+                            className="flex items-center gap-4 justify-start w-full md:w-1/3 "
                         >
                             {" "}
                             {/*para infinito usa esto flex-shrink-0*/}
@@ -45,6 +45,7 @@ const CarruselBenefitsSimple = ({ items }) => {
                                 <div className="relative z-10 text-3xl">
                                     <img
                                         src={`/storage/images/indicator/${benefit.symbol}`}
+                                        onError={e => e.target.src = 'assets/img/noimage/no_imagen_circular.png'}
                                         className="w-full h-auto "
                                     />
                                 </div>

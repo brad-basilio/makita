@@ -17,7 +17,7 @@ export default function CategoryCard({
                 >
                     <img
                         src={`/storage/images/category/${category?.image}`}
-                        //  src={`${category?.image}`}
+                        onError={e => e.target.src = 'assets/img/noimage/noimagenslider.jpg'}
                         alt={category?.name}
                         fill
                         className={`object-cover w-full h-full transition-transform duration-300 group-hover:scale-105 ${
@@ -32,11 +32,11 @@ export default function CategoryCard({
                                 "linear-gradient(187.83deg, rgba(0, 0, 0, 0) 34.08%, rgba(0, 0, 0, 0.4) 92.08%)",
                         }}
                     ></div>
-                    <div className={`absolute p-8 bottom-0 mt-4 space-y-2`}>
-                        <h3 className="text-4xl font-semibold ">
+                    <div className={`absolute p-4 lg:p-8 bottom-0 mt-4 space-y-1 lg:space-y-2`}>
+                        <h3 className="text-2xl md:text-3xl 2xl:text-4xl font-semibold ">
                             {category?.name}
                         </h3>
-                        <p className="line-clamp-1 text-lg ">
+                        <p className="text-sm sm:text-base lg:text-lg 2xl:text-xl">
                             {category?.description}
                         </p>
                     </div>

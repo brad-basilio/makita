@@ -20,8 +20,9 @@ const ProductNavigation = ({ items, data, setCart, cart }) => {
         const updateSlidesPerView = () => {
             const width = window.innerWidth;
             if (width < 640) setSlidesPerView(1); // Móvil
-            else if (width < 1024) setSlidesPerView(3); // Tablet
-            else setSlidesPerView(5); // Desktop
+            else if (width < 1024) setSlidesPerView(2); // Tablet
+            else if (width < 1280) setSlidesPerView(3); // Tablet
+            else setSlidesPerView(4); // Desktop
         };
         updateSlidesPerView();
         window.addEventListener("resize", updateSlidesPerView);
@@ -51,12 +52,12 @@ const ProductNavigation = ({ items, data, setCart, cart }) => {
     }, []);
 
     return (
-        <section className="py-12">
+        <section className="pt-10 lg:pt-16">
             <div className=" mx-auto px-primary 2xl:px-0 2xl:max-w-7xl font-font-general">
                 {/* Header */}
                 {data?.title && (
-                    <div className="flex justify-between items-center mb-8 pb-4 ">
-                        <h2 className="text-5xl font-semibold   ">
+                    <div className="flex flex-wrap gap-4 justify-between items-center pb-4 ">
+                        <h2 className="text-3xl sm:text-4xl lg:text-[42px] 2xl:text-5xl font-semibold tracking-normal customtext-neutral-dark max-w-5xl 2xl:max-w-6xl">
                             {data?.title}
                         </h2>
                         <a
@@ -71,12 +72,12 @@ const ProductNavigation = ({ items, data, setCart, cart }) => {
                 {/* Carousel */}
                 <div className="relative">
                     {/* Previous button */}
-                    <div className="absolute h-full flex items-center z-10  -left-4  ">
+                    <div className="absolute h-full flex items-center z-10 -left-4">
                         <button
                             onClick={prevSlide}
                             ref={prevSlideRef}
                             disabled={currentSlide === 0}
-                            className=" w-16 h-16 flex items-center justify-center bg-secondary rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-16 h-16 flex items-center justify-center bg-secondary rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
                             aria-label="Productos anteriores"
                         >
                             <ArrowLeft
@@ -87,9 +88,9 @@ const ProductNavigation = ({ items, data, setCart, cart }) => {
                     </div>
 
                     {/* Products container */}
-                    <div className="overflow-hidden py-4">
+                    <div className="overflow-hidden">
                         <div
-                            className="flex items-center transition-all duration-300   ease-in-out "
+                            className="flex items-center transition-all duration-300 ease-in-out"
                             style={{
                                 transform: `translateX(-${
                                     currentSlide * (100 / slidesPerView)
@@ -102,7 +103,7 @@ const ProductNavigation = ({ items, data, setCart, cart }) => {
                                     product={product}
                                     setCart={setCart}
                                     cart={cart}
-                                    widthClass="lg:w-1/4"
+                                    widthClass="xl:w-1/4"
                                 />
                             ))}
                         </div>
