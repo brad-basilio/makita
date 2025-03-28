@@ -424,6 +424,10 @@
             {
                 "id": "BannerStatic",
                 "name": "Estatico"
+            },
+            {
+                "id": "BannerSimpleSF",
+                "name": "SimpleSF"
             }
         ]
     },
@@ -588,6 +592,10 @@
             {
                 "id": "SignUpSimple",
                 "name": "Simple"
+            },
+            {
+                "id": "SignUpSimpleSF",
+                "name": "SimpleSF"
             }
         ]
     },

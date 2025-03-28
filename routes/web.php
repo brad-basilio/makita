@@ -47,6 +47,8 @@ use SoDe\Extend\File;
 |
 */
 
+Route::get('/', fn() => view('coming-soon'));
+
 // Verificar si el archivo existe, si no, crear uno vacío
 $filePath = storage_path('app/pages.json');
 if (!file_exists($filePath)) {

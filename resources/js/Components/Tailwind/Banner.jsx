@@ -7,6 +7,7 @@ const BannerFullWidth = lazy(() => import('./Banners/BannerFullWidth'))
 const BannerFlex = lazy(() => import('./Banners/BannerFlex'))
 const BannerPublicitario = lazy(() => import('./Banners/BannerPublicitario'))
 const BannerStatic = lazy(() => import('./Banners/BannerStatic'))
+const BannerSimpleSF = lazy(() => import('./Banners/BannerSimpleSF'))
 
 const Banner = ({ which, data }) => {
   const getBanner = () => {
@@ -21,6 +22,8 @@ const Banner = ({ which, data }) => {
         return <BannerFlex data={data} />
       case 'BannerStatic':
         return <BannerStatic data={data} />
+      case 'BannerSimpleSF':
+        return <BannerSimpleSF data={data} />
 
 
       default:
