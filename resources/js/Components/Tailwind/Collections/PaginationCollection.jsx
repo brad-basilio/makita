@@ -74,30 +74,30 @@ const PaginationCollection = ({
                                 }%)`,
                             }}
                         >
-                            {items.map((category) => (
+                            {items.map((collection) => (
                                 <div
-                                    key={category.id}
+                                    key={collection.id}
                                     className="group  min-w-[150px] px-2 w-1/2 sm:w-1/3 lg:w-1/6 flex-shrink-0 group-hover:shadow-xl"
                                 >
                                     <a
-                                        href={`/catalogo?category=${category.slug}`}
+                                        href={`/catalogo?collection=${collection.slug}`}
                                         className="block group"
                                     >
                                         <div className="bg-transparent rounded-xl p-0 sm:p-4 transition-transform duration-300 ">
                                             <div className="aspect-square relative mb-4 rounded-full overflow-hidden">
                                                 <img
-                                                    src={`/storage/images/collection/${category.image}`}
+                                                    src={`/storage/images/collection/${collection.image}`}
                                                     onError={(e) =>
                                                         (e.target.src =
                                                             "assets/img/noimage/no_imagen_circular.png")
                                                     }
-                                                    alt={category.name}
+                                                    alt={collection.name}
                                                     className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-110"
                                                     loading="lazy"
                                                 />
                                             </div>
                                             <h3 className="text-center font-semibold text-base lg:text-lg 2xl:text-xl customtext-neutral-dark font-font-general">
-                                                {category.name}
+                                                {collection.name}
                                             </h3>
                                         </div>
                                     </a>

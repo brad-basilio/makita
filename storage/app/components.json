@@ -25,7 +25,8 @@
                 "using": {
                     "model": "Social"
                 },
-                "generals": ["cintillo"]
+                "generals": ["cintillo"],
+                "data": ["link_cart"]
             },
             {
                 "id": "TopBarCopyright",
