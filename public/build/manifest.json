@@ -62,8 +62,8 @@
       "resources/js/Admin/Components/ModalImportItem.jsx"
     ]
   },
-  "_CardHoverBtn-DX-_a2xG.js": {
-    "file": "assets/CardHoverBtn-DX-_a2xG.js",
+  "_CardHoverBtn-nGqW4aMl.js": {
+    "file": "assets/CardHoverBtn-nGqW4aMl.js",
     "name": "CardHoverBtn",
     "imports": [
       "resources/js/Components/About/AboutHeader.jsx",
@@ -3151,7 +3151,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Filter.jsx": {
-    "file": "assets/Filter-DY58AGQN.js",
+    "file": "assets/Filter-D1uki_iR.js",
     "name": "Filter",
     "src": "resources/js/Components/Tailwind/Filter.jsx",
     "isEntry": true,
@@ -3168,14 +3168,14 @@
     ]
   },
   "resources/js/Components/Tailwind/Filters/CatalagoFiltros.jsx": {
-    "file": "assets/CatalagoFiltros-PFxNfFXB.js",
+    "file": "assets/CatalagoFiltros-DmheCV2s.js",
     "name": "CatalagoFiltros",
     "src": "resources/js/Components/Tailwind/Filters/CatalagoFiltros.jsx",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/Components/About/AboutHeader.jsx",
       "_index-CqkZ-sT_.js",
-      "_CardHoverBtn-DX-_a2xG.js",
+      "_CardHoverBtn-nGqW4aMl.js",
       "_ItemsRest-BAFjqsqA.js",
       "_NoResult-CKKmsI7-.js",
       "_SelectForm-B3_ZzKEz.js",
@@ -3706,7 +3706,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Product.jsx": {
-    "file": "assets/Product-Vw-diWeE.js",
+    "file": "assets/Product-L9-vBVRu.js",
     "name": "Product",
     "src": "resources/js/Components/Tailwind/Product.jsx",
     "isEntry": true,
@@ -3724,7 +3724,7 @@
     ]
   },
   "resources/js/Components/Tailwind/ProductDetail.jsx": {
-    "file": "assets/ProductDetail-RWTNhP7R.js",
+    "file": "assets/ProductDetail-BBUVPY1l.js",
     "name": "ProductDetail",
     "src": "resources/js/Components/Tailwind/ProductDetail.jsx",
     "isEntry": true,
@@ -4664,7 +4664,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-CLaXktJe.js",
+    "file": "assets/System-B5o-tLNq.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,
