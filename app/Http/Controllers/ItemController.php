@@ -79,7 +79,7 @@ class ItemController extends BasicController
     /*aqui agregar el codigo*/
     public function setPaginationInstance(Request $request, string $model)
     {
-        dump('Estamos aqui');
+        // dump('Estamos aqui');
         $query = $model::select(['items.*'])
             ->with(['category', 'subcategory', 'brand', 'tags'])
             ->leftJoin('categories AS category', 'category.id', 'items.category_id')
