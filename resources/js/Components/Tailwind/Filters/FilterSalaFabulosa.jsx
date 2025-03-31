@@ -21,9 +21,10 @@ const itemsRest = new ItemsRest();
 
 //const FilterSalaFabulosa = ({ items, data, categories, brands, prices, cart, setCart }) => {
 const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
-    const { categories, brands, priceRanges } = filteredData;
-
+    const { collections, categories, brands, priceRanges } = filteredData;
+    console.log(collections);
     const [sections, setSections] = useState({
+        collection: true,
         marca: true,
         precio: true,
         categoria: true,
@@ -31,6 +32,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
     });
 
     const [selectedFilters, setSelectedFilters] = useState({
+        collection_id: [],
         category_id: [], // Array para múltiples categorías
         brand_id: [], // Array para múltiples marcas
         subcategory_id: [],
@@ -54,7 +56,16 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
     const transformFilters = (filters) => {
         const transformedFilters = [];
 
+        if (filters.collection_id.length > 0) {
+            const collectionConditions = filters.collection_id.map((id) => [
+                "collection_id",
+                "=",
+                id,
+            ]);
+            transformedFilters.push(["or", ...collectionConditions]);
+        }
         // Categorías
+
         if (filters.category_id.length > 0) {
             const categoryConditions = filters.category_id.map((id) => [
                 "category_id",
@@ -190,6 +201,21 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
             }
         }
 
+        const collectionParam = params.get("collection");
+
+        if (collectionParam) {
+            const collection = collections.find(
+                (item) => item.slug === collectionParam
+            ); // Usa .find() en lugar de .filter()
+
+            if (collection) {
+                setSelectedFilters((prev) => ({
+                    ...prev,
+                    collection_id: [collection.id], // Asegúrate de que `category.id` exista
+                }));
+            }
+        }
+
         const searchParam = params.get("search");
 
         if (searchParam) {
@@ -246,8 +272,11 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
     ];
 
     const [searchCategory, setSearchCategory] = useState("");
+    const [searchCollection, setSearchCollection] = useState("");
     const [searchBrand, setSearchBrand] = useState("");
-
+    const filteredCollections = collections.filter((collection) =>
+        collection.name.toLowerCase().includes(searchCollection.toLowerCase())
+    );
     // Filtrar categorías según el input
     const filteredCategories = categories.filter((category) =>
         category.name.toLowerCase().includes(searchCategory.toLowerCase())
@@ -321,13 +350,89 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                         {/*Categoria Seccion */}
                         <div className="mb-6">
                             <button
-                                onClick={() => toggleSection("categoria")}
+                                onClick={() => toggleSection("collection")}
                                 className="flex items-center justify-between w-full mb-4"
                             >
-                                <span className="font-medium">Categoría</span>
+                                <span className="font-medium">Colecciones</span>
                                 <ChevronDown
                                     className={`h-5 w-5 transform transition-transform ${
-                                        sections.categoria ? "" : "-rotate-180"
+                                        sections.collection ? "" : "-rotate-180"
+                                    }`}
+                                />
+                            </button>
+                            {sections.collection && (
+                                <div className="space-y-4">
+                                    <div className="relative">
+                                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                                        <input
+                                            type="text"
+                                            placeholder="Buscar"
+                                            className={`w-full px-4 pl-10 py-3 border customtext-neutral-dark  border-neutral-ligth rounded-xl focus:ring-0 focus:outline-0   transition-all duration-300`}
+                                            value={searchCollection}
+                                            onChange={(e) =>
+                                                setSearchCollection(
+                                                    e.target.value
+                                                )
+                                            }
+                                        />
+                                    </div>
+                                    {filteredCollections.map((collection) => {
+                                        const isChecked =
+                                            selectedFilters.collection_id?.includes(
+                                                collection.id
+                                            );
+                                        return (
+                                            <div
+                                                key={collection.id}
+                                                className={`group py-2 rounded-md ${
+                                                    isChecked
+                                                        ? "bg-secondary"
+                                                        : "bg-transparent"
+                                                }`}
+                                            >
+                                                <label className="flex items-center space-x-3 ">
+                                                    <input
+                                                        type="checkbox"
+                                                        className="h-4 hidden w-4 rounded border-gray-300"
+                                                        onChange={() =>
+                                                            handleFilterChange(
+                                                                "collection_id",
+                                                                collection.id
+                                                            )
+                                                        }
+                                                        checked={selectedFilters.collection_id?.includes(
+                                                            collection.id
+                                                        )}
+                                                    />
+                                                    <img
+                                                        src={`/storage/images/collection/${collection.image}`}
+                                                        onError={(e) =>
+                                                            (e.target.src =
+                                                                "assets/img/noimage/no_imagen_circular.png")
+                                                        }
+                                                        alt={collection.name}
+                                                        className="w-8 h-8 rounded-full object-cover"
+                                                        loading="lazy"
+                                                    />
+                                                    <span>
+                                                        {collection.name}
+                                                    </span>
+                                                </label>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            )}
+                        </div>
+                        <div className="mb-6">
+                            <button
+                                onClick={() => toggleSection("category")}
+                                className="flex items-center justify-between w-full mb-4"
+                            >
+                                <span className="font-medium">Categorias</span>
+                                <ChevronDown
+                                    className={`h-5 w-5 transform transition-transform ${
+                                        sections.category ? "" : "-rotate-180"
                                     }`}
                                 />
                             </button>
