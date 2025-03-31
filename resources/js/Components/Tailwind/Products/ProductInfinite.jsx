@@ -109,6 +109,7 @@ const ProductInfinite = ({ items, data, setCart, cart }) => {
                                     product={product}
                                     setCart={setCart}
                                     cart={cart}
+                                    data={data}
                                 />
                             ))}
                         </div>

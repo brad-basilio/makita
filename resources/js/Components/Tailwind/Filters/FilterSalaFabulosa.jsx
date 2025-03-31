@@ -426,13 +426,13 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                         </div>
                         <div className="mb-6">
                             <button
-                                onClick={() => toggleSection("category")}
+                                onClick={() => toggleSection("categoria")}
                                 className="flex items-center justify-between w-full mb-4"
                             >
                                 <span className="font-medium">Categorias</span>
                                 <ChevronDown
                                     className={`h-5 w-5 transform transition-transform ${
-                                        sections.category ? "" : "-rotate-180"
+                                        sections.categoria ? "" : "-rotate-180"
                                     }`}
                                 />
                             </button>

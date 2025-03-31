@@ -4,9 +4,17 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import ItemsRest from "../../../../Actions/ItemsRest";
 import CartModal from "../../Components/CartModal";
+import { Local } from "sode-extend-react";
+import Global from "../../../../Utils/Global";
 
 const itemsRest = new ItemsRest();
-const CardHoverBtn = ({ product, widthClass = "lg:w-1/5", setCart, cart }) => {
+const CardHoverBtn = ({
+    data,
+    product,
+    widthClass = "lg:w-1/5",
+    setCart,
+    cart,
+}) => {
     const [message, setMessage] = useState("");
     const [modalOpen, setModalOpen] = useState(false);
     const onAddClicked = (product) => {
@@ -154,6 +162,7 @@ const CardHoverBtn = ({ product, widthClass = "lg:w-1/5", setCart, cart }) => {
                 </div>
             </div>
             <CartModal
+                data={data}
                 cart={cart}
                 setCart={setCart}
                 modalOpen={modalOpen}
