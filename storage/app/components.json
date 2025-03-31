@@ -232,12 +232,45 @@
                 "name": "Filtro SalaFabulosa",
                 "image": "products-list.png",
                 "data": ["path", "title", "description"],
-                "using": {
-                    "model": "Item",
-                    "with": ["category", "subcategory", "brand"],
-
-                    "relations": ["category", "tags"]
-                }
+                "options": [
+                    {
+                        "id": "default",
+                        "name": "Lista estándar",
+                        "using": {
+                            "model": "Item",
+                            "with": ["category", "subcategory", "brand"],
+                            "relations": ["category", "tags"],
+                            "fields": [
+                                "id",
+                                "name",
+                                "slug",
+                                "price",
+                                "final_price",
+                                "image",
+                                "color"
+                            ]
+                        }
+                    },
+                    {
+                        "id": "with_variants",
+                        "name": "Lista con variantes",
+                        "using": {
+                            "model": "Item",
+                            "with": ["category", "subcategory", "brand"],
+                            "relations": ["category", "tags"],
+                            "fields": [
+                                "id",
+                                "name",
+                                "slug",
+                                "price",
+                                "final_price",
+                                "image",
+                                "color"
+                            ],
+                            "group_by_name": true
+                        }
+                    }
+                ]
             }
         ]
     },
@@ -484,7 +517,14 @@
                 "name": "ProductDetailSF",
                 "using": {
                     "model": "Item",
-                    "flied": "slug"
+                    "field": "slug",
+                    "with": [
+                        "variants",
+                        "images",
+                        "specifications",
+                        "features"
+                    ],
+                    "relations": ["category", "brand", "subcategory"]
                 }
             },
             {
@@ -516,6 +556,11 @@
             {
                 "id": "CheckoutSteps",
                 "name": "Steps",
+                "data": ["title"]
+            },
+            {
+                "id": "CheckoutStepsSF",
+                "name": "StepsSF",
                 "data": ["title"]
             }
         ]
