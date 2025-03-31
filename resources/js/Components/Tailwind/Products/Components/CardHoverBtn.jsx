@@ -54,7 +54,7 @@ const CardHoverBtn = ({
                     <div className="relative ">
                         {product.discount != null &&
                             !isNaN(product.discount) && (
-                                <span className="absolute top-2 left-2 bg-[#F93232] text-white text-base font-medium px-2 py-1 rounded-full">
+                                <span className="absolute top-2 right-2 bg-[#F93232] text-white text-base font-medium px-2 py-1 rounded-full">
                                     -
                                     {Number(
                                         100 -
