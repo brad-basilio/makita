@@ -14,6 +14,7 @@ use SoDe\Extend\Response;
 use Throwable;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File as FacadesFile;
 use ReflectionClass;
 
 class SystemController extends BasicController
@@ -82,7 +83,7 @@ class SystemController extends BasicController
         ];
     }
 
-    public function afterSave(Request $request, object $jpa)
+    public function afterSave(Request $request, object $jpa, ?bool $isNew)
     {
         return $jpa;
     }
@@ -153,11 +154,25 @@ class SystemController extends BasicController
 
     public function exportBK(Request $request)
     {
+        // Get and encode the images
+        $iconPath = public_path('assets/resources/icon.png');
+        $logoPath = public_path('assets/resources/logo.png');
+        $logoFooterPath = public_path('assets/resources/logo-footer.png');
+
+        $iconBase64 = FacadesFile::exists($iconPath) ? base64_encode(FacadesFile::get($iconPath)) : '';
+        $logoBase64 = FacadesFile::exists($logoPath) ? base64_encode(FacadesFile::get($logoPath)) : '';
+        $logoFooterBase64 = FacadesFile::exists($logoFooterPath) ? base64_encode(FacadesFile::get($logoFooterPath)) : '';
+
         $backup = [
             'pages' => JSON::parse(File::get(storage_path('app/pages.json'))),
-            'components' => System::with([])->get()
+            'components' => System::all(),
+            'colors' => SystemColor::all(),
+            'icon' => $iconBase64,
+            'logo' => $logoBase64,
+            'logo_footer' => $logoFooterBase64,
         ];
-        return $backup;
+
+        return response()->json($backup);
     }
 
     public function importBK(Request $request)
@@ -167,18 +182,45 @@ class SystemController extends BasicController
                 $backupData = $request->file('backup')->get();
                 $data = JSON::parse($backupData);
 
+                // Restaurar las páginas
                 if (isset($data['pages'])) {
-                    File::save(storage_path('app/pages.json'), JSON::stringify($data['pages'], true));
+                    FacadesFile::put(storage_path('app/pages.json'), JSON::stringify($data['pages'], true));
                 }
 
+                // Restaurar los componentes
                 $this->model::whereNotNull('id')->delete();
                 if (isset($data['components'])) {
                     foreach ($data['components'] as $component) {
                         $this->model::create($component);
                     }
                 }
+
+                // Restaurar los colores
+                SystemColor::whereNotNull('id')->delete();
+                if (isset($data['colors'])) {
+                    foreach ($data['colors'] as $color) {
+                        SystemColor::create($color);
+                    }
+                }
+
+                // Restaurar las imágenes
+                if (isset($data['icon'])) {
+                    $iconPath = public_path('assets/resources/icon.png');
+                    FacadesFile::put($iconPath, base64_decode($data['icon']));
+                }
+
+                if (isset($data['logo'])) {
+                    $logoPath = public_path('assets/resources/logo.png');
+                    FacadesFile::put($logoPath, base64_decode($data['logo']));
+                }
+
+                if (isset($data['logo_footer'])) {
+                    $logoFooterPath = public_path('assets/resources/logo-footer.png');
+                    FacadesFile::put($logoFooterPath, base64_decode($data['logo_footer']));
+                }
             });
         });
+
         return response($response->toArray(), $response->status);
     }
 }

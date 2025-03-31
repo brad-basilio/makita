@@ -17,10 +17,12 @@ class SubCategorySeeder extends Seeder
     {
         for ($i=1; $i < 20; $i++) {
             $name = 'Subcategoría ' . $i;
-            SubCategory::create([
+            $slug = Str::slug($name);
+            SubCategory::updateOrCreate([
+                'slug' => $slug
+            ],[
                 'category_id' => Category::all()?->random()?->id,
                 'name' => $name,
-                'slug' => Str::slug($name),
                 'featured' => rand(0, 1)
             ]);
         }

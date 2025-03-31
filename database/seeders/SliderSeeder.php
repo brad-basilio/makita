@@ -14,16 +14,15 @@ class SliderSeeder extends Seeder
     public function run(): void
     {
         for ($i = 1; $i <= 4; $i++) {
-            Slider::create(
-                [
-                    'name' => 'Título de slider ' . $i,
-                    'description' => 'Una breve descripción de mi slider ' . $i . ', y algo mas de texto',
-                    'button_text' => 'Botón dummy',
-                    'button_link' => '/',
-                    'visible' => true,
-                    'status' => true,
-                ]
-            );
+            Slider::updateOrCreate([
+                'name' => 'Título de slider ' . $i,
+            ], [
+                'description' => 'Una breve descripción de mi slider ' . $i . ', y algo mas de texto',
+                'button_text' => 'Botón dummy',
+                'button_link' => '/',
+                'visible' => true,
+                'status' => true,
+            ]);
         }
     }
 }

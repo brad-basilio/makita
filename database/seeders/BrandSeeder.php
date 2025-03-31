@@ -15,9 +15,11 @@ class BrandSeeder extends Seeder
     {
         for ($i = 1; $i <= 6; $i++) {
             $name = 'Marca ' . $i;
-            Brand::create([
+            $slug = Str::slug($name);
+            Brand::updateOrCreate([
+                'slug' => $slug
+            ],[
                 'name' => $name,
-                'slug' => Str::slug($name),
                 'featured' => true
             ]);
         }

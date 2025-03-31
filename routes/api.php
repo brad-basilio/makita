@@ -33,6 +33,7 @@ use App\Http\Controllers\Admin\WebDetailController as AdminWebDetailController;
 use App\Http\Controllers\Admin\ItemImageController as AdminItemImageController;
 use App\Http\Controllers\Admin\FaqController as AdminFaqController;
 use App\Http\Controllers\Admin\ComboController as AdminComboController;
+use App\Http\Controllers\Admin\RepositoryController as AdminRepositoryController;
 use App\Http\Controllers\AuthClientController;
 // Public
 use App\Http\Controllers\AuthController;
@@ -45,6 +46,7 @@ use App\Http\Controllers\ItemImportController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\RepositoryController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\ScrapController;
@@ -266,6 +268,10 @@ Route::middleware('auth')->group(function () {
 
       Route::post('/colors', [AdminSystemColorController::class, 'save']);
     });
+
+    Route::post('/repository', [AdminRepositoryController::class, 'save']);
+    Route::post('/repository/paginate', [AdminRepositoryController::class, 'paginate']);
+    Route::delete('/repository/{id}', [AdminRepositoryController::class, 'delete']);
 
     Route::post('/generals', [AdminGeneralController::class, 'save']);
     Route::post('/generals/paginate', [AdminGeneralController::class, 'paginate']);

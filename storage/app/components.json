@@ -34,7 +34,7 @@
                 "using": {
                     "model": "Social"
                 },
-                "generals": ["cintillo"]
+                "generals": ["copyright"]
             },
             {
                 "id": "TopBarCopyrightSocials",
@@ -43,7 +43,7 @@
                 "using": {
                     "model": "Social"
                 },
-                "generals": ["cintillo"]
+                "generals": ["copyright"]
             }
         ]
     },
@@ -641,6 +641,11 @@
                 "using": {
                     "model": "Aboutus"
                 }
+            },
+            {
+                "id": "AboutImage",
+                "name": "Con Imagen",
+                "data": ["url_imagen", "title", "description"]
             }
         ]
     },
@@ -709,6 +714,24 @@
                 "id": "FooterB",
                 "name": "FooterB",
                 "image": "footer-simple.png",
+                "using": {
+                    "model": "Social",
+                    "limit": 10
+                },
+                "generals": [
+                    "terms_conditions",
+                    "privacy_policy",
+                    "delivery_policy",
+                    "saleback_policy",
+                    "address",
+                    "support_phone",
+                    "support_email"
+                ]
+            },
+            {
+                "id": "FooterTermsCTASocials",
+                "name": "Politicas, CTA y Redes",
+                "image": "footer-terms-cta-socials.png",
                 "using": {
                     "model": "Social",
                     "limit": 10

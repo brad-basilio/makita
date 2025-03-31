@@ -4,11 +4,18 @@ import { useRef } from "react";
 import { adjustTextColor } from "../../../Functions/adjustTextColor";
 
 const TopBarSimple = ({ }) => {
+  const copyright = General.get('copyright') ?? ''
+  const content = copyright.replace(/\{\{([^}]+)\}\}/g, (match, code) => {
+    try {
+      return eval(code);
+    } catch (error) {
+      console.error('Error evaluating code:', error);
+      return match;
+    }
+  });
 
-
-
-  return <div className="bg-white text-xs customtext-primary font-medium py-3  px-primary flex justify-center items-center font-font-general">
-    <p>Copyright © 2025 Sala Fabulosa. Reservados todos los derechos.</p>
+  return <div className="bg-white text-xs font-bold py-3  px-primary flex justify-center items-center font-font-general">
+    <p>{content}</p>
   </div>
 }
 

@@ -14,7 +14,7 @@ export default defineConfig({
         laravel({
             input: [
                 ...glob.sync('resources/js/**/*.jsx'),
-                'resources/css/app.css',
+                'resources/css/app.css'
             ],
             refresh: true,
         }),

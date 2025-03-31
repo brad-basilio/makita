@@ -77,7 +77,7 @@ class ItemController extends BasicController
         ];
     }
     /*aqui agregar el codigo*/
-    public function setPaginationInstance(string $model)
+    public function setPaginationInstance(Request $request, string $model)
     {
         dump('Estamos aqui');
         $query = $model::select(['items.*'])

@@ -28,6 +28,9 @@ const Generals = ({ generals }) => {
         cintillo:
             generals.find((x) => x.correlative == "cintillo")?.description ??
             "",
+        copyright:
+            generals.find((x) => x.correlative == "copyright")?.description ??
+            "",
         address:
             generals.find((x) => x.correlative == "address")?.description ?? "",
         openingHours:
@@ -126,6 +129,11 @@ const Generals = ({ generals }) => {
                     description: formData.cintillo,
                 },
                 {
+                    correlative: "copyright",
+                    name: "Copyright",
+                    description: formData.copyright,
+                },
+                {
                     correlative: "opening_hours",
                     name: "Horarios de atención",
                     description: formData.openingHours,
@@ -189,9 +197,8 @@ const Generals = ({ generals }) => {
                 <ul className="nav nav-tabs" id="contactTabs" role="tablist">
                     <li className="nav-item" role="presentation">
                         <button
-                            className={`nav-link ${
-                                activeTab === "contact" ? "active" : ""
-                            }`}
+                            className={`nav-link ${activeTab === "contact" ? "active" : ""
+                                }`}
                             onClick={() => setActiveTab("contact")}
                             type="button"
                             role="tab"
@@ -201,9 +208,8 @@ const Generals = ({ generals }) => {
                     </li>
                     <li className="nav-item" role="presentation">
                         <button
-                            className={`nav-link ${
-                                activeTab === "policies" ? "active" : ""
-                            }`}
+                            className={`nav-link ${activeTab === "policies" ? "active" : ""
+                                }`}
                             onClick={() => setActiveTab("policies")}
                             type="button"
                             role="tab"
@@ -213,9 +219,8 @@ const Generals = ({ generals }) => {
                     </li>
                     <li className="nav-item" role="presentation">
                         <button
-                            className={`nav-link ${
-                                activeTab === "location" ? "active" : ""
-                            }`}
+                            className={`nav-link ${activeTab === "location" ? "active" : ""
+                                }`}
                             onClick={() => setActiveTab("location")}
                             type="button"
                             role="tab"
@@ -227,9 +232,8 @@ const Generals = ({ generals }) => {
 
                 <div className="tab-content" id="contactTabsContent">
                     <div
-                        className={`tab-pane fade ${
-                            activeTab === "contact" ? "show active" : ""
-                        }`}
+                        className={`tab-pane fade ${activeTab === "contact" ? "show active" : ""
+                            }`}
                         role="tabpanel"
                     >
                         <div className="row">
@@ -348,7 +352,22 @@ const Generals = ({ generals }) => {
                                         cintillo: e.target.value,
                                     })
                                 }
-                                required
+                            ></textarea>
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="copyright" className="form-label">
+                                Copyright
+                            </label>
+                            <textarea
+                                className="form-control"
+                                id="copyright"
+                                value={formData.copyright}
+                                onChange={(e) =>
+                                    setFormData({
+                                        ...formData,
+                                        copyright: e.target.value,
+                                    })
+                                }
                             ></textarea>
                         </div>
                         <div className="mb-3">
@@ -468,9 +487,8 @@ const Generals = ({ generals }) => {
                     </div>
 
                     <div
-                        className={`tab-pane fade ${
-                            activeTab === "policies" ? "show active" : ""
-                        }`}
+                        className={`tab-pane fade ${activeTab === "policies" ? "show active" : ""
+                            }`}
                         role="tabpanel"
                     >
                         <div className="mb-3">
@@ -524,9 +542,8 @@ const Generals = ({ generals }) => {
                     </div>
 
                     <div
-                        className={`tab-pane fade ${
-                            activeTab === "location" ? "show active" : ""
-                        }`}
+                        className={`tab-pane fade ${activeTab === "location" ? "show active" : ""
+                            }`}
                         role="tabpanel"
                     >
                         <LoadScript googleMapsApiKey={Global.GMAPS_API_KEY}>

@@ -13,7 +13,7 @@ class SubCategoryController extends BasicController
     public $reactView = 'Admin/Subcategory';
     public $prefix4filter = 'sub_categories';
 
-    public function setPaginationInstance(string $model)
+    public function setPaginationInstance(Request $request, string $model)
     {
         return $model::select('sub_categories.*')
             ->with(['category'])
