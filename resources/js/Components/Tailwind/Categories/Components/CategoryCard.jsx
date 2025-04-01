@@ -9,7 +9,7 @@ export default function CategoryCard({
                 featured ? " h-[500px]" : "h-[238px]"
             }`}
         >
-            <a href="#" className={` ${flex && "flex gap-4 h-full"}`}>
+            <a href={`/catalogo?category=${category.slug}`} className={` ${flex && "flex gap-4 h-full"}`}>
                 <div
                     className={`relative  w-full h-full overflow-hidden rounded-3xl ${
                         flex && "   h-full"

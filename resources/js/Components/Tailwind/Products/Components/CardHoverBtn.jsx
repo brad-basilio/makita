@@ -4,9 +4,17 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import ItemsRest from "../../../../Actions/ItemsRest";
 import CartModal from "../../Components/CartModal";
+import { Local } from "sode-extend-react";
+import Global from "../../../../Utils/Global";
 
 const itemsRest = new ItemsRest();
-const CardHoverBtn = ({ product, widthClass = "lg:w-1/5", setCart, cart }) => {
+const CardHoverBtn = ({
+    data,
+    product,
+    widthClass = "lg:w-1/5",
+    setCart,
+    cart,
+}) => {
     const [message, setMessage] = useState("");
     const [modalOpen, setModalOpen] = useState(false);
     const onAddClicked = (product) => {
@@ -25,6 +33,7 @@ const CardHoverBtn = ({ product, widthClass = "lg:w-1/5", setCart, cart }) => {
             icon: "success",
             timer: 1500,
         });
+        setModalOpen(!modalOpen);
     };
 
     const inCart = cart?.find((x) => x.id == product?.id);
@@ -45,7 +54,7 @@ const CardHoverBtn = ({ product, widthClass = "lg:w-1/5", setCart, cart }) => {
                     <div className="relative ">
                         {product.discount != null &&
                             !isNaN(product.discount) && (
-                                <span className="absolute top-2 left-2 bg-[#F93232] text-white text-base font-medium px-2 py-1 rounded-full">
+                                <span className="absolute top-2 right-2 bg-[#F93232] text-white text-base font-medium px-2 py-1 rounded-full">
                                     -
                                     {Number(
                                         100 -
@@ -111,7 +120,6 @@ const CardHoverBtn = ({ product, widthClass = "lg:w-1/5", setCart, cart }) => {
                         </a>
                         <button
                             className="py-2 px-2.5 border border-primary rounded-lg customtext-primary transition-all duration-300  hover:opacity-90"
-                            disabled={inCart}
                             onClick={() => onAddClicked(product)}
                         >
                             <svg
@@ -135,7 +143,7 @@ const CardHoverBtn = ({ product, widthClass = "lg:w-1/5", setCart, cart }) => {
                         <p className="text-xs customtext-neutral-light font-semibold mb-1">
                             {product.brand.name}
                         </p>
-                        <h3 className="customtext-neutral-dark text-sm font-semibold mb-2 line-clamp-2">
+                        <h3 className="customtext-neutral-dark text-sm font-semibold mb-2 line-clamp-3 h-16">
                             {product.name}
                         </h3>
                         {/* Precio */}
@@ -154,6 +162,7 @@ const CardHoverBtn = ({ product, widthClass = "lg:w-1/5", setCart, cart }) => {
                 </div>
             </div>
             <CartModal
+                data={data}
                 cart={cart}
                 setCart={setCart}
                 modalOpen={modalOpen}

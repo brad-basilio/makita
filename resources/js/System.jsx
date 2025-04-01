@@ -237,7 +237,7 @@ const System = ({
                     />
                 );
             case "post-detail":
-                return <PostDetail which={value} data={data} />;
+                return <PostDetail which={value} data={data} item={filteredData.Post} />;
             case "about":
                 return (
                     <AboutUs

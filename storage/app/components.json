@@ -25,7 +25,8 @@
                 "using": {
                     "model": "Social"
                 },
-                "generals": ["cintillo"]
+                "generals": ["cintillo"],
+                "data": ["link_cart"]
             },
             {
                 "id": "TopBarCopyright",
@@ -100,6 +101,12 @@
             {
                 "id": "HeaderSearchMenu",
                 "name": "Con busqueda y menu",
+                "image": "header-with-search.png",
+                "data": ["class", "link_cart"]
+            },
+            {
+                "id": "HeaderSearchMenuSF",
+                "name": "Con busqueda y menu SF",
                 "image": "header-with-search.png",
                 "data": ["class", "link_cart"]
             }
@@ -228,7 +235,7 @@
                 "id": "FilterSimple",
                 "name": "Simple",
                 "image": "filters-simple.png",
-                "data": ["path", "title", "description"],
+                "data": ["path", "title", "description", "link_cart"],
                 "using": {
                     "model": "Item"
                 }
@@ -237,7 +244,7 @@
                 "id": "CatalagoFiltros",
                 "name": "Producto Catalogo Filtro",
                 "image": "products-list.png",
-                "data": ["path", "title", "description"],
+                "data": ["path", "title", "description", "link_cart"],
                 "using": {
                     "model": "Item",
                     "with": ["category", "subcategory", "brand"],
@@ -250,7 +257,7 @@
                 "id": "FilterSalaFabulosa",
                 "name": "Filtro SalaFabulosa",
                 "image": "products-list.png",
-                "data": ["path", "title", "description"],
+                "data": ["path", "title", "description", "link_cart"],
                 "options": [
                     {
                         "id": "default",
@@ -412,7 +419,8 @@
                     "description",
                     "link_catalog",
                     "button_text",
-                    "bool:show_summary"
+                    "bool:show_summary",
+                    "link_cart"
                 ],
                 "using": {
                     "model": "Item",
@@ -430,7 +438,13 @@
                 "id": "List",
                 "name": "Listado",
                 "image": "products-list.png",
-                "data": ["path", "title", "description", "link_catalog"],
+                "data": [
+                    "path",
+                    "title",
+                    "description",
+                    "link_catalog",
+                    "link_cart"
+                ],
                 "using": {
                     "model": "Item",
                     "filters": [
@@ -446,7 +460,13 @@
                 "id": "ProductInfinite",
                 "name": "Producto Infinito",
                 "image": "products-list.png",
-                "data": ["title", "path", "description", "link_catalog"],
+                "data": [
+                    "title",
+                    "path",
+                    "description",
+                    "link_catalog",
+                    "link_cart"
+                ],
                 "using": {
                     "model": "Item",
                     "filters": [
@@ -464,7 +484,13 @@
                 "id": "ProductNavigation",
                 "name": "Navegacion",
                 "image": "products-list.png",
-                "data": ["title", "path", "description", "link_catalog"],
+                "data": [
+                    "title",
+                    "path",
+                    "description",
+                    "link_catalog",
+                    "link_cart"
+                ],
                 "using": {
                     "model": "Item",
                     "filters": [
@@ -603,6 +629,11 @@
                 "id": "CheckoutSteps",
                 "name": "Steps",
                 "data": ["title"]
+            },
+            {
+                "id": "CheckoutStepsSF",
+                "name": "StepsSF",
+                "data": ["title"]
             }
         ]
     },
@@ -667,7 +698,12 @@
             {
                 "id": "PostDetailSimple",
                 "name": "Simple",
-                "data": ["title"]
+                "data": ["title"],
+                "using": {
+                    "model": "Post",
+                    "flied": "slug",
+                    "with": ["category"]
+                }
             }
         ]
     },
