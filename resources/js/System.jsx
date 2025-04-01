@@ -32,6 +32,7 @@ import Signup from "./Components/Tailwind/Signup";
 import ForgotPassword from "./Components/Tailwind/ForgotPassword";
 import ResetPassword from "./Components/Tailwind/ResetPassword";
 import Complaint from "./Components/Tailwind/Complaint";
+import Indicator from "./Components/Tailwind/Indicator";
 
 const itemsRest = new ItemsRest();
 
@@ -189,6 +190,8 @@ const System = ({
                     />
                 );
 
+            case "indicator":
+                return <Indicator which={value} data={data} items={getItems(itemsId)} />;
             case "banner":
                 return <Banner which={value} data={data} />;
             case "step":

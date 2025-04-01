@@ -406,6 +406,20 @@
         ]
     },
     {
+        "id": "indicator",
+        "name": "Indicadores",
+        "options": [
+            {
+                "id": "IndicatorSimple",
+                "name": "Simple",
+                "image": "indicator-simple.png",
+                "using": {
+                    "model": "Indicator"
+                }
+            }
+        ]
+    },
+    {
         "id": "product",
         "name": "Productos",
         "options": [
