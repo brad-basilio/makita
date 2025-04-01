@@ -9,8 +9,8 @@ const ProductCarousel = ({ data, items, cart, setCart }) => {
 
     return (
         <div className="bg-gray-50">
-            <div className="px-[5%] replace-max-w-here w-full mx-auto py-[5%] md:py-[2.5%]">
-                <div className="flex flex-wrap justify-between mb-[2%]">
+            <div className="px-[5%] w-full mx-auto py-[5%] md:py-[2.5%]">
+                <div className="flex flex-wrap justify-between items-center mb-[2%]">
                     <div>
                         {data?.title && (
                             <h1 className="text-2xl font-bold mb-[2%]">
@@ -18,17 +18,17 @@ const ProductCarousel = ({ data, items, cart, setCart }) => {
                             </h1>
                         )}
                         {data?.description && (
-                            <p className="text-sm mb-[3%]">
+                            <p className="mb-[3%]">
                                 {data?.description}
                             </p>
                         )}
                     </div>
                     <button
                         href={data?.link_catalog}
-                        className="text-primary font-bold"
+                        className="text-primary font-bold bg-primary rounded-full px-4 py-2 text-white"
                     >
-                        <span>Ver todos los productos</span>
-                        <i className="mdi mdi-arrow-top-right"></i>
+                        <span>{data?.button_text || 'Ver todos los productos'}</span>
+                        <i className="mdi mdi-arrow-top-right ms-1"></i>
                     </button>
                 </div>
                 <Swiper

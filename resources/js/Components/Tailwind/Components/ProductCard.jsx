@@ -41,7 +41,7 @@ const ProductCard = ({ data, cart, item, setCart }) => {
   </div>
 
   return <div className="w-full relative">
-    <img src={`/storage/images/item/${item?.image}`} alt={item?.name} className="border w-full object-cover mb-4 aspect-square rounded-3xl shadow-lg" />
+    <img src={`/storage/images/item/${item?.image}`} alt={item?.name} className="border w-full object-cover mb-4 aspect-square rounded-2xl shadow-lg" />
     {
       item?.tags &&
       <div className="absolute top-2 left-2 flex flex-col gap-1 text-xs font-bold">
@@ -55,13 +55,16 @@ const ProductCard = ({ data, cart, item, setCart }) => {
       <h3 className="line-clamp-1 h-8">{item?.category?.name}</h3>
     }
     <a href={`/${data?.path}/${item.slug}`}>
-      <h2 className="text-2xl w-full line-clamp-1 font-bold mb-2">{item?.name}</h2>
-      </a>
-    <p className="line-clamp-3 h-[72px] opacity-80 mb-4">{item?.summary}</p>
+      <h2 className="text-2xl w-full line-clamp-2 h-16 font-bold mb-2">{item?.name}</h2>
+    </a>
+    {
+      data?.['bool:show_summary'] !== false &&
+      <p className="line-clamp-3 h-[72px] opacity-80 mb-4">{item?.summary}</p>
+    }
     <div className="flex justify-between items-end">
       <div className="h-[52px] flex flex-col items-start justify-end">
         <span className="text-sm block opacity-80 line-through">{item?.discount > 0 ? <>S/. {Number2Currency(item?.price)}</> : ''}</span>
-        <span className="text-2xl font-bold">S/. {Number2Currency(finalPrice)}</span>
+        <span className="text-2xl font-bold customtext-primary">S/. {Number2Currency(finalPrice)}</span>
       </div>
       <Tippy content='Agregar al carrito'>
         <button className="bg-primary text-white text-lg px-3 py-1 rounded disabled:cursor-not-allowed disabled:opacity-80" disabled={inCart} onClick={() => onAddClicked(item)}>

@@ -5,6 +5,7 @@ const SliderBoxed = React.lazy(() => import('./Sliders/SliderBoxed'))
 const SliderSearch = React.lazy(() => import('./Sliders/SliderSearch'))
 const SliderInteractive = React.lazy(() => import('./Sliders/SliderInteractive'))
 const SliderImagen = React.lazy(() => import('./Sliders/SliderImagen'))
+const SliderJustImage = React.lazy(() => import('./Sliders/SliderJustImage'))
 
 const Slider = ({ which, data, sliders }) => {
   const getSlider = () => {
@@ -19,6 +20,8 @@ const Slider = ({ which, data, sliders }) => {
         return <SliderInteractive data={data} items={sliders} />
       case 'SliderImagen':
         return <SliderImagen data={data} items={sliders} />
+        case 'SliderJustImage':
+        return <SliderJustImage data={data} items={sliders} />
       default:
         return <div className="w-full px-[5%] replace-max-w-here p-4 mx-auto">- No Hay componente <b>{which}</b> -</div>
     }

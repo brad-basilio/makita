@@ -23,6 +23,7 @@ const Categories = () => {
     const idRef = useRef();
     const nameRef = useRef();
     const descriptionRef = useRef();
+    const bannerRef = useRef();
     const imageRef = useRef();
 
     const [isEditing, setIsEditing] = useState(false);
@@ -34,6 +35,8 @@ const Categories = () => {
         idRef.current.value = data?.id ?? "";
         nameRef.current.value = data?.name ?? "";
         descriptionRef.current.value = data?.description ?? "";
+        bannerRef.image.src = `/storage/images/category/${data?.banner}`;
+        bannerRef.current.value = null;
         imageRef.image.src = `/storage/images/category/${data?.image}`;
         imageRef.current.value = null;
 
@@ -56,6 +59,10 @@ const Categories = () => {
         const file = imageRef.current.files[0];
         if (file) {
             formData.append("image", file);
+        }
+        const file2 = bannerRef.current.files[0];
+        if (file2) {
+            formData.append("banner", file2);
         }
 
         const result = await categoriesRest.save(formData);
@@ -164,8 +171,8 @@ const Categories = () => {
                                         borderRadius: "4px",
                                     }}
                                     onError={(e) =>
-                                        (e.target.src =
-                                            "/api/cover/thumbnail/null")
+                                    (e.target.src =
+                                        "/api/cover/thumbnail/null")
                                     }
                                 />
                             );
@@ -241,27 +248,37 @@ const Categories = () => {
                 modalRef={modalRef}
                 title={isEditing ? "Editar categoría" : "Agregar categoría"}
                 onSubmit={onModalSubmit}
-                size="sm"
             >
-                <ImageFormGroup
-                    eRef={imageRef}
-                    label="Imagen"
-                    col="col-12"
-                    aspect={16 / 9}
-                />
-                <div className="row" id="faqs-container">
-                    <input ref={idRef} type="hidden" />
-                    <InputFormGroup
-                        eRef={nameRef}
-                        label="Categoría"
-                        col="col-12"
-                        required
-                    />
-                    <TextareaFormGroup
-                        eRef={descriptionRef}
-                        label="Descripción"
-                        rows={3}
-                    />
+                <input ref={idRef} type="hidden" />
+                <div className="row" id="categories-container">
+                    <div className="col-md-6">
+                        <ImageFormGroup
+                            eRef={bannerRef}
+                            label="Banner"
+                            col="col-12"
+                            aspect={3 / 1}
+                        />
+                        <ImageFormGroup
+                            eRef={imageRef}
+                            label="Imagen"
+                            col="col-12"
+                            aspect={16 / 9}
+                        />
+
+                    </div>
+                    <div className="col-md-6">
+                        <TextareaFormGroup
+                            eRef={nameRef}
+                            label="Categoría"
+                            rows={2}
+                            required
+                        />
+                        <TextareaFormGroup
+                            eRef={descriptionRef}
+                            label="Descripción"
+                            rows={3}
+                        />
+                    </div>
                 </div>
             </Modal>
         </>

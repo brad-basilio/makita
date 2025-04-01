@@ -87,8 +87,9 @@ const RepositoryDropzone = ({ files: filesDB, height = 'calc(100vh - 240px)', se
 
       try {
         const result = await repositoryRest.save(formData)
+        const newFile = result.data
         if (result) {
-          setFiles(prevFiles => [...prevFiles, result])
+          setFiles(prevFiles => [...prevFiles, newFile])
           Notify.add({
             title: 'Operación correcta',
             body: `Archivo ${file.name} subido correctamente`,
@@ -125,7 +126,9 @@ const RepositoryDropzone = ({ files: filesDB, height = 'calc(100vh - 240px)', se
     const result = await repositoryRest.save(formData)
     if (!result) return
 
-    setFiles(prevFiles => prevFiles.map(file => file.id === result.id ? result : file))
+    const newFile = result.data
+
+    setFiles(prevFiles => prevFiles.map(file => file.id === newFile.id ? newFile : file))
 
     $(modalRef.current).modal('hide')
   }

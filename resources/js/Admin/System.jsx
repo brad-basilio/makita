@@ -21,6 +21,7 @@ const System = ({
   pages: pagesDB = [],
   colors: colorsDB = [],
   components, models,
+  settings: settingsDB = [],
 }) => {
 
   const modalSEORef = useRef(null);
@@ -30,6 +31,7 @@ const System = ({
   const [systems, setSystems] = useState(systemsDB);
   const [pages, setPages] = useState(pagesDB);
   const [colors, setColors] = useState(colorsDB)
+  const [settings, setSettings] = useState(settingsDB);
 
   const [addingPage, setAddingPage] = useState(false);
   const [pageLoaded, setPageLoaded] = useState(null);
@@ -79,7 +81,7 @@ const System = ({
       $(iframe).removeAttr('src');
       $(iframe).attr('src', iframe.data('path'));
     }
-  }, [systems, colors])
+  }, [systems, colors, settings])
 
   const onPathChange = (e) => {
     const pageId = $(e.target).data('page-id')
@@ -298,7 +300,7 @@ const System = ({
           </div>
         </div>
       </div>
-      <RigthBar colors={colors} setColors={setColors} />
+      <RigthBar colors={colors} setColors={setColors} settings={settings} setSettings={setSettings} />
 
       <SEOModal dataLoaded={pageLoaded} setDataLoaded={setPageLoaded} modalRef={modalSEORef} />
       <ParamsModal dataLoaded={pageLoaded} setDataLoaded={setPageLoaded} setPages={setPages} modalRef={modalParamsRef} models={models} />

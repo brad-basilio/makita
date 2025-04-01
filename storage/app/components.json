@@ -85,6 +85,13 @@
                 "generals": ["phone_whatsapp", "message_whatsapp"]
             },
             {
+                "id": "HeaderSearchContact",
+                "name": "Busqueda y contacto",
+                "image": "header-with-search-contact.png",
+                "data": ["class", "link_cart"],
+                "generals": ["phone_whatsapp", "message_whatsapp"]
+            },
+            {
                 "id": "HeaderScraping",
                 "name": "HeaderScraping",
                 "image": "header-with-search.png",
@@ -149,6 +156,18 @@
                         "description",
                         "bg_image",
                         "button_text",
+                        "button_link"
+                    ]
+                }
+            },
+            {
+                "id": "SliderJustImage",
+                "name": "Solo Imagen",
+                "image": "slider-just-image.png",
+                "using": {
+                    "model": "Slider",
+                    "fields": [
+                        "bg_image",
                         "button_link"
                     ]
                 }
@@ -289,6 +308,26 @@
                 }
             },
             {
+                "id": "CategoryOneLine",
+                "name": "Una Linea",
+                "image": "categories-one-line.png",
+                "data": ["path"],
+                "using": {
+                    "model": "Category"
+                }
+            },
+            {
+                "id": "CategoryPrettyGrid",
+                "name": "Pretty Grid",
+                "image": "categories-pretty-grid.png",
+                "data": ["path", "borderRadius"],
+                "using": {
+                    "model": "Category",
+                    "limit": 3,
+                    "filters": ["featured", "ignoreVisibility"]
+                }
+            },
+            {
                 "id": "InfiniteCategory",
                 "name": "category-infinito",
                 "image": "categories-simple.png",
@@ -367,7 +406,14 @@
                 "id": "Carousel",
                 "name": "Carousel",
                 "image": "products-carousel.png",
-                "data": ["path", "title", "description", "link_catalog"],
+                "data": [
+                    "path",
+                    "title",
+                    "description",
+                    "link_catalog",
+                    "button_text",
+                    "bool:show_summary"
+                ],
                 "using": {
                     "model": "Item",
                     "filters": [

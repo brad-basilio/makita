@@ -274,7 +274,7 @@ const System = ({
         page.extends_base ? !x.page_id : true
     );
 
-    return <main>{systemsSorted.map((system) => getSystem(system))}</main>;
+    return <main className="font-paragraph">{systemsSorted.map((system) => getSystem(system))}</main>;
 };
 
 CreateReactScript((el, properties) => {

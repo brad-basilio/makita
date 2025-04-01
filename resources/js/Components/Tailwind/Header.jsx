@@ -1,12 +1,11 @@
 import React from "react";
 
 const HeaderContact = React.lazy(() => import("./Headers/HeaderContact"));
+const HeaderSearchContact = React.lazy(() => import("./Headers/HeaderSearchContact"));
 const HeaderSearch = React.lazy(() => import("./Headers/HeaderSearch"));
 const HeaderSearchB = React.lazy(() => import("./Headers/HeaderSearchB"));
 const HeaderSearchMenu = React.lazy(() => import("./Headers/HeaderSearchMenu"));
-const HeaderScraping = React.lazy(() =>
-    import("./Scraping/Components/HeaderScraping")
-);
+const HeaderScraping = React.lazy(() =>import("./Scraping/Components/HeaderScraping"));
 
 const Header = ({
     data,
@@ -33,6 +32,16 @@ const Header = ({
             case "HeaderSearch":
                 return (
                     <HeaderSearch
+                        data={data}
+                        items={items}
+                        cart={cart}
+                        setCart={setCart}
+                        pages={pages}
+                    />
+                );
+                case "HeaderSearchContact":
+                return (
+                    <HeaderSearchContact
                         data={data}
                         items={items}
                         cart={cart}

@@ -5,6 +5,8 @@ import React from "react"
 
 
 const CategorySimple = React.lazy(() => import('./Categories/CategorySimple'))
+const CategoryOneLine = React.lazy(() => import('./Categories/CategoryOneLine'))
+const CategoryPrettyGrid = React.lazy(() => import('./Categories/CategoryPrettyGrid'))
 const CategoryCarousel = React.lazy(() => import('./Categories/CategoryCarousel'))
 const InfiniteCategory = React.lazy(() => import('./Categories/InfiniteCategory'))
 const PaginationCategory = React.lazy(() => import('./Categories/PaginationCategory'))
@@ -16,6 +18,10 @@ const Category = ({ which, data, items }) => {
     switch (which) {
       case 'CategorySimple':
         return <CategorySimple data={data} items={items} />
+      case 'CategoryOneLine':
+        return <CategoryOneLine data={data} items={items} />
+      case 'CategoryPrettyGrid':
+        return <CategoryPrettyGrid data={data} items={items} />
       case 'CategoryCarousel':
         return <CategoryCarousel data={data} items={items} />
       case 'InfiniteCategory':

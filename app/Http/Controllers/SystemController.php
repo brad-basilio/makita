@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Faq;
 use App\Models\General;
 use App\Models\Post;
+use App\Models\Setting;
 use App\Models\System;
 use App\Models\SystemColor;
 use Illuminate\Http\Request;
@@ -16,6 +17,7 @@ use SoDe\Extend\Crypto;
 use SoDe\Extend\File;
 use SoDe\Extend\JSON;
 use Illuminate\Support\Facades\Schema;
+use SoDe\Extend\Array2;
 
 class SystemController extends BasicController
 {
@@ -35,6 +37,17 @@ class SystemController extends BasicController
             'params' => []
         ];
 
+        $fonts = [
+            'title' => [
+                'name' => Setting::get('title-font-name'),
+                'url' => Setting::get('title-font-url')
+            ],
+            'paragraph' => [
+                'name' => Setting::get('paragraph-font-name'),
+                'url' => Setting::get('paragraph-font-url')
+            ]
+        ];
+
         if ($path === '/base-template') {
             $props['systems'] = System::whereNull('page_id')->get();
             $props['page'] = ['name' => 'Template base'];
@@ -50,6 +63,7 @@ class SystemController extends BasicController
                 }
             }
             $props['generals'] = General::whereIn('correlative', $generals)->get();
+            $this->reactData['fonts'] = $fonts;
             return $props;
         }
 
@@ -69,6 +83,9 @@ class SystemController extends BasicController
         $props['page'] = $page;
         $this->reactData = $page;
         $this->reactData['colors'] = SystemColor::all();
+
+        // Fuentes if exists
+        $this->reactData['fonts'] = $fonts;
 
         $systems = [];
         if (isset($page['extends_base']) && $page['extends_base']) {
@@ -92,6 +109,7 @@ class SystemController extends BasicController
 
                 if ($system->filters) {
                     foreach ($system->filters as $field) {
+                        if (in_array($field, ['ignoreVisibility', 'ignoreStatus'])) continue;
                         if ($field === 'views') {
                             // Ordenar por vistas de manera descendente
                             $query->orderBy('views', 'desc');
@@ -108,10 +126,10 @@ class SystemController extends BasicController
 
                 // aquí filtrar visible & status
                 $table = (new $using)->getTable();
-                if (Schema::hasColumn($table, 'visible')) {
+                if (Schema::hasColumn($table, 'visible') && !Array2::find($system->filters ?? [], fn($x) => $x == 'ignoreVisibility')) {
                     $query->where('visible', true);
                 }
-                if (Schema::hasColumn($table, 'status')) {
+                if (Schema::hasColumn($table, 'status') &&!Array2::find($system->filters?? [], fn($x) => $x == 'ignoreStatus')) {
                     $query->where('status', true);
                 }
 

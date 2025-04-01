@@ -30,17 +30,14 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    {{-- <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
 
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
-        rel="stylesheet">
+    @if ($data['fonts']['title']['url'] && !str_starts_with($data['fonts']['title']['url'], '/'))
+        <link rel="stylesheet" href="{{ $data['fonts']['title']['url'] }}">
+    @endif
 
-    <link
-        href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
-        rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap"
-        rel="stylesheet"> --}}
+    @if ($data['fonts']['paragraph']['url'] && !str_starts_with($data['fonts']['paragraph']['url'], '/'))
+        <link rel="stylesheet" href="{{ $data['fonts']['paragraph']['url'] }}">
+    @endif
 
     @vite(['resources/css/app.css', 'resources/js/' . Route::currentRouteName()])
     @inertiaHead
@@ -65,6 +62,16 @@
     @endif
 
     <style>
+        @if ($data['fonts']['title']['name'])
+            .font-title {
+                font-family: "{{ $data['fonts']['title']['name'] }}", sans-serif;
+            }
+        @endif
+        @if ($data['fonts']['paragraph']['name'])
+            * {
+                font-family: {{ $data['fonts']['paragraph']['name'] }};
+            }
+        @endif
         @foreach ($data['colors'] as $color)
             .bg-{{ $color->name }} {
                 background-color: {{ $color->description }};

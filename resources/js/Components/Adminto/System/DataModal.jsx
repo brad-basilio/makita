@@ -38,6 +38,12 @@ const DataModal = ({ dataLoaded, setDataLoaded, setSystems, modalRef }) => {
     $(usingRef.filters.current).val(dataLoaded?.filters ?? []).trigger('change')
   }, [dataLoaded])
 
+  const onBoolChange = (key, value) => {
+    setData({...data, [key]: value })
+  }
+
+  console.log(data)
+
   return (
     <Modal modalRef={modalRef} title={dataLoaded?.name} onSubmit={onDataSubmit} size={dataLoaded?.component?.data?.some(x => x.startsWith('code:')) ? 'lg' : 'md'}>
       <ul className="nav nav-tabs nav-bordered">
@@ -52,13 +58,48 @@ const DataModal = ({ dataLoaded, setDataLoaded, setSystems, modalRef }) => {
           </a>
         </li>
       </ul>
-      <div className="tab-content">
+      <div className="tab-content" id="data-modal-container">
         <div className="tab-pane active" id="tab-info" hidden={!dataLoaded?.component?.data?.length}>
           {
             dataLoaded?.component?.data?.map((element, index) => (
               element.startsWith('code:')
                 ? <EditorFormGroup key={index} label={element.replace('code:', '')} value={data[element] ?? ''} rows={1} onChange={e => setData({ ...data, [element]: e.target.value })} />
-                : <TextareaFormGroup key={index} label={element} value={data[element] ?? ''} rows={1} onChange={e => setData({ ...data, [element]: e.target.value })} />
+                : <>
+                  {
+                    element.startsWith('bool:')
+                      ? <div className="form-group">
+                          <label className="form-label">{element.replace('bool:', '')}</label>
+                          <div>
+                            <div className="form-check form-check-inline">
+                              <input
+                                type="radio"
+                                className="form-check-input"
+                                id={`${element}-true`}
+                                name={element}
+                                value="true"
+                                checked={data[element] === true}
+                                onChange={e => onBoolChange(element, e.target.value === 'true')}
+                              />
+                              <label className="form-check-label" htmlFor={`${element}-true`}>Sí</label>
+                            </div>
+                            <div className="form-check form-check-inline">
+                              <input
+                                type="radio"
+                                className="form-check-input"
+                                id={`${element}-false`}
+                                name={element}
+                                value="false"
+                                checked={data[element] === false}
+                                onChange={e => onBoolChange(element, e.target.value === 'true')}
+                              />
+                              <label className="form-check-label" htmlFor={`${element}-false`}>No</label>
+                            </div>
+                          </div>
+                        </div>
+                      : <TextareaFormGroup key={index} label={element} value={data[element] ?? ''} rows={1} onChange={e => setData({ ...data, [element]: e.target.value })} />
+                  }
+                </>
+
             ))
           }
         </div>

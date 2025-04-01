@@ -2,16 +2,17 @@ import React, { useState } from 'react'
 import ColorsRest from '../../../Actions/Admin/ColorsRest'
 import GalleryRest from '../../../Actions/Admin/GalleryRest'
 import SettingsRest from '../../../Actions/Admin/SettingsRest'
+import Tippy from '@tippyjs/react'
 
 const galleryRest = new GalleryRest()
 const colorsRest = new ColorsRest()
 const settingsRest = new SettingsRest()
 
-const RigthBar = ({ colors, setColors }) => {
+const RigthBar = ({ colors, setColors, settings, setSettings }) => {
 
   const [images, setImages] = useState([
     { uuid: crypto.randomUUID(), col: 'col-3', name: "Icon (1:1)", src: "icon.png", width: '100%', aspectRatio: 1 },
-    { uuid: crypto.randomUUID(), col: 'col-5', name: "Logo (13:4)", src: "logo.png", width: '100%', aspectRatio: 13 / 4  },
+    { uuid: crypto.randomUUID(), col: 'col-5', name: "Logo (13:4)", src: "logo.png", width: '100%', aspectRatio: 13 / 4 },
     { uuid: crypto.randomUUID(), col: 'col-4', name: "Logo footer (1:1)", src: "logo-footer.png", width: '100%', aspectRatio: 1 }
   ])
 
@@ -53,10 +54,29 @@ const RigthBar = ({ colors, setColors }) => {
     })
   }
 
-  return (<div className="right-bar" style={{
-    width: '400px',
-    right: '-300px'
-  }}>
+  const onSettingChange = async (e) => {
+    const id = e.target.getAttribute('data-id')
+    const name = e.target.name
+    const value = e.target.value
+    const currentSetting = settings.find(setting => setting.name == name)?.description ?? '';
+    if (currentSetting === value) return;
+    const result = await settingsRest.save({
+      name,
+      value
+    })
+    if (!result) return
+    setSettings(old => {
+      return old.map(x => x.id == id ? result.data : x);
+    })
+  }
+
+  const getSetting = (name) => {
+    const setting = settings.find(setting => setting.name == name)
+    if (!setting) return ''
+    return setting.value
+  }
+
+  return (<div className="right-bar">
 
     <div data-simplebar className="h-100">
 
@@ -95,31 +115,41 @@ const RigthBar = ({ colors, setColors }) => {
         <h5>Fuentes del sistema</h5>
         <div className='mb-2'>
           <label htmlFor="" className='form-label mb-1'>Titulos</label>
-          <label className="input-group input-group-sm mb-1">
-            <span className="input-group-text text-end" style={{ width: '75px' }}>Nombre</span>
-            <input type="text" className='form-control' />
-          </label>
-          <label className='input-group input-group-sm'>
-            <span className="input-group-text text-end" style={{ width: '75px' }}>Enlace</span>
-            <textarea name="" id="" className='form-control form-control-sm' rows={1} style={{
-              minHeight: 27,
-              fieldSizing: 'content'
-            }}></textarea>
-          </label>
+          <Tippy content='Nombre de la fuente'>
+            <input type="text" className='form-control form-control-sm mb-1'
+              name='title-font-name'
+              defaultValue={getSetting('title-font-name')}
+              onBlur={onSettingChange} />
+          </Tippy>
+          <Tippy content='Enlace de la fuente'>
+            <textarea className='form-control form-control-sm' rows={1}
+              name='title-font-url'
+              defaultValue={getSetting('title-font-url')}
+              onBlur={onSettingChange}
+              style={{
+                minHeight: 27,
+                fieldSizing: 'content'
+              }} />
+          </Tippy>
         </div>
-        <div>
+        <div className='mb-2'>
           <label htmlFor="" className='form-label mb-1'>Parrafos</label>
-          <label className="input-group input-group-sm mb-1">
-            <span className="input-group-text text-end" style={{ width: '75px' }}>Nombre</span>
-            <input type="text" className='form-control' />
-          </label>
-          <label className='input-group input-group-sm'>
-            <span className="input-group-text text-end" style={{ width: '75px' }}>Enlace</span>
-            <textarea name="" id="" className='form-control form-control-sm' rows={1} style={{
-              minHeight: 27,
-              fieldSizing: 'content'
-            }}></textarea>
-          </label>
+          <Tippy content='Nombre de la fuente'>
+            <input type="text" className='form-control form-control-sm mb-1'
+              name='paragraph-font-name'
+              defaultValue={getSetting('paragraph-font-name')}
+              onBlur={onSettingChange} />
+          </Tippy>
+          <Tippy content='Enlace de la fuente'>
+            <textarea className='form-control form-control-sm' rows={1}
+              name='paragraph-font-url'
+              defaultValue={getSetting('paragraph-font-url')}
+              onBlur={onSettingChange}
+              style={{
+                minHeight: 27,
+                fieldSizing: 'content'
+              }} />
+          </Tippy>
         </div>
         <hr className='my-2' />
         <h5>Colores del sistema</h5>
