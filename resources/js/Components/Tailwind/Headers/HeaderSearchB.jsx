@@ -57,6 +57,7 @@ const HeaderSearchB = ({
             document.removeEventListener("mousedown", handleClickOutside);
     }, []);
     const [search, setSearch] = useState("");
+
     return (
         <header
             className={`w-full ${

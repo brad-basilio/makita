@@ -33,6 +33,7 @@ const CardHoverBtn = ({
             icon: "success",
             timer: 1500,
         });
+        setModalOpen(!modalOpen);
     };
 
     const inCart = cart?.find((x) => x.id == product?.id);
@@ -53,7 +54,7 @@ const CardHoverBtn = ({
                     <div className="relative ">
                         {product.discount != null &&
                             !isNaN(product.discount) && (
-                                <span className="absolute top-2 left-2 bg-[#F93232] text-white text-base font-medium px-2 py-1 rounded-full">
+                                <span className="absolute top-2 right-2 bg-[#F93232] text-white text-base font-medium px-2 py-1 rounded-full">
                                     -
                                     {Number(
                                         100 -
@@ -119,7 +120,6 @@ const CardHoverBtn = ({
                         </a>
                         <button
                             className="py-2 px-2.5 border border-primary rounded-lg customtext-primary transition-all duration-300  hover:opacity-90"
-                            disabled={inCart}
                             onClick={() => onAddClicked(product)}
                         >
                             <svg
@@ -143,7 +143,7 @@ const CardHoverBtn = ({
                         <p className="text-xs customtext-neutral-light font-semibold mb-1">
                             {product.brand.name}
                         </p>
-                        <h3 className="customtext-neutral-dark text-sm font-semibold mb-2 line-clamp-2">
+                        <h3 className="customtext-neutral-dark text-sm font-semibold mb-2 line-clamp-3 h-16">
                             {product.name}
                         </h3>
                         {/* Precio */}

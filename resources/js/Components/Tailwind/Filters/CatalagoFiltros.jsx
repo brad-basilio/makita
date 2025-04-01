@@ -340,6 +340,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
          }
      });*/
     const [filtersOpen, setFiltersOpen] = useState(false);
+
     return (
         <section className="py-12 bg-sections-color customtext-neutral-dark">
             <div className="mx-auto px-primary 2xl:px-0 2xl:max-w-7xl">
@@ -616,6 +617,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                                             key={product.id}
                                         >
                                             <CardHoverBtn
+                                                data={data}
                                                 product={product}
                                                 widthClass="w-full sm:w-full lg:w-full"
                                                 cart={cart}

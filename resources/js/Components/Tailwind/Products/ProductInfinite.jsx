@@ -41,7 +41,7 @@ const ProductInfinite = ({ items, data, setCart, cart }) => {
         adjustTextColor(prevSlideRef.current); // Aplicar a cada botón en el slider
         adjustTextColor(nextSlideRef.current); // Aplicar a cada botón en el slider
     }, []);
-
+    console.log(data);
     return (
         <section className="py-12 bg-sections-color">
             <div className=" mx-auto px-primary 2xl:px-0 2xl:max-w-7xl ">
@@ -90,6 +90,7 @@ const ProductInfinite = ({ items, data, setCart, cart }) => {
                                     product={product}
                                     setCart={setCart}
                                     cart={cart}
+                                    data={data}
                                 />
                             ))}
                         </div>
