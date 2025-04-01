@@ -97,24 +97,24 @@ export default function BlogHeader({
         console.log("BlogHeader - posts actualizados:", posts);
     }, [posts]);
     return (
-        <main className="bg-white font-font-general">
+        <main className="bg-white !font-font-general">
             {/* Hero Section */}
             <section
-                className={`px-primary 2xl:px-0 2xl:max-w-7xl mx-auto ${
+                className={`px-primary ${
                     isFilter ? "pt-8" : "py-8"
                 }`}
             >
                 <div className="space-y-4">
-                    <span className="customtext-neutral-light  font-bold ">
+                    <span className="customtext-neutral-light font-bold ">
                         Blog
                     </span>
-                    <h1 className=" customtext-neutral-dark md:text-5xl font-bold tracking-tight">
+                    <h1 className=" customtext-neutral-dark text-3xl md:text-5xl 2xl:text-6xl font-bold tracking-tight">
                         Descubre lo mejor:
                         <br />
                         Publicaciones sobre el mundo de la decoración
                     </h1>
 
-                    <p className="customtext-neutral-dark opacity-80">
+                    <p className="customtext-neutral-dark opacity-80 text-base 2xl:text-xl">
                         Nuestros juguetes están diseñados para inspirar, educar
                         y divertir, desarrollando habilidades esenciales desde
                         temprana edad.

@@ -1,26 +1,25 @@
 
 import { Link, Linkedin, Facebook, Twitter, Send } from "lucide-react"
 
-export default function PostDetailSimple() {
+export default function PostDetailSimple(data) {
     return (
-        <article className="min-h-screen bg-white">
-            <div className="max-w-4xl mx-auto px-4 py-8 md:px-6">
+        <article className="min-h-screen bg-white !font-font-general">
+            <div className="px-[5%] py-8 flex flex-col justify-center">
                 {/* Metadata */}
-                <div className="flex items-center gap-2 text-sm mb-4">
-                    <span className="text-sky-500">Categoría</span>
-                    <span>•</span>
+                <div className="flex items-center gap-2 text-base mb-4 text-[#91502D] font-semibold 2xl:text-lg max-w-xl mx-auto">
+                    <span className="">Categoría</span>
+                    <span>|</span>
                     <time>Fecha</time>
                 </div>
 
                 {/* Title */}
-                <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-8">
+                <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-8 max-w-5xl mx-auto text-center 2xl:max-w-6xl">
                     Nunc lacinia ultrices quam ut volutpat.
-                    <br />
                     Curabitur quis porttitor nulla
                 </h1>
 
                 {/* Featured Image */}
-                <div className="relative aspect-[2/1] mb-8">
+                <div className="relative mb-8 max-w-4xl 2xl:max-w-5xl h-auto mx-auto">
                     <img
                         src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Frame%20186%20(1)-2tsmYTvQsc0XnxdmhRybXKS7acmQJq.png"
                         alt="Featured image"
@@ -30,7 +29,7 @@ export default function PostDetailSimple() {
                 </div>
 
                 {/* Content */}
-                <div className="prose prose-lg max-w-none">
+                <div className="prose prose-lg max-w-none customtext-neutral-dark text-base xl:text-lg">
                     <p>
                         Nullam nec iaculis libero, vitae commodo magna. Quisque tincidunt dolor et augue tempus, vitae interdum
                         purus interdum. Mauris sagittis risus ac purus mollis efficitur. Sed maximus aliquam lectus, id luctus justo

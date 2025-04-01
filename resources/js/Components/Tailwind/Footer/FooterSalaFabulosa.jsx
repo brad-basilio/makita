@@ -97,6 +97,7 @@ const FooterSalaFabulosa = ({ socials = [], pages, generals }) => {
                     </div>
 
                 </div>
+                
                 {/* Menu Columns */}
                 <div className=" w-full  flex justify-end gap-12">
 
@@ -203,6 +204,7 @@ const FooterSalaFabulosa = ({ socials = [], pages, generals }) => {
 
 
             </div>
+
             {
                 Object.keys(policyItems).map((key, index) => {
 

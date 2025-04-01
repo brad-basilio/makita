@@ -1,24 +1,30 @@
-
-
 import { useEffect, useRef, useState } from "react";
 import Global from "../../../Utils/Global";
 import { CircleUser, DoorClosed, Search, ShoppingCart } from "lucide-react";
 import CartModal from "../Components/CartModal";
 import AuthRest from '../../../Actions/AuthRest'
 import Logout from "../../../Actions/Logout";
-const HeaderSearchMenu = ({ data, cart, setCart, isUser, pages }) => {
+import MobileMenuSF from "./Components/MobileMenuSF";
+import TopBarCart from "../TopBars/TopBarCart";
 
-  const [modalOpen, setModalOpen] = useState(false)
+const HeaderSearchMenu = ({ 
+  items,
+  data,
+  cart,
+  setCart,
+  isUser,
+  pages,
+  generals = [], }) => {
+
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [modalOpen, setModalOpen] = useState(false);
+  const [search, setSearch] = useState("");
+  const [openMenu, setOpenMenu] = useState(false);
+  const menuRef = useRef(null);
 
   const totalCount = cart.reduce((acc, item) => {
     return Number(acc) + Number(item.quantity);
   }, 0);
-
-
-
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-
-  const menuRef = useRef(null)
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -30,17 +36,18 @@ const HeaderSearchMenu = ({ data, cart, setCart, isUser, pages }) => {
     document.addEventListener("mousedown", handleClickOutside)
     return () => document.removeEventListener("mousedown", handleClickOutside)
   }, [])
-  const [search, setSearch] = useState("");
+
+  
   return (
     <header className="w-full">
       <div className="px-primary mx-auto py-4 font-font-general customtext-primary text-base font-semibold">
         <div className="flex items-center justify-between gap-4 ">
+          
           {/* Logo */}
           <a href="/" className="flex items-center gap-2">
             <img src={`/assets/resources/logo.png?v=${crypto.randomUUID()}`} alt={Global.APP_NAME} className="h-14  object-contain object-center" />
-
-
           </a>
+
           <ul className="list-none flex gap-4 text-lg">
             {pages.map((page, index) => (
               page.menuable && ( // Simplified conditional rendering
@@ -52,7 +59,6 @@ const HeaderSearchMenu = ({ data, cart, setCart, isUser, pages }) => {
               )
             ))}
           </ul>
-
 
           {/* Search Bar */}
           <div className="flex justify-end">
@@ -73,10 +79,9 @@ const HeaderSearchMenu = ({ data, cart, setCart, isUser, pages }) => {
               </a>
             </div>
           </div>
+
         </div>
       </div>
-
-
     </header>
   )
 }

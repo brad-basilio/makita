@@ -96,6 +96,12 @@
                 "name": "Con busqueda y menu",
                 "image": "header-with-search.png",
                 "data": ["class", "link_cart"]
+            },
+            {
+                "id": "HeaderSearchMenuSF",
+                "name": "Con busqueda y menu SF",
+                "image": "header-with-search.png",
+                "data": ["class", "link_cart"]
             }
         ]
     },

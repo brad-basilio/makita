@@ -352,7 +352,7 @@ export default function ShippingStepSF({
                         placeholder="Ejem. Altura de la avenida..."
                     />
                 </form>
-                <div className="flex gap-4 mt-4">
+                {/* <div className="flex gap-4 mt-4">
                     <OptionCard
                         title="Envío gratis"
                         description="Entrega entre 3 a 10 días hábiles"
@@ -363,45 +363,7 @@ export default function ShippingStepSF({
                         description="Delivery 24 horas"
                         selected={selectedOption === "express"}
                     />
-                </div>
-                <div className="flex gap-4 mt-6 bg-[#F7F9FB] p-3 rounded-xl">
-                    <div className="w-5">
-                        <InfoIcon className="customtext-primary" width="20px" />
-                    </div>
-                    <div className="text-xs font-medium customtext-neutral-dark flex flex-col gap-2">
-                        <p>
-                            Solo Lima Metropolitana: Dentro de las 24 horas
-                            después de efectuado el pago, solo algunos distritos
-                            de Lima Metropolitana.
-                        </p>
-                        <p>
-                            {" "}
-                            Distritos No incluidos: Santa María del Mar,
-                            Pucusana, San Bartolo, Punta Hermosa, Lurín,
-                            Pachacamac, Chorrillos, Villa el Salvador, Villa
-                            María del Triunfo, San Juan de Miraflores,
-                            Cieneguilla, Ate, Chosica, Huaycan, San Juan de
-                            Lurigancho (hasta el Metro), Ancón, Santa Rosa,
-                            Carabayllo, Puente Piedra.
-                        </p>
-                        <p>
-                            {" "}
-                            Same Day: Solo para compras efectuadas hasta las 1pm
-                            del día.
-                        </p>
-                    </div>
-                </div>
-                <div className="flex gap-4 mt-4 bg-[#F7F9FB] p-3 rounded-xl">
-                    <div className="w-5">
-                        <InfoIcon className="customtext-primary" width="20px" />
-                    </div>
-                    <div className="text-xs font-medium customtext-neutral-dark flex flex-col gap-2">
-                        <p>
-                            Lima: 3 a 4 dias hábiles | Provincia: de 4 a 10 dias
-                            hábiles
-                        </p>
-                    </div>
-                </div>
+                </div> */}
             </div>
             {/* Resumen de compra */}
             <div className="bg-[#F7F9FB] rounded-xl shadow-lg p-6 col-span-2 h-max font-font-general">
@@ -426,7 +388,7 @@ export default function ShippingStepSF({
                                     <p className="text-sm customtext-neutral-light">
                                         Color:{" "}
                                         <span className="customtext-neutral-dark">
-                                            variado
+                                            {item.color}
                                         </span>
                                     </p>
                                     <p className="text-sm customtext-neutral-light">

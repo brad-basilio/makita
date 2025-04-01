@@ -19,7 +19,7 @@ export const processCulqiPayment = (request) => {
             // ✅ Configurar Culqi
             window.Culqi.publicKey = "pk_test_f4d42a7b5073e8df"; // Reemplaza con tu clave pública
             window.Culqi.settings({
-                title: "Stech Perú",
+                title: "Sala Fabulosa",
                 email: request.email,
                 currency: "PEN",
                 amount: request.amount * 100, // Convertir a céntimos
