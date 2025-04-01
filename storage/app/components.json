@@ -657,7 +657,12 @@
             {
                 "id": "PostDetailSimple",
                 "name": "Simple",
-                "data": ["title"]
+                "data": ["title"],
+                "using": {
+                    "model": "Post",
+                    "flied": "slug",
+                    "with": ["category"]
+                }
             }
         ]
     },

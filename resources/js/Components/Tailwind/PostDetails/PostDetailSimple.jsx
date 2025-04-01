@@ -1,13 +1,14 @@
 
 import { Link, Linkedin, Facebook, Twitter, Send } from "lucide-react"
 
-export default function PostDetailSimple(data) {
+export default function PostDetailSimple({item}) {
+    console.log(item);
     return (
         <article className="min-h-screen bg-white !font-font-general">
             <div className="px-[5%] py-8 flex flex-col justify-center">
                 {/* Metadata */}
                 <div className="flex items-center gap-2 text-base mb-4 text-[#91502D] font-semibold 2xl:text-lg max-w-xl mx-auto">
-                    <span className="">Categoría</span>
+                    {/* <span className="">{item.category.name}</span> */}
                     <span>|</span>
                     <time>Fecha</time>
                 </div>
