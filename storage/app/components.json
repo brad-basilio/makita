@@ -516,6 +516,29 @@
                 }
             },
             {
+                "id": "ProductSlider",
+                "name": "Slider",
+                "image": "products-slider.png",
+                "data": [
+                    "path",
+                    "title",
+                    "description",
+                    "link_catalog",
+                    "link_cart",
+                    "background_color",
+                    "text_color"
+                ],
+                "using": {
+                    "model": "Item",
+                    "filters": [
+                        "featured",
+                        "recommended",
+                        "offering",
+                        "is_new"
+                    ]
+                }
+            },
+            {
                 "id": "ProductInfinite",
                 "name": "Producto Infinito",
                 "image": "products-list.png",
