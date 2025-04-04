@@ -17,6 +17,7 @@ class Category extends Model
         'slug',
         'name',
         'description',
+        'banner',
         'image',
         'featured',
         'visible',

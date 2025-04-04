@@ -86,6 +86,13 @@
                 "generals": ["phone_whatsapp", "message_whatsapp"]
             },
             {
+                "id": "HeaderSearchContact",
+                "name": "Busqueda y contacto",
+                "image": "header-with-search-contact.png",
+                "data": ["class", "link_cart"],
+                "generals": ["phone_whatsapp", "message_whatsapp"]
+            },
+            {
                 "id": "HeaderScraping",
                 "name": "HeaderScraping",
                 "image": "header-with-search.png",
@@ -156,6 +163,18 @@
                         "description",
                         "bg_image",
                         "button_text",
+                        "button_link"
+                    ]
+                }
+            },
+            {
+                "id": "SliderJustImage",
+                "name": "Solo Imagen",
+                "image": "slider-just-image.png",
+                "using": {
+                    "model": "Slider",
+                    "fields": [
+                        "bg_image",
                         "button_link"
                     ]
                 }
@@ -278,6 +297,51 @@
                         }
                     }
                 ]
+            },
+            {
+                "id": "FilterCategoryImage",
+                "name": "Categoría con Imagen",
+                "image": "filters-category-image.png",
+                "data": ["path", "title"],
+                "options": [
+                    {
+                        "id": "default",
+                        "name": "Lista estándar",
+                        "using": {
+                            "model": "Item",
+                            "with": ["category", "subcategory", "brand"],
+                            "relations": ["category", "tags"],
+                            "fields": [
+                                "id",
+                                "name",
+                                "slug",
+                                "price",
+                                "final_price",
+                                "image",
+                                "color"
+                            ]
+                        }
+                    },
+                    {
+                        "id": "with_variants",
+                        "name": "Lista con variantes",
+                        "using": {
+                            "model": "Item",
+                            "with": ["category", "subcategory", "brand"],
+                            "relations": ["category", "tags"],
+                            "fields": [
+                                "id",
+                                "name",
+                                "slug",
+                                "price",
+                                "final_price",
+                                "image",
+                                "color"
+                            ],
+                            "group_by_name": true
+                        }
+                    }
+                ]
             }
         ]
     },
@@ -293,6 +357,26 @@
                 "using": {
                     "model": "Category",
                     "limit": 10
+                }
+            },
+            {
+                "id": "CategoryOneLine",
+                "name": "Una Linea",
+                "image": "categories-one-line.png",
+                "data": ["path"],
+                "using": {
+                    "model": "Category"
+                }
+            },
+            {
+                "id": "CategoryPrettyGrid",
+                "name": "Pretty Grid",
+                "image": "categories-pretty-grid.png",
+                "data": ["path", "borderRadius"],
+                "using": {
+                    "model": "Category",
+                    "limit": 3,
+                    "filters": ["featured", "ignoreVisibility"]
                 }
             },
             {
@@ -367,6 +451,20 @@
         ]
     },
     {
+        "id": "indicator",
+        "name": "Indicadores",
+        "options": [
+            {
+                "id": "IndicatorSimple",
+                "name": "Simple",
+                "image": "indicator-simple.png",
+                "using": {
+                    "model": "Indicator"
+                }
+            }
+        ]
+    },
+    {
         "id": "product",
         "name": "Productos",
         "options": [
@@ -379,6 +477,8 @@
                     "title",
                     "description",
                     "link_catalog",
+                    "button_text",
+                    "bool:show_summary",
                     "link_cart"
                 ],
                 "using": {
@@ -413,6 +513,29 @@
                         "is_new"
                     ],
                     "limit": 8
+                }
+            },
+            {
+                "id": "ProductSlider",
+                "name": "Slider",
+                "image": "products-slider.png",
+                "data": [
+                    "path",
+                    "title",
+                    "description",
+                    "link_catalog",
+                    "link_cart",
+                    "background_color",
+                    "text_color"
+                ],
+                "using": {
+                    "model": "Item",
+                    "filters": [
+                        "featured",
+                        "recommended",
+                        "offering",
+                        "is_new"
+                    ]
                 }
             },
             {

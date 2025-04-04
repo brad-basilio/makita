@@ -48,6 +48,11 @@ body {
   border-color: whitesmoke;
 }
 
+@font-face {
+  font-family: 'Bouncer Bold';
+  src: url(/cloud/59140520-71a8-411e-bab0-94220136a855.woff2);
+}
+
 .user-box .user-name {
   color: #343a40;
 }

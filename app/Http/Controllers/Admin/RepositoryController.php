@@ -3,10 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\BasicController;
-use App\Http\Controllers\Controller;
 use App\Models\Repository;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use SoDe\Extend\File;
 
 class RepositoryController extends BasicController

@@ -11,5 +11,5 @@ class CategoryController extends BasicController
 {
     public $model = Category::class;
     public $reactView = 'Admin/Categories';
-    public $imageFields = ['image'];
+    public $imageFields = ['banner', 'image'];
 }

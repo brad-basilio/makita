@@ -335,15 +335,44 @@ class BasicController extends Controller
     }
   }
 
+  public function beforeDelete(Request $request)
+  {
+    return [];
+  }
+
+  public function afterDelete(Model $data)
+  {
+    return [];
+  }
+
   public function delete(Request $request, string $id)
   {
     $response = new Response();
     try {
-      $deleted = $this->softDeletion
-        ? $this->model::where('id', $id)
-        ->update(['status' => null])
-        : $this->model::where('id', $id)
-        ->delete();
+      $body = $this->beforeDelete($request);
+
+      $dataBeforeDelete = $this->model::find($id);
+      if (!$dataBeforeDelete) throw new Exception('El registro que intenta eliminar no existe');
+      if ($this->softDeletion) {
+        $deleted = $this->model::where('id', $id)
+          ->update(\array_merge(['status' => null], $body));
+      } else {
+        $deleted = $this->model::where('id', $id)
+          ->delete();
+      }
+      if ($deleted) {
+        $snake_case = Text::camelToSnakeCase(str_replace('App\\Models\\', '', $this->model));
+        foreach ($this->imageFields as $field) {
+          $filename = $dataBeforeDelete->{$field};
+          if (!Text::has($filename, '.')) {
+            $filename = "{$filename}.enc";
+          }
+          $path = "images/{$snake_case}/{$filename}";
+          Storage::delete($path);
+        }
+      }
+
+      $this->afterDelete($dataBeforeDelete);
 
       if (!$deleted) throw new Exception('No se ha eliminado ningun registro');
 

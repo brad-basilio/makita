@@ -23,5 +23,6 @@ composer.lock
 /storage/public
 /storage/app/pages.json
 /storage/app/backup.sql
-/public/resources/logo.png
-/public/resources/icon.png
+/public/assets/resources/icon.png
+/public/assets/resources/logo.png
+/public/assets/resources/logo-footer.png

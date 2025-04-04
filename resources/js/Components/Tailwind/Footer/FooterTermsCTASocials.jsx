@@ -94,7 +94,7 @@ const FooterB = ({ pages, generals }) => {
                                     onClick={() => openModal(2)}
                                     className="cursor-pointer hover:customtext-primary hover:font-bold transition-all duration-300"
                                 >
-                                    Políticas de cambio
+                                    Políticas de devolución y cambio
                                 </a>
                             </li>
                             <li>

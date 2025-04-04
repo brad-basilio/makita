@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\BasicController;
+use App\Models\Setting;
 use App\Models\System;
 use App\Models\SystemColor;
 use Illuminate\Database\Eloquent\Model;
@@ -74,12 +75,15 @@ class SystemController extends BasicController
 
         $colors = SystemColor::all();
 
+        $settings = Setting::all();
+
         return [
             'systems' => $systems,
             'pages' => $pages,
             'components' => $components,
             'models' => $models,
-            'colors' => $colors
+            'colors' => $colors,
+            'settings' => $settings
         ];
     }
 
