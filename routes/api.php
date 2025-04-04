@@ -45,6 +45,7 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ItemImportController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\MercadoPagoController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\RepositoryController;
 use App\Http\Controllers\SaleController;
@@ -116,6 +117,16 @@ Route::post('/items/variations-items', [ItemController::class, 'variationsItems'
 
 Route::post('/pago', [PaymentController::class, 'charge']);
 Route::get('/pago/{sale_id}', [PaymentController::class, 'getPaymentStatus']);
+
+// Nuevas rutas para MercadoPago
+Route::post('/mercadopago/preference', [MercadoPagoController::class, 'createPreference']);
+Route::get('/mercadopago/success', [MercadoPagoController::class, 'handleSuccess']);
+Route::get('/mercadopago/failure', [MercadoPagoController::class, 'handleFailure']);
+Route::get('/mercadopago/pending', [MercadoPagoController::class, 'handlePending']);
+
+//pedido
+Route::post('/orders', [MercadoPagoController::class, 'getOrder']);
+
 
 Route::middleware('auth')->group(function () {
   Route::delete('logout', [AuthController::class, 'destroy'])

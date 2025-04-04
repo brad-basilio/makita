@@ -1,6 +1,7 @@
 import Tippy from "@tippyjs/react"
 import React from "react"
 import Number2Currency from "../../../Utils/Number2Currency"
+import { Minus, Plus } from "lucide-react"
 
 const CartItemRow = ({ setCart, ...item }) => {
 
@@ -32,7 +33,7 @@ const CartItemRow = ({ setCart, ...item }) => {
     );
   }
 
-  return <tr className="border-b">
+  return <tr className="border-b font-font-general">
     <td className="p-2 w-24">
       <img src={`/storage/images/item/${item.image}`} className="block bg-white shadow rounded-md p-0 aspect-[4/3] w-20 h-auto object-cover object-center" alt={item.name} />
     </td>
@@ -46,13 +47,13 @@ const CartItemRow = ({ setCart, ...item }) => {
       </p>
       <div className="flex w-20 justify-center border-[1px] border-[#6C7275] rounded-md">
         <button type="button" onClick={onMinusClicked} className="w-6 h-6 flex justify-center items-center ">
-          <span className="text-[20px]">-</span>
+          <Minus size={16} />
         </button>
         <div className="w-6 h-6 flex justify-center items-center">
-          <span className="font-semibold text-[12px]">{item.quantity || 1}</span>
+          <span className="font-semibold text-[13px]">{item.quantity || 1}</span>
         </div>
         <button type="button" onClick={onPlusClicked} className="w-6 h-6 flex justify-center items-center ">
-          <span className="text-[20px]">+</span>
+          <Plus size={16} />
         </button>
       </div>
     </td>

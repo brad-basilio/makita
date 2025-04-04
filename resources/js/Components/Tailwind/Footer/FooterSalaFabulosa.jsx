@@ -8,7 +8,7 @@ import Global from "../../../Utils/Global";
 import HtmlContent from "../../../Utils/HtmlContent";
 import { X } from "lucide-react";
 
-const FooterSalaFabulosa = ({ socials = [], pages, generals }) => {
+const FooterSalaFabulosa = ({ socials = [], pages, generals, contacts }) => {
 const subscriptionsRest = new SubscriptionsRest();
 const emailRef = useRef();
 
@@ -21,6 +21,13 @@ privacy_policy: "Políticas de privacidad",
 // 'delivery_policy': 'Políticas de envío',
 saleback_policy: "Políticas de devolucion y cambio",
 };
+
+const getContact = (correlative) => {
+    return (
+        contacts.find((contact) => contact.correlative === correlative)
+            ?.description || ""
+    );
+  };
 
 const openModal = (index) => setModalOpen(index);
 const closeModal = () => setModalOpen(null);
@@ -123,7 +130,7 @@ return (
                 <ul className="space-y-2 text-white text-sm 2xl:text-base">
                     <li>Montevideo N. 725 Tienda 1041</li>
                     <li>Teléfono: +51 915 968 941</li>
-                    <li>Correo: eva.collection.peru@gmail.com</li>
+                    <li>Correo: {getContact("email_contact")}</li>
                 </ul>
             </div>
         </div>
@@ -157,7 +164,7 @@ return (
                         </a>
                     </li>
                     <li>
-                        <a href="#" className="cursor-not-allowed flex flex-col gap-2 items-start  ">
+                        <a href="/libro-de-reclamaciones" className="flex flex-col gap-2 items-start  ">
                             <span className=" hover:font-bold transition-all duration-300">
                                 Libro de reclamaciones
                             </span>

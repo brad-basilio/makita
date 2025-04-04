@@ -9,7 +9,7 @@ const InputForm = ({
     return (
         <div className="w-full">
             {label && (
-                <label className={`block text-sm mb-1 customtext-neutral-dark ${labelClass}`}>
+                <label className={`block text-sm 2xl:text-base mb-1 customtext-neutral-dark ${labelClass}`}>
                     {label}
                 </label>
             )}

@@ -405,9 +405,9 @@ export default function ProductDetailSF({ item, data, setCart, cart }) {
                                 >
                                     Agregar al carrito
                                 </button>
-                                <button className="w-full font-font-general text-base 2xl:text-lg customtext-neutral-dark border border-neutral-dark py-3 font-semibold rounded-3xl hover:opacity-90 transition-all duration-300 mt-4">
+                                {/* <button className="w-full font-font-general text-base 2xl:text-lg customtext-neutral-dark border border-neutral-dark py-3 font-semibold rounded-3xl hover:opacity-90 transition-all duration-300 mt-4">
                                     Comprar
-                                </button>
+                                </button> */}
                             </div>
 
                             {/* Specifications */}

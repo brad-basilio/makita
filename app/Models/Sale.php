@@ -34,6 +34,10 @@ class Sale extends Model
         'delivery',
         'status_id',
         'culqi_charge_id',
-        'payment_status'
+        'payment_status',
+        'invoiceType',
+        'documentType',
+        'document',
+        'businessName',
     ];
 }

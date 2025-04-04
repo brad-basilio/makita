@@ -9,7 +9,7 @@ const FooterTermsCTASocials = React.lazy(() => import('./Footer/FooterTermsCTASo
 const FooterSalaFabulosa = React.lazy(() => import('./Footer/FooterSalaFabulosa'))
 const FooterPideloPe = React.lazy(() => import('./Footer/FooterPideloPe'))
 
-const Footer = ({ which, items, pages, generals }) => {
+const Footer = ({ which, items, pages, generals, contacts }) => {
   const getFooter = () => {
     switch (which) {
       case 'FooterSimpleCallToAction':
@@ -23,7 +23,7 @@ const Footer = ({ which, items, pages, generals }) => {
       case 'FooterTermsCTASocials':
         return <FooterTermsCTASocials socials={items} pages={pages} generals={generals} />
       case 'FooterSalaFabulosa':
-        return <FooterSalaFabulosa socials={items} pages={pages} generals={generals} />
+        return <FooterSalaFabulosa socials={items} pages={pages} generals={generals} contacts={contacts} />
       case 'FooterPideloPe':
         return <FooterPideloPe socials={items} pages={pages} generals={generals} />
       default:

@@ -10,28 +10,25 @@ import CardItemSF from "./CardItemSF";
 
 export default function CartStepSF({ cart, setCart, onContinue, subTotal, envio, igv, totalFinal }) {
 
-    console.log(cart)
-
-
     return (
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-y-8 md:gap-8">
             {/* Lista de productos */}
             <div className="lg:col-span-3 flex flex-row w-full">
                 {/* Versión desktop (tabla) */}
-                <div className="hidden md:block overflow-x-auto  rounded-lg w-full">
+                <div className="hidden md:block overflow-x-auto rounded-lg w-full">
                     <table className="min-w-full divide-y divide-gray-200">
                         <thead className="bg-gray-50">
                             <tr className="!font-font-general">
-                                <th scope="col" className="px-6 py-3 text-left text-sm font-semibold customtext-neutral-dark">
+                                <th scope="col" className="px-6 py-3 text-left text-sm 2xl:text-base font-semibold customtext-neutral-dark">
                                     Producto
                                 </th>
-                                <th scope="col" className="px-6 py-3 text-center text-sm font-semibold customtext-neutral-dark">
+                                <th scope="col" className="px-6 py-3 text-center text-sm 2xl:text-base font-semibold customtext-neutral-dark">
                                     Cantidad
                                 </th>
-                                <th scope="col" className="px-6 py-3 text-center text-sm font-semibold customtext-neutral-dark">
+                                <th scope="col" className="px-6 py-3 text-center text-sm 2xl:text-base font-semibold customtext-neutral-dark">
                                     Precio
                                 </th>
-                                <th scope="col" className="px-6 py-3 text-center text-sm font-semibold customtext-neutral-dark">
+                                <th scope="col" className="px-6 py-3 text-center text-sm 2xl:text-base font-semibold customtext-neutral-dark">
                                     Subtotal
                                 </th>
                             </tr>

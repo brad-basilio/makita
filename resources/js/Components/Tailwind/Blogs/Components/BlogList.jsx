@@ -9,7 +9,7 @@ export default function BlogList({ posts, postsLatest, loading, isFilter }) {
     useEffect(() => {}, [posts]);
     return (
         <section
-            className={`font-font-general ${isFilter ? "pb-16" : "py-16"}`}
+            className={`font-font-general ${isFilter ? "pb-16" : "pt-8 pb-16"}`}
         >
             <div className="px-primary 2xl:px-0 2xl:max-w-7xl mx-auto">
                 {!isFilter ? (

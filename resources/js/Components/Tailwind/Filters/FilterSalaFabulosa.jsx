@@ -288,7 +288,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
     );
 
     return (
-        <section className="py-12  font-font-general customtext-primary">
+        <section className="py-6  font-font-general customtext-primary">
             <div className="mx-auto px-primary">
                 <div className="relative flex flex-col sm:flex-row gap-4">
                     <div className="w-full sm:w-1/5 bg-white p-4 rounded-lg h-max">
