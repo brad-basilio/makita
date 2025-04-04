@@ -173,10 +173,7 @@
                 "image": "slider-just-image.png",
                 "using": {
                     "model": "Slider",
-                    "fields": [
-                        "bg_image",
-                        "button_link"
-                    ]
+                    "fields": ["bg_image", "button_link"]
                 }
             },
             {
@@ -530,12 +527,7 @@
                 ],
                 "using": {
                     "model": "Item",
-                    "filters": [
-                        "featured",
-                        "recommended",
-                        "offering",
-                        "is_new"
-                    ]
+                    "filters": ["featured", "recommended", "offering", "is_new"]
                 }
             },
             {
@@ -770,6 +762,24 @@
                 "id": "BlogSimple",
                 "name": "Blog Simple",
                 "data": ["title"]
+            },
+            {
+                "id": "BlogCarousel",
+                "name": "Carousel",
+                "data": [
+                    "title",
+                    "description",
+                    "button_text",
+                    "link_blog",
+                    "url_video",
+                    "button_video_text",
+                    "button_video_link"
+                ],
+                "using": {
+                    "model": "Post",
+                    "limit": 3,
+                    "with": ["category"]
+                }
             }
         ]
     },

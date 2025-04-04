@@ -234,6 +234,7 @@ const System = ({
                     <Blog
                         which={value}
                         data={data}
+                        items={getItems(itemsId)}
                         headerPosts={headerPosts}
                         postsLatest={postsLatest}
                         filteredData={filteredData}

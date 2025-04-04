@@ -26,18 +26,18 @@ const CategoryCardWithBanner = ({
                 <div className="mb-[5%]">
                     {
                         category?.name &&
-                        <h3 className={`${mainContainer ? 'text-4xl xl:text-6xl' : 'text-2xl xl:text-4xl'} font-semibold ${!mainContainer && 'line-clamp-2'} ${color} font-title`}>
+                        <h3 className={`${mainContainer ? 'text-4xl xl:text-6xl' : 'text-2xl xl:text-4xl'} font-semibold ${!mainContainer && 'line-clamp-2'} ${color} font-title leading-none`}>
                             {category?.name}
                         </h3>
                     }
                     {
                         category?.description &&
-                        <p className={`text-base line-clamp-2 mt-[2.5%] ${color}`}>
+                        <p className={`text-base line-clamp-2 mt-[2.5%] ${color} leading-none`}>
                             {category?.description}
                         </p>
                     }
                 </div>
-                <button className={`${buttonBackground || 'bg-primary'} ${buttonColor || 'text-white'} rounded-full px-4 py-2`}>Ver más productos</button>
+                <button className={`${buttonBackground || 'bg-primary'} ${buttonColor || 'text-white'} rounded-full px-4 py-1`}>Ver más productos</button>
             </div>
             {
                 !mainContainer &&
