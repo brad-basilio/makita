@@ -38,7 +38,7 @@ const CartItemRow = ({ setCart, ...item }) => {
       <img src={`/storage/images/item/${item.image}`} className="block bg-white shadow rounded-md p-0 aspect-[4/3] w-20 h-auto object-cover object-center" alt={item.name} />
     </td>
     <td className="p-2">
-      <p className="font-semibold mb-1">
+      <p className="font-semibold mb-1 leading-tight text-sm">
         {
           item?.category &&
           <span className="block text-xs opacity-80 -mb-1">{item?.category?.name ?? 'Sin categoría'}</span>
