@@ -1,6 +1,6 @@
 import React from "react";
 
-const StepSimple = ({ data }) => {
+const ImageSimple = ({ data }) => {
 
   const steps = data?.steps?.split('>') ?? ['Step 1', 'Step 2', 'Step 3']
   const selected = data?.selected ?? 1;
@@ -30,4 +30,4 @@ const StepSimple = ({ data }) => {
   </section>
 }
 
-export default StepSimple
+export default ImageSimple

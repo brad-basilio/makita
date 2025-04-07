@@ -40,4 +40,9 @@ class Sale extends Model
         'document',
         'businessName',
     ];
+
+    public function details()
+    {
+        return $this->hasMany(SaleDetail::class);
+    }
 }

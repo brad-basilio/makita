@@ -33,6 +33,7 @@ import ForgotPassword from "./Components/Tailwind/ForgotPassword";
 import ResetPassword from "./Components/Tailwind/ResetPassword";
 import Complaint from "./Components/Tailwind/Complaint";
 import Indicator from "./Components/Tailwind/Indicator";
+import ThankSimple from "./Components/Tailwind/Thanks/ThankSimple";
 
 const itemsRest = new ItemsRest();
 
@@ -229,6 +230,9 @@ const System = ({
                 );
             case "faq":
                 return <Faq which={value} data={data} faqs={faqs} />;
+
+            case "thank":
+                return <ThankSimple which={value} data={data} />;
             case "blog":
                 return (
                     <Blog
