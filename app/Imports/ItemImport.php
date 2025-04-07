@@ -5,6 +5,7 @@ namespace App\Imports;
 use App\Models\Item;
 use App\Models\Category;
 use App\Models\SubCategory;
+use App\Models\Collection;
 use App\Models\Brand;
 use App\Models\ItemSpecification;
 use App\Models\ItemImage;
@@ -46,17 +47,22 @@ class ItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsOnFailur
                 ['slug' => str()->slug($row['categoria'])]
             );
 
-            // 2️⃣ Obtener o crear la subcategoría
-            $subCategory = SubCategory::firstOrCreate(
-                ['name' => $row['subcategoria'], 'category_id' => $category->id],
-                ['slug' => str()->slug($row['subcategoria'])]
+            $collection = Collection::firstOrCreate(
+                ['name' => $row['collection']],
+                ['slug' => str()->slug($row['collection'])]
             );
 
+            // 2️⃣ Obtener o crear la subcategoría
+            // $subCategory = SubCategory::firstOrCreate(
+            //     ['name' => $row['subcategoria'], 'category_id' => $category->id],
+            //     ['slug' => str()->slug($row['subcategoria'])]
+            // );
+
             // 3️⃣ Obtener o crear la marca
-            $brand = Brand::firstOrCreate(
-                ['name' => $row['marca']],
-                ['slug' => str()->slug($row['marca'])]
-            );
+            // $brand = Brand::firstOrCreate(
+            //     ['name' => $row['marca']],
+            //     ['slug' => str()->slug($row['marca'])]
+            // );
 
             // 4️⃣ Crear el producto
             $item = Item::create([
@@ -70,11 +76,14 @@ class ItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsOnFailur
                 'final_price' => isset($row['descuento']) && $row['descuento'] > 0 ? $row['descuento'] : $row['precio'],
                 'discount_percent' => isset($row['descuento']) && $row['descuento'] > 0 ? round((100 - ($row['descuento'] / $row['precio']) * 100)) : NULL,
                 'category_id' => $category->id,
-                'subcategory_id' => $subCategory->id,
-                'brand_id' => $brand->id,
+                // 'subcategory_id' => $subCategory->id,
+                'collection_id' => $collection->id,
+                // 'brand_id' => $brand->id,
                 'image' => $this->getMainImage($row['sku']),
                 'slug' => str()->slug($row['nombre_de_producto']),
                 'stock' =>  isset($row['stock']) && $row['stock'] > 0 ? $row['stock'] : 10,
+                'color' => $row['color'],
+
             ]);
 
             if ($item) {
@@ -101,6 +110,14 @@ class ItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsOnFailur
             $path = "images/item/{$sku}.{$ext}";
             if (Storage::exists($path)) {
                 return "{$sku}.{$ext}";
+            }
+        }
+
+        // Si no encuentra, busca sku_1.ext
+        foreach ($extensions as $ext) {
+            $path = "images/item/{$sku}_1.{$ext}";
+            if (Storage::exists($path)) {
+                return "{$sku}_1.{$ext}";
             }
         }
         return null;
@@ -137,16 +154,30 @@ class ItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsOnFailur
     private function saveGalleryImages($item, $sku)
     {
         $extensions = ['png', 'jpg', 'jpeg', 'webp'];
-        $index = 1;
+        //$index = 1;
+        $index = 2;
 
         while (true) {
             $found = false;
-            foreach ($extensions as $ext) {
-                //$filename = "{$sku}_" . str_pad($index, 2, '0', STR_PAD_LEFT) . ".{$ext}";
-                //$filename = "{$sku}_{$index}.{$ext}";
-                $filename = "{$sku}_" . ($index < 10 ? $index : str_pad($index, 2, '0', STR_PAD_LEFT)) . ".{$ext}";
+            // foreach ($extensions as $ext) {
+            //     //$filename = "{$sku}_" . str_pad($index, 2, '0', STR_PAD_LEFT) . ".{$ext}";
+            //     //$filename = "{$sku}_{$index}.{$ext}";
+            //     $filename = "{$sku}_" . ($index < 10 ? $index : str_pad($index, 2, '0', STR_PAD_LEFT)) . ".{$ext}";
 
+            //     $path = "images/item/{$filename}";
+            //     if (Storage::exists($path)) {
+            //         ItemImage::create([
+            //             'item_id' => $item->id,
+            //             'url' => $filename,
+            //         ]);
+            //         $found = true;
+            //         break;
+            //     }
+            // }
+            foreach ($extensions as $ext) {
+                $filename = "{$sku}_{$index}.{$ext}";
                 $path = "images/item/{$filename}";
+                
                 if (Storage::exists($path)) {
                     ItemImage::create([
                         'item_id' => $item->id,
@@ -156,6 +187,7 @@ class ItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsOnFailur
                     break;
                 }
             }
+
             if (!$found) {
                 break;
             }

@@ -362,7 +362,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                                 />
                             </button>
                             {sections.collection && (
-                                <div className="space-y-4">
+                                <div className="space-y-1">
                                     <div className="relative">
                                         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                                         <input
@@ -385,7 +385,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                                         return (
                                             <div
                                                 key={collection.id}
-                                                className={`group py-2 rounded-md ${
+                                                className={`group py-1 rounded-md ${
                                                     isChecked
                                                         ? "bg-secondary"
                                                         : "bg-transparent"
@@ -438,7 +438,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                                 />
                             </button>
                             {sections.categoria && (
-                                <div className="space-y-4">
+                                <div className="space-y-1">
                                     <div className="relative">
                                         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                                         <input
