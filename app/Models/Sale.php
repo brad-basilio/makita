@@ -36,4 +36,9 @@ class Sale extends Model
         'culqi_charge_id',
         'payment_status'
     ];
+
+    public function details()
+    {
+        return $this->hasMany(SaleDetail::class);
+    }
 }

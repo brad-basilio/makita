@@ -39,13 +39,11 @@ const BlogCarousel = ({ data, items }) => {
 
               return <SwiperSlide key={index}>
                 <div className="bg-white rounded-lg overflow-hidden shadow-sm h-full">
-                  <div className="h-48 relative">
-                    <img
-                      src={`/storage/images/post/${item?.image}`}
-                      alt={item?.title}
-                      className="absolute inset-0 w-full h-full object-cover"
-                    />
-                  </div>
+                  <img
+                    src={`/storage/images/post/${item?.image}`}
+                    alt={item?.title}
+                    className="inset-0 w-full object-cover aspect-[4/3]"
+                  />
                   <div className="p-4">
                     <h3 className="text-lg font-medium text-green-700 mb-2 leading-tight">
                       {item?.name}
@@ -76,6 +74,11 @@ const BlogCarousel = ({ data, items }) => {
                     <path d="M8 5v14l11-7z" />
                   </svg>
                 </button>
+                <div className="absolute h-max self-end inset-0 flex flex-col justify-end p-4">
+                  <button className="bg-white hover:bg-gray-100 text-green-700 border border-green-700 rounded-full w-full py-2 z-10">
+                    {data?.button_video_text}
+                  </button>
+                </div>
               </>
             ) : (
               <YouTube
@@ -85,17 +88,17 @@ const BlogCarousel = ({ data, items }) => {
                   height: '100%',
                   playerVars: {
                     autoplay: 1,
+                    controls: 0,
+                    disablekb: 1,
+                    modestbranding: 1,
+                    showinfo: 0,
+                    rel: 0
                   },
                 }}
                 onPause={() => setIsPlaying(false)}
                 className="absolute inset-0 w-full h-full"
               />
             )}
-            <div className="absolute h-max self-end inset-0 flex flex-col justify-end p-4">
-              <button className="bg-white hover:bg-gray-100 text-green-700 border border-green-700 rounded-full w-full py-2 z-10">
-                {data?.button_video_text}
-              </button>
-            </div>
           </div>
         </div>
       </div>

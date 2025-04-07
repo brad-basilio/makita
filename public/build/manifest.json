@@ -645,9 +645,9 @@
       "_createLucideIcon-CC2OGGjd.js"
     ]
   },
-  "_swiper-!~{04n}~.js": {
+  "_swiper-!~{04q}~.js": {
     "file": "swiper.css",
-    "src": "_swiper-!~{04n}~.js"
+    "src": "_swiper-!~{04q}~.js"
   },
   "_tag-DhWNze6X.js": {
     "file": "assets/tag-DhWNze6X.js",
@@ -656,9 +656,9 @@
       "_createLucideIcon-CC2OGGjd.js"
     ]
   },
-  "_tippy-!~{04j}~.js": {
+  "_tippy-!~{04m}~.js": {
     "file": "tippy.css",
-    "src": "_tippy-!~{04j}~.js"
+    "src": "_tippy-!~{04m}~.js"
   },
   "_tippy-react.esm-CGYKl-Jd.js": {
     "file": "assets/tippy-react.esm-CGYKl-Jd.js",
@@ -2523,7 +2523,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Blog.jsx": {
-    "file": "assets/Blog-791RS4Ea.js",
+    "file": "assets/Blog-BNwr2c2h.js",
     "name": "Blog",
     "src": "resources/js/Components/Tailwind/Blog.jsx",
     "isEntry": true,
@@ -3741,6 +3741,16 @@
       "____vite-browser-external_commonjs-proxy-BQdpDcDf.js"
     ]
   },
+  "resources/js/Components/Tailwind/Images/ImageSimple.jsx": {
+    "file": "assets/ImageSimple-BZ0Z4mau.js",
+    "name": "ImageSimple",
+    "src": "resources/js/Components/Tailwind/Images/ImageSimple.jsx",
+    "isEntry": true,
+    "imports": [
+      "resources/js/Components/About/AboutHeader.jsx",
+      "_index-DFv2mRv-.js"
+    ]
+  },
   "resources/js/Components/Tailwind/Indicator.jsx": {
     "file": "assets/Indicator-DYdnBjBE.js",
     "name": "Indicator",
@@ -4413,7 +4423,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Step.jsx": {
-    "file": "assets/Step-BvH2MM-y.js",
+    "file": "assets/Step-ByrE1etP.js",
     "name": "Step",
     "src": "resources/js/Components/Tailwind/Step.jsx",
     "isEntry": true,
@@ -4430,6 +4440,30 @@
     "file": "assets/StepSimple-BZ0Z4mau.js",
     "name": "StepSimple",
     "src": "resources/js/Components/Tailwind/Steps/StepSimple.jsx",
+    "isEntry": true,
+    "imports": [
+      "resources/js/Components/About/AboutHeader.jsx",
+      "_index-DFv2mRv-.js"
+    ]
+  },
+  "resources/js/Components/Tailwind/Thank.jsx": {
+    "file": "assets/Thank-CfAAxyl8.js",
+    "name": "Thank",
+    "src": "resources/js/Components/Tailwind/Thank.jsx",
+    "isEntry": true,
+    "imports": [
+      "_preload-helper-DPi8upcZ.js",
+      "resources/js/Components/About/AboutHeader.jsx",
+      "_index-DFv2mRv-.js"
+    ],
+    "dynamicImports": [
+      "resources/js/Components/Tailwind/Thanks/ThankSimple.jsx"
+    ]
+  },
+  "resources/js/Components/Tailwind/Thanks/ThankSimple.jsx": {
+    "file": "assets/ThankSimple-BZ0Z4mau.js",
+    "name": "ThankSimple",
+    "src": "resources/js/Components/Tailwind/Thanks/ThankSimple.jsx",
     "isEntry": true,
     "imports": [
       "resources/js/Components/About/AboutHeader.jsx",
@@ -4853,7 +4887,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-Bz4MDfQW.js",
+    "file": "assets/System-BXCBSy-e.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,
@@ -4868,6 +4902,7 @@
       "_main-rZoj-gSW.js",
       "_Global-BM4Id4Pw.js",
       "_ItemsRest-DK8CnWHO.js",
+      "resources/js/Components/Tailwind/Thanks/ThankSimple.jsx",
       "_index-Sd7so-oN.js",
       "_index.esm-M1-TJtwJ.js",
       "____vite-browser-external_commonjs-proxy-BQdpDcDf.js",
