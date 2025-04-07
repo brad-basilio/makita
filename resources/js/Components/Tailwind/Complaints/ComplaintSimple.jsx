@@ -176,7 +176,7 @@ export default function ComplaintSimple({ generals }) {
     const openModal = (index) => setModalOpen(index);
     const closeModal = () => setModalOpen(null);
     return (
-        <div className=" w-full px-primary mx-auto py-16 bg-[#F7F9FB]">
+        <div className=" w-full px-primary mx-auto pt-8 pb-16 font-font-general">
             <div className="max-w-7xl mx-auto  bg-white shadow-lg rounded-2xl customtext-neutral-dark p-8">
                 <h1 className="text-2xl font-bold mb-10 text-center uppercase">
                     Libro de Reclamaciones
@@ -185,7 +185,7 @@ export default function ComplaintSimple({ generals }) {
                 <form onSubmit={handleSubmit}>
                     {/* Identificación del Consumidor */}
                     <div className="mb-8">
-                        <h2 className="text-xl font-medium mb-4">
+                        <h2 className="text-xl font-semibold mb-4">
                             Identificación del Consumidor
                         </h2>
 
@@ -316,7 +316,7 @@ export default function ComplaintSimple({ generals }) {
 
                     {/* Identificación del bien contratado */}
                     <div className="mb-8">
-                        <h2 className="text-xl font-medium mb-4">
+                        <h2 className="text-xl font-semibold mb-4">
                             Identificación del bien contratado
                         </h2>
 
@@ -363,7 +363,7 @@ export default function ComplaintSimple({ generals }) {
 
                     {/* Detalle del reclamo del pedido del consumidor */}
                     <div className="mb-8">
-                        <h2 className="text-xl font-medium mb-4">
+                        <h2 className="text-xl font-semibold mb-4">
                             Detalle del reclamo del pedido del consumidor
                         </h2>
 

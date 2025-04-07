@@ -296,7 +296,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                             Combina como desees tu sala
                         </p>
 
-                        <div className="mb-6">
+                        {/* <div className="mb-6">
                             <button
                                 onClick={() => toggleSection("marca")}
                                 className="flex items-center justify-between w-full mb-4"
@@ -346,7 +346,8 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                                     </div>
                                 </div>
                             )}
-                        </div>
+                        </div> */}
+                        
                         {/*Categoria Seccion */}
                         <div className="mb-6">
                             <button
@@ -546,7 +547,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                     </div>
 
                     <div className="w-full sm:w-4/5 py-4">
-                        <div className="flex justify-between items-center mb-4 w-full">
+                        <div className="flex flex-col lg:flex-row lg:justify-between items-center mb-4 w-full">
                             {/* Ordenación <span className='block w-6/12'>Productos seleccionados: <strong>{products?.length}</strong></span>*/}
                             <div className="flex gap-4 items-center">
                                 <label className="font-semibold text-sm w-[150px]">
@@ -575,7 +576,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                                 />
                             </div>
                             <div className="customtext-primary font-semibold">
-                                <div className="flex justify-between items-center mb-4 w-full mt-8">
+                                <div className="flex justify-between items-center w-full">
                                     <div className="customtext-primary font-semibold">
                                         <nav className="flex items-center gap-x-2 min-w-max">
                                             <button

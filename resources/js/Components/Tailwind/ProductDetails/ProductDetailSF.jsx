@@ -399,7 +399,7 @@ export default function ProductDetailSF({ item, data, setCart, cart }) {
                                 <button
                                     onClick={() => {
                                         onAddClicked(item);
-                                        setModalOpen(!modalOpen);
+                                        // setModalOpen(!modalOpen);
                                     }}
                                     className="w-full font-font-general text-base 2xl:text-lg bg-primary text-white py-3 font-semibold rounded-3xl hover:opacity-90 transition-all duration-300 mt-3"
                                 >
