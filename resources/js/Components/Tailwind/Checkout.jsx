@@ -2,14 +2,17 @@ import React from "react"
 
 
 const CheckoutCulqi = React.lazy(() => import('./Checkouts/CheckoutCulqi'))
+const CheckoutKuchara = React.lazy(() => import('./Checkouts/CheckoutKuchara'))
 const CheckoutSteps = React.lazy(() => import('./Checkouts/CheckoutSteps'))
 const CheckoutStepsSF = React.lazy(() => import('./Checkouts/CheckoutStepsSF'))
 
-const Checkout = ({ which, data, cart, setCart, isUser }) => {
+const Checkout = ({ which, data, items, cart, setCart, isUser, prefixes = [] }) => {
   const getCheckout = () => {
     switch (which) {
       case 'CheckoutCulqi':
         return <CheckoutCulqi data={data} cart={cart} setCart={setCart} />
+      case 'CheckoutKuchara':
+        return <CheckoutKuchara data={data} cart={cart} setCart={setCart} items={items} prefixes={prefixes} />
       case 'CheckoutSteps':
         return <CheckoutSteps data={data} cart={cart} setCart={setCart} user={isUser} />
       case 'CheckoutStepsSF':

@@ -4,6 +4,7 @@ import Global from './Global';
 import 'swiper/css'
 import 'tippy.js/dist/tippy.css'
 import General from './General';
+import LaravelSession from './LaravelSession';
 
 const CreateReactScript = (render) => {
 
@@ -21,6 +22,10 @@ const CreateReactScript = (render) => {
           const { correlative, description } = properties.generals[key]
           General.set(correlative, description)
         }
+      }
+      const session = { ...properties?.session }
+      for (const key in session) {
+        LaravelSession.set(`${key}`, session[key])
       }
       const can = (page, ...keys) => {
         const keys2validate = []
