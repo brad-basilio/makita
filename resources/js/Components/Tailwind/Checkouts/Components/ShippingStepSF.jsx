@@ -3,6 +3,7 @@ import Number2Currency from "../../../../Utils/Number2Currency";
 import ubigeoData from "../../../../../../storage/app/utils/ubigeo.json";
 import DeliveryPricesRest from "../../../../Actions/DeliveryPricesRest";
 import { processCulqiPayment } from "../../../../Actions/culqiPayment";
+import { processMercadoPagoPayment } from "../../../../Actions/mercadoPagoPayment"
 import ButtonPrimary from "./ButtonPrimary";
 import ButtonSecondary from "./ButtonSecondary";
 import InputForm from "./InputForm";
@@ -38,11 +39,26 @@ export default function ShippingStepSF({
         comment: user?.comment || "",
         reference: user?.reference || "",
         shippingOption: "delivery", // Valor predeterminado
+
+        invoiceType: user?.invoiceType || "boleta", // Nuevo campo para tipo de comprobante
+        documentType: user?.documentType || "dni", 
+        document: user?.document || "", 
+        businessName: user?.businessName || "", // Nuevo campo para Razón Social
     });
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
+
+        // Si cambia el tipo de comprobante, actualizar el tipo de documento por defecto
+        if (name === "invoiceType") {
+            setFormData(prev => ({
+                ...prev,
+                documentType: value === "factura" ? "ruc" : "dni",
+                document: "",
+                businessName: value === "factura" ? prev.businessName : ""
+            }));
+        }
     };
 
     // Estados para manejar los valores seleccionados
@@ -149,6 +165,28 @@ export default function ShippingStepSF({
 
             return;
         }
+
+        // Validar campos según el tipo de comprobante
+        if (!formData.document) {
+            Notify.add({
+                icon: "/assets/img/icon.svg",
+                title: "Error en el Formulario",
+                body: `El campo ${formData.documentType === "dni" ? "DNI" : "RUC"} es obligatorio`,
+                type: "danger",
+            });
+            return;
+        }
+
+        if (formData.invoiceType === "factura" && !formData.businessName) {
+            Notify.add({
+                icon: "/assets/img/icon.svg",
+                title: "Error en el Formulario",
+                body: "El campo Razón Social es obligatorio para factura",
+                type: "danger",
+            });
+            return;
+        }
+
         if (
             !formData.department ||
             !formData.province ||
@@ -169,10 +207,16 @@ export default function ShippingStepSF({
             return;
         }
 
-        if (!window.Culqi) {
-            console.error("❌ Culqi aún no se ha cargado.");
-            return;
+        // if (!window.Culqi) {
+        //     console.error("❌ Culqi aún no se ha cargado.");
+        //     return;
+        // }
+
+        if (!window.MercadoPago) {
+            console.error("❌ MercadoPago aún no se ha cargado.")
+            return
         }
+
         try {
             const request = {
                 user_id: user?.id || "",
@@ -193,17 +237,21 @@ export default function ShippingStepSF({
                 amount: totalFinal || 0,
                 delivery: envio,
                 cart: cart,
+                invoiceType: formData.invoiceType || "",
+                documentType: formData.documentType || "",
+                document: formData.document || "",
+                businessName: formData.businessName || "",
             };
-
-            const response = await processCulqiPayment(request);
+           
+            // const response = await processCulqiPayment(request);
+            const response = await processMercadoPagoPayment(request)
             const data = response;
-
+            
             if (data.status) {
                 setSale(data.sale);
                 setDelivery(data.delivery);
                 setCode(data.code);
                 setCart([]);
-                onContinue();
             } else {
                 Notify.add({
                     icon: "/assets/img/icon.svg",
@@ -225,14 +273,14 @@ export default function ShippingStepSF({
 
     const [selectedOption, setSelectedOption] = useState("free");
     return (
-        <div className="grid lg:grid-cols-5 gap-y-8 lg:gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-y-8 lg:gap-8 ">
             <div className="lg:col-span-3">
                 {/* Formulario */}
                 <form
-                    className="space-y-6"
+                    className="space-y-6 bg-[#f9f9f9] p-6 rounded-2xl font-font-general"
                     onSubmit={(e) => e.preventDefault()}
                 >
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid lg:grid-cols-2 gap-4 ">
                         {/* Nombres */}
                         <InputForm
                             type="text"
@@ -321,7 +369,7 @@ export default function ShippingStepSF({
                         placeholder="Ingresa el nombre de la calle"
                     />
 
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid lg:grid-cols-2 gap-4">
                         <InputForm
                             label="Número"
                             type="text"
@@ -351,6 +399,64 @@ export default function ShippingStepSF({
                         onChange={handleChange}
                         placeholder="Ejem. Altura de la avenida..."
                     />
+
+
+                    {/* Tipo de comprobante */}
+                    <div className="space-y-2">
+                        <label className="block text-sm font-medium customtext-neutral-dark">
+                            Tipo de comprobante
+                        </label>
+                        <div className="flex gap-4">
+                            <label className="inline-flex items-center">
+                                <input
+                                    type="radio"
+                                    className="form-radio"
+                                    name="invoiceType"
+                                    value="boleta"
+                                    checked={formData.invoiceType === "boleta"}
+                                    onChange={handleChange}
+                                />
+                                <span className="ml-2">Boleta</span>
+                            </label>
+                            <label className="inline-flex items-center">
+                                <input
+                                    type="radio"
+                                    className="form-radio"
+                                    name="invoiceType"
+                                    value="factura"
+                                    checked={formData.invoiceType === "factura"}
+                                    onChange={handleChange}
+                                />
+                                <span className="ml-2">Factura</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    {/* Documento */}
+                    
+                    <InputForm
+                            label={formData.documentType === "dni" ? "DNI" : "RUC"}
+                            type="text"
+                            name="document"
+                            value={formData.document}
+                            onChange={handleChange}
+                            placeholder={`Ingrese su ${formData.documentType === "dni" ? "DNI" : "RUC"}`}
+                            maxLength={formData.documentType === "dni" ? "8" : "11"}
+                    />
+                    
+
+                    {/* Razón Social (solo para factura) */}
+                    {formData.invoiceType === "factura" && (
+                        <InputForm
+                            label="Razón Social"
+                            type="text"
+                            name="businessName"
+                            value={formData.businessName}
+                            onChange={handleChange}
+                            placeholder="Ingrese la razón social"
+                        />
+                    )}    
+
                 </form>
                 {/* <div className="flex gap-4 mt-4">
                     <OptionCard
@@ -431,11 +537,12 @@ export default function ShippingStepSF({
                         </div>
                     </div>
                     <div className="space-y-2 pt-4">
-                        <ButtonPrimary onClick={handlePayment}>
+                        <ButtonPrimary className={'payment-button'} onClick={handlePayment}>
                             {" "}
                             Continuar
                         </ButtonPrimary>
-
+                        <div id="mercadopago-button-container" ></div>
+                        {/* style={{ display: "none" }} */}
                         <ButtonSecondary onClick={noContinue}>
                             {" "}
                             Cancelar

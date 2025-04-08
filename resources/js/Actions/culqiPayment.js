@@ -39,9 +39,9 @@ export const processCulqiPayment = (request) => {
                     cuotealo: true,
                 },
                 style: {
-                    logo: "https://i.ibb.co/Xf7Nbc7J/Simplification.png",
-                    bannerColor: "#20A4E0",
-                    buttonBackground: "#20A4E0",
+                    logo: "/assets/resources/logo.png",
+                    bannerColor: "#311609",
+                    buttonBackground: "#311609",
                 },
             });
 

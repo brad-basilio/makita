@@ -14,7 +14,7 @@ const TopBarSimple = ({ }) => {
     }
   });
 
-  return <div className="bg-white text-xs font-bold py-3  px-primary flex justify-center items-center font-font-general">
+  return <div className="bg-white text-sm font-bold py-3 customtext-neutral-dark text-center 2xl:text-lg px-primary flex justify-center items-center font-font-general">
     <p>{content}</p>
   </div>
 }

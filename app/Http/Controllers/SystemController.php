@@ -160,8 +160,6 @@ class SystemController extends BasicController
         $props['params'] = $request->route() ? $request->route()->parameters() : [];
         $props['filteredData'] = [];
         $props['generals'] = General::whereIn('correlative', $generals)->get();
-
-
         $props['contacts'] = General::where('status', true)->get();
         $props['faqs'] = Faq::where('status', true)->get();
         // Procesar el campo 'using'

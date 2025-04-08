@@ -571,7 +571,8 @@
                         "featured",
                         "recommended",
                         "offering",
-                        "is_new"
+                        "is_new",
+                        "views"
                     ],
                     "with": ["category", "subcategory", "brand"],
                     "limit": 8

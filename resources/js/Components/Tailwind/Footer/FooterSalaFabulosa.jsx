@@ -8,7 +8,7 @@ import Global from "../../../Utils/Global";
 import HtmlContent from "../../../Utils/HtmlContent";
 import { X } from "lucide-react";
 
-const FooterSalaFabulosa = ({ socials = [], pages, generals }) => {
+const FooterSalaFabulosa = ({ socials = [], pages, generals, contacts }) => {
 const subscriptionsRest = new SubscriptionsRest();
 const emailRef = useRef();
 
@@ -21,6 +21,13 @@ privacy_policy: "Políticas de privacidad",
 // 'delivery_policy': 'Políticas de envío',
 saleback_policy: "Políticas de devolucion y cambio",
 };
+
+const getContact = (correlative) => {
+    return (
+        contacts.find((contact) => contact.correlative === correlative)
+            ?.description || ""
+    );
+  };
 
 const openModal = (index) => setModalOpen(index);
 const closeModal = () => setModalOpen(null);
@@ -121,9 +128,9 @@ return (
                     Ubícanos
                 </h3>
                 <ul className="space-y-2 text-white text-sm 2xl:text-base">
-                    <li>Montevideo N. 725 Tienda 1041</li>
-                    <li>Teléfono: +51 915 968 941</li>
-                    <li>Correo: eva.collection.peru@gmail.com</li>
+                    <li>{getContact("address")}</li>
+                    <li>Teléfono: {getContact("phone_contact")}</li>
+                    <li>Correo: {getContact("email_contact")}</li>
                 </ul>
             </div>
         </div>
@@ -136,17 +143,17 @@ return (
                 </h3>
                 <ul className="space-y-2 text-white text-sm 2xl:text-base">
                     <li>
-                        <a onClick={()=> openModal(0)}
+                        <a onClick={()=> openModal(1)}
                             className="cursor-pointer  hover:font-bold transition-all duration-300"
                             >
                             Políticas de privacidad
                         </a>
                     </li>
                     <li>
-                        <a onClick={()=> openModal(1)}
+                        <a onClick={()=> openModal(0)}
                             className="cursor-pointer  hover:font-bold transition-all duration-300"
                             >
-                            Términos y Conduiciones
+                            Términos y Condiciones
                         </a>
                     </li>
                     <li>
@@ -157,7 +164,7 @@ return (
                         </a>
                     </li>
                     <li>
-                        <a href="#" className="cursor-not-allowed flex flex-col gap-2 items-start  ">
+                        <a href="/libro-de-reclamaciones" className="flex flex-col gap-2 items-start  ">
                             <span className=" hover:font-bold transition-all duration-300">
                                 Libro de reclamaciones
                             </span>
@@ -171,8 +178,7 @@ return (
                     Horario de atención
                 </h3>
                 <ul className="space-y-2 text-white text-sm 2xl:text-base">
-                    <li>Lun - Sab: 8:00 - 20:00</li>
-                    <li>Dom: 11:30 - 18:00</li>
+                    <li>{getContact("opening_hours")}</li>
                 </ul>
             </div>
         </div>

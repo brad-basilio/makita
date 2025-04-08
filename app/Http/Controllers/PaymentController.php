@@ -66,6 +66,10 @@ class PaymentController extends Controller
                 'culqi_charge_id' => $charge->id,
                 'payment_status' => 'pagado',
                 'status_id' => $saleStatusPagado ? $saleStatusPagado->id : null,
+                'invoiceType' => $request->invoiceType,
+                'documentType' => $request->documentType,
+                'document' => $request->document,
+                'businessName' => $request->businessName
             ]);
 
             // Registrar detalles de la venta y actualizar stock
@@ -94,6 +98,7 @@ class PaymentController extends Controller
                 'code' => $request->orderNumber,
                 'delivery' => $request->delivery
             ]);
+            
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Error en el pago',

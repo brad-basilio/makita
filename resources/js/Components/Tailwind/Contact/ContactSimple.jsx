@@ -4,7 +4,14 @@ import Swal from "sweetalert2"
 
 const messagesRest = new MessagesRest()
 
-const ContactSimple = ({ data }) => {
+const ContactSimple = ({ data, contacts }) => {
+
+  const getContact = (correlative) => {
+    return (
+        contacts.find((contact) => contact.correlative === correlative)
+            ?.description || ""
+    );
+  };
 
   const nameRef = useRef()
   const phoneRef = useRef()
@@ -49,7 +56,7 @@ const ContactSimple = ({ data }) => {
   }
 
   return <div className="bg-white">
-    <div className="px-[5%] xl:px-[8%] replace-max-w-here w-full mx-auto py-[5%] md:py-[2.5%]">
+    <div className="px-[5%] replace-max-w-here w-full mx-auto py-8">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-32 2xl:gap-44">
         <div className="flex flex-col gap-5 aos-init aos-animate" data-aos="fade-up" data-aos-offset="150">
           <h2 className="font-font-general font-bold text-3xl lg:text-4xl xl:text-[43px] leading-none customtext-primary">Escríbenos si tienes alguna duda o consulta</h2>
@@ -101,8 +108,7 @@ const ContactSimple = ({ data }) => {
                 <p className="font-poppins font-semibold text-lg  leading-none customtext-primary font-font-general">Dirección
                 </p>
                 <p className="customtext-primary text-opacity-20 font-font-general font-normal text-base">
-                  Lima, Perú
-
+                  {getContact("address")}
                 </p>
               </div>
             </div>
@@ -117,7 +123,7 @@ const ContactSimple = ({ data }) => {
                 <p className="font-poppins font-semibold text-lg  leading-none customtext-primary font-font-general">Número
                   de Teléfono</p>
                 <p className="customtext-primary text-opacity-20 font-font-general font-normal text-base">
-                  +51 123456789
+                  {getContact("phone_contact")}
                 </p>
               </div>
             </div>
@@ -132,7 +138,7 @@ const ContactSimple = ({ data }) => {
                 <p className="font-poppins font-semibold text-lg  leading-none customtext-primary font-font-general">Correo
                   Electrónico</p>
                 <p className="customtext-primary text-opacity-20 font-font-general font-normal text-base">
-                  info@mail.com </p>
+                  {getContact("email_contact")}</p>
               </div>
             </div>
 
@@ -146,7 +152,7 @@ const ContactSimple = ({ data }) => {
                 <p className="font-poppins font-semibold text-lg  leading-none customtext-primary font-font-general">Horario
                   de Atención</p>
                 <p className="customtext-primary text-opacity-20 font-font-general font-normal text-base">
-                  horarios
+                  {getContact("opening_hours")}
                 </p>
               </div>
             </div>

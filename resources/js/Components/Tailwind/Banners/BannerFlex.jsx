@@ -31,16 +31,14 @@ const BannerFlex = ({ data }) => {
                     </p>
                     <div className="flex flex-wrap gap-4 lg:gap-8 customtext-primary font-semibold w-full py-5 md:py-0">
                         <a
-                            href={data?.button_link}
-                            ref={buttonFirstRef}
-                            className="bg-primary text-base 2xl:text-xl tracking-normal cursor-pointer w-full sm:w-max px-5 sm:px-10 py-2.5 rounded-full  hover:opacity-90 transition-all duration-300 flex items-center justify-center"
+                            href="/catalogo"
+                            className="bg-primary text-white text-base 2xl:text-xl tracking-normal cursor-pointer w-full sm:w-max px-5 sm:px-10 py-2.5 rounded-full  hover:opacity-90 transition-all duration-300 flex items-center justify-center"
                         >
-                            <div>
-                            {data?.button_text}
-                            </div>
+                            Ver Productos
                         </a>
                         <a
                             href={data?.button_link}
+                            ref={buttonFirstRef}
                             className="border-primary text-base 2xl:text-xl tracking-normal border cursor-pointer w-full sm:w-max px-5 sm:px-10 py-2.5 rounded-full  hover:opacity-90 transition-all duration-300 flex items-center justify-center"
                         >
                             {data?.button_text}

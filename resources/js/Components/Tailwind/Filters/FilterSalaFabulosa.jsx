@@ -288,7 +288,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
     );
 
     return (
-        <section className="py-12  font-font-general customtext-primary">
+        <section className="py-6  font-font-general customtext-primary">
             <div className="mx-auto px-primary">
                 <div className="relative flex flex-col sm:flex-row gap-4">
                     <div className="w-full sm:w-1/5 bg-white p-4 rounded-lg h-max">
@@ -296,7 +296,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                             Combina como desees tu sala
                         </p>
 
-                        <div className="mb-6">
+                        {/* <div className="mb-6">
                             <button
                                 onClick={() => toggleSection("marca")}
                                 className="flex items-center justify-between w-full mb-4"
@@ -346,7 +346,8 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                                     </div>
                                 </div>
                             )}
-                        </div>
+                        </div> */}
+                        
                         {/*Categoria Seccion */}
                         <div className="mb-6">
                             <button
@@ -361,7 +362,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                                 />
                             </button>
                             {sections.collection && (
-                                <div className="space-y-4">
+                                <div className="space-y-1">
                                     <div className="relative">
                                         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                                         <input
@@ -384,7 +385,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                                         return (
                                             <div
                                                 key={collection.id}
-                                                className={`group py-2 rounded-md ${
+                                                className={`group py-1 rounded-md ${
                                                     isChecked
                                                         ? "bg-secondary"
                                                         : "bg-transparent"
@@ -437,7 +438,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                                 />
                             </button>
                             {sections.categoria && (
-                                <div className="space-y-4">
+                                <div className="space-y-1">
                                     <div className="relative">
                                         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                                         <input
@@ -546,7 +547,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                     </div>
 
                     <div className="w-full sm:w-4/5 py-4">
-                        <div className="flex justify-between items-center mb-4 w-full">
+                        <div className="flex flex-col lg:flex-row lg:justify-between items-center mb-4 w-full">
                             {/* Ordenación <span className='block w-6/12'>Productos seleccionados: <strong>{products?.length}</strong></span>*/}
                             <div className="flex gap-4 items-center">
                                 <label className="font-semibold text-sm w-[150px]">
@@ -575,7 +576,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                                 />
                             </div>
                             <div className="customtext-primary font-semibold">
-                                <div className="flex justify-between items-center mb-4 w-full mt-8">
+                                <div className="flex justify-between items-center w-full">
                                     <div className="customtext-primary font-semibold">
                                         <nav className="flex items-center gap-x-2 min-w-max">
                                             <button

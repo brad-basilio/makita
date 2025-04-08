@@ -276,12 +276,14 @@ export default function ProductDetailSF({ item, data, setCart, cart }) {
                         <div className="flex flex-col gap-2">
                             {/* Brand and Title */}
                             <div className="font-font-general">
-                                <p className="customtext-neutral-light text-sm 2xl:text-lg">
-                                    Marca:{" "}
-                                    <span className="customtext-neutral-dark">
-                                        {item?.brand.name}
-                                    </span>
-                                </p>
+                                {item?.brand && (
+                                    <p className="customtext-neutral-light text-sm 2xl:text-lg">
+                                        Marca:{" "}
+                                        <span className="customtext-neutral-dark">
+                                            {item?.brand.name}
+                                        </span>
+                                    </p>
+                                )}
                                 <h1 className="customtext-neutral-dark text-3xl lg:text-4xl 2xl:text-5xl font-bold mt-2">
                                     {item?.name}
                                 </h1>
@@ -387,9 +389,9 @@ export default function ProductDetailSF({ item, data, setCart, cart }) {
                                                 className="w-10 py-1 customtext-neutral-dark text-center bg-transparent outline-none appearance-none"
                                             />
                                         </div>
-                                        <span className="opacity-85">
+                                        {/* <span className="opacity-85">
                                             Máximo 10 unidades.
-                                        </span>
+                                        </span> */}
                                     </div>
                                 </div>
                             </div>
@@ -399,15 +401,15 @@ export default function ProductDetailSF({ item, data, setCart, cart }) {
                                 <button
                                     onClick={() => {
                                         onAddClicked(item);
-                                        setModalOpen(!modalOpen);
+                                        // setModalOpen(!modalOpen);
                                     }}
                                     className="w-full font-font-general text-base 2xl:text-lg bg-primary text-white py-3 font-semibold rounded-3xl hover:opacity-90 transition-all duration-300 mt-3"
                                 >
                                     Agregar al carrito
                                 </button>
-                                <button className="w-full font-font-general text-base 2xl:text-lg customtext-neutral-dark border border-neutral-dark py-3 font-semibold rounded-3xl hover:opacity-90 transition-all duration-300 mt-4">
+                                {/* <button className="w-full font-font-general text-base 2xl:text-lg customtext-neutral-dark border border-neutral-dark py-3 font-semibold rounded-3xl hover:opacity-90 transition-all duration-300 mt-4">
                                     Comprar
-                                </button>
+                                </button> */}
                             </div>
 
                             {/* Specifications */}

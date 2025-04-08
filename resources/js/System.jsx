@@ -274,6 +274,7 @@ const System = ({
                         items={getItems(itemsId)}
                         pages={pages}
                         generals={generals}
+                        contacts={contacts}
                     />
                 );
             case "complaints":

@@ -31,7 +31,7 @@ const CartModal = ({ data, cart, setCart, modalOpen, setModalOpen }) => {
             className="absolute right-0 bg-white p-4 rounded-l-2xl shadow-lg w-[95%] max-w-md outline-none h-screen"
             overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-50"
         >
-            <div className="flex flex-col">
+            <div className="flex flex-col font-font-general">
                 <div className="flex justify-between items-center mb-2">
                     <h2 className="text-xl font-bold">Carrito</h2>
                     <button onClick={() => setModalOpen(false)}>
@@ -39,7 +39,7 @@ const CartModal = ({ data, cart, setCart, modalOpen, setModalOpen }) => {
                     </button>
                 </div>
                 <div className="overflow-y-scroll h-[calc(100vh-160px)] scroll__carrito">
-                    <table className="w-full">
+                    <table className="w-full font-font-general">
                         <tbody id="itemsCarrito">
                             {cart.map((item, index) => {
                                 return (
@@ -54,8 +54,8 @@ const CartModal = ({ data, cart, setCart, modalOpen, setModalOpen }) => {
                     </table>
                 </div>
             </div>
-            <div className="font-poppins flex flex-col gap-2 pt-2">
-                <div className="text-[#141718] font-medium text-[20px] flex justify-between items-center">
+            <div className="font-font-general flex flex-col gap-2 pt-2">
+                <div className="text-[#141718] font-semibold text-xl flex justify-between items-center">
                     <b>Total</b>
                     <b id="itemsTotal">S/. {Number2Currency(totalPrice)}</b>
                 </div>
