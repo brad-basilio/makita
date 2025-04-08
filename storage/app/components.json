@@ -604,6 +604,11 @@
                 "name": "Simple"
             },
             {
+                "id": "BannerAd",
+                "name": "Anuncio",
+                "data": ["background_color"]
+            },
+            {
                 "id": "BannerPublicitario",
                 "name": "BannerPublicitario",
                 "data": ["title"]
@@ -623,6 +628,17 @@
             {
                 "id": "BannerSimpleSF",
                 "name": "SimpleSF"
+            }
+        ]
+    },
+    {
+        "id": "image",
+        "name": "Imágenes",
+        "options": [
+            {
+                "id": "ImageSimple",
+                "name": "Simple",
+                "data": ["image", "aspect_ratio"]
             }
         ]
     },
@@ -648,6 +664,14 @@
                     "model": "Item",
 
                     "with": ["category", "subcategory", "brand"]
+                }
+            },
+            {
+                "id": "ProductDetailKuchara",
+                "name": "Kuchara",
+                "using": {
+                    "model": "Item",
+                    "with": ["category"]
                 }
             },
             {

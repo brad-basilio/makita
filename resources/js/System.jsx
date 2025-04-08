@@ -34,6 +34,7 @@ import ResetPassword from "./Components/Tailwind/ResetPassword";
 import Complaint from "./Components/Tailwind/Complaint";
 import Indicator from "./Components/Tailwind/Indicator";
 import ThankSimple from "./Components/Tailwind/Thanks/ThankSimple";
+import Image from "./Components/Tailwind/Image";
 
 const itemsRest = new ItemsRest();
 
@@ -195,6 +196,8 @@ const System = ({
                 return <Indicator which={value} data={data} items={getItems(itemsId)} />;
             case "banner":
                 return <Banner which={value} data={data} />;
+            case "image":
+                return <Image which={value} data={data} />;
             case "step":
                 return <Step which={value} data={data} />;
             case "product-detail":

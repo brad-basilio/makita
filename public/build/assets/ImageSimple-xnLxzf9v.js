@@ -1,0 +1,1 @@
+import{j as s}from"./AboutHeader-ClKiNAEV.js";import"./index-DFv2mRv-.js";const c=({data:e})=>s.jsx("img",{className:"w-full object-cover object-center aspect-square",src:e==null?void 0:e.image,style:{aspectRatio:(e==null?void 0:e.aspect_ratio)??1}});export{c as default};
