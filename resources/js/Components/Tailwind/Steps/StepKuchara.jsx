@@ -6,9 +6,9 @@ const StepKuchara = ({ data }) => {
 
   return (
     <section className="bg-white px-[5%] py-8">
-      <div className="flex justify-between items-center relative max-w-3xl mx-auto">
+      <div className="flex justify-between items-start relative max-w-3xl mx-auto">
         {/* Línea de progreso */}
-        <div className="absolute h-0.5 bg-primary top-5 left-[10%] right-[10%] z-0"></div>
+        <div className="absolute h-0.5 bg-primary top-4 left-[10%] right-[10%] z-0"></div>
 
         {steps.map((step, index) => (
           <div key={index} className="flex flex-col items-center relative z-10">
