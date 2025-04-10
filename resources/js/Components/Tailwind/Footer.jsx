@@ -1,36 +1,100 @@
-import React from "react"
+import React from "react";
 
-
-const FooterSimple = React.lazy(() => import('./Footer/FooterSimple'))
-const FooterSimpleCallToAction = React.lazy(() => import('./Footer/FooterSimpleCallToAction'))
-const FooterCallToAction = React.lazy(() => import('./Footer/FooterCallToAction'))
-const FooterB = React.lazy(() => import('./Footer/FooterB'))
-const FooterTermsCTASocials = React.lazy(() => import('./Footer/FooterTermsCTASocials'))
-const FooterSalaFabulosa = React.lazy(() => import('./Footer/FooterSalaFabulosa'))
-const FooterPideloPe = React.lazy(() => import('./Footer/FooterPideloPe'))
+const FooterSimple = React.lazy(() => import("./Footer/FooterSimple"));
+const FooterSimpleCallToAction = React.lazy(() =>
+    import("./Footer/FooterSimpleCallToAction")
+);
+const FooterCallToAction = React.lazy(() =>
+    import("./Footer/FooterCallToAction")
+);
+const FooterB = React.lazy(() => import("./Footer/FooterB"));
+const FooterTermsCTASocials = React.lazy(() =>
+    import("./Footer/FooterTermsCTASocials")
+);
+const FooterSalaFabulosa = React.lazy(() =>
+    import("./Footer/FooterSalaFabulosa")
+);
+const FooterBananaLab = React.lazy(() => import("./Footer/FooterBananaLab"));
+const FooterPideloPe = React.lazy(() => import("./Footer/FooterPideloPe"));
 
 const Footer = ({ which, items, pages, generals, contacts }) => {
-  const getFooter = () => {
-    switch (which) {
-      case 'FooterSimpleCallToAction':
-        return <FooterSimpleCallToAction socials={items} pages={pages} generals={generals} />
-      case 'FooterCallToAction':
-        return <FooterCallToAction socials={items} pages={pages} generals={generals} />
-      case 'FooterSimple':
-        return <FooterSimple socials={items} pages={pages} generals={generals} />
-      case 'FooterB':
-        return <FooterB socials={items} pages={pages} generals={generals} />
-      case 'FooterTermsCTASocials':
-        return <FooterTermsCTASocials socials={items} pages={pages} generals={generals} />
-      case 'FooterSalaFabulosa':
-        return <FooterSalaFabulosa socials={items} pages={pages} generals={generals} contacts={contacts} />
-      case 'FooterPideloPe':
-        return <FooterPideloPe socials={items} pages={pages} generals={generals} />
-      default:
-        return <div className="w-full px-[5%] replace-max-w-here p-4 mx-auto">- No Hay componente <b>{which}</b> -</div>
-    }
-  }
-  return getFooter()
-}
+    const getFooter = () => {
+        switch (which) {
+            case "FooterSimpleCallToAction":
+                return (
+                    <FooterSimpleCallToAction
+                        socials={items}
+                        pages={pages}
+                        generals={generals}
+                    />
+                );
+            case "FooterCallToAction":
+                return (
+                    <FooterCallToAction
+                        socials={items}
+                        pages={pages}
+                        generals={generals}
+                    />
+                );
+            case "FooterSimple":
+                return (
+                    <FooterSimple
+                        socials={items}
+                        pages={pages}
+                        generals={generals}
+                    />
+                );
+            case "FooterB":
+                return (
+                    <FooterB
+                        socials={items}
+                        pages={pages}
+                        generals={generals}
+                    />
+                );
+            case "FooterTermsCTASocials":
+                return (
+                    <FooterTermsCTASocials
+                        socials={items}
+                        pages={pages}
+                        generals={generals}
+                    />
+                );
+            case "FooterSalaFabulosa":
+                return (
+                    <FooterSalaFabulosa
+                        socials={items}
+                        pages={pages}
+                        generals={generals}
+                        contacts={contacts}
+                    />
+                );
+            case "FooterPideloPe":
+                return (
+                    <FooterPideloPe
+                        socials={items}
+                        pages={pages}
+                        generals={generals}
+                    />
+                );
+            case "FooterBananaLab":
+                return (
+                    <FooterBananaLab
+                        socials={items}
+                        pages={pages}
+                        generals={generals}
+                        contacts={contacts}
+                    />
+                );
+            default:
+                return (
+                    <div className="w-full px-[5%] replace-max-w-here p-4 mx-auto">
+                        - No Hay componente <b>{which}</b> -
+                    </div>
+                );
+        }
+    };
+    return getFooter();
+};
 
-export default Footer
+export default Footer;

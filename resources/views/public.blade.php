@@ -60,7 +60,18 @@
             }
         </style>
     @endif
-
+    <style>
+        body {
+            /* background-image: url('/assets/img/maqueta/home-mobile.png');*/
+            width: 100%;
+            height: auto;
+            background-size: 100% auto;
+            background-repeat: no-repeat;
+            /* Asegura que la imagen no se repita */
+            background-position: top center;
+            /* Centra la imagen en la parte superior */
+        }
+    </style>
     <style>
         @if ($data['fonts']['title']['name'])
             .font-title {
