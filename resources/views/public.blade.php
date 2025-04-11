@@ -117,6 +117,10 @@
             .before\:.bg-{{ $color->name }} {
                 background-color: {{ $color->description }};
             }
+            .lg\:.bg-{{ $color->name }} {
+                background-color: {{ $color->description }};
+            }
+          
         @endforeach
     </style>
 </head>

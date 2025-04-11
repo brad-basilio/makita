@@ -1,1 +1,0 @@
-import{j as m}from"./AboutHeader-ClKiNAEV.js";import"./index-DFv2mRv-.js";import{H as r}from"./HtmlContent-CDI8HvWQ.js";const o=({data:e})=>m.jsx("div",{className:"bg-white",children:m.jsx("div",{className:"px-[5%] replace-max-w-here w-full mx-auto py-[5%] md:py-[2.5%]",children:m.jsx(r,{html:(e==null?void 0:e["code:html"])??""})})});export{o as default};

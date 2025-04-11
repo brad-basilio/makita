@@ -1,4 +1,4 @@
-import { Menu, X, Search, User, Heart, ShoppingCart } from "lucide-react";
+import { Menu, X, Search, User, Heart, ShoppingCart, UserRound, UserCircle } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import Global from "../../../Utils/Global";
 
@@ -79,7 +79,7 @@ const HeaderBananaLab = ({
                         </button>
                     </div>
                     {/* Logo */}
-                    <div className="flex-shrink-0">
+                    <a  href="/" className="flex-shrink-0">
                         <img
                             className="h-8 w-auto"
                             src={`/assets/resources/logo.png?v=${crypto.randomUUID()}`}
@@ -88,7 +88,7 @@ const HeaderBananaLab = ({
                                 (e.target.src = "/api/thumbnail/null")
                             }
                         />
-                    </div>
+                    </a>
                     {/* Mobile menu button */}
                     <div className="-mr-2 flex md:hidden">
                         <button className="inline-flex items-center justify-center p-2 rounded-md customtext-neutral-light hover:customtext-primary transition-colors duration-200">
@@ -126,11 +126,9 @@ const HeaderBananaLab = ({
 
                     {/* Desktop Right Icons */}
                     <div className="hidden md:flex items-center space-x-4">
+                       
                         <button className="customtext-neutral-light hover:customtext-primary transition-colors duration-200">
-                            <Search className="h-5 w-5" />
-                        </button>
-                        <button className="customtext-neutral-light hover:customtext-primary transition-colors duration-200">
-                            <User className="h-5 w-5" />
+                            <UserCircle className="h-5 w-5" />
                         </button>
                         <button className="relative customtext-neutral-light hover:customtext-primary transition-colors duration-200">
                             <Heart className="h-5 w-5" />

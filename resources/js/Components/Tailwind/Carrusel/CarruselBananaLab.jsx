@@ -58,7 +58,7 @@ const CarruselBananaLab = ({ items }) => {
     ];
     return (
         <div className=" pl-[5%] lg:px-[5%] overflow-hidden customtext-neutral-dark  font-paragraph mt-5 lg:mt-10 lg:flex lg:gap-8 2xl:px-0 2xl:max-w-7xl mx-auto">
-            <div className="bg-secondary rounded-l-3xl 2xl:px-0  2xl:max-w-7xl mx-auto relative lg:w-9/12 lg:rounded-3xl">
+            <div className="bg-secondary rounded-l-3xl 2xl:px-0  2xl:max-w-7xl mx-auto relative lg:w-9/12 lg:rounded-3xl lg:flex lg:items-center">
                 <div className="lg:hidden pl-4 py-4">
                     <Swiper
                         slidesPerView={3}
@@ -78,7 +78,7 @@ const CarruselBananaLab = ({ items }) => {
                             <SwiperSlide key={index}>
                                 <div
                                     key={index}
-                                    className="flex  bg-[#F4B8B8] p-4 flex-col rounded-xl  justify-center h-[230px]  "
+                                    className="flex  hover:bg-[#F4B8B8] p-4 flex-col rounded-xl  justify-center h-[230px]  "
                                 >
                                     <div className="relative w-20 h-20 rounded-full flex  justify-start">
                                         {/* Ícono */}
@@ -108,7 +108,7 @@ const CarruselBananaLab = ({ items }) => {
                     {pasos.map((benefit, index) => (
                         <div
                             key={index}
-                            className="flex  bg-[#F4B8B8] p-4 flex-col lg:flex-row lg:items-center lg:gap-4 rounded-xl  justify-center h-[230px] lg:h-auto "
+                            className="flex cursor-pointer  hover:bg-[#F4B8B8] p-4 flex-col lg:flex-row lg:items-center lg:gap-4 rounded-xl  justify-center h-[230px] lg:h-auto "
                         >
                             <div className="relative w-20 h-20 rounded-full flex  justify-start lg:justify-center lg:items-center">
                                 {/* Ícono */}

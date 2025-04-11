@@ -6,7 +6,8 @@ import Swal from "sweetalert2";
 import SubscriptionsRest from "../../../Actions/SubscriptionsRest";
 import Global from "../../../Utils/Global";
 import HtmlContent from "../../../Utils/HtmlContent";
-import { X } from "lucide-react";
+import { CheckCircleIcon, X } from "lucide-react";
+import { toast } from "sonner";
 
 const FooterBananaLab = ({ socials = [], pages, generals, contacts }) => {
     const subscriptionsRest = new SubscriptionsRest();
@@ -44,12 +45,13 @@ const FooterBananaLab = ({ socials = [], pages, generals, contacts }) => {
 
         if (!result) return;
 
-        Swal.fire({
-            title: "¡Éxito!",
-            text: `Te has suscrito correctamente al blog de ${Global.APP_NAME}.`,
-            icon: "success",
-            confirmButtonText: "Ok",
-        });
+        toast.success('¡SUSCRITO!', {
+            description: `Te has suscrito correctamente al blog de ${Global.APP_NAME}.`,
+            icon: <CheckCircleIcon className="h-5 w-5 text-green-500" />,
+            duration: 3000,
+            position: 'bottom-center',
+          });
+      
 
         emailRef.current.value = null;
     };

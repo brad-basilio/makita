@@ -17,14 +17,14 @@ const BannerBananaLab = ({ data }) => {
                     <div className="order-1 md:order-none w-full md:w-7/12 relative z-10">
                         <img
                             src={`/storage/images/system/${data?.image}`}
-                            className="absolute bottom-0 w-full h-[280px] object-cover md:absolute scale-110 lg:scale-100 lg:-top-6 lg:-translate-y-1/2 lg:h-[500px] "
+                            className="absolute bottom-0 w-full h-[280px] object-cover md:absolute scale-110 lg:scale-100 lg:-top-6 lg:-translate-y-1/2 lg:h-[500px] 2xl:-right-10 "
                         />
                     </div>
 
                     {/* Right side - Content */}
-                    <div className="md:order-1 md:w-5/12 text-white z-10 ">
-                        <div className="max-w-sm">
-                            <h1 className="text-[32px] leading-[1.2]  font-semibold mb-2 lg:text-4xl">
+                    <div className="md:order-1 md:w-5/12 xl:w-7/12 text-white z-10 ">
+                        <div className="max-w-sm 2xl:max-w-lg">
+                            <h1 className="text-[32px] leading-[1.2]  font-semibold mb-2 lg:text-4xl ">
                                 {data?.name}
                             </h1>
                             <p className="text-[14.2px] mb-7 ">

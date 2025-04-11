@@ -630,6 +630,7 @@
                     "title",
                     "path",
                     "description",
+                    "text_button",
                     "link_catalog",
                     "link_cart"
                 ],

@@ -37,7 +37,7 @@ const ProductBananaLab = ({ items, data, setCart, cart }) => {
     };
 
     return (
-        <section className=" pt-6 pb-0 font-paragraph lg:py-4">
+        <section className=" pt-6 pb-0 font-paragraph lg:py-4 2xl:py-8">
             <div className=" mx-auto px-primary 2xl:px-0 2xl:max-w-7xl ">
                 {/* Header */}
                 <div className="md:flex justify-between items-center    customborder-neutral-dark">
@@ -46,9 +46,9 @@ const ProductBananaLab = ({ items, data, setCart, cart }) => {
                     </h2>
                     <a
                         href={data?.link_catalog}
-                        className="bg-white  customtext-primary border border-primary transition-all duration-300   flex justify-center flex-row items-center gap-3   px-10  py-3 text-base rounded-full  tracking-wide font-bold cursor-pointer hover:opacity-90"
+                        className="bg-white customtext-primary border border-primary transition-all duration-300   flex justify-center flex-row items-center gap-3   px-10  py-3 text-base rounded-full  tracking-wide font-bold cursor-pointer hover:opacity-90 lg:bg-primary "
                     >
-                        Ver más recomendaciones
+                            {data?.text_button || 'Ver más recomendaciones'} 
                     </a>
                 </div>
 
@@ -59,7 +59,7 @@ const ProductBananaLab = ({ items, data, setCart, cart }) => {
                     {/* Products container */}
                     <div className="hidden md:block overflow-hidden py-0">
                         <div
-                            className="flex  items-center transition-all duration-300   ease-in-out lg:h-[460px] lg:max-h-[460px]  xl:h-[400px] xl:max-h-[420px] 2xl:h-[430px] 2xl:max-h-[430px] lg:my-10"
+                            className="flex  items-center transition-all duration-300   ease-in-out lg:h-[460px] lg:max-h-[460px]  xl:h-[400px] xl:max-h-[420px] 2xl:h-[460px] 2xl:max-h-[460px] lg:mt-4 lg:mb-10 lg:gap-0"
                             style={{
                                 transform: `translateX(-${
                                     currentSlide * (100 / slidesPerView)
