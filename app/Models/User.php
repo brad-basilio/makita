@@ -33,6 +33,7 @@ class User extends Authenticatable
         'password',
         'dni',
         'phone',
+        'phone_prefix',
         'video',
         'title',
         'country',

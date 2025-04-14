@@ -20,7 +20,7 @@ const ProductDetailSimple = ({ item, cart, setCart }) => {
 
     Swal.fire({
       title: 'Producto agregado',
-      text: `Se agregó ${item.name} al carrito`,
+      text: `Se agregó ${item?.name} al carrito`,
       icon: 'success',
       timer: 1500,
     })
@@ -31,9 +31,9 @@ const ProductDetailSimple = ({ item, cart, setCart }) => {
       <div className="flex flex-col md:flex-row justify-center items-center gap-5">
         <div className="flex flex-row justify-between md:flex-col md:justify-start md:items-center h-full gap-4 md:gap-10 md:basis-1/4 order-2 md:order-1 w-full">
 
-          <img src={`/storage/images/item/${item.image}`} alt={item?.name} className="w-full aspect-square  aos-init aos-animate object-cover object-center rounded-lg" data-aos="fade-up" data-aos-offset="150" />
+          <img src={`/storage/images/item/${item?.image}`} alt={item?.name} className="w-full aspect-square  aos-init aos-animate object-cover object-center rounded-lg" data-aos="fade-up" data-aos-offset="150" />
           {
-            item.gallery?.map((image, index) => (
+            item?.gallery?.map((image, index) => (
               <img key={index} src={`/storage/images/item/${image}`} alt={`imagen-${index}`} className="w-full aspect-square aos-init aos-animate object-cover object-center rounded-lg" data-aos="fade-up" data-aos-offset="150" />
             ))
           }
@@ -41,7 +41,7 @@ const ProductDetailSimple = ({ item, cart, setCart }) => {
         </div>
 
         <div className="md:basis-3/4 flex justify-center items-center order-1 md:order-2 w-full">
-          <img src={`/storage/images/item/${item.image}`} alt={item?.name} className="w-full aspect-square aos-init aos-animate object-cover object-center rounded-lg" data-aos="fade-up" data-aos-offset="150" />
+          <img src={`/storage/images/item/${item?.image}`} alt={item?.name} className="w-full aspect-square aos-init aos-animate object-cover object-center rounded-lg" data-aos="fade-up" data-aos-offset="150" />
         </div>
       </div>
 
@@ -51,11 +51,11 @@ const ProductDetailSimple = ({ item, cart, setCart }) => {
           <div className="flex flex-col xl:flex-row justify-start md:justify-between items-start">
             <div className="w-full xl:w-[70%] flex justify-start items-start">
               <h2 className="font-poppins font-bold text-3xl text-colorJL">
-                {item.name ?? 'Sin nombre'}
+                {item?.name ?? 'Sin nombre'}
               </h2>
             </div>
             <div className="w-full xl:w-[30%] flex justify-start xl:justify-end items-start">
-              <p className="font-poppins font-bold text-3xl text-color3JL">S/. {Number2Currency(item.final_price)}</p>
+              <p className="font-poppins font-bold text-3xl text-color3JL">S/. {Number2Currency(item?.final_price)}</p>
             </div>
           </div>
           <div>
@@ -63,9 +63,9 @@ const ProductDetailSimple = ({ item, cart, setCart }) => {
           </div>
 
           {
-            item.summary &&
+            item?.summary &&
             <p className="text-[#565656] text-text16 md:text-text20 font-normal font-poppins">
-              {item.summary}
+              {item?.summary}
             </p>
           }
 

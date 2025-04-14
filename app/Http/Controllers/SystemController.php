@@ -95,6 +95,7 @@ class SystemController extends BasicController
         }
 
         $generals = [];
+        $jsons = [];
         foreach ($systems as $key => $system) {
             if ($system->component == 'content') continue;
             $parent = collect($components)->firstWhere('id', $system->component);
@@ -151,12 +152,20 @@ class SystemController extends BasicController
                 $props['systemItems'][$shortID] = $query->get();
             }
 
+            if (isset($component['json'])) {
+                foreach ($component['json'] as $key => $value) {
+                    if (isset($jsons[$key])) continue;
+                    $jsons[$key] = JSON::parse(File::get($value));
+                }
+            }
+
             if (isset($component['generals'])) {
                 $generals = array_merge($generals, $component['generals']);
             }
         }
 
         $props['systems'] = $systems;
+        $props['jsons'] = $jsons;
         $props['params'] = $request->route() ? $request->route()->parameters() : [];
         $props['filteredData'] = [];
         $props['generals'] = General::whereIn('correlative', $generals)->get();
@@ -191,8 +200,6 @@ class SystemController extends BasicController
         }
         $props['headerPosts'] = Post::with('category')->where('status', true)->latest()->take(3)->get();
         $props['postsLatest'] = Post::with('category')->where('status', true)->latest()->take(6)->get();
-        // Verificar si hay una sesión activa
-        $props['isUser'] = Auth::user();
 
         return $props;
     }

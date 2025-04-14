@@ -1,8 +1,8 @@
 import React, { lazy } from "react"
 
 
-
 const BannerSimple = lazy(() => import('./Banners/BannerSimple'))
+const BannerAd = lazy(() => import('./Banners/BannerAd'))
 const BannerFullWidth = lazy(() => import('./Banners/BannerFullWidth'))
 const BannerFlex = lazy(() => import('./Banners/BannerFlex'))
 const BannerPublicitario = lazy(() => import('./Banners/BannerPublicitario'))
@@ -14,6 +14,8 @@ const Banner = ({ which, data }) => {
     switch (which) {
       case 'BannerSimple':
         return <BannerSimple data={data} />
+        case 'BannerAd':
+        return <BannerAd data={data} />
       case 'BannerPublicitario':
         return <BannerPublicitario data={data} />
       case 'BannerFullWidth':

@@ -605,6 +605,11 @@
                 "name": "Simple"
             },
             {
+                "id": "BannerAd",
+                "name": "Anuncio",
+                "data": ["background_color"]
+            },
+            {
                 "id": "BannerPublicitario",
                 "name": "BannerPublicitario",
                 "data": ["title"]
@@ -628,12 +633,28 @@
         ]
     },
     {
+        "id": "image",
+        "name": "Imágenes",
+        "options": [
+            {
+                "id": "ImageSimple",
+                "name": "Simple",
+                "data": ["image", "aspect_ratio"]
+            }
+        ]
+    },
+    {
         "id": "step",
         "name": "Steps",
         "options": [
             {
                 "id": "StepSimple",
                 "name": "Simple",
+                "data": ["steps", "selected"]
+            },
+            {
+                "id": "StepKuchara",
+                "name": "Kuchara",
                 "data": ["steps", "selected"]
             }
         ]
@@ -649,6 +670,14 @@
                     "model": "Item",
 
                     "with": ["category", "subcategory", "brand"]
+                }
+            },
+            {
+                "id": "ProductDetailKuchara",
+                "name": "Kuchara",
+                "using": {
+                    "model": "Item",
+                    "with": ["category"]
                 }
             },
             {
@@ -688,6 +717,11 @@
                 "id": "CartSimple",
                 "name": "Simple",
                 "data": ["url_catalog", "url_checkout"]
+            },
+            {
+                "id": "CartKuchara",
+                "name": "Kuchara",
+                "data": ["url_catalog", "url_checkout"]
             }
         ]
     },
@@ -699,6 +733,18 @@
                 "id": "CheckoutCulqi",
                 "name": "Culqi",
                 "data": ["url_thanks"]
+            },
+            {
+                "id": "CheckoutKuchara",
+                "name": "Kuchara",
+                "data": ["url_thanks"],
+                "json": {
+                    "prefixes" : "./prefijocelular.json"
+                },
+                "using": {
+                    "model": "DeliveryPrice",
+                    "field": ["name", "price", "data"]
+                }
             },
             {
                 "id": "CheckoutSteps",

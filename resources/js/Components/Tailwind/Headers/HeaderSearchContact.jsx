@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import Global from "../../../Utils/Global";
 import CartModal from "../Components/CartModal";
 
-
-
 const HeaderSearchContact = ({ data, cart, setCart, pages }) => {
   const [modalOpen, setModalOpen] = useState(false)
 
@@ -12,7 +10,8 @@ const HeaderSearchContact = ({ data, cart, setCart, pages }) => {
   }, 0)
 
   const totalPrice = cart.reduce((acc, item) => {
-    return acc + Number(item.quantity) * Number(item.price)
+    const finalPrice = item.discount ? item.discount : item.price
+    return acc + Number(item.quantity) * finalPrice
   }, 0)
 
   return (

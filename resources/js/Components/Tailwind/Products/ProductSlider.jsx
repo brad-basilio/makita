@@ -43,7 +43,7 @@ const ProductSlider = ({ data, items = [], cart, setCart }) => {
         <SwiperSlide key={index}>
           <div className="grid grid-cols-2 gap-[5%] items-center">
             <div className="flex gap-2 items-center">
-              <img src={`/storage/images/item/${item.image}`} className="w-[60px] rounded aspect-square" alt={item.name} />
+              <img src={`/storage/images/item/${item.image}`} className="w-[60px] h-[60px] rounded aspect-square" alt={item.name} />
               <h4 className="font-title font-bold text-2xl line-clamp-2 leading-tight max-h-[60px]">{item.name}</h4>
             </div>
             <div className="grid grid-cols-2 items-center">

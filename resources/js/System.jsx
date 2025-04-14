@@ -34,6 +34,7 @@ import ResetPassword from "./Components/Tailwind/ResetPassword";
 import Complaint from "./Components/Tailwind/Complaint";
 import Indicator from "./Components/Tailwind/Indicator";
 import ThankSimple from "./Components/Tailwind/Thanks/ThankSimple";
+import Image from "./Components/Tailwind/Image";
 
 const itemsRest = new ItemsRest();
 
@@ -43,6 +44,7 @@ const System = ({
     isUser,
     pages,
     params,
+    jsons,
     filteredData = {},
     systems,
     generals = [],
@@ -52,7 +54,6 @@ const System = ({
     headerPosts,
     postsLatest,
 }) => {
-    // console.log(session);
     const getItems = (itemsId) => {
         return systemItems[itemsId] ?? [];
     };
@@ -84,29 +85,9 @@ const System = ({
 
         switch (component) {
             case "top_bar":
-                return (
-                    <TopBar
-                        data={data}
-                        which={value}
-                        items={getItems(itemsId)}
-                        cart={cart}
-                        setCart={setCart}
-                        isUser={isUser}
-                    />
-                );
+                return <TopBar data={data} which={value} items={getItems(itemsId)} cart={cart} setCart={setCart} isUser={session} />
             case "header":
-                return (
-                    <Header
-                        data={data}
-                        which={value}
-                        items={getItems(itemsId)}
-                        cart={cart}
-                        setCart={setCart}
-                        pages={pages}
-                        isUser={isUser}
-                        generals={generals}
-                    />
-                );
+                return <Header data={data} which={value} items={getItems(itemsId)} cart={cart} setCart={setCart} pages={pages} isUser={session} generals={generals} />
             case "menu":
                 return (
                     <Menu
@@ -195,6 +176,8 @@ const System = ({
                 return <Indicator which={value} data={data} items={getItems(itemsId)} />;
             case "banner":
                 return <Banner which={value} data={data} />;
+            case "image":
+                return <Image which={value} data={data} />;
             case "step":
                 return <Step which={value} data={data} />;
             case "product-detail":
@@ -216,14 +199,7 @@ const System = ({
                     />
                 );
             case "checkout":
-                return (
-                    <Checkout
-                        which={value}
-                        cart={cart}
-                        setCart={setCart}
-                        isUser={isUser}
-                    />
-                );
+                return <Checkout which={value} items={getItems(itemsId)} cart={cart} setCart={setCart} isUser={session} prefixes={jsons?.prefixes ?? []} />
             case "contact":
                 return (
                     <Contact which={value} data={data} contacts={contacts} />
