@@ -59,9 +59,9 @@ mklink /D "public\cloud" "storage\app\images\repository"
 
 2. Establecer permisos:
 ```bash
-   chmod -R 777 storage/
-   chmod -R 777 bootstrap/cache/
-   chmod -R 777 public/storage/
+chmod -R 777 storage/
+chmod -R 777 bootstrap/cache/
+chmod -R 777 public/storage/
 ```
 
 ## Nginx Configuration (Solo VPS)
@@ -100,6 +100,11 @@ server {
     }
 }
 ```
+
+2. Ejecutar Nginx Certbot:
+```bash
+sudo certbot --nginx -d your-domain.com
+```	
 
 2. Testear la configuración:
 ```bash
