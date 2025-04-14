@@ -76,7 +76,7 @@ const ProductInfinite = ({ items, data, setCart, cart }) => {
 
                     {/* Products container */}
                     {/* <div className="hidden md:block overflow-hidden py-8"> */}
-                    <div className="hidden md:block overflow-x-hidden py-8">
+                    <div className="hidden md:block overflow-x-hidden py-10">
                         <div
                             className="flex  items-center transition-all duration-300   ease-in-out lg:h-[460px] lg:max-h-[460px]  xl:h-[400px] xl:max-h-[400px] 2xl:h-[430px] 2xl:max-h-[430px]"
                             style={{
