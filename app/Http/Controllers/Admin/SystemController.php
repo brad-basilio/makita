@@ -18,6 +18,10 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File as FacadesFile;
 use ReflectionClass;
 
+use Illuminate\Support\Facades\Storage;
+use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+
 class SystemController extends BasicController
 {
     public $model = System::class;
@@ -167,6 +171,26 @@ class SystemController extends BasicController
         $logoBase64 = FacadesFile::exists($logoPath) ? base64_encode(FacadesFile::get($logoPath)) : '';
         $logoFooterBase64 = FacadesFile::exists($logoFooterPath) ? base64_encode(FacadesFile::get($logoFooterPath)) : '';
 
+        // INICIO: Dumping database
+        $sqlContent = '';
+        if (env('APP_ENV') === 'production') {
+            // $username = env('DB_USERNAME');
+            // $password = env('DB_PASSWORD');
+            // $database = env('DB_DATABASE');
+            // $dumpFileName = env('APP_CORRELATIVE') . '_backup.sql';
+            // $dumpPath = storage_path('app/' . $dumpFileName);
+
+            // $command = "mysqldump -u {$username} -p'{$password}' {$database} > {$dumpPath}";
+
+            // $process = Process::fromShellCommandline($command);
+            // try {
+            //     $process->mustRun();
+            //     $sqlContent = file_get_contents($dumpPath);
+            // } catch (ProcessFailedException $exception) {
+            //     // dump($exception->getMessage());
+            // }
+        }
+
         $backup = [
             'pages' => JSON::parse(File::get(storage_path('app/pages.json'))),
             'components' => System::all(),
@@ -174,6 +198,7 @@ class SystemController extends BasicController
             'icon' => $iconBase64,
             'logo' => $logoBase64,
             'logo_footer' => $logoFooterBase64,
+            'sql' => $sqlContent
         ];
 
         return response()->json($backup);
