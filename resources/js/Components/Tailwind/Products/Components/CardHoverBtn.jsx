@@ -44,7 +44,7 @@ const CardHoverBtn = ({
         <>
             <div
                 key={product.id}
-                className={`group px-1 md:px-2 w-1/2 sm:w-1/3 ${widthClass} flex-shrink-0 font-font-secondary cursor-pointer relative`}
+                className={`group px-1 md:px-2 w-1/2 sm:w-1/3 ${widthClass} flex-shrink-0 font-font-secondary cursor-pointer relative hover:scale-110`}
             >
                 <div
                     className="bg-white rounded-xl shadow-md p-2 md:p-4 "
