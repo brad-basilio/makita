@@ -111,15 +111,15 @@ const CardHoverBtn = ({
                     </div>
 
                     {/* Botones de acción (ocultos por defecto, aparecen con hover) */}
-                    <div className="overflow-hidden max-h-20 lg:max-h-0 pb-4 lg:opacity-0 group-hover:max-h-20 group-hover:opacity-100 transition-[max-height,opacity] duration-1000 ease-in-out flex gap-2 my-2 transform hover:scale-105">
+                    <div className="overflow-hidden opacity-0 lg:scale-95 group-hover:scale-100 group-hover:opacity-100 transition-all duration-300 flex gap-2 my-2">
                         <a
                             href={`/product/${product.slug}`}
-                            className="flex-1 inline-flex items-center justify-center font-bold  text-sm bg-primary text-white  py-3 rounded-xl shadow-lg transition-all duration-300 hover:opacity-90"
+                            className="flex-1 inline-flex items-center justify-center font-bold text-sm bg-primary text-white py-3 rounded-xl shadow-lg transition-all duration-300 hover:opacity-90"
                         >
                             Ver detalle
                         </a>
                         <button
-                            className="py-2 px-2.5 border border-primary rounded-lg customtext-primary transition-all duration-300  hover:opacity-90"
+                            className="py-2 px-2.5 border border-primary rounded-lg customtext-primary transition-all duration-300 hover:opacity-90"
                             onClick={() => onAddClicked(product)}
                         >
                             <svg
