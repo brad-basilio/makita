@@ -414,12 +414,13 @@
       "testimonieImage.png"
     ]
   },
-  "_YouTube.esm-CWXrFmw5.js": {
-    "file": "assets/YouTube.esm-CWXrFmw5.js",
+  "_YouTube.esm-CalHMD6O.js": {
+    "file": "assets/YouTube.esm-CalHMD6O.js",
     "name": "YouTube.esm",
     "imports": [
       "_index-duZ_MKqr.js",
-      "_index-BH53Isel.js"
+      "_index-BH53Isel.js",
+      "_index-BSWw-p5k.js"
     ]
   },
   "____vite-browser-external_commonjs-proxy-0zb4Agf2.js": {
@@ -503,13 +504,6 @@
       "_index-BH53Isel.js"
     ]
   },
-  "_defineProperty-DRmM3rRU.js": {
-    "file": "assets/defineProperty-DRmM3rRU.js",
-    "name": "defineProperty",
-    "imports": [
-      "_typeof-QjJsDpFa.js"
-    ]
-  },
   "_door-closed-Z4GbcMb-.js": {
     "file": "assets/door-closed-Z4GbcMb-.js",
     "name": "door-closed",
@@ -571,6 +565,13 @@
     "name": "index",
     "imports": [
       "_index-yBjzXJbu.js"
+    ]
+  },
+  "_index-BSWw-p5k.js": {
+    "file": "assets/index-BSWw-p5k.js",
+    "name": "index",
+    "imports": [
+      "_index-BH53Isel.js"
     ]
   },
   "_index-Bv81MoWS.js": {
@@ -783,10 +784,6 @@
       "_createLucideIcon-Cy5Ya80P.js"
     ]
   },
-  "_typeof-QjJsDpFa.js": {
-    "file": "assets/typeof-QjJsDpFa.js",
-    "name": "typeof"
-  },
   "_user-BvYmyGTY.js": {
     "file": "assets/user-BvYmyGTY.js",
     "name": "user",
@@ -801,31 +798,13 @@
       "_createLucideIcon-Cy5Ya80P.js"
     ]
   },
-  "node_modules/canvg/lib/index.es.js": {
-    "file": "assets/index.es-BLlnpIMc.js",
-    "name": "index.es",
-    "src": "node_modules/canvg/lib/index.es.js",
-    "isDynamicEntry": true,
-    "imports": [
-      "_index-BH53Isel.js",
-      "_defineProperty-DRmM3rRU.js",
-      "_index-yBjzXJbu.js",
-      "_typeof-QjJsDpFa.js"
-    ]
-  },
-  "node_modules/dompurify/dist/purify.es.mjs": {
-    "file": "assets/purify.es-Bf0oSh3b.js",
-    "name": "purify.es",
-    "src": "node_modules/dompurify/dist/purify.es.mjs",
-    "isDynamicEntry": true
-  },
   "resources/css/app.css": {
     "file": "app.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
   "resources/js/About.jsx": {
-    "file": "assets/About-Q6O4Sl5x.js",
+    "file": "assets/About-Cuc6J57C.js",
     "name": "About",
     "src": "resources/js/About.jsx",
     "isEntry": true,
@@ -835,7 +814,7 @@
       "_CreateReactScript-C53VDHBb.js",
       "resources/js/Utils/ReactAppend.jsx",
       "_Base-DEoYjSuC.js",
-      "_YouTube.esm-CWXrFmw5.js",
+      "_YouTube.esm-CalHMD6O.js",
       "_em-DRiSFGEW.js",
       "_Weare-DVjaa7yY.js",
       "resources/js/Components/Tailwind/Blogs/BlogCarousel.jsx",
@@ -854,6 +833,7 @@
       "_preload-helper-DPi8upcZ.js",
       "_index-duZ_MKqr.js",
       "_index-Chjiymov.js",
+      "_index-BSWw-p5k.js",
       "_HtmlContent-FTivcJrM.js"
     ],
     "css": [
@@ -2673,7 +2653,7 @@
     ]
   },
   "resources/js/Components/Tailwind/BananaLab.jsx": {
-    "file": "assets/BananaLab-Cb_qgiQB.js",
+    "file": "assets/BananaLab-jqBT36Ex.js",
     "name": "BananaLab",
     "src": "resources/js/Components/Tailwind/BananaLab.jsx",
     "isEntry": true,
@@ -2724,20 +2704,45 @@
     ]
   },
   "resources/js/Components/Tailwind/BananaLab/Editor.jsx": {
-    "file": "assets/Editor-Dt0Ba3hx.js",
+    "file": "assets/Editor-Co_3lRRe.js",
     "name": "Editor",
     "src": "resources/js/Components/Tailwind/BananaLab/Editor.jsx",
     "isEntry": true,
     "imports": [
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
       "_index-BH53Isel.js",
-      "_preload-helper-DPi8upcZ.js",
-      "_typeof-QjJsDpFa.js",
       "_index-yBjzXJbu.js"
-    ],
-    "dynamicImports": [
-      "node_modules/dompurify/dist/purify.es.mjs",
-      "node_modules/canvg/lib/index.es.js"
+    ]
+  },
+  "resources/js/Components/Tailwind/BananaLab/FontSelector.jsx": {
+    "file": "assets/FontSelector-DYlcHizO.js",
+    "name": "FontSelector",
+    "src": "resources/js/Components/Tailwind/BananaLab/FontSelector.jsx",
+    "isEntry": true,
+    "imports": [
+      "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
+      "_index-yBjzXJbu.js"
+    ]
+  },
+  "resources/js/Components/Tailwind/BananaLab/LayerPanel.jsx": {
+    "file": "assets/LayerPanel-DYlcHizO.js",
+    "name": "LayerPanel",
+    "src": "resources/js/Components/Tailwind/BananaLab/LayerPanel.jsx",
+    "isEntry": true,
+    "imports": [
+      "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
+      "_index-yBjzXJbu.js"
+    ]
+  },
+  "resources/js/Components/Tailwind/BananaLab/celda-editable.jsx": {
+    "file": "assets/celda-editable-Co_3lRRe.js",
+    "name": "celda-editable",
+    "src": "resources/js/Components/Tailwind/BananaLab/celda-editable.jsx",
+    "isEntry": true,
+    "imports": [
+      "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
+      "_index-BH53Isel.js",
+      "_index-yBjzXJbu.js"
     ]
   },
   "resources/js/Components/Tailwind/BananaLab/components/CardBanana.jsx": {
@@ -2768,6 +2773,37 @@
     "isEntry": true,
     "imports": [
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
+      "_index-yBjzXJbu.js"
+    ]
+  },
+  "resources/js/Components/Tailwind/BananaLab/drag-layer.jsx": {
+    "file": "assets/drag-layer-DYlcHizO.js",
+    "name": "drag-layer",
+    "src": "resources/js/Components/Tailwind/BananaLab/drag-layer.jsx",
+    "isEntry": true,
+    "imports": [
+      "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
+      "_index-yBjzXJbu.js"
+    ]
+  },
+  "resources/js/Components/Tailwind/BananaLab/mascara-selector.jsx": {
+    "file": "assets/mascara-selector-DYlcHizO.js",
+    "name": "mascara-selector",
+    "src": "resources/js/Components/Tailwind/BananaLab/mascara-selector.jsx",
+    "isEntry": true,
+    "imports": [
+      "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
+      "_index-yBjzXJbu.js"
+    ]
+  },
+  "resources/js/Components/Tailwind/BananaLab/plantilla-cuatro-huecos.jsx": {
+    "file": "assets/plantilla-cuatro-huecos-Co_3lRRe.js",
+    "name": "plantilla-cuatro-huecos",
+    "src": "resources/js/Components/Tailwind/BananaLab/plantilla-cuatro-huecos.jsx",
+    "isEntry": true,
+    "imports": [
+      "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
+      "_index-BH53Isel.js",
       "_index-yBjzXJbu.js"
     ]
   },
@@ -2914,7 +2950,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Blog.jsx": {
-    "file": "assets/Blog-BsIopjLW.js",
+    "file": "assets/Blog-D6cGPzAo.js",
     "name": "Blog",
     "src": "resources/js/Components/Tailwind/Blog.jsx",
     "isEntry": true,
@@ -3711,7 +3747,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Filter.jsx": {
-    "file": "assets/Filter-DVxWSnCR.js",
+    "file": "assets/Filter-Dn4hBRfB.js",
     "name": "Filter",
     "src": "resources/js/Components/Tailwind/Filter.jsx",
     "isEntry": true,
@@ -5872,7 +5908,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-7Er9-aRU.js",
+    "file": "assets/System-Dp9o-Vtf.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,
