@@ -33,7 +33,7 @@ const CarruselBenefitsInifinite = ({ items }) => {
   return (
     <div ref={benefitsRef} className="bg-primary   py-6 overflow-hidden">
       <div className="px-primary 2xl:px-0  2xl:max-w-7xl mx-auto relative">
-        <div className="flex w-full gap-8 whitespace-nowrap transition-none">
+        <div className="flex w-full gap-8 whitespace-nowrap transition-none justify-center">
           {items.map((benefit, index) => (
             <div
               key={index}
@@ -44,7 +44,7 @@ const CarruselBenefitsInifinite = ({ items }) => {
                 }`}
             >
               <div className="relative w-16 h-16 flex items-center justify-center">
-                <div className="relative z-10 text-3xl p-2">
+                <div className="relative z-10 text-3xl p-3">
                   <img
                     src={`/storage/images/indicator/${benefit.symbol}`}
                     className="w-full h-auto aspect-square"

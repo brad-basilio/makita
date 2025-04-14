@@ -92,12 +92,7 @@
                 "data": ["class", "link_cart"],
                 "generals": ["phone_whatsapp", "message_whatsapp"]
             },
-            {
-                "id": "HeaderScraping",
-                "name": "HeaderScraping",
-                "image": "header-with-search.png",
-                "data": ["class", "link_cart"]
-            },
+
             {
                 "id": "HeaderSearchMenu",
                 "name": "Con busqueda y menu",
@@ -739,7 +734,7 @@
                 "name": "Kuchara",
                 "data": ["url_thanks"],
                 "json": {
-                    "prefixes" : "./prefijocelular.json"
+                    "prefixes": "./prefijocelular.json"
                 },
                 "using": {
                     "model": "DeliveryPrice",
@@ -937,15 +932,6 @@
         "name": "Footer",
         "options": [
             {
-                "id": "FooterSimple",
-                "name": "Simple",
-                "image": "footer-simple.png",
-                "using": {
-                    "model": "Social",
-                    "limit": 10
-                }
-            },
-            {
                 "id": "FooterB",
                 "name": "FooterB",
                 "image": "footer-simple.png",
@@ -999,24 +985,7 @@
                     "support_email"
                 ]
             },
-            {
-                "id": "FooterPideloPe",
-                "name": "FooterPideloPe",
-                "image": "footer-simple.png",
-                "using": {
-                    "model": "Social",
-                    "limit": 10
-                },
-                "generals": [
-                    "terms_conditions",
-                    "privacy_policy",
-                    "delivery_policy",
-                    "saleback_policy",
-                    "address",
-                    "support_phone",
-                    "support_email"
-                ]
-            },
+
             {
                 "id": "FooterCallToAction",
                 "name": "Llamada a la acción",

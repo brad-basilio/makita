@@ -1,2 +1,0 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/CarruselBenefitsInifinite-utgi07O_.js","assets/AboutHeader-ClKiNAEV.js","assets/index-DFv2mRv-.js","assets/adjustTextColor-FzLvY4Q1.js","assets/CarruselBenefitsSimple-C2uXjpsZ.js"])))=>i.map(i=>d[i]);
-import{_}from"./preload-helper-DPi8upcZ.js";import"./AboutHeader-ClKiNAEV.js";import{R as o}from"./index-DFv2mRv-.js";o.lazy(()=>_(()=>import("./CarruselBenefitsInifinite-utgi07O_.js"),__vite__mapDeps([0,1,2,3])));o.lazy(()=>_(()=>import("./CarruselBenefitsSimple-C2uXjpsZ.js"),__vite__mapDeps([4,1,2])));
