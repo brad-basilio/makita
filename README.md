@@ -21,7 +21,7 @@ Un creador de páginas e-commerce con arrastrar y soltar que te permite crear ti
 
 1. Clone el repositorio:
 ```bash
-git clone <repository-url>
+git clone https://github.com/Mundo-Web/build.git
 ```
 
 2. Instalar dependencias de PHP:
@@ -81,7 +81,7 @@ server {
     charset utf-8;
 
     location / {
-    try_files $uri $uri/ /index.php?$query_string;
+        try_files $uri $uri/ /index.php?$query_string;
     }
 
     location = /favicon.ico { access_log off; log_not_found off; }
