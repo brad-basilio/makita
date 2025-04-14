@@ -349,7 +349,7 @@ export default function ProductDetailSF({ item, data, setCart, cart }) {
                                         >
                                             <img
                                                 className="color-box rounded-full h-9 w-9 object-fit-cover "
-                                                src={`/storage/images/item/${item.texture}`}
+                                                src={`/storage/images/item/${item.texture || item.image} `}
                                             />
                                         </a>
                                     </Tippy>    
@@ -359,12 +359,12 @@ export default function ProductDetailSF({ item, data, setCart, cart }) {
                                         <Tippy content={variant.color}>
                                         <a
                                             key={variant.slug}
-                                            href={`/product/${variant.slug}`}
+                                            href={`/item/${variant.slug}`}
                                             className="variant-option  rounded-full object-fit-cover "
                                         >
                                             <img
                                                 className="color-box rounded-full h-9 w-9 object-fit-cover "
-                                                src={`/storage/images/item/${variant.texture}`}
+                                                src={`/storage/images/item/${variant.texture || variant.image}`}
                                             />
                                         </a>
                                         </Tippy>

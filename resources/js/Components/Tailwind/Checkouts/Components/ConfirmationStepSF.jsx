@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import Number2Currency from "../../../../Utils/Number2Currency";
 import { recoveryOrderData } from "../../../../Actions/recoveryOrderData";
 import ButtonPrimary from "./ButtonPrimary";
+import { Local } from "sode-extend-react";
+import Global from "../../../../Utils/Global";
 
 
-
-export default function ConfirmationStepSF({ cart, code, delivery }) {
+export default function ConfirmationStepSF({setCart, cart, code, delivery }) {
     const [order, setOrder] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -24,6 +25,8 @@ export default function ConfirmationStepSF({ cart, code, delivery }) {
         
         if (code) {
             fetchOrderDetails();
+            Local.delete(`${Global.APP_CORRELATIVE}_cart`);
+            Local.set(`${Global.APP_CORRELATIVE}_cart`,[]);
         }
     }, [code]);
 
