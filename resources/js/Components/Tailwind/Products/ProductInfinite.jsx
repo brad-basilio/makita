@@ -97,7 +97,7 @@ const ProductInfinite = ({ items, data, setCart, cart }) => {
                         </div>
                     </div>
                     {/* <div className="overflow-hidden py-4 md:hidden"> */}
-                    <div className="overflow-x-hidden py-8 md:hidden">
+                    <div className="overflow-x-hidden py-4 md:hidden">
                         <div
                             className="flex items-center  gap-y-4 transition-all duration-300 ease-in-out flex-wrap flex-shrink "
                             style={{
