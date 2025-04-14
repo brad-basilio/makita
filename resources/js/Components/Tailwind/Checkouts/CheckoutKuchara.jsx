@@ -111,6 +111,10 @@ const CheckoutCulqi = ({ data, cart, setCart, items, prefixes }) => {
     price: item.price === null ? null : Number(item.price),
   })))]
 
+  useEffect(() => {
+    if (cart.length == 0) location.href = '/'
+  }, [null])
+
   return (
     <section className="bg-white">
       <div className="container mx-auto px-[5%] py-[2.5%]">
@@ -425,7 +429,7 @@ const CheckoutCulqi = ({ data, cart, setCart, items, prefixes }) => {
                       }`}>
                       {paymentMethod === 'mercadopago' && <div className="w-3 h-3 rounded-full bg-primary"></div>}
                     </div>
-                    <span>Mercado pago</span>
+                    <span>Pago con tarjeta</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <svg width="238" height="25" viewBox="0 0 238 25" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -466,7 +470,7 @@ const CheckoutCulqi = ({ data, cart, setCart, items, prefixes }) => {
                       }`}>
                       {paymentMethod === 'yape' && <div className="w-3 h-3 rounded-full bg-primary"></div>}
                     </div>
-                    <span>Yape</span>
+                    <span>Yape / Plin</span>
                   </div>
                   <img src="/storage/images/system/yape.svg" alt="Yape" className="h-8" />
                 </div>
