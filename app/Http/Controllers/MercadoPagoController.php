@@ -230,7 +230,7 @@ class MercadoPagoController extends Controller
     public function handleFailure(Request $request)
     {
         return redirect('/catalogo');
-        // return redirect('/cart?message=El pago ha sido rechazado');
+        //return redirect('/cart?message=El pago ha sido rechazado');
     }
 
     public function handlePending(Request $request)

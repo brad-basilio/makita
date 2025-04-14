@@ -4,6 +4,7 @@ import CartStepSF from "./Components/CartStepSF";
 import ShippingStepSF from "./Components/ShippingStepSF";
 import ConfirmationStepSF from "./Components/ConfirmationStepSF";
 import Global from "../../../Utils/Global";
+import { Local } from "sode-extend-react";
 
 export default function CheckoutStepsSF({ cart, setCart, user }) {
    
@@ -69,6 +70,12 @@ export default function CheckoutStepsSF({ cart, setCart, user }) {
             setCurrentStep(3);
         }
     }, [window.location.search]);
+
+    useEffect(() => {
+        if (code) {
+            Local.delete(`${Global.APP_CORRELATIVE}_cart`);
+        }
+    }, [code]);
 
     useEffect(() => {
         // Cargar script de MercadoPago
@@ -170,6 +177,7 @@ export default function CheckoutStepsSF({ cart, setCart, user }) {
                 {currentStep === 3 && (
                     <ConfirmationStepSF
                         code={code}
+                        setCart={setCart}
                         delivery={delivery}
                         cart={sale}
                         subTotal={subTotal}

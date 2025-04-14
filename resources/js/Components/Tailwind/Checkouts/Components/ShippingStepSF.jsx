@@ -251,7 +251,7 @@ export default function ShippingStepSF({
                 setSale(data.sale);
                 setDelivery(data.delivery);
                 setCode(data.code);
-                setCart([]);
+                
             } else {
                 Notify.add({
                     icon: "/assets/img/icon.svg",

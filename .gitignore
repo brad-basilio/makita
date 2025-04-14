@@ -26,4 +26,4 @@ composer.lock
 /public/assets/resources/icon.png
 /public/assets/resources/logo.png
 /public/assets/resources/logo-footer.png
-/
+/vite.config.js.timestamp*

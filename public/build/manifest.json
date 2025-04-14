@@ -2677,7 +2677,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Carrusel.jsx": {
-    "file": "assets/Carrusel-4XUJooNl.js",
+    "file": "assets/Carrusel-Cvql2nPO.js",
     "name": "Carrusel",
     "src": "resources/js/Components/Tailwind/Carrusel.jsx",
     "isEntry": true,
@@ -2889,7 +2889,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Checkout.jsx": {
-    "file": "assets/Checkout-BiR_PERc.js",
+    "file": "assets/Checkout-CDrMyX8E.js",
     "name": "Checkout",
     "src": "resources/js/Components/Tailwind/Checkout.jsx",
     "isEntry": true,
@@ -3885,7 +3885,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Indicator.jsx": {
-    "file": "assets/Indicator-DYdnBjBE.js",
+    "file": "assets/Indicator-kN_VogA7.js",
     "name": "Indicator",
     "src": "resources/js/Components/Tailwind/Indicator.jsx",
     "isEntry": true,
@@ -4019,7 +4019,7 @@
     ]
   },
   "resources/js/Components/Tailwind/ProductDetail.jsx": {
-    "file": "assets/ProductDetail-2hO1v55V.js",
+    "file": "assets/ProductDetail-1nOBWhuK.js",
     "name": "ProductDetail",
     "src": "resources/js/Components/Tailwind/ProductDetail.jsx",
     "isEntry": true,
@@ -4076,7 +4076,7 @@
     ]
   },
   "resources/js/Components/Tailwind/ProductDetails/ProductDetailSF.jsx": {
-    "file": "assets/ProductDetailSF-C7ZtoZrb.js",
+    "file": "assets/ProductDetailSF-Dh7wAlRA.js",
     "name": "ProductDetailSF",
     "src": "resources/js/Components/Tailwind/ProductDetails/ProductDetailSF.jsx",
     "isDynamicEntry": true,
@@ -5054,7 +5054,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-CWpkRrrq.js",
+    "file": "assets/System-DxDJYMxP.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,
