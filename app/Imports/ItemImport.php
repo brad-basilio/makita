@@ -16,6 +16,7 @@ use Maatwebsite\Excel\Concerns\SkipsOnFailure;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Validators\Failure;
+use Illuminate\Support\Str;
 use Throwable;
 
 class ItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsOnFailure
@@ -63,6 +64,14 @@ class ItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsOnFailur
             //     ['name' => $row['marca']],
             //     ['slug' => str()->slug($row['marca'])]
             // );
+            $slug = "";
+            if ($row['nombre_de_producto']) {
+                $slug = Str::slug($row['nombre_de_producto']);
+                $slugExists = Item::where('slug', $slug)->exists();
+                if ($slugExists) {
+                  $slug = $slug . '-' . Crypto::short();
+                }
+            }
 
             // 4️⃣ Crear el producto
             $item = Item::create([
@@ -80,7 +89,7 @@ class ItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsOnFailur
                 'collection_id' => $collection->id,
                 // 'brand_id' => $brand->id,
                 'image' => $this->getMainImage($row['sku']),
-                'slug' => str()->slug($row['nombre_de_producto']),
+                'slug' => str()->slug($row['nombre_de_producto'] .'-'. $row['color']),
                 'stock' =>  isset($row['stock']) && $row['stock'] > 0 ? $row['stock'] : 10,
                 'color' => $row['color'],
 
