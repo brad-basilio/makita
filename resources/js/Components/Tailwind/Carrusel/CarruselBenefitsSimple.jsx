@@ -45,8 +45,11 @@ const CarruselBenefitsSimple = ({ items }) => {
                                 <div className="relative z-10 text-3xl">
                                     <img
                                         src={`/storage/images/indicator/${benefit.symbol}`}
-                                        onError={e => e.target.src = 'assets/img/noimage/no_imagen_circular.png'}
-                                        className="w-full h-auto "
+                                        onError={(e) =>
+                                            (e.target.src =
+                                                "assets/img/noimage/no_imagen_circular.png")
+                                        }
+                                        className="w-full h-auto object-contain "
                                     />
                                 </div>
                             </div>
