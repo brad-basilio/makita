@@ -340,6 +340,51 @@
                 ]
             },
             {
+                "id": "FilterBananaLab",
+                "name": "Filtro FilterBananaLab",
+                "image": "products-list.png",
+                "data": ["path", "title", "description", "link_cart"],
+                "options": [
+                    {
+                        "id": "default",
+                        "name": "Lista estándar",
+                        "using": {
+                            "model": "Item",
+                            "with": ["category", "subcategory", "brand"],
+                            "relations": ["category", "tags"],
+                            "fields": [
+                                "id",
+                                "name",
+                                "slug",
+                                "price",
+                                "final_price",
+                                "image",
+                                "color"
+                            ]
+                        }
+                    },
+                    {
+                        "id": "with_variants",
+                        "name": "Lista con variantes",
+                        "using": {
+                            "model": "Item",
+                            "with": ["category", "subcategory", "brand"],
+                            "relations": ["category", "tags"],
+                            "fields": [
+                                "id",
+                                "name",
+                                "slug",
+                                "price",
+                                "final_price",
+                                "image",
+                                "color"
+                            ],
+                            "group_by_name": true
+                        }
+                    }
+                ]
+            },
+            {
                 "id": "FilterCategoryImage",
                 "name": "Categoría con Imagen",
                 "image": "filters-category-image.png",
@@ -971,6 +1016,9 @@
             {
                 "id": "LoginSimpleSF",
                 "name": "SimpleSF"
+            }, {
+                "id": "LoginBananaLab",
+                "name": "LoginBananaLab"
             }
         ]
     },
@@ -995,6 +1043,9 @@
             {
                 "id": "ForgotPasswordSimple",
                 "name": "Simple"
+            }, {
+                "id": "ForgotBananaLab",
+                "name": "ForgotBananaLab"
             }
         ]
     },

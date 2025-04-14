@@ -1,10 +1,11 @@
 import React, { useState } from "react";
+import { motion } from "framer-motion";
 import { CheckCircleIcon, Heart, ShoppingCart } from "lucide-react";
 import Swal from "sweetalert2";
 import ItemsRest from "../../../../Actions/ItemsRest";
 import CartModal from "../../Components/CartModal";
 import { toast, Toaster } from "sonner";
-
+import CartModalBananaLab from "../../Components/CartModalBananaLab";
 
 const CardProductBananaLab = ({
     data,
@@ -31,37 +32,32 @@ const CardProductBananaLab = ({
 
         setCart(newCart);
 
-        toast.success('Producto agregado', {
+        toast.success("Producto agregado", {
             description: `${product.name} se ha añadido al carrito.`,
             icon: <CheckCircleIcon className="h-5 w-5 text-green-500" />,
             duration: 3000,
-            position: 'bottom-center',
-          });
-
-        //setModalOpen(true);
+            position: "bottom-center",
+        });
     };
 
     return (
-        <>   
-        
-            <a
+        <>
+            <motion.a
                 href={`/product/${product.slug}`}
-                key={product.id}
-                className={`group px-1 md:px-2 w-1/2 sm:w-1/3 ${widthClass} flex-shrink-0 font-font-secondary cursor-pointer relative`}
+                initial={{
+                    scale: 1,
+                    boxShadow: "0px 0px 8px rgba(0, 0, 0, 0.1)",
+                }}
+                whileHover={{
+                    scale: 1.02,
+                    boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.2)",
+                    transition: { duration: 0.3 },
+                }}
+                className={`group px-1 md:px-2 w-1/2 sm:w-1/3 ${widthClass} rounded-b-3xl overflow-hidden flex-shrink-0 font-font-secondary cursor-pointer relative`}
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
             >
-                <div
-                    className={`
-    bg-white rounded-md transition-all duration-300 lg:p-4
-    transform-gpu origin-top
-    ${
-        isHovered
-            ? "lg:shadow-xl  lg:rounded-b-2xl"
-            : "lg:shadow-sm lg:scale-y-100"
-    }
-  `}
-                >
+                <div className="bg-white rounded-md lg:p-4 h-full flex flex-col">
                     {/* Imagen del producto y etiqueta de descuento */}
                     <div className="relative">
                         {product.discount != null &&
@@ -70,36 +66,38 @@ const CardProductBananaLab = ({
                                     Oferta
                                 </span>
                             )}
-                        <div className="aspect-square rounded-t-md overflow-hidden flex items-center justify-center">
+                        <motion.div
+                            className="aspect-square rounded-t-md overflow-hidden flex items-center justify-center"
+                            whileHover={{ scale: 1.05 }}
+                            transition={{ duration: 0.3 }}
+                        >
                             <img
                                 src={`/storage/images/item/${product.image}`}
                                 onError={(e) =>
                                     (e.target.src = "/api/cover/thumbnail/null")
                                 }
                                 alt={product.name}
-                                className="w-full h-full object-cover transition-transform duration-500 lg:group-hover:scale-105"
+                                className="w-full h-full object-cover"
                                 loading="lazy"
                             />
-                        </div>
+                        </motion.div>
                     </div>
 
                     {/* Información del producto */}
-                    <div className="p-3">
+                    <div className="p-3 flex-grow flex flex-col">
                         <div className="flex gap-1">
                             <div className="w-2 h-2 bg-[#CD6E56] rounded-full lg:w-3 lg:h-3"></div>
                             <div className="w-2 h-2 bg-[#E5C794] rounded-full lg:w-3 lg:h-3"></div>
                             <div className="w-2 h-2 bg-[#E37B58] rounded-full lg:w-3 lg:h-3"></div>
                         </div>
-
                         <div className="flex justify-between items-start w-full mt-2">
                             <h3 className="w-11/12 lg:w-10/12 customtext-neutral-dark text-xs lg:text-[15px] leading-4 font-semibold mb-2 line-clamp-3">
                                 {product.name}
                             </h3>
-                            <button className="customtext-primary brightness-125 lg:hover:brightness-100 lg:hover:customtext-primary transition-colors duration-200">
+                            <button className="customtext-primary brightness-125 hover:brightness-100 hover:customtext-primary transition-colors duration-200">
                                 <Heart width={18} strokeWidth={1.5} />
                             </button>
                         </div>
-
                         {/* Precio */}
                         <div className="flex flex-col lg:flex-row lg:justify-between items-baseline mt-1">
                             <span className="customtext-neutral-dark text-[20px] md:text-2xl font-bold">
@@ -109,16 +107,11 @@ const CardProductBananaLab = ({
                                 Más vendidos (100)
                             </p>
                         </div>
-
-                        {/* Botón de acción - solo visible en hover con animación mejorada */}
-                        <div
-                            className={`mt-3 transition-[max-height,opacity] duration-500   `}
-                        >
+            
+                        <div className="mt-3 overflow-hidden block lg:hidden">
                             <button
                                 onClick={(e) => onAddClicked(e, product)}
-                                className={`w-full text-[10px] font-light lg:font-normal flex items-center justify-center bg-primary text-white lg:text-sm py-2 lg:py-3 px-4 rounded-full shadow-md lg:hover:shadow-lg transform lg:hover:scale-[1.02] transition-all duration-300 ${
-                                    isHovered ? "lg:flex" : "lg:hidden "
-                                } `}
+                                className="w-full text-[10px] font-light lg:font-normal flex items-center justify-center bg-primary text-white lg:text-sm py-2 lg:py-3 px-4 rounded-full shadow-md hover:bg-primary-dark transition-all duration-300"
                             >
                                 <span className="mr-2">Agregar al carrito</span>
                                 <ShoppingCart
@@ -127,11 +120,32 @@ const CardProductBananaLab = ({
                                 />
                             </button>
                         </div>
+                        {/* Botón de acción - ahora con mejor manejo del hover */}
+                        <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{
+                                opacity: isHovered ? 1 : 0,
+                                height: isHovered ? "auto" : 0,
+                            }}
+                            transition={{ duration: 0.2 }}
+                            className="mt-3 overflow-hidden"
+                        >
+                            <button
+                                onClick={(e) => onAddClicked(e, product)}
+                                className="w-full text-[10px] font-light lg:font-normal flex items-center justify-center bg-primary text-white lg:text-sm py-2 lg:py-3 px-4 rounded-full shadow-md hover:bg-primary-dark transition-all duration-300"
+                            >
+                                <span className="mr-2">Agregar al carrito</span>
+                                <ShoppingCart
+                                    className="w-3 h-3 lg:w-4 lg:h-4"
+                                    strokeWidth={2}
+                                />
+                            </button>
+                        </motion.div>
                     </div>
                 </div>
-            </a>
+            </motion.a>
 
-            <CartModal
+            <CartModalBananaLab
                 data={data}
                 cart={cart}
                 setCart={setCart}

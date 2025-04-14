@@ -1,64 +1,113 @@
+import { motion, AnimatePresence } from "framer-motion";
 import { Hexagon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { adjustTextColor } from "../../../Functions/adjustTextColor";
 import { Swiper, SwiperSlide } from "swiper/react";
-
-// Import Swiper styles
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-
-// import required modules
 import { Navigation, Pagination } from "swiper/modules";
+
 const CarruselBananaLab = ({ items }) => {
-    // Duplicamos los elementos para lograr el efecto infinito
-    const infiniteBenefits = [...items, ...items];
-    const sliderRef = useRef(null);
     const [activeIndex, setActiveIndex] = useState(0);
-    useEffect(() => {
-        const slider = sliderRef.current;
-        if (slider) {
-            const totalWidth = slider.scrollWidth / 2; // La mitad porque duplicamos la lista
-            let start = 0;
-
-            const animate = () => {
-                start -= 1; // Velocidad de desplazamiento
-                if (Math.abs(start) >= totalWidth) {
-                    start = 0; // Reinicia el scroll sin que se note el corte
-                }
-                slider.style.transform = `translateX(${start}px)`;
-                requestAnimationFrame(animate);
-            };
-
-            animate();
-        }
-    }, []);
-
+    const [hoveredIndex, setHoveredIndex] = useState(null);
+    
     const pasos = [
         {
             name: "Paso 1",
             description: "Elige tus fotos, diseñados, lo que tú quieras",
             image: "/assets/img/backgrounds/resources/paso1.png",
+            color: "#FF6B6B"
         },
         {
             name: "Paso 2",
             description: "Selecciona tus productos entre cientos de opciones",
             image: "/assets/img/backgrounds/resources/paso2.png",
+            color: "#4ECDC4"
         },
         {
             name: "Paso 3",
             description: "Crea tu proyecto seleccionado tus fotos",
             image: "/assets/img/backgrounds/resources/paso3.png",
+            color: "#FFE66D"
         },
         {
             name: "Paso 4",
             description: "Selecciona tus productos entre cientos de opciones",
             image: "/assets/img/backgrounds/resources/paso4.png",
+            color: "#7D70BA"
         },
     ];
+
+    // Animaciones
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.1,
+                delayChildren: 0.3
+            }
+        }
+    };
+
+    const itemVariants = {
+        hidden: { y: 20, opacity: 0 },
+        visible: {
+            y: 0,
+            opacity: 1,
+            transition: {
+                duration: 0.5,
+                ease: "easeOut"
+            }
+        },
+        hover: {
+            y: -5,
+            backgroundColor: "rgba(244, 184, 184, 0.8)",
+            transition: { duration: 0.3 }
+        }
+    };
+
+    const iconVariants = {
+        hidden: { scale: 0 },
+        visible: {
+            scale: 1,
+            transition: {
+                type: "spring",
+                stiffness: 260,
+                damping: 20
+            }
+        },
+        hover: {
+            rotate: 10,
+            scale: 1.1,
+            transition: { duration: 0.3 }
+        }
+    };
+
+    const imageVariants = {
+        hidden: { opacity: 0, x: 50 },
+        visible: {
+            opacity: 1,
+            x: 0,
+            transition: {
+                duration: 0.8,
+                ease: "easeOut"
+            }
+        }
+    };
+
     return (
-        <div className=" pl-[5%] lg:px-[5%] overflow-hidden customtext-neutral-dark  font-paragraph mt-5 lg:mt-10 lg:flex lg:gap-8 2xl:px-0 2xl:max-w-7xl mx-auto">
-            <div className="bg-secondary rounded-l-3xl 2xl:px-0  2xl:max-w-7xl mx-auto relative lg:w-9/12 lg:rounded-3xl lg:flex lg:items-center">
+        <motion.div 
+            initial="hidden"
+            animate="visible"
+            variants={containerVariants}
+            className="pl-[5%] lg:px-[5%] overflow-hidden customtext-neutral-dark font-paragraph mt-5 lg:mt-10 lg:flex lg:gap-8 2xl:px-0 2xl:max-w-7xl mx-auto"
+        >
+            <motion.div 
+                className="bg-secondary rounded-l-3xl 2xl:px-0 2xl:max-w-7xl mx-auto relative lg:w-9/12 lg:rounded-3xl lg:flex lg:items-center"
+                whileHover={{ boxShadow: "0 10px 25px rgba(0, 0, 0, 0.1)" }}
+            >
+                {/* Versión Mobile */}
                 <div className="lg:hidden pl-4 py-4">
                     <Swiper
                         slidesPerView={3}
@@ -70,77 +119,113 @@ const CarruselBananaLab = ({ items }) => {
                             1024: { slidesPerView: 1, spaceBetween: 0 },
                         }}
                         modules={[Navigation, Pagination]}
-                        onSlideChange={(swiper) =>
-                            setActiveIndex(swiper.realIndex)
-                        }
+                        onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
                     >
                         {pasos.map((benefit, index) => (
                             <SwiperSlide key={index}>
-                                <div
-                                    key={index}
-                                    className="flex  hover:bg-[#F4B8B8] p-4 flex-col rounded-xl  justify-center h-[230px]  "
+                                <motion.div
+                                    className="flex hover:bg-[#F4B8B8] p-4 flex-col rounded-xl justify-center h-[230px]"
+                                    variants={itemVariants}
+                                    whileHover="hover"
                                 >
-                                    <div className="relative w-20 h-20 rounded-full flex  justify-start">
-                                        {/* Ícono */}
-                                        <div className="relative z-10 text-3xl">
-                                            <img
-                                                src={`/storage/images/indicator/${benefit.symbol}`}
-                                                onError={(e) =>
-                                                    (e.target.src =
-                                                        benefit.image)
-                                                }
-                                                className="w-full h-auto "
-                                            />
-                                        </div>
-                                    </div>
-                                    <p className="font-bold text-white mt-4">
+                                    <motion.div 
+                                        className="relative w-20 h-20 rounded-full flex justify-start"
+                                        variants={iconVariants}
+                                        whileHover="hover"
+                                    >
+                                        <motion.img
+                                            src={benefit.image}
+                                            className="w-full h-auto"
+                                            initial={{ scale: 0 }}
+                                            animate={{ scale: 1 }}
+                                            transition={{ delay: 0.2 }}
+                                        />
+                                    </motion.div>
+                                    <motion.p 
+                                        className="font-bold text-white mt-4"
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        transition={{ delay: 0.3 }}
+                                    >
                                         {benefit.name}
-                                    </p>{" "}
-                                    <p className="text-white text-lg  leading-6">
+                                    </motion.p>
+                                    <motion.p 
+                                        className="text-white text-lg leading-6"
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        transition={{ delay: 0.4 }}
+                                    >
                                         {benefit.description}
-                                    </p>
-                                </div>
+                                    </motion.p>
+                                </motion.div>
                             </SwiperSlide>
                         ))}
                     </Swiper>
                 </div>
-                <div className="hidden lg:grid grid-cols-2 lg:p-4 lg:gap-4">
+
+                {/* Versión Desktop */}
+                <motion.div 
+                    className="hidden lg:grid grid-cols-2 lg:p-4 lg:gap-4"
+                    variants={containerVariants}
+                >
                     {pasos.map((benefit, index) => (
-                        <div
+                        <motion.div
                             key={index}
-                            className="flex cursor-pointer  hover:bg-[#F4B8B8] p-4 flex-col lg:flex-row lg:items-center lg:gap-4 rounded-xl  justify-center h-[230px] lg:h-auto "
+                            className="flex cursor-pointer hover:bg-[#F4B8B8] p-4 flex-col lg:flex-row lg:items-center lg:gap-4 rounded-xl justify-center h-[230px] lg:h-auto"
+                            variants={itemVariants}
+                            whileHover="hover"
+                            onHoverStart={() => setHoveredIndex(index)}
+                            onHoverEnd={() => setHoveredIndex(null)}
                         >
-                            <div className="relative w-20 h-20 rounded-full flex  justify-start lg:justify-center lg:items-center">
-                                {/* Ícono */}
-                                <div className="relative z-10 text-3xl">
-                                    <img
-                                        src={`/storage/images/indicator/${benefit.symbol}`}
-                                        onError={(e) =>
-                                            (e.target.src = benefit.image)
-                                        }
-                                        className="w-full h-auto "
-                                    />
-                                </div>
-                            </div>
-                            <div className="lg:flex lg:flex-col">
-                                <p className="font-bold text-white mt-4 lg:mt-0">
+                            <motion.div 
+                                className="relative w-20 h-20 rounded-full flex justify-start lg:justify-center lg:items-center"
+                                variants={iconVariants}
+                                whileHover="hover"
+                            >
+                                <motion.img
+                                    src={benefit.image}
+                                    className="w-full h-auto"
+                                    animate={{
+                                        filter: hoveredIndex === index ? "drop-shadow(0 5px 15px rgba(255,255,255,0.5))" : "none"
+                                    }}
+                                />
+                            </motion.div>
+                            <motion.div className="lg:flex lg:flex-col">
+                                <motion.p 
+                                    className="font-bold text-white mt-4 lg:mt-0"
+                                    animate={{
+                                        color: hoveredIndex === index ? "#FFF" : "#FFF",
+                                        x: hoveredIndex === index ? 5 : 0
+                                    }}
+                                >
                                     {benefit.name}
-                                </p>{" "}
-                                <p className="text-white text-lg  leading-6">
+                                </motion.p>
+                                <motion.p 
+                                    className="text-white text-lg leading-6"
+                                    animate={{
+                                        opacity: hoveredIndex === index ? 1 : 0.9
+                                    }}
+                                >
                                     {benefit.description}
-                                </p>
-                            </div>
-                        </div>
+                                </motion.p>
+                            </motion.div>
+                        </motion.div>
                     ))}
-                </div>
-            </div>
-            <div className=" h-[330px] w-full pr-[5%] relative lg:w-4/12 ">
-                <img
+                </motion.div>
+            </motion.div>
+
+            {/* Imagen lateral */}
+            <motion.div 
+                className="h-[330px] w-full pr-[5%] relative lg:w-4/12"
+                variants={imageVariants}
+            >
+                <motion.img
                     src="/assets/img/backgrounds/resources/anuncio-mobile.png"
-                    className="absolute h-[350px]    object-cover object-left lg:w-auto h:h-full lg:bottom-0  lg:right-0"
+                    className="absolute h-[350px] object-cover object-left lg:w-auto lg:h-full lg:bottom-0 lg:right-0"
+                    whileHover={{ scale: 1.02 }}
                 />
-            </div>
-        </div>
+            </motion.div>
+        </motion.div>
     );
 };
 

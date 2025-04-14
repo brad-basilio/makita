@@ -1,2 +1,0 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/MenuSimple-DDWyz_xX.js","assets/AboutSimple-Cf8x2fCZ.js","assets/index-yBjzXJbu.js","assets/index-BH53Isel.js","assets/MenuBananaLab-CqyY_Vaa.js"])))=>i.map(i=>d[i]);
-import{_}from"./preload-helper-DPi8upcZ.js";import"./AboutSimple-Cf8x2fCZ.js";import{R as o}from"./index-BH53Isel.js";import"./index-yBjzXJbu.js";o.lazy(()=>_(()=>import("./MenuSimple-DDWyz_xX.js"),__vite__mapDeps([0,1,2,3])));o.lazy(()=>_(()=>import("./MenuBananaLab-CqyY_Vaa.js"),__vite__mapDeps([4,1,2,3])));
