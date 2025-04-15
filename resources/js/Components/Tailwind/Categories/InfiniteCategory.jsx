@@ -62,7 +62,7 @@ const InfiniteCategory = ({ items, data }) => {
                     {/* Contenedor de categorías */}
                     <div className="overflow-hidden py-4">
                         <div
-                            className="flex transition-transform duration-300 ease-in-out"
+                            className="flex transition-transform justify-center duration-300 ease-in-out"
                             style={{
                                 transform: `translateX(-${
                                     currentSlide * (100 / slidesPerView)
