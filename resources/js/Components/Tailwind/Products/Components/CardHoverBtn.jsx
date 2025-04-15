@@ -58,10 +58,10 @@ const CardHoverBtn = ({
                                     -
                                     {Number(
                                         100 -
-                                            Number(
-                                                (product?.discount * 100) /
-                                                    product?.price
-                                            )
+                                        Number(
+                                            (product?.discount * 100) /
+                                            product?.price
+                                        )
                                     ).toFixed(0)}
                                     %
                                 </span>
@@ -109,56 +109,58 @@ const CardHoverBtn = ({
                         </div>
                         */}
                     </div>
-
-                    {/* Botones de acción (ocultos por defecto, aparecen con hover) */}
-                    <div className="overflow-hidden max-h-20 p-2 md:p-4 lg:max-h-0 pb-4 lg:opacity-0 group-hover:max-h-20 group-hover:opacity-100 transition-[max-height,opacity] duration-1000 ease-in-out flex gap-2 my-2 transform ">
-                        <a
-                            href={`/product/${product.slug}`}
-                            className="flex-1 inline-flex items-center justify-center font-bold  text-sm bg-primary text-white  py-3 rounded-xl shadow-lg transition-all duration-300 hover:opacity-90"
-                        >
-                            Ver detalle
-                        </a>
-                        <button
-                            className="py-2 px-2.5 border border-primary rounded-lg customtext-primary transition-all duration-300  hover:opacity-90"
-                            onClick={() => onAddClicked(product)}
-                        >
-                            <svg
-                                className="w-5 h-5"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
+                    <div className="p-2 md:p-4">
+                        {/* Botones de acción (ocultos por defecto, aparecen con hover) */}
+                        <div className="overflow-hidden max-h-20 lg:max-h-0 pb-4 lg:opacity-0 group-hover:max-h-20 group-hover:opacity-100 transition-[max-height,opacity] duration-1000 ease-in-out flex gap-2 my-2 transform ">
+                            <a
+                                href={`/product/${product.slug}`}
+                                className="flex-1 inline-flex items-center justify-center font-bold  text-sm bg-primary text-white  py-3 rounded-xl shadow-lg transition-all duration-300 hover:opacity-90"
                             >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                                />
-                            </svg>
-                        </button>
-                    </div>
+                                Ver detalle
+                            </a>
+                            <button
+                                className="py-2 px-2.5 border border-primary rounded-lg customtext-primary transition-all duration-300  hover:opacity-90"
+                                onClick={() => onAddClicked(product)}
+                            >
+                                <svg
+                                    className="w-5 h-5"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+                                    />
+                                </svg>
+                            </button>
+                        </div>
 
-                    {/* Información del producto */}
-                    <div>
-                        <p className="text-xs customtext-neutral-light font-semibold mb-1">
-                            {product.brand.name}
-                        </p>
-                        <h3 className="customtext-neutral-dark text-sm font-semibold mb-2 line-clamp-3 h-16">
-                            {product.name}
-                        </h3>
-                        {/* Precio */}
-                        <div className="flex flex-col items-baseline gap-2 md:mb-4">
-                            {product.discount != null &&
-                                !isNaN(product.discount) && (
-                                    <span className="text-xs customtext-neutral-light font-semibold1 line-through">
-                                        S/ {product.price}
-                                    </span>
-                                )}
-                            <span className="customtext-neutral-dark text-[20px] md:text-2xl font-bold">
-                                S/ {product.final_price}
-                            </span>
+                        {/* Información del producto */}
+                        <div>
+                            <p className="text-xs customtext-neutral-light font-semibold mb-1">
+                                {product.brand.name}
+                            </p>
+                            <h3 className="customtext-neutral-dark text-sm font-semibold mb-2 line-clamp-3 h-16">
+                                {product.name}
+                            </h3>
+                            {/* Precio */}
+                            <div className="flex flex-col items-baseline gap-2 md:mb-4">
+                                {product.discount != null &&
+                                    !isNaN(product.discount) && (
+                                        <span className="text-xs customtext-neutral-light font-semibold1 line-through">
+                                            S/ {product.price}
+                                        </span>
+                                    )}
+                                <span className="customtext-neutral-dark text-[20px] md:text-2xl font-bold">
+                                    S/ {product.final_price}
+                                </span>
+                            </div>
                         </div>
                     </div>
+
                 </div>
             </div>
             <CartModal
