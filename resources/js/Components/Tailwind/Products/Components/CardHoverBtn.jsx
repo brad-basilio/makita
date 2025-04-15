@@ -66,14 +66,14 @@ const CardHoverBtn = ({
                                     %
                                 </span>
                             )}
-                        <div className="aspect-square rounded-lg overflow-hidden flex items-center justify-center p-4">
+                        <div className="aspect-square rounded-lg overflow-hidden flex items-center justify-center p-0">
                             <img
                                 src={`/storage/images/item/${product.image}`}
                                 onError={(e) =>
                                     (e.target.src = "/api/cover/thumbnail/null")
                                 }
                                 alt={product.name}
-                                className="w-full h-full object-contain"
+                                className="w-full h-full object-cover bg-slate-100"
                                 loading="lazy"
                             />
                         </div>
