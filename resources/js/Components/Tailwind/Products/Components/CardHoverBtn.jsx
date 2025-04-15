@@ -47,7 +47,7 @@ const CardHoverBtn = ({
                 className={`group px-1 md:px-2 w-1/2 sm:w-1/3 ${widthClass} flex-shrink-0 font-font-secondary cursor-pointer relative`}
             >
                 <div
-                    className="bg-white rounded-xl shadow-md p-2 md:p-4 "
+                    className="bg-white rounded-xl shadow-md  "
                     style={{ boxShadow: "0px 0px 6px 0px #00000040" }}
                 >
                     {/* Imagen del producto y etiqueta de descuento */}
@@ -111,7 +111,7 @@ const CardHoverBtn = ({
                     </div>
 
                     {/* Botones de acción (ocultos por defecto, aparecen con hover) */}
-                    <div className="overflow-hidden max-h-20  lg:max-h-0 pb-4 lg:opacity-0 group-hover:max-h-20 group-hover:opacity-100 transition-[max-height,opacity] duration-1000 ease-in-out flex gap-2 my-2 transform ">
+                    <div className="overflow-hidden max-h-20 p-2 md:p-4 lg:max-h-0 pb-4 lg:opacity-0 group-hover:max-h-20 group-hover:opacity-100 transition-[max-height,opacity] duration-1000 ease-in-out flex gap-2 my-2 transform ">
                         <a
                             href={`/product/${product.slug}`}
                             className="flex-1 inline-flex items-center justify-center font-bold  text-sm bg-primary text-white  py-3 rounded-xl shadow-lg transition-all duration-300 hover:opacity-90"
