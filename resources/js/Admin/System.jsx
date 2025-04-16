@@ -13,6 +13,7 @@ import Menu from '../Components/Adminto/System/Menu';
 import ParamsModal from '../Components/Adminto/System/ParamsModal';
 import RouteParams from '../Utils/RouteParams';
 import RigthBar from '../Components/Adminto/System/RightBar';
+import { Fetch } from 'sode-extend-react';
 
 const systemRest = new SystemRest()
 
@@ -36,6 +37,8 @@ const System = ({
   const [addingPage, setAddingPage] = useState(false);
   const [pageLoaded, setPageLoaded] = useState(null);
   const [systemLoaded, setSystemLoaded] = useState(null);
+
+  const [hasRemoteChanges, setHasRemoteChanges] = useState(false)
 
   const onAddPageClicked = async () => {
     setAddingPage(true);
@@ -73,6 +76,10 @@ const System = ({
 
   useEffect(() => {
     document.title = `Sistema | ${Global.APP_NAME}`
+    Fetch('/api/admin/has-remote-changes')
+      .then(({ status, result }) => {
+        console.log(status, result)
+      })
   }, [null])
 
   useEffect(() => {
@@ -158,7 +165,7 @@ const System = ({
 
   return (
     <>
-      <div id="wrapper">
+      <div id="wrapper position-relative">
         <Menu components={components} onClick={onComponentClicked} />
         <div className="content-page mt-2 pb-3" style={{ height: 'max-content' }}>
           <div className="content mt-2">
@@ -299,6 +306,17 @@ const System = ({
             </div>
           </div>
         </div>
+        {
+          hasRemoteChanges &&
+          <button className='btn btn-dark p-0 position-absolute rounded-pill' style={{
+            right: '20px',
+            bottom: '20px',
+            height: '40px',
+            width: '40px'
+          }}>
+            <i className='mdi mdi-github mdi-24px'></i>
+          </button>
+        }
       </div>
       <RigthBar colors={colors} setColors={setColors} settings={settings} setSettings={setSettings} />
 

@@ -252,4 +252,63 @@ class SystemController extends BasicController
 
         return response($response->toArray(), $response->status);
     }
+
+    public function hasRemoteChanges(Request $request)
+    {
+        $response = Response::simpleTryCatch(function () {
+            $projectPath = base_path();
+
+            // 1. Traer datos del remoto sin hacer pull
+            $fetch = new Process(['git', 'fetch'], $projectPath);
+            $fetch->run();
+
+            if (!$fetch->isSuccessful()) {
+                throw new \Exception($fetch->getErrorOutput());
+            }
+
+            // 2. Revisar si HEAD está detrás de origin
+            $statusCheck = new Process(['git', 'rev-list', 'HEAD..origin/main', '--count'], $projectPath);
+            $statusCheck->run();
+
+            if (!$statusCheck->isSuccessful()) {
+                throw new \Exception($statusCheck->getErrorOutput());
+            }
+
+            $aheadCount = (int) trim($statusCheck->getOutput());
+
+            return $aheadCount > 0;
+        });
+        return response($response->toArray(), $response->status);
+        // try {
+        //     $projectPath = base_path();
+
+        //     // 1. Traer datos del remoto sin hacer pull
+        //     $fetch = new Process(['git', 'fetch'], $projectPath);
+        //     $fetch->run();
+
+        //     if (!$fetch->isSuccessful()) {
+        //         throw new \Exception($fetch->getErrorOutput());
+        //     }
+
+        //     // 2. Revisar si HEAD está detrás de origin
+        //     $statusCheck = new Process(['git', 'rev-list', 'HEAD..origin/main', '--count'], $projectPath);
+        //     $statusCheck->run();
+
+        //     if (!$statusCheck->isSuccessful()) {
+        //         throw new \Exception($statusCheck->getErrorOutput());
+        //     }
+
+        //     $aheadCount = (int) trim($statusCheck->getOutput());
+
+        //     return response()->json([
+        //         'status' => 'success',
+        //         'has_changes' => $aheadCount > 0,
+        //     ]);
+        // } catch (\Exception $e) {
+        //     return response()->json([
+        //         'status' => 'error',
+        //         'message' => $e->getMessage(),
+        //     ], 500);
+        // }
+    }
 }
