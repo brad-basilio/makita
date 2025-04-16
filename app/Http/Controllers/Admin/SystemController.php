@@ -258,6 +258,7 @@ class SystemController extends BasicController
         $response = Response::simpleTryCatch(function () {
             $projectPath = base_path();
 
+            // 1. Fetch del remoto
             $fetch = new Process(['git', 'fetch'], $projectPath);
             $fetch->run();
 
@@ -265,6 +266,7 @@ class SystemController extends BasicController
                 throw new \Exception($fetch->getErrorOutput());
             }
 
+            // 2. Verificar si HEAD está detrás del remoto
             $statusCheck = new Process(['git', 'rev-list', 'HEAD..origin/main', '--count'], $projectPath);
             $statusCheck->run();
 
@@ -273,9 +275,22 @@ class SystemController extends BasicController
             }
 
             $aheadCount = (int) trim($statusCheck->getOutput());
+            $hasChanges = $aheadCount > 0;
 
-            return $aheadCount > 0;
+            // 3. Obtener último commit local
+            $commitLog = new Process(['git', 'log', '-1', '--pretty=format:%h - %s (%ci) by %an'], $projectPath);
+            $commitLog->run();
+
+            $lastCommit = $commitLog->isSuccessful()
+                ? trim($commitLog->getOutput())
+                : 'No se pudo obtener el último commit.';
+
+            return [
+                'has_changes' => $hasChanges,
+                'last_commit' => $lastCommit,
+            ];
         });
+
         return response($response->toArray(), $response->status);
     }
 }
