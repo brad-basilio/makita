@@ -255,7 +255,6 @@ class SystemController extends BasicController
 
     public function hasRemoteChanges(Request $request)
     {
-        dump($request);
         $response = Response::simpleTryCatch(function () {
             $projectPath = base_path();
 
