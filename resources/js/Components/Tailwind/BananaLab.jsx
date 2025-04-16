@@ -1,11 +1,13 @@
 import React from "react"
 
 
+
+
 const Canva1 = React.lazy(() => import('./BananaLab/Canva1'))
 const Canva2 = React.lazy(() => import('./BananaLab/Canva2'))
 const Canva3 = React.lazy(() => import('./BananaLab/Canva3'))
+const EditorLayout = React.lazy(() => import('./BananaLab/components/Editor/EditorLayout'))
 const Editor = React.lazy(() => import('./BananaLab/Editor'))
-
 const BananaLab = ({ data, which, filteredData }) => {
     const getBananaLab = () => {
         switch (which) {
