@@ -4,6 +4,7 @@
 /public/hot
 /public/storage
 /public/cloud
+/public/error_log
 /storage/*.key
 /vendor
 .env
