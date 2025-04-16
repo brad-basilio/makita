@@ -259,7 +259,7 @@ class SystemController extends BasicController
             $projectPath = base_path();
 
             // 1. Traer datos del remoto sin hacer pull
-            $fetch = new Process(['git', 'fetch'], $projectPath);
+            $fetch = new Process(['cmd', 'git', 'fetch'], $projectPath);
             $fetch->run();
 
             if (!$fetch->isSuccessful()) {
@@ -267,7 +267,7 @@ class SystemController extends BasicController
             }
 
             // 2. Revisar si HEAD está detrás de origin
-            $statusCheck = new Process(['git', 'rev-list', 'HEAD..origin/main', '--count'], $projectPath);
+            $statusCheck = new Process(['cmd', 'git', 'rev-list', 'HEAD..origin/main', '--count'], $projectPath);
             $statusCheck->run();
 
             if (!$statusCheck->isSuccessful()) {

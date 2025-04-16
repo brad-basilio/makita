@@ -49,7 +49,11 @@ const Login = ({ }) => {
 
     if (!result) return setLoading(false)
 
-    location.reload();
+      if (GET.redirectTo) {
+        location.href = GET.redirectTo
+      } else {
+        location.reload();
+      }
   }
 
   return (
