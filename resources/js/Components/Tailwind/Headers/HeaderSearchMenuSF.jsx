@@ -70,7 +70,7 @@ const HeaderSearchMenuSF = ({
             <div className="flex justify-center items-center z-40">
               <a href="/" className="flex items-center gap-2">
                 <img src={`/assets/resources/logo.png?v=${crypto.randomUUID()}`} alt={Global.APP_NAME} className="h-14 object-contain object-center" onError={(e) => {
-                  e.target.onError = null;
+                  e.target.onerror = null;
                   e.target.src = '/assets/img/logo-bk.svg';
                 }} />
               </a>

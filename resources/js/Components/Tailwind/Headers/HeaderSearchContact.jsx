@@ -24,7 +24,7 @@ const HeaderSearchContact = ({ data, cart, setCart, pages }) => {
               src={`/assets/resources/logo.png?v=${crypto.randomUUID()}`}
               alt={Global.APP_NAME}
               onError={(e) => {
-                e.target.onError = null;
+                e.target.onerror = null;
                 e.target.src = '/assets/img/logo-bk.svg';
               }} 
             />

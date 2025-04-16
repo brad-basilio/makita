@@ -71,7 +71,7 @@ const HeaderSearchB = ({
                             alt={Global.APP_NAME}
                             className="h-14  object-contain object-center"
                             onError={(e) => {
-                                e.target.onError = null;
+                                e.target.onerror = null;
                                 e.target.src = '/assets/img/logo-bk.svg';
                             }}
                         />

@@ -71,7 +71,7 @@ const FooterCallToAction = ({ socials = [], summary = '', generals = [], pages =
         <section className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div className="flex flex-col gap-4 items-start justify-start">
             <img src={`/assets/resources/logo.png?v=${crypto.randomUUID()}`} alt="" className="h-8 aspect-[13/4] object-contain object-center" onError={(e) => {
-              e.target.onError = null;
+              e.target.onerror = null;
               e.target.src = '/assets/img/logo-bk.svg';
             }}/>
             <p className="text-sm max-w-md">

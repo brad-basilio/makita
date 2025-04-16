@@ -57,7 +57,7 @@ const FooterSimpleCallToAction = ({ socials = [], generals = [], pages = [] }) =
               <div>
                 <a href="/">
                   <img src={`/assets/resources/logo.png?v=${crypto.randomUUID()}`} alt={Global.APP_NAME} className="w-full aspect-[13/4] object-contain object-center" onError={(e) => {
-                    e.target.onError = null;
+                    e.target.onerror = null;
                     e.target.src = '/assets/img/logo-bk.svg';
                   }} />
                 </a>

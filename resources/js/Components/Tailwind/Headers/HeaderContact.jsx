@@ -33,7 +33,7 @@ const HeaderContact = ({ items, generals = [] }) => {
         <div className="py-4">
           <a href="/">
             <img src={`/assets/resources/logo.png?v=${crypto.randomUUID()}`} alt={Global.APP_NAME} className="h-8 aspect-[13/4] object-contain object-center" onError={(e) => {
-              e.target.onError = null;
+              e.target.onerror = null;
               e.target.src = '/assets/img/logo-bk.svg';
             }} />
           </a>

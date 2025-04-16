@@ -55,7 +55,7 @@ const FooterB = ({ pages, generals }) => {
                     <div className="md:col-span-2">
                         <div className=" -ml-8 md:ml-0 w-48 aspect-[1] ">
                             <img src="/assets/resources/logo-footer.png" className="w-full h-full" alt="" onError={(e) => {
-                                e.target.onError = null;
+                                e.target.onerror = null;
                                 e.target.src = '/assets/img/logo-footer.svg';
                             }} />
                             {/* <div
