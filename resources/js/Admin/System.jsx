@@ -312,14 +312,14 @@ const System = ({
         {
           hasRemoteChanges &&
           <Tippy content={lastRemoteCommit}>
-          <button className='btn btn-dark p-0 position-absolute rounded-pill' style={{
-            right: '20px',
-            bottom: '20px',
-            height: '40px',
-            width: '40px'
-          }}>
-            <i className='mdi mdi-github mdi-24px'></i>
-          </button>
+            <button className='btn btn-dark p-0 position-absolute rounded-pill' style={{
+              right: '20px',
+              bottom: '20px',
+              height: '40px',
+              width: '40px'
+            }}>
+              <i className='mdi mdi-github mdi-24px'></i>
+            </button>
           </Tippy>
         }
       </div>
