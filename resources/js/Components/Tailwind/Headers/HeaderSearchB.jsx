@@ -8,7 +8,6 @@ import {
     XIcon,
 } from "lucide-react";
 import CartModal from "../Components/CartModal";
-import AuthRest from "../../../Actions/AuthRest";
 import Logout from "../../../Actions/Logout";
 import MobileMenu from "./Components/MobileMenu";
 const HeaderSearchB = ({
@@ -60,9 +59,8 @@ const HeaderSearchB = ({
 
     return (
         <header
-            className={`w-full ${
-                openMenu ? "fixed w-screen h-screen bg-white  z-50" : "relative"
-            } `}
+            className={`w-full ${openMenu ? "fixed w-screen h-screen bg-white  z-50" : "relative"
+                } `}
         >
             <div className="px-primary 2xl:px-0 2xl:max-w-7xl mx-auto py-4 font-font-secondary text-base font-semibold">
                 <div className=" flex items-center justify-between gap-4 ">
@@ -72,6 +70,10 @@ const HeaderSearchB = ({
                             src={`/assets/resources/logo.png?v=${crypto.randomUUID()}`}
                             alt={Global.APP_NAME}
                             className="h-14  object-contain object-center"
+                            onError={(e) => {
+                                e.target.onError = null;
+                                e.target.src = '/assets/img/logo-bk.svg';
+                            }}
                         />
                     </a>
                     <button
@@ -127,8 +129,8 @@ const HeaderSearchB = ({
                             href={
                                 search.trim()
                                     ? `/catalogo?search=${encodeURIComponent(
-                                          search
-                                      )}`
+                                        search
+                                    )}`
                                     : "#"
                             }
                             className="absolute right-3 top-1/2 transform -translate-y-1/2 p-2 bg-primary text-white rounded-lg"
@@ -213,9 +215,8 @@ const HeaderSearchB = ({
                     <div className="flex  md:hidden relative w-auto">
                         <button
                             onClick={() => setSearchMobile(!searchMobile)}
-                            className={`${
-                                searchMobile ? "hidden" : "block"
-                            } px-3 py-2 bg-primary text-white rounded-lg`}
+                            className={`${searchMobile ? "hidden" : "block"
+                                } px-3 py-2 bg-primary text-white rounded-lg`}
                             aria-label="Buscar"
                         >
                             <Search width="1rem" />
@@ -230,9 +231,8 @@ const HeaderSearchB = ({
                                     : "#"
                             }*/}
                     <div
-                        className={`${
-                            searchMobile ? "block" : "hidden"
-                        }  relative w-full max-w-xl mx-auto`}
+                        className={`${searchMobile ? "block" : "hidden"
+                            }  relative w-full max-w-xl mx-auto`}
                     >
                         <input
                             type="search"
@@ -245,8 +245,8 @@ const HeaderSearchB = ({
                             href={
                                 search.trim()
                                     ? `/catalogo?search=${encodeURIComponent(
-                                          search
-                                      )}`
+                                        search
+                                    )}`
                                     : "#"
                             }
                             className="absolute right-3 top-1/2 transform -translate-y-1/2 p-2 bg-primary text-white rounded-lg"
@@ -256,9 +256,8 @@ const HeaderSearchB = ({
                         </a>
                     </div>
                     <div
-                        className={`${
-                            searchMobile ? "hidden" : "flex"
-                        }  md:hidden items-center gap-4 relative text-sm`}
+                        className={`${searchMobile ? "hidden" : "flex"
+                            }  md:hidden items-center gap-4 relative text-sm`}
                     >
                         {isUser ? (
                             <button
@@ -336,9 +335,8 @@ const HeaderSearchB = ({
                 </div>
             </div>
             <div
-                className={`${
-                    openMenu ? "block" : "hidden"
-                }  lg:hidden bg-white text-textWhite shadow-lg w-full min-h-screen absolute z-10 top-20`}
+                className={`${openMenu ? "block" : "hidden"
+                    }  lg:hidden bg-white text-textWhite shadow-lg w-full min-h-screen absolute z-10 top-20`}
             >
                 <MobileMenu
                     search={search}

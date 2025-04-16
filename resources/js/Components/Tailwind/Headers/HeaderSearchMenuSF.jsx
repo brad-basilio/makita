@@ -1,13 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import Global from "../../../Utils/Global";
-import { CircleUser, DoorClosed, Search, ShoppingCart } from "lucide-react";
-import CartModal from "../Components/CartModal";
-import AuthRest from '../../../Actions/AuthRest'
-import Logout from "../../../Actions/Logout";
+import { Search } from "lucide-react";
 import MobileMenuSF from "./Components/MobileMenuSF";
 import TopBarCart from "../TopBars/TopBarCart";
 
-const HeaderSearchMenuSF = ({ 
+const HeaderSearchMenuSF = ({
   items,
   data,
   cart,
@@ -37,19 +34,19 @@ const HeaderSearchMenuSF = ({
     return () => document.removeEventListener("mousedown", handleClickOutside)
   }, [])
 
-  
+
   return (
     <header id="main-header" className="sticky top-0 w-full z-20 bg-white font-font-general">
-      
+
       <TopBarCart
-              data={data}
-               items={items}
-              cart={cart}
-              setCart={setCart}
-              isUser={isUser}
-          />
-                
-      
+        data={data}
+        items={items}
+        cart={cart}
+        setCart={setCart}
+        isUser={isUser}
+      />
+
+
       <div className="left-0 right-0">
         <div className="flex justify-between w-full px-[5%]">
           <nav className="flex h-[80px] items-center justify-between gap-10 w-full">
@@ -57,25 +54,28 @@ const HeaderSearchMenuSF = ({
             <input type="checkbox" id="menu" className="peer/menu menu hidden" />
 
             {/* Botón de hamburguesa para móviles */}
-           
-              <label 
-                onClick={() => setOpenMenu(!openMenu)}
-                htmlFor="menu" 
-                className="transition-all flex flex-col gap-1 z-40 lg:hidden hamburguesa justify-center items-center order-3 lg:order-none"
-              >   
-                      <p className="w-7 h-1 bg-primary transition-transform duration-500"></p>
-                      <p className="w-7 h-1 bg-primary transition-transform duration-500"></p>
-                      <p className="w-7 h-1 bg-primary transition-transform duration-500"></p>
-              </label>
-            
+
+            <label
+              onClick={() => setOpenMenu(!openMenu)}
+              htmlFor="menu"
+              className="transition-all flex flex-col gap-1 z-40 lg:hidden hamburguesa justify-center items-center order-3 lg:order-none"
+            >
+              <p className="w-7 h-1 bg-primary transition-transform duration-500"></p>
+              <p className="w-7 h-1 bg-primary transition-transform duration-500"></p>
+              <p className="w-7 h-1 bg-primary transition-transform duration-500"></p>
+            </label>
+
 
             {/* Logo */}
             <div className="flex justify-center items-center z-40">
               <a href="/" className="flex items-center gap-2">
-                <img src={`/assets/resources/logo.png?v=${crypto.randomUUID()}`} alt={Global.APP_NAME} className="h-14 object-contain object-center" />
+                <img src={`/assets/resources/logo.png?v=${crypto.randomUUID()}`} alt={Global.APP_NAME} className="h-14 object-contain object-center" onError={(e) => {
+                  e.target.onError = null;
+                  e.target.src = '/assets/img/logo-bk.svg';
+                }} />
               </a>
             </div>
-            
+
 
             {/* Menú de navegación */}
             <ul className={`bg-white flex font-gilroy_regular font-semibold text-lg`}>
@@ -83,8 +83,8 @@ const HeaderSearchMenuSF = ({
                 {pages.map((page, index) => (
                   page.menuable && (
                     <li key={index} className="flex flex-col py-1 lg:py-0">
-                      <a 
-                        href={page.path} 
+                      <a
+                        href={page.path}
                         className="hover:customtext-primary cursor-pointer transition-all duration-300 pr-6"
                         onClick={() => setMenuOpen(false)}
                       >
@@ -115,19 +115,18 @@ const HeaderSearchMenuSF = ({
                 </a>
               </div>
             </div>
-              
+
             <div
-                className={`${
-                    openMenu ? "block" : "hidden"
+              className={`${openMenu ? "block" : "hidden"
                 }  lg:hidden bg-white w-full min-h-screen absolute z-50 top-28 left-0`}
             >
-                <MobileMenuSF
-                    search={search}
-                    setSearch={setSearch}
-                    pages={pages}
-                    items={items}
-                /> 
-                
+              <MobileMenuSF
+                search={search}
+                setSearch={setSearch}
+                pages={pages}
+                items={items}
+              />
+
             </div>
           </nav>
         </div>

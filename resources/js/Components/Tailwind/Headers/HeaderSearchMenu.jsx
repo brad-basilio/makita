@@ -1,13 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import Global from "../../../Utils/Global";
-import { CircleUser, DoorClosed, Search, ShoppingCart } from "lucide-react";
-import CartModal from "../Components/CartModal";
-import AuthRest from '../../../Actions/AuthRest'
-import Logout from "../../../Actions/Logout";
-import MobileMenuSF from "./Components/MobileMenuSF";
-import TopBarCart from "../TopBars/TopBarCart";
+import { Search} from "lucide-react";
 
-const HeaderSearchMenu = ({ 
+const HeaderSearchMenu = ({
   items,
   data,
   cart,
@@ -37,15 +32,19 @@ const HeaderSearchMenu = ({
     return () => document.removeEventListener("mousedown", handleClickOutside)
   }, [])
 
-  
+
   return (
     <header className="w-full">
       <div className="px-primary mx-auto py-4 font-font-general customtext-primary text-base font-semibold">
         <div className="flex items-center justify-between gap-4 ">
-          
+
           {/* Logo */}
           <a href="/" className="flex items-center gap-2">
-            <img src={`/assets/resources/logo.png?v=${crypto.randomUUID()}`} alt={Global.APP_NAME} className="h-14  object-contain object-center" />
+            <img src={`/assets/resources/logo.png?v=${crypto.randomUUID()}`} alt={Global.APP_NAME} className="h-14  object-contain object-center"
+              onError={(e) => {
+                e.target.onError = null;
+                e.target.src = '/assets/img/logo-bk.svg';
+              }} />
           </a>
 
           <ul className="list-none flex gap-4 text-lg">

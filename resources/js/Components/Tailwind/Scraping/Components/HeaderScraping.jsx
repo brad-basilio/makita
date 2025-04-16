@@ -63,6 +63,10 @@ const HeaderScraping = ({
                             src={`/assets/resources/logo.png?v=${crypto.randomUUID()}`}
                             alt={Global.APP_NAME}
                             className="h-14  object-contain object-center"
+                            onError={(e) => {
+                                e.target.onError = null;
+                                e.target.src = '/assets/img/logo-bk.svg';
+                            }}
                         />
                     </a>
 
@@ -93,10 +97,10 @@ const HeaderScraping = ({
                                 href={
                                     search.trim()
                                         ? `/catalogo?search=${encodeURIComponent(
-                                              search
-                                          )}&provider=${encodeURIComponent(
-                                              proveedor
-                                          )}`
+                                            search
+                                        )}&provider=${encodeURIComponent(
+                                            proveedor
+                                        )}`
                                         : "#"
                                 }
                                 className="inline-flex absolute  items-center justify-center gap-2 right-3 text-sm customtext-primary top-1/2 transform -translate-y-1/2 py-2 px-3 bg-black  rounded-xl"
