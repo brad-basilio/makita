@@ -100,12 +100,7 @@
                 "data": ["class", "link_cart"],
                 "generals": ["phone_whatsapp", "message_whatsapp"]
             },
-            {
-                "id": "HeaderScraping",
-                "name": "HeaderScraping",
-                "image": "header-with-search.png",
-                "data": ["class", "link_cart"]
-            },
+
             {
                 "id": "HeaderSearchMenu",
                 "name": "Con busqueda y menu",
@@ -769,6 +764,11 @@
                 "id": "StepSimple",
                 "name": "Simple",
                 "data": ["steps", "selected"]
+            },
+            {
+                "id": "StepKuchara",
+                "name": "Kuchara",
+                "data": ["steps", "selected"]
             }
         ]
     },
@@ -845,6 +845,11 @@
                 "id": "CartSimple",
                 "name": "Simple",
                 "data": ["url_catalog", "url_checkout"]
+            },
+            {
+                "id": "CartKuchara",
+                "name": "Kuchara",
+                "data": ["url_catalog", "url_checkout"]
             }
         ]
     },
@@ -856,6 +861,23 @@
                 "id": "CheckoutCulqi",
                 "name": "Culqi",
                 "data": ["url_thanks"]
+            },
+            {
+                "id": "CheckoutKuchara",
+                "name": "Kuchara",
+                "data": ["url_thanks"],
+                "json": {
+                    "prefixes": "./prefijocelular.json"
+                },
+                "using": {
+                    "model": "DeliveryPrice",
+                    "field": ["name", "price", "data"]
+                },
+                "generals": [
+                    "checkout_culqi_public_key",
+                    "checkout_bim",
+                    "checkout_transfer"
+                ]
             },
             {
                 "id": "CheckoutSteps",
@@ -1064,15 +1086,6 @@
         "name": "Footer",
         "options": [
             {
-                "id": "FooterSimple",
-                "name": "Simple",
-                "image": "footer-simple.png",
-                "using": {
-                    "model": "Social",
-                    "limit": 10
-                }
-            },
-            {
                 "id": "FooterB",
                 "name": "FooterB",
                 "image": "footer-simple.png",
@@ -1126,6 +1139,7 @@
                     "support_email"
                 ]
             },
+<<<<<<< HEAD
             {
                 "id": "FooterBananaLab",
                 "name": "FooterBananaLab",
@@ -1162,6 +1176,9 @@
                     "support_email"
                 ]
             },
+=======
+
+>>>>>>> 1e6bcb0f456f3bc801e6ff14c5f311e8e783da0c
             {
                 "id": "FooterCallToAction",
                 "name": "Llamada a la acción",

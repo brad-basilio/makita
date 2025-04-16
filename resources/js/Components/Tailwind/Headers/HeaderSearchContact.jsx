@@ -23,6 +23,10 @@ const HeaderSearchContact = ({ data, cart, setCart, pages }) => {
               className="h-12 aspect-[13/4] object-contain object-center w-auto"
               src={`/assets/resources/logo.png?v=${crypto.randomUUID()}`}
               alt={Global.APP_NAME}
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = '/assets/img/logo-bk.svg';
+              }} 
             />
           </a>
 

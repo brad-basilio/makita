@@ -349,11 +349,15 @@ export default function ProductDetailSF({ item, data, setCart, cart }) {
                                         >
                                             <img
                                                 className="color-box rounded-full h-9 w-9 object-fit-cover "
+<<<<<<< HEAD
                                                 src={`/storage/images/item/${item.texture}`}
                                                 onError={(e) =>
                                                     (e.target.src =
                                                         "/api/cover/thumbnail/null")
                                                 }
+=======
+                                                src={`/storage/images/item/${item.texture || item.image} `}
+>>>>>>> 1e6bcb0f456f3bc801e6ff14c5f311e8e783da0c
                                             />
                                         </a>
                                     </Tippy>    
@@ -363,12 +367,12 @@ export default function ProductDetailSF({ item, data, setCart, cart }) {
                                         <Tippy content={variant.color}>
                                         <a
                                             key={variant.slug}
-                                            href={`/product/${variant.slug}`}
+                                            href={`/item/${variant.slug}`}
                                             className="variant-option  rounded-full object-fit-cover "
                                         >
                                             <img
                                                 className="color-box rounded-full h-9 w-9 object-fit-cover "
-                                                src={`/storage/images/item/${variant.texture}`}
+                                                src={`/storage/images/item/${variant.texture || variant.image}`}
                                             />
                                         </a>
                                         </Tippy>

@@ -87,7 +87,7 @@ const BlogCarousel = ({ data, items }) => {
                   width: '100%',
                   height: '100%',
                   playerVars: {
-                    autoplay: 1,
+                    autoplay: isPlaying ? 1 : 0,
                     controls: 0,
                     disablekb: 1,
                     modestbranding: 1,

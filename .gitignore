@@ -3,6 +3,8 @@
 # /public/build
 /public/hot
 /public/storage
+/public/cloud
+/public/error_log
 /storage/*.key
 /vendor
 .env
@@ -26,3 +28,5 @@ composer.lock
 /public/assets/resources/icon.png
 /public/assets/resources/logo.png
 /public/assets/resources/logo-footer.png
+/vite.config.js.timestamp*
+/storage/app/*_backup.sql

@@ -56,7 +56,10 @@ const FooterSimpleCallToAction = ({ socials = [], generals = [], pages = [] }) =
             <div className="lg:col-span-3 w-full flex flex-col gap-10">
               <div>
                 <a href="/">
-                  <img src={`/assets/resources/logo.png?v=${crypto.randomUUID()}`} alt={Global.APP_NAME} className="w-full aspect-[13/4] object-contain object-center" />
+                  <img src={`/assets/resources/logo.png?v=${crypto.randomUUID()}`} alt={Global.APP_NAME} className="w-full aspect-[13/4] object-contain object-center" onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = '/assets/img/logo-bk.svg';
+                  }} />
                 </a>
               </div>
               <nav>

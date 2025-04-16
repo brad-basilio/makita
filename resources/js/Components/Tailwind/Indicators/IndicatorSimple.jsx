@@ -3,10 +3,10 @@ import React from "react"
 const IndicatorSimple = ({ items }) => {
   return (
     <section className="bg-accent w-full">
-      <div className="px-[5%] py-[2.5%] mx-auto relative">
-        <div className="flex flex-col md:flex-row w-full gap-6 md:gap-4 lg:gap-8">
+      <div className="px-primary py-[2.5%] 2xl:max-w-7xl mx-auto relative">
+        <div className="flex flex-col md:flex-row md:justify-center w-full gap-6 md:gap-4 lg:gap-8">
           {items.map((benefit, index) => (
-            <div key={index} className="flex items-center gap-4 justify-start w-full">
+            <div key={index} className="flex items-center gap-4 justify-center w-full">
               <div className="flex-shrink-0">
                 <div className="bg-primary rounded-full p-3 w-12 h-12 flex items-center justify-center">
                   <img

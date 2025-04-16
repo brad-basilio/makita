@@ -8,7 +8,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 
 const ProductDetailKuchara = ({ item, cart, setCart }) => {
   // Add this state near other states
-  const [currentImage, setCurrentImage] = useState(item.image);
+  const [currentImage, setCurrentImage] = useState(item?.image);
 
   const quantityRef = useRef()
   const [quantity, setQuantity] = useState(1)
@@ -67,25 +67,23 @@ const ProductDetailKuchara = ({ item, cart, setCart }) => {
           >
             <SwiperSlide className="!w-[80px]">
               <button
-                onClick={() => setCurrentImage(item.image)}
-                className={`w-[80px] h-[80px] rounded-lg overflow-hidden border-2 ${
-                  currentImage === item.image ? 'border-green-600' : 'border-gray-200'
-                }`}
+                onClick={() => setCurrentImage(item?.image)}
+                className={`w-[80px] h-[80px] rounded-lg overflow-hidden border-2 ${currentImage === item?.image ? 'border-green-600' : 'border-gray-200'
+                  }`}
               >
                 <img
-                  src={`/storage/images/item/${item.image}`}
+                  src={`/storage/images/item/${item?.image}`}
                   alt={item?.name}
                   className="w-full h-full object-cover object-center"
                 />
               </button>
             </SwiperSlide>
-            {item.gallery?.map((image, index) => (
+            {item?.gallery?.map((image, index) => (
               <SwiperSlide key={index} className="!w-[80px]">
                 <button
                   onClick={() => setCurrentImage(image)}
-                  className={`w-[80px] h-[80px] rounded-lg overflow-hidden border-2 ${
-                    currentImage === image ? 'border-green-600' : 'border-gray-200'
-                  }`}
+                  className={`w-[80px] h-[80px] rounded-lg overflow-hidden border-2 ${currentImage === image ? 'border-green-600' : 'border-gray-200'
+                    }`}
                 >
                   <img
                     src={`/storage/images/item/${image}`}
@@ -106,14 +104,14 @@ const ProductDetailKuchara = ({ item, cart, setCart }) => {
               <span className="text-green-600 font-medium">Disponibilidad: {item?.stock > 0 ? "En stock" : "Agotado"}</span>
             </div>
 
-            <h1 className="font-bold font-title text-3xl text-green-700 leading-none my-4">{item.name || "Sin nombre"}</h1>
+            <h1 className="font-bold font-title text-3xl text-green-700 leading-none my-4">{item?.name || "Sin nombre"}</h1>
 
             <div className="flex items-baseline gap-3 mt-2">
-              {item.discount && (
+              {item?.discount && (
                 <span className="text-gray-500 line-through text-lg">S/ {Number2Currency(item.price)}</span>
               )}
-              <span className="font-bold text-3xl">S/ {Number2Currency(item.final_price)}</span>
-              {item.discount && (
+              <span className="font-bold text-3xl">S/ {Number2Currency(item?.final_price)}</span>
+              {item?.discount && (
                 <span className="bg-red-500 text-white text-sm px-2 py-1 rounded-md">
                   -{Math.round(((item.price - item.final_price) / item.price) * 100)}%
                 </span>
@@ -124,7 +122,7 @@ const ProductDetailKuchara = ({ item, cart, setCart }) => {
           <div className="mt-2">
             <h3 className="font-medium text-lg mb-2">Descripción:</h3>
             <p className="text-gray-700">
-              {item.summary || html2string(item?.description).trim() || "Sin descripción"}
+              {item?.summary || html2string(item?.description).trim() || "Sin descripción"}
             </p>
           </div>
 

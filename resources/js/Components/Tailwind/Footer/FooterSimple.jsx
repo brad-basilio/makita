@@ -31,7 +31,10 @@ const FooterSimple = ({ socials = [], terms = {}, footerLinks = [] }) => {
             </li>
             {links['customer-complaints'] && <li><a href={links['customer-complaints']}>Libro de reclamaciones</a></li>}
           </ul>
-          <img src={`/assets/resources/logo.png?v=${crypto.randomUUID()}`} alt={Global.APP_NAME} className="h-8 aspect-[13/4] object-contain object-center" />
+          <img src={`/assets/resources/logo.png?v=${crypto.randomUUID()}`} alt={Global.APP_NAME} className="h-8 aspect-[13/4] object-contain object-center" onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = '/assets/img/logo-bk.svg';
+          }} />
         </div>
         <div className="col-span-1 flex flex-col gap-4 md:flex-row items-start justify-evenly md:col-span-1">
           <ul className="flex flex-col gap-2">

@@ -16,6 +16,7 @@ const Generals = ({ generals }) => {
     const location =
         generals.find((x) => x.correlative == "location")?.description ?? "0,0";
 
+    // First add these to your formData state
     const [formData, setFormData] = useState({
         phones: generals
             .find((x) => x.correlative == "phone_contact")
@@ -64,6 +65,8 @@ const Generals = ({ generals }) => {
             lat: Number(location.split(",").map((x) => x.trim())[0]),
             lng: Number(location.split(",").map((x) => x.trim())[1]),
         },
+        culqi: generals.find((x) => x.correlative == "culqi")
+            ?.description ?? "",
     });
 
     const [activeTab, setActiveTab] = useState("contact");
@@ -208,6 +211,17 @@ const Generals = ({ generals }) => {
                     </li>
                     <li className="nav-item" role="presentation">
                         <button
+                            className={`nav-link ${activeTab === "checkout" ? "active" : ""
+                                }`}
+                            onClick={() => setActiveTab("checkout")}
+                            type="button"
+                            role="tab"
+                        >
+                            Métodos de Pago
+                        </button>
+                    </li>
+                    <li className="nav-item" role="presentation">
+                        <button
                             className={`nav-link ${activeTab === "policies" ? "active" : ""
                                 }`}
                             onClick={() => setActiveTab("policies")}
@@ -338,7 +352,7 @@ const Generals = ({ generals }) => {
                                 </button>
                             </div>
                         </div>
-                        <div className="mb-3">
+                        <div className="mb-2">
                             <label htmlFor="cintillo" className="form-label">
                                 Cintillo
                             </label>
@@ -354,7 +368,7 @@ const Generals = ({ generals }) => {
                                 }
                             ></textarea>
                         </div>
-                        <div className="mb-3">
+                        <div className="mb-2">
                             <label htmlFor="copyright" className="form-label">
                                 Copyright
                             </label>
@@ -370,7 +384,7 @@ const Generals = ({ generals }) => {
                                 }
                             ></textarea>
                         </div>
-                        <div className="mb-3">
+                        <div className="mb-2">
                             <label htmlFor="address" className="form-label">
                                 Dirección
                             </label>
@@ -387,7 +401,7 @@ const Generals = ({ generals }) => {
                                 required
                             ></textarea>
                         </div>
-                        <div className="mb-3">
+                        <div className="mb-2">
                             <TextareaFormGroup
                                 label="Horarios de atencion"
                                 onChange={(e) =>
@@ -400,7 +414,7 @@ const Generals = ({ generals }) => {
                                 required
                             />
                         </div>
-                        <div className="mb-3">
+                        <div className="mb-2">
                             <label
                                 htmlFor="supportPhone"
                                 className="form-label"
@@ -421,7 +435,7 @@ const Generals = ({ generals }) => {
                                 required
                             />
                         </div>
-                        <div className="mb-3">
+                        <div className="mb-2">
                             <label
                                 htmlFor="supportEmail"
                                 className="form-label"
@@ -442,7 +456,7 @@ const Generals = ({ generals }) => {
                                 required
                             />
                         </div>
-                        <div className="mb-3">
+                        <div className="mb-2">
                             <label
                                 htmlFor="phoneWhatsapp"
                                 className="form-label"
@@ -463,7 +477,7 @@ const Generals = ({ generals }) => {
                                 required
                             />
                         </div>
-                        <div className="mb-3">
+                        <div className="mb-2">
                             <label
                                 htmlFor="messageWhatsapp"
                                 className="form-label"
@@ -487,11 +501,193 @@ const Generals = ({ generals }) => {
                     </div>
 
                     <div
+                        className={`tab-pane fade ${activeTab === "checkout" ? "show active" : ""
+                            }`}
+                        role="tabpanel"
+                    >
+                        <div className="row">
+                            <div className="col-sm-3">
+                                <div className="nav flex-column nav-pills nav-pills-tab" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                                    <a className="nav-link active show mb-1" id="v-culqi-tab" data-bs-toggle="pill" href="#v-culqi" role="tab" aria-controls="v-culqi" aria-selected="true">
+                                        Culqi
+                                    </a>
+                                    <a className="nav-link mb-1" id="v-digital-wallet-tab" data-bs-toggle="pill" href="#v-digital-wallet" role="tab" aria-controls="v-digital-wallet" aria-selected="false">
+                                        Yape / Plin
+                                    </a>
+                                    <a className="nav-link mb-1" id="v-transfer-tab" data-bs-toggle="pill" href="#v-transfer" role="tab" aria-controls="v-transfer" aria-selected="false">
+                                        Transferencia
+                                    </a>
+                                </div>
+                            </div>
+                            <div className="col-sm-9">
+                                <div className="tab-content pt-0">
+                                    <div className="tab-pane fade active show" id="v-culqi" role="tabpanel" aria-labelledby="v-culqi-tab">
+                                        <div className="mb-2">
+                                            <label className="form-label">Título del formulario</label>
+                                            <input
+                                                type="text"
+                                                className="form-control"
+                                                value={formData.culqi?.name}
+                                                onChange={(e) => setFormData({
+                                                    ...formData,
+                                                    culqi: {
+                                                        ...formData.culqi,
+                                                        name: e.target.value
+                                                    }
+                                                })}
+                                            />
+                                        </div>
+                                        <div className="mb-2">
+                                            <label className="form-label">Clave Pública</label>
+                                            <input
+                                                type="text"
+                                                className="form-control"
+                                                value={formData.culqi?.public_key}
+                                                onChange={(e) => setFormData({
+                                                    ...formData,
+                                                    culqi: {
+                                                        ...formData.culqi,
+                                                        public_key: e.target.value
+                                                    }
+                                                })}
+                                            />
+                                        </div>
+                                        <div className="mb-2">
+                                            <label className="form-label">Clave Privada</label>
+                                            <input
+                                                type="password"
+                                                className="form-control"
+                                                value={formData.culqi?.private_key}
+                                                onChange={(e) => setFormData({
+                                                    ...formData,
+                                                    culqi: { ...formData.culqi, private_key: e.target.value }
+                                                })}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="tab-pane fade" id="v-digital-wallet" role="tabpanel" aria-labelledby="v-digital-wallet-tab">
+                                        <div className="mb-2">
+                                            <label className="form-label">QR</label>
+                                            <input
+                                                type="file"
+                                                className="form-control"
+                                                accept="image/*"
+                                                onChange={(e) => {
+                                                    const file = e.target.files[0];
+                                                    if (file) {
+                                                        const reader = new FileReader();
+                                                        reader.onloadend = () => {
+                                                            setFormData({
+                                                                ...formData,
+                                                                digitalWallet: { ...formData.digitalWallet, qr: reader.result }
+                                                            });
+                                                        };
+                                                        reader.readAsDataURL(file);
+                                                    }
+                                                }}
+                                            />
+                                        </div>
+                                        <div className="mb-2">
+                                            <label className="form-label">Título</label>
+                                            <input
+                                                type="text"
+                                                className="form-control"
+                                                value={formData.digitalWallet?.title}
+                                                onChange={(e) => setFormData({
+                                                    ...formData,
+                                                    digitalWallet: { ...formData.digitalWallet, title: e.target.value }
+                                                })}
+                                            />
+                                        </div>
+                                        <div className="mb-2">
+                                            <label className="form-label">Descripción</label>
+                                            <textarea
+                                                className="form-control"
+                                                value={formData.digitalWallet?.description}
+                                                onChange={(e) => setFormData({
+                                                    ...formData,
+                                                    digitalWallet: { ...formData.digitalWallet, description: e.target.value }
+                                                })}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="tab-pane fade" id="v-transfer" role="tabpanel" aria-labelledby="v-transfer-tab">
+                                        {formData.bankAccounts?.map((account, index) => (
+                                            <div key={index} className="border rounded p-3 mb-3">
+                                                <div className="mb-2">
+                                                    <label className="form-label">CCI</label>
+                                                    <input
+                                                        type="text"
+                                                        className="form-control"
+                                                        value={account.cci}
+                                                        onChange={(e) => {
+                                                            const newAccounts = [...formData.bankAccounts];
+                                                            newAccounts[index].cci = e.target.value;
+                                                            setFormData({ ...formData, bankAccounts: newAccounts });
+                                                        }}
+                                                    />
+                                                </div>
+                                                <div className="mb-2">
+                                                    <label className="form-label">Título</label>
+                                                    <input
+                                                        type="text"
+                                                        className="form-control"
+                                                        value={account.title}
+                                                        onChange={(e) => {
+                                                            const newAccounts = [...formData.bankAccounts];
+                                                            newAccounts[index].title = e.target.value;
+                                                            setFormData({ ...formData, bankAccounts: newAccounts });
+                                                        }}
+                                                    />
+                                                </div>
+                                                <div className="mb-2">
+                                                    <label className="form-label">Descripción</label>
+                                                    <textarea
+                                                        className="form-control"
+                                                        value={account.description}
+                                                        onChange={(e) => {
+                                                            const newAccounts = [...formData.bankAccounts];
+                                                            newAccounts[index].description = e.target.value;
+                                                            setFormData({ ...formData, bankAccounts: newAccounts });
+                                                        }}
+                                                    />
+                                                </div>
+                                                {formData.bankAccounts.length > 1 && (
+                                                    <button
+                                                        type="button"
+                                                        className="btn btn-danger"
+                                                        onClick={() => {
+                                                            const newAccounts = formData.bankAccounts.filter((_, i) => i !== index);
+                                                            setFormData({ ...formData, bankAccounts: newAccounts });
+                                                        }}
+                                                    >
+                                                        Eliminar cuenta
+                                                    </button>
+                                                )}
+                                            </div>
+                                        ))}
+                                        <button
+                                            type="button"
+                                            className="btn btn-primary"
+                                            onClick={() => setFormData({
+                                                ...formData,
+                                                bankAccounts: [...formData.bankAccounts, { cci: "", title: "", description: "" }]
+                                            })}
+                                        >
+                                            Agregar cuenta
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
                         className={`tab-pane fade ${activeTab === "policies" ? "show active" : ""
                             }`}
                         role="tabpanel"
                     >
-                        <div className="mb-3">
+                        <div className="mb-2">
                             <QuillFormGroup
                                 label="Política de privacidad"
                                 value={formData.privacyPolicy}
@@ -503,7 +699,7 @@ const Generals = ({ generals }) => {
                                 }
                             />
                         </div>
-                        <div className="mb-3">
+                        <div className="mb-2">
                             <QuillFormGroup
                                 label="Términos y condiciones"
                                 value={formData.termsConditions}
@@ -515,7 +711,7 @@ const Generals = ({ generals }) => {
                                 }
                             />
                         </div>
-                        <div className="mb-3">
+                        <div className="mb-2">
                             <QuillFormGroup
                                 label="Políticas de envío"
                                 value={formData.deliveryPolicy}
@@ -527,7 +723,7 @@ const Generals = ({ generals }) => {
                                 }
                             />
                         </div>
-                        <div className="mb-3">
+                        <div className="mb-2">
                             <QuillFormGroup
                                 label="Políticas de devolución y cambio"
                                 value={formData.salebackPolicy}
