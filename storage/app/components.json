@@ -739,7 +739,12 @@
                 "using": {
                     "model": "DeliveryPrice",
                     "field": ["name", "price", "data"]
-                }
+                },
+                "generals": [
+                    "checkout_culqi_public_key",
+                    "checkout_bim",
+                    "checkout_transfer"
+                ]
             },
             {
                 "id": "CheckoutSteps",
