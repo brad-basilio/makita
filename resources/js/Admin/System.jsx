@@ -136,8 +136,7 @@ const System = ({
       setCommits(data.commits)
     }
 
-    checkRemoteChanges();
-    interval = setInterval(checkRemoteChanges, 10000)
+    interval = setInterval(checkRemoteChanges, 5000)
 
     return () => clearInterval(interval)
   }, [ghHasError, fetchingChanges, checkingChanges])
