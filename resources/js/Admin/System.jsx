@@ -141,10 +141,6 @@ const System = ({
   }, [ghHasError, fetchingChanges])
 
   useEffect(() => {
-    document.title = `Sistema | ${Global.APP_NAME}`
-  }, [null])
-
-  useEffect(() => {
     const iframe = $('iframe:visible');
     if (iframe) {
       $(iframe).removeAttr('src');
@@ -200,6 +196,10 @@ const System = ({
       }).disableSelection();
     });
   }, [pages, systems]);
+
+  useEffect(() => {
+    document.title = `Sistema | ${Global.APP_NAME}`
+  }, [null])
 
   const [gitAuthor, gitDate, gitMessage] = lastRemoteCommit?.split('\n') ?? []
 
