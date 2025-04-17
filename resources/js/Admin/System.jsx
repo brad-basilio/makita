@@ -384,10 +384,15 @@ const System = ({
             disabled={fetchingChanges}>
             {
               fetchingChanges
-                ? <i className='mdi mdi-loading mdi-spin me-1'></i>
-                : <i className='mdi mdi-cloud-download me-1'></i>
+                ? <>
+                  <i className='mdi mdi-loading mdi-spin me-1'></i>
+                  Sincronizando
+                </>
+                : <>
+                  <i className='mdi mdi-cloud-download me-1'></i>
+                  Sincronizar
+                </>
             }
-            Sincronizar
           </button>
         </div>
       </Modal>
