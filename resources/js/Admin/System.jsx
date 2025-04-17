@@ -43,7 +43,6 @@ const System = ({
   const [hasRemoteChanges, setHasRemoteChanges] = useState(false)
   const [lastRemoteCommit, setLastRemoteCommit] = useState(null)
   const [fetchingChanges, setFetchingChanges] = useState(false)
-  const [checkingChanges, setCheckingChanges] = useState(false)
   const [commits, setCommits] = useState(0)
 
   const onAddPageClicked = async () => {
@@ -116,15 +115,13 @@ const System = ({
     let interval = null;
 
     const checkRemoteChanges = async () => {
-      if (fetchingChanges, checkingChanges) return
+      if (fetchingChanges) return
       if (ghHasError) {
         clearInterval(interval)
         return
       }
 
-      setCheckingChanges(true)
       const data = await systemRest.hasRemoteChanges()
-      setCheckingChanges(false)
 
       if (!data) {
         setGhHasError(true)
@@ -136,10 +133,12 @@ const System = ({
       setCommits(data.commits)
     }
 
-    interval = setInterval(checkRemoteChanges, 5000)
+    interval = setInterval(async () => {
+      await checkRemoteChanges()
+    }, 5000)
 
     return () => clearInterval(interval)
-  }, [ghHasError, fetchingChanges, checkingChanges])
+  }, [ghHasError, fetchingChanges])
 
   useEffect(() => {
     document.title = `Sistema | ${Global.APP_NAME}`
