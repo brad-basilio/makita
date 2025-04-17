@@ -375,7 +375,7 @@ const System = ({
           <div className='mb-2'>
             <b className='d-block'>{gitAuthor}</b>
             <small className='d-block text-muted'>{moment(gitDate).fromNow()}</small>
-            <span className='d-block'>{gitMessage}</span>
+            <span className='d-block'>Commit: {gitMessage}</span>
           </div>
           <button
             className='btn btn-primary'
