@@ -35,6 +35,8 @@ import Complaint from "./Components/Tailwind/Complaint";
 import Indicator from "./Components/Tailwind/Indicator";
 import ThankSimple from "./Components/Tailwind/Thanks/ThankSimple";
 import Image from "./Components/Tailwind/Image";
+import BananaLab from "./Components/Tailwind/BananaLab";
+import { Toaster } from "sonner";
 
 const itemsRest = new ItemsRest();
 
@@ -173,7 +175,13 @@ const System = ({
                 );
 
             case "indicator":
-                return <Indicator which={value} data={data} items={getItems(itemsId)} />;
+                return (
+                    <Indicator
+                        which={value}
+                        data={data}
+                        items={getItems(itemsId)}
+                    />
+                );
             case "banner":
                 return <Banner which={value} data={data} />;
             case "image":
@@ -221,7 +229,13 @@ const System = ({
                     />
                 );
             case "post-detail":
-                return <PostDetail which={value} data={data} item={filteredData.Post} />;
+                return (
+                    <PostDetail
+                        which={value}
+                        data={data}
+                        item={filteredData.Post}
+                    />
+                );
             case "about":
                 return (
                     <AboutUs
@@ -252,6 +266,8 @@ const System = ({
                 );
             case "complaints":
                 return <Complaint which={value} generals={generals} />;
+            case "bananalab":
+                return <BananaLab which={value} generals={generals} />;
         }
     };
 
@@ -259,7 +275,12 @@ const System = ({
         page.extends_base ? !x.page_id : true
     );
 
-    return <main className="font-paragraph">{systemsSorted.map((system) => getSystem(system))}</main>;
+    return (
+        <main className="font-paragraph">
+            {systemsSorted.map((system) => getSystem(system))} 
+            <Toaster  />
+        </main>
+    );
 };
 
 CreateReactScript((el, properties) => {

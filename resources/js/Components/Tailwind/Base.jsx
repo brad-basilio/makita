@@ -3,6 +3,8 @@ import Header from "./Header";
 import Footer from "./Footer";
 import TopBar from "./TopBar";
 
+
+
 const Base = ({ children, summary, socials, generals }) => {
   return <>
     <TopBar socials={socials} />
@@ -11,6 +13,7 @@ const Base = ({ children, summary, socials, generals }) => {
       {children}
     </main>
     <Footer summary={summary} socials={socials} generals={generals} />
+   
   </>
 }
 

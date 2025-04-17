@@ -16,7 +16,7 @@ import { NoResults } from "../Components/Resources/NoResult";
 import SelectForm from "./Components/SelectForm";
 import ProductCard from "../Components/ProductCard";
 import ProductCardSimple from "../Products/Components/ProductCardSimple";
-
+import CardProductBananaLab from "../Products/Components/CardProductBananaLab";
 const itemsRest = new ItemsRest();
 
 const FilterCategoryImage = ({ items, data, filteredData, cart, setCart }) => {
@@ -122,7 +122,7 @@ const FilterCategoryImage = ({ items, data, filteredData, cart, setCart }) => {
           to: Math.min(page * pagination.itemsPerPage, response.totalCount),
         })
         setBrands(response?.summary?.brands ?? [])
-        setCategories(response?.summary?.categories?? [])
+        setCategories(response?.summary?.categories ?? [])
       }
     } catch (error) {
       console.error("Error fetching products:", error)
@@ -273,12 +273,149 @@ const FilterCategoryImage = ({ items, data, filteredData, cart, setCart }) => {
       sort,
     }))
   }
+  // Añadi este nuevo estado para controlar la visibilidad del filtro en móvil
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
 
+  // Componente del modal de filtros
+  const FiltersModal = () => (
+    <div className="fixed inset-0 z-50 overflow-y-auto">
+      {/* Fondo oscuro */}
+      <div
+        className="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
+        onClick={() => setShowMobileFilters(false)}
+      />
+
+      {/* Contenedor del modal */}
+      <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        {/* Panel del modal */}
+        <div className="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 w-full sm:align-middle sm:max-w-lg sm:w-full h-[80vh]">
+          {/* Encabezado del modal */}
+          <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 border-b sticky top-0 z-10">
+            <div className="flex justify-between items-center">
+              <h3 className="text-lg font-bold leading-6 text-gray-900">Filtros</h3>
+              <button
+                type="button"
+                className="text-gray-400 hover:text-gray-500 focus:outline-none"
+                onClick={() => setShowMobileFilters(false)}
+              >
+                <span className="sr-only">Cerrar</span>
+                ✕
+              </button>
+            </div>
+          </div>
+
+          {/* Contenido del modal - tus filtros actuales */}
+          <div className="bg-white px-4 pt-2 pb-4 sm:p-6 sm:pb-4 overflow-y-auto h-[calc(100%-60px)]">
+            <div className="mb-6">
+              <button
+                onClick={() => toggleSection("categoria")}
+                className="flex items-center justify-between w-full mb-4"
+              >
+                <span className="font-bold">Categorias</span>
+                <ChevronDown
+                  className={`h-5 w-5 transform transition-transform ${sections.categoria ? "" : "-rotate-180"}`}
+                />
+              </button>
+              {sections.categoria && (
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    {filteredCategories?.map((category) => {
+                      const isChecked = selectedFilters.category_id?.includes(category.id);
+                      return (
+                        <div
+                          key={category.id}
+                          className={`group py-2 rounded-md ${isChecked ? "bg-secondary" : "bg-transparent"}`}
+                        >
+                          <label className="flex items-center justify-between cursor-pointer">
+                            <input
+                              type="checkbox"
+                              className="h-4 hidden w-4 rounded border-gray-300"
+                              onChange={() => handleFilterChange("category_id", category.id)}
+                              checked={isChecked}
+                            />
+                            <span>{category.name}</span>
+                            <img
+                              src={`/storage/images/category/${category.image}`}
+                              onError={(e) => (e.target.src = "assets/img/noimage/no_imagen_circular.png")}
+                              alt={category.name}
+                              className="w-8 h-8 rounded-full object-cover"
+                              loading="lazy"
+                            />
+                          </label>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Sección de precios */}
+            <div className="mb-6">
+              <button
+                onClick={() => toggleSection("precio")}
+                className="flex items-center justify-between w-full mb-4"
+              >
+                <span className="font-medium">Precio</span>
+                <ChevronDown
+                  className={`h-5 w-5 transform transition-transform ${sections.precio ? "" : "-rotate-180"}`}
+                />
+              </button>
+              {sections.precio && (
+                <div className="space-y-3">
+                  {priceRanges?.map((range) => (
+                    <label key={`${range.min}-${range.max}`} className="flex items-center space-x-3">
+                      <input
+                        type="checkbox"
+                        name="precio"
+                        className="h-4 w-4 rounded border-gray-300"
+                        onChange={() => handleFilterChange("price", range)}
+                        checked={
+                          selectedFilters.price &&
+                          selectedFilters.price.min === range.min &&
+                          selectedFilters.price.max === range.max
+                        }
+                      />
+                      <span>{`S/ ${range.min} - S/ ${range.max}`}</span>
+                    </label>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Botón para aplicar filtros */}
+          <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse sticky bottom-0 border-t">
+            <button
+              type="button"
+              className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-3 bg-primary text-white text-base font-medium hover:bg-primary-dark focus:outline-none sm:ml-3 sm:w-auto sm:text-sm"
+              onClick={() => setShowMobileFilters(false)}
+            >
+              Aplicar filtros
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
   return (
     <section className="p-[5%] mx-auto w-full">
+      {/* Modal de filtros (solo se muestra en móvil) */}
+      {showMobileFilters && <FiltersModal />}
+
       <div className="relative flex flex-col sm:flex-row gap-4">
-        {/* Filters sidebar */}
-        <div className="w-full sm:w-1/5 bg-white p-4 rounded-lg h-max">
+        {/* Filters sidebar (visible solo en desktop) */}
+        <div className="hidden lg:block w-full sm:w-1/5 bg-white p-4 rounded-lg h-max">
+          {/* Botón para cerrar en móvil */}
+          <div className="sm:hidden flex justify-between items-center mb-4">
+
+            <button
+              onClick={() => setShowMobileFilters(false)}
+              className="customtext-primary hover:customtext-accent"
+            >
+              ✕
+            </button>
+          </div>
           <p className="text-xl font-bold pb-4 mb-4 border-b">{data?.title || "Filtros"}</p>
           <div className="mb-6">
             <button
@@ -358,8 +495,8 @@ const FilterCategoryImage = ({ items, data, filteredData, cart, setCart }) => {
         {/* Products section */}
         <div className="w-full sm:w-4/5 py-4">
           {/* Sort and pagination controls */}
-          <div className="flex justify-between items-center mb-4 w-full">
-            <div className="flex gap-4 items-center">
+          <div className="flex justify-between items-end mb-4 w-full">
+            <div className="flex gap-4  items-start lg:items-center flex-col w-8/12 lg:w-auto lg:flex-row">
               <label className="font-semibold text-sm w-[150px]">Ordenar por</label>
               <SelectForm
                 options={sortOptions}
@@ -370,7 +507,16 @@ const FilterCategoryImage = ({ items, data, filteredData, cart, setCart }) => {
                 className="border-primary rounded-full customtext-primary"
               />
             </div>
-            <div className="customtext-primary font-semibold">
+            <div className="lg:hidden flex items-end h-full mb-4">
+              <button
+                onClick={() => setShowMobileFilters(!showMobileFilters)}
+                className=" h-12 w-12 gap-2 bg-primary text-white flex items-center justify-center  rounded-full lg:hidden"
+              >
+                <Filter size={20} />
+
+              </button>
+            </div>
+            <div className="customtext-primary font-semibold hidden lg:block">
               <div className="flex justify-between items-center mb-4 w-full mt-8">
                 {/* Top pagination */}
                 <div className="customtext-primary font-semibold">
@@ -425,15 +571,26 @@ const FilterCategoryImage = ({ items, data, filteredData, cart, setCart }) => {
           ) : (
             <div className="flex items-center flex-wrap gap-y-2 lg:gap-y-3 transition-all duration-300 ease-in-out">
               {Array.isArray(products) && products.length > 0 ? (
-                products.map((product) => (
-                  <ProductCardSimple
-                    key={product.id}
-                    product={product}
-                    widthClass="lg:w-1/3"
-                    cart={cart}
-                    setCart={setCart}
-                  />
-                ))
+                products.map((product) => {
+                  if (data?.card === "CardProductBananaLab") {
+                    return (
+                      <CardProductBananaLab
+                        key={product.id}
+                        product={product}
+                        widthClass="lg:w-1/3"
+                        cart={cart}
+                        setCart={setCart}
+                      />)
+                  } else {
+                    return (<ProductCardSimple
+                      key={product.id}
+                      product={product}
+                      widthClass="lg:w-1/3"
+                      cart={cart}
+                      setCart={setCart}
+                    />)
+                  }
+                })
               ) : (
                 <NoResults />
               )}

@@ -13,7 +13,6 @@ import Menu from '../Components/Adminto/System/Menu';
 import ParamsModal from '../Components/Adminto/System/ParamsModal';
 import RouteParams from '../Utils/RouteParams';
 import RigthBar from '../Components/Adminto/System/RightBar';
-import { Fetch } from 'sode-extend-react';
 import Modal from '../Components/Adminto/Modal';
 
 const systemRest = new SystemRest()

@@ -6,6 +6,7 @@ const ProductDetailSimple = React.lazy(() => import('./ProductDetails/ProductDet
 const ProductDetailB = React.lazy(() => import('./ProductDetails/ProductDetailB'))
 const ScrapingProductDetail = React.lazy(() => import('./Scraping/ScrapingProductDetail'))
 const ProductDetailSF = React.lazy(() => import('./ProductDetails/ProductDetailSF'))
+const ProductDetailBananaLab = React.lazy(() => import('./ProductDetails/ProductDetailBananaLab'))
 const ProductDetailKuchara = React.lazy(() => import('./ProductDetails/ProductDetailKuchara'))
 
 const ProductDetail = ({ which, item, cart, setCart }) => {
@@ -19,6 +20,8 @@ const ProductDetail = ({ which, item, cart, setCart }) => {
         return <ScrapingProductDetail cart={cart} setCart={setCart} />
       case 'ProductDetailSF':
         return <ProductDetailSF item={item} cart={cart} setCart={setCart} />
+        case 'ProductDetailBananaLab':
+          return <ProductDetailBananaLab item={item} cart={cart} setCart={setCart} />
         case 'ProductDetailKuchara':
           return <ProductDetailKuchara item={item} cart={cart} setCart={setCart} />
       default:

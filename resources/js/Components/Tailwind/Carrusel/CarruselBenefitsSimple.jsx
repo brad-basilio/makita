@@ -2,7 +2,7 @@ import { Hexagon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { adjustTextColor } from "../../../Functions/adjustTextColor";
 
-const CarruselBenefitsSimple = ({ items }) => {
+const CarruselBenefitsSimple = ({ items, data }) => {
     // Duplicamos los elementos para lograr el efecto infinito
     const infiniteBenefits = [...items, ...items];
     const sliderRef = useRef(null);
@@ -30,7 +30,11 @@ const CarruselBenefitsSimple = ({ items }) => {
     //va en el div incial ref = { benefitsRef }
     // va en el div antes de hacer el map ref={sliderRef}
     return (
-        <div className="bg-secondary py-6 overflow-hidden customtext-primary !font-font-general mt-5 lg:mt-10">
+        <div
+            className={`${
+                data.background ? data.background : "bg-secondary"
+            } py-6 overflow-hidden customtext-primary font-paragraph mt-5 lg:mt-10 `}
+        >
             <div className="px-primary 2xl:px-0  2xl:max-w-7xl mx-auto relative">
                 <div className="flex flex-col md:flex-row w-full gap-8 whitespace-nowrap transition-none">
                     {items.map((benefit, index) => (
@@ -49,7 +53,7 @@ const CarruselBenefitsSimple = ({ items }) => {
                                             (e.target.src =
                                                 "assets/img/noimage/no_imagen_circular.png")
                                         }
-                                        className="w-full h-auto object-contain "
+                                        className="w-full h-auto "
                                     />
                                 </div>
                             </div>
