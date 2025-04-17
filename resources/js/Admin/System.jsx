@@ -43,6 +43,7 @@ const System = ({
   const [hasRemoteChanges, setHasRemoteChanges] = useState(false)
   const [lastRemoteCommit, setLastRemoteCommit] = useState(null)
   const [fetchingChanges, setFetchingChanges] = useState(false)
+  const [checkingChanges, setCheckingChanges] = useState(false)
   const [commits, setCommits] = useState(0)
 
   const onAddPageClicked = async () => {
@@ -114,30 +115,32 @@ const System = ({
   useEffect(() => {
     let interval = null;
 
-    const checkRemoteChanges = () => {
-      if (fetchingChanges) return
+    const checkRemoteChanges = async () => {
+      if (fetchingChanges, checkingChanges) return
       if (ghHasError) {
         clearInterval(interval)
         return
       }
-      systemRest
-        .hasRemoteChanges()
-        .then((data) => {
-          if (!data) {
-            setGhHasError(true)
-            return
-          };
-          setHasRemoteChanges(data.has_changes)
-          setLastRemoteCommit(data.last_commit)
-          setCommits(data.commits)
-        })
+
+      setCheckingChanges(true)
+      const data = await systemRest.hasRemoteChanges()
+      setCheckingChanges(false)
+
+      if (!data) {
+        setGhHasError(true)
+        return
+      };
+
+      setHasRemoteChanges(data.has_changes)
+      setLastRemoteCommit(data.last_commit)
+      setCommits(data.commits)
     }
 
     checkRemoteChanges();
-    interval = setInterval(checkRemoteChanges, 5000)
+    interval = setInterval(checkRemoteChanges, 10000)
 
     return () => clearInterval(interval)
-  }, [ghHasError, fetchingChanges])
+  }, [ghHasError, fetchingChanges, checkingChanges])
 
   useEffect(() => {
     document.title = `Sistema | ${Global.APP_NAME}`
