@@ -1139,46 +1139,6 @@
                     "support_email"
                 ]
             },
-<<<<<<< HEAD
-            {
-                "id": "FooterBananaLab",
-                "name": "FooterBananaLab",
-                "image": "footer-simple.png",
-                "using": {
-                    "model": "Social",
-                    "limit": 10
-                },
-                "generals": [
-                    "terms_conditions",
-                    "privacy_policy",
-                    "delivery_policy",
-                    "saleback_policy",
-                    "address",
-                    "support_phone",
-                    "support_email"
-                ]
-            },
-            {
-                "id": "FooterPideloPe",
-                "name": "FooterPideloPe",
-                "image": "footer-simple.png",
-                "using": {
-                    "model": "Social",
-                    "limit": 10
-                },
-                "generals": [
-                    "terms_conditions",
-                    "privacy_policy",
-                    "delivery_policy",
-                    "saleback_policy",
-                    "address",
-                    "support_phone",
-                    "support_email"
-                ]
-            },
-=======
-
->>>>>>> 1e6bcb0f456f3bc801e6ff14c5f311e8e783da0c
             {
                 "id": "FooterCallToAction",
                 "name": "Llamada a la acción",
