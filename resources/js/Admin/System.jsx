@@ -110,11 +110,10 @@ const System = ({
   useEffect(() => {
     document.title = `Sistema | ${Global.APP_NAME}`
     systemRest.hasRemoteChanges()
-      .then(({ result }) => {
-        console.log(result)
+      .then((data) => {
         if (!result) return;
-        setHasRemoteChanges(result.data.has_changes)
-        setLastRemoteCommit(result.data.last_commit)
+        setHasRemoteChanges(data.has_changes)
+        setLastRemoteCommit(data.last_commit)
       })
   }, [null])
 
