@@ -99,6 +99,7 @@ class SystemRest extends BasicRest {
     }
   }
 
+  hasRemoteChanges = () => this.simpleGet(`/api/${this.path}/has-remote-changes`)
   fetchRemoteChanges = () => this.simpleGet(`/api/${this.path}/fetch-remote-changes`)
 }
 

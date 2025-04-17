@@ -86,9 +86,9 @@ const System = ({
 
   useEffect(() => {
     document.title = `Sistema | ${Global.APP_NAME}`
-    Fetch('/api/admin/has-remote-changes')
-      .then(({ status, result }) => {
-        if (!status) return
+    systemRest.hasRemoteChanges()
+      .then(({ result }) => {
+        if (!result) return;
         setHasRemoteChanges(result.data.has_changes)
         setLastRemoteCommit(result.data.last_commit)
       })
