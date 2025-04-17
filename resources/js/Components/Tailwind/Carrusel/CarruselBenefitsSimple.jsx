@@ -53,11 +53,7 @@ const CarruselBenefitsSimple = ({ items, data }) => {
                                             (e.target.src =
                                                 "assets/img/noimage/no_imagen_circular.png")
                                         }
-<<<<<<< HEAD
                                         className="w-full h-auto "
-=======
-                                        className="w-full h-auto object-contain "
->>>>>>> 1e6bcb0f456f3bc801e6ff14c5f311e8e783da0c
                                     />
                                 </div>
                             </div>

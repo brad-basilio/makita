@@ -39,6 +39,7 @@ const System = ({
   const [systemLoaded, setSystemLoaded] = useState(null);
 
   const [hasRemoteChanges, setHasRemoteChanges] = useState(false)
+  const [lastRemoteCommit, setLastRemoteCommit] = useState(null)
 
   const onAddPageClicked = async () => {
     setAddingPage(true);
@@ -78,7 +79,9 @@ const System = ({
     document.title = `Sistema | ${Global.APP_NAME}`
     Fetch('/api/admin/has-remote-changes')
       .then(({ status, result }) => {
-        console.log(status, result)
+        if (!status) return
+        setHasRemoteChanges(result.data.has_changes)
+        setLastRemoteCommit(result.data.last_commit)
       })
   }, [null])
 
@@ -308,14 +311,16 @@ const System = ({
         </div>
         {
           hasRemoteChanges &&
-          <button className='btn btn-dark p-0 position-absolute rounded-pill' style={{
-            right: '20px',
-            bottom: '20px',
-            height: '40px',
-            width: '40px'
-          }}>
-            <i className='mdi mdi-github mdi-24px'></i>
-          </button>
+          <Tippy content={lastRemoteCommit}>
+            <button className='btn btn-dark p-0 position-absolute rounded-pill' style={{
+              right: '20px',
+              bottom: '20px',
+              height: '40px',
+              width: '40px'
+            }}>
+              <i className='mdi mdi-github mdi-24px'></i>
+            </button>
+          </Tippy>
         }
       </div>
       <RigthBar colors={colors} setColors={setColors} settings={settings} setSettings={setSettings} />
