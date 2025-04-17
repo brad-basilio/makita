@@ -109,8 +109,10 @@ const System = ({
 
   useEffect(() => {
     document.title = `Sistema | ${Global.APP_NAME}`
-    systemRest.hasRemoteChanges()
+    systemRest
+      .hasRemoteChanges()
       .then((data) => {
+        console.log('En el useEffect:', data)
         if (!data) return;
         setHasRemoteChanges(data.has_changes)
         setLastRemoteCommit(data.last_commit)
