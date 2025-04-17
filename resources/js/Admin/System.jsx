@@ -111,7 +111,7 @@ const System = ({
     document.title = `Sistema | ${Global.APP_NAME}`
     systemRest.hasRemoteChanges()
       .then((data) => {
-        if (!result) return;
+        if (!data) return;
         setHasRemoteChanges(data.has_changes)
         setLastRemoteCommit(data.last_commit)
       })
