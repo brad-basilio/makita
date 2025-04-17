@@ -39,6 +39,7 @@ const System = ({
   const [pageLoaded, setPageLoaded] = useState(null);
   const [systemLoaded, setSystemLoaded] = useState(null);
 
+  const [ghHasError, setGhHasError] = useState(false)
   const [hasRemoteChanges, setHasRemoteChanges] = useState(false)
   const [lastRemoteCommit, setLastRemoteCommit] = useState(null)
 
@@ -107,14 +108,33 @@ const System = ({
   }
 
   useEffect(() => {
+    let interval = null;
+
+    const checkRemoteChanges = () => {
+      if (ghHasError) {
+        clearInterval(interval)
+        return
+      }
+      systemRest
+        .hasRemoteChanges()
+        .then((data) => {
+          if (!data) {
+            setGhHasError(true)
+            return
+          };
+          setHasRemoteChanges(data.has_changes)
+          setLastRemoteCommit(data.last_commit)
+        })
+    }
+
+    checkRemoteChanges();
+    interval = setInterval(checkRemoteChanges, 5000)
+
+    return () => clearInterval(interval)
+  }, [ghHasError])
+
+  useEffect(() => {
     document.title = `Sistema | ${Global.APP_NAME}`
-    systemRest
-      .hasRemoteChanges()
-      .then((data) => {
-        if (!data) return;
-        setHasRemoteChanges(data.has_changes)
-        setLastRemoteCommit(data.last_commit)
-      })
   }, [null])
 
   useEffect(() => {
