@@ -9,7 +9,6 @@ const FilterBananaLab = React.lazy(() => import('./Filters/FilterBananaLab'))
 const FilterCategoryImage = React.lazy(() => import('./Filters/FilterCategoryImage'))//
 //const Filter = ({ which, items, data, category, brands, subcategory, cart, setCart, prices }) => {
 const Filter = ({ which, items, data, cart, setCart, filteredData }) => {
-  console.log("Filter props:", { which, items, data, filteredData });
   const getFilter = () => {
     switch (which) {
       case 'FilterSimple':

@@ -10,7 +10,6 @@ class BasicRest {
         try {
             const { status, result } = await Fetch(url, params)
             if (!status) throw new Error(result?.message || 'Ocurrio un error inesperado')
-            console.log('Dentro de BasicRest:', result.data)
             return result.data ?? true;
         } catch (error) {
             Notify.add({
