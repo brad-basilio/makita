@@ -302,7 +302,7 @@ class SystemController extends BasicController
             $hasChanges = $aheadCount > 0;
 
             // 3. Obtener último commit local
-            $commitLog = new Process(['git', 'log', '-1', "--pretty=format:%an\n%ci\n%s"], $projectPath);
+            $commitLog = new Process(['git', 'log', 'origin/mainn', '-1', "--pretty=format:%an\n%ci\n%s"], $projectPath);
             $commitLog->run();
 
             $lastCommit = $commitLog->isSuccessful()
