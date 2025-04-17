@@ -43,6 +43,7 @@ const System = ({
   const [hasRemoteChanges, setHasRemoteChanges] = useState(false)
   const [lastRemoteCommit, setLastRemoteCommit] = useState(null)
   const [fetchingChanges, setFetchingChanges] = useState(false)
+  const [commits, setCommits] = useState(0)
 
   const onAddPageClicked = async () => {
     setAddingPage(true);
@@ -128,6 +129,7 @@ const System = ({
           };
           setHasRemoteChanges(data.has_changes)
           setLastRemoteCommit(data.last_commit)
+          setCommits(data.commits)
         })
     }
 
@@ -366,9 +368,16 @@ const System = ({
             <small className='d-block text-muted'>{moment(gitDate).fromNow()}</small>
             <span className='d-block'>{gitMessage}</span>
           </div>
-          <button className='btn btn-primary' type='button' onClick={() => fetchRemoteChanges()}
-          >
-            <i className='mdi mdi-cloud-download'></i>
+          <button
+            className='btn btn-primary'
+            type='button'
+            onClick={() => fetchRemoteChanges()}
+            disabled={fetchingChanges}>
+            {
+              fetchingChanges
+                ? <i className='mdi mdi-loading mdi-spin me-1'></i>
+                : <i className='mdi mdi-cloud-download me-1'></i>
+            }
             Sincronizar
           </button>
         </div>
