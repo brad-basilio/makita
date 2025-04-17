@@ -44,7 +44,7 @@ const CreateReactScript = (render) => {
         return false
       }
 
-      const hasRole = (...rolesIn ) => {
+      const hasRole = (...rolesIn) => {
         const roles2validate = []
         if (Array.isArray(rolesIn)) {
           roles2validate.push(...rolesIn)
@@ -61,6 +61,12 @@ const CreateReactScript = (render) => {
         'X-Xsrf-Token': decodeURIComponent(Cookies.get('XSRF-TOKEN'))
       }
       render(el, { ...properties, can, hasRole })
+
+      if (Global.APP_ENV == 'local') {
+        $('.modal-backdrop').each(function () {
+          if (!$(this).text()) $(this).remove()
+        })
+      }
     },
   });
 }

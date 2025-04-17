@@ -11,7 +11,7 @@
     @viteReactRefresh
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-    <title>Panel - {{ env('APP_NAME', 'Stech Perú') }}</title>
+    <title>Panel - {{ env('APP_NAME', 'Base Template') }}</title>
     <link rel="shortcut icon" href="/assets/resources/icon.png?v={{ uniqid() }}" type="image/png">
 
     <meta name="csrf_token" content="{{ csrf_token() }}">
@@ -23,9 +23,9 @@
     <link href="/lte/assets/libs/quill/quill.snow.css" rel="stylesheet" type="text/css" />
     <link href="/lte/assets/libs/quill/quill.bubble.css" rel="stylesheet" type="text/css" />
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="/lte/assets/libs/exceljs/exceljs.min.js"></script>
+    <script src="/lte/assets/libs/filesaver/FileSaver.min.js"></script>
+    <script src="/lte/assets/libs/jszip//jszip.min.js"></script>
 
     {{-- DxDataGrid Styles --}}
     <link href="/lte/assets/libs/dxdatagrid/css/dx.light.compact.css?v=06d3ebc8-645c-4d80-a600-c9652743c425"

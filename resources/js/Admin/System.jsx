@@ -14,6 +14,7 @@ import ParamsModal from '../Components/Adminto/System/ParamsModal';
 import RouteParams from '../Utils/RouteParams';
 import RigthBar from '../Components/Adminto/System/RightBar';
 import { Fetch } from 'sode-extend-react';
+import Modal from '../Components/Adminto/Modal';
 
 const systemRest = new SystemRest()
 
@@ -27,6 +28,7 @@ const System = ({
 
   const modalSEORef = useRef(null);
   const modalParamsRef = useRef(null);
+  const modalGitHubRef = useRef(null);
   const dataModalRef = useRef(null);
 
   const [systems, setSystems] = useState(systemsDB);
@@ -75,23 +77,11 @@ const System = ({
     setSystems(old => old.filter(x => x.id != system.id));
   }
 
-  useEffect(() => {
-    document.title = `Sistema | ${Global.APP_NAME}`
-    Fetch('/api/admin/has-remote-changes')
-      .then(({ status, result }) => {
-        if (!status) return
-        setHasRemoteChanges(result.data.has_changes)
-        setLastRemoteCommit(result.data.last_commit)
-      })
-  }, [null])
-
-  useEffect(() => {
-    const iframe = $('iframe:visible');
-    if (iframe) {
-      $(iframe).removeAttr('src');
-      $(iframe).attr('src', iframe.data('path'));
-    }
-  }, [systems, colors, settings])
+  const fetchRemoteChanges = async () => {
+    const result = await systemRest.fetchRemoteChanges();
+    if (!result) return;
+    location.reload();
+  }
 
   const onPathChange = (e) => {
     const pageId = $(e.target).data('page-id')
@@ -116,6 +106,24 @@ const System = ({
     setSystemLoaded({ ...system, component });
     $(dataModalRef.current).modal('show');
   }
+
+  useEffect(() => {
+    document.title = `Sistema | ${Global.APP_NAME}`
+    systemRest.hasRemoteChanges()
+      .then((data) => {
+        if (!data) return;
+        setHasRemoteChanges(data.has_changes)
+        setLastRemoteCommit(data.last_commit)
+      })
+  }, [null])
+
+  useEffect(() => {
+    const iframe = $('iframe:visible');
+    if (iframe) {
+      $(iframe).removeAttr('src');
+      $(iframe).attr('src', iframe.data('path'));
+    }
+  }, [systems, colors, settings])
 
   useEffect(() => {
     const containers = [...$('.components-container')];
@@ -165,6 +173,10 @@ const System = ({
       }).disableSelection();
     });
   }, [pages, systems]);
+
+  const [gitCommited, gitDate, gitMessage] = lastRemoteCommit?.split('\n') ?? []
+
+  console.log({ gitCommited, gitDate, gitMessage })
 
   return (
     <>
@@ -250,7 +262,7 @@ const System = ({
                             </div>
                             <div className="col-md-8">
                               <iframe src='/base-template' data-path='/base-template' className='w-100 h-100 border' style={{
-                                minHeight: 'calc(100vh - 185px)',
+                                minHeight: 'calc(100vh - 200px)',
                                 borderRadius: '4px'
                               }}></iframe>
                             </div>
@@ -293,7 +305,7 @@ const System = ({
                                     }
                                   </div>
                                   <iframe id={`iframe-${page.id}`} src={page?.pseudo_path || page.path} data-path={page?.pseudo_path || page.path} className='w-100 h-100 border' style={{
-                                    minHeight: 'calc(100vh - 185px)',
+                                    minHeight: 'calc(100vh - 302px)',
                                     borderRadius: '4px'
                                   }}></iframe>
                                 </div>
@@ -311,18 +323,34 @@ const System = ({
         </div>
         {
           hasRemoteChanges &&
-          <Tippy content={lastRemoteCommit}>
+          <Tippy content='Tienes cambios sin sincronizar'>
             <button className='btn btn-dark p-0 position-absolute rounded-pill' style={{
-              right: '20px',
-              bottom: '20px',
+              right: '10px',
+              bottom: '10px',
               height: '40px',
               width: '40px'
-            }}>
+            }} onClick={() => $(modalGitHubRef.current).modal('show')}>
               <i className='mdi mdi-github mdi-24px'></i>
             </button>
           </Tippy>
         }
       </div>
+      <Modal modalRef={modalGitHubRef} title='Cambios de Github' size='sm'>
+        <div className="text-center">
+          <i className='mdi mdi-github mdi-48px'></i>
+          <h5 className='mt-2'>Tienes cambios sin sincronizar</h5>
+          <p className='text-muted'>
+            {
+              lastRemoteCommit ? `Ultima actualización: ${lastRemoteCommit}` : ''
+            }
+          </p>
+          <button className='btn btn-primary' onClick={() => fetchRemoteChanges()}
+          >
+            <i className='mdi mdi-cloud-download'></i>
+            Sincronizar
+          </button>
+        </div>
+      </Modal>
       <RigthBar colors={colors} setColors={setColors} settings={settings} setSettings={setSettings} />
 
       <SEOModal dataLoaded={pageLoaded} setDataLoaded={setPageLoaded} modalRef={modalSEORef} />

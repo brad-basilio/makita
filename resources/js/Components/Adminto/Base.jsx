@@ -7,7 +7,6 @@ import RigthBar from './RightBar'
 moment.tz.setDefault('UTC');
 
 const Base = ({ children, title, ...props }) => {
-
   return (<>
     <div id="wrapper">
       <NavBar {...props} title={title} />

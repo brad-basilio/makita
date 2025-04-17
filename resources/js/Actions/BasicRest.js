@@ -6,6 +6,23 @@ class BasicRest {
     path = null;
     hasFiles = false;
 
+    simpleGet = async (url, params) => {
+        try {
+            const { status, result } = await Fetch(url, params)
+            console.log('Simple Get:', { status, result });
+            if (!status) throw new Error(result?.message || 'Ocurrio un error inesperado')
+            return result.data ?? true;
+        } catch (error) {
+            Notify.add({
+                icon: '/assets/img/icon.svg',
+                title: 'Error',
+                body: error.message,
+                type: 'danger'
+            })
+            return null;
+        }
+    }
+
     paginate = async (params) => {
         controller.abort("Nothing");
         controller = new AbortController();
@@ -23,7 +40,7 @@ class BasicRest {
         return await res.json();
     };
 
-    save = async (request, callback = () => {}) => {
+    save = async (request, callback = () => { }) => {
         try {
             let status = false;
             let result = {};
