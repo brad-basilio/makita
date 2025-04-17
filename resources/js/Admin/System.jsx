@@ -378,7 +378,7 @@ const System = ({
             <span className='d-block'>Commit: {gitMessage}</span>
           </div>
           <button
-            className='btn btn-primary'
+            className='btn btn-primary mb-2'
             type='button'
             onClick={() => fetchRemoteChanges()}
             disabled={fetchingChanges}>
