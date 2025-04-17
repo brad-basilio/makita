@@ -353,16 +353,16 @@ const System = ({
           </Tippy>
         }
       </div>
-      <Modal modalRef={modalGitHubRef} title='Cambios de Github' size='sm'>
+      <Modal modalRef={modalGitHubRef} title='Cambios de Github' size='sm' hideFooter>
         <div className="text-center">
           <i className='mdi mdi-github mdi-48px'></i>
           <h5 className='mt-2'>Tienes cambios sin sincronizar</h5>
-          <p className='text-muted'>
+          <div>
             <b className='d-block'>{gitAuthor}</b>
-            <small className='d-block'>{moment(gitDate).fromNow()}</small>
+            <small className='d-block text-muted'>{moment(gitDate).fromNow()}</small>
             <span className='d-block'>{gitMessage}</span>
-          </p>
-          <button className='btn btn-primary' onClick={() => fetchRemoteChanges()}
+          </div>
+          <button className='btn btn-primary' type='button' onClick={() => fetchRemoteChanges()}
           >
             <i className='mdi mdi-cloud-download'></i>
             Sincronizar
