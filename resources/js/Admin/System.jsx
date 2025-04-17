@@ -349,8 +349,8 @@ const System = ({
           hasRemoteChanges &&
           <Tippy content='Tienes cambios sin sincronizar'>
             <button className='btn btn-dark p-0 position-absolute rounded-pill' style={{
-              right: '10px',
-              bottom: '10px',
+              right: '20px',
+              bottom: '20px',
               height: '40px',
               width: '40px'
             }} onClick={() => $(modalGitHubRef.current).modal('show')}>
