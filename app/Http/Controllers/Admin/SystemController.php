@@ -6,6 +6,7 @@ use App\Http\Controllers\BasicController;
 use App\Models\Setting;
 use App\Models\System;
 use App\Models\SystemColor;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use SoDe\Extend\Crypto;
@@ -253,6 +254,29 @@ class SystemController extends BasicController
         return response($response->toArray(), $response->status);
     }
 
+    public function fetchRemoteChanges(Request $request)
+    {
+        $response = Response::simpleTryCatch(function () {
+            $commands = [
+                ['git', 'restore', '--source=HEAD', '--staged', '--worktree', '.'],
+                ['git', 'pull'],
+                ['php', 'artisan', 'migrate', '--force'],
+                ['php', 'artisan', 'config:clear'],
+                ['php', 'artisan', 'cache:clear'],
+            ];
+
+            foreach ($commands as $cmd) {
+                $process = new Process($cmd, base_path());
+                $process->run();
+
+                if (!$process->isSuccessful()) {
+                    throw new Exception($process->getErrorOutput());
+                }
+            }
+        });
+        return response($response->toArray(), $response->status);
+    }
+
     public function hasRemoteChanges(Request $request)
     {
         $response = Response::simpleTryCatch(function () {
@@ -278,7 +302,7 @@ class SystemController extends BasicController
             $hasChanges = $aheadCount > 0;
 
             // 3. Obtener último commit local
-            $commitLog = new Process(['git', 'log', '-1', "--pretty=format:%an (%ci)\n%s"], $projectPath);
+            $commitLog = new Process(['git', 'log', '-1', "--pretty=format:%an\n%ci\n%s"], $projectPath);
             $commitLog->run();
 
             $lastCommit = $commitLog->isSuccessful()

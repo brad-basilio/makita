@@ -23,9 +23,9 @@
     <link href="/lte/assets/libs/quill/quill.snow.css" rel="stylesheet" type="text/css" />
     <link href="/lte/assets/libs/quill/quill.bubble.css" rel="stylesheet" type="text/css" />
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="/lte/assets/libs/exceljs/exceljs.min.js"></script>
+    <script src="/lte/assets/libs/filesaver/FileSaver.min.js"></script>
+    <script src="/lte/assets/libs/jszip//jszip.min.js"></script>
 
     {{-- DxDataGrid Styles --}}
     <link href="/lte/assets/libs/dxdatagrid/css/dx.light.compact.css?v=06d3ebc8-645c-4d80-a600-c9652743c425"

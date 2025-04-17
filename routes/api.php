@@ -277,7 +277,8 @@ Route::middleware('auth')->group(function () {
 
       Route::post('/colors', [AdminSystemColorController::class, 'save']);
 
-      Route::get('/has-remote-changes', [AdminSystemController::class, 'hasRemoteChanges']);
+      Route::get('/system/fetch-remote-changes', [AdminSystemController::class, 'fetchRemoteChanges']);
+      Route::get('/system/has-remote-changes', [AdminSystemController::class, 'hasRemoteChanges']);
     });
 
     Route::post('/repository', [AdminRepositoryController::class, 'save']);

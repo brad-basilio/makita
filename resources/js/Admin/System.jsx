@@ -14,6 +14,7 @@ import ParamsModal from '../Components/Adminto/System/ParamsModal';
 import RouteParams from '../Utils/RouteParams';
 import RigthBar from '../Components/Adminto/System/RightBar';
 import { Fetch } from 'sode-extend-react';
+import Modal from '../Components/Adminto/Modal';
 
 const systemRest = new SystemRest()
 
@@ -27,6 +28,7 @@ const System = ({
 
   const modalSEORef = useRef(null);
   const modalParamsRef = useRef(null);
+  const modalGitHubRef = useRef(null);
   const dataModalRef = useRef(null);
 
   const [systems, setSystems] = useState(systemsDB);
@@ -38,7 +40,7 @@ const System = ({
   const [pageLoaded, setPageLoaded] = useState(null);
   const [systemLoaded, setSystemLoaded] = useState(null);
 
-  const [hasRemoteChanges, setHasRemoteChanges] = useState(false)
+  const [hasRemoteChanges, setHasRemoteChanges] = useState(true)
   const [lastRemoteCommit, setLastRemoteCommit] = useState(null)
 
   const onAddPageClicked = async () => {
@@ -73,6 +75,13 @@ const System = ({
     const result = await systemRest.delete(system.id);
     if (!result) return;
     setSystems(old => old.filter(x => x.id != system.id));
+  }
+
+  const fetchRemoteChanges = async () => {
+    const result = await systemRest.fetchRemoteChanges();
+    if (!result) return;
+    setHasRemoteChanges(result.data.has_changes)
+    setLastRemoteCommit(result.data.last_commit)
   }
 
   useEffect(() => {
@@ -165,6 +174,10 @@ const System = ({
       }).disableSelection();
     });
   }, [pages, systems]);
+
+  const [gitCommited, gitDate, gitMessage] = lastRemoteCommit?.split('\n') ?? []
+
+  console.log({ gitCommited, gitDate, gitMessage })
 
   return (
     <>
@@ -311,18 +324,34 @@ const System = ({
         </div>
         {
           hasRemoteChanges &&
-          <Tippy content={lastRemoteCommit}>
+          <Tippy content='Tienes cambios sin sincronizar'>
             <button className='btn btn-dark p-0 position-absolute rounded-pill' style={{
               right: '20px',
               bottom: '20px',
               height: '40px',
               width: '40px'
-            }}>
+            }} onClick={() => $(modalGitHubRef.current).modal('show')}>
               <i className='mdi mdi-github mdi-24px'></i>
             </button>
           </Tippy>
         }
       </div>
+      <Modal modalRef={modalGitHubRef} title='Cambios de Github' size='sm'>
+        <div className="text-center">
+          <i className='mdi mdi-github mdi-48px'></i>
+          <h5 className='mt-2'>Tienes cambios sin sincronizar</h5>
+          <p className='text-muted'>
+            {
+              lastRemoteCommit ? `Ultima actualización: ${lastRemoteCommit}` : ''
+            }
+          </p>
+          <button className='btn btn-primary' onClick={() => fetchRemoteChanges()}
+          >
+            <i className='mdi mdi-cloud-download'></i>
+            Sincronizar
+          </button>
+        </div>
+      </Modal>
       <RigthBar colors={colors} setColors={setColors} settings={settings} setSettings={setSettings} />
 
       <SEOModal dataLoaded={pageLoaded} setDataLoaded={setPageLoaded} modalRef={modalSEORef} />
