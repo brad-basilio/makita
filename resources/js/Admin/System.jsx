@@ -135,7 +135,7 @@ const System = ({
 
     interval = setInterval(async () => {
       await checkRemoteChanges()
-    }, 5000)
+    }, 10000)
 
     return () => clearInterval(interval)
   }, [ghHasError, fetchingChanges])
