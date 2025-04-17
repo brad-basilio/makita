@@ -25,6 +25,7 @@ const CartKuchara = ({ data, cart, setCart }) => {
                     <div className="!w-20">
                       <img
                         src={`/storage/images/item/${item.image}`}
+                        onError={(e) => e.target.src = "/assets/img/noimage/no_img.jpg"}
                         alt={item.name}
                         className="!w-20 h-full object-cover object-center rounded-md aspect-[4/3]"
                       />
@@ -39,21 +40,7 @@ const CartKuchara = ({ data, cart, setCart }) => {
                         className="text-red-500 flex items-center mt-2"
                       >
                         Eliminar
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="ml-1"
-                        >
-                          <path d="M18 6 6 18" />
-                          <path d="m6 6 12 12" />
-                        </svg>
+                        <i className="mdi mdi-close ms-1 -mb-0.5"></i>
                       </button>
                     </div>
                   </div>

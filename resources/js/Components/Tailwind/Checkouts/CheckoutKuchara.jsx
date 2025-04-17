@@ -642,6 +642,7 @@ const CheckoutCulqi = ({ data, cart, setCart, items, prefixes }) => {
                     <div className="w-16">
                       <img
                         src={`/storage/images/item/${item.image}`}
+                        onError={(e) => e.target.src = "/assets/img/noimage/no_img.jpg"}
                         alt={item.name}
                         className="w-16 object-cover object-center aspect-[4/3] rounded"
                       />

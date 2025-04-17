@@ -35,7 +35,11 @@ const CartItemRow = ({ setCart, ...item }) => {
 
   return <tr className="border-b font-font-general">
     <td className="p-2 w-24">
-      <img src={`/storage/images/item/${item.image}`} className="block bg-white shadow rounded-md p-0 aspect-[4/3] w-20 h-auto object-cover object-center" alt={item.name} />
+      <img
+        src={`/storage/images/item/${item.image}`}
+        onError={(e) => e.target.src = "/assets/img/noimage/no_img.jpg"}
+        className="block bg-white shadow rounded-md p-0 aspect-[4/3] w-20 h-auto object-cover object-center"
+        alt={item.name} />
     </td>
     <td className="p-2">
       <p className="font-semibold mb-1 leading-tight text-sm">
