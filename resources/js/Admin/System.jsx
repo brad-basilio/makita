@@ -111,7 +111,6 @@ const System = ({
     systemRest
       .hasRemoteChanges()
       .then((data) => {
-        console.log('En el useEffect:', data)
         if (!data) return;
         setHasRemoteChanges(data.has_changes)
         setLastRemoteCommit(data.last_commit)
@@ -175,9 +174,7 @@ const System = ({
     });
   }, [pages, systems]);
 
-  const [gitCommited, gitDate, gitMessage] = lastRemoteCommit?.split('\n') ?? []
-
-  console.log({ gitCommited, gitDate, gitMessage })
+  const [gitAuthor, gitDate, gitMessage] = lastRemoteCommit?.split('\n') ?? []
 
   return (
     <>
@@ -341,9 +338,9 @@ const System = ({
           <i className='mdi mdi-github mdi-48px'></i>
           <h5 className='mt-2'>Tienes cambios sin sincronizar</h5>
           <p className='text-muted'>
-            {
-              lastRemoteCommit ? `Ultima actualización: ${lastRemoteCommit}` : ''
-            }
+            <b className='d-block'>{gitAuthor}</b>
+            <small className='d-block'>{moment(gitDate).fromNow()}</small>
+            <span className='d-block'>{gitMessage}</span>
           </p>
           <button className='btn btn-primary' onClick={() => fetchRemoteChanges()}
           >
