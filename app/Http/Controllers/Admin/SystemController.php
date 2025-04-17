@@ -310,6 +310,7 @@ class SystemController extends BasicController
                 : 'No se pudo obtener el último commit.';
 
             return [
+                'commits' => $aheadCount,
                 'has_changes' => $hasChanges,
                 'last_commit' => $lastCommit,
             ];
