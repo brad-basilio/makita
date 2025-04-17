@@ -40,7 +40,7 @@ const System = ({
   const [pageLoaded, setPageLoaded] = useState(null);
   const [systemLoaded, setSystemLoaded] = useState(null);
 
-  const [hasRemoteChanges, setHasRemoteChanges] = useState(true)
+  const [hasRemoteChanges, setHasRemoteChanges] = useState(false)
   const [lastRemoteCommit, setLastRemoteCommit] = useState(null)
 
   const onAddPageClicked = async () => {
@@ -263,7 +263,7 @@ const System = ({
                             </div>
                             <div className="col-md-8">
                               <iframe src='/base-template' data-path='/base-template' className='w-100 h-100 border' style={{
-                                minHeight: 'calc(100vh - 185px)',
+                                minHeight: 'calc(100vh - 200px)',
                                 borderRadius: '4px'
                               }}></iframe>
                             </div>
@@ -306,7 +306,7 @@ const System = ({
                                     }
                                   </div>
                                   <iframe id={`iframe-${page.id}`} src={page?.pseudo_path || page.path} data-path={page?.pseudo_path || page.path} className='w-100 h-100 border' style={{
-                                    minHeight: 'calc(100vh - 185px)',
+                                    minHeight: 'calc(100vh - 302px)',
                                     borderRadius: '4px'
                                   }}></iframe>
                                 </div>
@@ -326,8 +326,8 @@ const System = ({
           hasRemoteChanges &&
           <Tippy content='Tienes cambios sin sincronizar'>
             <button className='btn btn-dark p-0 position-absolute rounded-pill' style={{
-              right: '20px',
-              bottom: '20px',
+              right: '10px',
+              bottom: '10px',
               height: '40px',
               width: '40px'
             }} onClick={() => $(modalGitHubRef.current).modal('show')}>
