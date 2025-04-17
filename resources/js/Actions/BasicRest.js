@@ -9,7 +9,7 @@ class BasicRest {
     simpleGet = async (url, params) => {
         try {
             const { status, result } = await Fetch(url, params)
-            console.log(status, result);
+            console.log('Simple Get:', { status, result });
             if (!status) throw new Error(result?.message || 'Ocurrio un error inesperado')
             return result.data ?? true;
         } catch (error) {
