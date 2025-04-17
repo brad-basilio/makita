@@ -348,13 +348,21 @@ const System = ({
         </div>
         {
           hasRemoteChanges &&
-          <Tippy content='Tienes cambios sin sincronizar'>
+          <Tippy content={`Tienes ${commits} cambios sin sincronizar`}>
             <button className='btn btn-dark p-0 position-absolute rounded-pill' style={{
               right: '20px',
               bottom: '20px',
               height: '40px',
               width: '40px'
             }} onClick={() => $(modalGitHubRef.current).modal('show')}>
+              <small className='position-absolute' style={{
+                backgroundColor: '#ff5b5b',
+                borderRadius: '50%',
+                width: '18px',
+                height: '18px',
+                top: '-5px',
+                left: '-5px'
+              }}>{commits}</small>
               <i className='mdi mdi-github mdi-24px'></i>
             </button>
           </Tippy>
