@@ -80,27 +80,8 @@ const System = ({
   const fetchRemoteChanges = async () => {
     const result = await systemRest.fetchRemoteChanges();
     if (!result) return;
-    setHasRemoteChanges(result.data.has_changes)
-    setLastRemoteCommit(result.data.last_commit)
+    location.reload();
   }
-
-  useEffect(() => {
-    document.title = `Sistema | ${Global.APP_NAME}`
-    systemRest.hasRemoteChanges()
-      .then(({ result }) => {
-        if (!result) return;
-        setHasRemoteChanges(result.data.has_changes)
-        setLastRemoteCommit(result.data.last_commit)
-      })
-  }, [null])
-
-  useEffect(() => {
-    const iframe = $('iframe:visible');
-    if (iframe) {
-      $(iframe).removeAttr('src');
-      $(iframe).attr('src', iframe.data('path'));
-    }
-  }, [systems, colors, settings])
 
   const onPathChange = (e) => {
     const pageId = $(e.target).data('page-id')
@@ -125,6 +106,25 @@ const System = ({
     setSystemLoaded({ ...system, component });
     $(dataModalRef.current).modal('show');
   }
+
+  useEffect(() => {
+    document.title = `Sistema | ${Global.APP_NAME}`
+    systemRest.hasRemoteChanges()
+      .then(({ result }) => {
+        console.log(result)
+        if (!result) return;
+        setHasRemoteChanges(result.data.has_changes)
+        setLastRemoteCommit(result.data.last_commit)
+      })
+  }, [null])
+
+  useEffect(() => {
+    const iframe = $('iframe:visible');
+    if (iframe) {
+      $(iframe).removeAttr('src');
+      $(iframe).attr('src', iframe.data('path'));
+    }
+  }, [systems, colors, settings])
 
   useEffect(() => {
     const containers = [...$('.components-container')];
