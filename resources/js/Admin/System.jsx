@@ -42,6 +42,7 @@ const System = ({
   const [ghHasError, setGhHasError] = useState(false)
   const [hasRemoteChanges, setHasRemoteChanges] = useState(false)
   const [lastRemoteCommit, setLastRemoteCommit] = useState(null)
+  const [fetchingChanges, setFetchingChanges] = useState(false)
 
   const onAddPageClicked = async () => {
     setAddingPage(true);
@@ -78,9 +79,11 @@ const System = ({
   }
 
   const fetchRemoteChanges = async () => {
-    const result = await systemRest.fetchRemoteChanges();
-    if (!result) return;
-    location.reload();
+    setFetchingChanges(true)
+    const result = await systemRest.fetchRemoteChanges()
+    setFetchingChanges(false)
+    if (!result) return
+    location.reload()
   }
 
   const onPathChange = (e) => {
@@ -111,6 +114,7 @@ const System = ({
     let interval = null;
 
     const checkRemoteChanges = () => {
+      if (fetchingChanges) return
       if (ghHasError) {
         clearInterval(interval)
         return
@@ -131,7 +135,7 @@ const System = ({
     interval = setInterval(checkRemoteChanges, 5000)
 
     return () => clearInterval(interval)
-  }, [ghHasError])
+  }, [ghHasError, fetchingChanges])
 
   useEffect(() => {
     document.title = `Sistema | ${Global.APP_NAME}`
