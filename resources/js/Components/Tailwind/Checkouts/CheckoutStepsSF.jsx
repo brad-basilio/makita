@@ -188,21 +188,19 @@ export default function CheckoutStepsSF({ cart, setCart, user }) {
                 )}
             </div>
 
-            <section className="px-[5%] xl:px-[8%] bg-white py-12 xl:py-16">
+            <section className="px-[5%] xl:px-[8%] bg-white py-12 xl:py-16 font-paragraph">
                 <div className="flex flex-col md:flex-row justify-start items-center bg-gradient-to-br from-[#FFFFFF] to-[#91502D1A] w-full rounded-3xl relative">
                     <div className="flex flex-col gap-5 py-8 px-5 lg:pl-16 xl:pl-20  justify-start items-start w-full 2xl:w-3/5 max-w-xl 2xl:max-w-5xl text-white text-left">
-                        <h1 className="customtext-primary text-opacity-20 font-font-general font-bold text-3xl md:text-4xl xl:text-5xl">
+                        <h1 className="customtext-primary text-opacity-20 font-bold text-3xl md:text-4xl xl:text-5xl">
                             ¡Tu compra merece un envío GRATIS!
                         </h1>
 
-                        <p className="customtext-primary font-font-general font-normal text-base xl:text-lg 2xl:text-xl">
-                            Llévate tus fundas favoritas y obtén envío gratis en
-                            compras mayores a S/100. ¡Protege tus muebles con
-                            estilo sin pagar extra!
+                        <p className="customtext-primary  font-normal text-base xl:text-lg 2xl:text-xl">
+                        Llévate tus regalos favoritos y obtén envío gratis en compras mayores a S/100.
                         </p>
 
                         <div className="flex flex-col">
-                            <a className="w-auto bg-[#311609] px-6 py-3 2xl:py-4 2xl:px-8 rounded-3xl text-white font-font-general leading-none text-base 2xl:text-xl">
+                            <a className="w-auto bg-primary px-6 py-3 2xl:py-4 2xl:px-8 rounded-3xl text-white font-font-general leading-none text-base 2xl:text-xl">
                                 Seguir comprando
                             </a>
                         </div>
@@ -210,7 +208,7 @@ export default function CheckoutStepsSF({ cart, setCart, user }) {
 
                     <div className="xl:absolute right-0 bottom-0 flex flex-col ml-5 w-full items-end  md:w-6/12 2xl:w-2/5 mt-0 md:-mb-14 ">
                         <img
-                            src={"/assets/img/salafabulosa/cobijas_sl.png"}
+                            src={"/assets/img/backgrounds/resources/image-cart.png"}
                             onError={(e) =>
                                 (e.target.src =
                                     "/assets/img/noimage/no_img.jpg")

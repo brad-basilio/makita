@@ -107,6 +107,7 @@ class BasicController extends Controller
         'APP_NAME' => env('APP_NAME', 'Trasciende'),
         'APP_URL' => env('APP_URL'),
         'APP_DOMAIN' => env('APP_DOMAIN'),
+        'APP_ENV' => env('APP_ENV'),
         'APP_CORRELATIVE' => env('APP_CORRELATIVE'),
         'APP_PROTOCOL' => env('APP_PROTOCOL', 'https'),
         'GMAPS_API_KEY' => env('GMAPS_API_KEY')

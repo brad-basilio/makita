@@ -60,6 +60,14 @@
                     "model": "Category",
                     "with": ["subcategories"]
                 }
+            }, {
+                "id": "MenuBananaLab",
+                "name": "MenuBananaLab",
+                "image": "top-bar-simple.png",
+                "using": {
+                    "model": "Category",
+                    "with": ["subcategories"]
+                }
             }
         ]
     },
@@ -104,6 +112,17 @@
                 "name": "Con busqueda y menu SF",
                 "image": "header-with-search.png",
                 "data": ["class", "link_cart"]
+            },
+            {
+                "id": "HeaderBananaLab",
+                "name": "HeaderBananaLab",
+                "image": "header-with-search.png",
+                "data": ["class", "link_cart"],
+                "using": {
+                    "model": "Category",
+                    "with": ["subcategories"]
+                },
+                "generals": ["phone_whatsapp", "message_whatsapp"]
             }
         ]
     },
@@ -121,6 +140,15 @@
             {
                 "id": "CarruselBenefitsSimple",
                 "name": "Beneficios Simple",
+                "data": ["background"],
+                "using": {
+                    "model": "Indicator"
+                }
+            },
+            {
+                "id": "CarruselBananaLab",
+                "name": "CarruselBananaLab",
+                "data": ["background"],
                 "using": {
                     "model": "Indicator"
                 }
@@ -196,6 +224,22 @@
                     "paginationAlignment",
                     "showNavigation"
                 ],
+                "using": {
+                    "model": "Slider",
+                    "fields": [
+                        "name",
+                        "description",
+                        "bg_image",
+                        "button_text",
+                        "button_link"
+                    ]
+                }
+            },
+            {
+                "id": "SliderBananaLab",
+                "name": "SliderBananaLab",
+                "image": "slider-simple.png",
+
                 "using": {
                     "model": "Slider",
                     "fields": [
@@ -291,10 +335,55 @@
                 ]
             },
             {
+                "id": "FilterBananaLab",
+                "name": "Filtro FilterBananaLab",
+                "image": "products-list.png",
+                "data": ["path", "title", "description", "link_cart"],
+                "options": [
+                    {
+                        "id": "default",
+                        "name": "Lista estándar",
+                        "using": {
+                            "model": "Item",
+                            "with": ["category", "subcategory", "brand"],
+                            "relations": ["category", "tags"],
+                            "fields": [
+                                "id",
+                                "name",
+                                "slug",
+                                "price",
+                                "final_price",
+                                "image",
+                                "color"
+                            ]
+                        }
+                    },
+                    {
+                        "id": "with_variants",
+                        "name": "Lista con variantes",
+                        "using": {
+                            "model": "Item",
+                            "with": ["category", "subcategory", "brand"],
+                            "relations": ["category", "tags"],
+                            "fields": [
+                                "id",
+                                "name",
+                                "slug",
+                                "price",
+                                "final_price",
+                                "image",
+                                "color"
+                            ],
+                            "group_by_name": true
+                        }
+                    }
+                ]
+            },
+            {
                 "id": "FilterCategoryImage",
                 "name": "Categoría con Imagen",
                 "image": "filters-category-image.png",
-                "data": ["path", "title"],
+                "data": ["path", "title","card"],
                 "options": [
                     {
                         "id": "default",
@@ -574,6 +663,31 @@
                 }
             },
             {
+                "id": "ProductBananaLab",
+                "name": "ProductBananaLab",
+                "image": "products-list.png",
+                "data": [
+                    "title",
+                    "path",
+                    "description",
+                    "text_button",
+                    "link_catalog",
+                    "link_cart"
+                ],
+                "using": {
+                    "model": "Item",
+                    "filters": [
+                        "featured",
+                        "recommended",
+                        "offering",
+                        "is_new",
+                        "views"
+                    ],
+                    "with": ["category", "subcategory", "brand"],
+                    "limit": 4
+                }
+            },
+            {
                 "id": "Scraping",
                 "name": "Scraping Simple",
                 "image": "products-list.png",
@@ -624,6 +738,10 @@
             {
                 "id": "BannerSimpleSF",
                 "name": "SimpleSF"
+            },
+            {
+                "id": "BannerBananaLab",
+                "name": "BannerBananaLab"
             }
         ]
     },
@@ -699,6 +817,21 @@
                 }
             },
             {
+                "id": "ProductDetailBananaLab",
+                "name": "ProductDetailBananaLab",
+                "using": {
+                    "model": "Item",
+                    "field": "slug",
+                    "with": [
+                        "variants",
+                        "images",
+                        "specifications",
+                        "features"
+                    ],
+                    "relations": ["category", "brand", "subcategory"]
+                }
+            },
+            {
                 "id": "ScrapingProductDetail",
                 "name": "ScrapingProductDetail"
             }
@@ -739,7 +872,12 @@
                 "using": {
                     "model": "DeliveryPrice",
                     "field": ["name", "price", "data"]
-                }
+                },
+                "generals": [
+                    "checkout_culqi_public_key",
+                    "checkout_bim",
+                    "checkout_transfer"
+                ]
             },
             {
                 "id": "CheckoutSteps",
@@ -822,6 +960,16 @@
                     "limit": 3,
                     "with": ["category"]
                 }
+            },
+            {
+                "id": "BlogCarruselBananaLab",
+                "name": "BlogCarruselBananaLab",
+                "data": ["title", "description", "button_text", "link_blog"],
+                "using": {
+                    "model": "Post",
+                    "limit": 3,
+                    "with": ["category"]
+                }
             }
         ]
     },
@@ -890,6 +1038,9 @@
             {
                 "id": "LoginSimpleSF",
                 "name": "SimpleSF"
+            }, {
+                "id": "LoginBananaLab",
+                "name": "LoginBananaLab"
             }
         ]
     },
@@ -914,6 +1065,9 @@
             {
                 "id": "ForgotPasswordSimple",
                 "name": "Simple"
+            }, {
+                "id": "ForgotBananaLab",
+                "name": "ForgotBananaLab"
             }
         ]
     },
@@ -985,7 +1139,6 @@
                     "support_email"
                 ]
             },
-
             {
                 "id": "FooterCallToAction",
                 "name": "Llamada a la acción",
@@ -1033,6 +1186,30 @@
                 "data": ["steps", "selected"],
                 "generals": ["terms_conditions"]
             }
+        ]
+    },
+    {
+        "id": "bananalab",
+        "name": "BananaLab",
+        "options": [
+            {
+                "id": "Canva1",
+                "name": "Canva1",
+                "data": ["steps", "selected"]
+            }, {
+                "id": "Canva2",
+                "name": "Canva2",
+                "data": ["steps", "selected"]
+            },{
+                "id": "Canva3",
+                "name": "Canva3",
+                "data": ["steps", "selected"]
+            },{
+                "id": "Editor",
+                "name": "Editor",
+                "data": ["steps", "selected"]
+            }
+            
         ]
     }
 ]

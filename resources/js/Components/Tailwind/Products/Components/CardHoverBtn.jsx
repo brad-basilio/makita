@@ -58,22 +58,22 @@ const CardHoverBtn = ({
                                     -
                                     {Number(
                                         100 -
-                                            Number(
-                                                (product?.discount * 100) /
-                                                    product?.price
-                                            )
+                                        Number(
+                                            (product?.discount * 100) /
+                                            product?.price
+                                        )
                                     ).toFixed(0)}
                                     %
                                 </span>
                             )}
-                        <div className="aspect-square rounded-lg overflow-hidden flex items-center justify-center p-4">
+                        <div className="aspect-square rounded-lg overflow-hidden flex items-center justify-center p-0">
                             <img
                                 src={`/storage/images/item/${product.image}`}
                                 onError={(e) =>
                                     (e.target.src = "/api/cover/thumbnail/null")
                                 }
                                 alt={product.name}
-                                className="w-full h-full object-contain"
+                                className="w-full h-full object-cover bg-slate-100"
                                 loading="lazy"
                             />
                         </div>
@@ -111,7 +111,7 @@ const CardHoverBtn = ({
                     </div>
 
                     {/* Botones de acción (ocultos por defecto, aparecen con hover) */}
-                    <div className="overflow-hidden max-h-20  lg:max-h-0 pb-4 lg:opacity-0 group-hover:max-h-20 group-hover:opacity-100 transition-[max-height,opacity] duration-1000 ease-in-out flex gap-2 my-2 transform group-hover:translate-y-0 translate-y-4">
+                    <div className="overflow-hidden max-h-20  lg:max-h-0 pb-4 lg:opacity-0 group-hover:max-h-20 group-hover:opacity-100 transition-[max-height,opacity] duration-1000 ease-in-out flex gap-2 my-2 transform ">
                         <a
                             href={`/product/${product.slug}`}
                             className="flex-1 inline-flex items-center justify-center font-bold  text-sm bg-primary text-white  py-3 rounded-xl shadow-lg transition-all duration-300 hover:opacity-90"
@@ -143,7 +143,7 @@ const CardHoverBtn = ({
                         <p className="text-xs customtext-neutral-light font-semibold mb-1">
                             {product.brand.name}
                         </p>
-                        <h3 className="customtext-neutral-dark text-sm font-semibold mb-2 line-clamp-3 h-16">
+                        <h3 className="customtext-neutral-dark text-lg font-semibold mb-2 line-clamp-3 h-16">
                             {product.name}
                         </h3>
                         {/* Precio */}

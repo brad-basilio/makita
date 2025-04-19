@@ -1,31 +1,41 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react";
 
-const BlogSimple = React.lazy(() => import('./Blogs/BlogSimple'))
-const BlogCarousel = React.lazy(() => import('./Blogs/BlogCarousel'))
+const BlogSimple = React.lazy(() => import("./Blogs/BlogSimple"));
+const BlogCarousel = React.lazy(() => import("./Blogs/BlogCarousel"));
+const BlogCarruselBananaLab = React.lazy(() =>
+    import("./Blogs/BlogCarruselBananaLab")
+);
+const Blog = ({
+    data,
+    items,
+    which,
+    headerPosts,
+    filteredData,
+    postsLatest,
+}) => {
+    const getBlog = () => {
+        switch (which) {
+            case "BlogSimple":
+                return (
+                    <BlogSimple
+                        data={data}
+                        headerPosts={headerPosts}
+                        postsLatest={postsLatest}
+                        filteredData={filteredData}
+                    />
+                );
 
-const Blog = ({ data, items, which, headerPosts, filteredData, postsLatest }) => {
+            case "BlogCarousel":
+                return <BlogCarousel data={data} items={items} />;
+            case "BlogCarruselBananaLab":
+                return <BlogCarruselBananaLab data={data} items={items} />;
 
-  const getBlog = () => {
-    switch (which) {
-      case 'BlogSimple':
-        return (
-          <BlogSimple
-            data={data}
-            headerPosts={headerPosts}
-            postsLatest={postsLatest}
-            filteredData={filteredData}
-          />
-        );
+            default:
+                return <div>No hay componente {which}</div>;
+        }
+    };
 
-      case 'BlogCarousel':
-        return <BlogCarousel data={data} items={items} />
-
-      default:
-        return <div>No hay componente {which}</div>;
-    }
-  };
-
-  return getBlog();
-}
+    return getBlog();
+};
 
 export default Blog;

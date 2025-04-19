@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 const Modal = ({ modalRef, title = 'Modal', isStatic = false, size = 'md', children, bodyClass = '', btnCancelText, btnSubmitText, hideFooter, hideButtonSubmit, onSubmit = (e) => { e.preventDefault(); $(modalRef.current).modal('hide') }, onClose }) => {
+  if (!modalRef) modalRef = useRef()
   const staticProp = isStatic ? { 'data-bs-backdrop': 'static' } : {}
 
   useEffect(() => {
@@ -15,6 +16,10 @@ const Modal = ({ modalRef, title = 'Modal', isStatic = false, size = 'md', child
       $(modalElement).off('hidden.bs.modal', handleClose);
     };
   }, [modalRef, onClose]);
+
+  useEffect(() => {
+    $(modalRef.current).modal('hide')
+  }, [null])
 
   return (<form className='modal fade' ref={modalRef} tabIndex='-1' aria-hidden='true' {...staticProp} onSubmit={onSubmit} autoComplete='off'>
     <div className={`modal-dialog modal-dialog-centered modal-${size ?? 'md'}`}>

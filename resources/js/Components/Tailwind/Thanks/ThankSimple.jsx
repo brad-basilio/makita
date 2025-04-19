@@ -39,36 +39,6 @@ const ThankSimple = ({ data }) => {
     <div className="min-h-screen bg-white">
       <div className="max-w-4xl mx-auto p-[5%]">
 
-        {/* Indicador de progreso */}
-        <div className="flex justify-between items-center mb-12 relative">
-          {/* Línea de progreso */}
-          <div className="absolute h-0.5 bg-green-600 top-5 left-[10%] right-[10%] z-0"></div>
-
-          {/* Paso 1 */}
-          <div className="flex flex-col items-center relative z-10">
-            <div className="w-8 h-8 rounded-full bg-green-600 text-white flex items-center justify-center mb-2">
-              <span>1</span>
-            </div>
-            <span className="text-xs text-center">Carro de la compra</span>
-          </div>
-
-          {/* Paso 2 */}
-          <div className="flex flex-col items-center relative z-10">
-            <div className="w-8 h-8 rounded-full bg-green-600 text-white flex items-center justify-center mb-2">
-              <span>2</span>
-            </div>
-            <span className="text-xs text-center">Detalles de Pago</span>
-          </div>
-
-          {/* Paso 3 */}
-          <div className="flex flex-col items-center relative z-10">
-            <div className="w-8 h-8 rounded-full bg-green-600 text-white flex items-center justify-center mb-2">
-              <span>3</span>
-            </div>
-            <span className="text-xs text-center">Orden completada</span>
-          </div>
-        </div>
-
         {/* Mensaje de agradecimiento */}
         <div className="text-center mb-8">
           <p className="text-lg mb-2">Gracias por tu compra 🎉</p>

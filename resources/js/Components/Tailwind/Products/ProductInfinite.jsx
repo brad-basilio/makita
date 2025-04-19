@@ -44,7 +44,7 @@ const ProductInfinite = ({ items, data, setCart, cart }) => {
     console.log(data);
     return (
         <section className="py-12 bg-sections-color">
-            <div className=" mx-auto px-primary 2xl:px-0 2xl:max-w-7xl ">
+            <div className=" mx-auto px-[5%] py-[2.5%]">
                 {/* Header */}
                 <div className="md:flex justify-between items-center mb-8 pb-4 border-b customborder-neutral-light">
                     <h2 className="text-[28px] md:text-4xl font-bold  font-font-secondary mb-4 md:mb-0">
@@ -75,9 +75,11 @@ const ProductInfinite = ({ items, data, setCart, cart }) => {
                     </div>
 
                     {/* Products container */}
-                    <div className="hidden md:block overflow-hidden py-8">
+                    {/* <div className="hidden md:block overflow-hidden py-8"> */}
+                    <div className="hidden md:block overflow-x-hidden py-6">
                         <div
-                            className="flex  items-center transition-all duration-300   ease-in-out lg:h-[460px] lg:max-h-[460px]  xl:h-[400px] xl:max-h-[400px] 2xl:h-[430px] 2xl:max-h-[430px]"
+                            // className="flex  items-center transition-all duration-300   ease-in-out lg:h-[460px] lg:max-h-[460px]  xl:h-[400px] xl:max-h-[400px] 2xl:h-[430px] 2xl:max-h-[430px]"
+                            className="flex  items-center transition-all duration-300   ease-in-out"
                             style={{
                                 transform: `translateX(-${
                                     currentSlide * (100 / slidesPerView)
@@ -95,7 +97,8 @@ const ProductInfinite = ({ items, data, setCart, cart }) => {
                             ))}
                         </div>
                     </div>
-                    <div className="overflow-hidden py-4 md:hidden">
+                    {/* <div className="overflow-hidden py-4 md:hidden"> */}
+                    <div className="overflow-x-hidden py-4 md:hidden">
                         <div
                             className="flex items-center  gap-y-4 transition-all duration-300 ease-in-out flex-wrap flex-shrink "
                             style={{

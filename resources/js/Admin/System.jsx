@@ -13,6 +13,7 @@ import Menu from '../Components/Adminto/System/Menu';
 import ParamsModal from '../Components/Adminto/System/ParamsModal';
 import RouteParams from '../Utils/RouteParams';
 import RigthBar from '../Components/Adminto/System/RightBar';
+import Modal from '../Components/Adminto/Modal';
 
 const systemRest = new SystemRest()
 
@@ -26,6 +27,7 @@ const System = ({
 
   const modalSEORef = useRef(null);
   const modalParamsRef = useRef(null);
+  const modalGitHubRef = useRef(null);
   const dataModalRef = useRef(null);
 
   const [systems, setSystems] = useState(systemsDB);
@@ -36,6 +38,12 @@ const System = ({
   const [addingPage, setAddingPage] = useState(false);
   const [pageLoaded, setPageLoaded] = useState(null);
   const [systemLoaded, setSystemLoaded] = useState(null);
+
+  const [ghHasError, setGhHasError] = useState(false)
+  const [hasRemoteChanges, setHasRemoteChanges] = useState(false)
+  const [lastRemoteCommit, setLastRemoteCommit] = useState(null)
+  const [fetchingChanges, setFetchingChanges] = useState(false)
+  const [commits, setCommits] = useState(0)
 
   const onAddPageClicked = async () => {
     setAddingPage(true);
@@ -71,17 +79,13 @@ const System = ({
     setSystems(old => old.filter(x => x.id != system.id));
   }
 
-  useEffect(() => {
-    document.title = `Sistema | ${Global.APP_NAME}`
-  }, [null])
-
-  useEffect(() => {
-    const iframe = $('iframe:visible');
-    if (iframe) {
-      $(iframe).removeAttr('src');
-      $(iframe).attr('src', iframe.data('path'));
-    }
-  }, [systems, colors, settings])
+  const fetchRemoteChanges = async () => {
+    setFetchingChanges(true)
+    const result = await systemRest.fetchRemoteChanges()
+    setFetchingChanges(false)
+    if (!result) return
+    location.reload()
+  }
 
   const onPathChange = (e) => {
     const pageId = $(e.target).data('page-id')
@@ -106,6 +110,43 @@ const System = ({
     setSystemLoaded({ ...system, component });
     $(dataModalRef.current).modal('show');
   }
+
+  useEffect(() => {
+    let interval = null;
+
+    const checkRemoteChanges = async () => {
+      if (fetchingChanges) return
+      if (ghHasError) {
+        clearInterval(interval)
+        return
+      }
+
+      const data = await systemRest.hasRemoteChanges()
+
+      if (!data) {
+        setGhHasError(true)
+        return
+      };
+
+      setHasRemoteChanges(data.has_changes)
+      setLastRemoteCommit(data.last_commit)
+      setCommits(data.commits)
+    }
+
+    interval = setInterval(async () => {
+      await checkRemoteChanges()
+    }, 10000)
+
+    return () => clearInterval(interval)
+  }, [ghHasError, fetchingChanges])
+
+  useEffect(() => {
+    const iframe = $('iframe:visible');
+    if (iframe) {
+      $(iframe).removeAttr('src');
+      $(iframe).attr('src', iframe.data('path'));
+    }
+  }, [systems, colors, settings])
 
   useEffect(() => {
     const containers = [...$('.components-container')];
@@ -156,9 +197,15 @@ const System = ({
     });
   }, [pages, systems]);
 
+  useEffect(() => {
+    document.title = `Sistema | ${Global.APP_NAME}`
+  }, [null])
+
+  const [gitAuthor, gitDate, gitMessage] = lastRemoteCommit?.split('\n') ?? []
+
   return (
     <>
-      <div id="wrapper">
+      <div id="wrapper position-relative">
         <Menu components={components} onClick={onComponentClicked} />
         <div className="content-page mt-2 pb-3" style={{ height: 'max-content' }}>
           <div className="content mt-2">
@@ -240,7 +287,7 @@ const System = ({
                             </div>
                             <div className="col-md-8">
                               <iframe src='/base-template' data-path='/base-template' className='w-100 h-100 border' style={{
-                                minHeight: 'calc(100vh - 185px)',
+                                minHeight: 'calc(100vh - 200px)',
                                 borderRadius: '4px'
                               }}></iframe>
                             </div>
@@ -283,7 +330,7 @@ const System = ({
                                     }
                                   </div>
                                   <iframe id={`iframe-${page.id}`} src={page?.pseudo_path || page.path} data-path={page?.pseudo_path || page.path} className='w-100 h-100 border' style={{
-                                    minHeight: 'calc(100vh - 185px)',
+                                    minHeight: 'calc(100vh - 302px)',
                                     borderRadius: '4px'
                                   }}></iframe>
                                 </div>
@@ -299,7 +346,56 @@ const System = ({
             </div>
           </div>
         </div>
+        {
+          hasRemoteChanges &&
+          <Tippy content={`Tienes ${commits} cambios sin sincronizar`}>
+            <button className='btn btn-dark p-0 position-absolute rounded-pill' style={{
+              right: '20px',
+              bottom: '20px',
+              height: '40px',
+              width: '40px'
+            }} onClick={() => $(modalGitHubRef.current).modal('show')}>
+              <small className='position-absolute' style={{
+                backgroundColor: '#ff5b5b',
+                borderRadius: '50%',
+                width: '18px',
+                height: '18px',
+                top: '-5px',
+                left: '-5px'
+              }}>{commits}</small>
+              <i className='mdi mdi-github mdi-24px'></i>
+            </button>
+          </Tippy>
+        }
       </div>
+      <Modal modalRef={modalGitHubRef} title='Cambios de Github' size='sm' hideFooter>
+        <div className="text-center">
+          <i className='mdi mdi-github mdi-48px'></i>
+          <h5 className='mt-2'>Tienes cambios sin sincronizar</h5>
+          <div className='mb-2 py-2'>
+            <b className='d-block'>{gitAuthor}</b>
+            <small className='d-block text-muted'>{moment(gitDate).fromNow()}</small>
+            <span className='d-block'>Commit: {gitMessage}</span>
+          </div>
+          <button
+            className='btn btn-primary mb-2'
+            type='button'
+            onClick={() => fetchRemoteChanges()}
+            disabled={fetchingChanges}>
+            {
+              fetchingChanges
+                ? <>
+                  <i className='mdi mdi-loading mdi-spin me-1'></i>
+                  Sincronizando
+                </>
+                : <>
+                  <i className='mdi mdi-cloud-download me-1'></i>
+                  Sincronizar
+                </>
+            }
+          </button>
+        </div>
+      </Modal>
       <RigthBar colors={colors} setColors={setColors} settings={settings} setSettings={setSettings} />
 
       <SEOModal dataLoaded={pageLoaded} setDataLoaded={setPageLoaded} modalRef={modalSEORef} />

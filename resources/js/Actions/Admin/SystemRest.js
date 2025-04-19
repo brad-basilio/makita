@@ -98,6 +98,9 @@ class SystemRest extends BasicRest {
       return null
     }
   }
+
+  hasRemoteChanges = async () => await this.simpleGet(`/api/${this.path}/has-remote-changes`)
+  fetchRemoteChanges = async () => await this.simpleGet(`/api/${this.path}/fetch-remote-changes`)
 }
 
 export default SystemRest

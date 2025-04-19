@@ -5,6 +5,7 @@ import Number2Currency from "../../../Utils/Number2Currency"
 import { ShoppingBag, Gift } from "lucide-react"
 import { renderToString } from "react-dom/server"
 import LaravelSession from "../../../Utils/LaravelSession"
+import Tippy from "@tippyjs/react"
 
 const CheckoutCulqi = ({ data, cart, setCart, items, prefixes }) => {
   const [deliveryMethod, setDeliveryMethod] = useState("pickup")
@@ -23,6 +24,13 @@ const CheckoutCulqi = ({ data, cart, setCart, items, prefixes }) => {
     calle: "",
     numero: "",
     referencia: "",
+  })
+  const [billing, setBilling] = useState({
+    type: "boleta",
+    number: "",
+    fullname: "",
+    name: "",
+    lastname: ""
   })
   // Add these states at the top with other states
   const [paymentMethod, setPaymentMethod] = useState('mercadopago')
@@ -420,7 +428,7 @@ const CheckoutCulqi = ({ data, cart, setCart, items, prefixes }) => {
               <div className="space-y-3">
                 {/* Mercado Pago */}
                 <div
-                  className={`flex items-center justify-between p-4 border-2 rounded-lg cursor-pointer ${paymentMethod === 'mercadopago' ? 'border-primary bg-gray-100' : 'border-gray-200'
+                  className={`flex items-center justify-between px-4 py-2 border-2 rounded-lg cursor-pointer ${paymentMethod === 'mercadopago' ? 'border-primary bg-gray-100' : 'border-gray-200'
                     }`}
                   onClick={() => setPaymentMethod('mercadopago')}
                 >
@@ -429,7 +437,10 @@ const CheckoutCulqi = ({ data, cart, setCart, items, prefixes }) => {
                       }`}>
                       {paymentMethod === 'mercadopago' && <div className="w-3 h-3 rounded-full bg-primary"></div>}
                     </div>
-                    <span>Pago con tarjeta</span>
+                    <div className="flex flex-col">
+                      <span>Pago con tarjeta</span>
+                      <small className="text-xs text-opacity-60 text-black">Formulario Culqi</small>
+                    </div>
                   </div>
                   <div className="flex items-center gap-2">
                     <svg width="238" height="25" viewBox="0 0 238 25" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -461,7 +472,7 @@ const CheckoutCulqi = ({ data, cart, setCart, items, prefixes }) => {
 
                 {/* Yape */}
                 <div
-                  className={`flex items-center justify-between p-4 border-2 rounded-lg cursor-pointer ${paymentMethod === 'yape' ? 'border-primary bg-gray-100' : 'border-gray-200'
+                  className={`flex items-center justify-between px-4 py-2 border-2 rounded-lg cursor-pointer ${paymentMethod === 'yape' ? 'border-primary bg-gray-100' : 'border-gray-200'
                     }`}
                   onClick={() => setPaymentMethod('yape')}
                 >
@@ -470,10 +481,45 @@ const CheckoutCulqi = ({ data, cart, setCart, items, prefixes }) => {
                       }`}>
                       {paymentMethod === 'yape' && <div className="w-3 h-3 rounded-full bg-primary"></div>}
                     </div>
-                    <span>Yape / Plin</span>
+                    <div className="flex flex-col">
+                      <span>Yape / Plin</span>
+                      <small className="text-xs text-opacity-60 text-black">Billeteras digitales</small>
+                    </div>
                   </div>
-                  <img src="/storage/images/system/yape.svg" alt="Yape" className="h-8" />
+                  <div className="flex gap-3">
+                    <Tippy content='Yape BCP'>
+                      <img src="/assets/img/banks/yape.png" alt="Yape BCP" className="h-6" />
+                    </Tippy>
+                    <Tippy content='Plin Interbank'>
+                      <img src="/assets/img/banks/plin.png" alt="Plin Interbank" className="h-6" />
+                    </Tippy>
+                  </div>
                 </div>
+
+                {/* Bank Details and Upload Section */}
+                {(paymentMethod === 'yape') && (
+                  <div className="mt-4 p-4 bg-gray-100 rounded-lg">
+                    <div className="space-y-2">
+                      <img src="/storage/images/system/yape-qr.png" alt="Yape QR" className="w-48 mx-auto" />
+                      <a href="#" className="text-primary text-sm hover:underline block text-center">
+                        Envía tu comprobante
+                      </a>
+                    </div>
+                    <div className="mt-4">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => setVoucher(e.target.files[0])}
+                        className="block w-full text-sm text-gray-500
+                          file:mr-4 file:py-2 file:px-4
+                          file:rounded-full file:border-0
+                          file:text-sm file:font-semibold
+                          file:bg-primary file:text-white
+                          hover:file:bg-primary/90"
+                      />
+                    </div>
+                  </div>
+                )}
 
                 {/* Transferencia */}
                 <div
@@ -488,41 +534,35 @@ const CheckoutCulqi = ({ data, cart, setCart, items, prefixes }) => {
                     </div>
                     <span>Transferencia</span>
                   </div>
-                  <img src="/storage/images/system/interbank.svg" alt="Interbank" className="h-6" />
+                  <div className="flex gap-3">
+                    <img src="/assets/img/banks/bcp.svg" alt="BCP" className="h-4" />
+                    <img src="/assets/img/banks/interbank.svg" alt="Interbank" className="h-4" />
+                    <img src="/assets/img/banks/bbva.svg" alt="BBVA" className="h-4" />
+                  </div>
                 </div>
 
                 {/* Bank Details and Upload Section */}
-                {(paymentMethod === 'transfer' || paymentMethod === 'yape') && (
+                {(paymentMethod === 'transfer') && (
                   <div className="mt-4 p-4 bg-gray-100 rounded-lg">
-                    {paymentMethod === 'transfer' ? (
-                      <div className="space-y-2">
-                        <p className="font-medium">Banco - Interbank</p>
-                        <p className="text-sm">N. Cuenta Corriente</p>
-                        <p className="font-mono bg-white p-2 rounded select-all">43942483984398285</p>
-                        <a href="#" className="text-primary text-sm hover:underline">
-                          Envía tu comprobante
-                        </a>
-                      </div>
-                    ) : (
-                      <div className="space-y-2">
-                        <img src="/storage/images/system/yape-qr.png" alt="Yape QR" className="w-48 mx-auto" />
-                        <a href="#" className="text-primary text-sm hover:underline block text-center">
-                          Envía tu comprobante
-                        </a>
-                      </div>
-                    )}
-
+                    <div className="space-y-2">
+                      <p className="font-medium">Banco - Interbank</p>
+                      <p className="text-sm">N. Cuenta Corriente</p>
+                      <p className="font-mono bg-white p-2 rounded select-all">43942483984398285</p>
+                      <a href="#" className="text-primary text-sm hover:underline">
+                        Envía tu comprobante
+                      </a>
+                    </div>
                     <div className="mt-4">
                       <input
                         type="file"
                         accept="image/*"
                         onChange={(e) => setVoucher(e.target.files[0])}
                         className="block w-full text-sm text-gray-500
-              file:mr-4 file:py-2 file:px-4
-              file:rounded-full file:border-0
-              file:text-sm file:font-semibold
-              file:bg-primary file:text-white
-              hover:file:bg-primary/90"
+                          file:mr-4 file:py-2 file:px-4
+                          file:rounded-full file:border-0
+                          file:text-sm file:font-semibold
+                          file:bg-primary file:text-white
+                          hover:file:bg-primary/90"
                       />
                     </div>
                   </div>
@@ -530,34 +570,50 @@ const CheckoutCulqi = ({ data, cart, setCart, items, prefixes }) => {
 
                 {/* Invoice/Receipt Selection */}
                 <div className="mt-6 border-t pt-6">
-                  <div className="flex gap-4">
-                    <label className="flex items-center gap-2">
+                  <div className="flex gap-2 w-full">
+                    <label className="flex-1">
                       <input
                         type="radio"
                         name="document_type"
                         value="boleta"
-                        className="text-primary"
+                        checked={billing.type == 'boleta'}
+                        className="hidden"
+                        onChange={(e) => setBilling(old => ({ ...old, type: e.target.value }))}
                       />
-                      <span>Boleta</span>
+                      <div className={`w-full flex gap-3 items-center text-center py-3 px-4 rounded-lg border-2 cursor-pointer transition-all ${billing.type == 'boleta' ? 'border-primary bg-gray-100' : 'border-gray-200'} `}>
+                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${billing.type === 'boleta' ? 'border-primary' : 'border-gray-400'
+                          }`}>
+                          {billing.type === 'boleta' && <div className="w-3 h-3 rounded-full bg-primary"></div>}
+                        </div>
+                        <span>Boleta</span>
+                      </div>
                     </label>
-                    <label className="flex items-center gap-2">
+                    <label className="flex-1">
                       <input
                         type="radio"
                         name="document_type"
                         value="factura"
-                        className="text-primary"
+                        checked={billing.type == 'factura'}
+                        className="hidden"
+                        onChange={(e) => setBilling(old => ({ ...old, type: e.target.value }))}
                       />
-                      <span>Factura</span>
+                      <div className={`w-full flex gap-3 items-center text-center py-3 px-4 rounded-lg border-2 cursor-pointer transition-all ${billing.type == 'factura' ? 'border-primary bg-gray-100' : 'border-gray-200'} `}>
+                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${billing.type === 'factura' ? 'border-primary' : 'border-gray-400'
+                          }`}>
+                          {billing.type === 'factura' && <div className="w-3 h-3 rounded-full bg-primary"></div>}
+                        </div>
+                        <span>Factura</span>
+                      </div>
                     </label>
                   </div>
 
                   <div className="mt-4">
-                    <label className="block text-sm mb-1">Número de RUC</label>
+                    <label className="block text-sm mb-1">Número de {billing.type == 'factura' ? 'RUC' : 'DNI'}</label>
                     <input
                       type="text"
                       className="w-full p-2 border border-gray-300 rounded"
-                      placeholder="00000000000"
-                      maxLength={11}
+                      placeholder={billing.type == 'factura' ? '00000000000' : '00000000'}
+                      maxLength={billing.type == 'factura' ? 11 : 8}
                     />
                   </div>
 
@@ -567,6 +623,8 @@ const CheckoutCulqi = ({ data, cart, setCart, items, prefixes }) => {
                       type="text"
                       className="w-full p-2 border border-gray-300 rounded"
                       placeholder="Nombre de razón social"
+                      value={billing.fullname}
+                      onChange={e => setBilling(old => ({ ...old, fullname: e.target.value }))}
                     />
                   </div>
                 </div>
@@ -584,6 +642,7 @@ const CheckoutCulqi = ({ data, cart, setCart, items, prefixes }) => {
                     <div className="w-16">
                       <img
                         src={`/storage/images/item/${item.image}`}
+                        onError={(e) => e.target.src = "/assets/img/noimage/no_img.jpg"}
                         alt={item.name}
                         className="w-16 object-cover object-center aspect-[4/3] rounded"
                       />
@@ -631,7 +690,7 @@ const CheckoutCulqi = ({ data, cart, setCart, items, prefixes }) => {
                     : 'bg-primary'
                     }`}
                 >
-                  Siguiente
+                  Pagar (S/. {Number2Currency(totalPrice + (typeof shippingPrice === 'number' ? shippingPrice : 0))})
                 </button>
               </div>
 

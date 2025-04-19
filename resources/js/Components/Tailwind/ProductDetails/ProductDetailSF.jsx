@@ -258,7 +258,7 @@ export default function ProductDetailSF({ item, data, setCart, cart }) {
                                             }`}
                                         >
                                             <img
-                                                src={`/storage/images/item/${image.url}`}
+                                                src={`/storage/images/item/${image.url}`||"/api/cover/thumbnail/null"}
                                                 alt={`Thumbnail ${index + 1}`}
                                                 className="w-full h-full object-cover"
                                                 onError={(e) =>
@@ -349,7 +349,11 @@ export default function ProductDetailSF({ item, data, setCart, cart }) {
                                         >
                                             <img
                                                 className="color-box rounded-full h-9 w-9 object-fit-cover "
-                                                src={`/storage/images/item/${item.texture || item.image} `}
+                                                src={`/storage/images/item/${item.texture}`}
+                                                onError={(e) =>
+                                                    (e.target.src =
+                                                        "/api/cover/thumbnail/null")
+                                                }
                                             />
                                         </a>
                                     </Tippy>    
