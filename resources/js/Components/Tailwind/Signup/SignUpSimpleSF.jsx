@@ -172,7 +172,7 @@ export default function SignUpSimple() {
                             >
                                 Crear cuenta
                             </button>
-                            <button
+                            {/* <button
                                 type="submit"
                                 className="w-full flex flex-row justify-center items-center border border-neutral-dark gap-3 lg:col-span-2 rounded-3xl font-semibold px-4 py-3 customtext-primary hover:opacity-90 focus:outline-none focus:ring-2 transition-all duration-300"
                             >
@@ -185,8 +185,8 @@ export default function SignUpSimple() {
                                     </svg>
                                 </span>
                                 Ingresar con mi cuenta de Google
-                            </button>
-                            <button
+                            </button> */}
+                            {/* <button
                                 type="submit"
                                 className="w-full flex flex-row justify-center items-center border border-neutral-dark gap-3 lg:col-span-2 rounded-3xl font-semibold px-4 py-3 customtext-primary hover:opacity-90 focus:outline-none focus:ring-2 transition-all duration-300"
                             >
@@ -196,7 +196,7 @@ export default function SignUpSimple() {
                                 </svg>
                                 </span>
                                 Ingresar con mi cuenta de Facebook
-                            </button>
+                            </button> */}
                         </form>
                     </div>
                 </div>
