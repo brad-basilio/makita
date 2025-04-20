@@ -72,7 +72,7 @@ const TopBarCart = ({ data, cart, setCart, isUser, items }) => {
                         <div className="absolute customtext-primary  z-50 top-full left-0 bg-white shadow-xl border-t rounded-xl transition-all duration-300 ease-in-out w-40 mt-2">
                             <div className="p-4">
                                 <ul className="space-y-2">
-                                    <li>
+                                    {/* <li>
                                         <a
                                             href="#"
                                             className="flex items-center gap-2  text-xs transition-colors duration-300 cursor-pointer"
@@ -80,12 +80,12 @@ const TopBarCart = ({ data, cart, setCart, isUser, items }) => {
                                             <CircleUser height="1rem" />
                                             <span>Mi cuenta</span>
                                         </a>
-                                    </li>
+                                    </li> */}
                                     <li>
                                         <a
                                             href="#"
                                             onClick={Logout}
-                                            className="flex items-center gap-2  text-xs transition-colors duration-300 cursor-pointer"
+                                            className="flex items-center gap-2  text-sm transition-colors duration-300 cursor-pointer"
                                         >
                                             <DoorClosed
                                                 className="customtext-primary"
