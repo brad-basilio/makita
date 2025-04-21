@@ -127,6 +127,10 @@
         .font-emoji {
             font-family: "Noto Color Emoji", sans-serif;
         }
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            top: 50%;
+            transform: translateY(-50%);
+        }
     </style>
 </head>
 
