@@ -39,6 +39,14 @@
         gtag('js', new Date());
         gtag('config', 'G-RF5XHT4BR6');
     </script>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-M3KCKSQP');
+    </script>
+    <!-- End Google Tag Manager -->
 
     @if ($data['fonts']['title']['url'] && !str_starts_with($data['fonts']['title']['url'], '/'))
         <link rel="stylesheet" href="{{ $data['fonts']['title']['url'] }}">
@@ -138,6 +146,10 @@
 </head>
 
 <body class="font-general">
+    <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M3KCKSQP" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+
     @inertia
 
     <!-- Vendor js -->
