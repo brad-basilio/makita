@@ -181,7 +181,7 @@ const CheckoutCulqi = ({ data, cart, setCart, items, prefixes }) => {
                 />
               </div>
 
-              <div className="">
+              <div>
                 <label htmlFor="phone" className="block text-sm mb-1">
                   Celular
                 </label>
