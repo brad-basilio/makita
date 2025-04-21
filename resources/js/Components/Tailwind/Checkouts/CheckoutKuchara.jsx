@@ -135,7 +135,7 @@ const CheckoutCulqi = ({ data, cart, setCart, items, prefixes }) => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
                   <label htmlFor="name" className="block text-sm mb-1">
-                    Nombre
+                    Nombre 
                   </label>
                   <input
                     type="text"
@@ -281,7 +281,7 @@ const CheckoutCulqi = ({ data, cart, setCart, items, prefixes }) => {
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                     <div>
                       <label htmlFor="departamento" className="block text-sm mb-1">
-                        Departamento
+                        Departamento <b className="text-red-500">*</b>
                       </label>
                       <div className="relative">
                         <select
@@ -290,6 +290,7 @@ const CheckoutCulqi = ({ data, cart, setCart, items, prefixes }) => {
                           value={shippingAddress.departamento}
                           onChange={handleShippingAddressChange}
                           className="w-full p-2 border border-gray-300 rounded appearance-none pr-8"
+                          required={deliveryMethod === "express"}
                         >
                           <option value="">Selecciona un Departamento</option>
                           {
@@ -312,7 +313,7 @@ const CheckoutCulqi = ({ data, cart, setCart, items, prefixes }) => {
 
                     <div>
                       <label htmlFor="provincia" className="block text-sm mb-1">
-                        Provincia
+                        Provincia <b className="text-red-500">*</b>
                       </label>
                       <div className="relative">
                         <select
@@ -321,6 +322,7 @@ const CheckoutCulqi = ({ data, cart, setCart, items, prefixes }) => {
                           value={shippingAddress.provincia}
                           onChange={handleShippingAddressChange}
                           className="w-full p-2 border border-gray-300 rounded appearance-none pr-8"
+                          required={deliveryMethod === "express"}
                         >
                           <option value="">Selecciona un Provincia</option>
                           {
@@ -343,7 +345,7 @@ const CheckoutCulqi = ({ data, cart, setCart, items, prefixes }) => {
 
                     <div>
                       <label htmlFor="distrito" className="block text-sm mb-1">
-                        Distrito
+                        Distrito <b className="text-red-500">*</b>
                       </label>
                       <div className="relative">
                         <select
@@ -352,6 +354,7 @@ const CheckoutCulqi = ({ data, cart, setCart, items, prefixes }) => {
                           value={shippingAddress.distrito}
                           onChange={handleShippingAddressChange}
                           className="w-full p-2 border border-gray-300 rounded appearance-none pr-8"
+                          required={deliveryMethod === "express"}
                         >
                           <option value="">Selecciona un distrito</option>
                           {
@@ -375,7 +378,7 @@ const CheckoutCulqi = ({ data, cart, setCart, items, prefixes }) => {
 
                   <div className="mb-4">
                     <label htmlFor="calle" className="block text-sm mb-1">
-                      Avenida / Calle / Jirón
+                      Avenida / Calle / Jirón <b className="text-red-500">*</b>
                     </label>
                     <input
                       type="text"
@@ -385,13 +388,14 @@ const CheckoutCulqi = ({ data, cart, setCart, items, prefixes }) => {
                       onChange={handleShippingAddressChange}
                       className="w-full p-2 border border-gray-300 rounded"
                       placeholder="Ingresa el nombre de la calle"
+                      required={deliveryMethod === "express"}
                     />
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label htmlFor="numero" className="block text-sm mb-1">
-                        Número
+                        Número <b className="text-red-500">*</b>
                       </label>
                       <input
                         type="text"
@@ -401,6 +405,7 @@ const CheckoutCulqi = ({ data, cart, setCart, items, prefixes }) => {
                         onChange={handleShippingAddressChange}
                         className="w-full p-2 border border-gray-300 rounded"
                         placeholder="Ingresa el número de la calle"
+                        required={deliveryMethod === "express"}
                       />
                     </div>
 
@@ -608,7 +613,10 @@ const CheckoutCulqi = ({ data, cart, setCart, items, prefixes }) => {
                   </div>
 
                   <div className="mt-4">
-                    <label className="block text-sm mb-1">Número de {billing.type == 'factura' ? 'RUC' : 'DNI'}</label>
+                    <label className="block text-sm mb-1">
+                      <span>Número de {billing.type == 'factura' ? 'RUC' : 'DNI'}</span>
+                      <b className="text-red-500 ms-1">*</b>
+                    </label>
                     <input
                       type="text"
                       className="w-full p-2 border border-gray-300 rounded"
@@ -618,7 +626,7 @@ const CheckoutCulqi = ({ data, cart, setCart, items, prefixes }) => {
                   </div>
 
                   <div className="mt-4">
-                    <label className="block text-sm mb-1">Razón Social</label>
+                    <label className="block text-sm mb-1">{billing.type == 'factura' ? 'Razón Social' : 'Nombre completo'}</label>
                     <input
                       type="text"
                       className="w-full p-2 border border-gray-300 rounded"
