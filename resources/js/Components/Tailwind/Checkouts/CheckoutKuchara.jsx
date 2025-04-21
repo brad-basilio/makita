@@ -12,7 +12,6 @@ const CheckoutCulqi = ({ data, cart, setCart, items, prefixes }) => {
   const [contactInfo, setContactInfo] = useState({
     name: LaravelSession.name,
     lastname: LaravelSession.lastname,
-    dni: LaravelSession.dni,
     email: LaravelSession.email,
     phone_prefix: LaravelSession.phone_prefix || '51',
     phone: LaravelSession.phone,
@@ -135,7 +134,7 @@ const CheckoutCulqi = ({ data, cart, setCart, items, prefixes }) => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
                   <label htmlFor="name" className="block text-sm mb-1">
-                    Nombre 
+                    Nombre <b className="text-red-500">*</b>
                   </label>
                   <input
                     type="text"
@@ -145,12 +144,13 @@ const CheckoutCulqi = ({ data, cart, setCart, items, prefixes }) => {
                     onChange={handleContactInfoChange}
                     className="w-full p-2 border border-gray-300 rounded"
                     placeholder="Nombre"
+                    required
                   />
                 </div>
 
                 <div>
                   <label htmlFor="lastname" className="block text-sm mb-1">
-                    Apellido
+                    Apellido <b className="text-red-500">*</b>
                   </label>
                   <input
                     type="text"
@@ -160,29 +160,14 @@ const CheckoutCulqi = ({ data, cart, setCart, items, prefixes }) => {
                     onChange={handleContactInfoChange}
                     className="w-full p-2 border border-gray-300 rounded"
                     placeholder="Apellido"
+                    required
                   />
                 </div>
               </div>
 
               <div className="mb-4">
-                <label htmlFor="dni" className="block text-sm mb-1">
-                  DNI
-                </label>
-                <input
-                  type="text"
-                  id="dni"
-                  name="dni"
-                  value={contactInfo.dni}
-                  onChange={handleContactInfoChange}
-                  className="w-full p-2 border border-gray-300 rounded"
-                  placeholder="00000000"
-                  maxLength={8}
-                />
-              </div>
-
-              <div className="mb-4">
                 <label htmlFor="email" className="block text-sm mb-1">
-                  E-mail
+                  E-mail <b className="text-red-500">*</b>
                 </label>
                 <input
                   type="email"
@@ -192,6 +177,7 @@ const CheckoutCulqi = ({ data, cart, setCart, items, prefixes }) => {
                   onChange={handleContactInfoChange}
                   className="w-full p-2 border border-gray-300 rounded"
                   placeholder="Correo electrónico"
+                  required
                 />
               </div>
 
