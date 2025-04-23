@@ -54,13 +54,13 @@ const Sales = ({ statuses = [] }) => {
     $(modalRef.current).modal('show');
   }
 
-  useEffect(() => {
-    if (!saleLoaded) return
-    saleStatusesRest.bySale(saleLoaded.id).then((data) => {
-      if (data) setSaleStatuses(data)
-      else setSaleStatuses([])
-    })
-  }, [saleLoaded])
+  // useEffect(() => {
+  //   if (!saleLoaded) return
+  //   saleStatusesRest.bySale(saleLoaded.id).then((data) => {
+  //     if (data) setSaleStatuses(data)
+  //     else setSaleStatuses([])
+  //   })
+  // }, [saleLoaded])
 
   const totalAmount = Number(saleLoaded?.amount)
     + Number(saleLoaded?.delivery)
