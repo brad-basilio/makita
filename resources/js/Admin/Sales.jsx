@@ -48,11 +48,21 @@ const Sales = ({ statuses = [] }) => {
     $(gridRef.current).dxDataGrid('instance').refresh()
   }
 
+  // const onModalOpen = async (saleId) => {
+  //   const newSale = await salesRest.get(saleId)
+  //   setSaleLoaded(newSale)
+  //   $(modalRef.current).modal('show');
+  // }
+
   const onModalOpen = async (saleId) => {
-    const newSale = await salesRest.get(saleId)
-    setSaleLoaded(newSale)
-    $(modalRef.current).modal('show');
-  }
+    const result = await salesRest.get(saleId);
+    if (result && result.data) {
+      setSaleLoaded(result.data);  // Asegúrate de que estás asignando result.data
+      $(modalRef.current).modal('show');
+    } else {
+      console.error("No se recibieron datos válidos:", result);
+    }
+  };
 
   // useEffect(() => {
   //   if (!saleLoaded) return
@@ -62,12 +72,13 @@ const Sales = ({ statuses = [] }) => {
   //   })
   // }, [saleLoaded])
 
-  const totalAmount = Number(saleLoaded?.amount)
-    + Number(saleLoaded?.delivery)
-    - Number(saleLoaded?.bundle_discount)
-    - Number(saleLoaded?.renewal_discount)
-    - Number(saleLoaded?.coupon_discount)
-
+  const totalAmount = 
+  (Number(saleLoaded?.amount ?? 0)) +
+  (Number(saleLoaded?.delivery ?? 0)) -
+  (Number(saleLoaded?.bundle_discount ?? 0)) -
+  (Number(saleLoaded?.renewal_discount ?? 0)) -
+  (Number(saleLoaded?.coupon_discount ?? 0));
+  
   return (<>
     <Table gridRef={gridRef} title='Pedidos' rest={salesRest}
       toolBar={(container) => {
@@ -116,16 +127,16 @@ const Sales = ({ statuses = [] }) => {
             container.text(moment(data.created_at).fromNow())
           }
         },
-        {
-          dataField: 'status.name',
-          caption: 'Estado',
-          cellTemplate: (container, { data }) => {
-            ReactAppend(container, <span className='badge rounded-pill' style={{
-              backgroundColor: data.status.color ? `${data.status.color}2e` : '#3333332e',
-              color: data.status.color ?? '#333'
-            }}>{data.status.name}</span>)
-          }
-        },
+        // {
+        //   dataField: 'status.name',
+        //   caption: 'Estado',
+        //   cellTemplate: (container, { data }) => {
+        //     ReactAppend(container, <span className='badge rounded-pill' style={{
+        //       backgroundColor: data.status.color ? `${data.status.color}2e` : '#3333332e',
+        //       color: data.status.color ?? '#333'
+        //     }}>{data.status.name}</span>)
+        //   }
+        // },
         {
           dataField: 'amount',
           caption: 'Total',
@@ -159,205 +170,212 @@ const Sales = ({ statuses = [] }) => {
           allowExporting: false
         }
       ]} />
-    <Modal modalRef={modalRef} title={`Detalles del pedido #${Global.APP_CORRELATIVE}-${saleLoaded?.code}`} size='lg' bodyStyle={{
+    <Modal modalRef={modalRef} 
+      title={saleLoaded ? `Detalles del pedido #${Global.APP_CORRELATIVE}-${saleLoaded.code}` : 'Cargando...'} 
+      size='lg' bodyStyle={{
       backgroundColor: '#ebeff2'
     }} hideButtonSubmit >
-      <div className="row">
-        <div className="col-md-8">
-          <div className="card">
-            <div className="card-header p-2">
-              <h5 className="card-title mb-0">Detalles de Venta</h5>
-            </div>
-            <div className="card-body p-2">
-              <table className="table table-borderless table-sm mb-0">
-                <tbody>
-                  <tr>
-                    <th>Nombres:</th>
-                    <td>{saleLoaded?.name} {saleLoaded?.lastname}</td>
-                  </tr>
-                  <tr>
-                    <th>Email:</th>
-                    <td>{saleLoaded?.email}</td>
-                  </tr>
-                  <tr>
-                    <th>Teléfono:</th>
-                    <td>{saleLoaded?.phone}</td>
-                  </tr>
-                  <tr>
-                    <th>Dirección:</th>
-                    <td>{saleLoaded?.address} {saleLoaded?.number}
-                      <small className='text-muted d-block'>{saleLoaded?.province ?? saleLoaded?.district}, {saleLoaded?.department}, {saleLoaded?.country} {saleLoaded?.zip_code && <>- {saleLoaded?.zip_code}</>}</small>
-                    </td>
-                  </tr>
-                  {
-                    saleLoaded?.reference &&
+      {saleLoaded ? (
+        <div className="row">
+          <div className="col-md-8">
+            <div className="card">
+              <div className="card-header p-2">
+                <h5 className="card-title mb-0">Detalles de Venta</h5>
+              </div>
+              <div className="card-body p-2">
+                <table className="table table-borderless table-sm mb-0">
+                  <tbody>
                     <tr>
-                      <th>Referencia:</th>
-                      <td>{saleLoaded?.reference}</td>
+                      <th>Nombres:</th>
+                      <td>{saleLoaded?.name} {saleLoaded?.lastname}</td>
                     </tr>
-                  }
-                  {
-                    saleLoaded?.comment &&
                     <tr>
-                      <th>Comentario:</th>
-                      <td>{saleLoaded?.comment}</td>
+                      <th>Email:</th>
+                      <td>{saleLoaded?.email}</td>
                     </tr>
-                  }
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <div className="card">
-            <div className="card-header p-2">
-              <h5 className="card-title mb-0">Artículos</h5>
-            </div>
-            <div className="card-body p-2 table-responsive">
-              <table className="table table-striped table-bordered table-sm table-hover mb-0">
-                <thead>
-                  <tr>
-                    <th>Nombre</th>
-                    <th>Colores</th>
-                    <th>Precio</th>
-                    <th>Cantidad</th>
-                    <th>Subtotal</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {
-                    saleLoaded?.details?.map((detail, index) => {
-                      const quantity = (detail.quantity * 100) / 100
-                      const totalPrice = detail.price * detail.quantity
-                      return <tr key={index}>
-                        <td>{detail.name}</td>
-                        <td>
-                          {
-                            detail?.colors?.map((color, index) => {
-                              return <Tippy key={index} content={color.name}>
-                                <i className='mdi mdi-circle' style={{
-                                  color: color.hex,
-                                  WebkitTextStroke: '1px #808080'
-                                }}></i>
-                              </Tippy>
-                            })
-                          }
-                        </td>
-                        <td align='right'>S/ {Number2Currency(detail.price)}</td>
-                        <td align='center'>{quantity}</td>
-                        <td align='right'>S/ {Number2Currency(totalPrice)}</td>
+                    {/* <tr>
+                      <th>Teléfono:</th>
+                      <td>{saleLoaded?.phone}</td>
+                    </tr> */}
+                    <tr>
+                      <th>Dirección:</th>
+                      <td>{saleLoaded?.address} {saleLoaded?.number}
+                        <small className='text-muted d-block'>{saleLoaded?.province ?? saleLoaded?.district}, {saleLoaded?.department}, {saleLoaded?.country} {saleLoaded?.zip_code && <>- {saleLoaded?.zip_code}</>}</small>
+                      </td>
+                    </tr>
+                    {
+                      saleLoaded?.reference &&
+                      <tr>
+                        <th>Referencia:</th>
+                        <td>{saleLoaded?.reference}</td>
                       </tr>
-                    })
-                  }
-                </tbody>
-              </table>
+                    }
+                    {
+                      saleLoaded?.comment &&
+                      <tr>
+                        <th>Comentario:</th>
+                        <td>{saleLoaded?.comment}</td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div className="card">
+              <div className="card-header p-2">
+                <h5 className="card-title mb-0">Artículos</h5>
+              </div>
+              <div className="card-body p-2 table-responsive">
+                <table className="table table-striped table-bordered table-sm table-hover mb-0">
+                  <thead>
+                    <tr>
+                      <th>Nombre</th>
+                      <th>Colores</th>
+                      <th>Precio</th>
+                      <th>Cantidad</th>
+                      <th>Subtotal</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {
+                      saleLoaded?.details?.map((detail, index) => {
+                        const quantity = (detail.quantity * 100) / 100
+                        const totalPrice = detail.price * detail.quantity
+                        return <tr key={index}>
+                          <td>{detail.name}</td>
+                          <td>
+                            {
+                              detail?.colors?.map((color, index) => {
+                                return <Tippy key={index} content={color.name}>
+                                  <i className='mdi mdi-circle' style={{
+                                    color: color.hex,
+                                    WebkitTextStroke: '1px #808080'
+                                  }}></i>
+                                </Tippy>
+                              })
+                            }
+                          </td>
+                          <td align='right'>S/{Number2Currency(detail.price)}</td>
+                          <td align='center'>{quantity}</td>
+                          <td align='right'>S/{Number2Currency(totalPrice)}</td>
+                          
+                        </tr>
+                      })
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div className="card">
+              <div className="card-header p-2">
+                <h5 className="card-title mb-0">Resumen</h5>
+              </div>
+              <div className="card-body p-2">
+                <div className="d-flex justify-content-between">
+                  <b>Subtotal:</b>
+                  <span>S/ {Number2Currency(saleLoaded?.amount)}</span>
+                </div>
+                <div className="d-flex justify-content-between">
+                  <b>Envío:</b>
+                  <span>S/ {Number2Currency(saleLoaded?.delivery)}</span>
+                </div>
+                {saleLoaded?.bundle && (
+                  <div className="d-flex justify-content-between">
+                    <b>
+                      Descuento x paquete:
+                      <small className="d-block text-muted" style={{ fontWeight: "lighter" }}>
+                        Elegiste {saleLoaded?.bundle?.name} (-{(saleLoaded?.bundle?.percentage * 10000) / 100}%)
+                      </small>
+                    </b>
+                    <span>S/ -{Number2Currency(saleLoaded?.bundle_discount)}</span>
+                  </div>
+                )}
+                {saleLoaded?.renewal && (
+                  <div className="d-flex justify-content-between">
+                    <b>
+                      Subscripción:
+                      <small className="d-block text-muted" style={{ fontWeight: "lighter" }}>
+                        {saleLoaded?.renewal?.name} (-{(saleLoaded?.renewal?.percentage * 10000) / 100}%)
+                      </small>
+                    </b>
+                    <span>S/ -{Number2Currency(saleLoaded?.renewal_discount)}</span>
+                  </div>
+                )}
+                {saleLoaded?.coupon && (
+                  <div className="d-flex justify-content-between">
+                    <b>
+                      Cupón aplicado:
+                      <small className="d-block text-muted" style={{ fontWeight: "lighter" }}>
+                        {saleLoaded?.coupon?.name} (-{(saleLoaded?.coupon?.amount * 100) / 100}%)
+                      </small>
+                    </b>
+                    <span>S/ -{Number2Currency(saleLoaded?.coupon_discount)}</span>
+                  </div>
+                )}
+                <hr className='my-2' />
+                <div className="d-flex justify-content-between">
+                  <b>Total:</b>
+                  <span>
+                    <strong>S/ {Number2Currency(totalAmount)}</strong>
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div className="card">
-            <div className="card-header p-2">
-              <h5 className="card-title mb-0">Resumen</h5>
-            </div>
-            <div className="card-body p-2">
-              <div className="d-flex justify-content-between">
-                <b>Subtotal:</b>
-                <span>S/ {Number2Currency(saleLoaded?.amount)}</span>
+          {/* <div className="col-md-4">
+            <div className="card">
+              <div className="card-header p-2">
+                <h5 className="card-title mb-0">Estado</h5>
               </div>
-              <div className="d-flex justify-content-between">
-                <b>Envío:</b>
-                <span>S/ {Number2Currency(saleLoaded?.delivery)}</span>
-              </div>
-              {saleLoaded?.bundle && (
-                <div className="d-flex justify-content-between">
-                  <b>
-                    Descuento x paquete:
-                    <small className="d-block text-muted" style={{ fontWeight: "lighter" }}>
-                      Elegiste {saleLoaded?.bundle?.name} (-{(saleLoaded?.bundle?.percentage * 10000) / 100}%)
-                    </small>
-                  </b>
-                  <span>S/ -{Number2Currency(saleLoaded?.bundle_discount)}</span>
+              <div className="card-body p-2">
+                <div className="">
+                  <label htmlFor="statusSelect" className="form-label">Estado Actual</label>
+                  <select className="form-select" id="statusSelect" value={saleLoaded?.status_id} onChange={onStatusChange} disabled={!saleLoaded?.status?.reversible}>
+                    {
+                      statuses.map((status, index) => {
+                        return <option value={status.id}>{status.name}</option>
+                      })
+                    }
+                  </select>
                 </div>
-              )}
-              {saleLoaded?.renewal && (
-                <div className="d-flex justify-content-between">
-                  <b>
-                    Subscripción:
-                    <small className="d-block text-muted" style={{ fontWeight: "lighter" }}>
-                      {saleLoaded?.renewal?.name} (-{(saleLoaded?.renewal?.percentage * 10000) / 100}%)
-                    </small>
-                  </b>
-                  <span>S/ -{Number2Currency(saleLoaded?.renewal_discount)}</span>
-                </div>
-              )}
-              {saleLoaded?.coupon && (
-                <div className="d-flex justify-content-between">
-                  <b>
-                    Cupón aplicado:
-                    <small className="d-block text-muted" style={{ fontWeight: "lighter" }}>
-                      {saleLoaded?.coupon?.name} (-{(saleLoaded?.coupon?.amount * 100) / 100}%)
-                    </small>
-                  </b>
-                  <span>S/ -{Number2Currency(saleLoaded?.coupon_discount)}</span>
-                </div>
-              )}
-              <hr className='my-2' />
-              <div className="d-flex justify-content-between">
-                <b>Total:</b>
-                <span>
-                  <strong>S/ {Number2Currency(totalAmount)}</strong>
-                </span>
               </div>
             </div>
-          </div>
+
+            <div className="card">
+              <div className="card-header p-2">
+                <h5 className="card-title mb-0">Cambios de Estado</h5>
+              </div>
+              <div className="card-body p-2 d-flex flex-column gap-1">
+                {
+                  saleStatuses?.map((ss, index) => {
+                    return <article key={index} class="border py-1 px-2 ms-3" style={{
+                      position: 'relative',
+                      borderRadius: '16px 4px 4px 16px',
+                      backgroundColor: ss.status.color ? `${ss.status.color}2e` : '#3333332e',
+                    }}>
+                      <i className='mdi mdi-circle left-2' style={{
+                        color: ss.status.color || '#333',
+                        position: 'absolute',
+                        left: '-25px',
+                        top: '50%',
+                        transform: 'translateY(-50%)'
+                      }}></i>
+                      <b style={{ color: ss.status.color || '#333' }}>{ss?.status?.name}</b>
+                      <small className='d-block text-truncate'>{ss?.user?.name} {ss?.user?.lastname}</small>
+                      <small className='d-block text-muted'>{moment(ss.created_at).format('YYYY-MM-DD HH:mm')}</small>
+                    </article>
+                  })
+                }
+              </div>
+            </div>
+          </div> */}
         </div>
-
-        <div className="col-md-4">
-          <div className="card">
-            <div className="card-header p-2">
-              <h5 className="card-title mb-0">Estado</h5>
-            </div>
-            <div className="card-body p-2">
-              <div className="">
-                <label htmlFor="statusSelect" className="form-label">Estado Actual</label>
-                <select className="form-select" id="statusSelect" value={saleLoaded?.status_id} onChange={onStatusChange} disabled={!saleLoaded?.status?.reversible}>
-                  {
-                    statuses.map((status, index) => {
-                      return <option value={status.id}>{status.name}</option>
-                    })
-                  }
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <div className="card">
-            <div className="card-header p-2">
-              <h5 className="card-title mb-0">Cambios de Estado</h5>
-            </div>
-            <div className="card-body p-2 d-flex flex-column gap-1">
-              {
-                saleStatuses?.map((ss, index) => {
-                  return <article key={index} class="border py-1 px-2 ms-3" style={{
-                    position: 'relative',
-                    borderRadius: '16px 4px 4px 16px',
-                    backgroundColor: ss.status.color ? `${ss.status.color}2e` : '#3333332e',
-                  }}>
-                    <i className='mdi mdi-circle left-2' style={{
-                      color: ss.status.color || '#333',
-                      position: 'absolute',
-                      left: '-25px',
-                      top: '50%',
-                      transform: 'translateY(-50%)'
-                    }}></i>
-                    <b style={{ color: ss.status.color || '#333' }}>{ss?.status?.name}</b>
-                    <small className='d-block text-truncate'>{ss?.user?.name} {ss?.user?.lastname}</small>
-                    <small className='d-block text-muted'>{moment(ss.created_at).format('YYYY-MM-DD HH:mm')}</small>
-                  </article>
-                })
-              }
-            </div>
-          </div>
-        </div>
-      </div>
+      ) : (
+        <div className="text-center p-4">Cargando detalles del pedido...</div>
+      )}
     </Modal>
   </>
   )

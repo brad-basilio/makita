@@ -11,4 +11,5 @@ class SaleController extends BasicController
 {
     public $model = Sale::class;
     public $reactView = 'Admin/Sales';
+    public $with4get = ['details'];
 }

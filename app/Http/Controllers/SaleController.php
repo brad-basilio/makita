@@ -9,4 +9,5 @@ use App\Http\Requests\UpdateSaleRequest;
 class SaleController extends BasicController
 {
     public $model = Sale::class;
+    
 }
