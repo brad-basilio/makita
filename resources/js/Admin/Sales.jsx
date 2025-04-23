@@ -127,6 +127,15 @@ const Sales = ({ statuses = [] }) => {
             container.text(moment(data.created_at).fromNow())
           }
         },
+        {
+          dataField: 'payment_status',
+          caption: 'Estado de Pago',
+          dataType: 'string',
+          sortOrder: 'desc',
+          cellTemplate: (container, { data }) => {
+            container.text(data.payment_status)
+          }
+        },
         // {
         //   dataField: 'status.name',
         //   caption: 'Estado',
