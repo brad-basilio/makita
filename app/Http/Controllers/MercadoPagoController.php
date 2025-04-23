@@ -60,6 +60,7 @@ class MercadoPagoController extends Controller
                 $itemName = is_array($item) ? $item['name'] ?? null : $item->name ?? null;
                 $itemPrice = is_array($item) ? $item['final_price'] ?? null : $item->final_price ?? null;
                 $itemQuantity = is_array($item) ? $item['quantity'] ?? null : $item->quantity ?? null;
+                $color = is_array($item) ? $item['color'] ?? null : $item->color ?? null;
 
                 SaleDetail::create([
                     'sale_id' => $sale->id,
@@ -67,6 +68,7 @@ class MercadoPagoController extends Controller
                     'name' => $itemName,
                     'price' => $itemPrice,
                     'quantity' => $itemQuantity,
+                    'colors' => $color,
                 ]);
             }
 

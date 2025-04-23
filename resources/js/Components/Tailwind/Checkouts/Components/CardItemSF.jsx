@@ -45,7 +45,7 @@ const CardItemSF = ({ setCart, ...item }) => {
                         <div>
                             <h3 className="text-sm 2xl:text-base font-semibold customtext-neutral-dark">{item.name}</h3>
                             <div className="text-[12px] 2xl:text-sm customtext-neutral-dark space-y-1 mt-1">
-                                <p>Color: varios</p>
+                                <p>Color: {item.color}</p>
                                 <button
                                     onClick={onDeleteClicked}
                                     className=" text-red-500 transition-colors duration-200 rounded-full hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-200"
@@ -107,7 +107,7 @@ const CardItemSF = ({ setCart, ...item }) => {
                     />
                     <div className="flex-1">
                         <h3 className="font-semibold text-lg mb-1 leading-tight customtext-neutral-dark">{item.name}</h3>
-                        <p className="text-sm text-gray-500">Color: varios</p>
+                        <p className="text-sm text-gray-500">Color: {item.color}</p>
                         
                         <div className="mt-1 flex flex-col">
                             <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden shadow-sm w-24">
