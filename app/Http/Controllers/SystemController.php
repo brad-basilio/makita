@@ -189,6 +189,11 @@ class SystemController extends BasicController
                 // Cargar todos los registros
                 $class = 'App\\Models\\' . $model;
                 $query = $class::select($using['fields'] ?? ['*']);
+                
+                if ($model === 'Category') {
+                    $query->where('status', 1)->where('visible', 1);
+                }
+                
                 if (isset($using['relations'])) {
                     $query->with($using['relations']);
                 }
