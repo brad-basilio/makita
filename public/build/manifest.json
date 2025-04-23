@@ -1568,7 +1568,7 @@
     ]
   },
   "resources/js/Admin/Sales.jsx": {
-    "file": "assets/Sales-BGMR83Et.js",
+    "file": "assets/Sales-FERkSVNd.js",
     "name": "Sales",
     "src": "resources/js/Admin/Sales.jsx",
     "isEntry": true,
@@ -1586,17 +1586,17 @@
       "_Global-CklCDfn9.js",
       "_Number2Currency-e57Tgsuk.js",
       "_Modal-CIqmjseY.js",
-      "_tippy-react.esm-BWiGTO87.js",
       "_main-BSEyQEJW.js",
       "_index-yBjzXJbu.js",
       "_index-fNjTmf9T.js",
+      "_tippy-react.esm-BWiGTO87.js",
+      "_index-rimy3MAc.js",
       "_Logout-CGCqvje3.js",
       "_MenuItemContainer-BkmzVQNY.js",
       "_index.esm-BE8-iLxT.js",
       "____vite-browser-external_commonjs-proxy-0zb4Agf2.js",
       "_General-BmbBKdsB.js",
-      "_LaravelSession-Dz9cpV3l.js",
-      "_index-rimy3MAc.js"
+      "_LaravelSession-Dz9cpV3l.js"
     ],
     "css": [
       "tippy.css",

@@ -253,8 +253,8 @@ const Sales = ({ statuses = [] }) => {
                         const totalPrice = detail.price * detail.quantity
                         return <tr key={index}>
                           <td>{detail.name}</td>
-                          <td>
-                            {
+                          <td>{detail.colors}
+                            {/* {
                               detail?.colors?.map((color, index) => {
                                 return <Tippy key={index} content={color.name}>
                                   <i className='mdi mdi-circle' style={{
@@ -263,7 +263,7 @@ const Sales = ({ statuses = [] }) => {
                                   }}></i>
                                 </Tippy>
                               })
-                            }
+                            } */}
                           </td>
                           <td align='right'>S/{Number2Currency(detail.price)}</td>
                           <td align='center'>{quantity}</td>
