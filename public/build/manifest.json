@@ -4958,7 +4958,7 @@
     ]
   },
   "resources/js/Components/Tailwind/ProductDetail.jsx": {
-    "file": "assets/ProductDetail-DlYU7nzw.js",
+    "file": "assets/ProductDetail-rLmq0ZYk.js",
     "name": "ProductDetail",
     "src": "resources/js/Components/Tailwind/ProductDetail.jsx",
     "isEntry": true,
@@ -5058,7 +5058,7 @@
     ]
   },
   "resources/js/Components/Tailwind/ProductDetails/ProductDetailSF.jsx": {
-    "file": "assets/ProductDetailSF-qzMwbTEn.js",
+    "file": "assets/ProductDetailSF-CSkSeUUV.js",
     "name": "ProductDetailSF",
     "src": "resources/js/Components/Tailwind/ProductDetails/ProductDetailSF.jsx",
     "isDynamicEntry": true,
@@ -6201,7 +6201,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-BoS1OjPj.js",
+    "file": "assets/System-DywLr3uy.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,

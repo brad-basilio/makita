@@ -349,7 +349,7 @@ export default function ProductDetailSF({ item, data, setCart, cart }) {
                                         >
                                             <img
                                                 className="color-box rounded-full h-9 w-9 object-fit-cover "
-                                                src={`/storage/images/item/${item.texture}`}
+                                                src={`/storage/images/item/${item.texture || item.image}`}
                                                 onError={(e) =>
                                                     (e.target.src =
                                                         "/api/cover/thumbnail/null")
