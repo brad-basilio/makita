@@ -40,11 +40,13 @@ class SystemController extends BasicController
         $fonts = [
             'title' => [
                 'name' => Setting::get('title-font-name'),
-                'url' => Setting::get('title-font-url')
+                'url' => Setting::get('title-font-url'),
+                'source' => Setting::get('title-font-source')
             ],
             'paragraph' => [
                 'name' => Setting::get('paragraph-font-name'),
-                'url' => Setting::get('paragraph-font-url')
+                'url' => Setting::get('paragraph-font-url'),
+                'source' => Setting::get('paragraph-font-source')
             ]
         ];
 

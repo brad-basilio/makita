@@ -216,7 +216,7 @@ const System = ({
                 return <Faq which={value} data={data} faqs={faqs} />;
 
             case "thank":
-                return <ThankSimple which={value} data={data} />;
+                return <ThankSimple which={value} data={data} item={filteredData.Sale} />;
             case "blog":
                 return (
                     <Blog

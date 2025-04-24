@@ -1801,7 +1801,7 @@
     ]
   },
   "resources/js/Admin/System.jsx": {
-    "file": "assets/System-CVaYtsXt.js",
+    "file": "assets/System-CPJvih3Q.js",
     "name": "System",
     "src": "resources/js/Admin/System.jsx",
     "isEntry": true,
@@ -3529,7 +3529,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Checkout.jsx": {
-    "file": "assets/Checkout-BB60k_-T.js",
+    "file": "assets/Checkout-B4gQHMF7.js",
     "name": "Checkout",
     "src": "resources/js/Components/Tailwind/Checkout.jsx",
     "isEntry": true,
@@ -3558,7 +3558,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Checkouts/CheckoutKuchara.jsx": {
-    "file": "assets/CheckoutKuchara-GAJK_K48.js",
+    "file": "assets/CheckoutKuchara-DrNw0QL7.js",
     "name": "CheckoutKuchara",
     "src": "resources/js/Components/Tailwind/Checkouts/CheckoutKuchara.jsx",
     "isDynamicEntry": true,
@@ -4913,7 +4913,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Product.jsx": {
-    "file": "assets/Product-DET4I0pN.js",
+    "file": "assets/Product-DRFZuePD.js",
     "name": "Product",
     "src": "resources/js/Components/Tailwind/Product.jsx",
     "isEntry": true,
@@ -4934,7 +4934,7 @@
     ]
   },
   "resources/js/Components/Tailwind/ProductDetail.jsx": {
-    "file": "assets/ProductDetail-DOYSZ_43.js",
+    "file": "assets/ProductDetail-Hlc1eFLD.js",
     "name": "ProductDetail",
     "src": "resources/js/Components/Tailwind/ProductDetail.jsx",
     "isEntry": true,
@@ -5018,7 +5018,7 @@
     ]
   },
   "resources/js/Components/Tailwind/ProductDetails/ProductDetailKuchara.jsx": {
-    "file": "assets/ProductDetailKuchara-5tZbcutS.js",
+    "file": "assets/ProductDetailKuchara-C9qOurnf.js",
     "name": "ProductDetailKuchara",
     "src": "resources/js/Components/Tailwind/ProductDetails/ProductDetailKuchara.jsx",
     "isDynamicEntry": true,
@@ -5548,7 +5548,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Slider.jsx": {
-    "file": "assets/Slider-nNWxOyXS.js",
+    "file": "assets/Slider-BxXF61N6.js",
     "name": "Slider",
     "src": "resources/js/Components/Tailwind/Slider.jsx",
     "isEntry": true,
@@ -5699,7 +5699,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Thank.jsx": {
-    "file": "assets/Thank-B1ZmxhIb.js",
+    "file": "assets/Thank-CgeQW8s4.js",
     "name": "Thank",
     "src": "resources/js/Components/Tailwind/Thank.jsx",
     "isEntry": true,
@@ -6178,7 +6178,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-BkPgOuEC.js",
+    "file": "assets/System-DlItl9jz.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,

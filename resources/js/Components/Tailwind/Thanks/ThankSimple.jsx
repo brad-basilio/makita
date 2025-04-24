@@ -1,6 +1,8 @@
 import React from "react";
 
-const ThankSimple = ({ data, cart }) => {
+const ThankSimple = ({ data, item }) => {
+
+  console.log(item)
 
   const orderData = {
     orderCode: "#0123_45678",

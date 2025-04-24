@@ -1,51 +1,57 @@
 import React from "react";
+import { Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 const SliderJustImage = ({ data, items }) => {
-    const onFormSubmit = (e) => {
-        e.preventDefault();
-        const input = document.querySelector('[name="search"]');
-        location.href = `${data?.link_catalog}?search=${input.value}`;
-    };
+  const onFormSubmit = (e) => {
+    e.preventDefault();
+    const input = document.querySelector('[name="search"]');
+    location.href = `${data?.link_catalog}?search=${input.value}`;
+  };
 
-    return (
-        <Swiper
-            className="slider"
-            slidesPerView={1}
-            loop={true}
-            grabCursor={true}
-            centeredSlides={false}
-            initialSlide={0}
-            navigation={{
-                nextEl: ".swiper-button-next",
-                prevEl: ".swiper-button-prev",
-            }}
-            pagination={{
-                el: ".swiper-pagination",
-            }}
-            breakpoints={{
-                0: {
-                    slidesPerView: 1,
-                    spaceBetween: 20,
-                },
-                768: {
-                    slidesPerView: 1,
-                    spaceBetween: 20,
-                },
-                1024: {
-                    slidesPerView: 1,
-                },
-            }}
-        >
-            {items.map((slider, i) => {
-                return (
-                    <SwiperSlide className="!w-full" key={`slider-${i}`}>
-                        <img
-                            src={`/storage/images/slider/${slider.bg_image}`}
-                            alt=""
-                            className="w-full apect-[14/5] object-cover"
-                        />
-                        {/* <div className="gap-20 bg-no-repeat object-top bg-center bg-cover w-full px-[5%] h-[600px] xl:h-[650px] flex flex-row items-center"
+  return (
+    <Swiper
+      className="slider"
+      slidesPerView={1}
+      modules={[Autoplay]}
+      autoplay={{
+        delay: 5000,
+        disableOnInteraction: false,
+      }}
+      loop={true}
+      grabCursor={true}
+      centeredSlides={false}
+      initialSlide={0}
+      navigation={{
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+      }}
+      pagination={{
+        el: ".swiper-pagination",
+      }}
+      breakpoints={{
+        0: {
+          slidesPerView: 1,
+          spaceBetween: 20,
+        },
+        768: {
+          slidesPerView: 1,
+          spaceBetween: 20,
+        },
+        1024: {
+          slidesPerView: 1,
+        },
+      }}
+    >
+      {items.map((slider, i) => {
+        return (
+          <SwiperSlide className="!w-full" key={`slider-${i}`}>
+            <img
+              src={`/storage/images/slider/${slider.bg_image}`}
+              alt=""
+              className="w-full apect-[14/5] object-cover"
+            />
+            {/* <div className="gap-20 bg-no-repeat object-top bg-center bg-cover w-full px-[5%] h-[600px] xl:h-[650px] flex flex-row items-center"
               style={{ backgroundImage: `url('/storage/images/slider/${slider.bg_image}')` }}>
               <div className="flex flex-row justify-center items-center gap-2 w-full xl:w-2/3 py-12 lg:py-24">
                 <div className="flex flex-col gap-5 lg:gap-10 items-start px-0 lg:px-[2%]">
@@ -90,11 +96,11 @@ const SliderJustImage = ({ data, items }) => {
                 </div>
               </div>
             </div> */}
-                    </SwiperSlide>
-                );
-            })}
-        </Swiper>
-    );
+          </SwiperSlide>
+        );
+      })}
+    </Swiper>
+  );
 };
 
 export default SliderJustImage;

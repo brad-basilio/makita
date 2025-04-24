@@ -676,7 +676,11 @@ const CheckoutCulqi = ({ cart, setCart, items, prefixes }) => {
 
                 <div className="flex justify-between items-center">
                   <p>Subtotal</p>
-                  <span>S/ {Number2Currency(totalPrice)}</span>
+                  <span>S/ {Number2Currency(totalPrice * 0.82)}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <p>IGV (18%)</p>
+                  <span>S/ {Number2Currency(totalPrice * 0.18)}</span>
                 </div>
 
                 <div className="flex justify-between items-center font-semibold text-lg pt-2 border-t border-gray-200">

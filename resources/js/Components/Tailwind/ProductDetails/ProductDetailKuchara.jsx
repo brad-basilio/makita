@@ -186,14 +186,14 @@ const ProductDetailKuchara = ({ item, cart, setCart }) => {
           </div>
 
           {/* Información de envío */}
-          <div className="mt-2 bg-green-50 p-3 rounded-md flex items-center gap-2">
+          {/* <div className="mt-2 bg-green-50 p-3 rounded-md flex items-center gap-2">
             <div className="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center text-white">
               <span>S/</span>
             </div>
             <span className="text-green-700">
               Agrega S/100.00 para <strong>ENVÍO GRATIS</strong>
             </span>
-          </div>
+          </div> */}
 
           {/* Botones de acción */}
           <div className="mt-4 flex flex-col gap-3">

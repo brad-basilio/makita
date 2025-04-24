@@ -33,11 +33,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap" rel="stylesheet">
 
-    @if ($data['fonts']['title']['url'] && !str_starts_with($data['fonts']['title']['url'], '/'))
+    @if ($data['fonts']['title']['url'] && $data['fonts']['title']['source'] !== 'true')
         <link rel="stylesheet" href="{{ $data['fonts']['title']['url'] }}">
     @endif
 
-    @if ($data['fonts']['paragraph']['url'] && !str_starts_with($data['fonts']['paragraph']['url'], '/'))
+    @if ($data['fonts']['paragraph']['url'] && $data['fonts']['paragraph']['source'] !== 'true')
         <link rel="stylesheet" href="{{ $data['fonts']['paragraph']['url'] }}">
     @endif
 
@@ -74,18 +74,39 @@
             /* Centra la imagen en la parte superior */
         }
     </style>
-    <style>
-        @if ($data['fonts']['title']['name'])
+
+    @if ($data['fonts']['title']['url'] && $data['fonts']['title']['source'] == 'true')
+        <style>
+            @font-face {
+                font-family: "{{ $data['fonts']['title']['name'] }}";
+                src: url('{{ $data['fonts']['title']['url'] }}') format('woff2');
+            }
+        </style>
+    @endif
+    @if ($data['fonts']['title']['name'])
+        <style>
             .font-title {
                 font-family: "{{ $data['fonts']['title']['name'] }}", sans-serif;
             }
-        @endif
-        @if ($data['fonts']['paragraph']['name'])
-            * {
-                font-family: {{ $data['fonts']['paragraph']['name'] }};
+        </style>
+    @endif
+    @if ($data['fonts']['paragraph']['url'] && $data['fonts']['paragraph']['source'] == 'true')
+        <style>
+            @font-face {
+                font-family: "{{ $data['fonts']['paragraph']['name'] }}";
+                src: url('{{ $data['fonts']['paragraph']['url'] }}') format('woff2');
             }
-        @endif
-        @foreach ($data['colors'] as $color)
+        </style>
+    @endif
+    @if ($data['fonts']['paragraph']['name'])
+        <style>
+            * {
+                font-family: "{{ $data['fonts']['paragraph']['name'] }}", sans-serif;
+            }
+        </style>
+    @endif
+    @foreach ($data['colors'] as $color)
+        <style>
             .bg-{{ $color->name }} {
                 background-color: {{ $color->description }};
             }
@@ -119,19 +140,23 @@
             .before\:.bg-{{ $color->name }} {
                 background-color: {{ $color->description }};
             }
+
             .lg\:.bg-{{ $color->name }} {
                 background-color: {{ $color->description }};
             }
-          
-        @endforeach
+        </style>
+    @endforeach
+    <style>
         .font-emoji {
             font-family: "Noto Color Emoji", sans-serif;
         }
+
         .select2-container--default .select2-selection--single .select2-selection__arrow {
             top: 50%;
             transform: translateY(-50%);
         }
     </style>
+
 </head>
 
 <body class="font-general">
