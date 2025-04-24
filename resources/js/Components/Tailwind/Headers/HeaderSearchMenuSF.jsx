@@ -149,7 +149,7 @@ const HeaderSearchMenuSF = ({
       <div class="flex justify-end relative">
         <div class="fixed bottom-[36px] z-[10] right-[15px] md:right-[25px] animate-bounce animate-twice">
           <a target="_blank"
-            href={`https://api.whatsapp.com/send?phone=+51${getContact("phone_whatsapp")}&text=${encodeURIComponent(getContact("message_whatsapp"))}`}
+            href={`https://api.whatsapp.com/send?phone=${getContact("phone_whatsapp")}&text=${encodeURIComponent(getContact("message_whatsapp"))}`}
             class="">
             <img src={`/assets/resources/botonwhatsapp.svg?v=${crypto.randomUUID()}`} alt="whatsapp" class="w-16" />
           </a>
