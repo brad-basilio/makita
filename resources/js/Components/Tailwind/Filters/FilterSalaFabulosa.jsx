@@ -5,6 +5,7 @@ import {
     ChevronDown,
     ChevronLeft,
     ChevronRight,
+    ChevronUp,
     Filter,
     Search,
     Tag,
@@ -355,7 +356,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                                 className="flex items-center justify-between w-full mb-4"
                             >
                                 <span className="font-medium">Colecciones</span>
-                                <ChevronDown
+                                <ChevronUp
                                     className={`h-5 w-5 transform transition-transform ${
                                         sections.collection ? "" : "-rotate-180"
                                     }`}
@@ -431,7 +432,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                                 className="flex items-center justify-between w-full mb-4"
                             >
                                 <span className="font-medium">Categorias</span>
-                                <ChevronDown
+                                <ChevronUp
                                     className={`h-5 w-5 transform transition-transform ${
                                         sections.categoria ? "" : "-rotate-180"
                                     }`}
@@ -507,7 +508,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                                 className="flex items-center justify-between w-full mb-4"
                             >
                                 <span className="font-medium">Precio</span>
-                                <ChevronDown
+                                <ChevronUp
                                     className={`h-5 w-5 transform transition-transform ${
                                         sections.precio ? "" : "-rotate-180"
                                     }`}
