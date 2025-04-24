@@ -11,6 +11,7 @@ const HeaderSearchMenuSF = ({
   setCart,
   isUser,
   pages,
+  headerPosts,
   generals = [], }) => {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -83,13 +84,25 @@ const HeaderSearchMenuSF = ({
                 {pages.map((page, index) => (
                   page.menuable && (
                     <li key={index} className="flex flex-col py-1 lg:py-0">
-                      <a
-                        href={page.path}
-                        className="hover:customtext-primary cursor-pointer transition-all duration-300 pr-6"
-                        onClick={() => setMenuOpen(false)}
-                      >
-                        {page.name}
-                      </a>
+                      {page.name === "Blogs" ? (
+                        headerPosts.length > 0 && (
+                          <a
+                            href={page.path}
+                            className="hover:customtext-primary cursor-pointer transition-all duration-300 pr-6"
+                            onClick={() => setMenuOpen(false)}
+                          >
+                            {page.name}
+                          </a>
+                        )
+                      ) : (
+                        <a
+                          href={page.path}
+                          className="hover:customtext-primary cursor-pointer transition-all duration-300 pr-6"
+                          onClick={() => setMenuOpen(false)}
+                        >
+                          {page.name}
+                        </a>
+                      )}
                     </li>
                   )
                 ))}

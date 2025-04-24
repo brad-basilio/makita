@@ -25,6 +25,7 @@ const Header = ({
     setCart,
     pages,
     isUser,
+    headerPosts,
 }) => {
     const getHeader = () => {
         switch (which) {
@@ -102,6 +103,7 @@ const Header = ({
                         setCart={setCart}
                         pages={pages}
                         isUser={isUser}
+                        headerPosts={headerPosts}
                     />
                 );
             case "HeaderScraping":
