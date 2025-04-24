@@ -577,7 +577,7 @@ export default function ProductDetailSF({ item, data, setCart, cart }) {
 
             {/* Productos relacionados */}
             {relationsItems.length > 0 && (
-                <div className="-mt-20 mb-10">
+                <div className="-mt-10 mb-10 p-4">
                     <ProductNavigation
                         data={{ title: "Te Puede Interesar", link_catalog: "/catalogo" }}
                         items={relationsItems}

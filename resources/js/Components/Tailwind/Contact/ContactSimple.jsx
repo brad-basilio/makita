@@ -1,11 +1,12 @@
 import React, { useRef, useState } from "react"
 import MessagesRest from "../../../Actions/MessagesRest"
 import Swal from "sweetalert2"
+// import { useNavigate } from "react-router-dom"
 
 const messagesRest = new MessagesRest()
 
 const ContactSimple = ({ data, contacts }) => {
-
+  // const navigate = useNavigate()
   const getContact = (correlative) => {
     return (
         contacts.find((contact) => contact.correlative === correlative)

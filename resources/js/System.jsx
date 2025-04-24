@@ -36,6 +36,7 @@ import Indicator from "./Components/Tailwind/Indicator";
 import ThankSimple from "./Components/Tailwind/Thanks/ThankSimple";
 import Image from "./Components/Tailwind/Image";
 import BananaLab from "./Components/Tailwind/BananaLab";
+import Agradecimientos from "./Components/Tailwind/Agradecimientos";
 import { Toaster } from "sonner";
 
 const itemsRest = new ItemsRest();
@@ -268,6 +269,8 @@ const System = ({
                 return <Complaint which={value} generals={generals} />;
             case "bananalab":
                 return <BananaLab which={value} generals={generals} />;
+            case "agradecimiento":
+                return <Agradecimientos which={value} data={data} contacts={contacts} />;
         }
     };
 

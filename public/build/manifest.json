@@ -2726,6 +2726,32 @@
       "_index-yBjzXJbu.js"
     ]
   },
+  "resources/js/Components/Tailwind/Agradecimiento/AgradecimientoSF.jsx": {
+    "file": "assets/AgradecimientoSF-Co_3lRRe.js",
+    "name": "AgradecimientoSF",
+    "src": "resources/js/Components/Tailwind/Agradecimiento/AgradecimientoSF.jsx",
+    "isEntry": true,
+    "imports": [
+      "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
+      "_index-BH53Isel.js",
+      "_index-yBjzXJbu.js"
+    ]
+  },
+  "resources/js/Components/Tailwind/Agradecimientos.jsx": {
+    "file": "assets/Agradecimientos-B7vNIxSm.js",
+    "name": "Agradecimientos",
+    "src": "resources/js/Components/Tailwind/Agradecimientos.jsx",
+    "isEntry": true,
+    "imports": [
+      "_preload-helper-BfFHrpNk.js",
+      "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
+      "_index-BH53Isel.js",
+      "_index-yBjzXJbu.js"
+    ],
+    "dynamicImports": [
+      "resources/js/Components/Tailwind/Agradecimiento/AgradecimientoSF.jsx"
+    ]
+  },
   "resources/js/Components/Tailwind/BananaLab.jsx": {
     "file": "assets/BananaLab-TTycbUfx.js",
     "name": "BananaLab",
@@ -4932,7 +4958,7 @@
     ]
   },
   "resources/js/Components/Tailwind/ProductDetail.jsx": {
-    "file": "assets/ProductDetail-Dnt4ZMHH.js",
+    "file": "assets/ProductDetail-DlYU7nzw.js",
     "name": "ProductDetail",
     "src": "resources/js/Components/Tailwind/ProductDetail.jsx",
     "isEntry": true,
@@ -5032,7 +5058,7 @@
     ]
   },
   "resources/js/Components/Tailwind/ProductDetails/ProductDetailSF.jsx": {
-    "file": "assets/ProductDetailSF-DSl-6guO.js",
+    "file": "assets/ProductDetailSF-qzMwbTEn.js",
     "name": "ProductDetailSF",
     "src": "resources/js/Components/Tailwind/ProductDetails/ProductDetailSF.jsx",
     "isDynamicEntry": true,
@@ -6175,7 +6201,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-CePTKwrf.js",
+    "file": "assets/System-Dn1uUJb3.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,
@@ -6285,7 +6311,8 @@
       "resources/js/Components/Tailwind/BananaLab/Canva2.jsx",
       "resources/js/Components/Tailwind/BananaLab/Canva3.jsx",
       "resources/js/Components/Tailwind/BananaLab/components/Editor/EditorLayout.jsx",
-      "resources/js/Components/Tailwind/BananaLab/Editor.jsx"
+      "resources/js/Components/Tailwind/BananaLab/Editor.jsx",
+      "resources/js/Components/Tailwind/Agradecimiento/AgradecimientoSF.jsx"
     ],
     "css": [
       "swiper.css",
