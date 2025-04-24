@@ -90,7 +90,7 @@ const System = ({
             case "top_bar":
                 return <TopBar data={data} which={value} items={getItems(itemsId)} cart={cart} setCart={setCart} isUser={session} />
             case "header":
-                return <Header data={data} which={value} items={getItems(itemsId)} cart={cart} setCart={setCart} pages={pages} isUser={session} generals={generals} headerPosts={headerPosts} />
+                return <Header data={data} which={value} items={getItems(itemsId)} cart={cart} setCart={setCart} pages={pages} isUser={session} generals={generals} headerPosts={headerPosts} contacts={contacts}/>
             case "menu":
                 return (
                     <Menu

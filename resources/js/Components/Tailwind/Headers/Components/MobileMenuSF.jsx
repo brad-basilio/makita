@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Search, X, ChevronRight, ChevronLeft } from "lucide-react";
 
-export default function MobileMenuSF({ search, setSearch, pages, items }) {
+export default function MobileMenuSF({ search, setSearch, pages, items, headerPosts}) {
     const [menuLevel, setMenuLevel] = useState("main"); // main, categories, subcategories
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [selectedSubcategory, setSelectedSubcategory] = useState(null);
@@ -127,20 +127,22 @@ export default function MobileMenuSF({ search, setSearch, pages, items }) {
                             {pages.map(
                                 (page, index) =>
                                     page.menuable && (
-                                        <li
-                                            key={index}
-                                            className="flex flex-col py-1"
-                                        >
-                                            <a
-                                                href={page.path}
-                                                className="hover:customtext-neutral-dark cursor-pointer transition-all duration-300 pr-6"
-                                                onClick={() =>
-                                                    setMenuOpen(false)
-                                                }
+                                        (page.name !== "Blogs" || headerPosts.length > 0) && (
+                                            <li
+                                                key={index}
+                                                className="flex flex-col py-1"
                                             >
-                                                {page.name}
-                                            </a>
-                                        </li>
+                                                <a
+                                                    href={page.path}
+                                                    className="hover:customtext-neutral-dark cursor-pointer transition-all duration-300 pr-6"
+                                                    onClick={() =>
+                                                        setMenuOpen(false)
+                                                    }
+                                                >
+                                                    {page.name}
+                                                </a>
+                                            </li>
+                                        )
                                     )
                             )}
                         </div>

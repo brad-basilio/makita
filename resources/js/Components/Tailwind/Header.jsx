@@ -26,6 +26,7 @@ const Header = ({
     pages,
     isUser,
     headerPosts,
+    contacts,
 }) => {
     const getHeader = () => {
         switch (which) {
@@ -104,6 +105,7 @@ const Header = ({
                         pages={pages}
                         isUser={isUser}
                         headerPosts={headerPosts}
+                        contacts={contacts}
                     />
                 );
             case "HeaderScraping":

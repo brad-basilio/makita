@@ -12,6 +12,7 @@ const HeaderSearchMenuSF = ({
   isUser,
   pages,
   headerPosts,
+  contacts,
   generals = [], }) => {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -20,6 +21,13 @@ const HeaderSearchMenuSF = ({
   const [openMenu, setOpenMenu] = useState(false);
   const menuRef = useRef(null);
 
+  const getContact = (correlative) => {
+    return (
+        contacts.find((contact) => contact.correlative === correlative)
+            ?.description || ""
+    );
+  };
+  
   const totalCount = cart.reduce((acc, item) => {
     return Number(acc) + Number(item.quantity);
   }, 0);
@@ -83,18 +91,8 @@ const HeaderSearchMenuSF = ({
               <div className="hidden lg:flex flex-col lg:flex-row order-2 lg:order-1 lg:w-full lg:justify-center gap-1 lg:gap-4">
                 {pages.map((page, index) => (
                   page.menuable && (
-                    <li key={index} className="flex flex-col py-1 lg:py-0">
-                      {page.name === "Blogs" ? (
-                        headerPosts.length > 0 && (
-                          <a
-                            href={page.path}
-                            className="hover:customtext-primary cursor-pointer transition-all duration-300 pr-6"
-                            onClick={() => setMenuOpen(false)}
-                          >
-                            {page.name}
-                          </a>
-                        )
-                      ) : (
+                    (page.name !== "Blogs" || headerPosts.length > 0) && (
+                      <li key={index} className="flex flex-col py-1 lg:py-0">
                         <a
                           href={page.path}
                           className="hover:customtext-primary cursor-pointer transition-all duration-300 pr-6"
@@ -102,8 +100,8 @@ const HeaderSearchMenuSF = ({
                         >
                           {page.name}
                         </a>
-                      )}
-                    </li>
+                      </li>
+                    )
                   )
                 ))}
               </div>
@@ -138,6 +136,7 @@ const HeaderSearchMenuSF = ({
                 setSearch={setSearch}
                 pages={pages}
                 items={items}
+                headerPosts={headerPosts}
               />
 
             </div>
@@ -145,6 +144,18 @@ const HeaderSearchMenuSF = ({
         </div>
 
       </div>
+
+
+      <div class="flex justify-end relative">
+        <div class="fixed bottom-[36px] z-[10] right-[15px] md:right-[25px] animate-bounce animate-twice">
+          <a target="_blank"
+            href={`https://api.whatsapp.com/send?phone=+51${getContact("phone_whatsapp")}&text=${encodeURIComponent(getContact("message_whatsapp"))}`}
+            class="">
+            <img src={`/assets/resources/botonwhatsapp.svg?v=${crypto.randomUUID()}`} alt="whatsapp" class="w-16" />
+          </a>
+        </div>
+      </div>
+
     </header>
   )
 }
