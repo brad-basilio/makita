@@ -593,6 +593,7 @@
                         "offering",
                         "is_new"
                     ],
+                    "filters:method": "category",
                     "limit": 8
                 }
             },
@@ -849,7 +850,8 @@
             {
                 "id": "CartKuchara",
                 "name": "Kuchara",
-                "data": ["url_catalog", "url_checkout"]
+                "data": ["url_catalog", "url_checkout"],
+                "generals": ["igv_checkout"]
             }
         ]
     },
@@ -876,7 +878,8 @@
                 "generals": [
                     "checkout_culqi_public_key",
                     "checkout_bim",
-                    "checkout_transfer"
+                    "checkout_transfer",
+                    "igv_checkout"
                 ]
             },
             {
@@ -987,7 +990,8 @@
                     "link_blog",
                     "url_video",
                     "button_video_text",
-                    "button_video_link"
+                    "button_video_link",
+                    "bool:send_whatsapp"
                 ]
             }
         ]

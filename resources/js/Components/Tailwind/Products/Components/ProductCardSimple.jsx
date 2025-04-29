@@ -42,7 +42,7 @@ const ProductCardSimple = ({ product, widthClass = "xl:w-1/5", setCart, cart }) 
                     <div className="aspect-square rounded-3xl overflow-hidden flex items-center justify-center  bg-secondary">
                         <img
                             src={`/storage/images/item/${product.image}`}
-                            onError={e => e.target.src = '/assets/img/noimage/no_img.jpg'}
+                            onError={e => e.target.src = '/api/cover/thumbnail/null'}
                             alt={product.name}
                             className="w-full h-full object-cover"
                             loading='lazy'

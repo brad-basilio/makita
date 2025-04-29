@@ -367,7 +367,7 @@ const Items = ({ categories, brands, collections }) => {
                     {
                         dataField: "name",
                         caption: "Nombre",
-                        width: "300px",
+                        minWidth: "300px",
                         cellTemplate: (container, { data }) => {
                             container.html(
                                 renderToString(

@@ -7,6 +7,7 @@ import { renderToString } from "react-dom/server"
 import LaravelSession from "../../../Utils/LaravelSession"
 import Tippy from "@tippyjs/react"
 import CulqiRest from "../../../Actions/CulqiRest"
+import General from "../../../Utils/General"
 
 const CheckoutCulqi = ({ cart, setCart, items, prefixes }) => {
 
@@ -127,6 +128,8 @@ const CheckoutCulqi = ({ cart, setCart, items, prefixes }) => {
   useEffect(() => {
     if (cart.length == 0) location.href = '/'
   }, [null])
+
+  const igv = Number(General.igv_checkout) / 100
 
   return (
     <form className="bg-white" onSubmit={onCheckoutSubmit}>
@@ -495,31 +498,34 @@ const CheckoutCulqi = ({ cart, setCart, items, prefixes }) => {
 
                 {/* Bank Details and Upload Section */}
                 {(paymentMethod === 'yape') && (
-                  <div className="mt-4 p-4 bg-gray-100 rounded-lg">
-                    <div className="space-y-2">
-                      <img src="/storage/images/system/yape-qr.png" alt="Yape QR" className="w-48 mx-auto" />
-                      <a href="#" className="text-primary text-sm hover:underline block text-center">
-                        Envía tu comprobante
-                      </a>
-                    </div>
-                    <div className="mt-4">
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => setVoucher(e.target.files[0])}
-                        className="block w-full text-sm text-gray-500
-                          file:mr-4 file:py-2 file:px-4
-                          file:rounded-full file:border-0
-                          file:text-sm file:font-semibold
-                          file:bg-primary file:text-white
-                          hover:file:bg-primary/90"
-                      />
+                  <div className="mt-4 p-4 bg-white rounded-lg">
+                    <div className="flex gap-6">
+                      <div className="flex-shrink-0">
+                        <img src="/cloud/4664bc89-2424-487e-b10b-0a04245c7e1d.png" alt="Yape QR" className="w-48" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-xl font-semibold mb-2">Carlos Manuel Gamboa Palomino</h3>
+                        <p className="text-gray-600 mb-4">
+                          O yapea al número 999413711
+                        </p>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => setVoucher(e.target.files[0])}
+                          className="block w-full text-sm text-gray-800
+                            file:mr-4 file:py-2 file:px-4
+                            file:rounded-full file:border-0
+                            file:text-sm file:font-semibold
+                            file:bg-primary file:text-white
+                            hover:file:bg-primary/90 cursor-pointer"
+                        />
+                      </div>
                     </div>
                   </div>
                 )}
 
                 {/* Transferencia */}
-                <div
+                {/* <div
                   className={`flex items-center justify-between p-4 border-2 rounded-lg cursor-pointer ${paymentMethod === 'transfer' ? 'border-primary bg-gray-100' : 'border-gray-200'
                     }`}
                   onClick={() => setPaymentMethod('transfer')}
@@ -536,7 +542,7 @@ const CheckoutCulqi = ({ cart, setCart, items, prefixes }) => {
                     <img src="/assets/img/banks/interbank.svg" alt="Interbank" className="h-4" />
                     <img src="/assets/img/banks/bbva.svg" alt="BBVA" className="h-4" />
                   </div>
-                </div>
+                </div> */}
 
                 {/* Bank Details and Upload Section */}
                 {(paymentMethod === 'transfer') && (
@@ -649,12 +655,18 @@ const CheckoutCulqi = ({ cart, setCart, items, prefixes }) => {
                     </div>
                     <div className="flex-1">
                       <h3 className="font-medium line-clamp-2 leading-none mb-2">{item.name || `Producto ${index + 1}`}</h3>
-                      <p className="text-xs text-gray-500">SKU: {item.sku || "0908824"}</p>
+                      <p className="text-xs text-gray-500">SKU: {item.sku}</p>
                       <div className="flex justify-between items-center mt-2">
                         <div className="border border-gray-300 rounded w-12 text-center py-0.5 text-sm bg-white">
                           {item.quantity.toString().padStart(2, "0")}
                         </div>
-                        <span className="font-medium">S/ {Number2Currency(item.price)}</span>
+                        <div className="leading-none text-end">
+                          {
+                            item.discount_percent > 0 &&
+                            <small className="line-through text-xs text-gray-500">S/ {Number2Currency(item.price)}</small>
+                          }
+                          <span className="font-medium block">S/ {Number2Currency(item.final_price)}</span>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -676,12 +688,16 @@ const CheckoutCulqi = ({ cart, setCart, items, prefixes }) => {
 
                 <div className="flex justify-between items-center">
                   <p>Subtotal</p>
-                  <span>S/ {Number2Currency(totalPrice * 0.82)}</span>
+                  <span>S/. {Number2Currency(igv > 0 ? totalPrice * (1 - igv) : totalPrice)}</span>
                 </div>
-                <div className="flex justify-between items-center">
-                  <p>IGV (18%)</p>
-                  <span>S/ {Number2Currency(totalPrice * 0.18)}</span>
-                </div>
+
+                {
+                  igv > 0 &&
+                  <div className="flex justify-between items-center">
+                    <p>IGV ({(igv * 100).toFixed(2)}%)</p>
+                    <span>S/. {Number2Currency(totalPrice * igv)}</span>
+                  </div>
+                }
 
                 <div className="flex justify-between items-center font-semibold text-lg pt-2 border-t border-gray-200">
                   <p>Total</p>

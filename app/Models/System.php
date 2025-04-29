@@ -23,12 +23,15 @@ class System extends Model
         'value',
         'data',
         'filters',
+        'filters_method',
+        'filters_method_values',
         'visible'
     ];
 
     protected $casts = [
         'data' => 'array',
-        'filters' => 'array'
+        'filters' => 'array',
+        'filters_method_values' => 'array'
     ];
 
     public function after()

@@ -120,6 +120,7 @@ const Sales = ({ statuses = [] }) => {
           dataField: 'status.name',
           caption: 'Estado',
           cellTemplate: (container, { data }) => {
+            console.log(data)
             ReactAppend(container, <span className='badge rounded-pill' style={{
               backgroundColor: data.status.color ? `${data.status.color}2e` : '#3333332e',
               color: data.status.color ?? '#333'

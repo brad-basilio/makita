@@ -4,7 +4,6 @@ import Tippy from "@tippyjs/react"
 import Swal from "sweetalert2"
 
 const ProductCard = ({ data, cart, item, setCart }) => {
-
   const onAddClicked = (item) => {
     const newCart = structuredClone(cart)
     const index = newCart.findIndex(x => x.id == item.id)
@@ -41,7 +40,12 @@ const ProductCard = ({ data, cart, item, setCart }) => {
   </div>
 
   return <div className="w-full relative">
-    <img src={`/storage/images/item/${item?.image}`} alt={item?.name} className="border w-full object-cover mb-4 aspect-square rounded-2xl shadow-lg" />
+    <img
+      src={`/storage/images/item/${item?.image}`}
+      alt={item?.name}
+      className="border w-full object-cover mb-4 aspect-square rounded-2xl shadow-lg"
+      onError={e => e.target.src = '/api/cover/thumbnail/null'}
+    />
     {
       item?.tags &&
       <div className="absolute top-2 left-2 flex flex-col gap-1 text-xs font-bold">

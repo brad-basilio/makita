@@ -61,12 +61,16 @@ const Generals = ({ generals }) => {
         messageWhatsapp:
             generals.find((x) => x.correlative == "message_whatsapp")
                 ?.description ?? "",
+        igvCheckout:
+            generals.find((x) => x.correlative == "igv_checkout")
+                ?.description ?? "",
         location: {
             lat: Number(location.split(",").map((x) => x.trim())[0]),
             lng: Number(location.split(",").map((x) => x.trim())[1]),
         },
-        culqi: generals.find((x) => x.correlative == "culqi")
-            ?.description ?? "",
+        checkout_culqi_name: generals.find(x => x.correlative == 'checkout_culqi_name')?.description ?? "",
+        checkout_culqi_public_key: generals.find(x => x.correlative == 'checkout_culqi_public_key')?.description ?? "",
+        checkout_culqi_private_key: generals.find(x => x.correlative == 'checkout_culqi_private_key')?.description ?? "",
     });
 
     const [activeTab, setActiveTab] = useState("contact");
@@ -180,6 +184,26 @@ const Generals = ({ generals }) => {
                     correlative: "message_whatsapp",
                     name: "Mensaje de Whatsapp",
                     description: formData.messageWhatsapp,
+                },
+                {
+                    correlative: "igv_checkout",
+                    name: "IGV en el checkout",
+                    description: formData.igvCheckout,
+                },
+                {
+                    correlative: 'checkout_culqi_name',
+                    name: 'Nombre de la cuenta de Culqi',
+                    description: formData.checkout_culqi_name,
+                },
+                {
+                    correlative: 'checkout_culqi_public_key',
+                    name: 'Llave pública de Culqi',
+                    description: formData.checkout_culqi_public_key,
+                },
+                {
+                    correlative: 'checkout_culqi_private_key',
+                    name: 'Llave privada de Culqi',
+                    description: formData.checkout_culqi_private_key,
                 },
                 {
                     correlative: "location",
@@ -498,6 +522,28 @@ const Generals = ({ generals }) => {
                                 required
                             />
                         </div>
+                        <div className="mb-2">
+                            <label
+                                htmlFor="igvCheckout"
+                                className="form-label"
+                            >
+                                IGV
+                                <small className="d-block text-muted">Dejar en 0 si no se quiere mostrar</small>
+                            </label>
+                            <input
+                                type="number"
+                                step={0.01}
+                                className="form-control"
+                                id="igvCheckout"
+                                value={formData.igvCheckout}
+                                onChange={(e) =>
+                                    setFormData({
+                                        ...formData,
+                                        igvCheckout: e.target.value,
+                                    })
+                                }
+                            />
+                        </div>
                     </div>
 
                     <div
@@ -527,13 +573,10 @@ const Generals = ({ generals }) => {
                                             <input
                                                 type="text"
                                                 className="form-control"
-                                                value={formData.culqi?.name}
+                                                value={formData.checkout_culqi_name}
                                                 onChange={(e) => setFormData({
                                                     ...formData,
-                                                    culqi: {
-                                                        ...formData.culqi,
-                                                        name: e.target.value
-                                                    }
+                                                    checkout_culqi_name: e.target.value
                                                 })}
                                             />
                                         </div>
@@ -542,13 +585,10 @@ const Generals = ({ generals }) => {
                                             <input
                                                 type="text"
                                                 className="form-control"
-                                                value={formData.culqi?.public_key}
+                                                value={formData.checkout_culqi_public_key}
                                                 onChange={(e) => setFormData({
                                                     ...formData,
-                                                    culqi: {
-                                                        ...formData.culqi,
-                                                        public_key: e.target.value
-                                                    }
+                                                    checkout_culqi_public_key: e.target.value
                                                 })}
                                             />
                                         </div>
@@ -557,10 +597,10 @@ const Generals = ({ generals }) => {
                                             <input
                                                 type="password"
                                                 className="form-control"
-                                                value={formData.culqi?.private_key}
+                                                value={formData.checkout_culqi_private_key}
                                                 onChange={(e) => setFormData({
                                                     ...formData,
-                                                    culqi: { ...formData.culqi, private_key: e.target.value }
+                                                    checkout_culqi_private_key: e.target.value
                                                 })}
                                             />
                                         </div>
@@ -592,7 +632,7 @@ const Generals = ({ generals }) => {
                                             <input
                                                 type="text"
                                                 className="form-control"
-                                                value={formData.digitalWallet?.title}
+                                                value={formData.digitalWallet?.title ?? 'Carlos Manuel Gamboa Palomino'}
                                                 onChange={(e) => setFormData({
                                                     ...formData,
                                                     digitalWallet: { ...formData.digitalWallet, title: e.target.value }
@@ -603,7 +643,7 @@ const Generals = ({ generals }) => {
                                             <label className="form-label">Descripción</label>
                                             <textarea
                                                 className="form-control"
-                                                value={formData.digitalWallet?.description}
+                                                value={formData.digitalWallet?.description ?? 'O yapea al número 999413711'}
                                                 onChange={(e) => setFormData({
                                                     ...formData,
                                                     digitalWallet: { ...formData.digitalWallet, description: e.target.value }

@@ -279,6 +279,8 @@ Route::middleware('auth')->group(function () {
 
       Route::get('/system/fetch-remote-changes', [AdminSystemController::class, 'fetchRemoteChanges']);
       Route::get('/system/has-remote-changes', [AdminSystemController::class, 'hasRemoteChanges']);
+
+      Route::get('/system/related/{model}/{method}', [AdminSystemController::class, 'getRelatedFilter']);
     });
 
     Route::post('/repository', [AdminRepositoryController::class, 'save']);

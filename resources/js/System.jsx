@@ -207,7 +207,7 @@ const System = ({
                     />
                 );
             case "checkout":
-                return <Checkout which={value} items={getItems(itemsId)} cart={cart} setCart={setCart} isUser={session} prefixes={jsons?.prefixes ?? []} />
+                return <Checkout which={value} data={data} items={getItems(itemsId)} cart={cart} setCart={setCart} isUser={session} prefixes={jsons?.prefixes ?? []} />
             case "contact":
                 return (
                     <Contact which={value} data={data} contacts={contacts} />

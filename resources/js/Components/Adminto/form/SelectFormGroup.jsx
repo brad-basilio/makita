@@ -5,6 +5,7 @@ const SelectFormGroup = ({ id, col, className, label, eRef, required = false, ch
   templateSelection,
   tags = false,
   minimumResultsForSearch,
+  changeWith = [null],
 }) => {
 
   if (!eRef) eRef = useRef()
@@ -19,7 +20,7 @@ const SelectFormGroup = ({ id, col, className, label, eRef, required = false, ch
       minimumResultsForSearch
     })
     $(eRef.current).on('change', onChange)
-  }, [dropdownParent])
+  }, [dropdownParent, changeWith])
 
   return <div className={`form-group ${col} ${!noMargin && 'mb-2'}`}>
     <label htmlFor={id} className="mb-1 form-label">

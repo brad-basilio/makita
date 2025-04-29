@@ -1,9 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 const ThankSimple = ({ data, item }) => {
-
-  console.log(item)
-
   const orderData = {
     orderCode: "#0123_45678",
     products: [
@@ -36,6 +33,12 @@ const ThankSimple = ({ data, item }) => {
       },
     ],
   }
+
+  useEffect(() => {
+    if (data['bool:send_whatsapp']) { 
+      console.log('wa')
+    }
+  }, [null])
 
   return (
     <div className="min-h-screen bg-white">

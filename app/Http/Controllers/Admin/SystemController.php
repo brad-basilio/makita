@@ -318,4 +318,16 @@ class SystemController extends BasicController
 
         return response($response->toArray(), $response->status);
     }
+
+    public function getRelatedFilter(Request $request, string $model, string $method)
+    {
+        $response = Response::simpleTryCatch(function () use ($model, $method) {
+            $class = 'App\\Models\\' . $model;
+            $instance = new $class();
+            $relation = $instance->$method();
+            $relatedModel = $relation->getRelated();
+            return $relatedModel->all();
+        });
+        return response($response->toArray(), $response->status);
+    }
 }
