@@ -257,6 +257,12 @@ class SystemController extends BasicController
     public function fetchRemoteChanges(Request $request)
     {
         $response = Response::simpleTryCatch(function () {
+            $projectPath = base_path();
+
+            // Verificar y configurar safe.directory si es necesario
+            $safeDirectoryCheck = new Process(['git', 'config', '--local', '--add', 'safe.directory', $projectPath], $projectPath);
+            $safeDirectoryCheck->run();
+
             $commands = [
                 ['git', 'restore', '--source=HEAD', '--staged', '--worktree', '.'],
                 ['git', 'pull'],
@@ -270,6 +276,9 @@ class SystemController extends BasicController
                 $process->run();
 
                 if (!$process->isSuccessful()) {
+                    if (strpos($process->getErrorOutput(), 'dubious ownership') !== false) {
+                        throw new Exception('Error de permisos Git. Por favor, contacte al administrador del sistema.');
+                    }
                     throw new Exception($process->getErrorOutput());
                 }
             }
