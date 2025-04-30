@@ -380,7 +380,7 @@ const Generals = ({ generals }) => {
               }`}
             role="tabpanel"
           >
-            <div className="row">
+            <div className="row mb-2">
               <div className="col-md-6">
                 {formData.phones.map((phone, index) => (
                   <div

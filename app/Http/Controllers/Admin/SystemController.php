@@ -282,11 +282,18 @@ class SystemController extends BasicController
         $response = Response::simpleTryCatch(function () {
             $projectPath = base_path();
 
+            // Verificar y configurar safe.directory si es necesario
+            $safeDirectoryCheck = new Process(['git', 'config', '--local', '--add', 'safe.directory', $projectPath], $projectPath);
+            $safeDirectoryCheck->run();
+
             // 1. Fetch del remoto
             $fetch = new Process(['git', 'fetch'], $projectPath);
             $fetch->run();
 
             if (!$fetch->isSuccessful()) {
+                if (strpos($fetch->getErrorOutput(), 'dubious ownership') !== false) {
+                    throw new \Exception('Error de permisos Git. Por favor, contacte al administrador del sistema.');
+                }
                 throw new \Exception($fetch->getErrorOutput());
             }
 
