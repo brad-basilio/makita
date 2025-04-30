@@ -37,6 +37,7 @@ import ThankSimple from "./Components/Tailwind/Thanks/ThankSimple";
 import Image from "./Components/Tailwind/Image";
 import BananaLab from "./Components/Tailwind/BananaLab";
 import { Toaster } from "sonner";
+import Floating from "./Components/Tailwind/Floating";
 
 const itemsRest = new ItemsRest();
 
@@ -90,6 +91,8 @@ const System = ({
                 return <TopBar data={data} which={value} items={getItems(itemsId)} cart={cart} setCart={setCart} isUser={session} />
             case "header":
                 return <Header data={data} which={value} items={getItems(itemsId)} cart={cart} setCart={setCart} pages={pages} isUser={session} generals={generals} />
+            case "floating":
+                return <Floating data={data} which={value} items={getItems(itemsId)} />
             case "menu":
                 return (
                     <Menu
@@ -277,8 +280,8 @@ const System = ({
 
     return (
         <main className="font-paragraph">
-            {systemsSorted.map((system) => getSystem(system))} 
-            <Toaster  />
+            {systemsSorted.map((system) => getSystem(system))}
+            <Toaster />
         </main>
     );
 };

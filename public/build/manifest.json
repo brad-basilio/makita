@@ -1278,7 +1278,7 @@
     ]
   },
   "resources/js/Admin/Generals.jsx": {
-    "file": "assets/Generals-xMv8f0Gv.js",
+    "file": "assets/Generals-rQ7klhT5.js",
     "name": "Generals",
     "src": "resources/js/Admin/Generals.jsx",
     "isEntry": true,
@@ -1801,7 +1801,7 @@
     ]
   },
   "resources/js/Admin/System.jsx": {
-    "file": "assets/System-BA395Cd_.js",
+    "file": "assets/System-vTkXWk5Z.js",
     "name": "System",
     "src": "resources/js/Admin/System.jsx",
     "isEntry": true,
@@ -4267,6 +4267,31 @@
       "____vite-browser-external_commonjs-proxy-0zb4Agf2.js"
     ]
   },
+  "resources/js/Components/Tailwind/Floating.jsx": {
+    "file": "assets/Floating-DBChGVqk.js",
+    "name": "Floating",
+    "src": "resources/js/Components/Tailwind/Floating.jsx",
+    "isEntry": true,
+    "imports": [
+      "_preload-helper-DPi8upcZ.js",
+      "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
+      "_index-BH53Isel.js",
+      "_index-yBjzXJbu.js"
+    ],
+    "dynamicImports": [
+      "resources/js/Components/Tailwind/Floating/WhatsApp.jsx"
+    ]
+  },
+  "resources/js/Components/Tailwind/Floating/WhatsApp.jsx": {
+    "file": "assets/WhatsApp-DYlcHizO.js",
+    "name": "WhatsApp",
+    "src": "resources/js/Components/Tailwind/Floating/WhatsApp.jsx",
+    "isEntry": true,
+    "imports": [
+      "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
+      "_index-yBjzXJbu.js"
+    ]
+  },
   "resources/js/Components/Tailwind/Footer.jsx": {
     "file": "assets/Footer-wu0GuzA3.js",
     "name": "Footer",
@@ -6179,7 +6204,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-D6EYw2Vx.js",
+    "file": "assets/System-CNth5XoD.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,
@@ -6289,7 +6314,8 @@
       "resources/js/Components/Tailwind/BananaLab/Canva2.jsx",
       "resources/js/Components/Tailwind/BananaLab/Canva3.jsx",
       "resources/js/Components/Tailwind/BananaLab/components/Editor/EditorLayout.jsx",
-      "resources/js/Components/Tailwind/BananaLab/Editor.jsx"
+      "resources/js/Components/Tailwind/BananaLab/Editor.jsx",
+      "resources/js/Components/Tailwind/Floating/WhatsApp.jsx"
     ],
     "css": [
       "swiper.css",
