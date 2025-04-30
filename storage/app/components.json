@@ -1,6 +1,7 @@
 [
     {
         "id": "top_bar",
+        "icon": "mdi mdi-tag",
         "name": "Cintillo",
         "options": [
             {
@@ -79,7 +80,7 @@
             },
             {
                 "id": "HeaderSearchContact",
-                "name": "Busqueda y contacto",
+                "name": "Header - Kuchara",
                 "image": "header-with-search-contact.png",
                 "data": ["class", "link_cart"],
                 "generals": ["phone_whatsapp", "message_whatsapp"]
@@ -92,14 +93,14 @@
                 "data": ["class", "link_cart"]
             },
             {
-                "id": "HeaderSearchMenuSF",
+                "id": "Header - Sala Fabulosa",
                 "name": "Con busqueda y menu SF",
                 "image": "header-with-search.png",
                 "data": ["class", "link_cart"]
             },
             {
                 "id": "HeaderBananaLab",
-                "name": "HeaderBananaLab",
+                "name": "Header - Banana Lab",
                 "image": "header-with-search.png",
                 "data": ["class", "link_cart"],
                 "using": {
