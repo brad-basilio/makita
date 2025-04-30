@@ -5,7 +5,7 @@
         "options": [
             {
                 "id": "TopBarSimple",
-                "name": "Simple",
+                "name": "Simple - Stech",
                 "image": "top-bar-simple.png",
                 "generals": ["cintillo"]
             },
@@ -27,24 +27,6 @@
                 },
                 "generals": ["cintillo"],
                 "data": ["link_cart"]
-            },
-            {
-                "id": "TopBarCopyright",
-                "name": "Copyright",
-                "image": "top-bar-socials.png",
-                "using": {
-                    "model": "Social"
-                },
-                "generals": ["copyright"]
-            },
-            {
-                "id": "TopBarCopyrightSocials",
-                "name": "Copyright - Social",
-                "image": "top-bar-socials.png",
-                "using": {
-                    "model": "Social"
-                },
-                "generals": ["copyright"]
             }
         ]
     },
