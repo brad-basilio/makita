@@ -260,7 +260,7 @@ class SystemController extends BasicController
             $projectPath = base_path();
 
             // Verificar y configurar safe.directory si es necesario
-            $safeDirectoryCheck = new Process(['git', 'config', '--local', '--add', 'safe.directory', $projectPath], $projectPath);
+            $safeDirectoryCheck = new Process(['git', 'config', '--global', '--add', 'safe.directory', $projectPath], $projectPath);
             $safeDirectoryCheck->run();
 
             $commands = [
@@ -292,7 +292,7 @@ class SystemController extends BasicController
             $projectPath = base_path();
 
             // Verificar y configurar safe.directory si es necesario
-            $safeDirectoryCheck = new Process(['git', 'config', '--local', '--add', 'safe.directory', $projectPath], $projectPath);
+            $safeDirectoryCheck = new Process(['git', 'config', '--global', '--add', 'safe.directory', $projectPath], $projectPath);
             $safeDirectoryCheck->run();
 
             // 1. Fetch del remoto
