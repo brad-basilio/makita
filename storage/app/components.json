@@ -36,7 +36,7 @@
         "options": [
             {
                 "id": "MenuSimple",
-                "name": "MenuSimple",
+                "name": "Menu - Stech",
                 "image": "top-bar-simple.png",
                 "using": {
                     "model": "Category",
@@ -45,7 +45,7 @@
             },
             {
                 "id": "MenuBananaLab",
-                "name": "MenuBananaLab",
+                "name": "Menu - Banana Lab",
                 "image": "top-bar-simple.png",
                 "using": {
                     "model": "Category",
