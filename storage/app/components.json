@@ -33,6 +33,7 @@
     {
         "id": "menu",
         "name": "Menu",
+        "icon": "mdi mdi-page-layout-sidebar-left",
         "options": [
             {
                 "id": "MenuSimple",
@@ -54,9 +55,9 @@
             }
         ]
     },
-
     {
         "id": "header",
+        "icon": "mdi mdi-page-layout-header",
         "name": "Header",
         "options": [
             {
@@ -109,9 +110,9 @@
             }
         ]
     },
-
     {
         "id": "floating",
+        "icon": "mdi mdi-ghost",
         "name": "Flotantes",
         "options": [
             {
