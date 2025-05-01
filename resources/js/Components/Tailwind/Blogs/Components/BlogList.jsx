@@ -28,7 +28,7 @@ export default function BlogList({ data, posts, postsLatest, loading, isFilter }
                             {Array.isArray(postsLatest) &&
                                 postsLatest.length > 0 ? (
                                 postsLatest.map((post, index) => (
-                                    <BlogPostCard key={index} post={post} />
+                                    <BlogPostCard data={data} key={index} post={post} />
                                 ))
                             ) : (
                                 <div className="col-span-3 my-8">
@@ -45,7 +45,7 @@ export default function BlogList({ data, posts, postsLatest, loading, isFilter }
                             </div>
                         ) : Array.isArray(posts) && posts.length > 0 ? (
                             posts.map((post, index) => (
-                                <BlogPostCard key={index} post={post} />
+                                <BlogPostCard data={data} key={index} post={post} />
                             ))
                         ) : (
                             <div className="col-span-3 my-8">

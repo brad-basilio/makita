@@ -953,7 +953,7 @@
             {
                 "id": "BlogSimple",
                 "name": "Simple",
-                "data": ["title", "description", "second_title", "second_description"]
+                "data": ["title", "description", "second_title", "second_description", "bool:show_seen"]
             },
             {
                 "id": "BlogCarousel",

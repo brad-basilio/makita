@@ -169,13 +169,13 @@ export default function BlogHeader({
 
         {/* Featured Posts */}
         {!isFilter && (
-          <div className="mt-12 flex gap-8">
+          <div className="mt-12 flex gap-8 bg-accent p-[2.5%] rounded-2xl">
             <div className="w-full md:w-1/2">
-              <BlogPostCard featured post={headerPosts[0]} />
+              <BlogPostCard data={data} featured post={headerPosts[0]} />
             </div>
             <div className="hidden md:flex space-y-4  flex-col w-1/2">
               {headerPosts.slice(1, 3).map((post) => (
-                <BlogPostCard flex key={post.id} post={post} />
+                <BlogPostCard data={data} flex key={post.id} post={post} />
               ))}
             </div>
           </div>
