@@ -88,7 +88,7 @@
                 "id": "HeaderSearchContact",
                 "name": "Header - Kuchara",
                 "image": "header-with-search-contact.png",
-                "data": ["class", "link_cart"],
+                "data": ["class", "link_cart", "path_product"],
                 "generals": ["phone_whatsapp", "message_whatsapp"]
             },
 
@@ -556,6 +556,7 @@
     },
     {
         "id": "product",
+        "icon": "mdi mdi-bookshelf",
         "name": "Productos",
         "options": [
             {
@@ -757,6 +758,7 @@
     },
     {
         "id": "image",
+        "icon": "mdi mdi-image-area",
         "name": "Imágenes",
         "options": [
             {
@@ -849,7 +851,8 @@
     },
     {
         "id": "cart",
-        "name": "Cart",
+        "icon": "mdi mdi-cart",
+        "name": "Carrito",
         "options": [
             {
                 "id": "CartSimple",

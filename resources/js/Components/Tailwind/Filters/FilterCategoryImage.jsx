@@ -447,7 +447,7 @@ const FilterCategoryImage = ({ items, data, filteredData, cart, setCart }) => {
                           <span>{category.name}</span>
                           <img
                             src={`/storage/images/category/${category.image}`}
-                            onError={(e) => (e.target.src = "assets/img/noimage/no_imagen_circular.png")}
+                            onError={(e) => (e.target.src = "/assets/img/noimage/no_imagen_circular.png")}
                             alt={category.name}
                             className="w-8 h-8 rounded-full object-cover"
                             loading="lazy"
