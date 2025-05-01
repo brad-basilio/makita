@@ -260,6 +260,7 @@ const System = ({
             case "footer":
                 return (
                     <Footer
+                        data={data}
                         which={value}
                         items={getItems(itemsId)}
                         pages={pages}

@@ -28,6 +28,12 @@
                 },
                 "generals": ["cintillo"],
                 "data": ["link_cart"]
+            },
+            {
+                "id": "TopBarCopyright",
+                "name": "Copyright",
+                "image": "top-bar-copyright.png",
+                "generals": ["copyright"]
             }
         ]
     },
@@ -946,8 +952,8 @@
         "options": [
             {
                 "id": "BlogSimple",
-                "name": "Blog Simple",
-                "data": ["title"]
+                "name": "Simple",
+                "data": ["title", "description", "second_title", "second_description"]
             },
             {
                 "id": "BlogCarousel",
@@ -1116,6 +1122,7 @@
                 "id": "FooterTermsCTASocials",
                 "name": "Politicas, CTA y Redes",
                 "image": "footer-terms-cta-socials.png",
+                "data": ["complaint_url"],
                 "using": {
                     "model": "Social",
                     "limit": 10

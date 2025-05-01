@@ -11,9 +11,7 @@ export default function BlogPostCard({ flex = false, post, featured = false }) {
                         src={`/storage/images/post/${post?.image}`}
                         alt={post?.name}
                         fill
-                        className={`object-cover transition-transform duration-300 group-hover:scale-105 ${
-                            flex && "h-full w-full"
-                        } `}
+                        className={`object-cover transition-transform duration-300 group-hover:scale-105 h-full w-full`}
                     />
                 </div>
                 <div className={`mt-4 space-y-1 ${flex && "w-1/2 mt-0 gap-2"}`}>

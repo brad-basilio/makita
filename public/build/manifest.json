@@ -41,8 +41,8 @@
       "tippy.css"
     ]
   },
-  "_Base-CrQqEKJk.js": {
-    "file": "assets/Base-CrQqEKJk.js",
+  "_Base-CzRNUKig.js": {
+    "file": "assets/Base-CzRNUKig.js",
     "name": "Base",
     "imports": [
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
@@ -847,7 +847,7 @@
     "isEntry": true
   },
   "resources/js/About.jsx": {
-    "file": "assets/About-gF7QI-rV.js",
+    "file": "assets/About-EVg3aGPh.js",
     "name": "About",
     "src": "resources/js/About.jsx",
     "isEntry": true,
@@ -856,7 +856,7 @@
       "_index-BH53Isel.js",
       "_CreateReactScript-H8Uf0Xeb.js",
       "resources/js/Utils/ReactAppend.jsx",
-      "_Base-CrQqEKJk.js",
+      "_Base-CzRNUKig.js",
       "_YouTube.esm-CalHMD6O.js",
       "_em-DRiSFGEW.js",
       "_Weare-DVjaa7yY.js",
@@ -1920,7 +1920,7 @@
     ]
   },
   "resources/js/Blog.jsx": {
-    "file": "assets/Blog-cNpWNSQc.js",
+    "file": "assets/Blog-D9Zb9f_6.js",
     "name": "Blog",
     "src": "resources/js/Blog.jsx",
     "isEntry": true,
@@ -1929,7 +1929,7 @@
       "_index-BH53Isel.js",
       "_CreateReactScript-H8Uf0Xeb.js",
       "resources/js/Utils/ReactAppend.jsx",
-      "_Base-CrQqEKJk.js",
+      "_Base-CzRNUKig.js",
       "resources/js/Components/Tailwind/Components/ProductCard.jsx",
       "_SubscriptionsRest-CdTNx4A4.js",
       "_Global-CklCDfn9.js",
@@ -1956,7 +1956,7 @@
     ]
   },
   "resources/js/BlogArticle.jsx": {
-    "file": "assets/BlogArticle-Yvne08QP.js",
+    "file": "assets/BlogArticle-DcEPXCbU.js",
     "name": "BlogArticle",
     "src": "resources/js/BlogArticle.jsx",
     "isEntry": true,
@@ -1965,7 +1965,7 @@
       "_index-BH53Isel.js",
       "_CreateReactScript-H8Uf0Xeb.js",
       "resources/js/Utils/ReactAppend.jsx",
-      "_Base-CrQqEKJk.js",
+      "_Base-CzRNUKig.js",
       "_HtmlContent-FTivcJrM.js",
       "_tippy-react.esm-BWiGTO87.js",
       "_proxy-BTYtmp9V.js",
@@ -3140,7 +3140,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Base.jsx": {
-    "file": "assets/Base-B1lNRZPW.js",
+    "file": "assets/Base-Bwq9umys.js",
     "name": "Base",
     "src": "resources/js/Components/Tailwind/Base.jsx",
     "isEntry": true,
@@ -3175,7 +3175,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Blog.jsx": {
-    "file": "assets/Blog-Cqm-Y4g2.js",
+    "file": "assets/Blog-B1t36XcT.js",
     "name": "Blog",
     "src": "resources/js/Components/Tailwind/Blog.jsx",
     "isEntry": true,
@@ -3243,13 +3243,12 @@
     ]
   },
   "resources/js/Components/Tailwind/Blogs/Components/BlogList.jsx": {
-    "file": "assets/BlogList-Co_3lRRe.js",
+    "file": "assets/BlogList-DYlcHizO.js",
     "name": "BlogList",
     "src": "resources/js/Components/Tailwind/Blogs/Components/BlogList.jsx",
     "isEntry": true,
     "imports": [
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
-      "_index-BH53Isel.js",
       "_index-yBjzXJbu.js"
     ]
   },
@@ -4293,7 +4292,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Footer.jsx": {
-    "file": "assets/Footer-wu0GuzA3.js",
+    "file": "assets/Footer-DaezpQMY.js",
     "name": "Footer",
     "src": "resources/js/Components/Tailwind/Footer.jsx",
     "isEntry": true,
@@ -5751,7 +5750,7 @@
     ]
   },
   "resources/js/Components/Tailwind/TopBar.jsx": {
-    "file": "assets/TopBar-C4EVJ5QO.js",
+    "file": "assets/TopBar-ttPQ_wt7.js",
     "name": "TopBar",
     "src": "resources/js/Components/Tailwind/TopBar.jsx",
     "isEntry": true,
@@ -5794,13 +5793,12 @@
     ]
   },
   "resources/js/Components/Tailwind/TopBars/TopBarCopyright.jsx": {
-    "file": "assets/TopBarCopyright-Co_3lRRe.js",
+    "file": "assets/TopBarCopyright-DYlcHizO.js",
     "name": "TopBarCopyright",
     "src": "resources/js/Components/Tailwind/TopBars/TopBarCopyright.jsx",
     "isEntry": true,
     "imports": [
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
-      "_index-BH53Isel.js",
       "_index-yBjzXJbu.js"
     ]
   },
@@ -5929,7 +5927,7 @@
     ]
   },
   "resources/js/Contact.jsx": {
-    "file": "assets/Contact-B-q5H07r.js",
+    "file": "assets/Contact-C1cGfASu.js",
     "name": "Contact",
     "src": "resources/js/Contact.jsx",
     "isEntry": true,
@@ -5938,7 +5936,7 @@
       "_index-BH53Isel.js",
       "_CreateReactScript-H8Uf0Xeb.js",
       "resources/js/Utils/ReactAppend.jsx",
-      "_Base-CrQqEKJk.js",
+      "_Base-CzRNUKig.js",
       "_Global-CklCDfn9.js",
       "_createLucideIcon-Cy5Ya80P.js",
       "_phone-BZ94M50k.js",
@@ -5963,7 +5961,7 @@
     ]
   },
   "resources/js/CourseDetails.jsx": {
-    "file": "assets/CourseDetails-DBgp0Dm5.js",
+    "file": "assets/CourseDetails-SualTbJv.js",
     "name": "CourseDetails",
     "src": "resources/js/CourseDetails.jsx",
     "isEntry": true,
@@ -5972,7 +5970,7 @@
       "_index-BH53Isel.js",
       "resources/js/Utils/ReactAppend.jsx",
       "_main-BSEyQEJW.js",
-      "_Base-CrQqEKJk.js",
+      "_Base-CzRNUKig.js",
       "_CreateReactScript-H8Uf0Xeb.js",
       "_HtmlContent-FTivcJrM.js",
       "_Number2Currency-e57Tgsuk.js",
@@ -5993,7 +5991,7 @@
     ]
   },
   "resources/js/Courses.jsx": {
-    "file": "assets/Courses-B8mYfTpJ.js",
+    "file": "assets/Courses-eHljgode.js",
     "name": "Courses",
     "src": "resources/js/Courses.jsx",
     "isEntry": true,
@@ -6002,7 +6000,7 @@
       "_index-BH53Isel.js",
       "resources/js/Utils/ReactAppend.jsx",
       "_CreateReactScript-H8Uf0Xeb.js",
-      "_Base-CrQqEKJk.js",
+      "_Base-CzRNUKig.js",
       "_em-DRiSFGEW.js",
       "_ArrayJoin-D8pAQiSC.js",
       "_CourseCard-CbDLljRi.js",
@@ -6036,7 +6034,7 @@
     "isEntry": true
   },
   "resources/js/Home.jsx": {
-    "file": "assets/Home-Cn7VR5DP.js",
+    "file": "assets/Home-BylRfwHM.js",
     "name": "Home",
     "src": "resources/js/Home.jsx",
     "isEntry": true,
@@ -6044,7 +6042,7 @@
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
       "_index-BH53Isel.js",
       "resources/js/Utils/ReactAppend.jsx",
-      "_Base-CrQqEKJk.js",
+      "_Base-CzRNUKig.js",
       "_CreateReactScript-H8Uf0Xeb.js",
       "_Weare-DVjaa7yY.js",
       "resources/js/Components/Tailwind/Blogs/BlogCarousel.jsx",
@@ -6204,7 +6202,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-CNth5XoD.js",
+    "file": "assets/System-DY7i57wU.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,
