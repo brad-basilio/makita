@@ -44,7 +44,7 @@ const ThankSimple = ({ data, item }) => {
       ).join('\n');
       
       const message = encodeURIComponent(
-        `¡Hola! Acabo de realizar una compra con el código #${item.code}.\n` +
+        `¡Hola! Acabo de realizar una compra con el código \`#${item.code}\`.\n` +
         `Me gustaría confirmar los siguientes productos:\n${itemsList}\n` +
         `¿Podrían indicarme el tiempo estimado de entrega?`
       );
@@ -55,8 +55,6 @@ const ThankSimple = ({ data, item }) => {
       window.open(whatsappUrl, '_blank');
     }
   }, [null])
-
-  console.log(item)
 
   return (
     <div className="min-h-screen bg-white">
