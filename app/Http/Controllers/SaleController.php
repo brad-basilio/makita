@@ -185,6 +185,7 @@ class SaleController extends BasicController
 
     public function afterSave(Request $request, object $jpa, ?bool $isNew)
     {
+        $totalPrice = 0;
         foreach ($request->details as $item) {
             $itemJpa = Item::find($item['id']);
             SaleDetail::create([
@@ -195,7 +196,10 @@ class SaleController extends BasicController
                 'quantity' => $item['quantity'],
                 'image' => $itemJpa->image,
             ]);
+            $totalPrice += $itemJpa->final_price * $item['quantity'];
         }
+        $jpa->amount = $totalPrice;
+        $jpa->save();
         return $jpa;
     }
 

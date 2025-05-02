@@ -12,6 +12,7 @@ import PaymentMethods from './Images/PaymentMethods.svg'
 import SalesRest from "../../../Actions/SalesRest"
 import Swal from "sweetalert2"
 import { Local } from "sode-extend-react"
+import Global from "../../../Utils/Global"
 
 const salesRest = new SalesRest()
 
@@ -173,8 +174,8 @@ const CheckoutCulqi = ({ data, cart, setCart, items, prefixes }) => {
     const result = await salesRest.save(saleData);
     if (!result) return
 
-    setCart(null)
-    Local.delete('cart')
+    setCart([])
+    Local.delete(`${Global.APP_CORRELATIVE}_cart`)
 
     location.href = `${location.origin}/${data.url_thanks}/${result.code}`
   }

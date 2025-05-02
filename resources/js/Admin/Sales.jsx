@@ -29,7 +29,7 @@ const Sales = ({ statuses = [] }) => {
       status_id: e.target.value
     })
     if (!result) return
-    setSaleLoaded(result.data)
+    setSaleLoaded(result)
     $(gridRef.current).dxDataGrid('instance').refresh()
   }
 
@@ -50,23 +50,23 @@ const Sales = ({ statuses = [] }) => {
 
   const onModalOpen = async (saleId) => {
     const newSale = await salesRest.get(saleId)
-    setSaleLoaded(newSale)
+    setSaleLoaded(newSale.data)
     $(modalRef.current).modal('show');
   }
 
   useEffect(() => {
-    if (!saleLoaded) return
-    saleStatusesRest.bySale(saleLoaded.id).then((data) => {
-      if (data) setSaleStatuses(data)
-      else setSaleStatuses([])
-    })
+    // if (!saleLoaded) return
+    // saleStatusesRest.bySale(saleLoaded.id).then((data) => {
+    //   if (data) setSaleStatuses(data)
+    //   else setSaleStatuses([])
+    // })
   }, [saleLoaded])
 
   const totalAmount = Number(saleLoaded?.amount)
-    + Number(saleLoaded?.delivery)
-    - Number(saleLoaded?.bundle_discount)
-    - Number(saleLoaded?.renewal_discount)
-    - Number(saleLoaded?.coupon_discount)
+    + Number(saleLoaded?.delivery || 0)
+    - Number(saleLoaded?.bundle_discount || 0)
+    - Number(saleLoaded?.renewal_discount || 0)
+    - Number(saleLoaded?.coupon_discount || 0)
 
   return (<>
     <Table gridRef={gridRef} title='Pedidos' rest={salesRest}
@@ -160,7 +160,7 @@ const Sales = ({ statuses = [] }) => {
           allowExporting: false
         }
       ]} />
-    <Modal modalRef={modalRef} title={`Detalles del pedido #${Global.APP_CORRELATIVE}-${saleLoaded?.code}`} size='lg' bodyStyle={{
+    <Modal modalRef={modalRef} title={`Detalles del pedido #${Global.APP_CORRELATIVE}-${saleLoaded?.code}`} size='xl' bodyStyle={{
       backgroundColor: '#ebeff2'
     }} hideButtonSubmit >
       <div className="row">
@@ -174,7 +174,7 @@ const Sales = ({ statuses = [] }) => {
                 <tbody>
                   <tr>
                     <th>Nombres:</th>
-                    <td>{saleLoaded?.name} {saleLoaded?.lastname}</td>
+                    <td>{saleLoaded?.fullname}</td>
                   </tr>
                   <tr>
                     <th>Email:</th>
@@ -218,7 +218,6 @@ const Sales = ({ statuses = [] }) => {
                 <thead>
                   <tr>
                     <th>Nombre</th>
-                    <th>Colores</th>
                     <th>Precio</th>
                     <th>Cantidad</th>
                     <th>Subtotal</th>
@@ -231,21 +230,13 @@ const Sales = ({ statuses = [] }) => {
                       const totalPrice = detail.price * detail.quantity
                       return <tr key={index}>
                         <td>{detail.name}</td>
-                        <td>
-                          {
-                            detail?.colors?.map((color, index) => {
-                              return <Tippy key={index} content={color.name}>
-                                <i className='mdi mdi-circle' style={{
-                                  color: color.hex,
-                                  WebkitTextStroke: '1px #808080'
-                                }}></i>
-                              </Tippy>
-                            })
-                          }
+                        <td align='right'>
+                          <span className='text-nowrap'>S/ {Number2Currency(detail.price)}</span>
                         </td>
-                        <td align='right'>S/ {Number2Currency(detail.price)}</td>
                         <td align='center'>{quantity}</td>
-                        <td align='right'>S/ {Number2Currency(totalPrice)}</td>
+                        <td align='right'>
+                          <span className='text-nowrap'>S/ {Number2Currency(totalPrice)}</span>
+                        </td>
                       </tr>
                     })
                   }
@@ -261,45 +252,12 @@ const Sales = ({ statuses = [] }) => {
             <div className="card-body p-2">
               <div className="d-flex justify-content-between">
                 <b>Subtotal:</b>
-                <span>S/ {Number2Currency(saleLoaded?.amount)}</span>
+                <span>S/ {Number2Currency(saleLoaded?.amount * 1)}</span>
               </div>
               <div className="d-flex justify-content-between">
                 <b>Envío:</b>
                 <span>S/ {Number2Currency(saleLoaded?.delivery)}</span>
               </div>
-              {saleLoaded?.bundle && (
-                <div className="d-flex justify-content-between">
-                  <b>
-                    Descuento x paquete:
-                    <small className="d-block text-muted" style={{ fontWeight: "lighter" }}>
-                      Elegiste {saleLoaded?.bundle?.name} (-{(saleLoaded?.bundle?.percentage * 10000) / 100}%)
-                    </small>
-                  </b>
-                  <span>S/ -{Number2Currency(saleLoaded?.bundle_discount)}</span>
-                </div>
-              )}
-              {saleLoaded?.renewal && (
-                <div className="d-flex justify-content-between">
-                  <b>
-                    Subscripción:
-                    <small className="d-block text-muted" style={{ fontWeight: "lighter" }}>
-                      {saleLoaded?.renewal?.name} (-{(saleLoaded?.renewal?.percentage * 10000) / 100}%)
-                    </small>
-                  </b>
-                  <span>S/ -{Number2Currency(saleLoaded?.renewal_discount)}</span>
-                </div>
-              )}
-              {saleLoaded?.coupon && (
-                <div className="d-flex justify-content-between">
-                  <b>
-                    Cupón aplicado:
-                    <small className="d-block text-muted" style={{ fontWeight: "lighter" }}>
-                      {saleLoaded?.coupon?.name} (-{(saleLoaded?.coupon?.amount * 100) / 100}%)
-                    </small>
-                  </b>
-                  <span>S/ -{Number2Currency(saleLoaded?.coupon_discount)}</span>
-                </div>
-              )}
               <hr className='my-2' />
               <div className="d-flex justify-content-between">
                 <b>Total:</b>
@@ -319,7 +277,13 @@ const Sales = ({ statuses = [] }) => {
             <div className="card-body p-2">
               <div className="">
                 <label htmlFor="statusSelect" className="form-label">Estado Actual</label>
-                <select className="form-select" id="statusSelect" value={saleLoaded?.status_id} onChange={onStatusChange} disabled={!saleLoaded?.status?.reversible}>
+                <select
+                  className="form-select"
+                  id="statusSelect"
+                  value={saleLoaded?.status_id}
+                  onChange={onStatusChange}
+                //  disabled={!saleLoaded?.status?.reversible}
+                >
                   {
                     statuses.map((status, index) => {
                       return <option value={status.id}>{status.name}</option>
@@ -330,7 +294,7 @@ const Sales = ({ statuses = [] }) => {
             </div>
           </div>
 
-          <div className="card">
+          <div className="card" hidden>
             <div className="card-header p-2">
               <h5 className="card-title mb-0">Cambios de Estado</h5>
             </div>
