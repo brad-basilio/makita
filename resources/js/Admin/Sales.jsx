@@ -113,7 +113,8 @@ const Sales = ({ statuses = [] }) => {
           dataType: 'date',
           sortOrder: 'desc',
           cellTemplate: (container, { data }) => {
-            container.text(moment(data.created_at).fromNow())
+            // container.text(moment(data.created_at).fromNow())
+            container.text(moment(data.created_at).format('LLL'))
           }
         },
         {
