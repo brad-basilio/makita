@@ -21,13 +21,13 @@ const BannerAd = ({ data }) => {
                     }}></img>
             }
 
-            <button
+            {/* <button
                 onClick={() => setIsVisible(false)}
                 aria-label="Cerrar"
                 className="absolute top-4 right-[5%] z-20 hover:opacity-75 transition-opacity"
             >
                 <i className="mdi mdi-close text-2xl"></i>
-            </button>
+            </button> */}
 
             <div className="relative w-full flex flex-col md:flex-row items-center justify-between gap-4 z-10">
                 <h2 className="text-lg md:text-xl font-title font-bold uppercase text-center md:text-left">
