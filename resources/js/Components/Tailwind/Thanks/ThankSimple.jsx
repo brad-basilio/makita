@@ -97,7 +97,7 @@ const ThankSimple = ({ data, item }) => {
 
         {/* Botones de acción */}
         <div className="grid gap-4 max-w-md mx-auto">
-          <a href={data?.url_catalog ?? '/'} className="bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-md transition-colors">
+          <a href={data?.url_catalog ?? '/'} className="bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-md transition-colors text-center">
             Seguir Comprando
           </a>
           {/* <button className="bg-gray-100 hover:bg-gray-200 text-gray-800 py-3 px-4 rounded-md transition-colors">
