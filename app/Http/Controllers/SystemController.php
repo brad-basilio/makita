@@ -172,8 +172,6 @@ class SystemController extends BasicController
             }
         }
 
-        dump($generals);
-
         $props['systems'] = $systems;
         $props['jsons'] = $jsons;
         $props['params'] = $request->route() ? $request->route()->parameters() : [];

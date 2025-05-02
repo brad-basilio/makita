@@ -48,6 +48,7 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\MercadoPagoController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\SaleController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\ScrapController;
 
@@ -125,6 +126,7 @@ Route::get('/mercadopago/pending', [MercadoPagoController::class, 'handlePending
 //pedido
 Route::post('/orders', [MercadoPagoController::class, 'getOrder']);
 
+Route::post('/sales', [SaleController::class, 'save']);
 
 Route::middleware('auth')->group(function () {
   Route::delete('logout', [AuthController::class, 'destroy'])

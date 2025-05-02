@@ -9,6 +9,10 @@ import Tippy from "@tippyjs/react"
 import CulqiRest from "../../../Actions/CulqiRest"
 import General from "../../../Utils/General"
 import PaymentMethods from './Images/PaymentMethods.svg'
+import SalesRest from "../../../Actions/SalesRest"
+import Swal from "sweetalert2"
+
+const salesRest = new SalesRest()
 
 const CheckoutCulqi = ({ cart, setCart, items, prefixes }) => {
 
@@ -36,7 +40,11 @@ const CheckoutCulqi = ({ cart, setCart, items, prefixes }) => {
     lastname: ""
   })
   // Add these states at the top with other states
-  const [paymentMethod, setPaymentMethod] = useState('mercadopago')
+  const [paymentMethod, setPaymentMethod] = useState(
+    General.get('checkout_culqi') == 'true' ? 'culqi' :
+      General.get('checkout_dwallet') == 'true' ? 'dwallet' :
+        General.get('checkout_transfer') == 'true' ? 'transfer' : null
+  )
   const [voucher, setVoucher] = useState(null)
 
   const totalPrice = cart.reduce((acc, item) => {
@@ -122,27 +130,52 @@ const CheckoutCulqi = ({ cart, setCart, items, prefixes }) => {
     price: item.price === null ? null : Number(item.price),
   })))]
 
-  const onCheckoutSubmit = async () => {
+  const onCheckoutSubmit = async (e) => {
+    e.preventDefault()
 
+    const { isConfirmed } = await Swal.fire({
+      title: '¿Confirmar pedido?',
+      text: '¿Estás seguro de realizar este pedido? Revise que todos los datos estén correctos antes de confirmar el pedido.',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, confirmar',
+      cancelButtonText: 'Cancelar'
+    });
+
+    if (!isConfirmed) return
+
+    const saleData = {
+      user_id: LaravelSession.id,
+      name: contactInfo.name,
+      lastname: contactInfo.lastname,
+      email: contactInfo.email,
+      phone: contactInfo.phone,
+      phone_prefix: contactInfo.phone_prefix,
+      country: 'Perú',
+      delivery_type: deliveryMethod,
+      ubigeo: deliveryMethod == 'express' ? shippingAddress.distrito : null,
+      address: shippingAddress.calle,
+      number: shippingAddress.numero,
+      reference: shippingAddress.referencia,
+      payment_method: paymentMethod,
+      invoiceType: billing.type,
+      documentType: billing.type === 'factura' ? 'ruc' : 'dni',
+      document: billing.number,
+      businessName: billing.fullname,
+      details: cart.map((item) => ({
+        id: item.id,
+        quantity: item.quantity
+      })),
+    };
+
+    // Enviar la solicitud
+    const result = await salesRest.save(saleData);
+    console.log(result)
   }
 
   useEffect(() => {
     if (cart.length == 0) location.href = '/'
   }, [null])
-
-  console.log(
-    General.get("checkout_culqi"),
-    General.get("checkout_culqi_name"),
-    General.get("checkout_culqi_public_key"),
-    General.get("checkout_dwallet"),
-    General.get("checkout_dwallet_qr"),
-    General.get("checkout_dwallet_name"),
-    General.get("checkout_dwallet_description"),
-    General.get("checkout_transfer"),
-    General.get("checkout_transfer_cci"),
-    General.get("checkout_transfer_name"),
-    General.get("checkout_transfer_description")
-  )
 
   const igv = Number(General.igv_checkout) / 100
 
@@ -444,14 +477,14 @@ const CheckoutCulqi = ({ cart, setCart, items, prefixes }) => {
                 {
                   General.get("checkout_culqi") == "true" &&
                   <div
-                    className={`flex items-center justify-between px-4 py-2 border-2 rounded-lg cursor-pointer ${paymentMethod === 'mercadopago' ? 'border-primary bg-gray-100' : 'border-gray-200'
+                    className={`flex items-center justify-between px-4 py-2 border-2 rounded-lg cursor-pointer ${paymentMethod === 'culqi' ? 'border-primary bg-gray-100' : 'border-gray-200'
                       }`}
-                    onClick={() => setPaymentMethod('mercadopago')}
+                    onClick={() => setPaymentMethod('culqi')}
                   >
                     <div className="flex items-center gap-3">
-                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${paymentMethod === 'mercadopago' ? 'border-primary' : 'border-gray-400'
+                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${paymentMethod === 'culqi' ? 'border-primary' : 'border-gray-400'
                         }`}>
-                        {paymentMethod === 'mercadopago' && <div className="w-3 h-3 rounded-full bg-primary"></div>}
+                        {paymentMethod === 'culqi' && <div className="w-3 h-3 rounded-full bg-primary"></div>}
                       </div>
                       <div className="flex flex-col">
                         <span>Pago con tarjeta</span>
@@ -468,14 +501,14 @@ const CheckoutCulqi = ({ cart, setCart, items, prefixes }) => {
                   General.get("checkout_dwallet") == "true" &&
                   <>
                     <div
-                      className={`flex items-center justify-between px-4 py-2 border-2 rounded-lg cursor-pointer ${paymentMethod === 'yape' ? 'border-primary bg-gray-100' : 'border-gray-200'
+                      className={`flex items-center justify-between px-4 py-2 border-2 rounded-lg cursor-pointer ${paymentMethod === 'dwallet' ? 'border-primary bg-gray-100' : 'border-gray-200'
                         }`}
-                      onClick={() => setPaymentMethod('yape')}
+                      onClick={() => setPaymentMethod('dwallet')}
                     >
                       <div className="flex items-center gap-3">
-                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${paymentMethod === 'yape' ? 'border-primary' : 'border-gray-400'
+                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${paymentMethod === 'dwallet' ? 'border-primary' : 'border-gray-400'
                           }`}>
-                          {paymentMethod === 'yape' && <div className="w-3 h-3 rounded-full bg-primary"></div>}
+                          {paymentMethod === 'dwallet' && <div className="w-3 h-3 rounded-full bg-primary"></div>}
                         </div>
                         <div className="flex flex-col">
                           <span>Yape / Plin</span>
@@ -491,7 +524,7 @@ const CheckoutCulqi = ({ cart, setCart, items, prefixes }) => {
                         </Tippy>
                       </div>
                     </div>
-                    {(paymentMethod === 'yape') && (
+                    {(paymentMethod === 'dwallet') && (
                       <div className="mt-4 p-4 bg-white rounded-lg">
                         <div className="flex flex-col md:flex-row gap-6">
                           <div className="flex-shrink-0">
@@ -547,7 +580,7 @@ const CheckoutCulqi = ({ cart, setCart, items, prefixes }) => {
                           <p className="font-medium mb-0">{General.get('checkout_transfer_name')}</p>
                           <p className="text-gray-600 mb-4">{General.get('checkout_transfer_description')}</p>
                           <p className="text-sm">Código de Cuenta Interbancario (CCI)</p>
-                          <p className="font-mono bg-white p-2 rounded select-all">{General.get('checkout_transfer_cci')}</p>
+                          <p className="font-mono bg-gray-50 p-2 rounded select-all">{General.get('checkout_transfer_cci')}</p>
                           <a href="#" className="text-primary text-sm hover:underline">
                             Envía tu comprobante
                           </a>
@@ -621,17 +654,24 @@ const CheckoutCulqi = ({ cart, setCart, items, prefixes }) => {
                       className="w-full p-2 border border-gray-300 rounded"
                       placeholder={billing.type == 'factura' ? '00000000000' : '00000000'}
                       maxLength={billing.type == 'factura' ? 11 : 8}
+                      required
+                      value={billing.number}
+                      onChange={e => setBilling(old => ({ ...old, number: e.target.value }))}
                     />
                   </div>
 
                   <div className="mt-4">
-                    <label className="block text-sm mb-1">{billing.type == 'factura' ? 'Razón Social' : 'Nombre completo'}</label>
+                    <label className="block text-sm mb-1">
+                      {billing.type == 'factura' ? 'Razón Social' : 'Nombre completo'}
+                      <b className="text-red-500 ms-1">*</b>
+                    </label>
                     <input
                       type="text"
                       className="w-full p-2 border border-gray-300 rounded"
                       placeholder="Nombre de razón social"
                       value={billing.fullname}
                       onChange={e => setBilling(old => ({ ...old, fullname: e.target.value }))}
+                      required
                     />
                   </div>
                 </div>

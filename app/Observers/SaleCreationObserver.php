@@ -18,7 +18,7 @@ class SaleCreationObserver
         Sale::where('id', $sale->id)
             ->update([
                 'fullname' => $sale->name . ' ' . $sale->lastname,
-                'total_amount' => Math::round($total_amount, 1)
+                // 'total_amount' => Math::round($total_amount, 1)
             ]);
     }
 }

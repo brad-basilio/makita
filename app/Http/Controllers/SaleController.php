@@ -6,6 +6,7 @@ use App\Jobs\SendSaleEmail;
 use App\Jobs\SendSaleWhatsApp;
 use App\Models\Sale;
 use App\Models\Bundle;
+use App\Models\DeliveryPrice;
 use App\Models\Item;
 use App\Models\Renewal;
 use App\Models\SaleDetail;
@@ -17,8 +18,10 @@ use SoDe\Extend\Trace;
 use SoDe\Extend\Math;
 use SoDe\Extend\Response;
 
-class SaleController extends Controller
+class SaleController extends BasicController
 {
+    public $model = Sale::class;
+
     static function create(array $sale, array $details): array
     {
         try {
@@ -160,6 +163,40 @@ class SaleController extends Controller
         }
     }
 
+    public function beforeSave(Request $request)
+    {
+        $body = $request->all();
+
+        $delivery = DeliveryPrice::query()
+            ->where('ubigeo', $body['ubigeo'])
+            ->first();
+
+        $body['delivery'] = $delivery?->price ?? 0;
+        $body['department'] = $delivery?->data['departamento'] ?? null;
+        $body['province'] = $delivery?->data['provincia'] ?? null;
+        $body['district'] = $delivery?->data['distrito'] ?? null;
+        $body['ubigeo'] = $delivery?->ubigeo?? null;
+
+        $body['code'] = Trace::getId();
+        $body['status_id'] = 'e13a417d-a2f0-4f5f-93d8-462d57f13d3c';
+        $body['user_id'] = Auth::id();
+        return $body;
+    }
+
+    public function afterSave(Request $request, object $jpa, ?bool $isNew)
+    {
+        dump($request->details);
+        foreach ($request->details as $item) {
+            $itemJpa = Item::find($item['id']);
+            SaleDetail::create([
+                'sale_id' => $jpa->id,
+                'item_id' => $itemJpa->id,
+                'name' => $itemJpa->name,
+                'price' => $itemJpa->final_price,
+                'quantity' => $item['quantity']
+            ]);
+        }
+    }
 
     public function notify(Request $request)
     {

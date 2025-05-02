@@ -4,4 +4,4 @@ class SalesRest extends BasicRest {
     path = "sales";
 }
 
-export default PostsRest;
+export default SalesRest;
