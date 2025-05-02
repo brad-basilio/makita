@@ -11,10 +11,11 @@ import General from "../../../Utils/General"
 import PaymentMethods from './Images/PaymentMethods.svg'
 import SalesRest from "../../../Actions/SalesRest"
 import Swal from "sweetalert2"
+import { Local } from "sode-extend-react"
 
 const salesRest = new SalesRest()
 
-const CheckoutCulqi = ({ cart, setCart, items, prefixes }) => {
+const CheckoutCulqi = ({ data, cart, setCart, items, prefixes }) => {
 
   const [deliveryMethod, setDeliveryMethod] = useState("pickup")
   const [contactInfo, setContactInfo] = useState({
@@ -170,7 +171,12 @@ const CheckoutCulqi = ({ cart, setCart, items, prefixes }) => {
 
     // Enviar la solicitud
     const result = await salesRest.save(saleData);
-    console.log(result)
+    if (!result) return
+
+    setCart(null)
+    Local.delete('cart')
+
+    location.href = `${location.origin}/${data.url_thanks}/${result.code}`
   }
 
   useEffect(() => {

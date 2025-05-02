@@ -1004,13 +1004,7 @@
                 "id": "ThankSimple",
                 "name": "Simple",
                 "data": [
-                    "title",
-                    "description",
-                    "button_text",
-                    "link_blog",
-                    "url_video",
-                    "button_video_text",
-                    "button_video_link",
+                    "url_catalog",                    
                     "bool:send_whatsapp"
                 ]
             }

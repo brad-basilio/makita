@@ -1,4 +1,6 @@
 import React, { useEffect } from "react";
+import Number2Currency from "../../../Utils/Number2Currency";
+import { Local } from "sode-extend-react";
 
 const ThankSimple = ({ data, item }) => {
   const orderData = {
@@ -36,9 +38,11 @@ const ThankSimple = ({ data, item }) => {
 
   useEffect(() => {
     if (data['bool:send_whatsapp']) { 
-      console.log('wa')
+      // window.open(data['str:send_whatsapp'], '_blank');
     }
   }, [null])
+
+  console.log(item)
 
   return (
     <div className="min-h-screen bg-white">
@@ -50,7 +54,7 @@ const ThankSimple = ({ data, item }) => {
           <h1 className="text-3xl font-bold mb-2">Tu orden ha sido recibida</h1>
           <div className="mb-4">
             <p className="text-sm text-gray-600">Código de pedido</p>
-            <p className="font-medium">{orderData.orderCode}</p>
+            <p className="font-medium">#{item.code}</p>
           </div>
         </div>
 
@@ -65,26 +69,27 @@ const ThankSimple = ({ data, item }) => {
           </div>
 
           {/* Productos */}
-          {orderData.products.map((product) => (
-            <div key={product.id} className="border-t border-gray-200 py-4">
+          {item.details.map((item) => (
+            <div key={item.id} className="border-t border-gray-200 py-4">
               <div className="grid grid-cols-12 gap-4 items-center">
                 <div className="col-span-6 flex items-center">
-                  <div className="w-20 h-20 mr-3 relative">
+                  <div className="w-20 h-auto mr-3 relative">
                     <img
-                      src={product.image || "/placeholder.svg"}
-                      alt={product.name}
+                      src={`/storage/images/item/${item.image}`}
+                      onError={(e) => e.target.src = "/assets/img/noimage/no_img.jpg"}
+                      alt={item.name}
                       fill
-                      className="object-cover rounded-md"
+                      className="rounded-md aspect-[4/3] w-full h-auto object-cover object-center"
                     />
                   </div>
-                  <div>
-                    <p className="font-medium">{product.name}</p>
-                    <p className="text-xs text-gray-500">SKU: {product.sku}</p>
+                  <div className="w-full">
+                    <p className="font-medium">{item.name}</p>
+                    <p className="text-xs text-gray-500">SKU: {item.sku}</p>
                   </div>
                 </div>
-                <div className="col-span-2 text-center">{product.quantity}</div>
-                <div className="col-span-2 text-center">S/{product.price.toFixed(2)}</div>
-                <div className="col-span-2 text-center">S/{product.subtotal.toFixed(2)}</div>
+                <div className="col-span-2 text-center">{item.quantity}</div>
+                <div className="col-span-2 text-center">S/ {Number2Currency(item.price)}</div>
+                <div className="col-span-2 text-center">S/ {Number2Currency(item.price * item.quantity)}</div>
               </div>
             </div>
           ))}
@@ -92,12 +97,12 @@ const ThankSimple = ({ data, item }) => {
 
         {/* Botones de acción */}
         <div className="grid gap-4 max-w-md mx-auto">
-          <button className="bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-md transition-colors">
+          <a href={data?.url_catalog ?? '/'} className="bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-md transition-colors">
             Seguir Comprando
-          </button>
-          <button className="bg-gray-100 hover:bg-gray-200 text-gray-800 py-3 px-4 rounded-md transition-colors">
+          </a>
+          {/* <button className="bg-gray-100 hover:bg-gray-200 text-gray-800 py-3 px-4 rounded-md transition-colors">
             Historial de compras
-          </button>
+          </button> */}
         </div>
       </div>
     </div>

@@ -31,7 +31,8 @@ class AuthController extends Controller
   public function loginView(Request $request, string $confirmation = null)
   {
     if (Auth::check()) {
-      switch (Auth::user()->getRole()) {
+      $sessionJpa = User::find(Auth::id());
+      switch ($sessionJpa->getRole()) {
         case 'Admin':
           return redirect('/admin/home');
           break;

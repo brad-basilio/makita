@@ -76,7 +76,7 @@ class BasicRest {
                 type: "success",
             });
             callback?.();
-            return result;
+            return result?.data ?? true;
         } catch (error) {
             Notify.add({
                 icon: "/assets/img/icon.svg",
