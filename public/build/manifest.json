@@ -1278,7 +1278,7 @@
     ]
   },
   "resources/js/Admin/Generals.jsx": {
-    "file": "assets/Generals-DMQx8eNT.js",
+    "file": "assets/Generals-BzMteQew.js",
     "name": "Generals",
     "src": "resources/js/Admin/Generals.jsx",
     "isEntry": true,
@@ -1293,10 +1293,11 @@
       "_QuillFormGroup-D8zDHSfJ.js",
       "_TextareaFormGroup-CdwdsTk2.js",
       "_Global-CklCDfn9.js",
+      "_GalleryRest-I9JAkJ4D.js",
+      "_tippy-react.esm-BWiGTO87.js",
       "_index-yBjzXJbu.js",
       "_index-rimy3MAc.js",
       "_index-fNjTmf9T.js",
-      "_tippy-react.esm-BWiGTO87.js",
       "_Logout-CGCqvje3.js",
       "_main-BSEyQEJW.js",
       "____vite-browser-external_commonjs-proxy-0zb4Agf2.js",
@@ -3528,7 +3529,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Checkout.jsx": {
-    "file": "assets/Checkout-DXqvhADr.js",
+    "file": "assets/Checkout-DyUUXbNB.js",
     "name": "Checkout",
     "src": "resources/js/Components/Tailwind/Checkout.jsx",
     "isEntry": true,
@@ -3557,7 +3558,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Checkouts/CheckoutKuchara.jsx": {
-    "file": "assets/CheckoutKuchara-C2xZYrjz.js",
+    "file": "assets/CheckoutKuchara-vO4MSGJ0.js",
     "name": "CheckoutKuchara",
     "src": "resources/js/Components/Tailwind/Checkouts/CheckoutKuchara.jsx",
     "isDynamicEntry": true,
@@ -6213,7 +6214,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-lm8Jfo1A.js",
+    "file": "assets/System-DAAEaBkC.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,

@@ -9,8 +9,11 @@ import { createRoot } from "react-dom/client";
 import QuillFormGroup from "../Components/Adminto/form/QuillFormGroup";
 import TextareaFormGroup from "../Components/Adminto/form/TextareaFormGroup";
 import Global from "../Utils/Global";
+import GalleryRest from "../Actions/Admin/GalleryRest";
+import Tippy from "@tippyjs/react";
 
 const generalsRest = new GeneralsRest();
+const galleryRest = new GalleryRest();
 
 const Generals = ({ generals }) => {
   const location =
@@ -68,9 +71,18 @@ const Generals = ({ generals }) => {
       lat: Number(location.split(",").map((x) => x.trim())[0]),
       lng: Number(location.split(",").map((x) => x.trim())[1]),
     },
+    checkout_culqi: generals.find(x => x.correlative == 'checkout_culqi')?.description ?? "",
     checkout_culqi_name: generals.find(x => x.correlative == 'checkout_culqi_name')?.description ?? "",
     checkout_culqi_public_key: generals.find(x => x.correlative == 'checkout_culqi_public_key')?.description ?? "",
     checkout_culqi_private_key: generals.find(x => x.correlative == 'checkout_culqi_private_key')?.description ?? "",
+    checkout_dwallet: generals.find(x => x.correlative == 'checkout_dwallet')?.description ?? "",
+    checkout_dwallet_qr: generals.find(x => x.correlative == 'checkout_dwallet_qr')?.description ?? "",
+    checkout_dwallet_name: generals.find(x => x.correlative == 'checkout_dwallet_name')?.description ?? "",
+    checkout_dwallet_description: generals.find(x => x.correlative == 'checkout_dwallet_description')?.description ?? "",
+    checkout_transfer: generals.find(x => x.correlative == 'checkout_transfer')?.description?? "",
+    checkout_transfer_cci: generals.find(x => x.correlative == 'checkout_transfer_cci')?.description?? "",
+    checkout_transfer_name: generals.find(x => x.correlative == 'checkout_transfer_name')?.description?? "",
+    checkout_transfer_description: generals.find(x => x.correlative == 'checkout_transfer_description')?.description?? "",
   });
 
   const [activeTab, setActiveTab] = useState("general");
@@ -191,6 +203,11 @@ const Generals = ({ generals }) => {
           description: formData.igvCheckout,
         },
         {
+          correlative: "checkout_culqi",
+          name: "Habilitar Culqi",
+          description: formData.checkout_culqi,
+        },
+        {
           correlative: 'checkout_culqi_name',
           name: 'Nombre de la cuenta de Culqi',
           description: formData.checkout_culqi_name,
@@ -204,6 +221,46 @@ const Generals = ({ generals }) => {
           correlative: 'checkout_culqi_private_key',
           name: 'Llave privada de Culqi',
           description: formData.checkout_culqi_private_key,
+        },
+        {
+          correlative: 'checkout_dwallet',
+          name: 'Habilitar Yape/Plin',
+          description: formData.checkout_dwallet,
+        },
+        {
+          correlative: 'checkout_dwallet_qr',
+          name: 'QR Yape/Plin',
+          description: formData.checkout_dwallet_qr,
+        },
+        {
+          correlative: 'checkout_dwallet_name',
+          name: 'Título Yape/Plin',
+          description: formData.checkout_dwallet_name,
+        },
+        {
+          correlative: 'checkout_dwallet_description',
+          name: 'Descripción Yape/Plin',
+          description: formData.checkout_dwallet_description,
+        },
+        {
+          correlative: 'checkout_transfer',
+          name: 'Habilitar Transferencia',
+          description: formData.checkout_transfer,
+        },
+        {
+          correlative: 'checkout_transfer_cci',
+          name: 'CCI Transferencia',
+          description: formData.checkout_transfer_cci,
+        },
+        {
+          correlative: 'checkout_transfer_name',
+          name: 'Nombre Transferencia',
+          description: formData.checkout_transfer_name,
+        },
+        {
+          correlative: 'checkout_transfer_description',
+          name: 'Descripción Transferencia',
+          description: formData.checkout_transfer_description,
         },
         {
           correlative: "location",
@@ -591,6 +648,21 @@ const Generals = ({ generals }) => {
                 <div className="tab-content pt-0">
                   <div className="tab-pane fade active show" id="v-culqi" role="tabpanel" aria-labelledby="v-culqi-tab">
                     <div className="mb-2">
+                      <div className="form-check">
+                        <input
+                          type="checkbox"
+                          className="form-check-input"
+                          id="checkout-culqi"
+                          checked={formData.checkout_culqi == 'true'}
+                          onChange={(e) => setFormData({ ...formData, checkout_culqi: String(e.target.checked) })}
+                        />
+                        <label className="form-check-label form-label" htmlFor="checkout-culqi">
+                          Habilitar pago con Culqi
+                          <small className="text-muted d-block">Al habilitar esta opción, permite pagos por Culqi </small>
+                        </label>
+                      </div>
+                    </div>
+                    <div className="mb-2">
                       <label className="form-label">Título del formulario</label>
                       <input
                         type="text"
@@ -629,35 +701,77 @@ const Generals = ({ generals }) => {
                   </div>
                   <div className="tab-pane fade" id="v-digital-wallet" role="tabpanel" aria-labelledby="v-digital-wallet-tab">
                     <div className="mb-2">
+                      <div className="form-check">
+                        <input
+                          type="checkbox"
+                          className="form-check-input"
+                          id="checkout-dwallet"
+                          checked={formData.checkout_dwallet == 'true'}
+                          onChange={(e) => setFormData({ ...formData, checkout_dwallet: String(e.target.checked) })}
+                        />
+                        <label className="form-check-label form-label" htmlFor="checkout-dwallet">
+                          Habilitar pago con Yape/Plin
+                          <small className="text-muted d-block">Al habilitar esta opción, permite pagos por Yape/Plin </small>
+                        </label>
+                      </div>
+                    </div>
+                    <div className="mb-2">
                       <label className="form-label">QR</label>
-                      <input
-                        type="file"
-                        className="form-control"
-                        accept="image/*"
-                        onChange={(e) => {
-                          const file = e.target.files[0];
-                          if (file) {
-                            const reader = new FileReader();
-                            reader.onloadend = () => {
+                      {
+                        formData.checkout_dwallet_qr
+                          ? <div className="position-relative">
+                            <Tippy content="Eliminar QR">
+                              <button className="position-absolute btn btn-xs btn-danger" style={{
+                                top: '5px',
+                                left: '5px'
+                              }} onClick={() => setFormData({
+                                ...formData,
+                                checkout_dwallet_qr: null
+                              })}>
+                                <i className="mdi mdi-delete"></i>
+                              </button>
+                            </Tippy>
+                            <img src={`/assets/resources/${formData.checkout_dwallet_qr}`} className="img-thumbnail" style={{
+                              height: '200px',
+                              width: 'auto'
+                            }} />
+                          </div>
+                          : <input
+                            type="file"
+                            className="form-control"
+                            accept="image/*"
+                            onChange={async (e) => {
+                              const file = e.target.files[0];
+                              if (!file) return;
+                              e.target.value = null
+
+                              const ext = file.name.split('.').pop()
+                              const dwallet_name = `qr-digital-wallet.${ext}`
+
+                              const request = new FormData()
+                              request.append('image', file)
+                              request.append('name', dwallet_name)
+
+                              const result = await galleryRest.save(request)
+                              if (!result) return;
+
                               setFormData({
                                 ...formData,
-                                digitalWallet: { ...formData.digitalWallet, qr: reader.result }
+                                checkout_dwallet_qr: dwallet_name
                               });
-                            };
-                            reader.readAsDataURL(file);
-                          }
-                        }}
-                      />
+                            }}
+                          />
+                      }
                     </div>
                     <div className="mb-2">
                       <label className="form-label">Título</label>
                       <input
                         type="text"
                         className="form-control"
-                        value={formData.digitalWallet?.title ?? 'Carlos Manuel Gamboa Palomino'}
+                        value={formData.checkout_dwallet_name}
                         onChange={(e) => setFormData({
                           ...formData,
-                          digitalWallet: { ...formData.digitalWallet, title: e.target.value }
+                          checkout_dwallet_name: e.target.value
                         })}
                       />
                     </div>
@@ -665,79 +779,65 @@ const Generals = ({ generals }) => {
                       <label className="form-label">Descripción</label>
                       <textarea
                         className="form-control"
-                        value={formData.digitalWallet?.description ?? 'O yapea al número 999413711'}
+                        value={formData.checkout_dwallet_description}
                         onChange={(e) => setFormData({
                           ...formData,
-                          digitalWallet: { ...formData.digitalWallet, description: e.target.value }
+                          checkout_dwallet_description: e.target.value
                         })}
                       />
                     </div>
                   </div>
                   <div className="tab-pane fade" id="v-transfer" role="tabpanel" aria-labelledby="v-transfer-tab">
-                    {formData.bankAccounts?.map((account, index) => (
-                      <div key={index} className="border rounded p-3 mb-3">
-                        <div className="mb-2">
-                          <label className="form-label">CCI</label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            value={account.cci}
-                            onChange={(e) => {
-                              const newAccounts = [...formData.bankAccounts];
-                              newAccounts[index].cci = e.target.value;
-                              setFormData({ ...formData, bankAccounts: newAccounts });
-                            }}
-                          />
-                        </div>
-                        <div className="mb-2">
-                          <label className="form-label">Título</label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            value={account.title}
-                            onChange={(e) => {
-                              const newAccounts = [...formData.bankAccounts];
-                              newAccounts[index].title = e.target.value;
-                              setFormData({ ...formData, bankAccounts: newAccounts });
-                            }}
-                          />
-                        </div>
-                        <div className="mb-2">
-                          <label className="form-label">Descripción</label>
-                          <textarea
-                            className="form-control"
-                            value={account.description}
-                            onChange={(e) => {
-                              const newAccounts = [...formData.bankAccounts];
-                              newAccounts[index].description = e.target.value;
-                              setFormData({ ...formData, bankAccounts: newAccounts });
-                            }}
-                          />
-                        </div>
-                        {formData.bankAccounts.length > 1 && (
-                          <button
-                            type="button"
-                            className="btn btn-danger"
-                            onClick={() => {
-                              const newAccounts = formData.bankAccounts.filter((_, i) => i !== index);
-                              setFormData({ ...formData, bankAccounts: newAccounts });
-                            }}
-                          >
-                            Eliminar cuenta
-                          </button>
-                        )}
+                    <div className="mb-2">
+                      <div className="form-check">
+                        <input
+                          type="checkbox"
+                          className="form-check-input"
+                          id="checkout-transfer"
+                          checked={formData.checkout_transfer == 'true'}
+                          onChange={(e) => setFormData({ ...formData, checkout_transfer: String(e.target.checked) })}
+                        />
+                        <label className="form-check-label form-label" htmlFor="checkout-transfer">
+                          Habilitar pago por transferencia
+                          <small className="text-muted d-block">Al habilitar esta opción, permite pagos por transferencia</small>
+                        </label>
                       </div>
-                    ))}
-                    <button
-                      type="button"
-                      className="btn btn-primary"
-                      onClick={() => setFormData({
-                        ...formData,
-                        bankAccounts: [...formData.bankAccounts, { cci: "", title: "", description: "" }]
-                      })}
-                    >
-                      Agregar cuenta
-                    </button>
+                    </div>
+                    <div className="mb-2">
+                      <label className="form-label">Código de Cuenta Interbancario (CCI)</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={formData.checkout_transfer_cci}
+                        onChange={(e) => setFormData({
+                          ...formData,
+                          checkout_transfer_cci: e.target.value
+                        })}
+                      />
+                    </div>
+                    <div className="mb-2">
+                      <label className="form-label">Título</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={formData.checkout_transfer_name}
+                        onChange={(e) => setFormData({
+                          ...formData,
+                          checkout_transfer_name: e.target.value
+                        })}
+                      />
+                    </div>
+                    <div className="mb-2">
+                      <label className="form-label">Descripción</label>
+                      <textarea
+                        className="form-control"
+                        value={formData.checkout_transfer_description}
+                        onChange={(e) => setFormData({
+                          ...formData,
+                          checkout_transfer_description: e.target.value
+                        })}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>

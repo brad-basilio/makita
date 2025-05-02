@@ -888,10 +888,18 @@
                     "field": ["name", "price", "data"]
                 },
                 "generals": [
+                    "igv_checkout",
+                    "checkout_culqi",
+                    "checkout_culqi_name",
                     "checkout_culqi_public_key",
-                    "checkout_bim",
+                    "checkout_dwallet",
+                    "checkout_dwallet_qr",
+                    "checkout_dwallet_name",
+                    "checkout_dwallet_description",
                     "checkout_transfer",
-                    "igv_checkout"
+                    "checkout_transfer_cci",
+                    "checkout_transfer_name",
+                    "checkout_transfer_description"
                 ]
             },
             {

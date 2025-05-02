@@ -130,6 +130,20 @@ const CheckoutCulqi = ({ cart, setCart, items, prefixes }) => {
     if (cart.length == 0) location.href = '/'
   }, [null])
 
+  console.log(
+    General.get("checkout_culqi"),
+    General.get("checkout_culqi_name"),
+    General.get("checkout_culqi_public_key"),
+    General.get("checkout_dwallet"),
+    General.get("checkout_dwallet_qr"),
+    General.get("checkout_dwallet_name"),
+    General.get("checkout_dwallet_description"),
+    General.get("checkout_transfer"),
+    General.get("checkout_transfer_cci"),
+    General.get("checkout_transfer_name"),
+    General.get("checkout_transfer_description")
+  )
+
   const igv = Number(General.igv_checkout) / 100
 
   return (
@@ -427,130 +441,139 @@ const CheckoutCulqi = ({ cart, setCart, items, prefixes }) => {
               <h2 className="text-xl font-semibold mb-4">Método de pago</h2>
 
               <div className="space-y-3">
-                {/* Mercado Pago */}
-                <div
-                  className={`flex items-center justify-between px-4 py-2 border-2 rounded-lg cursor-pointer ${paymentMethod === 'mercadopago' ? 'border-primary bg-gray-100' : 'border-gray-200'
-                    }`}
-                  onClick={() => setPaymentMethod('mercadopago')}
-                >
-                  <div className="flex items-center gap-3">
-                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${paymentMethod === 'mercadopago' ? 'border-primary' : 'border-gray-400'
-                      }`}>
-                      {paymentMethod === 'mercadopago' && <div className="w-3 h-3 rounded-full bg-primary"></div>}
-                    </div>
-                    <div className="flex flex-col">
-                      <span>Pago con tarjeta</span>
-                      <small className="text-xs text-opacity-60 text-black">Formulario Culqi</small>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <img src={PaymentMethods} alt='Métodos de pago - Culqi' className="h-[25px]" />
-                  </div>
-                </div>
-
-                {/* Yape */}
-                <div
-                  className={`flex items-center justify-between px-4 py-2 border-2 rounded-lg cursor-pointer ${paymentMethod === 'yape' ? 'border-primary bg-gray-100' : 'border-gray-200'
-                    }`}
-                  onClick={() => setPaymentMethod('yape')}
-                >
-                  <div className="flex items-center gap-3">
-                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${paymentMethod === 'yape' ? 'border-primary' : 'border-gray-400'
-                      }`}>
-                      {paymentMethod === 'yape' && <div className="w-3 h-3 rounded-full bg-primary"></div>}
-                    </div>
-                    <div className="flex flex-col">
-                      <span>Yape / Plin</span>
-                      <small className="text-xs text-opacity-60 text-black">Billeteras digitales</small>
-                    </div>
-                  </div>
-                  <div className="flex gap-3">
-                    <Tippy content='Yape BCP'>
-                      <img src="/assets/img/banks/yape.png" alt="Yape BCP" className="h-6" />
-                    </Tippy>
-                    <Tippy content='Plin Interbank'>
-                      <img src="/assets/img/banks/plin.png" alt="Plin Interbank" className="h-6" />
-                    </Tippy>
-                  </div>
-                </div>
-
-                {/* Bank Details and Upload Section */}
-                {(paymentMethod === 'yape') && (
-                  <div className="mt-4 p-4 bg-white rounded-lg">
-                    <div className="flex gap-6">
-                      <div className="flex-shrink-0">
-                        <img src="/cloud/4664bc89-2424-487e-b10b-0a04245c7e1d.png" alt="Yape QR" className="w-48" />
+                {
+                  General.get("checkout_culqi") == "true" &&
+                  <div
+                    className={`flex items-center justify-between px-4 py-2 border-2 rounded-lg cursor-pointer ${paymentMethod === 'mercadopago' ? 'border-primary bg-gray-100' : 'border-gray-200'
+                      }`}
+                    onClick={() => setPaymentMethod('mercadopago')}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${paymentMethod === 'mercadopago' ? 'border-primary' : 'border-gray-400'
+                        }`}>
+                        {paymentMethod === 'mercadopago' && <div className="w-3 h-3 rounded-full bg-primary"></div>}
                       </div>
-                      <div className="flex-1">
-                        <h3 className="text-xl font-semibold mb-2">Carlos Manuel Gamboa Palomino</h3>
-                        <p className="text-gray-600 mb-4">
-                          O yapea al número 999413711
-                        </p>
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={(e) => setVoucher(e.target.files[0])}
-                          className="block w-full text-sm text-gray-800
+                      <div className="flex flex-col">
+                        <span>Pago con tarjeta</span>
+                        <small className="text-xs text-opacity-60 text-black">Formulario Culqi</small>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <img src={PaymentMethods} alt='Métodos de pago - Culqi' className="h-[25px]" />
+                    </div>
+                  </div>
+                }
+
+                {
+                  General.get("checkout_dwallet") == "true" &&
+                  <>
+                    <div
+                      className={`flex items-center justify-between px-4 py-2 border-2 rounded-lg cursor-pointer ${paymentMethod === 'yape' ? 'border-primary bg-gray-100' : 'border-gray-200'
+                        }`}
+                      onClick={() => setPaymentMethod('yape')}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${paymentMethod === 'yape' ? 'border-primary' : 'border-gray-400'
+                          }`}>
+                          {paymentMethod === 'yape' && <div className="w-3 h-3 rounded-full bg-primary"></div>}
+                        </div>
+                        <div className="flex flex-col">
+                          <span>Yape / Plin</span>
+                          <small className="text-xs text-opacity-60 text-black">Billeteras digitales</small>
+                        </div>
+                      </div>
+                      <div className="flex gap-3">
+                        <Tippy content='Yape BCP'>
+                          <img src="/assets/img/banks/yape.png" alt="Yape BCP" className="h-6" />
+                        </Tippy>
+                        <Tippy content='Plin Interbank'>
+                          <img src="/assets/img/banks/plin.png" alt="Plin Interbank" className="h-6" />
+                        </Tippy>
+                      </div>
+                    </div>
+                    {(paymentMethod === 'yape') && (
+                      <div className="mt-4 p-4 bg-white rounded-lg">
+                        <div className="flex flex-col md:flex-row gap-6">
+                          <div className="flex-shrink-0">
+                            <img src={`/assets/resources/${General.get('checkout_dwallet_qr')}`} alt={General.get('checkout_dwallet_name')} className="w-full lg:w-48 border rounded" />
+                          </div>
+                          <div className="flex-1">
+                            <h3 className="text-xl font-semibold mb-2">{General.get('checkout_dwallet_name')}</h3>
+                            <p className="text-gray-600 mb-4">
+                              {General.get('checkout_dwallet_description')}
+                            </p>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              onChange={(e) => setVoucher(e.target.files[0])}
+                              className="block w-full text-sm text-gray-800
+                              file:mr-4 file:py-2 file:px-4
+                              file:rounded-full file:border-0
+                              file:text-sm file:font-semibold
+                              file:bg-primary file:text-white
+                              hover:file:bg-primary/90 cursor-pointer"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </>
+                }
+
+                {
+                  General.get("checkout_transfer") == "true" &&
+                  <>
+                    <div
+                      className={`flex items-center justify-between p-4 border-2 rounded-lg cursor-pointer ${paymentMethod === 'transfer' ? 'border-primary bg-gray-100' : 'border-gray-200'
+                        }`}
+                      onClick={() => setPaymentMethod('transfer')}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${paymentMethod === 'transfer' ? 'border-primary' : 'border-gray-400'
+                          }`}>
+                          {paymentMethod === 'transfer' && <div className="w-3 h-3 rounded-full bg-primary"></div>}
+                        </div>
+                        <span>Transferencia</span>
+                      </div>
+                      <div className="flex gap-3">
+                        <img src="/assets/img/banks/bcp.svg" alt="BCP" className="h-4" />
+                        <img src="/assets/img/banks/interbank.svg" alt="Interbank" className="h-4" />
+                        <img src="/assets/img/banks/bbva.svg" alt="BBVA" className="h-4" />
+                      </div>
+                    </div>
+                    {(paymentMethod === 'transfer') && (
+                      <div className="mt-4 p-4 bg-white rounded-lg">
+                        <div className="space-y-2">
+                          <p className="font-medium mb-0">{General.get('checkout_transfer_name')}</p>
+                          <p className="text-gray-600 mb-4">{General.get('checkout_transfer_description')}</p>
+                          <p className="text-sm">Código de Cuenta Interbancario (CCI)</p>
+                          <p className="font-mono bg-white p-2 rounded select-all">{General.get('checkout_transfer_cci')}</p>
+                          <a href="#" className="text-primary text-sm hover:underline">
+                            Envía tu comprobante
+                          </a>
+                        </div>
+                        <div className="mt-4">
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => setVoucher(e.target.files[0])}
+                            className="block w-full text-sm text-gray-500
                             file:mr-4 file:py-2 file:px-4
                             file:rounded-full file:border-0
                             file:text-sm file:font-semibold
                             file:bg-primary file:text-white
-                            hover:file:bg-primary/90 cursor-pointer"
-                        />
+                            hover:file:bg-primary/90"
+                          />
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                )}
+                    )}
+                  </>
+                }
+              </div>
 
-                {/* Transferencia */}
-                <div
-                  className={`flex items-center justify-between p-4 border-2 rounded-lg cursor-pointer ${paymentMethod === 'transfer' ? 'border-primary bg-gray-100' : 'border-gray-200'
-                    }`}
-                  onClick={() => setPaymentMethod('transfer')}
-                >
-                  <div className="flex items-center gap-3">
-                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${paymentMethod === 'transfer' ? 'border-primary' : 'border-gray-400'
-                      }`}>
-                      {paymentMethod === 'transfer' && <div className="w-3 h-3 rounded-full bg-primary"></div>}
-                    </div>
-                    <span>Transferencia</span>
-                  </div>
-                  <div className="flex gap-3">
-                    <img src="/assets/img/banks/bcp.svg" alt="BCP" className="h-4" />
-                    <img src="/assets/img/banks/interbank.svg" alt="Interbank" className="h-4" />
-                    <img src="/assets/img/banks/bbva.svg" alt="BBVA" className="h-4" />
-                  </div>
-                </div>
-
-                {/* Bank Details and Upload Section */}
-                {(paymentMethod === 'transfer') && (
-                  <div className="mt-4 p-4 bg-gray-100 rounded-lg">
-                    <div className="space-y-2">
-                      <p className="font-medium">Banco - Interbank</p>
-                      <p className="text-sm">N. Cuenta Corriente</p>
-                      <p className="font-mono bg-white p-2 rounded select-all">43942483984398285</p>
-                      <a href="#" className="text-primary text-sm hover:underline">
-                        Envía tu comprobante
-                      </a>
-                    </div>
-                    <div className="mt-4">
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => setVoucher(e.target.files[0])}
-                        className="block w-full text-sm text-gray-500
-                          file:mr-4 file:py-2 file:px-4
-                          file:rounded-full file:border-0
-                          file:text-sm file:font-semibold
-                          file:bg-primary file:text-white
-                          hover:file:bg-primary/90"
-                      />
-                    </div>
-                  </div>
-                )}
-
-                {/* Invoice/Receipt Selection */}
-                <div className="mt-6 border-t pt-6">
+              <div className="space-y-3 mt-6 border-t pt-6">
+                <h2 className="text-xl font-semibold mb-4">Datos de facturación</h2>
+                <div >
                   <div className="flex gap-2 w-full">
                     <label className="flex-1">
                       <input
