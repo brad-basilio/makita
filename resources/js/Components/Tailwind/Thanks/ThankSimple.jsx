@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import Number2Currency from "../../../Utils/Number2Currency";
 import { Local } from "sode-extend-react";
+import General from "../../../Utils/General";
 
 const ThankSimple = ({ data, item }) => {
   const orderData = {
@@ -37,8 +38,21 @@ const ThankSimple = ({ data, item }) => {
   }
 
   useEffect(() => {
-    if (data['bool:send_whatsapp']) { 
-      // window.open(data['str:send_whatsapp'], '_blank');
+    if (data['bool:send_whatsapp']) {
+      const itemsList = item.details.map(product => 
+        `- ${product.name} (${product.quantity} unidades)`
+      ).join('\n');
+      
+      const message = encodeURIComponent(
+        `¡Hola! Acabo de realizar una compra con el código #${item.code}.\n` +
+        `Me gustaría confirmar los siguientes productos:\n${itemsList}\n` +
+        `¿Podrían indicarme el tiempo estimado de entrega?`
+      );
+      
+      const phoneNumber = General.get('phone_whatsapp');
+      const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
+      
+      window.open(whatsappUrl, '_blank');
     }
   }, [null])
 

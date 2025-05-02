@@ -1004,9 +1004,10 @@
                 "id": "ThankSimple",
                 "name": "Simple",
                 "data": [
-                    "url_catalog",                    
+                    "url_catalog",
                     "bool:send_whatsapp"
-                ]
+                ],
+                "generals": ["phone_whatsapp"]
             }
         ]
     },
