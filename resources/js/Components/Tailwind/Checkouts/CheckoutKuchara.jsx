@@ -18,7 +18,7 @@ const salesRest = new SalesRest()
 
 const CheckoutCulqi = ({ data, cart, setCart, items, prefixes }) => {
 
-  const [deliveryMethod, setDeliveryMethod] = useState("pickup")
+  const [deliveryMethod, setDeliveryMethod] = useState("express")
   const [contactInfo, setContactInfo] = useState({
     name: LaravelSession.name,
     lastname: LaravelSession.lastname,
@@ -296,7 +296,7 @@ const CheckoutCulqi = ({ data, cart, setCart, items, prefixes }) => {
             <div className="bg-gray-50 rounded-lg p-6">
               <h2 className="text-xl font-semibold mb-4">Dirección de envío</h2>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+              {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 <div
                   className={`flex flex-col p-6 rounded-lg border-2 cursor-pointer ${deliveryMethod === "pickup" ? "border-primary bg-gray-100" : "border-gray-200"
                     }`}
@@ -332,7 +332,7 @@ const CheckoutCulqi = ({ data, cart, setCart, items, prefixes }) => {
                   </div>
                   <p className="text-sm text-gray-500 ml-9">Sujeto a evaluación</p>
                 </div>
-              </div>
+              </div> */}
 
               {deliveryMethod === "express" && (
                 <div className="mt-4">
