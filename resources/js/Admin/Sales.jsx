@@ -184,12 +184,15 @@ const Sales = ({ statuses = [] }) => {
                     <th>Teléfono:</th>
                     <td>{saleLoaded?.phone}</td>
                   </tr>
-                  <tr>
-                    <th>Dirección:</th>
-                    <td>{saleLoaded?.address} {saleLoaded?.number}
-                      <small className='text-muted d-block'>{saleLoaded?.province ?? saleLoaded?.district}, {saleLoaded?.department}, {saleLoaded?.country} {saleLoaded?.zip_code && <>- {saleLoaded?.zip_code}</>}</small>
-                    </td>
-                  </tr>
+                  {
+                    saleLoaded?.delivery_type == 'express' &&
+                    <tr>
+                      <th>Dirección:</th>
+                      <td>{saleLoaded?.address} {saleLoaded?.number}
+                        <small className='text-muted d-block'>{saleLoaded?.province ?? saleLoaded?.district}, {saleLoaded?.department}, {saleLoaded?.country} {saleLoaded?.zip_code && <>- {saleLoaded?.zip_code}</>}</small>
+                      </td>
+                    </tr>
+                  }
                   {
                     saleLoaded?.reference &&
                     <tr>
@@ -211,7 +214,7 @@ const Sales = ({ statuses = [] }) => {
                       <td>
                         <Tippy content='Ver comprobante de pago' placement='top'>
                           <a href={`/storage/images/sale/${saleLoaded?.payment_proof}`} target='_blank'>
-                            <img 
+                            <img
                               src={`/storage/images/sale/${saleLoaded?.payment_proof}`}
                               alt="Comprobante de pago"
                               className="img-thumbnail"
