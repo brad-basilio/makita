@@ -164,14 +164,20 @@ const CheckoutCulqi = ({ data, cart, setCart, items, prefixes }) => {
       documentType: billing.type === 'factura' ? 'ruc' : 'dni',
       document: billing.number,
       businessName: billing.fullname,
-      details: cart.map((item) => ({
+      details: JSON.stringify(cart.map((item) => ({
         id: item.id,
         quantity: item.quantity
-      })),
+      }))),
+      payment_proof: voucher,
     };
 
+    const formData = new FormData();
+    Object.keys(saleData).forEach(key => {
+      formData.append(key, saleData[key]);
+    });
+
     // Enviar la solicitud
-    const result = await salesRest.save(saleData);
+    const result = await salesRest.save(formData);
     if (!result) return
 
     setCart([])

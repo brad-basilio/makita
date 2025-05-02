@@ -204,6 +204,24 @@ const Sales = ({ statuses = [] }) => {
                       <td>{saleLoaded?.comment}</td>
                     </tr>
                   }
+                  {
+                    saleLoaded?.payment_proof &&
+                    <tr>
+                      <th>Comprobante de pago:</th>
+                      <td>
+                        <Tippy content='Ver comprobante de pago' placement='top'>
+                          <a href={`/storage/images/sale/${saleLoaded?.payment_proof}`} target='_blank'>
+                            <img 
+                              src={`/storage/images/sale/${saleLoaded?.payment_proof}`}
+                              alt="Comprobante de pago"
+                              className="img-thumbnail"
+                              style={{ maxWidth: '150px', cursor: 'pointer' }}
+                            />
+                          </a>
+                        </Tippy>
+                      </td>
+                    </tr>
+                  }
                 </tbody>
               </table>
             </div>

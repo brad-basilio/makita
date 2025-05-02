@@ -14,6 +14,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use SoDe\Extend\JSON;
 use SoDe\Extend\Trace;
 use SoDe\Extend\Math;
 use SoDe\Extend\Response;
@@ -21,6 +22,7 @@ use SoDe\Extend\Response;
 class SaleController extends BasicController
 {
     public $model = Sale::class;
+    public $imageFields = ['payment_proof'];
 
     static function create(array $sale, array $details): array
     {
@@ -186,7 +188,8 @@ class SaleController extends BasicController
     public function afterSave(Request $request, object $jpa, ?bool $isNew)
     {
         $totalPrice = 0;
-        foreach ($request->details as $item) {
+        $details = JSON::parse($request->details);
+        foreach ($details as $item) {
             $itemJpa = Item::find($item['id']);
             SaleDetail::create([
                 'sale_id' => $jpa->id,

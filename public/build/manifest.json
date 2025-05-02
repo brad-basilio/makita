@@ -1569,7 +1569,7 @@
     ]
   },
   "resources/js/Admin/Sales.jsx": {
-    "file": "assets/Sales-DaizApC2.js",
+    "file": "assets/Sales-3VyrdUnN.js",
     "name": "Sales",
     "src": "resources/js/Admin/Sales.jsx",
     "isEntry": true,
@@ -1587,17 +1587,17 @@
       "_Global-CklCDfn9.js",
       "_Number2Currency-e57Tgsuk.js",
       "_Modal-CIqmjseY.js",
+      "_tippy-react.esm-BWiGTO87.js",
       "_main-BSEyQEJW.js",
       "_index-yBjzXJbu.js",
       "_index-fNjTmf9T.js",
-      "_tippy-react.esm-BWiGTO87.js",
-      "_index-rimy3MAc.js",
       "_Logout-CGCqvje3.js",
       "_MenuItemContainer-BkmzVQNY.js",
       "_index.esm-BE8-iLxT.js",
       "____vite-browser-external_commonjs-proxy-0zb4Agf2.js",
       "_General-BmbBKdsB.js",
-      "_LaravelSession-Dz9cpV3l.js"
+      "_LaravelSession-Dz9cpV3l.js",
+      "_index-rimy3MAc.js"
     ],
     "css": [
       "tippy.css",
@@ -3529,7 +3529,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Checkout.jsx": {
-    "file": "assets/Checkout-B2VqkeLg.js",
+    "file": "assets/Checkout-HYH9EQNS.js",
     "name": "Checkout",
     "src": "resources/js/Components/Tailwind/Checkout.jsx",
     "isEntry": true,
@@ -3558,7 +3558,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Checkouts/CheckoutKuchara.jsx": {
-    "file": "assets/CheckoutKuchara-wAYAHj1k.js",
+    "file": "assets/CheckoutKuchara-CsYGXTmq.js",
     "name": "CheckoutKuchara",
     "src": "resources/js/Components/Tailwind/Checkouts/CheckoutKuchara.jsx",
     "isDynamicEntry": true,
@@ -6219,7 +6219,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-DPXl5O5L.js",
+    "file": "assets/System-CLrpmYTX.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,
