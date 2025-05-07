@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use SoDe\Extend\File;
 use SoDe\Extend\JSON;
 
@@ -20,10 +21,16 @@ class DeliveryPrice extends Model
         'description',
         'price',
         'ubigeo',
+        'is_free',
+        'express_price',
+        'type_id'
     ];
 
     protected $appends = [
         'data'
+    ];
+    protected $casts = [
+        'is_free' => 'boolean'
     ];
 
     protected function getDataAttribute()
@@ -33,7 +40,12 @@ class DeliveryPrice extends Model
             if (!isset($item['reniec'])) return false;
             return $item['reniec'] == $this->ubigeo;
         })->first();
-        
+
         return $filtered ?? null;
+    }
+
+    public function type(): BelongsTo
+    {
+        return $this->belongsTo(TypeDelivery::class, 'type_id');
     }
 }

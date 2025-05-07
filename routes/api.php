@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\BannerController as AdminBannerController;
 use App\Http\Controllers\Admin\BrandController as AdminBrandController;
 
 use App\Http\Controllers\Admin\DeliveryPriceController as AdminDeliveryPriceController;
+use App\Http\Controllers\Admin\TypesDeliveryController as AdminTypesDeliveryController;
 use App\Http\Controllers\Admin\GalleryController as AdminGalleryController;
 use App\Http\Controllers\Admin\ItemController as AdminItemController;
 use App\Http\Controllers\Admin\SaleController as AdminSaleController;
@@ -248,6 +249,13 @@ Route::middleware('auth')->group(function () {
     Route::patch('/prices/status', [AdminDeliveryPriceController::class, 'status']);
     Route::patch('/prices/{field}', [AdminDeliveryPriceController::class, 'boolean']);
     Route::delete('/prices/{id}', [AdminDeliveryPriceController::class, 'delete']);
+
+    Route::post('/types_delivery', [AdminTypesDeliveryController::class, 'save']);
+    Route::post('/types_delivery/paginate', [AdminTypesDeliveryController::class, 'paginate']);
+    Route::post('/types_delivery/massive', [AdminTypesDeliveryController::class, 'massive']);
+    Route::patch('/types_delivery/status', [AdminTypesDeliveryController::class, 'status']);
+    Route::patch('/types_delivery/{field}', [AdminTypesDeliveryController::class, 'boolean']);
+    Route::delete('/types_delivery/{id}', [AdminTypesDeliveryController::class, 'delete']);
 
     Route::post('/tags', [AdminTagController::class, 'save']);
     Route::post('/tags/paginate', [AdminTagController::class, 'paginate']);

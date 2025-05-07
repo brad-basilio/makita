@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\BasicController;
 use App\Models\DeliveryPrice;
+use App\Models\TypeDelivery;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use SoDe\Extend\File;
@@ -15,7 +16,7 @@ use SoDe\Extend\Text;
 class DeliveryPriceController extends BasicController
 {
     public $model = DeliveryPrice::class;
-    public $reactView = 'Admin/DeliveryPrices';
+    public $reactView = 'Admin/DeliveryPricesType';
 
     public function setReactViewProperties(Request $request)
     {
@@ -29,9 +30,24 @@ class DeliveryPriceController extends BasicController
     {
         $body = $request->all();
         $found = $this->model::where('ubigeo', $body['ubigeo'])->first();
-        if ($found) $body['id'] = $found->id;
+
+        if ($found) {
+            $body['id'] = $found->id;
+        }
+
+        if ($request->has('is_free') && $request->input('is_free')) {
+            $freeType = TypeDelivery::where('slug', 'envio-gratis')->first();
+        } else {
+            $freeType = TypeDelivery::where('slug', 'delivery-normal')->first();
+        }
+
+        if ($freeType) {
+            $body['type_id'] = $freeType->id;
+        }
+
         return $body;
     }
+
 
     public function massive(Request $request)
     {
@@ -62,7 +78,7 @@ class DeliveryPriceController extends BasicController
                 $price = $price === '' ? null : $price;
 
                 $ubigeoObject = collect($ubigeoData)->firstWhere('reniec', $ubigeo);
-                
+
                 $name = $ubigeoObject ? Text::toTitleCase("{$ubigeoObject['distrito']}, {$ubigeoObject['departamento']}") : null;
 
                 $deliveryPrice = $this->model::updateOrCreate(
