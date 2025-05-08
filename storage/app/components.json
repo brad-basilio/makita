@@ -204,7 +204,7 @@
                 "image": "slider-just-image.png",
                 "using": {
                     "model": "Slider",
-                    "fields": ["bg_image", "button_link"]
+                    "fields": ["bg_type", "bg_image", "bg_video", "button_link"]
                 }
             },
             {
@@ -964,7 +964,13 @@
             {
                 "id": "BlogSimple",
                 "name": "Simple",
-                "data": ["title", "description", "second_title", "second_description", "bool:show_seen"]
+                "data": [
+                    "title",
+                    "description",
+                    "second_title",
+                    "second_description",
+                    "bool:show_seen"
+                ]
             },
             {
                 "id": "BlogCarousel",
@@ -1003,10 +1009,7 @@
             {
                 "id": "ThankSimple",
                 "name": "Simple",
-                "data": [
-                    "url_catalog",
-                    "bool:send_whatsapp"
-                ],
+                "data": ["url_catalog", "bool:send_whatsapp"],
                 "generals": ["phone_whatsapp"]
             }
         ]
