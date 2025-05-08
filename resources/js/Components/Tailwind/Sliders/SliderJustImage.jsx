@@ -46,7 +46,7 @@ const SliderJustImage = ({ data, items }) => {
       {items.map((slider, i) => {
         return (
           <SwiperSlide className="!w-full relative" key={`slider-${i}`}>
-            {data.bg_type === 'image' ? (
+            {slider.bg_type === 'image' ? (
               <img
                 src={`/storage/images/slider/${slider.bg_image}`}
                 alt=""
