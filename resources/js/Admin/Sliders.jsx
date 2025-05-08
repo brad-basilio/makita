@@ -12,6 +12,7 @@ import Table from '../Components/Adminto/Table';
 import DxButton from '../Components/dx/DxButton';
 import CreateReactScript from '../Utils/CreateReactScript';
 import ReactAppend from '../Utils/ReactAppend';
+import getYTVideoId from '../Utils/getYTVideoId';
 
 const slidersRest = new SlidersRest()
 
@@ -31,6 +32,7 @@ const Sliders = () => {
   const secondarybtnUrlRef = useRef()
 
   const [isEditing, setIsEditing] = useState(false)
+  const [iframeSrc, setIframeSrc] = useState('')
 
   const onModalOpen = (data) => {
     if (data?.id) setIsEditing(true)
@@ -196,7 +198,31 @@ const Sliders = () => {
     <Modal modalRef={modalRef} title={isEditing ? 'Editar slider' : 'Agregar slider'} onSubmit={onModalSubmit} size='md'>
       <div className='row' id='sliders-container'>
         <input ref={idRef} type='hidden' />
-        <ImageFormGroup eRef={bgImageRef} label='Imagen' col='col-12' />
+        <div>
+          <ul class="nav nav-pills navtab-bg nav-justified">
+            <li class="nav-item">
+              <a href="#tab-image" data-bs-toggle="tab" aria-expanded="false" class="nav-link active">
+                Imagen
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="#tab-media" data-bs-toggle="tab" aria-expanded="true" class="nav-link">
+                Video
+              </a>
+            </li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane show active" id="tab-image">
+              <ImageFormGroup eRef={bgImageRef} label='Imagen' />
+            </div>
+            <div class="tab-pane" id="tab-media">
+              <InputFormGroup label='URL (Youtube)' type='link' onChange={e => setIframeSrc(getYTVideoId(e.target.value))} />
+              <iframe src={`https://www.youtube.com/embed/${iframeSrc}`} className='w-100 rounded border' style={{
+                aspectRatio: 21 / 9
+              }}/>
+            </div>
+          </div>
+        </div>
         <TextareaFormGroup eRef={nameRef} label='Titulo' col='col-12' rows={2} required />
         <TextareaFormGroup eRef={descriptionRef} label='Descripción' rows={3} />
         <InputFormGroup eRef={buttonTextRef} label='Texto botón primario' col='col-sm-6' required />

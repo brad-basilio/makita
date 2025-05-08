@@ -52,9 +52,17 @@ php artisan migrate
 ```
 
 1. Crear enlaces simbólicos:
+
+1.1. Windows:
 ```bash
 mklink /D "public\storage\images" "storage\app\images"
 mklink /D "public\cloud" "storage\app\images\repository"
+```
+
+1.2. Linux:
+```bash
+ln -s storage/app/images public/storage/images
+ln -s storage/app/images/repository public/cloud
 ```
 
 2. Establecer permisos:
