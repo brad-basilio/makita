@@ -54,13 +54,15 @@ const SliderJustImage = ({ data, items }) => {
                 onError={e => e.target.src = '/api/cover/thumbnail/null'}
               />
             ) : (
-              <iframe
-                src={`https://www.youtube.com/embed/${slider.bg_video}?autoplay=1&mute=1&controls=0&showinfo=0&rel=0&loop=1&playlist=${slider.bg_video}`}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                className="w-full aspect-[14/5]"
-                frameBorder="0"
-                title="YouTube video player"
-              />
+              <div className="relative w-full aspect-[14/5] overflow-hidden">
+                <iframe
+                  src={`https://www.youtube.com/embed/${slider.bg_video}?autoplay=1&mute=1&controls=0&showinfo=0&rel=0&loop=1&playlist=${slider.bg_video}`}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  className="absolute top-1/2 left-1/2 w-[300%] h-[300%] -translate-x-1/2 -translate-y-1/2"
+                  frameBorder="0"
+                  title="YouTube video player"
+                />
+              </div>
             )}
           </SwiperSlide>
         );
