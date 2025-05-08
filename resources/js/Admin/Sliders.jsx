@@ -26,12 +26,14 @@ const Sliders = () => {
   const nameRef = useRef()
   const descriptionRef = useRef()
   const bgImageRef = useRef()
+  const bgVideoRef = useRef()
   const buttonTextRef = useRef()
   const buttonLinkRef = useRef()
   const secondarybtnTextRef = useRef()
   const secondarybtnUrlRef = useRef()
 
   const [isEditing, setIsEditing] = useState(false)
+  const [activeTab, setActiveTab] = useState('image')
   const [iframeSrc, setIframeSrc] = useState('')
 
   const onModalOpen = (data) => {
@@ -41,8 +43,11 @@ const Sliders = () => {
     idRef.current.value = data?.id ?? ''
     nameRef.current.value = data?.name ?? ''
     descriptionRef.current.value = data?.description ?? ''
+    setActiveTab(data?.bg_type ?? 'image')
+    setIframeSrc(data?.bg_video ?? '')
     bgImageRef.current.value = null
     bgImageRef.image.src = `/storage/images/slider/${data?.bg_image}`
+    bgVideoRef.current.value = data?.bg_video ? `https://youtu.be/${data.bg_video}` : ''
     buttonTextRef.current.value = data?.button_text ?? ''
     buttonLinkRef.current.value = data?.button_link ?? ''
 
@@ -58,6 +63,8 @@ const Sliders = () => {
       description: descriptionRef.current.value,
       button_text: buttonTextRef.current.value,
       button_link: buttonLinkRef.current.value,
+      bg_type: activeTab,
+      bg_video: activeTab == 'video' ? iframeSrc : null
     }
 
     const formData = new FormData()
@@ -65,9 +72,13 @@ const Sliders = () => {
       formData.append(key, request[key])
     }
 
-    const file = bgImageRef.current.files[0]
-    if (file) {
-      formData.append('bg_image', file)
+    if (activeTab == 'image') {
+      const file = bgImageRef.current.files[0]
+      if (file) {
+        formData.append('bg_image', file)
+      }
+    } else {
+      formData.append('bg_image', null)
     }
 
     const result = await slidersRest.save(formData)
@@ -141,7 +152,13 @@ const Sliders = () => {
           caption: 'Imagen',
           width: '90px',
           cellTemplate: (container, { data }) => {
-            ReactAppend(container, <img src={`/storage/images/slider/${data.bg_image}`} style={{ width: '80px', height: '48px', objectFit: 'cover', objectPosition: 'center', borderRadius: '4px' }} onError={e => e.target.src = '/api/cover/thumbnail/null'} />)
+            ReactAppend(container, <img src={data.bg_type == 'image' ? `/storage/images/slider/${data.bg_image}` : `//img.youtube.com/vi/${data.bg_video}/mqdefault.jpg`}
+              style={{
+                width: '80px', height: '48px',
+                objectFit: 'cover', objectPosition: 'center',
+                borderRadius: '4px'
+              }}
+              onError={e => e.target.src = '/api/cover/thumbnail/null'} />)
           }
         },
         {
@@ -201,25 +218,25 @@ const Sliders = () => {
         <div>
           <ul class="nav nav-pills navtab-bg nav-justified">
             <li class="nav-item">
-              <a href="#tab-image" data-bs-toggle="tab" aria-expanded="false" class="nav-link active">
+              <a href="#tab-image" data-bs-toggle="tab" aria-expanded="false" class={`nav-link ${activeTab == 'image' && 'active'}`} onClick={() => setActiveTab('image')}>
                 Imagen
               </a>
             </li>
             <li class="nav-item">
-              <a href="#tab-media" data-bs-toggle="tab" aria-expanded="true" class="nav-link">
+              <a href="#tab-video" data-bs-toggle="tab" aria-expanded="true" class={`nav-link ${activeTab == 'video' && 'active'}`} onClick={() => setActiveTab('video')}>
                 Video
               </a>
             </li>
           </ul>
           <div class="tab-content">
-            <div class="tab-pane show active" id="tab-image">
+            <div class={`tab-pane ${activeTab == 'image' && 'show active'}`} id="tab-image">
               <ImageFormGroup eRef={bgImageRef} label='Imagen' />
             </div>
-            <div class="tab-pane" id="tab-media">
-              <InputFormGroup label='URL (Youtube)' type='link' onChange={e => setIframeSrc(getYTVideoId(e.target.value))} />
-              <iframe src={`https://www.youtube.com/embed/${iframeSrc}`} className='w-100 rounded border' style={{
+            <div class={`tab-pane ${activeTab == 'video' && 'show active'}`} id="tab-video">
+              <InputFormGroup eRef={bgVideoRef} label='URL (Youtube)' type='link' onChange={e => setIframeSrc(getYTVideoId(e.target.value))} />
+              <iframe src={`https://www.youtube.com/embed/${iframeSrc}`} className='w-100 rounded border mb-2' style={{
                 aspectRatio: 21 / 9
-              }}/>
+              }} />
             </div>
           </div>
         </div>
