@@ -196,17 +196,17 @@ export default function ShippingStep({
 
             const response = await processCulqiPayment(request);
 
-            if (response.data.status) {
-                setSale(response.data.sale);
-                setDelivery(response.data.delivery);
-                setCode(response.data.code);
+            if (response.status) {
+                setSale(response.sale);
+                setDelivery(response.delivery);
+                setCode(response.code);
                 setCart([]);
                 onContinue();
             } else {
                 Notify.add({
                     icon: "/assets/img/icon.svg",
                     title: "Error en el pago",
-                    body: response.data.message || "Pago rechazado",
+                    body: response.message || "Pago rechazado",
                     type: "danger",
                 });
             }

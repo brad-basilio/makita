@@ -177,7 +177,7 @@ class SaleController extends BasicController
         $body['department'] = $delivery?->data['departamento'] ?? null;
         $body['province'] = $delivery?->data['provincia'] ?? null;
         $body['district'] = $delivery?->data['distrito'] ?? null;
-        $body['ubigeo'] = $delivery?->ubigeo?? null;
+        $body['ubigeo'] = $delivery?->ubigeo ?? null;
 
         $body['code'] = Trace::getId();
         $body['status_id'] = 'e13a417d-a2f0-4f5f-93d8-462d57f13d3c';

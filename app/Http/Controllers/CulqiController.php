@@ -132,8 +132,10 @@ class CulqiController extends Controller
   private function createCharge($token, $sale): void
   {
     // Validate required sale data
-    if (!$sale->amount || !$sale->code || !$sale->email || !$sale->address || 
-        !$sale->name || !$sale->lastname || !$sale->phone) {
+    if (
+      !$sale->amount || !$sale->code || !$sale->email || !$sale->address ||
+      !$sale->name || !$sale->lastname || !$sale->phone
+    ) {
       throw new Exception('Missing required sale information');
     }
 

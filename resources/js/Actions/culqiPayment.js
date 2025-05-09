@@ -26,7 +26,7 @@ export const processCulqiPayment = (request) => {
                 amount: request.amount * 100, // Convertir a céntimos
                 order: `${orderNumber}`,
             });
-            //  console.log(window.Culqi.settings);
+            console.log(window.Culqi.settings);
 
             window.Culqi.options({
                 lang: "es",
