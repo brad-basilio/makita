@@ -34,6 +34,13 @@ class DeliveryTypeSeeder extends Seeder
                 'slug' => 'delivery-normal',
                 'description' => 'Lima: 3 a 4 días hábiles | Provincia: de 4 a 10 días hábiles',
 
+            ],
+            [
+
+                'name' => 'Delivery en Agencia',
+                'slug' => 'delivery-agencia',
+                'description' => 'Provincia: de 4 a 10 días hábiles',
+
             ]
         ];
 
