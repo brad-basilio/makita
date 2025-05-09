@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Select from "react-select";
 import Number2Currency from "../../../../Utils/Number2Currency";
 import ubigeoData from "../../../../../../storage/app/utils/ubigeo.json";
@@ -10,6 +10,9 @@ import InputForm from "./InputForm";
 import OptionCard from "./OptionCard";
 import { InfoIcon } from "lucide-react";
 import { Notify } from "sode-extend-react";
+import { useUbigeo } from "../../../../Utils/useUbigeo";
+import AsyncSelect from "react-select/async";
+import { debounce } from "lodash";
 
 export default function ShippingStep({
     cart,
@@ -25,6 +28,7 @@ export default function ShippingStep({
     user,
     setEnvio,
     envio,
+    ubigeos = [],
 }) {
     const [formData, setFormData] = useState({
         name: user?.name || "",
@@ -43,16 +47,24 @@ export default function ShippingStep({
     const [loading, setLoading] = useState(false);
     const [shippingOptions, setShippingOptions] = useState([]);
     const [selectedOption, setSelectedOption] = useState(null);
-
+    const [costsGet, setCostsGet] = useState(null);
+    /*useEffect(() => {
+        DeliveryPricesRest.getCosts().then((response) => {
+            setCostsGet(response.data);
+        });
+    }, []);*/
+    console.log(ubigeos);
+    // Funci
     // Preparar opciones para el select de ubigeo
-    const ubigeoOptions = ubigeoData.map((item) => ({
+    /*   const ubigeoOptions = ubigeoData.map((item) => ({
         value: item.reniec,
         label: `${item.distrito}, ${item.provincia}, ${item.departamento}`,
         data: item,
-    }));
+    }));*/
 
     const handleUbigeoChange = async (selected) => {
         if (!selected) return;
+        console.log("selected", selected);
 
         const { data } = selected;
         setFormData((prev) => ({
@@ -67,7 +79,7 @@ export default function ShippingStep({
         setLoading(true);
         try {
             const response = await DeliveryPricesRest.getShippingCost({
-                ubigeo: data.reniec,
+                ubigeo: data.inei,
             });
 
             const options = [];
@@ -77,6 +89,7 @@ export default function ShippingStep({
                     price: 0,
                     description: response.data.standard.description,
                     deliveryType: response.data.standard.type,
+                    characteristics: response.data.standard.characteristics,
                 });
 
                 if (response.data.express.price > 0) {
@@ -85,14 +98,24 @@ export default function ShippingStep({
                         price: response.data.express.price,
                         description: response.data.express.description,
                         deliveryType: response.data.express.type,
+                        characteristics: response.data.express.characteristics,
                     });
                 }
+            } else if (response.data.agency.price > 0) {
+                options.push({
+                    type: "agency",
+                    price: response.data.agency.price,
+                    description: response.data.agency.description,
+                    deliveryType: response.data.agency.type,
+                    characteristics: response.data.agency.characteristics,
+                });
             } else {
                 options.push({
                     type: "standard",
                     price: response.data.standard.price,
                     description: response.data.standard.description,
                     deliveryType: response.data.standard.type,
+                    characteristics: response.data.standard.characteristics,
                 });
             }
 
@@ -195,6 +218,42 @@ export default function ShippingStep({
         }
     };
 
+    const { ubigeoOptions, loadingUbigeo, searchUbigeo } = useUbigeo();
+
+    const loadOptions = useCallback(
+        debounce((inputValue, callback) => {
+            if (inputValue.length < 3) {
+                callback([]);
+                return;
+            }
+            console.log("inputValue", inputValue);
+
+            fetch(`/api/ubigeo/search?q=${encodeURIComponent(inputValue)}`)
+                .then((response) => {
+                    if (!response.ok) throw new Error("Error en la respuesta");
+                    return response.json();
+                })
+                .then((data) => {
+                    const options = data.map((item) => ({
+                        value: item.reniec,
+                        label: `${item.distrito}, ${item.provincia}, ${item.departamento}`,
+                        data: {
+                            inei: item.inei,
+                            reniec: item.reniec,
+                            departamento: item.departamento,
+                            provincia: item.provincia,
+                            distrito: item.distrito,
+                        },
+                    }));
+                    callback(options);
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                    callback([]);
+                });
+        }, 300),
+        []
+    );
     return (
         <div className="grid lg:grid-cols-5 gap-8">
             <div className="lg:col-span-3">
@@ -241,10 +300,68 @@ export default function ShippingStep({
                     />
 
                     <div className="form-group">
-                        <label className="form-label">
+                        <label
+                            className={`block text-sm 2xl:text-base mb-1 customtext-neutral-dark `}
+                        >
                             Ubicación de entrega
                         </label>
-                        <Select
+                        <AsyncSelect
+                            cacheOptions
+                            defaultOptions
+                            loadOptions={loadOptions}
+                            onChange={handleUbigeoChange}
+                            placeholder="Buscar distrito, provincia o departamento..."
+                            loadingMessage={() => "Buscando ubicaciones..."}
+                            noOptionsMessage={({ inputValue }) =>
+                                inputValue.length < 3
+                                    ? "Buscar distrito, provincia o departamento..."
+                                    : "No se encontraron resultados"
+                            }
+                            isLoading={loading}
+                            styles={{
+                                control: (base) => ({
+                                    ...base,
+                                    border: "1px solid transparent",
+                                    boxShadow: "none",
+                                    minHeight: "44px",
+                                    "&:hover": {
+                                        borderColor: "transparent",
+                                    },
+                                }),
+                                menu: (base) => ({
+                                    ...base,
+                                    zIndex: 9999,
+                                    marginTop: "4px",
+                                    borderRadius: "8px",
+                                    boxShadow: "none",
+                                }),
+                                option: (base) => ({
+                                    ...base,
+                                    color: "inherit",
+                                    "&:hover": {
+                                        color: "white",
+                                    },
+                                    backgroundColor: "inherit",
+                                    "&:hover": {
+                                        backgroundColor: "#f4f4f5",
+                                    },
+                                }),
+                            }}
+                            formatOptionLabel={({ data }) => (
+                                <div className="text-sm">
+                                    <div className="font-medium">
+                                        {data.distrito}
+                                    </div>
+                                    <div className="text-gray-500">
+                                        {data.provincia}, {data.departamento}
+                                    </div>
+                                </div>
+                            )}
+                            className="w-full px-4 py-1.5 border focus:bg-primary focus:text-white border-gray-300 rounded-xl  transition-all duration-300"
+                            menuPortalTarget={document.body}
+                            menuPosition="fixed"
+                        />
+                        {/*} <Select
                             options={ubigeoOptions}
                             onChange={handleUbigeoChange}
                             placeholder="Buscar distrito, provincia o departamento..."
@@ -263,15 +380,20 @@ export default function ShippingStep({
                                     </div>
                                 </div>
                             )}
+                            className={`w-full  px-4 py-1.5 border customtext-neutral-dark  border-neutral-ligth rounded-xl focus:ring-0 focus:outline-0   transition-all duration-300 `}
                             styles={{
-                                control: (base) => ({
+                                control: (base, state) => ({
                                     ...base,
-                                    border: "1px solid #e2e8f0",
-                                    borderRadius: "0.375rem",
-                                    padding: "2px",
+                                    border: "transparent",
+                                    borderColor: state.isFocused
+                                        ? "transparent"
+                                        : "transparent",
+                                    boxShadow: state.isFocused
+                                        ? "none"
+                                        : "none",
                                 }),
                             }}
-                        />
+                        />*/}
                     </div>
 
                     <InputForm
@@ -324,6 +446,8 @@ export default function ShippingStep({
                                                 ? "Envío Gratis"
                                                 : option.type === "express"
                                                 ? "Envío Express"
+                                                : option.type === "agency"
+                                                ? "Envío en Agencia"
                                                 : "Envío Estándar"
                                         }
                                         price={option.price}
@@ -338,22 +462,52 @@ export default function ShippingStep({
                                     />
                                 ))}
                             </div>
+                            {console.log(
+                                shippingOptions.find(
+                                    (o) => o.type === selectedOption
+                                )
+                            )}
 
-                            {selectedOption && (
-                                <div className="p-4 bg-blue-50 rounded-lg">
-                                    <p className="text-sm text-blue-800">
-                                        {
-                                            shippingOptions.find(
-                                                (o) => o.type === selectedOption
-                                            )?.description
-                                        }
-                                    </p>
-                                    {selectedOption === "express" && (
-                                        <p className="text-xs mt-2 text-blue-700">
-                                            Disponible para pedidos antes de las
-                                            1pm
-                                        </p>
-                                    )}
+                            {selectedOption && shippingOptions.length > 0 && (
+                                <div className="space-y-4 mt-4">
+                                    {shippingOptions
+                                        .find((o) => o.type === selectedOption)
+                                        ?.characteristics?.map(
+                                            (char, index) => (
+                                                <div
+                                                    key={`char-${index}`}
+                                                    className="flex items-start gap-4 bg-[#F7F9FB] p-4 rounded-xl"
+                                                >
+                                                    <div className="w-5 flex-shrink-0">
+                                                        <svg
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            width="20"
+                                                            height="20"
+                                                            viewBox="0 0 24 24"
+                                                            fill="none"
+                                                            stroke="currentColor"
+                                                            strokeWidth="2"
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            className="lucide lucide-info customtext-primary"
+                                                        >
+                                                            <circle
+                                                                cx="12"
+                                                                cy="12"
+                                                                r="10"
+                                                            />
+                                                            <path d="M12 16v-4" />
+                                                            <path d="M12 8h.01" />
+                                                        </svg>
+                                                    </div>
+                                                    <div className="flex-1">
+                                                        <p className="text-sm font-medium customtext-neutral-dark">
+                                                            {char}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            )
+                                        )}
                                 </div>
                             )}
                         </div>

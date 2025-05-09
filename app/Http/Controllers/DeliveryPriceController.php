@@ -20,6 +20,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\View;
 use Illuminate\Validation\Rules\File;
@@ -29,6 +30,7 @@ use SoDe\Extend\JSON;
 use SoDe\Extend\Response;
 use SoDe\Extend\Trace;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Str;
 
 class DeliveryPriceController extends BasicController
 {
@@ -40,7 +42,7 @@ class DeliveryPriceController extends BasicController
 
 
             $validated = $request->validate([
-                'ubigeo' => 'required|string|size:6' // Asumiendo nuevo parámetro desde el front
+                'ubigeo' => 'required|string' // Asumiendo nuevo parámetro desde el front
             ]);
 
             $ubigeo = $validated['ubigeo'];
@@ -70,7 +72,8 @@ class DeliveryPriceController extends BasicController
                 'standard' => [
                     'price' => $deliveryPrice->is_free ? 0 : $deliveryPrice->price,
                     'description' => $deliveryPrice->type->description ?? 'Entrega estándar',
-                    'type' => $deliveryPrice->type->name
+                    'type' => $deliveryPrice->type->name,
+                    'characteristics' => $deliveryPrice->type->characteristics,
                 ]
             ];
 
@@ -81,7 +84,19 @@ class DeliveryPriceController extends BasicController
                 $result['express'] = [
                     'price' => $deliveryPrice->express_price,
                     'description' => $expressType->description ?? 'Entrega express',
-                    'type' => $expressType->name
+                    'type' => $expressType->name,
+                    'characteristics' => $expressType->characteristics,
+                ];
+            }
+
+            if ($deliveryPrice->is_agency) {
+                $agencyType = TypeDelivery::where('slug', 'envio-agencia')->first();
+
+                $result['agency'] = [
+                    'price' => $deliveryPrice->agency_price,
+                    'description' => $agencyType->description ?? 'Entrega en Agencia',
+                    'type' => $agencyType->name,
+                    'characteristics' => $agencyType->characteristics,
                 ];
             }
 
@@ -93,5 +108,114 @@ class DeliveryPriceController extends BasicController
         });
 
         return response($response->toArray(), $response->status);
+    }
+
+    /* public function getPrices(Request $request): HttpResponse|ResponseFactory|RedirectResponse
+    {
+        $response = Response::simpleTryCatch(function (Response $response) use ($request) {
+
+            $result = DeliveryPrice::with(['type'])
+                ->get();
+
+            $response->data = $result;
+            $response->status = 200;
+            $response->message = 'Precios obtenidos correctamente';
+        }, function ($e) {
+            \Log::error('Error en getDeliveryPrice: ' . $e->getMessage());
+        });
+
+        return response($response->toArray(), $response->status);
+    }
+
+    public function getDeliveryPrice(Request $request)
+    {
+        $response = new Response();
+
+
+        try {
+            $validated = $request->validate(['ubigeo' => 'required']);
+            $ubigeo = $validated['ubigeo'];
+
+
+
+            $deliveryPrice = DeliveryPrice::with(['type'])
+                ->where('ubigeo', $ubigeo)
+                ->first();
+
+
+
+
+            if (!$deliveryPrice) {
+                throw new Exception('No hay cobertura');
+            }
+
+            $result = $this->structureResponse($deliveryPrice);
+
+            $response->data = $result;
+            $response->status = 200;
+        } catch (Exception $e) {
+            $response->status = 404;
+            $response->message = $e->getMessage();
+        }
+
+        return response()->json($response);
+    }
+
+    private function structureResponse(DeliveryPrice $deliveryPrice): array
+    {
+        $base = [
+            'is_free' => $deliveryPrice->is_free,
+            'standard' => [
+                'price' => $deliveryPrice->is_free ? 0 : $deliveryPrice->price,
+                'description' => $deliveryPrice->type->description,
+                'type' => $deliveryPrice->type->name,
+                'characteristics' => $deliveryPrice->type->characteristics,
+            ]
+        ];
+
+        if ($deliveryPrice->is_free && $deliveryPrice->expressType) {
+            $base['express'] = [
+                'price' => $deliveryPrice->express_price,
+                'description' => $deliveryPrice->expressType->description,
+                'type' => $deliveryPrice->expressType->name,
+                'characteristics' => $deliveryPrice->expressType->characteristics,
+            ];
+        }
+
+        return $base;
+    }*/
+
+
+
+    public function search(Request $request)
+    {
+        $search = $request->query('q');
+        // dump($search);
+
+
+        // Eliminar el dump() que rompe la respuesta JSON
+
+        return collect(config('app.ubigeo'))
+            ->filter(function ($item) use ($search) {
+
+                $searchLower = Str::lower($search);
+
+                // Verificar si el término de búsqueda está presente en el departamento, provincia o distrito en minúsclas
+
+                return Str::contains(Str::lower($item['departamento']), $searchLower) ||
+                    Str::contains(Str::lower($item['provincia']), $searchLower) ||
+                    Str::contains(Str::lower($item['distrito']), $searchLower);
+            })
+
+            ->values()
+            ->map(function ($item) {
+                return [
+                    'inei' => $item['inei'],
+                    //   'reniec' => $item['reniec'],
+                    'departamento' => $item['departamento'],
+                    'provincia' => $item['provincia'],
+                    'distrito' => $item['distrito']
+                ];
+            });
     }
 }

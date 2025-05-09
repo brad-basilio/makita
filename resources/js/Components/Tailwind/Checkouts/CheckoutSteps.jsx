@@ -3,7 +3,13 @@ import CartStep from "./Components/CartStep";
 import ShippingStep from "./Components/ShippingStep";
 import ConfirmationStep from "./Components/ConfirmationStep";
 
-export default function CheckoutSteps({ cart, setCart, user }) {
+export default function CheckoutSteps({
+    cart,
+    setCart,
+    user,
+    ubigeos = [],
+    items,
+}) {
     const [currentStep, setCurrentStep] = useState(1);
     // Calcular el precio total incluyendo IGV
     const totalPrice = cart.reduce((acc, item) => {
@@ -113,6 +119,7 @@ export default function CheckoutSteps({ cart, setCart, user }) {
 
                 {currentStep === 2 && (
                     <ShippingStep
+                        items={items}
                         setCode={setCode}
                         setDelivery={setDelivery}
                         cart={cart}
@@ -126,6 +133,7 @@ export default function CheckoutSteps({ cart, setCart, user }) {
                         igv={igv}
                         totalFinal={totalFinal}
                         user={user}
+                        ubigeos={ubigeos}
                     />
                 )}
 

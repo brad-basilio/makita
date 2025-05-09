@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { renderToString } from "react-dom/server";
 
 import DeliveryPricesRest from "@Rest/Admin/DeliveryPricesRest";
+import TypesDeliveryRest from "@Rest/Admin/TypesDeliveryRest";
 import CreateReactScript from "@Utils/CreateReactScript";
 import Swal from "sweetalert2";
 import BaseAdminto from "../Components/Adminto/Base";
@@ -16,24 +17,31 @@ import TextareaFormGroup from "../Components/Adminto/form/TextareaFormGroup";
 import Number2Currency from "../Utils/Number2Currency";
 
 const deliverypricesRest = new DeliveryPricesRest();
+const deliverypricesTypeRest = new TypesDeliveryRest();
 
 const DeliveryPricesType = ({ ubigeo = [] }) => {
     const gridRef = useRef();
+    const gridTypeRef = useRef();
     const modalRef = useRef();
-
+    const modalTypeRef = useRef();
+    const modalTypeFormRef = useRef();
     // Form elements ref
     const idRef = useRef();
     const ubigeoRef = useRef();
     const priceRef = useRef();
     const descriptionRef = useRef();
     const is_freeRef = useRef();
+    const is_agencyRef = useRef();
     const express_priceRef = useRef();
-
+    const agency_priceRef = useRef();
     const [isEditing, setIsEditing] = useState(false);
+    const [isEditingType, setIsEditingType] = useState(false);
     const [inHome, setInHome] = useState(false);
     const [isFreeChecked, setIsFreeChecked] = useState(false);
+    const [isAgencyChecked, setIsAgencyChecked] = useState(false);
 
     const onModalOpen = (data) => {
+        console.log(data);
         if (data?.id) setIsEditing(true);
         else setIsEditing(false);
 
@@ -48,8 +56,14 @@ const DeliveryPricesType = ({ ubigeo = [] }) => {
             setIsFreeChecked(data?.is_free ?? false);
         }
 
+        if (is_agencyRef.current) {
+            is_agencyRef.current.checked = data?.is_agency ?? false;
+            setIsAgencyChecked(data?.is_agency ?? false);
+        }
+
         priceRef.current.value = data?.price ?? 0;
         express_priceRef.current.value = data?.express_price ?? 0;
+        agency_priceRef.current.value = data?.agency_price ?? 0;
         descriptionRef.current.value = data?.description ?? "";
 
         $(modalRef.current).modal("show");
@@ -66,7 +80,9 @@ const DeliveryPricesType = ({ ubigeo = [] }) => {
             name: `${selected.distrito}, ${selected.departamento}`.toTitleCase(),
             price: inHome || isFreeChecked ? null : priceRef.current.value,
             is_free: is_freeRef.current.checked,
+            is_agency: is_agencyRef.current.checked,
             express_price: express_priceRef.current.value,
+            agency_price: agency_priceRef.current.value,
             description: descriptionRef.current.value,
             ubigeo: ubigeoRef.current.value,
         };
@@ -78,6 +94,83 @@ const DeliveryPricesType = ({ ubigeo = [] }) => {
         $(modalRef.current).modal("hide");
     };
 
+    const idTypeRef = useRef();
+    const nameTypeRef = useRef();
+    const descriptionTypeRef = useRef();
+    const [characteristics, setCharacteristics] = useState([{ value: "" }]);
+
+    // Manejo de características
+    const addCharacteristic = () => {
+        setCharacteristics([...characteristics, { value: "" }]);
+    };
+
+    const updateCharacteristic = (index, value) => {
+        const newCharacteristics = [...characteristics];
+        newCharacteristics[index].value = value;
+        setCharacteristics(newCharacteristics);
+    };
+
+    const removeCharacteristic = (index) => {
+        if (characteristics.length <= 1) return;
+        const newCharacteristics = characteristics.filter(
+            (_, i) => i !== index
+        );
+        setCharacteristics(newCharacteristics);
+    };
+    const onModalType = () => {
+        $(modalTypeRef.current).modal("show");
+    };
+
+    const onModalTypeOpen = (data) => {
+        if (data?.id) setIsEditingType(true);
+        else setIsEditingType(false);
+        idTypeRef.current.value = data?.id ?? "";
+
+        nameTypeRef.current.value = data?.name ?? "";
+        descriptionTypeRef.current.value = data?.description ?? "";
+
+        // Cargar características existentes
+        if (data?.characteristics && data.characteristics.length > 0) {
+            setCharacteristics(
+                data.characteristics.map((item) => ({ value: item }))
+            );
+        } else {
+            setCharacteristics([{ value: "" }]);
+        }
+
+        $(modalTypeFormRef.current).modal("show");
+    };
+
+    const onModalTypeSubmit = async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData();
+        formData.append("name", nameTypeRef.current.value);
+        formData.append("description", descriptionTypeRef.current.value);
+        // Si estamos editando, agregar el ID
+        if (isEditingType) {
+            formData.append("id", idTypeRef.current.value);
+        }
+
+        // Agregar características (filtrar vacías)
+        const nonEmptyCharacteristics = characteristics
+            .map((c) => c.value.trim())
+            .filter((c) => c.length > 0);
+        formData.append(
+            "characteristics",
+            JSON.stringify(nonEmptyCharacteristics)
+        );
+
+        // Enviar al backend
+        const result = await deliverypricesTypeRest.save(formData);
+        if (!result) return;
+
+        // Limpiar y cerrar
+        $(gridTypeRef.current).dxDataGrid("instance").refresh();
+        $(modalTypeFormRef.current).modal("hide");
+
+        setCharacteristics([{ value: "" }]);
+    };
     const onDeleteClicked = async (id) => {
         const { isConfirmed } = await Swal.fire({
             title: "Eliminar registro",
@@ -159,6 +252,7 @@ const DeliveryPricesType = ({ ubigeo = [] }) => {
                                     .refresh(),
                         },
                     });
+
                     container.unshift({
                         widget: "dxButton",
                         location: "after",
@@ -167,6 +261,16 @@ const DeliveryPricesType = ({ ubigeo = [] }) => {
                             text: "Nuevo registro",
                             hint: "Nuevo registro",
                             onClick: () => onModalOpen(),
+                        },
+                    });
+                    container.unshift({
+                        widget: "dxButton",
+                        location: "after",
+                        options: {
+                            icon: "refresh",
+                            text: "Actualizar datos de Delivery",
+                            hint: "Actualizar datos de Delivery",
+                            onClick: () => onModalType(),
                         },
                     });
                 }}
@@ -198,6 +302,13 @@ const DeliveryPricesType = ({ ubigeo = [] }) => {
                         },
                     },
                     {
+                        dataField: "is_free",
+                        caption: "¿Envío gratis?",
+                        cellTemplate: (container, { data }) => {
+                            container.html(data.is_free);
+                        },
+                    },
+                    {
                         dataField: "price",
                         caption: "Precio",
                         dataType: "number",
@@ -208,7 +319,7 @@ const DeliveryPricesType = ({ ubigeo = [] }) => {
                                     renderToString(
                                         <div className="row">
                                             {" "}
-                                            <span className="text-muted italic">
+                                            <span className="text-muted font-italic">
                                                 Delivery Gratis
                                             </span>
                                             <span className="text-muted">
@@ -271,7 +382,7 @@ const DeliveryPricesType = ({ ubigeo = [] }) => {
                         : "Agregar Costo de envío"
                 }
                 onSubmit={onModalSubmit}
-                size="sm"
+                size="md"
             >
                 <input ref={idRef} type="hidden" />
                 <div id="form-container" className="row">
@@ -299,15 +410,31 @@ const DeliveryPricesType = ({ ubigeo = [] }) => {
                         checked={inHome}
                         refreshable={[inHome]}
                     />*/}
-                    <SwitchFormGroup
-                        eRef={is_freeRef}
-                        label="¿Tiene delivery gratis?"
-                        col="col-12"
-                        onChange={(e) => setIsFreeChecked(e.target.checked)}
-                        checked={isFreeChecked}
-                        refreshable={[isFreeChecked]}
-                    />
-                    <div className="col-12" hidden={isFreeChecked}>
+                    <div className="row">
+                        <SwitchFormGroup
+                            eRef={is_freeRef}
+                            label="¿Delivery gratis?"
+                            col="col-6"
+                            onChange={(e) => setIsFreeChecked(e.target.checked)}
+                            checked={isFreeChecked}
+                            refreshable={[isFreeChecked]}
+                        />
+                        <SwitchFormGroup
+                            eRef={is_agencyRef}
+                            label="¿Recogo en agencia?"
+                            col="col-6"
+                            onChange={(e) => {
+                                setIsAgencyChecked(e.target.checked),
+                                    setIsFreeChecked(false);
+                            }}
+                            checked={isAgencyChecked}
+                            refreshable={[isAgencyChecked]}
+                        />
+                    </div>
+                    <div
+                        className="col-12"
+                        hidden={isFreeChecked || isAgencyChecked}
+                    >
                         <InputFormGroup
                             eRef={priceRef}
                             label="Costo de envío"
@@ -327,11 +454,185 @@ const DeliveryPricesType = ({ ubigeo = [] }) => {
                             required
                         />
                     </div>
+                    <div className="col-12" hidden={!isAgencyChecked}>
+                        <InputFormGroup
+                            eRef={agency_priceRef}
+                            label="Costo de envío a Agencia"
+                            col="col-12"
+                            type="number"
+                            step={0.01}
+                            required
+                        />
+                    </div>
                     <TextareaFormGroup
                         eRef={descriptionRef}
                         label="Descripción"
                         rows={2}
                     />
+                </div>
+            </Modal>
+
+            <Modal
+                modalRef={modalTypeRef}
+                title={"Tipos de Delivery"}
+                size="lg"
+            >
+                <Table
+                    gridRef={gridTypeRef}
+                    title="Tipos de Delivery"
+                    rest={deliverypricesTypeRest}
+                    toolBar={(container) => {
+                        container.unshift({
+                            widget: "dxButton",
+                            location: "after",
+                            options: {
+                                icon: "refresh",
+                                hint: "Refrescar tabla",
+                                onClick: () =>
+                                    $(gridTypeRef.current)
+                                        .dxDataGrid("instance")
+                                        .refresh(),
+                            },
+                        });
+                    }}
+                    columns={[
+                        {
+                            dataField: "id",
+                            caption: "ID",
+                            visible: false,
+                        },
+
+                        {
+                            dataField: "name",
+                            caption: "Nombre",
+                            width: "150px",
+                            allowExporting: false,
+                        },
+                        {
+                            dataField: "description",
+                            caption: "Descripción",
+                            width: "300px",
+                            cellTemplate: (container, { data }) => {
+                                container.html(
+                                    data.description ||
+                                        '<i class="text-muted">- Sin descripción -</i>'
+                                );
+                            },
+                        },
+                        {
+                            dataField: "characteristics",
+                            caption: "Caracteristicas",
+                            width: "200px",
+                            cellTemplate: (container, { data }) => {
+                                if (data.characteristics) {
+                                    data.characteristics.forEach((char) => {
+                                        container.css("text-overflow", "unset");
+                                        container.append(
+                                            renderToString(
+                                                <li className="d-flex gap-2">
+                                                    <i className="text-muted font-italic d-block">
+                                                        - {char}
+                                                    </i>
+                                                </li>
+                                            )
+                                        );
+                                    });
+                                } else {
+                                    ('<i class="text-muted">- Sin caracteristicas -</i>');
+                                }
+                            },
+                        },
+                        {
+                            caption: "Acciones",
+                            width: "50px",
+                            cellTemplate: (container, { data }) => {
+                                container.css("text-overflow", "unset");
+                                container.append(
+                                    DxButton({
+                                        className:
+                                            "btn btn-xs btn-soft-primary",
+                                        title: "Editar",
+                                        icon: "fa fa-pen",
+                                        onClick: () => onModalTypeOpen(data),
+                                    })
+                                );
+                            },
+                            allowFiltering: false,
+                            allowExporting: false,
+                        },
+                    ]}
+                />
+            </Modal>
+
+            <Modal
+                modalRef={modalTypeFormRef}
+                title={
+                    isEditing
+                        ? "Editar tipo de Delivery"
+                        : "Agregar tipo de Delivery"
+                }
+                onSubmit={onModalTypeSubmit}
+                size="sm"
+            >
+                <input ref={idTypeRef} type="hidden" />
+                <div id="form-container" className="row">
+                    <div className="col-12">
+                        <InputFormGroup
+                            eRef={nameTypeRef}
+                            label="Nombre"
+                            col="col-12"
+                            type="string"
+                            disabled
+                        />
+                        <InputFormGroup
+                            eRef={descriptionTypeRef}
+                            label="descripcion"
+                            col="col-12"
+                            type="string"
+                            required
+                        />
+                    </div>
+                    <div className="col-12">
+                        <div className="mb-3">
+                            <label className="form-label">
+                                Características
+                            </label>
+                            {characteristics.map((char, index) => (
+                                <div key={index} className="input-group mb-2">
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        placeholder="Ej: Egresada de la Universidad Nacional Federico Villarreal."
+                                        value={char.value}
+                                        onChange={(e) =>
+                                            updateCharacteristic(
+                                                index,
+                                                e.target.value
+                                            )
+                                        }
+                                    />
+                                    <button
+                                        type="button"
+                                        className="btn btn-outline-danger"
+                                        onClick={() =>
+                                            removeCharacteristic(index)
+                                        }
+                                        disabled={characteristics.length <= 1}
+                                    >
+                                        <i className="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            ))}
+                            <button
+                                type="button"
+                                className="btn btn-sm btn-outline-primary"
+                                onClick={addCharacteristic}
+                            >
+                                <i className="fas fa-plus me-1"></i> Agregar
+                                característica
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </Modal>
         </>

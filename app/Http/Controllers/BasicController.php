@@ -229,8 +229,6 @@ class BasicController extends Controller
     try {
 
       $body = $this->beforeSave($request);
-
-
       $snake_case = Text::camelToSnakeCase(str_replace('App\\Models\\', '', $this->model));
       if ($snake_case === "item_image") {
         $snake_case = 'item';

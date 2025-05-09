@@ -18,7 +18,7 @@ const OptionCard = ({ title, description, selected, onSelect, disabled }) => {
             </div>
             <div className="customtext-neutral-light">
                 <h4 className="text-sm ">{title}</h4>
-                {/*    <p className="text-xs">{description}</p> */}
+                <p className="text-xs">{description}</p>
             </div>
         </div>
     );

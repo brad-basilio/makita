@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
+use SoDe\Extend\File;
+use SoDe\Extend\JSON;
 
 return [
 
@@ -30,6 +32,7 @@ return [
     */
 
     'env' => env('APP_ENV', 'production'),
+    'ubigeo' => collect(JSON::parse(File::get(storage_path('app/utils/ubigeo.json')))),
 
     /*
     |--------------------------------------------------------------------------

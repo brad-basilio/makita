@@ -64,7 +64,7 @@ use App\Http\Controllers\ScrapController;
 |
 */
 
-
+Route::get('/ubigeo/search', [DeliveryPriceController::class, 'search'])->name('ubigeo.search');
 Route::post('/scrap', [ScrapController::class, 'scrap']);
 Route::post('/scrap-shopsimon', [ScrapController::class, 'scrapShopSimon']);
 
@@ -79,7 +79,7 @@ Route::post('/forgot-password-client', [AuthClientController::class, 'forgotPass
 Route::post('/reset-password-client', [AuthClientController::class, 'resetPassword']);
 
 Route::post('/delivery-prices', [DeliveryPriceController::class, 'getDeliveryPrice']);
-
+Route::post('/prices-type', [DeliveryPriceController::class, 'getPrices']);
 
 Route::get('/banners/media/{uuid}', [AdminBannerController::class, 'media']);
 Route::get('/sliders/media/{uuid}', [AdminSliderController::class, 'media']);

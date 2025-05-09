@@ -22,7 +22,9 @@ class DeliveryPrice extends Model
         'price',
         'ubigeo',
         'is_free',
+        'is_agency',
         'express_price',
+        'agency_price',
         'type_id'
     ];
 
@@ -30,15 +32,18 @@ class DeliveryPrice extends Model
         'data'
     ];
     protected $casts = [
-        'is_free' => 'boolean'
+        'is_free' => 'boolean',
+        'is_agency' => 'boolean'
     ];
 
     protected function getDataAttribute()
     {
         $ubigeo = collect(JSON::parse(File::get(storage_path('app/utils/ubigeo.json'))));
+
+        //$ubigeo = config('app.ubigeo');
         $filtered = $ubigeo->filter(function ($item) {
-            if (!isset($item['reniec'])) return false;
-            return $item['reniec'] == $this->ubigeo;
+            if (!isset($item['inei'])) return false;
+            return $item['inei'] == $this->ubigeo;
         })->first();
 
         return $filtered ?? null;

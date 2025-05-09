@@ -17,10 +17,15 @@ class TypeDelivery extends Model
     protected $keyType = 'string';
 
     protected $table = 'types_delivery';
-    protected $fillable = ['name', 'slug', 'description'];
+    protected $fillable = ['name', 'slug', 'description', 'characteristics'];
 
     public function deliveryPrices(): HasMany
     {
         return $this->hasMany(DeliveryPrice::class, 'type_id');
     }
+
+    protected $casts = [
+        'characteristics' => 'array',
+
+    ];
 }

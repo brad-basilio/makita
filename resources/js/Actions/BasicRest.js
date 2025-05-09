@@ -1,10 +1,12 @@
 import { Cookies, Fetch, Notify } from "sode-extend-react";
 
-let controller = new AbortController();
-
 class BasicRest {
     path = null;
     hasFiles = false;
+    controller = null;
+    constructor() {
+        this.controller = new AbortController();
+    }
 
     simpleGet = async (url, params) => {
         try {
@@ -26,9 +28,9 @@ class BasicRest {
     };
 
     paginate = async (params) => {
-        controller.abort("Nothing");
-        controller = new AbortController();
-        const signal = controller.signal;
+        this.controller.abort("Nothing");
+        this.controller = new AbortController();
+        const signal = this.controller.signal;
         const res = await fetch(`/api/${this.path}/paginate`, {
             method: "POST",
             headers: {

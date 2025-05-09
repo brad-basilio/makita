@@ -88,11 +88,37 @@ const System = ({
 
         switch (component) {
             case "top_bar":
-                return <TopBar data={data} which={value} items={getItems(itemsId)} cart={cart} setCart={setCart} isUser={session} />
+                return (
+                    <TopBar
+                        data={data}
+                        which={value}
+                        items={getItems(itemsId)}
+                        cart={cart}
+                        setCart={setCart}
+                        isUser={session}
+                    />
+                );
             case "header":
-                return <Header data={data} which={value} items={getItems(itemsId)} cart={cart} setCart={setCart} pages={pages} isUser={session} generals={generals} />
+                return (
+                    <Header
+                        data={data}
+                        which={value}
+                        items={getItems(itemsId)}
+                        cart={cart}
+                        setCart={setCart}
+                        pages={pages}
+                        isUser={session}
+                        generals={generals}
+                    />
+                );
             case "floating":
-                return <Floating data={data} which={value} items={getItems(itemsId)} />
+                return (
+                    <Floating
+                        data={data}
+                        which={value}
+                        items={getItems(itemsId)}
+                    />
+                );
             case "menu":
                 return (
                     <Menu
@@ -210,7 +236,18 @@ const System = ({
                     />
                 );
             case "checkout":
-                return <Checkout which={value} data={data} items={getItems(itemsId)} cart={cart} setCart={setCart} isUser={session} prefixes={jsons?.prefixes ?? []} />
+                return (
+                    <Checkout
+                        which={value}
+                        data={data}
+                        items={getItems(itemsId)}
+                        cart={cart}
+                        setCart={setCart}
+                        isUser={session}
+                        prefixes={jsons?.prefixes ?? []}
+                        ubigeos={jsons?.ubigeos ?? []}
+                    />
+                );
             case "contact":
                 return (
                     <Contact which={value} data={data} contacts={contacts} />
@@ -219,7 +256,13 @@ const System = ({
                 return <Faq which={value} data={data} faqs={faqs} />;
 
             case "thank":
-                return <ThankSimple which={value} data={data} item={filteredData.Sale} />;
+                return (
+                    <ThankSimple
+                        which={value}
+                        data={data}
+                        item={filteredData.Sale}
+                    />
+                );
             case "blog":
                 return (
                     <Blog
