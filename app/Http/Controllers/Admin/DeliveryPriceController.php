@@ -79,9 +79,9 @@ class DeliveryPriceController extends BasicController
                 $price = $row[2];
                 $price = $price === '' ? null : $price;
 
-                $is_free = strtolower($row[3]) === 'sí' ? 1 : 0;
+                $is_free = strtolower($row[3]) ===  'sí' || strtolower($row[3]) ===  'si' || $row[3] ===  1 ? 1 : 0;
                 $express_price = $row[4] === '' ? null : $row[4];
-                $is_agency = strtolower($row[5]) === 'sí' ? 1 : 0;
+                $is_agency = strtolower($row[5]) ===  'sí' || strtolower($row[5]) ===  'si' || $row[5] ===  1 ? 1 : 0;
                 $agency_price = $row[6] === '' ? null : $row[6];
 
 

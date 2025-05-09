@@ -303,9 +303,39 @@ const DeliveryPricesType = ({ ubigeo = [] }) => {
                     },
                     {
                         dataField: "is_free",
-                        caption: "¿Envío gratis?",
+                        dataType: "number",
+                        caption: "Tipo Envio",
                         cellTemplate: (container, { data }) => {
-                            container.html(data.is_free);
+                            if (data.is_free) {
+                                container.html(
+                                    renderToString(
+                                        <div className="d-flex gap-2">
+                                            <span className="text-muted font-italic">
+                                                Delivery Gratis
+                                            </span>
+                                            <span className="text-muted font-italic">
+                                                Delivery Express
+                                            </span>
+                                        </div>
+                                    )
+                                );
+                            } else if (data.is_agency) {
+                                container.html(
+                                    renderToString(
+                                        <span className="text-muted font-italic">
+                                            Recojo en agencia
+                                        </span>
+                                    )
+                                );
+                            } else {
+                                container.html(
+                                    renderToString(
+                                        <span className="text-muted font-italic">
+                                            Delivery
+                                        </span>
+                                    )
+                                );
+                            }
                         },
                     },
                     {
