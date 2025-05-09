@@ -1,4 +1,5 @@
 import { Fetch, Notify } from "sode-extend-react";
+import Global from "../Utils/Global";
 
 function generarNumeroOrdenConPrefijoYFecha() {
     let numeroOrden = "";
@@ -17,15 +18,15 @@ export const processCulqiPayment = (request) => {
             );
             console.log(orderNumber);
             // ✅ Configurar Culqi
-            window.Culqi.publicKey = "pk_test_f4d42a7b5073e8df"; // Reemplaza con tu clave pública
+            window.Culqi.publicKey = Global.CULQI_PUBLIC_KEY; // Reemplaza con tu clave pública
             window.Culqi.settings({
-                title: "Sala Fabulosa",
+                title: Global.APP_NAME,
                 email: request.email,
                 currency: "PEN",
                 amount: request.amount * 100, // Convertir a céntimos
                 order: `${orderNumber}`,
             });
-            console.log(window.Culqi.settings);
+            //  console.log(window.Culqi.settings);
 
             window.Culqi.options({
                 lang: "es",
@@ -39,9 +40,9 @@ export const processCulqiPayment = (request) => {
                     cuotealo: true,
                 },
                 style: {
-                    logo: "/assets/resources/logo.png",
-                    bannerColor: "#311609",
-                    buttonBackground: "#311609",
+                    logo: Global.APP_URL + "/assets/resources/logo.png",
+                    bannerColor: Global.APP_COLOR_PRIMARY,
+                    buttonBackground: Global.APP_COLOR_PRIMARY,
                 },
             });
 

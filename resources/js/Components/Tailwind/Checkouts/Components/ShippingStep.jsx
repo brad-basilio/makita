@@ -67,12 +67,13 @@ export default function ShippingStep({
         console.log("selected", selected);
 
         const { data } = selected;
+
         setFormData((prev) => ({
             ...prev,
             department: data.departamento,
             province: data.provincia,
             district: data.distrito,
-            ubigeo: data.reniec,
+            ubigeo: data.inei,
         }));
 
         // Consultar precios de envío
@@ -160,6 +161,7 @@ export default function ShippingStep({
         const missingFields = requiredFields.filter(
             (field) => !formData[field]
         );
+        console.log(missingFields);
 
         if (missingFields.length > 0) {
             Notify.add({

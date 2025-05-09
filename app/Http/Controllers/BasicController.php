@@ -110,7 +110,10 @@ class BasicController extends Controller
         'APP_ENV' => env('APP_ENV'),
         'APP_CORRELATIVE' => env('APP_CORRELATIVE'),
         'APP_PROTOCOL' => env('APP_PROTOCOL', 'https'),
-        'GMAPS_API_KEY' => env('GMAPS_API_KEY')
+        'GMAPS_API_KEY' => env('GMAPS_API_KEY'),
+        'APP_COLOR_PRIMARY' => env('APP_COLOR_PRIMARY', '#000000'),
+        'CULQI_PUBLIC_KEY' => env('CULQI_PUBLIC_KEY'),
+        'CULQI_API' => env('CULQI_API'),
       ],
     ];
     $reactViewProperties = $this->setReactViewProperties($request);
