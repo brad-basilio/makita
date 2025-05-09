@@ -48,6 +48,7 @@ use App\Http\Controllers\ItemImportController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\MercadoPagoController;
+use App\Http\Controllers\PersonController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\SubscriptionController;
@@ -128,6 +129,8 @@ Route::get('/mercadopago/pending', [MercadoPagoController::class, 'handlePending
 Route::post('/orders', [MercadoPagoController::class, 'getOrder']);
 
 Route::post('/sales', [SaleController::class, 'save']);
+
+Route::get('/person/{dni}', [PersonController::class, 'find']);
 
 Route::middleware('auth')->group(function () {
   Route::delete('logout', [AuthController::class, 'destroy'])

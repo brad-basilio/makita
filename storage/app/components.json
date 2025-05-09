@@ -204,7 +204,7 @@
                 "image": "slider-just-image.png",
                 "using": {
                     "model": "Slider",
-                    "fields": ["bg_image", "button_link"]
+                    "fields": ["bg_type", "bg_image", "bg_video", "button_link"]
                 }
             },
             {
