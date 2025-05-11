@@ -260,11 +260,22 @@ class BasicController extends Controller
 
       $table = (new $this->model)->getTable();
       if (Schema::hasColumn($table, 'slug')) {
-        $slug = Str::slug($jpa->name);
-        $slugExists = $this->model::where('slug', $slug)->where('id', '<>', $jpa->id)->exists();
-        if ($slugExists) {
-          $slug = $slug . '-' . Crypto::short();
+        // Generar el slug base usando el nombre del producto
+        $slugBase = $jpa->name;
+        // Si existe el campo 'color' y tiene valor, añadirlo al slug
+        if (Schema::hasColumn($table, 'color') && !empty($jpa->color)) {
+            $slugBase .= '-' . $jpa->color;
         }
+        $slug = Str::slug($slugBase);
+        // Verificar si el slug ya existe para otro registro
+        $slugExists = $this->model::where('slug', $slug)
+            ->where('id', '<>', $jpa->id)
+            ->exists();
+        // Si existe, añadir un identificador único corto
+        if ($slugExists) {
+            $slug = $slug . '-' . Crypto::short();
+        }
+        // Actualizar el slug
         $jpa->update(['slug' => $slug]);
       }
 

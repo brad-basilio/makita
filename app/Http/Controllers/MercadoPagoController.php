@@ -20,13 +20,13 @@ class MercadoPagoController extends Controller
         try {
             // Configurar SDK de MercadoPago
             MercadoPagoConfig::setAccessToken(config('services.mercadopago.access_token'));
-
+            
             // Generar número de orden
             $orderNumber = $this->generateOrderNumber();
-
+            
             // Crear registro de venta con estado "pendiente" ANTES de crear la preferencia
             $saleStatusPendiente = SaleStatus::getByName('Pendiente');
-
+           
             $sale = Sale::create([
                 'code' => $orderNumber,
                 'user_id' => $request->user_id,
@@ -53,7 +53,7 @@ class MercadoPagoController extends Controller
                 'document' => $request->document,
                 'businessName' => $request->businessName,
             ]);
-
+            
              // Registrar detalles de la venta (sin afectar stock aún)
             foreach ($request->cart as $item) {
                 $itemId = is_array($item) ? $item['id'] ?? null : $item->id ?? null;
@@ -71,7 +71,7 @@ class MercadoPagoController extends Controller
                     'colors' => $color,
                 ]);
             }
-
+            
             // Configurar items para MercadoPago
             $items = [];
 
@@ -84,7 +84,7 @@ class MercadoPagoController extends Controller
                     'currency_id' => 'PEN',
                 ];
             }
-
+            
             // Agregar envío si existe
             if ($request->delivery > 0) {
                 $items[] = [
@@ -95,7 +95,7 @@ class MercadoPagoController extends Controller
                     'currency_id' => 'PEN',
                 ];
             }
-
+            
             // Configurar preferencia
             $preferenceData = [
                 'items' => $items,
@@ -135,13 +135,13 @@ class MercadoPagoController extends Controller
                 'auto_return' => 'approved',
                 'external_reference' => $orderNumber,
             ];
-
+            
             // Crear preferencia
             $client = new PreferenceClient();
-
+           
             // Guardar la preferencia
             $preference = $client->create($preferenceData);
-
+            
             if (!$preference || !isset($preference->id)) {
                 throw new \Exception('No se pudo crear la preferencia de pago');
             }
@@ -155,7 +155,17 @@ class MercadoPagoController extends Controller
                 'cart' => $request->cart,
                 'sale_id' => $sale->id,
             ]);
-        } catch (\Exception $e) {
+        }catch (MPApiException $e) {
+            if (isset($sale)) {
+                $sale->delete();
+            }
+            return response()->json([
+                'message' => 'Error en la API de MercadoPago',
+                'status' => false,
+                'error' => $e->getApiResponse()->getContent(),
+                'details' => $e->getMessage()
+            ], 400);
+        }catch (\Exception $e) {
             if (isset($sale)) {
                 $sale->delete();
             }
@@ -164,6 +174,7 @@ class MercadoPagoController extends Controller
                     'message' => 'Error al crear la preferencia de pago',
                     'status' => false,
                     'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
                 ],
                 400,
             );

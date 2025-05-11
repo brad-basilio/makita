@@ -536,7 +536,7 @@ export default function ProductDetailSF({ item, data, setCart, cart }) {
                             <div
                                 className={`space-y-2 ${
                                     !isExpanded
-                                        ? "max-h-[400px] overflow-hidden"
+                                        ? "max-h-none overflow-hidden"
                                         : ""
                                 }`}
                             >

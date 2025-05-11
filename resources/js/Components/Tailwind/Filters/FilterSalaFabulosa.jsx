@@ -23,7 +23,7 @@ const itemsRest = new ItemsRest();
 //const FilterSalaFabulosa = ({ items, data, categories, brands, prices, cart, setCart }) => {
 const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
     const { collections, categories, brands, priceRanges } = filteredData;
-    console.log(collections);
+    console.log(filteredData);
     const [sections, setSections] = useState({
         collection: true,
         marca: true,

@@ -190,8 +190,14 @@ class SystemController extends BasicController
                 $class = 'App\\Models\\' . $model;
                 $query = $class::select($using['fields'] ?? ['*']);
                 
-                if ($model === 'Category') {
-                    $query->where('status', 1)->where('visible', 1);
+                $table = (new $class)->getTable();
+                
+                if (Schema::hasColumn($table, 'visible')) {
+                    $query->where('visible', true);
+                }
+
+                if (Schema::hasColumn($table, 'status')) {
+                    $query->where('status', true);
                 }
                 
                 if (isset($using['relations'])) {

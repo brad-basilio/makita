@@ -28,7 +28,7 @@ const CartModal = ({ data, cart, setCart, modalOpen, setModalOpen }) => {
             isOpen={modalOpen}
             onRequestClose={() => setModalOpen(false)}
             contentLabel="Términos y condiciones"
-            className="absolute right-0 bg-white p-4 rounded-l-2xl shadow-lg w-[95%] max-w-md outline-none h-screen"
+            className="absolute right-0 bg-white p-4 rounded-l-2xl shadow-lg w-[95%] max-w-md outline-none h-[90vh] sm:h-screen"
             overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-50"
         >
             <div className="flex flex-col font-font-general">
@@ -38,7 +38,7 @@ const CartModal = ({ data, cart, setCart, modalOpen, setModalOpen }) => {
                         <i className="mdi mdi-close text-xl"></i>
                     </button>
                 </div>
-                <div className="overflow-y-scroll h-[calc(100vh-160px)] scroll__carrito">
+                <div className="overflow-y-scroll h-[calc(90vh-160px)] sm:h-[calc(100vh-160px)] scroll__carrito">
                     <table className="w-full font-font-general">
                         <tbody id="itemsCarrito">
                             {cart.map((item, index) => {
