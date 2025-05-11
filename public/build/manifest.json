@@ -25,8 +25,8 @@
       "_main-BvVILmTO.js"
     ]
   },
-  "_Base-DIdRXgNB.js": {
-    "file": "assets/Base-DIdRXgNB.js",
+  "_Base-Cl_qy_ks.js": {
+    "file": "assets/Base-Cl_qy_ks.js",
     "name": "Base",
     "imports": [
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
@@ -34,15 +34,15 @@
       "resources/js/Components/Tailwind/Base.jsx"
     ]
   },
-  "_Base-T5Pm3uPi.js": {
-    "file": "assets/Base-T5Pm3uPi.js",
+  "_Base-eMlfXmua.js": {
+    "file": "assets/Base-eMlfXmua.js",
     "name": "Base",
     "imports": [
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
       "_index-BH53Isel.js",
       "_Global-ErywZRdd.js",
       "_tippy-react.esm-BWiGTO87.js",
-      "_Logout-LH3dzJpV.js",
+      "_Logout-7s5dsuEK.js",
       "_MenuItemContainer-BwGvRAHs.js",
       "_main-BvVILmTO.js"
     ],
@@ -239,8 +239,8 @@
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx"
     ]
   },
-  "_Logout-LH3dzJpV.js": {
-    "file": "assets/Logout-LH3dzJpV.js",
+  "_Logout-7s5dsuEK.js": {
+    "file": "assets/Logout-7s5dsuEK.js",
     "name": "Logout",
     "imports": [
       "_main-BvVILmTO.js"
@@ -940,7 +940,7 @@
     "isEntry": true
   },
   "resources/js/About.jsx": {
-    "file": "assets/About-Bovs6ClA.js",
+    "file": "assets/About-Cqi4d2Eo.js",
     "name": "About",
     "src": "resources/js/About.jsx",
     "isEntry": true,
@@ -949,7 +949,7 @@
       "_index-BH53Isel.js",
       "_CreateReactScript-Bq8gMpEh.js",
       "resources/js/Utils/ReactAppend.jsx",
-      "_Base-DIdRXgNB.js",
+      "_Base-Cl_qy_ks.js",
       "_YouTube.esm-CalHMD6O.js",
       "_em-DRiSFGEW.js",
       "_Weare-DzhH2Vjy.js",
@@ -983,13 +983,13 @@
     ]
   },
   "resources/js/Admin/About.jsx": {
-    "file": "assets/About-BHXOZPkk.js",
+    "file": "assets/About-BR8OiN1S.js",
     "name": "About",
     "src": "resources/js/Admin/About.jsx",
     "isEntry": true,
     "imports": [
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
-      "_Base-T5Pm3uPi.js",
+      "_Base-eMlfXmua.js",
       "_SwitchFormGroup-DUGhyqoj.js",
       "_index-BH53Isel.js",
       "resources/js/Utils/ReactAppend.jsx",
@@ -1011,7 +1011,7 @@
       "_tippy-react.esm-BWiGTO87.js",
       "_index-rimy3MAc.js",
       "_index-fNjTmf9T.js",
-      "_Logout-LH3dzJpV.js",
+      "_Logout-7s5dsuEK.js",
       "_main-BvVILmTO.js",
       "____vite-browser-external_commonjs-proxy-0zb4Agf2.js",
       "_MenuItemContainer-BwGvRAHs.js",
@@ -1027,7 +1027,7 @@
     ]
   },
   "resources/js/Admin/Account.jsx": {
-    "file": "assets/Account-Bhkrsv2_.js",
+    "file": "assets/Account-CKHEd69H.js",
     "name": "Account",
     "src": "resources/js/Admin/Account.jsx",
     "isEntry": true,
@@ -1036,12 +1036,12 @@
       "_index-BH53Isel.js",
       "resources/js/Utils/ReactAppend.jsx",
       "_JSEncrypt-BF8AmNNu.js",
-      "_Base-T5Pm3uPi.js",
+      "_Base-eMlfXmua.js",
       "_CreateReactScript-Bq8gMpEh.js",
       "_main-BvVILmTO.js",
       "_InputFormGroup-D5I6zpZc.js",
       "_Global-ErywZRdd.js",
-      "_Logout-LH3dzJpV.js",
+      "_Logout-7s5dsuEK.js",
       "_index-yBjzXJbu.js",
       "_index-fNjTmf9T.js",
       "_tippy-react.esm-BWiGTO87.js",
@@ -1058,13 +1058,13 @@
     ]
   },
   "resources/js/Admin/Banners.jsx": {
-    "file": "assets/Banners-Cnj8B__w.js",
+    "file": "assets/Banners-C0ayITWf.js",
     "name": "Banners",
     "src": "resources/js/Admin/Banners.jsx",
     "isEntry": true,
     "imports": [
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
-      "_Base-T5Pm3uPi.js",
+      "_Base-eMlfXmua.js",
       "_TextareaFormGroup-CdwdsTk2.js",
       "_index-BH53Isel.js",
       "resources/js/Utils/ReactAppend.jsx",
@@ -1084,7 +1084,7 @@
       "_tippy-react.esm-BWiGTO87.js",
       "_index-rimy3MAc.js",
       "_index-fNjTmf9T.js",
-      "_Logout-LH3dzJpV.js",
+      "_Logout-7s5dsuEK.js",
       "_main-BvVILmTO.js",
       "____vite-browser-external_commonjs-proxy-0zb4Agf2.js",
       "_MenuItemContainer-BwGvRAHs.js",
@@ -1098,13 +1098,13 @@
     ]
   },
   "resources/js/Admin/Brands.jsx": {
-    "file": "assets/Brands-COUo2XDD.js",
+    "file": "assets/Brands-mxuyazxe.js",
     "name": "Brands",
     "src": "resources/js/Admin/Brands.jsx",
     "isEntry": true,
     "imports": [
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
-      "_Base-T5Pm3uPi.js",
+      "_Base-eMlfXmua.js",
       "_SwitchFormGroup-DUGhyqoj.js",
       "_TextareaFormGroup-CdwdsTk2.js",
       "_index-BH53Isel.js",
@@ -1123,7 +1123,7 @@
       "_tippy-react.esm-BWiGTO87.js",
       "_index-rimy3MAc.js",
       "_index-fNjTmf9T.js",
-      "_Logout-LH3dzJpV.js",
+      "_Logout-7s5dsuEK.js",
       "_main-BvVILmTO.js",
       "____vite-browser-external_commonjs-proxy-0zb4Agf2.js",
       "_MenuItemContainer-BwGvRAHs.js",
@@ -1137,13 +1137,13 @@
     ]
   },
   "resources/js/Admin/Categories.jsx": {
-    "file": "assets/Categories-DwPrqROT.js",
+    "file": "assets/Categories-B3Na4JYX.js",
     "name": "Categories",
     "src": "resources/js/Admin/Categories.jsx",
     "isEntry": true,
     "imports": [
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
-      "_Base-T5Pm3uPi.js",
+      "_Base-eMlfXmua.js",
       "_SwitchFormGroup-DUGhyqoj.js",
       "_TextareaFormGroup-CdwdsTk2.js",
       "_index-BH53Isel.js",
@@ -1161,7 +1161,7 @@
       "_tippy-react.esm-BWiGTO87.js",
       "_index-rimy3MAc.js",
       "_index-fNjTmf9T.js",
-      "_Logout-LH3dzJpV.js",
+      "_Logout-7s5dsuEK.js",
       "_main-BvVILmTO.js",
       "____vite-browser-external_commonjs-proxy-0zb4Agf2.js",
       "_MenuItemContainer-BwGvRAHs.js",
@@ -1175,13 +1175,13 @@
     ]
   },
   "resources/js/Admin/Collections.jsx": {
-    "file": "assets/Collections-amZsg7S1.js",
+    "file": "assets/Collections-C46MvAS8.js",
     "name": "Collections",
     "src": "resources/js/Admin/Collections.jsx",
     "isEntry": true,
     "imports": [
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
-      "_Base-T5Pm3uPi.js",
+      "_Base-eMlfXmua.js",
       "_SwitchFormGroup-DUGhyqoj.js",
       "_TextareaFormGroup-CdwdsTk2.js",
       "_index-BH53Isel.js",
@@ -1200,7 +1200,7 @@
       "_tippy-react.esm-BWiGTO87.js",
       "_index-rimy3MAc.js",
       "_index-fNjTmf9T.js",
-      "_Logout-LH3dzJpV.js",
+      "_Logout-7s5dsuEK.js",
       "_main-BvVILmTO.js",
       "____vite-browser-external_commonjs-proxy-0zb4Agf2.js",
       "_MenuItemContainer-BwGvRAHs.js",
@@ -1214,13 +1214,13 @@
     ]
   },
   "resources/js/Admin/Combos.jsx": {
-    "file": "assets/Combos-Dqt3GQCV.js",
+    "file": "assets/Combos-B_g0rEyK.js",
     "name": "Combos",
     "src": "resources/js/Admin/Combos.jsx",
     "isEntry": true,
     "imports": [
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
-      "_Base-T5Pm3uPi.js",
+      "_Base-eMlfXmua.js",
       "_SwitchFormGroup-DUGhyqoj.js",
       "_index-BH53Isel.js",
       "resources/js/Utils/ReactAppend.jsx",
@@ -1241,7 +1241,7 @@
       "_tippy-react.esm-BWiGTO87.js",
       "_index-rimy3MAc.js",
       "_index-fNjTmf9T.js",
-      "_Logout-LH3dzJpV.js",
+      "_Logout-7s5dsuEK.js",
       "_MenuItemContainer-BwGvRAHs.js",
       "_index.esm-CveLAcri.js",
       "____vite-browser-external_commonjs-proxy-0zb4Agf2.js",
@@ -1269,7 +1269,7 @@
     ]
   },
   "resources/js/Admin/DeliveryPrices.jsx": {
-    "file": "assets/DeliveryPrices-BmS0f1qI.js",
+    "file": "assets/DeliveryPrices-C3aVvtji.js",
     "name": "DeliveryPrices",
     "src": "resources/js/Admin/DeliveryPrices.jsx",
     "isEntry": true,
@@ -1281,7 +1281,7 @@
       "_DeliveryPricesRest-CEiqxoNc.js",
       "_CreateReactScript-Bq8gMpEh.js",
       "resources/js/Components/Tailwind/Components/ProductCard.jsx",
-      "_Base-T5Pm3uPi.js",
+      "_Base-eMlfXmua.js",
       "_DxButton-CsjWvhyj.js",
       "_Modal-CIqmjseY.js",
       "_Table-CP679pea.js",
@@ -1301,7 +1301,7 @@
       "_LaravelSession-Dz9cpV3l.js",
       "_tippy-react.esm-BWiGTO87.js",
       "_index-rimy3MAc.js",
-      "_Logout-LH3dzJpV.js",
+      "_Logout-7s5dsuEK.js",
       "_MenuItemContainer-BwGvRAHs.js"
     ],
     "css": [
@@ -1310,7 +1310,7 @@
     ]
   },
   "resources/js/Admin/DeliveryPricesType.jsx": {
-    "file": "assets/DeliveryPricesType-O5EJ5C7O.js",
+    "file": "assets/DeliveryPricesType-D2S6gxXb.js",
     "name": "DeliveryPricesType",
     "src": "resources/js/Admin/DeliveryPricesType.jsx",
     "isEntry": true,
@@ -1324,7 +1324,7 @@
       "_BasicRest-C_0LADdJ.js",
       "_CreateReactScript-Bq8gMpEh.js",
       "resources/js/Components/Tailwind/Components/ProductCard.jsx",
-      "_Base-T5Pm3uPi.js",
+      "_Base-eMlfXmua.js",
       "_DxButton-CsjWvhyj.js",
       "_Modal-CIqmjseY.js",
       "_Table-CP679pea.js",
@@ -1342,7 +1342,7 @@
       "_LaravelSession-Dz9cpV3l.js",
       "_tippy-react.esm-BWiGTO87.js",
       "_index-rimy3MAc.js",
-      "_Logout-LH3dzJpV.js",
+      "_Logout-7s5dsuEK.js",
       "_MenuItemContainer-BwGvRAHs.js"
     ],
     "css": [
@@ -1351,7 +1351,7 @@
     ]
   },
   "resources/js/Admin/DeliveryTypes.jsx": {
-    "file": "assets/DeliveryTypes-Buhs6fRv.js",
+    "file": "assets/DeliveryTypes-U1GIY2J1.js",
     "name": "DeliveryTypes",
     "src": "resources/js/Admin/DeliveryTypes.jsx",
     "isEntry": true,
@@ -1362,7 +1362,7 @@
       "_server.browser-Bf4gQIc7.js",
       "_CreateReactScript-Bq8gMpEh.js",
       "resources/js/Components/Tailwind/Components/ProductCard.jsx",
-      "_Base-T5Pm3uPi.js",
+      "_Base-eMlfXmua.js",
       "_DxButton-CsjWvhyj.js",
       "_Modal-CIqmjseY.js",
       "_Table-CP679pea.js",
@@ -1377,7 +1377,7 @@
       "_LaravelSession-Dz9cpV3l.js",
       "_tippy-react.esm-BWiGTO87.js",
       "_index-rimy3MAc.js",
-      "_Logout-LH3dzJpV.js",
+      "_Logout-7s5dsuEK.js",
       "_MenuItemContainer-BwGvRAHs.js"
     ],
     "css": [
@@ -1386,13 +1386,13 @@
     ]
   },
   "resources/js/Admin/Faqs.jsx": {
-    "file": "assets/Faqs-BuPIKorX.js",
+    "file": "assets/Faqs-BQe8IFu7.js",
     "name": "Faqs",
     "src": "resources/js/Admin/Faqs.jsx",
     "isEntry": true,
     "imports": [
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
-      "_Base-T5Pm3uPi.js",
+      "_Base-eMlfXmua.js",
       "_index-BH53Isel.js",
       "_TextareaFormGroup-CdwdsTk2.js",
       "resources/js/Utils/ReactAppend.jsx",
@@ -1408,7 +1408,7 @@
       "_tippy-react.esm-BWiGTO87.js",
       "_index-rimy3MAc.js",
       "_index-fNjTmf9T.js",
-      "_Logout-LH3dzJpV.js",
+      "_Logout-7s5dsuEK.js",
       "_main-BvVILmTO.js",
       "____vite-browser-external_commonjs-proxy-0zb4Agf2.js",
       "_MenuItemContainer-BwGvRAHs.js",
@@ -1422,7 +1422,7 @@
     ]
   },
   "resources/js/Admin/Gallery.jsx": {
-    "file": "assets/Gallery-ykyowAln.js",
+    "file": "assets/Gallery-DEofOTYl.js",
     "name": "Gallery",
     "src": "resources/js/Admin/Gallery.jsx",
     "isEntry": true,
@@ -1430,7 +1430,7 @@
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
       "_index-BH53Isel.js",
       "resources/js/Utils/ReactAppend.jsx",
-      "_Base-T5Pm3uPi.js",
+      "_Base-eMlfXmua.js",
       "_CreateReactScript-Bq8gMpEh.js",
       "_GalleryRest-CQyebKr5.js",
       "_index-yBjzXJbu.js",
@@ -1438,7 +1438,7 @@
       "_Global-ErywZRdd.js",
       "_tippy-react.esm-BWiGTO87.js",
       "_index-rimy3MAc.js",
-      "_Logout-LH3dzJpV.js",
+      "_Logout-7s5dsuEK.js",
       "_main-BvVILmTO.js",
       "____vite-browser-external_commonjs-proxy-0zb4Agf2.js",
       "_MenuItemContainer-BwGvRAHs.js",
@@ -1453,7 +1453,7 @@
     ]
   },
   "resources/js/Admin/Generals.jsx": {
-    "file": "assets/Generals-5asnXJ1u.js",
+    "file": "assets/Generals-BShQ_chc.js",
     "name": "Generals",
     "src": "resources/js/Admin/Generals.jsx",
     "isEntry": true,
@@ -1461,7 +1461,7 @@
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
       "_index-BH53Isel.js",
       "_esm-hESa1MbP.js",
-      "_Base-T5Pm3uPi.js",
+      "_Base-eMlfXmua.js",
       "_BasicRest-C_0LADdJ.js",
       "_CreateReactScript-Bq8gMpEh.js",
       "resources/js/Utils/ReactAppend.jsx",
@@ -1473,7 +1473,7 @@
       "_index-yBjzXJbu.js",
       "_index-rimy3MAc.js",
       "_index-fNjTmf9T.js",
-      "_Logout-LH3dzJpV.js",
+      "_Logout-7s5dsuEK.js",
       "_main-BvVILmTO.js",
       "____vite-browser-external_commonjs-proxy-0zb4Agf2.js",
       "_MenuItemContainer-BwGvRAHs.js",
@@ -1487,7 +1487,7 @@
     ]
   },
   "resources/js/Admin/Home.jsx": {
-    "file": "assets/Home-CuYL1-Hf.js",
+    "file": "assets/Home-BhMUncNf.js",
     "name": "Home",
     "src": "resources/js/Admin/Home.jsx",
     "isEntry": true,
@@ -1496,7 +1496,7 @@
       "_index-BH53Isel.js",
       "resources/js/Utils/ReactAppend.jsx",
       "_CreateReactScript-Bq8gMpEh.js",
-      "_Base-T5Pm3uPi.js",
+      "_Base-eMlfXmua.js",
       "_index-yBjzXJbu.js",
       "_index-fNjTmf9T.js",
       "_index.esm-CveLAcri.js",
@@ -1507,7 +1507,7 @@
       "_LaravelSession-Dz9cpV3l.js",
       "_tippy-react.esm-BWiGTO87.js",
       "_index-rimy3MAc.js",
-      "_Logout-LH3dzJpV.js",
+      "_Logout-7s5dsuEK.js",
       "_MenuItemContainer-BwGvRAHs.js"
     ],
     "css": [
@@ -1516,13 +1516,13 @@
     ]
   },
   "resources/js/Admin/Indicators.jsx": {
-    "file": "assets/Indicators-C3aIKz65.js",
+    "file": "assets/Indicators-DPhr_zRQ.js",
     "name": "Indicators",
     "src": "resources/js/Admin/Indicators.jsx",
     "isEntry": true,
     "imports": [
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
-      "_Base-T5Pm3uPi.js",
+      "_Base-eMlfXmua.js",
       "_SwitchFormGroup-DUGhyqoj.js",
       "_TextareaFormGroup-CdwdsTk2.js",
       "_index-BH53Isel.js",
@@ -1541,7 +1541,7 @@
       "_tippy-react.esm-BWiGTO87.js",
       "_index-rimy3MAc.js",
       "_index-fNjTmf9T.js",
-      "_Logout-LH3dzJpV.js",
+      "_Logout-7s5dsuEK.js",
       "_main-BvVILmTO.js",
       "____vite-browser-external_commonjs-proxy-0zb4Agf2.js",
       "_MenuItemContainer-BwGvRAHs.js",
@@ -1555,13 +1555,13 @@
     ]
   },
   "resources/js/Admin/Items.jsx": {
-    "file": "assets/Items-Da_A2niZ.js",
+    "file": "assets/Items-CXgkafVL.js",
     "name": "Items",
     "src": "resources/js/Admin/Items.jsx",
     "isEntry": true,
     "imports": [
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
-      "_Base-T5Pm3uPi.js",
+      "_Base-eMlfXmua.js",
       "_SwitchFormGroup-DUGhyqoj.js",
       "_TextareaFormGroup-CdwdsTk2.js",
       "_index-BH53Isel.js",
@@ -1587,7 +1587,7 @@
       "_tippy-react.esm-BWiGTO87.js",
       "_index-rimy3MAc.js",
       "_index-fNjTmf9T.js",
-      "_Logout-LH3dzJpV.js",
+      "_Logout-7s5dsuEK.js",
       "_MenuItemContainer-BwGvRAHs.js",
       "_index.esm-CveLAcri.js",
       "____vite-browser-external_commonjs-proxy-0zb4Agf2.js",
@@ -1601,7 +1601,7 @@
     ]
   },
   "resources/js/Admin/Messages.jsx": {
-    "file": "assets/Messages-4iRdvotk.js",
+    "file": "assets/Messages-0d0jaHtD.js",
     "name": "Messages",
     "src": "resources/js/Admin/Messages.jsx",
     "isEntry": true,
@@ -1609,7 +1609,7 @@
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
       "_index-BH53Isel.js",
       "resources/js/Utils/ReactAppend.jsx",
-      "_Base-T5Pm3uPi.js",
+      "_Base-eMlfXmua.js",
       "_CreateReactScript-Bq8gMpEh.js",
       "_Table-CP679pea.js",
       "_DxButton-DV0H-ZcL.js",
@@ -1622,7 +1622,7 @@
       "_Global-ErywZRdd.js",
       "_tippy-react.esm-BWiGTO87.js",
       "_index-rimy3MAc.js",
-      "_Logout-LH3dzJpV.js",
+      "_Logout-7s5dsuEK.js",
       "_main-BvVILmTO.js",
       "____vite-browser-external_commonjs-proxy-0zb4Agf2.js",
       "_MenuItemContainer-BwGvRAHs.js",
@@ -1636,13 +1636,13 @@
     ]
   },
   "resources/js/Admin/Posts.jsx": {
-    "file": "assets/Posts-Bu7d_kLb.js",
+    "file": "assets/Posts-BNa_INWM.js",
     "name": "Posts",
     "src": "resources/js/Admin/Posts.jsx",
     "isEntry": true,
     "imports": [
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
-      "_Base-T5Pm3uPi.js",
+      "_Base-eMlfXmua.js",
       "_index-BH53Isel.js",
       "resources/js/Utils/ReactAppend.jsx",
       "resources/js/Components/Tailwind/Components/ProductCard.jsx",
@@ -1664,7 +1664,7 @@
       "_tippy-react.esm-BWiGTO87.js",
       "_index-rimy3MAc.js",
       "_index-fNjTmf9T.js",
-      "_Logout-LH3dzJpV.js",
+      "_Logout-7s5dsuEK.js",
       "_main-BvVILmTO.js",
       "____vite-browser-external_commonjs-proxy-0zb4Agf2.js",
       "_MenuItemContainer-BwGvRAHs.js",
@@ -1682,7 +1682,7 @@
     ]
   },
   "resources/js/Admin/Profile.jsx": {
-    "file": "assets/Profile-BATtig-B.js",
+    "file": "assets/Profile-p2BoRvos.js",
     "name": "Profile",
     "src": "resources/js/Admin/Profile.jsx",
     "isEntry": true,
@@ -1694,7 +1694,7 @@
       "_main-BvVILmTO.js",
       "_CreateReactScript-Bq8gMpEh.js",
       "_InputFormGroup-D5I6zpZc.js",
-      "_Base-T5Pm3uPi.js",
+      "_Base-eMlfXmua.js",
       "_index-yBjzXJbu.js",
       "_index-fNjTmf9T.js",
       "_index-rimy3MAc.js",
@@ -1703,7 +1703,7 @@
       "_Global-ErywZRdd.js",
       "_General-BmbBKdsB.js",
       "_LaravelSession-Dz9cpV3l.js",
-      "_Logout-LH3dzJpV.js",
+      "_Logout-7s5dsuEK.js",
       "_MenuItemContainer-BwGvRAHs.js"
     ],
     "css": [
@@ -1712,7 +1712,7 @@
     ]
   },
   "resources/js/Admin/Repository.jsx": {
-    "file": "assets/Repository-WvJ_9MWB.js",
+    "file": "assets/Repository-puHXIfD9.js",
     "name": "Repository",
     "src": "resources/js/Admin/Repository.jsx",
     "isEntry": true,
@@ -1728,7 +1728,7 @@
       "_Modal-CIqmjseY.js",
       "_InputFormGroup-D5I6zpZc.js",
       "_CreateReactScript-Bq8gMpEh.js",
-      "_Base-T5Pm3uPi.js",
+      "_Base-eMlfXmua.js",
       "_index-yBjzXJbu.js",
       "_index-fNjTmf9T.js",
       "_BasicRest-C_0LADdJ.js",
@@ -1737,7 +1737,7 @@
       "_index.esm-CveLAcri.js",
       "_General-BmbBKdsB.js",
       "_LaravelSession-Dz9cpV3l.js",
-      "_Logout-LH3dzJpV.js",
+      "_Logout-7s5dsuEK.js",
       "_MenuItemContainer-BwGvRAHs.js"
     ],
     "css": [
@@ -1746,7 +1746,7 @@
     ]
   },
   "resources/js/Admin/Sales.jsx": {
-    "file": "assets/Sales-C__mKC72.js",
+    "file": "assets/Sales-CCSdR3tl.js",
     "name": "Sales",
     "src": "resources/js/Admin/Sales.jsx",
     "isEntry": true,
@@ -1754,7 +1754,7 @@
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
       "_index-BH53Isel.js",
       "resources/js/Utils/ReactAppend.jsx",
-      "_Base-T5Pm3uPi.js",
+      "_Base-eMlfXmua.js",
       "_CreateReactScript-Bq8gMpEh.js",
       "_Table-CP679pea.js",
       "_DxButton-DV0H-ZcL.js",
@@ -1768,7 +1768,7 @@
       "_SaleStatusesRest-BAwI4yQU.js",
       "_index-yBjzXJbu.js",
       "_index-fNjTmf9T.js",
-      "_Logout-LH3dzJpV.js",
+      "_Logout-7s5dsuEK.js",
       "_main-BvVILmTO.js",
       "____vite-browser-external_commonjs-proxy-0zb4Agf2.js",
       "_MenuItemContainer-BwGvRAHs.js",
@@ -1783,13 +1783,13 @@
     ]
   },
   "resources/js/Admin/Sliders.jsx": {
-    "file": "assets/Sliders-DX5jIzRt.js",
+    "file": "assets/Sliders-S3X_SD3B.js",
     "name": "Sliders",
     "src": "resources/js/Admin/Sliders.jsx",
     "isEntry": true,
     "imports": [
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
-      "_Base-T5Pm3uPi.js",
+      "_Base-eMlfXmua.js",
       "_SwitchFormGroup-DUGhyqoj.js",
       "_TextareaFormGroup-CdwdsTk2.js",
       "_index-BH53Isel.js",
@@ -1809,7 +1809,7 @@
       "_tippy-react.esm-BWiGTO87.js",
       "_index-rimy3MAc.js",
       "_index-fNjTmf9T.js",
-      "_Logout-LH3dzJpV.js",
+      "_Logout-7s5dsuEK.js",
       "_main-BvVILmTO.js",
       "____vite-browser-external_commonjs-proxy-0zb4Agf2.js",
       "_MenuItemContainer-BwGvRAHs.js",
@@ -1823,13 +1823,13 @@
     ]
   },
   "resources/js/Admin/Socials.jsx": {
-    "file": "assets/Socials-D4FXoCb2.js",
+    "file": "assets/Socials-D-zU69vz.js",
     "name": "Socials",
     "src": "resources/js/Admin/Socials.jsx",
     "isEntry": true,
     "imports": [
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
-      "_Base-T5Pm3uPi.js",
+      "_Base-eMlfXmua.js",
       "_InputFormGroup-D5I6zpZc.js",
       "_SelectFormGroup-YqB1XVb8.js",
       "_SwitchFormGroup-DUGhyqoj.js",
@@ -1849,7 +1849,7 @@
       "_tippy-react.esm-BWiGTO87.js",
       "_index-rimy3MAc.js",
       "_index-fNjTmf9T.js",
-      "_Logout-LH3dzJpV.js",
+      "_Logout-7s5dsuEK.js",
       "_main-BvVILmTO.js",
       "____vite-browser-external_commonjs-proxy-0zb4Agf2.js",
       "_MenuItemContainer-BwGvRAHs.js",
@@ -1863,13 +1863,13 @@
     ]
   },
   "resources/js/Admin/Strengths.jsx": {
-    "file": "assets/Strengths-NsPBGic6.js",
+    "file": "assets/Strengths-BLLlDZyS.js",
     "name": "Strengths",
     "src": "resources/js/Admin/Strengths.jsx",
     "isEntry": true,
     "imports": [
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
-      "_Base-T5Pm3uPi.js",
+      "_Base-eMlfXmua.js",
       "_SwitchFormGroup-DUGhyqoj.js",
       "_TextareaFormGroup-CdwdsTk2.js",
       "_index-BH53Isel.js",
@@ -1889,7 +1889,7 @@
       "_tippy-react.esm-BWiGTO87.js",
       "_index-rimy3MAc.js",
       "_index-fNjTmf9T.js",
-      "_Logout-LH3dzJpV.js",
+      "_Logout-7s5dsuEK.js",
       "_main-BvVILmTO.js",
       "____vite-browser-external_commonjs-proxy-0zb4Agf2.js",
       "_MenuItemContainer-BwGvRAHs.js",
@@ -1907,13 +1907,13 @@
     ]
   },
   "resources/js/Admin/SubCategories.jsx": {
-    "file": "assets/SubCategories-Cs9X2sUz.js",
+    "file": "assets/SubCategories-C9zUJyUI.js",
     "name": "SubCategories",
     "src": "resources/js/Admin/SubCategories.jsx",
     "isEntry": true,
     "imports": [
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
-      "_Base-T5Pm3uPi.js",
+      "_Base-eMlfXmua.js",
       "_SwitchFormGroup-DUGhyqoj.js",
       "_TextareaFormGroup-CdwdsTk2.js",
       "_index-BH53Isel.js",
@@ -1934,7 +1934,7 @@
       "_tippy-react.esm-BWiGTO87.js",
       "_index-rimy3MAc.js",
       "_index-fNjTmf9T.js",
-      "_Logout-LH3dzJpV.js",
+      "_Logout-7s5dsuEK.js",
       "_main-BvVILmTO.js",
       "____vite-browser-external_commonjs-proxy-0zb4Agf2.js",
       "_MenuItemContainer-BwGvRAHs.js",
@@ -1948,7 +1948,7 @@
     ]
   },
   "resources/js/Admin/Subscriptions.jsx": {
-    "file": "assets/Subscriptions-65dfaIZP.js",
+    "file": "assets/Subscriptions-B1Jl47WI.js",
     "name": "Subscriptions",
     "src": "resources/js/Admin/Subscriptions.jsx",
     "isEntry": true,
@@ -1956,7 +1956,7 @@
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
       "_index-BH53Isel.js",
       "resources/js/Utils/ReactAppend.jsx",
-      "_Base-T5Pm3uPi.js",
+      "_Base-eMlfXmua.js",
       "_CreateReactScript-Bq8gMpEh.js",
       "_Table-CP679pea.js",
       "_DxButton-DV0H-ZcL.js",
@@ -1968,7 +1968,7 @@
       "_Global-ErywZRdd.js",
       "_tippy-react.esm-BWiGTO87.js",
       "_index-rimy3MAc.js",
-      "_Logout-LH3dzJpV.js",
+      "_Logout-7s5dsuEK.js",
       "_main-BvVILmTO.js",
       "____vite-browser-external_commonjs-proxy-0zb4Agf2.js",
       "_MenuItemContainer-BwGvRAHs.js",
@@ -2020,13 +2020,13 @@
     ]
   },
   "resources/js/Admin/Tags.jsx": {
-    "file": "assets/Tags-C24-7o0x.js",
+    "file": "assets/Tags-bGteKGbF.js",
     "name": "Tags",
     "src": "resources/js/Admin/Tags.jsx",
     "isEntry": true,
     "imports": [
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
-      "_Base-T5Pm3uPi.js",
+      "_Base-eMlfXmua.js",
       "_SwitchFormGroup-DUGhyqoj.js",
       "_TextareaFormGroup-CdwdsTk2.js",
       "_index-BH53Isel.js",
@@ -2044,7 +2044,7 @@
       "_tippy-react.esm-BWiGTO87.js",
       "_index-rimy3MAc.js",
       "_index-fNjTmf9T.js",
-      "_Logout-LH3dzJpV.js",
+      "_Logout-7s5dsuEK.js",
       "_main-BvVILmTO.js",
       "____vite-browser-external_commonjs-proxy-0zb4Agf2.js",
       "_MenuItemContainer-BwGvRAHs.js",
@@ -2058,13 +2058,13 @@
     ]
   },
   "resources/js/Admin/Testimonies.jsx": {
-    "file": "assets/Testimonies-BnAhzQNR.js",
+    "file": "assets/Testimonies-CvJ-hjGR.js",
     "name": "Testimonies",
     "src": "resources/js/Admin/Testimonies.jsx",
     "isEntry": true,
     "imports": [
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
-      "_Base-T5Pm3uPi.js",
+      "_Base-eMlfXmua.js",
       "_SwitchFormGroup-DUGhyqoj.js",
       "_TextareaFormGroup-CdwdsTk2.js",
       "_index-BH53Isel.js",
@@ -2086,7 +2086,7 @@
       "_tippy-react.esm-BWiGTO87.js",
       "_index-rimy3MAc.js",
       "_index-fNjTmf9T.js",
-      "_Logout-LH3dzJpV.js",
+      "_Logout-7s5dsuEK.js",
       "_main-BvVILmTO.js",
       "____vite-browser-external_commonjs-proxy-0zb4Agf2.js",
       "_MenuItemContainer-BwGvRAHs.js",
@@ -2104,7 +2104,7 @@
     ]
   },
   "resources/js/Blog.jsx": {
-    "file": "assets/Blog-BAEBjvsy.js",
+    "file": "assets/Blog-B-uBp5vD.js",
     "name": "Blog",
     "src": "resources/js/Blog.jsx",
     "isEntry": true,
@@ -2113,7 +2113,7 @@
       "_index-BH53Isel.js",
       "_CreateReactScript-Bq8gMpEh.js",
       "resources/js/Utils/ReactAppend.jsx",
-      "_Base-DIdRXgNB.js",
+      "_Base-Cl_qy_ks.js",
       "resources/js/Components/Tailwind/Components/ProductCard.jsx",
       "_SubscriptionsRest-qjIAHRwm.js",
       "_Global-ErywZRdd.js",
@@ -2140,7 +2140,7 @@
     ]
   },
   "resources/js/BlogArticle.jsx": {
-    "file": "assets/BlogArticle-BdcEBYTM.js",
+    "file": "assets/BlogArticle-BoJW1ZKf.js",
     "name": "BlogArticle",
     "src": "resources/js/BlogArticle.jsx",
     "isEntry": true,
@@ -2149,7 +2149,7 @@
       "_index-BH53Isel.js",
       "_CreateReactScript-Bq8gMpEh.js",
       "resources/js/Utils/ReactAppend.jsx",
-      "_Base-DIdRXgNB.js",
+      "_Base-Cl_qy_ks.js",
       "_HtmlContent-FTivcJrM.js",
       "_tippy-react.esm-BWiGTO87.js",
       "_proxy-BTYtmp9V.js",
@@ -3336,7 +3336,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Base.jsx": {
-    "file": "assets/Base-C1RP42mt.js",
+    "file": "assets/Base-eBfrFvIr.js",
     "name": "Base",
     "src": "resources/js/Components/Tailwind/Base.jsx",
     "isEntry": true,
@@ -4753,7 +4753,7 @@
     ]
   },
   "resources/js/Components/Tailwind/ForgotPassword.jsx": {
-    "file": "assets/ForgotPassword-Dh7b6iiZ.js",
+    "file": "assets/ForgotPassword-Bg2ah3Bl.js",
     "name": "ForgotPassword",
     "src": "resources/js/Components/Tailwind/ForgotPassword.jsx",
     "isEntry": true,
@@ -4841,7 +4841,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Header.jsx": {
-    "file": "assets/Header-BbtpoEaV.js",
+    "file": "assets/Header-BXQaY58_.js",
     "name": "Header",
     "src": "resources/js/Components/Tailwind/Header.jsx",
     "isEntry": true,
@@ -5091,7 +5091,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Login.jsx": {
-    "file": "assets/Login-BflkX_Ds.js",
+    "file": "assets/Login-D37Icu6n.js",
     "name": "Login",
     "src": "resources/js/Components/Tailwind/Login.jsx",
     "isEntry": true,
@@ -5644,7 +5644,7 @@
     ]
   },
   "resources/js/Components/Tailwind/ResetPassword.jsx": {
-    "file": "assets/ResetPassword-BrS0pFdD.js",
+    "file": "assets/ResetPassword-VIWsf2Va.js",
     "name": "ResetPassword",
     "src": "resources/js/Components/Tailwind/ResetPassword.jsx",
     "isEntry": true,
@@ -5843,7 +5843,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Signup.jsx": {
-    "file": "assets/Signup-7pfTfzBZ.js",
+    "file": "assets/Signup-C3aTA3rB.js",
     "name": "Signup",
     "src": "resources/js/Components/Tailwind/Signup.jsx",
     "isEntry": true,
@@ -6073,7 +6073,7 @@
     ]
   },
   "resources/js/Components/Tailwind/TopBar.jsx": {
-    "file": "assets/TopBar-C0I76FZC.js",
+    "file": "assets/TopBar-CpVIvFG8.js",
     "name": "TopBar",
     "src": "resources/js/Components/Tailwind/TopBar.jsx",
     "isEntry": true,
@@ -6250,7 +6250,7 @@
     ]
   },
   "resources/js/Contact.jsx": {
-    "file": "assets/Contact-DBh_rFk3.js",
+    "file": "assets/Contact-DXJSvjb3.js",
     "name": "Contact",
     "src": "resources/js/Contact.jsx",
     "isEntry": true,
@@ -6259,7 +6259,7 @@
       "_index-BH53Isel.js",
       "_CreateReactScript-Bq8gMpEh.js",
       "resources/js/Utils/ReactAppend.jsx",
-      "_Base-DIdRXgNB.js",
+      "_Base-Cl_qy_ks.js",
       "_Global-ErywZRdd.js",
       "_createLucideIcon-Cy5Ya80P.js",
       "_phone-BZ94M50k.js",
@@ -6284,7 +6284,7 @@
     ]
   },
   "resources/js/CourseDetails.jsx": {
-    "file": "assets/CourseDetails-BM6HfaYv.js",
+    "file": "assets/CourseDetails-B5g2aBga.js",
     "name": "CourseDetails",
     "src": "resources/js/CourseDetails.jsx",
     "isEntry": true,
@@ -6293,7 +6293,7 @@
       "_index-BH53Isel.js",
       "resources/js/Utils/ReactAppend.jsx",
       "_main-BvVILmTO.js",
-      "_Base-DIdRXgNB.js",
+      "_Base-Cl_qy_ks.js",
       "_CreateReactScript-Bq8gMpEh.js",
       "_HtmlContent-FTivcJrM.js",
       "_Number2Currency-e57Tgsuk.js",
@@ -6314,7 +6314,7 @@
     ]
   },
   "resources/js/Courses.jsx": {
-    "file": "assets/Courses-B969Tcak.js",
+    "file": "assets/Courses-D71H4FDH.js",
     "name": "Courses",
     "src": "resources/js/Courses.jsx",
     "isEntry": true,
@@ -6323,7 +6323,7 @@
       "_index-BH53Isel.js",
       "resources/js/Utils/ReactAppend.jsx",
       "_CreateReactScript-Bq8gMpEh.js",
-      "_Base-DIdRXgNB.js",
+      "_Base-Cl_qy_ks.js",
       "_em-DRiSFGEW.js",
       "_ArrayJoin-D8pAQiSC.js",
       "_CourseCard-CbDLljRi.js",
@@ -6352,7 +6352,7 @@
     ]
   },
   "resources/js/Customer/Sales.jsx": {
-    "file": "assets/Sales-DdHnzm_D.js",
+    "file": "assets/Sales-DylltEjn.js",
     "name": "Sales",
     "src": "resources/js/Customer/Sales.jsx",
     "isEntry": true,
@@ -6360,7 +6360,7 @@
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
       "_index-BH53Isel.js",
       "resources/js/Utils/ReactAppend.jsx",
-      "_Base-T5Pm3uPi.js",
+      "_Base-eMlfXmua.js",
       "_CreateReactScript-Bq8gMpEh.js",
       "_Table-CP679pea.js",
       "_DxButton-DV0H-ZcL.js",
@@ -6374,7 +6374,7 @@
       "_SaleStatusesRest-BAwI4yQU.js",
       "_index-yBjzXJbu.js",
       "_index-fNjTmf9T.js",
-      "_Logout-LH3dzJpV.js",
+      "_Logout-7s5dsuEK.js",
       "_main-BvVILmTO.js",
       "____vite-browser-external_commonjs-proxy-0zb4Agf2.js",
       "_MenuItemContainer-BwGvRAHs.js",
@@ -6395,7 +6395,7 @@
     "isEntry": true
   },
   "resources/js/Home.jsx": {
-    "file": "assets/Home-B-PnmFEX.js",
+    "file": "assets/Home-CtKmgqqI.js",
     "name": "Home",
     "src": "resources/js/Home.jsx",
     "isEntry": true,
@@ -6403,7 +6403,7 @@
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
       "_index-BH53Isel.js",
       "resources/js/Utils/ReactAppend.jsx",
-      "_Base-DIdRXgNB.js",
+      "_Base-Cl_qy_ks.js",
       "_CreateReactScript-Bq8gMpEh.js",
       "_Weare-DzhH2Vjy.js",
       "resources/js/Components/Tailwind/Blogs/BlogCarousel.jsx",
@@ -6562,7 +6562,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-CULvp9mK.js",
+    "file": "assets/System-CffvHrYN.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,

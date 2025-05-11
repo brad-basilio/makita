@@ -67,7 +67,10 @@ export default function SignUpSimple() {
             <div className="lg:grid lg:grid-cols-2 gap-8 bg-[#f9f9f9] rounded-xl">
                 <div className="hidden lg:block">
                     <img
-                        src={image}
+                        src={
+                            `/storage/images/${Global.APP_CORRELATIVE}/signup.png` ||
+                            image
+                        }
                         alt="Imagen decorativa"
                         className="h-full w-full object-cover rounded-xl transform "
                     />

@@ -67,6 +67,12 @@ foreach ($pages as $page) {
 
 Route::get('/base-template', [SystemController::class, 'reactView'])->name('System.jsx');
 Route::get('/login', [AuthController::class, 'loginView'])->name('Login.jsx');
+Route::middleware('auth')->group(
+    function () {
+        Route::get('/profile', [AdminProfileController::class, 'reactView'])->name('Admin/Profile.jsx');
+        Route::get('/account', [AdminAccountController::class, 'reactView'])->name('Admin/Account.jsx');
+    }
+);
 
 // Admin routes
 Route::middleware(['can:Admin', 'auth'])->prefix('admin')->group(function () {
@@ -103,16 +109,11 @@ Route::middleware(['can:Admin', 'auth'])->prefix('admin')->group(function () {
     Route::get('/repository', [AdminRepositoryController::class, 'reactView'])->name('Admin/Repository.jsx');
 
     Route::middleware(['can:Root'])->get('/system', [AdminSystemController::class, 'reactView'])->name('Admin/System.jsx');
-
-    Route::get('/profile', [AdminProfileController::class, 'reactView'])->name('Admin/Profile.jsx');
-    Route::get('/account', [AdminAccountController::class, 'reactView'])->name('Admin/Account.jsx');
 });
 
 Route::middleware(['can:Customer', 'auth'])->prefix('customer')->group(function () {
     Route::get('/dashboard', [CustomerSaleController::class, 'reactView'])->name('Customer/Sales.jsx');
     Route::get('/orders', [CustomerSaleController::class, 'reactView'])->name('Customer/Sales.jsx');
-    Route::get('/profile', [AdminProfileController::class, 'reactView'])->name('Admin/Profile.jsx');
-    Route::get('/account', [AdminAccountController::class, 'reactView'])->name('Admin/Account.jsx');
 });
 
 

@@ -43,7 +43,10 @@ export default function ForgotPasswordSimple() {
             <div className="p-8 lg:grid lg:grid-cols-2 gap-8 bg-white rounded-xl">
                 <div className="hidden lg:block">
                     <img
-                        src={image}
+                        src={
+                            `/storage/images/${Global.APP_CORRELATIVE}/restore.png` ||
+                            image
+                        }
                         alt="Imagen decorativa"
                         className="h-[600px] w-full object-cover rounded-xl"
                     />

@@ -73,7 +73,10 @@ export default function LoginSimple() {
             <div className="p-8 lg:grid lg:grid-cols-2 gap-8 bg-white rounded-xl">
                 <div className="hidden lg:block">
                     <img
-                        src={image}
+                        src={
+                            `/storage/images/${Global.APP_CORRELATIVE}/login.png` ||
+                            image
+                        }
                         alt="Imagen decorativa"
                         className="h-[600px] w-full object-cover rounded-xl"
                     />
@@ -84,8 +87,9 @@ export default function LoginSimple() {
                             <h5 className="text-sky-500 font-medium">Hola</h5>
                             <h1 className="text-3xl font-bold">Bienvenido</h1>
                             <p className="text-gray-500">
-                                Class aptent taciti sociosqu ad litora torquent
-                                per conubia nostra, per inceptos himenaeos.
+                                Inicia sesión para acceder a tu cuenta y seguir
+                                tus pedidos y disfrutar de una experiencia de
+                                compra extraordinaria.
                             </p>
                         </div>
                         <form className="space-y-4" onSubmit={onLoginSubmit}>

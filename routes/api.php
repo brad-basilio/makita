@@ -137,6 +137,10 @@ Route::get('/person/{dni}', [PersonController::class, 'find']);
 Route::middleware('auth')->group(function () {
   Route::delete('logout', [AuthController::class, 'destroy'])
     ->name('logout');
+  Route::get('/profile/{uuid}', [AdminProfileController::class, 'full']);
+  Route::get('/profile/thumbnail/{uuid}', [AdminProfileController::class, 'thumbnail']);
+  Route::post('/profile', [AdminProfileController::class, 'saveProfile']);
+  Route::patch('/profile', [AdminProfileController::class, 'save']);
 
   Route::middleware('can:Admin')->prefix('admin')->group(function () {
 
@@ -313,10 +317,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/generals/{field}', [AdminGeneralController::class, 'boolean']);
     Route::delete('/generals/{id}', [AdminGeneralController::class, 'delete']);
 
-    Route::get('/profile/{uuid}', [AdminProfileController::class, 'full']);
-    Route::get('/profile/thumbnail/{uuid}', [AdminProfileController::class, 'thumbnail']);
-    Route::post('/profile', [AdminProfileController::class, 'saveProfile']);
-    Route::patch('/profile', [AdminProfileController::class, 'save']);
+
 
     Route::patch('/account/email', [AdminAccountController::class, 'email']);
     Route::patch('/account/password', [AdminAccountController::class, 'password']);
@@ -330,13 +331,5 @@ Route::middleware('auth')->group(function () {
     Route::patch('/sales/status', [CustomerSaleController::class, 'status']);
     Route::patch('/sales/{field}', [CustomerSaleController::class, 'boolean']);
     Route::delete('/sales/{id}', [CustomerSaleController::class, 'delete']);
-
-    Route::get('/profile/{uuid}', [AdminProfileController::class, 'full']);
-    Route::get('/profile/thumbnail/{uuid}', [AdminProfileController::class, 'thumbnail']);
-    Route::post('/profile', [AdminProfileController::class, 'saveProfile']);
-    Route::patch('/profile', [AdminProfileController::class, 'save']);
-
-    Route::patch('/account/email', [AdminAccountController::class, 'email']);
-    Route::patch('/account/password', [AdminAccountController::class, 'password']);
   });
 });
