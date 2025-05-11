@@ -143,7 +143,7 @@ const CardHoverBtn = ({
                         <p className="text-xs customtext-neutral-light font-semibold mb-1">
                             {product?.brand?.name}
                         </p>
-                        <h3 className="customtext-neutral-dark text-lg font-semibold mb-2 line-clamp-3 h-16">
+                        <h3 className="customtext-neutral-dark text-lg font-semibold mb-2 line-clamp-3 h-[70px]">
                             {product.name}
                         </h3>
                         {/* Precio */}
