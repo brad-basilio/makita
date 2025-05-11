@@ -26,14 +26,14 @@ const CardHoverBtn = ({
             newCart[index].quantity++;
         }
         setCart(newCart);
-
-        Swal.fire({
+        /* Swal.fire({
             title: "Producto agregado",
             text: `Se agregó ${product.name} al carrito`,
             icon: "success",
             timer: 1500,
-        });
+        });*/
         setModalOpen(!modalOpen);
+        setTimeout(() => setModalOpen(false), 3000);
     };
 
     const inCart = cart?.find((x) => x.id == product?.id);
@@ -44,7 +44,7 @@ const CardHoverBtn = ({
         <>
             <div
                 key={product.id}
-                className={`group px-1 md:px-2 w-1/2 sm:w-1/3 ${widthClass} flex-shrink-0 font-font-secondary cursor-pointer relative`}
+                className={`group px-1 md:px-2 w-full flex-shrink-0 font-font-secondary cursor-pointer relative`}
             >
                 <div
                     className="bg-white rounded-xl shadow-md p-2 md:p-4 "
@@ -58,10 +58,10 @@ const CardHoverBtn = ({
                                     -
                                     {Number(
                                         100 -
-                                        Number(
-                                            (product?.discount * 100) /
-                                            product?.price
-                                        )
+                                            Number(
+                                                (product?.discount * 100) /
+                                                    product?.price
+                                            )
                                     ).toFixed(0)}
                                     %
                                 </span>
@@ -141,7 +141,7 @@ const CardHoverBtn = ({
                     {/* Información del producto */}
                     <div>
                         <p className="text-xs customtext-neutral-light font-semibold mb-1">
-                            {product.brand.name}
+                            {product?.brand?.name}
                         </p>
                         <h3 className="customtext-neutral-dark text-lg font-semibold mb-2 line-clamp-3 h-16">
                             {product.name}
