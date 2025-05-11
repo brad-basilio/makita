@@ -56,9 +56,11 @@ export default function SignUpSimple() {
         };
         const result = await AuthClientRest.signup(request);
 
-        if (!result) return setLoading(false);
-
-        window.location.href = "/";
+        if (result) {
+            window.location.href = "/"; // Redirigir solo si es exitoso
+        } else {
+            setLoading(false);
+        }
     };
     return (
         <div className="w-full px-primary mx-auto py-16 bg-white">

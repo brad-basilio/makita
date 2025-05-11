@@ -25,6 +25,8 @@ use App\Http\Controllers\Admin\TypesDeliveryController as AdminTypesDeliveryCont
 use App\Http\Controllers\Admin\GalleryController as AdminGalleryController;
 use App\Http\Controllers\Admin\ItemController as AdminItemController;
 use App\Http\Controllers\Admin\SaleController as AdminSaleController;
+use App\Http\Controllers\Customer\SaleController as CustomerSaleController;
+
 use App\Http\Controllers\Admin\SubCategoryController as AdminSubCategoryController;
 use App\Http\Controllers\Admin\SystemColorController as AdminSystemColorController;
 use App\Http\Controllers\Admin\SystemController as AdminSystemController;
@@ -310,6 +312,24 @@ Route::middleware('auth')->group(function () {
     Route::patch('/generals/status', [AdminGeneralController::class, 'status']);
     Route::patch('/generals/{field}', [AdminGeneralController::class, 'boolean']);
     Route::delete('/generals/{id}', [AdminGeneralController::class, 'delete']);
+
+    Route::get('/profile/{uuid}', [AdminProfileController::class, 'full']);
+    Route::get('/profile/thumbnail/{uuid}', [AdminProfileController::class, 'thumbnail']);
+    Route::post('/profile', [AdminProfileController::class, 'saveProfile']);
+    Route::patch('/profile', [AdminProfileController::class, 'save']);
+
+    Route::patch('/account/email', [AdminAccountController::class, 'email']);
+    Route::patch('/account/password', [AdminAccountController::class, 'password']);
+  });
+
+  Route::middleware('can:Customer')->prefix('customer')->group(function () {
+
+    Route::get('/sales/{id}', [CustomerSaleController::class, 'get']);
+    Route::post('/sales', [CustomerSaleController::class, 'save']);
+    Route::post('/sales/paginate', [CustomerSaleController::class, 'paginate']);
+    Route::patch('/sales/status', [CustomerSaleController::class, 'status']);
+    Route::patch('/sales/{field}', [CustomerSaleController::class, 'boolean']);
+    Route::delete('/sales/{id}', [CustomerSaleController::class, 'delete']);
 
     Route::get('/profile/{uuid}', [AdminProfileController::class, 'full']);
     Route::get('/profile/thumbnail/{uuid}', [AdminProfileController::class, 'thumbnail']);

@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\SocialController as AdminSocialController;
 use App\Http\Controllers\Admin\StrengthController as AdminStrengthController;
 use App\Http\Controllers\Admin\GeneralController as AdminGeneralController;
 use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
+use App\Http\Controllers\Customer\SaleController as CustomerSaleController;
 use App\Http\Controllers\Admin\AccountController as AdminAccountController;
 use App\Http\Controllers\Admin\BannerController as AdminBannerController;
 use App\Http\Controllers\Admin\ItemController as AdminItemController;
@@ -106,6 +107,14 @@ Route::middleware(['can:Admin', 'auth'])->prefix('admin')->group(function () {
     Route::get('/profile', [AdminProfileController::class, 'reactView'])->name('Admin/Profile.jsx');
     Route::get('/account', [AdminAccountController::class, 'reactView'])->name('Admin/Account.jsx');
 });
+
+Route::middleware(['can:Customer', 'auth'])->prefix('customer')->group(function () {
+    Route::get('/dashboard', [CustomerSaleController::class, 'reactView'])->name('Customer/Sales.jsx');
+    Route::get('/orders', [CustomerSaleController::class, 'reactView'])->name('Customer/Sales.jsx');
+    Route::get('/profile', [AdminProfileController::class, 'reactView'])->name('Admin/Profile.jsx');
+    Route::get('/account', [AdminAccountController::class, 'reactView'])->name('Admin/Account.jsx');
+});
+
 
 if (env('APP_ENV') === 'local') {
     Route::get('/cloud/{uuid}', [RepositoryController::class, 'media']);

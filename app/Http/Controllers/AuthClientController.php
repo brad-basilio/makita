@@ -45,6 +45,7 @@ class AuthClientController extends BasicController
             $password = Controller::decode($request->password);
 
             if (!Auth::attempt(['email' => $email, 'password' => $password])) {
+
                 $response->status = 400;
                 $response->message = 'Operación Incorrecta. Por favor, ingresar credenciales válidas';
                 return;
@@ -68,7 +69,7 @@ class AuthClientController extends BasicController
 
 
 
-    public function signup(Request $request): HttpResponse | ResponseFactory | RedirectResponse
+    /* public function signup(Request $request): HttpResponse | ResponseFactory | RedirectResponse
     {
         $response = new Response();
         //dump($request->all(), Controller::decode($request->email));
@@ -114,7 +115,11 @@ class AuthClientController extends BasicController
                 'remember_token' => $confirmation_token, // Token para confirmación
             ]);
 
-            /*  // Enviar correo de confirmación
+
+            $role = Role::firstOrCreate(['name' => 'Customer']);
+            $user->assignRole($role);
+
+             // Enviar correo de confirmación
             $content = Constant::value('confirm-email'); // Plantilla de correo
             $content = str_replace('{URL_CONFIRM}', env('APP_URL') . '/confirmation/' . $confirmation_token, $content);
 
@@ -123,11 +128,13 @@ class AuthClientController extends BasicController
             $mailer->Body = $content;
             $mailer->addAddress($user->email);
             $mailer->isHTML(true);
-            $mailer->send();*/
+            $mailer->send();
 
             // Respuesta exitosa
             $response->status = 200;
             $response->message = 'Operación correcta. Por favor, confirma tu correo electrónico.';
+            Auth::login($user);
+            return redirect('/');
         } catch (\Throwable $th) {
             // Manejar errores
             $response->status = 400;
@@ -138,6 +145,64 @@ class AuthClientController extends BasicController
                 $response->status
             );
         }
+    }*/
+
+    public function signup(Request $request): HttpResponse | ResponseFactory
+    {
+        $response = new Response();
+        try {
+            $email = Controller::decode($request->email);
+            $password = Controller::decode($request->password);
+            $confirmation = Controller::decode($request->confirmation);
+            $name = Controller::decode($request->name);
+            $lastname = Controller::decode($request->lastname);
+
+            // Validar contraseñas
+            if ($password !== $confirmation) {
+                $response->status = 400;
+                $response->message = 'Las contraseñas no coinciden.';
+                return response($response->toArray(), $response->status);
+            }
+
+            // Validar formato email
+            if (!$this->validarEmail($email)) {
+                $response->status = 400;
+                $response->message = 'Correo electrónico inválido.';
+                return response($response->toArray(), $response->status);
+            }
+
+            // Verificar email único
+            if (User::where('email', $email)->exists()) {
+                $response->status = 400;
+                $response->message = 'El correo ya está registrado.';
+                return response($response->toArray(), $response->status);
+            }
+
+            // Crear usuario
+            $user = User::create([
+                'name' => $name,
+                'lastname' => $lastname,
+                'email' => $email,
+                'password' => bcrypt($password),
+                'email_verified_at' => now(), // O null si requiere confirmación
+            ]);
+
+            // Asignar rol
+            $role = Role::firstOrCreate(['name' => 'Customer']);
+            $user->assignRole($role);
+
+            // Iniciar sesión (opcional)
+            Auth::login($user);
+
+            $response->status = 200;
+            $response->message = 'Usuario registrado exitosamente.';
+            $response->data = ['user' => $user];
+        } catch (\Throwable $th) {
+            $response->status = 500;
+            $response->message = $th->getMessage();
+        }
+
+        return response($response->toArray(), $response->status);
     }
 
     /**

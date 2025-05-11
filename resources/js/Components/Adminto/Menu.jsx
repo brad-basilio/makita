@@ -104,193 +104,215 @@ const Menu = ({ session, hasRole }) => {
                         </li>
                     </ul>
                 </div>
+                {hasRole("Admin", "Root") && (
+                    <div id="sidebar-menu" className="show">
+                        <ul id="side-menu">
+                            <li className="menu-title">Navigation Panel</li>
+                            {hasRole("Admin", "Root") && (
+                                <>
+                                    <MenuItem
+                                        href="/admin/home"
+                                        icon="mdi mdi-home"
+                                    >
+                                        Dashboard
+                                    </MenuItem>
+                                    <MenuItem
+                                        href="/admin/sales"
+                                        icon="mdi mdi-cart-outline"
+                                    >
+                                        Pedidos
+                                    </MenuItem>
+                                    <MenuItem
+                                        href="/admin/items"
+                                        icon="mdi mdi-bookshelf"
+                                    >
+                                        Items
+                                    </MenuItem>
 
-                <div id="sidebar-menu" className="show">
-                    <ul id="side-menu">
-                        <li className="menu-title">Navigation Panel</li>
-                        {hasRole("Admin", "Root") && (
-                            <>
-                                <MenuItem
-                                    href="/admin/home"
-                                    icon="mdi mdi-home"
-                                >
-                                    Dashboard
-                                </MenuItem>
-                                <MenuItem
-                                    href="/admin/sales"
-                                    icon="mdi mdi-cart-outline"
-                                >
-                                    Pedidos
-                                </MenuItem>
-                                <MenuItem
-                                    href="/admin/items"
-                                    icon="mdi mdi-bookshelf"
-                                >
-                                    Items
-                                </MenuItem>
-
-                                {/* <MenuItem
+                                    {/* <MenuItem
                                     href="/admin/combos"
                                     icon="mdi mdi-bookshelf"
                                 >
                                     Combos
                                 </MenuItem>*/}
 
-                                <MenuItemContainer
-                                    title="Características"
-                                    icon="mdi mdi-view-dashboard"
-                                >
-                                    <MenuItem
-                                        href="/admin/collections"
-                                        icon="mdi mdi-view-carousel-outline"
+                                    <MenuItemContainer
+                                        title="Características"
+                                        icon="mdi mdi-view-dashboard"
                                     >
-                                        Colecciones
+                                        <MenuItem
+                                            href="/admin/collections"
+                                            icon="mdi mdi-view-carousel-outline"
+                                        >
+                                            Colecciones
+                                        </MenuItem>
+                                        <MenuItem
+                                            href="/admin/categories"
+                                            icon="mdi mdi-shape-outline"
+                                        >
+                                            Categorías
+                                        </MenuItem>
+                                        <MenuItem
+                                            href="/admin/subcategories"
+                                            icon="mdi mdi-file-tree"
+                                        >
+                                            SubCategorías
+                                        </MenuItem>
+                                        <MenuItem
+                                            href="/admin/brands"
+                                            icon="mdi mdi-label"
+                                        >
+                                            Marcas
+                                        </MenuItem>
+                                        <MenuItem
+                                            href="/admin/tags"
+                                            icon="mdi mdi-label-multiple"
+                                        >
+                                            Etiquetas
+                                        </MenuItem>
+                                    </MenuItemContainer>
+                                    <MenuItem
+                                        href="/admin/prices"
+                                        icon="mdi mdi-moped"
+                                    >
+                                        Costos de envío
                                     </MenuItem>
                                     <MenuItem
-                                        href="/admin/categories"
-                                        icon="mdi mdi-shape-outline"
+                                        href="/admin/messages"
+                                        icon="mdi mdi-message-text"
                                     >
-                                        Categorías
+                                        Mensajes
                                     </MenuItem>
                                     <MenuItem
-                                        href="/admin/subcategories"
-                                        icon="mdi mdi-file-tree"
+                                        href="/admin/subscriptions"
+                                        icon="mdi mdi-email-multiple"
                                     >
-                                        SubCategorías
+                                        Suscripciones
+                                    </MenuItem>
+                                    <li className="menu-title">Landing Page</li>
+                                    <MenuItem
+                                        href="/admin/posts"
+                                        icon="mdi mdi-post"
+                                    >
+                                        Posts
                                     </MenuItem>
                                     <MenuItem
-                                        href="/admin/brands"
-                                        icon="mdi mdi-label"
+                                        href="/admin/about"
+                                        icon="mdi mdi-briefcase"
                                     >
-                                        Marcas
+                                        Nosotros
                                     </MenuItem>
                                     <MenuItem
-                                        href="/admin/tags"
-                                        icon="mdi mdi-label-multiple"
+                                        href="/admin/indicators"
+                                        icon="mdi mdi-dots-grid"
                                     >
-                                        Etiquetas
+                                        Indicadores
                                     </MenuItem>
-                                </MenuItemContainer>
-                                <MenuItem
-                                    href="/admin/prices"
-                                    icon="mdi mdi-moped"
-                                >
-                                    Costos de envío
-                                </MenuItem>
-                                <MenuItem
-                                    href="/admin/messages"
-                                    icon="mdi mdi-message-text"
-                                >
-                                    Mensajes
-                                </MenuItem>
-                                <MenuItem
-                                    href="/admin/subscriptions"
-                                    icon="mdi mdi-email-multiple"
-                                >
-                                    Suscripciones
-                                </MenuItem>
-                                <li className="menu-title">Landing Page</li>
-                                <MenuItem
-                                    href="/admin/posts"
-                                    icon="mdi mdi-post"
-                                >
-                                    Posts
-                                </MenuItem>
-                                <MenuItem
-                                    href="/admin/about"
-                                    icon="mdi mdi-briefcase"
-                                >
-                                    Nosotros
-                                </MenuItem>
-                                <MenuItem
-                                    href="/admin/indicators"
-                                    icon="mdi mdi-dots-grid"
-                                >
-                                    Indicadores
-                                </MenuItem>
-                                <MenuItem
-                                    href="/admin/strengths"
-                                    icon="mdi mdi-arm-flex"
-                                >
-                                    Fortalezas
-                                </MenuItem>
-                                <MenuItem
-                                    href="/admin/banners"
-                                    icon="mdi mdi-post-outline"
-                                >
-                                    Banners
-                                </MenuItem>
-                                <MenuItem
-                                    href="/admin/sliders"
-                                    icon="mdi mdi-page-layout-body"
-                                >
-                                    Sliders
-                                </MenuItem>
+                                    <MenuItem
+                                        href="/admin/strengths"
+                                        icon="mdi mdi-arm-flex"
+                                    >
+                                        Fortalezas
+                                    </MenuItem>
+                                    <MenuItem
+                                        href="/admin/banners"
+                                        icon="mdi mdi-post-outline"
+                                    >
+                                        Banners
+                                    </MenuItem>
+                                    <MenuItem
+                                        href="/admin/sliders"
+                                        icon="mdi mdi-page-layout-body"
+                                    >
+                                        Sliders
+                                    </MenuItem>
 
-                                <MenuItem
-                                    href="/admin/faqs"
-                                    icon="mdi mdi-forum"
-                                >
-                                    Preguntas Frecuentes
-                                </MenuItem>
-                                <MenuItem
-                                    href="/admin/testimonies"
-                                    icon="mdi mdi-forum"
-                                >
-                                    Testimonios
-                                </MenuItem>
-                                <MenuItem
-                                    href="/admin/socials"
-                                    icon="mdi mdi-web"
-                                >
-                                    Redes Sociales
-                                </MenuItem>
-                                <li className="menu-title">Recursos</li>
-                                <MenuItem
-                                    href="/admin/gallery"
-                                    icon="mdi mdi-image-multiple"
-                                >
-                                    Galeria
-                                </MenuItem>
-                                <MenuItem
-                                    href="/admin/repository"
-                                    icon="mdi mdi-database"
-                                >
-                                    Repositorio
-                                </MenuItem>
-                                <li className="menu-title">Configuraciones</li>
-                                {hasRole("Root") && (
                                     <MenuItem
-                                        href="/admin/system"
-                                        icon="mdi mdi-cog"
-                                        target="_blank"
+                                        href="/admin/faqs"
+                                        icon="mdi mdi-forum"
                                     >
-                                        Configuraciones
-                                        <i className="mdi mdi-arrow-top-right ms-1"></i>
+                                        Preguntas Frecuentes
                                     </MenuItem>
-                                )}
-                                <MenuItem
-                                    href="/admin/generals"
-                                    icon="mdi mdi-credit-card-settings"
-                                >
-                                    Datos Generales
-                                </MenuItem>
-                                <MenuItem
-                                    href="/admin/profile"
-                                    icon="mdi mdi-account-box"
-                                >
-                                    Mi perfil
-                                </MenuItem>
-                                <MenuItem
-                                    href="/admin/account"
-                                    icon="mdi mdi-account-key"
-                                >
-                                    Mi cuenta
-                                </MenuItem>
-                            </>
-                        )}
-                    </ul>
-                </div>
+                                    <MenuItem
+                                        href="/admin/testimonies"
+                                        icon="mdi mdi-forum"
+                                    >
+                                        Testimonios
+                                    </MenuItem>
+                                    <MenuItem
+                                        href="/admin/socials"
+                                        icon="mdi mdi-web"
+                                    >
+                                        Redes Sociales
+                                    </MenuItem>
+                                    <li className="menu-title">Recursos</li>
+                                    <MenuItem
+                                        href="/admin/gallery"
+                                        icon="mdi mdi-image-multiple"
+                                    >
+                                        Galeria
+                                    </MenuItem>
+                                    <MenuItem
+                                        href="/admin/repository"
+                                        icon="mdi mdi-database"
+                                    >
+                                        Repositorio
+                                    </MenuItem>
+                                    <li className="menu-title">
+                                        Configuraciones
+                                    </li>
+                                    {hasRole("Root") && (
+                                        <MenuItem
+                                            href="/admin/system"
+                                            icon="mdi mdi-cog"
+                                            target="_blank"
+                                        >
+                                            Configuraciones
+                                            <i className="mdi mdi-arrow-top-right ms-1"></i>
+                                        </MenuItem>
+                                    )}
+                                    <MenuItem
+                                        href="/admin/generals"
+                                        icon="mdi mdi-credit-card-settings"
+                                    >
+                                        Datos Generales
+                                    </MenuItem>
+                                    <MenuItem
+                                        href="/admin/profile"
+                                        icon="mdi mdi-account-box"
+                                    >
+                                        Mi perfil
+                                    </MenuItem>
+                                    <MenuItem
+                                        href="/admin/account"
+                                        icon="mdi mdi-account-key"
+                                    >
+                                        Mi cuenta
+                                    </MenuItem>
+                                </>
+                            )}
+                        </ul>
+                    </div>
+                )}
+                {hasRole("Customer") && (
+                    <div id="sidebar-menu" className="show">
+                        <ul id="side-menu">
+                            <li className="menu-title">Panel del Cliente</li>
+
+                            {hasRole("Customer") && (
+                                <>
+                                    <MenuItem
+                                        href="/customer/orders"
+                                        icon="mdi mdi-cart-outline"
+                                    >
+                                        Mis Pedidos
+                                    </MenuItem>
+                                </>
+                            )}
+                        </ul>
+                    </div>
+                )}
+
                 <div className="clearfix"></div>
             </div>
         </div>
