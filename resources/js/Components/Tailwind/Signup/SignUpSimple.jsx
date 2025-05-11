@@ -68,7 +68,7 @@ export default function SignUpSimple() {
                 <div className="hidden lg:block">
                     <img
                         src={
-                            `/storage/images/${Global.APP_CORRELATIVE}/signup.png` ||
+                            `/assets/${Global.APP_CORRELATIVE}/signup.png` ||
                             image
                         }
                         alt="Imagen decorativa"

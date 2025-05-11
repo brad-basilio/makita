@@ -74,7 +74,7 @@ export default function LoginSimple() {
                 <div className="hidden lg:block">
                     <img
                         src={
-                            `/storage/images/${Global.APP_CORRELATIVE}/login.png` ||
+                            `/assets/${Global.APP_CORRELATIVE}/login.png` ||
                             image
                         }
                         alt="Imagen decorativa"

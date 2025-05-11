@@ -79,7 +79,7 @@ export default function ResetPasswordSimple() {
                 <div className="hidden lg:block">
                     <img
                         src={
-                            `/storage/images/${Global.APP_CORRELATIVE}/restore.png` ||
+                            `/assets/${Global.APP_CORRELATIVE}/restore.png` ||
                             image
                         }
                         alt="Imagen decorativa"
