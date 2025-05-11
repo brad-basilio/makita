@@ -143,7 +143,6 @@ const Sales = ({ statuses = [] }) => {
                         dataField: "status.name",
                         caption: "Estado",
                         cellTemplate: (container, { data }) => {
-                            console.log(data);
                             ReactAppend(
                                 container,
                                 <span

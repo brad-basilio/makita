@@ -28,6 +28,7 @@ class SaleController extends BasicController
 
     public function setPaginationInstance(Request $request, string $model)
     {
-        return $model::with('status');
+        $userId = Auth::user()->id;
+        return $model::with('status')->where('user_id', $userId);
     }
 }
