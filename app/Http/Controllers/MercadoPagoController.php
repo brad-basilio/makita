@@ -53,7 +53,7 @@ class MercadoPagoController extends Controller
                 'document' => $request->document,
                 'businessName' => $request->businessName,
             ]);
-            
+           
              // Registrar detalles de la venta (sin afectar stock aún)
             foreach ($request->cart as $item) {
                 $itemId = is_array($item) ? $item['id'] ?? null : $item->id ?? null;
@@ -118,7 +118,7 @@ class MercadoPagoController extends Controller
                     'surname' => $request->lastname,
                     'email' => $request->email,
                     'phone' => [
-                        'area_code' => '',
+                        'area_code' => $request->phone_prefix ??'',
                         'number' => $request->phone ?? '',
                     ],
                     'address' => [
@@ -132,7 +132,7 @@ class MercadoPagoController extends Controller
                     'failure' => url('/api/mercadopago/failure'),
                     'pending' => url('/api/mercadopago/pending'),
                 ],
-                'auto_return' => 'approved',
+                // 'auto_return' => 'approved',
                 'external_reference' => $orderNumber,
             ];
             

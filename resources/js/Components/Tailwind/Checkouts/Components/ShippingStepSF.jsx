@@ -11,7 +11,7 @@ import SelectForm from "./SelectForm";
 import OptionCard from "./OptionCard";
 import { InfoIcon } from "lucide-react";
 import { Notify } from "sode-extend-react";
-
+import { renderToString } from "react-dom/server";
 export default function ShippingStepSF({
     cart,
     setSale,
@@ -26,11 +26,15 @@ export default function ShippingStepSF({
     user,
     setEnvio,
     envio,
+    prefixes,
 }) {
+    
     const [formData, setFormData] = useState({
         name: user?.name || "",
         lastname: user?.lastname || "",
         email: user?.email || "",
+        phone_prefix: user?.phone_prefix || "51", //telf
+        phone: user?.phone || "",   //telf
         department: user?.department || "",
         province: user?.province || "",
         district: user?.district || "",
@@ -195,7 +199,10 @@ export default function ShippingStepSF({
             !formData.lastname ||
             !formData.email ||
             !formData.address ||
-            !formData.reference
+            !formData.reference ||
+            !formData.phone
+
+
         ) {
             Notify.add({
                 icon: "/assets/img/icon.svg",
@@ -223,8 +230,9 @@ export default function ShippingStepSF({
                 name: formData?.name || "",
                 lastname: formData?.lastname || "",
                 fullname: `${formData?.name} ${formData?.lastname}`,
+                phone_prefix: formData?.phone_prefix || "51",
                 email: formData?.email || "",
-                phone: "",
+                phone: `${formData.phone_prefix}${formData.phone}`,
                 country: "Perú",
                 department: departamento || "",
                 province: provincia || "",
@@ -271,7 +279,87 @@ export default function ShippingStepSF({
         }
     };
 
+    // useEffect(() => {
+    //     const htmlTemplate = (data) => {
+    //         const prefix = data.element.dataset.code;
+    //         const flag = data.element.dataset.flag;
+    //         return renderToString(
+    //             <span>
+    //                 <span className="inline-block w-8 font-emoji text-center">{flag}</span>
+    //                 <b className="me-1">{data.text}</b>
+    //                 <span className="text-sm text-opacity-20">{prefix}</span>
+    //             </span>
+    //         );
+    //     };
+    
+    //     $('.select2-phone-prefix').select2({
+    //         dropdownCssClass: 'py-1',
+    //         containerCssClass: '!border !border-gray-300 !rounded p-2 !h-[42px]',
+    //         templateResult: function(data) {
+    //             if (!data.id) return data.text;
+    //             return $(htmlTemplate(data));
+    //         },
+    //         templateSelection: function(data) {
+    //             if (!data.id) return data.text;
+    //             return $(htmlTemplate(data));
+    //         }
+    //     }).on('change', function(e) {
+    //         handleChange({ target: { name: 'phone_prefix', value: e.target.value } });
+    //     });
+    
+    //     return () => {
+    //         $('.select2-phone-prefix').select2('destroy');
+    //     };
+    // }, []);
+   
+    
+    useEffect(() => {
+        const htmlTemplate = (data) => {
+          const prefix = data.element.dataset.code
+          const flag = data.element.dataset.flag
+          return renderToString(<span>
+            <span className="inline-block w-8 font-emoji text-center">{flag}</span>
+            <b className="me-1">{data.text}</b>
+            <span className="text-sm text-opacity-20">{prefix}</span>
+          </span>)
+        }
+        $('.select2-prefix-selector').select2({
+          dropdownCssClass: 'py-1',
+          containerCssClass: '!border !border-gray-300 !rounded p-2 !h-[42px]',
+          arrowCssClass: '!text-primary top-1/2 -translate-y-1/2"',
+          //minimumResultsForSearch: -1,
+          templateResult: function (data) {
+            if (!data.id) {
+              return data.text;
+            }
+            var $container = $(htmlTemplate(data));
+            return $container;
+          },
+          templateSelection: function (data) {
+            if (!data.id) {
+              return data.text;
+            }
+            var $container = $(htmlTemplate(data));
+            return $container;
+          },
+          matcher: function (params, data) {
+            if (!params.term || !data.element) return data;
+      
+            const country = data.element.dataset.country || '';
+            const text = data.text || '';
+      
+            if (country.toLowerCase().includes(params.term.toLowerCase()) ||
+                text.toLowerCase().includes(params.term.toLowerCase())) {
+              return data;
+            }
+      
+            return null;
+          }
+        });
+    }, [formData.phone_prefix])
+
     const [selectedOption, setSelectedOption] = useState("free");
+
     return (
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-y-8 lg:gap-8 ">
             <div className="lg:col-span-3">
@@ -300,20 +388,98 @@ export default function ShippingStepSF({
                             placeholder="Apellidos"
                         />
                     </div>
+                    
+                    <div className="grid lg:grid-cols-2 gap-4 ">
+                    
+                        {/* Correo electrónico */}
+                        <InputForm
+                            label="Correo electrónico"
+                            type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            placeholder="Ej. hola@gmail.com"
+                        />
 
-                    {/* Correo electrónico */}
+                        {/* Celular */}
+                        <div className="mb-4">
+                            <label htmlFor="phone" className="block text-sm mb-1">
+                                Celular
+                            </label>
+                            <div className="flex gap-2">
+                                <select
+                                    className="select2-prefix-selector w-[200px] p-2 border border-gray-300 rounded"
+                                    onChange={(e) => setSelectedPrefix(e.target.value)}
+                                    name="phone_prefix"
+                                    value={formData.phone_prefix}
+                                >
+                                    <option value="">Selecciona un país</option>
+                                    {
+                                    prefixes
+                                        .sort((a, b) => a.country.localeCompare(b.country))
+                                        .map((prefix, index) => (
+                                        <option
+                                            key={index}
+                                            value={prefix.realCode}
+                                            data-code={prefix.beautyCode}
+                                            data-flag={prefix.flag}
+                                            data-country={prefix.country}
+                                        >
+                                        </option>
+                                        ))
+                                    }
+                                </select>
+                                <input
+                                    type="text"
+                                    id="phone"
+                                    name="phone"
+                                    value={formData.phone}
+                                    onChange={handleChange}
+                                    className="flex-1 p-2 border border-gray-300 rounded"
+                                    placeholder="000 000 000"
+                                />
+                            </div>
+                        
+                            {/* <label htmlFor="phone" className="block text-sm mb-1">
+                                Celular
+                            </label>
+                            <div className="flex gap-2">
+                                <select
+                                    className="select2-phone-prefix w-[200px]"
+                                    name="phone_prefix"
+                                    value={formData.phone_prefix}
+                                >
+                                    <option value="">Selecciona un país</option>
+                                    {
+                                    prefixes
+                                        .sort((a, b) => a.country.localeCompare(b.country))
+                                        .map((prefix, index) => (
+                                        <option
+                                            key={index}
+                                            value={prefix.realCode}
+                                            data-code={prefix.beautyCode}
+                                            data-flag={prefix.flag}
+                                        >
+                                            {prefix.country}
+                                        </option>
+                                        ))
+                                    }
+                                </select>
+                                <input
+                                    type="text"
+                                    id="phone"
+                                    name="phone"
+                                    value={formData.phone}
+                                    onChange={handleChange}
+                                    className="flex-1 p-2 border border-gray-300 rounded"
+                                    placeholder="000 000 000"
+                                />
+                            </div> */}
+                        </div>
 
-                    <InputForm
-                        label="Correo electrónico"
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        placeholder="Ej. hola@gmail.com"
-                    />
+                    </div>
 
                     {/* Departamento */}
-
                     <SelectForm
                         label="Departamento"
                         options={departamentos}
@@ -328,7 +494,6 @@ export default function ShippingStepSF({
                     />
 
                     {/* Provincia */}
-
                     <SelectForm
                         disabled={!departamento}
                         label="Provincia"

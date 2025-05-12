@@ -70,7 +70,7 @@ const CardItemSF = ({ setCart, ...item }) => {
                             >
                                 <Minus size={16} />
                             </button>
-                            <div className="w-12 h-8 flex justify-center items-center bg-white">
+                            <div className="w-8 h-8 flex justify-center items-center bg-white">
                                 <span className="font-semibold text-sm">{item.quantity || 1}</span>
                             </div>
                             <button
@@ -86,7 +86,7 @@ const CardItemSF = ({ setCart, ...item }) => {
                 </td>
                 
                 {/* Columna Precio Unitario */}
-                <td className="px-4 py-4 text-right">
+                <td className="px-4 py-4 text-right min-w-32">
                     <div className="text-xs text-gray-500 line-through">S/ {Number(item.price).toFixed(2)}</div>
                     <div className="font-bold">S/ {Number(item.final_price).toFixed(2)}</div>
                 </td>
@@ -110,7 +110,7 @@ const CardItemSF = ({ setCart, ...item }) => {
                         <p className="text-sm text-gray-500">Color: {item.color}</p>
                         
                         <div className="mt-1 flex flex-col">
-                            <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden shadow-sm w-24">
+                            <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden shadow-sm w-20">
                                 <button onClick={onMinusClicked} className="p-2 text-gray-600 hover:bg-gray-100">
                                     <Minus size={16} />
                                 </button>

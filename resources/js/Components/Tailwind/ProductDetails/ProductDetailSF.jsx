@@ -21,9 +21,10 @@ import CartModal from "../Components/CartModal";
 import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 import ProductNavigation from "../Products/ProductNavigation";
+import em from "../../../Utils/em";
 
-export default function ProductDetailSF({ item, data, setCart, cart }) {
-    console.log("VENIMOS DESDE ITEM DE PRODUCTDETAIL SF:", item);
+export default function ProductDetailSF({ item, data, setCart, cart, textstatic}) {
+   
     const itemsRest = new ItemsRest();
     const [modalOpen, setModalOpen] = useState(false);
     const [selectedImage, setSelectedImage] = useState({
@@ -38,6 +39,10 @@ export default function ProductDetailSF({ item, data, setCart, cart }) {
         if (value > 10) value = 10;
         setQuantity(value);
     };
+
+    /*TEXTOS */
+    const textProductRelation = textstatic.find(x => x.correlative == 'detailproduct-relation-title')?.title ?? '';
+    
     /*ESPECIFICACIONES */
     const [isExpanded, setIsExpanded] = useState(false);
 
@@ -579,7 +584,7 @@ export default function ProductDetailSF({ item, data, setCart, cart }) {
             {relationsItems.length > 0 && (
                 <div className="-mt-10 mb-10 p-4">
                     <ProductNavigation
-                        data={{ title: "Te Puede Interesar", link_catalog: "/catalogo" }}
+                        data={{ title: em(textProductRelation), link_catalog: "/catalogo" }}
                         items={relationsItems}
                         cart={cart}
                         setCart={setCart}

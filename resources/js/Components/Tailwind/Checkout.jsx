@@ -16,7 +16,7 @@ const Checkout = ({ which, data, items, cart, setCart, isUser, prefixes = [] }) 
       case 'CheckoutSteps':
         return <CheckoutSteps data={data} cart={cart} setCart={setCart} user={isUser} />
       case 'CheckoutStepsSF':
-        return <CheckoutStepsSF data={data} cart={cart} setCart={setCart} user={isUser} />
+        return <CheckoutStepsSF data={data} cart={cart} setCart={setCart} user={isUser} prefixes={prefixes} />
       default:
         return <div className="w-full px-[5%] replace-max-w-here p-4 mx-auto">- No Hay componente <b>{which}</b> -</div>
     }

@@ -6,7 +6,7 @@ import ConfirmationStepSF from "./Components/ConfirmationStepSF";
 import Global from "../../../Utils/Global";
 import { Local } from "sode-extend-react";
 
-export default function CheckoutStepsSF({ cart, setCart, user }) {
+export default function CheckoutStepsSF({ cart, setCart, user, prefixes }) {
    
     const [currentStep, setCurrentStep] = useState(1);
 
@@ -171,6 +171,7 @@ export default function CheckoutStepsSF({ cart, setCart, user }) {
                         igv={igv}
                         totalFinal={totalFinal}
                         user={user}
+                        prefixes={prefixes}
                     />
                 )}
 

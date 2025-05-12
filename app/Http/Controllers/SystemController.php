@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Faq;
 use App\Models\General;
 use App\Models\Post;
+use App\Models\Aboutus;
 use App\Models\Setting;
 use App\Models\System;
 use App\Models\SystemColor;
@@ -211,6 +212,7 @@ class SystemController extends BasicController
         }
         $props['headerPosts'] = Post::with('category')->where('status', true)->latest()->take(3)->get();
         $props['postsLatest'] = Post::with('category')->where('status', true)->latest()->take(6)->get();
+        $props['textstatic'] = Aboutus::where('visible', true)->where('status', true)->get();
 
         return $props;
     }

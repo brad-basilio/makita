@@ -781,7 +781,6 @@
                 "name": "Simple",
                 "using": {
                     "model": "Item",
-
                     "with": ["category", "subcategory", "brand"]
                 }
             },
@@ -887,7 +886,10 @@
             {
                 "id": "CheckoutStepsSF",
                 "name": "StepsSF",
-                "data": ["title"]
+                "data": ["title"],
+                "json": {
+                    "prefixes": "./prefijocelular.json"
+                }
             }
         ]
     },

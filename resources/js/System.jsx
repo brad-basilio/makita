@@ -56,6 +56,7 @@ const System = ({
     faqs,
     headerPosts,
     postsLatest,
+    textstatic,
 }) => {
     const getItems = (itemsId) => {
         return systemItems[itemsId] ?? [];
@@ -196,6 +197,7 @@ const System = ({
                         item={filteredData.Item}
                         cart={cart}
                         setCart={setCart}
+                        textstatic={textstatic}
                     />
                 );
             case "cart":

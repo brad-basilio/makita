@@ -9,7 +9,7 @@ const ProductDetailSF = React.lazy(() => import('./ProductDetails/ProductDetailS
 const ProductDetailBananaLab = React.lazy(() => import('./ProductDetails/ProductDetailBananaLab'))
 const ProductDetailKuchara = React.lazy(() => import('./ProductDetails/ProductDetailKuchara'))
 
-const ProductDetail = ({ which, item, cart, setCart }) => {
+const ProductDetail = ({ which, item, cart, setCart, textstatic }) => {
   const getProductDetail = () => {
     switch (which) {
       case 'ProductDetailSimple':
@@ -19,7 +19,7 @@ const ProductDetail = ({ which, item, cart, setCart }) => {
       case 'ScrapingProductDetail':
         return <ScrapingProductDetail cart={cart} setCart={setCart} />
       case 'ProductDetailSF':
-        return <ProductDetailSF item={item} cart={cart} setCart={setCart} />
+        return <ProductDetailSF item={item} cart={cart} setCart={setCart} textstatic={textstatic} />
         case 'ProductDetailBananaLab':
           return <ProductDetailBananaLab item={item} cart={cart} setCart={setCart} />
         case 'ProductDetailKuchara':
