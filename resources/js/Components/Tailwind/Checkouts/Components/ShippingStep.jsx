@@ -335,7 +335,7 @@ export default function ShippingStep({
                                     zIndex: 9999,
                                     marginTop: "4px",
                                     borderRadius: "8px",
-                                    boxShadow: "none",
+                                  //  boxShadow: "none",
                                 }),
                                 option: (base) => ({
                                     ...base,
