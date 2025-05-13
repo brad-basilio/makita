@@ -62,9 +62,10 @@ const CartModal = ({ data, cart, setCart, modalOpen, setModalOpen }) => {
                 <div>
                     <button
                         href={data?.link_cart}
+                        
                         className="font-semibold text-base bg-primary py-3 px-5 rounded-2xl text-white cursor-pointer w-full inline-block text-center"
                     >
-                        Checkout
+                        Ir al Carrito
                     </button>
                 </div>
             </div>

@@ -48,9 +48,9 @@ export default function CartStep({ cart, setCart, onContinue, subTotal, envio, i
                     </div>
                     <div className="space-y-2 pt-4">
 
-                        <ButtonPrimary onClick={onContinue}>  Continuar</ButtonPrimary>
+                        <ButtonPrimary onClick={onContinue}>Continuar Compra</ButtonPrimary>
 
-                        <ButtonSecondary href="/"> Cancelar</ButtonSecondary>
+                        <ButtonSecondary href="/">Cancelar</ButtonSecondary>
                     </div>
                     <div>
                         <p className="text-sm customtext-neutral-dark">

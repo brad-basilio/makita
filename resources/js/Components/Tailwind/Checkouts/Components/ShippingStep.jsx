@@ -568,7 +568,7 @@ export default function ShippingStep({
                         onClick={handlePayment}
                         className="w-full mt-6"
                     >
-                        Pagar con Culqi
+                        Ir a Pagar
                     </ButtonPrimary>
 
                     <p className="text-xs text-gray-600 mt-4 text-center">
