@@ -325,10 +325,11 @@ export default function ShippingStep({
                                     ...base,
                                     border: "1px solid transparent",
                                     boxShadow: "none",
-                                    minHeight: "44px",
+                                    minHeight: "50px",
                                     "&:hover": {
                                         borderColor: "transparent",
                                     },
+                                    borderRadius: "0.75rem",
                                 }),
                                 menu: (base) => ({
                                     ...base,
@@ -359,7 +360,7 @@ export default function ShippingStep({
                                     </div>
                                 </div>
                             )}
-                            className="w-full px-4 py-1.5 border focus:bg-primary focus:text-white border-gray-300 rounded-xl  transition-all duration-300"
+                            className="w-full border focus:bg-primary focus:text-white border-gray-300 rounded-xl  transition-all duration-300"
                             menuPortalTarget={document.body}
                             menuPosition="fixed"
                         />
