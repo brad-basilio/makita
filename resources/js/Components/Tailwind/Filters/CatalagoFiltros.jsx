@@ -66,7 +66,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
     });
     //filtros nuevos
     const [products, setProducts] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [pagination, setPagination] = useState({
         currentPage: 1,
         totalPages: 1,
