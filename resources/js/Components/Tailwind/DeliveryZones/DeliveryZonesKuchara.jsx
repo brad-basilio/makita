@@ -24,7 +24,8 @@ const DeliveryZonesKuchara = ({ data, items }) => {
         'X': 'Miércoles',
         'J': 'Jueves',
         'V': 'Viernes',
-        'S': 'Sábado'
+        'S': 'Sábado',
+        'D': 'Domingo'
     };
 
     // Agrupar distritos por día de entrega
