@@ -70,42 +70,43 @@ const DeliveryZonesKuchara = ({ data, items }) => {
         </div>
     );
 
+    const maxLength = Math.max(...Object.values(zonesByNumber || {}).map(zone => zone.length))
+    const maxLength2 = Math.max(...Object.values(districtsByDay || {}).map(districts => districts.length))
+
     return <div className="w-full mx-auto p-[5%]">
         <div>
             <div>
 
                 {/* Vista Desktop */}
                 <div className="hidden md:flex gap-8 mb-12">
-                    <div className="w-8/12 z-20">
+                    <div className="w-8/12 z-[15]">
                         <h1 className="customtext-primary text-4xl md:text-5xl font-bold mb-2 font-title">COBERTURA DE DELIVERY</h1>
                         <p className="text-lg mb-8">Conecta con tu Agro Interior</p>
                         <table className="w-full border-collapse">
                             <thead>
-                                <tr className="bg-primary">
+                                <tr className="bg-primary rounded-t-2xl">
                                     {Object.keys(zonesByNumber || {}).sort().map((zone, jndex) => (
                                         <>
-                                            <th className={`text-white p-3 ${jndex > 0 && 'border-l border-white'} text-left w-[20%]`}>
+                                            <th className={`text-white p-3 ${jndex == 0 && 'rounded-tl-2xl'} ${jndex > 0 && 'border-l border-white'} text-left w-[20%]`}>
                                                 <small className="block font-light">{zone}</small>
                                                 Distrito
                                             </th>
-                                            <th className="text-white p-3 border-l border-white text-start align-bottom w-[13.333%]">Precios</th>
+                                            <th className={`text-white p-3 border-l border-white text-start align-bottom w-[13.333%] ${Object.keys(zonesByNumber || {}).length == (jndex + 1) && 'rounded-tr-2xl'}`}>Precios</th>
                                         </>
                                     ))}
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody className="bg-accent rounded-b-2xl">
                                 {Array.from({
-                                    length: Math.max(
-                                        ...Object.values(zonesByNumber || {}).map(zone => zone.length)
-                                    )
+                                    length: maxLength
                                 }).map((_, index) => (
-                                    <tr key={index} className="bg-accent">
+                                    <tr key={index}>
                                         {Object.keys(zonesByNumber || {}).sort().map((zone, jndex) => (
                                             <>
-                                                <td className={`p-3 ${jndex > 0 && 'border-l border-black'}`}>
+                                                <td className={`p-3 ${index == (maxLength - 1) && jndex == 0 && 'rounded-bl-2xl'} ${jndex > 0 && 'border-l border-black'}`}>
                                                     {zonesByNumber[zone]?.[index]?.district || ''}
                                                 </td>
-                                                <td className="p-3 border-l border-black text-start">
+                                                <td className={`p-3 border-l border-black text-start ${index == (maxLength - 1) && Object.keys(zonesByNumber || {}).length == (jndex + 1) && 'rounded-br-2xl'}`}>
                                                     {zonesByNumber[zone]?.[index] ? `S/ ${Number2Currency(zonesByNumber[zone][index].price)}` : ''}
                                                 </td>
                                             </>
@@ -147,15 +148,17 @@ const DeliveryZonesKuchara = ({ data, items }) => {
 
                 {/* Vista Desktop */}
                 <div className="hidden md:block overflow-x-auto">
-                    <table className="w-full border-collapse">
+                <table className="w-full border-collapse">
                         <thead>
                             <tr className="bg-primary rounded-t-2xl">
                                 {Object.values(weekDays).map((day, index) => (
-                                    <th key={day} className={`text-white p-3 text-start ${index > 0 && 'border-l border-white'} w-[14.286%]`}>{day}</th>
+                                    <th key={day} className={`text-white p-3 text-start ${index === 0 && 'rounded-tl-2xl'} ${index > 0 && 'border-l border-white'} ${index === Object.values(weekDays).length - 1 && 'rounded-tr-2xl'} w-[14.286%]`}>
+                                        {day}
+                                    </th>
                                 ))}
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody className="bg-accent rounded-b-2xl">
                             {Array.from({
                                 length: Math.max(
                                     ...Object.values(districtsByDay || {}).map(districts => districts.length)
@@ -163,7 +166,11 @@ const DeliveryZonesKuchara = ({ data, items }) => {
                             }).map((_, index) => (
                                 <tr key={index}>
                                     {Object.keys(weekDays).map((dayCode, jndex) => (
-                                        <td key={dayCode} className={`bg-accent p-3 ${jndex > 0 && 'border-l border-black'}`}>
+                                        <td key={dayCode} className={`p-3 
+                                            ${jndex > 0 && 'border-l border-black'}
+                                            ${index === maxLength2 - 1 && jndex === 0 && 'rounded-bl-2xl'}
+                                            ${index === maxLength2 - 1 && jndex === Object.keys(weekDays).length - 1 && 'rounded-br-2xl'}
+                                        `}>
                                             {districtsByDay?.[dayCode]?.[index] || ''}
                                         </td>
                                     ))}
