@@ -1036,6 +1036,22 @@
         ]
     },
     {
+        "id": "delivery-zones",
+        "icon": "mdi mdi-map-marker-radius",
+        "name": "Zonas de Cobertura",
+        "options": [
+            {
+                "id": "DeliveryZonesKuchara",
+                "name": "Kuchara",
+                "image": "delivery-zones-kuchara.png",
+                "data": ["image"],
+                "using": {
+                    "model": "DeliveryZone"
+                }
+            }
+        ]
+    },
+    {
         "id": "thank",
         "name": "Thanks",
         "options": [

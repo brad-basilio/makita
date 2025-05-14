@@ -38,6 +38,7 @@ import Image from "./Components/Tailwind/Image";
 import BananaLab from "./Components/Tailwind/BananaLab";
 import { Toaster } from "sonner";
 import Floating from "./Components/Tailwind/Floating";
+import DeliveryZone from "./Components/Tailwind/DeliveryZone";
 
 const itemsRest = new ItemsRest();
 
@@ -217,6 +218,8 @@ const System = ({
                 return <Image which={value} data={data} />;
             case "step":
                 return <Step which={value} data={data} />;
+            case 'delivery-zones':
+                return <DeliveryZone which={value} data={data} items={getItems(itemsId)} />;
             case "product-detail":
                 return (
                     <ProductDetail

@@ -36,6 +36,7 @@ use App\Http\Controllers\Admin\WebDetailController as AdminWebDetailController;
 use App\Http\Controllers\Admin\ItemImageController as AdminItemImageController;
 use App\Http\Controllers\Admin\FaqController as AdminFaqController;
 use App\Http\Controllers\Admin\ComboController as AdminComboController;
+use App\Http\Controllers\Admin\DeliveryZoneController as AdminDeliveryZoneController;
 use App\Http\Controllers\Admin\RepositoryController as AdminRepositoryController;
 use App\Http\Controllers\Admin\SettingController as AdminSettingController;
 use App\Http\Controllers\AuthClientController;
@@ -45,6 +46,7 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\CoverController;
 use App\Http\Controllers\DeliveryPriceController;
+use App\Http\Controllers\DeliveryZoneController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ItemImportController;
 use App\Http\Controllers\MessageController;
@@ -271,6 +273,12 @@ Route::middleware('auth')->group(function () {
     Route::patch('/tags/status', [AdminTagController::class, 'status']);
     Route::patch('/tags/{field}', [AdminTagController::class, 'boolean']);
     Route::delete('/tags/{id}', [AdminTagController::class, 'delete']);
+
+    Route::post('/delivery-zones', [AdminDeliveryZoneController::class, 'save']);
+    Route::post('/delivery-zones/paginate', [AdminDeliveryZoneController::class, 'paginate']);
+    Route::patch('/delivery-zones/status', [AdminDeliveryZoneController::class, 'status']);
+    Route::patch('/delivery-zones/{field}', [AdminDeliveryZoneController::class, 'boolean']);
+    Route::delete('/delivery-zones/{id}', [AdminDeliveryZoneController::class, 'delete']);
 
     Route::post('/strengths', [AdminStrengthController::class, 'save']);
     Route::post('/strengths/paginate', [AdminStrengthController::class, 'paginate']);
