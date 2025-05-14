@@ -52,10 +52,10 @@ class DeliveryPriceController extends BasicController
             if (!$ubigeo) {
                 $response->status = 400;
                 $response->message = 'Ubigeo no encontrado';
-                //dump($ubigeo);
+            
                 return;
             }
-         //   dump($ubigeo);
+  
             // 1. Buscar el precio de envío
             $deliveryPrice = DeliveryPrice::with(['type'])
                 ->where('ubigeo', $ubigeo)
@@ -65,10 +65,10 @@ class DeliveryPriceController extends BasicController
             if (!$deliveryPrice) {
                 $response->status = 400;
                 $response->message = 'No hay cobertura para esta ubicación';
-            //    dump($deliveryPrice);
+              //dump($deliveryPrice);
                 return;
             }
-
+          //  dump($deliveryPrice);
             // 3. Estructurar la respuesta
             $result = [
                 'is_free' => $deliveryPrice->is_free,
@@ -94,7 +94,7 @@ class DeliveryPriceController extends BasicController
             }
 
             if ($deliveryPrice->is_agency) {
-                $agencyType = TypeDelivery::where('slug', 'envio-agencia')->first();
+                $agencyType = TypeDelivery::where('slug', 'delivery-agencia')->first();
 
                 $result['agency'] = [
                     'price' => $deliveryPrice->agency_price,
@@ -103,7 +103,7 @@ class DeliveryPriceController extends BasicController
                     'characteristics' => $agencyType->characteristics,
                 ];
             }
-//dump($result);
+            //dump($result);
             $response->data = $result;
             $response->status = 200;
             $response->message = 'Precios obtenidos correctamente';
@@ -215,8 +215,8 @@ class DeliveryPriceController extends BasicController
             ->values()
             ->map(function ($item) {
                 return [
-                    'inei' => $item['inei'],
-                    //   'reniec' => $item['reniec'],
+                    'ieni' => $item['inei'],
+                    'reniec' => $item['reniec'],
                     'departamento' => $item['departamento'],
                     'provincia' => $item['provincia'],
                     'distrito' => $item['distrito']

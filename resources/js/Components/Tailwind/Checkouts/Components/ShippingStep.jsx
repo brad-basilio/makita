@@ -73,16 +73,16 @@ export default function ShippingStep({
             department: data.departamento,
             province: data.provincia,
             district: data.distrito,
-            ubigeo: data.inei,
+            ubigeo: data.reniec,
         }));
 
         // Consultar precios de envío
         setLoading(true);
         try {
             const response = await DeliveryPricesRest.getShippingCost({
-                ubigeo: data.inei,
+                ubigeo: data.reniec,
             });
-console.log(response);
+
             const options = [];
             if (response.data.is_free) {
                 options.push({

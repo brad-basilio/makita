@@ -90,7 +90,7 @@ class DeliveryPriceController extends BasicController
                 if ($is_free === 1) {
                     $freeType = TypeDelivery::where('slug', 'envio-gratis')->first();
                 } else if ($is_agency === 1) {
-                    $freeType = TypeDelivery::where('slug', 'envio-agencia')->first();
+                    $freeType = TypeDelivery::where('slug', 'delivery-agencia')->first();
                 } else {
                     $freeType = TypeDelivery::where('slug', 'delivery-normal')->first();
                 }
@@ -99,7 +99,7 @@ class DeliveryPriceController extends BasicController
                     $type_id = $freeType->id;
                 }
 
-                $ubigeoObject = collect($ubigeoData)->firstWhere('inei', $ubigeo);
+                $ubigeoObject = collect($ubigeoData)->firstWhere('reniec', $ubigeo);
                 if (!$ubigeoObject) {
                     continue; // Saltar a la siguiente iteración si no se encuentra el ubige
                 }
