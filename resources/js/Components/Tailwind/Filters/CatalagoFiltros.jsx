@@ -40,7 +40,7 @@ const SkeletonCard = () => {
 //const CatalagoFiltros = ({ items, data, categories, brands, prices, cart, setCart }) => {
 const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
     //const { categories, brands, priceRanges } = filteredData;
-    const [brands,setBrands]=useState([]);
+    const [brands, setBrands]=useState([]);
     const [subcategories, setSubcategories] = useState([]);
     const [categories, setCategories] = useState([]);
     const [priceRanges, setPriceRanges] = useState([]);
