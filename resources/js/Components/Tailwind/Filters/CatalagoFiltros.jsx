@@ -57,7 +57,7 @@ const [brands,setBrands]=useState([]);
         category_id: [], // Array para múltiples categorías
         brand_id: [], // Array para múltiples marcas
         subcategory_id: [],
-        brand_id: [],
+        
         price: null,
         name: null,
         sort_by: "created_at",
@@ -168,11 +168,74 @@ const [brands,setBrands]=useState([]);
             setSubcategories(response?.summary.subcategories);
             setPriceRanges(response?.summary.priceRanges);
         } catch (error) {
-            console.error("Error fetching products:", error);
+            console.log("Error fetching products:", error);
         } finally {
             setLoading(false);
         }
     };
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const categoriaParam = params.get("category");
+        const subCategoriaParam = params.get("subcategory");
+        const collectionParam = params.get("collection");
+        const searchParam = params.get("search");
+        const campaignParam = params.get("campaign");
+        const sortParam = params.get("sort");
+
+        if (categoriaParam) {
+            const category = categories.find(
+                (item) => item.slug === categoriaParam
+            );
+            if (category) {
+                setSelectedFilters((prev) => ({
+                    ...prev,
+                    category_id: [category.id],
+                }));
+            }
+        }
+        if (subCategoriaParam) {
+            const subcategory = subcategories.find(
+                (item) => item.slug === subCategoriaParam
+            );
+         
+            if (subcategory) {
+                setSelectedFilters((prev) => ({
+                  ...prev,
+                  subcategory_id: [subcategory.id],
+                }));
+            }
+        }
+
+    
+
+       /* if (collectionParam) {
+            const collection = collections.find(
+                (item) => item.slug === collectionParam
+            );
+            if (collection) {
+                setSelectedFilters((prev) => ({
+                    ...prev,
+                    collection_id: [collection.id],
+                }));
+            }
+        }*/
+      /*if (campaignParam) {
+            const campaign = campaigns.find(
+                (item) => item.slug === campaignParam
+            );
+            setProducts(campaign.items);
+        }*/
+
+        if (searchParam) {
+            setSelectedFilters((prev) => ({
+                ...prev,
+                name: searchParam,
+            }));
+        }
+
+       
+    }, [items])
+
 
     useEffect(() => {
         fetchProducts(pagination.currentPage);
@@ -216,76 +279,8 @@ const [brands,setBrands]=useState([]);
         { value: "name:desc", label: "Nombre: Z-A" },
     ];
 
-    useEffect(() => {
-        const params = new URLSearchParams(window.location.search);
-        const categoriaParam = params.get("category");
-        const subCategoriaParam = params.get("subcategory");
-        const collectionParam = params.get("collection");
-        const searchParam = params.get("search");
-        const campaignParam = params.get("campaign");
-        const sortParam = params.get("sort");
-
-        if (categoriaParam) {
-            const category = categories.find(
-                (item) => item.slug === categoriaParam
-            );
-            if (category) {
-                setSelectedFilters((prev) => ({
-                    ...prev,
-                    category_id: [category.id],
-                }));
-            }
-        }
-        if (subCategoriaParam) {
-            const subcategory = subcategories.find(
-                (item) => item.slug === subCategoriaParam
-            );
-            console.log(subcategory);
-            if (subcategory) {
-                setSelectedFilters((prev) => ({
-                  ...prev,
-                  subcategory_id: [subcategory.id],
-                }));
-            }
-        }
-        console.log(subCategoriaParam);
-    
-
-       /* if (collectionParam) {
-            const collection = collections.find(
-                (item) => item.slug === collectionParam
-            );
-            if (collection) {
-                setSelectedFilters((prev) => ({
-                    ...prev,
-                    collection_id: [collection.id],
-                }));
-            }
-        }*/
-      /*if (campaignParam) {
-            const campaign = campaigns.find(
-                (item) => item.slug === campaignParam
-            );
-            setProducts(campaign.items);
-        }*/
-
-        if (searchParam) {
-            setSelectedFilters((prev) => ({
-                ...prev,
-                name: searchParam,
-            }));
-        }
-
-        if (sortParam === "novedades") {
-            setSelectedFilters((prev) => ({
-                ...prev,
-                sort_by: "created_at",
-                order: "desc",
-            }));
-
-            setSortDefault(sortOptions[0]);
-        }
-    }, [items]);
+   
+    //}, [items]);
     // Manejar cambios en los filtros
     const handleFilterChange = (type, value) => {
         setSelectedFilters((prev) => {
