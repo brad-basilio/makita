@@ -149,34 +149,54 @@ const DeliveryZonesKuchara = ({ data, items }) => {
 
                 {/* Vista Desktop */}
                 <div className="hidden md:block overflow-x-auto">
-                <table className="w-full border-collapse">
+                    <table className="w-full border-collapse">
                         <thead>
                             <tr className="bg-primary rounded-t-2xl">
-                                {Object.values(weekDays).map((day, index) => (
-                                    <th key={day} className={`text-white p-3 text-start ${index === 0 && 'rounded-tl-2xl'} ${index > 0 && 'border-l border-white'} ${index === Object.values(weekDays).length - 1 && 'rounded-tr-2xl'} w-[14.286%]`}>
-                                        {day}
-                                    </th>
-                                ))}
+                                {Object.entries(weekDays).map(([code, day], index) => {
+                                    // Get array of days that have districts
+                                    const activeDays = Object.keys(weekDays).filter(day => districtsByDay?.[day]?.length > 0);
+                                    const activeIndex = activeDays.indexOf(code);
+                                    
+                                    return districtsByDay?.[code]?.length > 0 && (
+                                        <th key={day} className={`text-white p-3 text-start 
+                                            ${activeIndex === 0 && 'rounded-tl-2xl'} 
+                                            ${activeIndex > 0 && 'border-l border-white'} 
+                                            ${activeIndex === activeDays.length - 1 && 'rounded-tr-2xl'}`}
+                                            style={{ width: `${100 / activeDays.length}%` }}
+                                        >
+                                            {day}
+                                        </th>
+                                    );
+                                })}
                             </tr>
                         </thead>
                         <tbody className="bg-accent rounded-b-2xl">
                             {Array.from({
                                 length: Math.max(
-                                    ...Object.values(districtsByDay || {}).map(districts => districts.length)
+                                    ...Object.values(districtsByDay || {}).map(districts => districts?.length || 0)
                                 )
-                            }).map((_, index) => (
-                                <tr key={index}>
-                                    {Object.keys(weekDays).map((dayCode, jndex) => (
-                                        <td key={dayCode} className={`p-3 
-                                            ${jndex > 0 && 'border-l border-black'}
-                                            ${index === maxLength2 - 1 && jndex === 0 && 'rounded-bl-2xl'}
-                                            ${index === maxLength2 - 1 && jndex === Object.keys(weekDays).length - 1 && 'rounded-br-2xl'}
-                                        `}>
-                                            {districtsByDay?.[dayCode]?.[index] || ''}
-                                        </td>
-                                    ))}
-                                </tr>
-                            ))}
+                            }).map((_, index) => {
+                                // Get array of days that have districts
+                                const activeDays = Object.keys(weekDays).filter(day => districtsByDay?.[day]?.length > 0);
+                                
+                                return (
+                                    <tr key={index}>
+                                        {Object.keys(weekDays).map(dayCode => {
+                                            const activeIndex = activeDays.indexOf(dayCode);
+                                            
+                                            return districtsByDay?.[dayCode]?.length > 0 && (
+                                                <td key={dayCode} className={`p-3 
+                                                    ${activeIndex > 0 && 'border-l border-black'}
+                                                    ${index === maxLength2 - 1 && activeIndex === 0 && 'rounded-bl-2xl'}
+                                                    ${index === maxLength2 - 1 && activeIndex === activeDays.length - 1 && 'rounded-br-2xl'}
+                                                `}>
+                                                    {districtsByDay?.[dayCode]?.[index] || ''}
+                                                </td>
+                                            );
+                                        })}
+                                    </tr>
+                                );
+                            })}
                         </tbody>
                     </table>
                 </div>
@@ -190,9 +210,11 @@ const DeliveryZonesKuchara = ({ data, items }) => {
                             className="pb-8"
                         >
                             {Object.keys(weekDays).map(day => (
-                                <SwiperSlide key={day}>
-                                    {renderMobileDay(day, districtsByDay[day] || [])}
-                                </SwiperSlide>
+                                districtsByDay?.[day]?.length > 0 && (
+                                    <SwiperSlide key={day}>
+                                        {renderMobileDay(day, districtsByDay[day] || [])}
+                                    </SwiperSlide>
+                                )
                             ))}
                         </Swiper>
                     </div>
