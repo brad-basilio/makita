@@ -297,20 +297,37 @@
                         "using": {
                             "model": "Item",
                             "with": ["category", "subcategory", "brand"],
-                            "relations": ["category","brand","subcategory", "tags"],
+                            "relations": ["category", "tags"],
                             "fields": [
                                 "id",
                                 "name",
                                 "slug",
                                 "price",
                                 "final_price",
-                                "image"
-                             
+                                "image",
+                                "color"
                             ]
                         }
+                    },
+                    {
+                        "id": "with_variants",
+                        "name": "Lista con variantes",
+                        "using": {
+                            "model": "Item",
+                            "with": ["category", "subcategory", "brand"],
+                            "relations": ["category", "tags"],
+                            "fields": [
+                                "id",
+                                "name",
+                                "slug",
+                                "price",
+                                "final_price",
+                                "image",
+                                "color"
+                            ],
+                            "group_by_name": true
+                        }
                     }
-                    
-                    
                 ]
             },
 
