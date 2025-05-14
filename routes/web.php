@@ -26,6 +26,7 @@ use App\Http\Controllers\Admin\TagController as AdminTagController;
 use App\Http\Controllers\Admin\BrandController as AdminBrandController;
 use App\Http\Controllers\Admin\ComboController as AdminComboController;
 use App\Http\Controllers\Admin\DeliveryPriceController as AdminDeliveryPriceController;
+use App\Http\Controllers\Admin\DeliveryZoneController as AdminDeliveryZoneController;
 use App\Http\Controllers\Admin\SaleController as AdminSaleController;
 use App\Http\Controllers\Admin\SubCategoryController as AdminSubCategoryController;
 
@@ -35,6 +36,7 @@ use App\Http\Controllers\AuthClientController;
 // Public 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ComplaintController;
+use App\Http\Controllers\DeliveryZoneController;
 use App\Http\Controllers\RepositoryController;
 use App\Http\Controllers\SystemController;
 use SoDe\Extend\File;
@@ -94,6 +96,7 @@ Route::middleware(['can:Admin', 'auth'])->prefix('admin')->group(function () {
 
     Route::get('/posts', [AdminPostController::class, 'reactView'])->name('Admin/Posts.jsx');
     Route::get('/about', [AdminAboutusController::class, 'reactView'])->name('Admin/About.jsx');
+    Route::get('/delivery-zones', [AdminDeliveryZoneController::class, 'reactView'])->name('Admin/DeliveryZones.jsx');
     Route::get('/indicators', [AdminIndicatorController::class, 'reactView'])->name('Admin/Indicators.jsx');
     Route::get('/sliders', [AdminSliderController::class, 'reactView'])->name('Admin/Sliders.jsx');
     Route::get('/banners', [AdminBannerController::class, 'reactView'])->name('Admin/Banners.jsx');

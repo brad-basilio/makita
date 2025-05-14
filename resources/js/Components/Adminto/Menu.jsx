@@ -203,6 +203,12 @@ const Menu = ({ session, hasRole }) => {
                                         Nosotros
                                     </MenuItem>
                                     <MenuItem
+                                        href="/admin/delivery-zones"
+                                        icon="mdi mdi-map-marker-radius"
+                                    >
+                                        Zonas de Cobertura
+                                    </MenuItem>
+                                    <MenuItem
                                         href="/admin/indicators"
                                         icon="mdi mdi-dots-grid"
                                     >
