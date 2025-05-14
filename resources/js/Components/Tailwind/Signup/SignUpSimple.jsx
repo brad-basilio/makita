@@ -56,16 +56,21 @@ export default function SignUpSimple() {
         };
         const result = await AuthClientRest.signup(request);
 
-        if (!result) return setLoading(false);
-
-        window.location.href = "/";
+        if (result) {
+            window.location.href = "/"; // Redirigir solo si es exitoso
+        } else {
+            setLoading(false);
+        }
     };
     return (
         <div className="w-full px-primary mx-auto py-16 bg-white">
             <div className="lg:grid lg:grid-cols-2 gap-8 bg-[#f9f9f9] rounded-xl">
                 <div className="hidden lg:block">
                     <img
-                        src={image}
+                        src={
+                            `/assets/${Global.APP_CORRELATIVE}/signup.png` ||
+                            image
+                        }
                         alt="Imagen decorativa"
                         className="h-full w-full object-cover rounded-xl transform "
                     />

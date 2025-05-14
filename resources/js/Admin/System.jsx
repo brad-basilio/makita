@@ -62,7 +62,7 @@ const System = ({
 
     const result = await systemRest.save(system);
     if (!result) return;
-    const newSystem = result.data;
+    const newSystem = result;
     setSystems(old => {
       const exists = old.some(x => x.id === newSystem.id);
       if (exists) {

@@ -38,6 +38,7 @@ import Image from "./Components/Tailwind/Image";
 import BananaLab from "./Components/Tailwind/BananaLab";
 import Agradecimientos from "./Components/Tailwind/Agradecimientos";
 import { Toaster } from "sonner";
+import Floating from "./Components/Tailwind/Floating";
 
 const itemsRest = new ItemsRest();
 
@@ -89,9 +90,39 @@ const System = ({
 
         switch (component) {
             case "top_bar":
-                return <TopBar data={data} which={value} items={getItems(itemsId)} cart={cart} setCart={setCart} isUser={session} />
+                return (
+                    <TopBar
+                        data={data}
+                        which={value}
+                        items={getItems(itemsId)}
+                        cart={cart}
+                        setCart={setCart}
+                        isUser={session}
+                    />
+                );
             case "header":
-                return <Header data={data} which={value} items={getItems(itemsId)} cart={cart} setCart={setCart} pages={pages} isUser={session} generals={generals} headerPosts={headerPosts} contacts={contacts}/>
+                return (
+                    <Header
+                        data={data}
+                        which={value}
+                        items={getItems(itemsId)}
+                        cart={cart}
+                        setCart={setCart}
+                        pages={pages}
+                        isUser={session}
+                        generals={generals}
+                        headerPosts={headerPosts} 
+                        contacts={contacts}
+                    />
+                );
+            case "floating":
+                return (
+                    <Floating
+                        data={data}
+                        which={value}
+                        items={getItems(itemsId)}
+                    />
+                );
             case "menu":
                 return (
                     <Menu
@@ -210,7 +241,18 @@ const System = ({
                     />
                 );
             case "checkout":
-                return <Checkout which={value} items={getItems(itemsId)} cart={cart} setCart={setCart} isUser={session} prefixes={jsons?.prefixes ?? []} />
+                return (
+                    <Checkout
+                        which={value}
+                        data={data}
+                        items={getItems(itemsId)}
+                        cart={cart}
+                        setCart={setCart}
+                        isUser={session}
+                        prefixes={jsons?.prefixes ?? []}
+                        ubigeos={jsons?.ubigeos ?? []}
+                    />
+                );
             case "contact":
                 return (
                     <Contact which={value} data={data} contacts={contacts} />
@@ -219,7 +261,13 @@ const System = ({
                 return <Faq which={value} data={data} faqs={faqs} />;
 
             case "thank":
-                return <ThankSimple which={value} data={data} />;
+                return (
+                    <ThankSimple
+                        which={value}
+                        data={data}
+                        item={filteredData.Sale}
+                    />
+                );
             case "blog":
                 return (
                     <Blog
@@ -260,6 +308,7 @@ const System = ({
             case "footer":
                 return (
                     <Footer
+                        data={data}
                         which={value}
                         items={getItems(itemsId)}
                         pages={pages}
@@ -282,8 +331,8 @@ const System = ({
 
     return (
         <main className="font-paragraph">
-            {systemsSorted.map((system) => getSystem(system))} 
-            <Toaster  />
+            {systemsSorted.map((system) => getSystem(system))}
+            <Toaster />
         </main>
     );
 };

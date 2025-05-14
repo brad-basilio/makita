@@ -1,6 +1,7 @@
 import React from "react";
 import Number2Currency from "../../../Utils/Number2Currency";
 import CartItemRow from "../Components/CartItemRow";
+import General from "../../../Utils/General";
 
 const CartKuchara = ({ data, cart, setCart }) => {
 
@@ -9,7 +10,7 @@ const CartKuchara = ({ data, cart, setCart }) => {
     return acc + (finalPrice * item.quantity); // Sumar el precio total por cantidad
   }, 0);
 
-  const subTotal = (totalPrice * 100) / 118
+  const igv = Number(General.igv_checkout) / 100
 
   return <section className="bg-white">
     <div className="px-[5%] replace-max-w-here w-full mx-auto py-[2.5%] grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -65,12 +66,18 @@ const CartKuchara = ({ data, cart, setCart }) => {
 
                     <div>
                       <div className="font-medium mb-2">Precio</div>
-                      <div>S/{Number2Currency(item.price)}</div>
+                      <div>
+                        {
+                        item.discount_percent > 0 &&
+                        <span className="line-through text-xs text-gray-500">S/ {Number2Currency(item.price)}</span>
+                        }
+                        <span className="block">S/ {Number2Currency(item.final_price)}</span>
+                      </div>
                     </div>
 
                     <div>
                       <div className="font-medium mb-2">Sub Total</div>
-                      <div>S/{Number2Currency(item.price * item.quantity)}</div>
+                      <div>S/ {Number2Currency(item.final_price * item.quantity)}</div>
                     </div>
                   </div>
                 </div>
@@ -98,8 +105,16 @@ const CartKuchara = ({ data, cart, setCart }) => {
           <div className="space-y-4">
             <div className="flex justify-between items-center">
               <p>Subtotal</p>
-              <span>S/. {Number2Currency(subTotal)}</span>
+              <span>S/. {Number2Currency(igv > 0 ? totalPrice * (1 - igv) : totalPrice)}</span>
             </div>
+
+            {
+              igv > 0 &&
+              <div className="flex justify-between items-center">
+                <p>IGV ({(igv * 100).toFixed(2)}%)</p>
+                <span>S/. {Number2Currency(totalPrice * igv)}</span>
+              </div>
+            }
 
             <div className="flex justify-between items-center font-semibold text-lg pt-2 border-t border-gray-200">
               <p>Total</p>

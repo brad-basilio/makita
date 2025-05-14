@@ -57,7 +57,12 @@ const RigthBar = ({ colors, setColors, settings, setSettings }) => {
   const onSettingChange = async (e) => {
     const id = e.target.getAttribute('data-id')
     const name = e.target.name
-    const value = e.target.value
+    let value = e.target.value
+
+    if (e.target.type == 'checkbox') {
+      value = e.target.checked ? 'true' : 'false'
+    }
+
     const currentSetting = settings.find(setting => setting.name == name)?.description ?? '';
     if (currentSetting === value) return;
     const result = await settingsRest.save({
@@ -131,6 +136,18 @@ const RigthBar = ({ colors, setColors, settings, setSettings }) => {
                 fieldSizing: 'content'
               }} />
           </Tippy>
+          <Tippy content='Marcar si el archivo es un archivo de fuente (otf, woff, woff2, etc)'>
+            <div className="form-check mt-1">
+              <input type="checkbox" className='form-check-input'
+                name='title-font-source'
+                id='title-font-source'
+                defaultChecked={getSetting('title-font-source') == 'true'}
+                onBlur={onSettingChange} />
+              <label className='form-check-label' htmlFor='title-font-source'>
+                ¿Es este un archivo de fuente?
+              </label>
+            </div>
+          </Tippy>
         </div>
         <div className='mb-2'>
           <label htmlFor="" className='form-label mb-1'>Parrafos</label>
@@ -149,6 +166,18 @@ const RigthBar = ({ colors, setColors, settings, setSettings }) => {
                 minHeight: 27,
                 fieldSizing: 'content'
               }} />
+          </Tippy>
+          <Tippy content='Marcar si el archivo es un archivo de fuente (otf, woff, woff2, etc)'>
+            <div className="form-check mt-1">
+              <input type="checkbox" className='form-check-input'
+                name='paragraph-font-source'
+                id='paragraph-font-source'
+                defaultChecked={getSetting('paragraph-font-source') == 'true'}
+                onBlur={onSettingChange} />
+              <label className='form-check-label' htmlFor='paragraph-font-source'>
+                ¿Es este un archivo de fuente?
+              </label>
+            </div>
           </Tippy>
         </div>
         <hr className='my-2' />

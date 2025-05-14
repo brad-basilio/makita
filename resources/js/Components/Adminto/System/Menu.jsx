@@ -15,10 +15,10 @@ const Menu = ({ components, onClick }) => {
             components
               .filter(component => component.options.length > 0)
               .map((component, index) => (
-                <MenuItemContainer title={component.name} key={index} >
+                <MenuItemContainer title={component.name} key={index} icon={component.icon}>
                   {
                     component.options.map((option, index) => (
-                      <MenuItem key={index} name={option.name} icon={option.image} onClick={() => {
+                      <MenuItem key={index} name={option.name} icon={option.icon} onClick={() => {
                         const after_component = $('.tab-pane:visible .components-container > div').last().data('id');
                         onClick({
                           name: `${component.name} - ${option.name}`,

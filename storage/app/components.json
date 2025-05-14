@@ -1,11 +1,12 @@
 [
     {
         "id": "top_bar",
+        "icon": "mdi mdi-tag",
         "name": "Cintillo",
         "options": [
             {
                 "id": "TopBarSimple",
-                "name": "Simple",
+                "name": "Simple - Stech",
                 "image": "top-bar-simple.png",
                 "generals": ["cintillo"]
             },
@@ -31,19 +32,7 @@
             {
                 "id": "TopBarCopyright",
                 "name": "Copyright",
-                "image": "top-bar-socials.png",
-                "using": {
-                    "model": "Social"
-                },
-                "generals": ["copyright"]
-            },
-            {
-                "id": "TopBarCopyrightSocials",
-                "name": "Copyright - Social",
-                "image": "top-bar-socials.png",
-                "using": {
-                    "model": "Social"
-                },
+                "image": "top-bar-copyright.png",
                 "generals": ["copyright"]
             }
         ]
@@ -51,18 +40,20 @@
     {
         "id": "menu",
         "name": "Menu",
+        "icon": "mdi mdi-page-layout-sidebar-left",
         "options": [
             {
                 "id": "MenuSimple",
-                "name": "MenuSimple",
+                "name": "Menu - Stech",
                 "image": "top-bar-simple.png",
                 "using": {
                     "model": "Category",
                     "with": ["subcategories"]
                 }
-            }, {
+            },
+            {
                 "id": "MenuBananaLab",
-                "name": "MenuBananaLab",
+                "name": "Menu - Banana Lab",
                 "image": "top-bar-simple.png",
                 "using": {
                     "model": "Category",
@@ -71,9 +62,9 @@
             }
         ]
     },
-
     {
         "id": "header",
+        "icon": "mdi mdi-page-layout-header",
         "name": "Header",
         "options": [
             {
@@ -95,9 +86,9 @@
             },
             {
                 "id": "HeaderSearchContact",
-                "name": "Busqueda y contacto",
+                "name": "Header - Kuchara",
                 "image": "header-with-search-contact.png",
-                "data": ["class", "link_cart"],
+                "data": ["class", "link_cart", "path_product"],
                 "generals": ["phone_whatsapp", "message_whatsapp"]
             },
 
@@ -108,14 +99,14 @@
                 "data": ["class", "link_cart"]
             },
             {
-                "id": "HeaderSearchMenuSF",
+                "id": "Header - Sala Fabulosa",
                 "name": "Con busqueda y menu SF",
                 "image": "header-with-search.png",
                 "data": ["class", "link_cart"]
             },
             {
                 "id": "HeaderBananaLab",
-                "name": "HeaderBananaLab",
+                "name": "Header - Banana Lab",
                 "image": "header-with-search.png",
                 "data": ["class", "link_cart"],
                 "using": {
@@ -127,7 +118,23 @@
         ]
     },
     {
+        "id": "floating",
+        "icon": "mdi mdi-ghost",
+        "name": "Flotantes",
+        "options": [
+            {
+                "id": "WhatsApp",
+                "icon": "mdi mdi-whatsapp",
+                "name": "WhatsApp",
+                "image": "floating-whatsapp.png",
+                "generals": ["phone_whatsapp", "message_whatsapp"]
+            }
+        ]
+    },
+
+    {
         "id": "carrusel",
+        "icon": "mdi mdi-view-carousel",
         "name": "Carrusel",
         "options": [
             {
@@ -157,6 +164,7 @@
     },
     {
         "id": "slider",
+        "icon": "mdi mdi-view-array",
         "name": "Sliders",
         "options": [
             {
@@ -196,7 +204,7 @@
                 "image": "slider-just-image.png",
                 "using": {
                     "model": "Slider",
-                    "fields": ["bg_image", "button_link"]
+                    "fields": ["bg_type", "bg_image", "bg_video", "button_link"]
                 }
             },
             {
@@ -265,6 +273,7 @@
     },
     {
         "id": "filter",
+        "icon": "mdi mdi-filter-menu",
         "name": "Filtros",
         "options": [
             {
@@ -383,7 +392,7 @@
                 "id": "FilterCategoryImage",
                 "name": "Categoría con Imagen",
                 "image": "filters-category-image.png",
-                "data": ["path", "title","card"],
+                "data": ["path", "title", "card"],
                 "options": [
                     {
                         "id": "default",
@@ -547,6 +556,7 @@
     },
     {
         "id": "product",
+        "icon": "mdi mdi-bookshelf",
         "name": "Productos",
         "options": [
             {
@@ -593,6 +603,7 @@
                         "offering",
                         "is_new"
                     ],
+                    "filters:method": "category",
                     "limit": 8
                 }
             },
@@ -747,6 +758,7 @@
     },
     {
         "id": "image",
+        "icon": "mdi mdi-image-area",
         "name": "Imágenes",
         "options": [
             {
@@ -838,7 +850,8 @@
     },
     {
         "id": "cart",
-        "name": "Cart",
+        "icon": "mdi mdi-cart",
+        "name": "Carrito",
         "options": [
             {
                 "id": "CartSimple",
@@ -848,7 +861,8 @@
             {
                 "id": "CartKuchara",
                 "name": "Kuchara",
-                "data": ["url_catalog", "url_checkout"]
+                "data": ["url_catalog", "url_checkout"],
+                "generals": ["igv_checkout"]
             }
         ]
     },
@@ -873,9 +887,18 @@
                     "field": ["name", "price", "data"]
                 },
                 "generals": [
+                    "igv_checkout",
+                    "checkout_culqi",
+                    "checkout_culqi_name",
                     "checkout_culqi_public_key",
-                    "checkout_bim",
-                    "checkout_transfer"
+                    "checkout_dwallet",
+                    "checkout_dwallet_qr",
+                    "checkout_dwallet_name",
+                    "checkout_dwallet_description",
+                    "checkout_transfer",
+                    "checkout_transfer_cci",
+                    "checkout_transfer_name",
+                    "checkout_transfer_description"
                 ]
             },
             {
@@ -942,8 +965,14 @@
         "options": [
             {
                 "id": "BlogSimple",
-                "name": "Blog Simple",
-                "data": ["title"]
+                "name": "Simple",
+                "data": [
+                    "title",
+                    "description",
+                    "second_title",
+                    "second_description",
+                    "bool:show_seen"
+                ]
             },
             {
                 "id": "BlogCarousel",
@@ -982,15 +1011,8 @@
             {
                 "id": "ThankSimple",
                 "name": "Simple",
-                "data": [
-                    "title",
-                    "description",
-                    "button_text",
-                    "link_blog",
-                    "url_video",
-                    "button_video_text",
-                    "button_video_link"
-                ]
+                "data": ["url_catalog", "bool:send_whatsapp"],
+                "generals": ["phone_whatsapp"]
             }
         ]
     },
@@ -1040,7 +1062,8 @@
             {
                 "id": "LoginSimpleSF",
                 "name": "SimpleSF"
-            }, {
+            },
+            {
                 "id": "LoginBananaLab",
                 "name": "LoginBananaLab"
             }
@@ -1067,7 +1090,8 @@
             {
                 "id": "ForgotPasswordSimple",
                 "name": "Simple"
-            }, {
+            },
+            {
                 "id": "ForgotBananaLab",
                 "name": "ForgotBananaLab"
             }
@@ -1109,6 +1133,7 @@
                 "id": "FooterTermsCTASocials",
                 "name": "Politicas, CTA y Redes",
                 "image": "footer-terms-cta-socials.png",
+                "data": ["complaint_url"],
                 "using": {
                     "model": "Social",
                     "limit": 10
@@ -1198,20 +1223,22 @@
                 "id": "Canva1",
                 "name": "Canva1",
                 "data": ["steps", "selected"]
-            }, {
+            },
+            {
                 "id": "Canva2",
                 "name": "Canva2",
                 "data": ["steps", "selected"]
-            },{
+            },
+            {
                 "id": "Canva3",
                 "name": "Canva3",
                 "data": ["steps", "selected"]
-            },{
+            },
+            {
                 "id": "Editor",
                 "name": "Editor",
                 "data": ["steps", "selected"]
             }
-            
         ]
     },
     {

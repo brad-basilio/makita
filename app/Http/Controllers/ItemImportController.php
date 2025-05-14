@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Imports\ItemImport;
+
+use App\Imports\ItemImportSf;
 use App\Services\ItemImportService;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+// use App\Imports\ItemImport;
 
 class ItemImportController extends Controller
 {
@@ -23,7 +25,7 @@ class ItemImportController extends Controller
                 'file' => 'required|mimes:xlsx'
             ]);
 
-            $import = new ItemImport();
+            $import = new ItemImportSf();
             Excel::import($import, $request->file('file'));
 
             $errors = $import->getErrors();

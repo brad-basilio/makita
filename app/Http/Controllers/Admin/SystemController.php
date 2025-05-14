@@ -257,6 +257,12 @@ class SystemController extends BasicController
     public function fetchRemoteChanges(Request $request)
     {
         $response = Response::simpleTryCatch(function () {
+            $projectPath = base_path();
+
+            // Verificar y configurar safe.directory si es necesario
+            $safeDirectoryCheck = new Process(['git', 'config', '--global', '--add', 'safe.directory', $projectPath], $projectPath);
+            $safeDirectoryCheck->run();
+
             $commands = [
                 ['git', 'restore', '--source=HEAD', '--staged', '--worktree', '.'],
                 ['git', 'pull'],
@@ -270,6 +276,9 @@ class SystemController extends BasicController
                 $process->run();
 
                 if (!$process->isSuccessful()) {
+                    if (strpos($process->getErrorOutput(), 'dubious ownership') !== false) {
+                        throw new Exception('Error de permisos Git. Por favor, contacte al administrador del sistema.');
+                    }
                     throw new Exception($process->getErrorOutput());
                 }
             }
@@ -282,11 +291,18 @@ class SystemController extends BasicController
         $response = Response::simpleTryCatch(function () {
             $projectPath = base_path();
 
+            // Verificar y configurar safe.directory si es necesario
+            $safeDirectoryCheck = new Process(['git', 'config', '--global', '--add', 'safe.directory', $projectPath], $projectPath);
+            $safeDirectoryCheck->run();
+
             // 1. Fetch del remoto
             $fetch = new Process(['git', 'fetch'], $projectPath);
             $fetch->run();
 
             if (!$fetch->isSuccessful()) {
+                if (strpos($fetch->getErrorOutput(), 'dubious ownership') !== false) {
+                    throw new \Exception('Error de permisos Git. Por favor, contacte al administrador del sistema.');
+                }
                 throw new \Exception($fetch->getErrorOutput());
             }
 
@@ -316,6 +332,18 @@ class SystemController extends BasicController
             ];
         });
 
+        return response($response->toArray(), $response->status);
+    }
+
+    public function getRelatedFilter(Request $request, string $model, string $method)
+    {
+        $response = Response::simpleTryCatch(function () use ($model, $method) {
+            $class = 'App\\Models\\' . $model;
+            $instance = new $class();
+            $relation = $instance->$method();
+            $relatedModel = $relation->getRelated();
+            return $relatedModel->all();
+        });
         return response($response->toArray(), $response->status);
     }
 }

@@ -28,8 +28,8 @@ const CartModal = ({ data, cart, setCart, modalOpen, setModalOpen }) => {
             isOpen={modalOpen}
             onRequestClose={() => setModalOpen(false)}
             contentLabel="Términos y condiciones"
-            className="absolute right-0 bg-white p-4 rounded-l-2xl shadow-lg w-[95%] max-w-md outline-none h-[90vh] sm:h-screen"
-            overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-50"
+            className="absolute right-0 bg-white p-4 rounded-l-2xl shadow-lg w-[95%] max-w-md outline-none h-screen"
+            overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-[200]"
         >
             <div className="flex flex-col font-font-general">
                 <div className="flex justify-between items-center mb-2">
@@ -62,9 +62,10 @@ const CartModal = ({ data, cart, setCart, modalOpen, setModalOpen }) => {
                 <div>
                     <button
                         href={data?.link_cart}
+                        
                         className="font-semibold text-base bg-primary py-3 px-5 rounded-2xl text-white cursor-pointer w-full inline-block text-center"
                     >
-                        Checkout
+                        Ir al Carrito
                     </button>
                 </div>
             </div>

@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Brand;
-use App\Models\Category;
 use App\Models\Faq;
 use App\Models\General;
 use App\Models\Post;
@@ -12,7 +10,6 @@ use App\Models\Setting;
 use App\Models\System;
 use App\Models\SystemColor;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use SoDe\Extend\Crypto;
 use SoDe\Extend\File;
@@ -41,11 +38,13 @@ class SystemController extends BasicController
         $fonts = [
             'title' => [
                 'name' => Setting::get('title-font-name'),
-                'url' => Setting::get('title-font-url')
+                'url' => Setting::get('title-font-url'),
+                'source' => Setting::get('title-font-source')
             ],
             'paragraph' => [
                 'name' => Setting::get('paragraph-font-name'),
-                'url' => Setting::get('paragraph-font-url')
+                'url' => Setting::get('paragraph-font-url'),
+                'source' => Setting::get('paragraph-font-source')
             ]
         ];
 
@@ -122,6 +121,15 @@ class SystemController extends BasicController
                     }
                 }
 
+                if ($system->filters_method) {
+                    $method = $system->filters_method;
+                    $methodValues = $system->filters_method_values;
+                    $relation = $query->getModel()->$method();
+                    $foreignKey = $relation->getLocalKeyName();
+                    $query->whereIn($foreignKey, $methodValues);
+                }
+
+
                 if (isset($component['using']['limit'])) {
                     $query->limit($component['using']['limit']);
                 }
@@ -131,7 +139,7 @@ class SystemController extends BasicController
                 if (Schema::hasColumn($table, 'visible') && !Array2::find($system->filters ?? [], fn($x) => $x == 'ignoreVisibility')) {
                     $query->where('visible', true);
                 }
-                if (Schema::hasColumn($table, 'status') &&!Array2::find($system->filters?? [], fn($x) => $x == 'ignoreStatus')) {
+                if (Schema::hasColumn($table, 'status') && !Array2::find($system->filters ?? [], fn($x) => $x == 'ignoreStatus')) {
                     $query->where('status', true);
                 }
 

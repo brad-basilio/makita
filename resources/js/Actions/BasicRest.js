@@ -1,31 +1,36 @@
 import { Cookies, Fetch, Notify } from "sode-extend-react";
 
-let controller = new AbortController();
-
 class BasicRest {
     path = null;
     hasFiles = false;
+    controller = null;
+    constructor() {
+        this.controller = new AbortController();
+    }
 
     simpleGet = async (url, params) => {
         try {
-            const { status, result } = await Fetch(url, params)
-            if (!status) throw new Error(result?.message || 'Ocurrio un error inesperado')
+            const { status, result } = await Fetch(url, params);
+            if (!status)
+                throw new Error(
+                    result?.message || "Ocurrio un error inesperado"
+                );
             return result.data ?? true;
         } catch (error) {
             Notify.add({
-                icon: '/assets/img/icon.svg',
-                title: 'Error',
+                icon: "/assets/img/icon.svg",
+                title: "Error",
                 body: error.message,
-                type: 'danger'
-            })
+                type: "danger",
+            });
             return null;
         }
-    }
+    };
 
     paginate = async (params) => {
-        controller.abort("Nothing");
-        controller = new AbortController();
-        const signal = controller.signal;
+        this.controller.abort("Nothing");
+        this.controller = new AbortController();
+        const signal = this.controller.signal;
         const res = await fetch(`/api/${this.path}/paginate`, {
             method: "POST",
             headers: {
@@ -39,7 +44,7 @@ class BasicRest {
         return await res.json();
     };
 
-    save = async (request, callback = () => { }) => {
+    save = async (request, callback = () => {}) => {
         try {
             let status = false;
             let result = {};
@@ -76,7 +81,7 @@ class BasicRest {
                 type: "success",
             });
             callback?.();
-            return result;
+            return result?.data ?? true;
         } catch (error) {
             Notify.add({
                 icon: "/assets/img/icon.svg",

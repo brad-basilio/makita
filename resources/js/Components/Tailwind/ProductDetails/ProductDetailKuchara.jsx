@@ -58,6 +58,7 @@ const ProductDetailKuchara = ({ item, cart, setCart }) => {
               className="w-full h-full object-cover object-center"
               data-aos="fade-up"
               data-aos-offset="150"
+              onError={e => e.target.src = '/api/cover/thumbnail/null'}
             />
           </div>
           <Swiper
@@ -75,6 +76,7 @@ const ProductDetailKuchara = ({ item, cart, setCart }) => {
                   src={`/storage/images/item/${item?.image}`}
                   alt={item?.name}
                   className="w-full h-full object-cover object-center"
+                  onError={e => e.target.src = '/api/cover/thumbnail/null'}
                 />
               </button>
             </SwiperSlide>
@@ -89,6 +91,7 @@ const ProductDetailKuchara = ({ item, cart, setCart }) => {
                     src={`/storage/images/item/${image}`}
                     alt={`imagen-${index}`}
                     className="w-full h-full object-cover object-center"
+                    onError={e => e.target.src = '/api/cover/thumbnail/null'}
                   />
                 </button>
               </SwiperSlide>
@@ -150,11 +153,11 @@ const ProductDetailKuchara = ({ item, cart, setCart }) => {
             </div>
           )}
 
-          <div className="mt-4">
+          {/* <div className="mt-4">
             <p className="text-gray-700 mb-2">
               Perfecto para quienes buscan calidad, sabor y productos directamente del productor.
             </p>
-          </div>
+          </div> */}
 
           {/* Selector de cantidad */}
           <div className="mt-4">
@@ -186,14 +189,14 @@ const ProductDetailKuchara = ({ item, cart, setCart }) => {
           </div>
 
           {/* Información de envío */}
-          <div className="mt-2 bg-green-50 p-3 rounded-md flex items-center gap-2">
+          {/* <div className="mt-2 bg-green-50 p-3 rounded-md flex items-center gap-2">
             <div className="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center text-white">
               <span>S/</span>
             </div>
             <span className="text-green-700">
               Agrega S/100.00 para <strong>ENVÍO GRATIS</strong>
             </span>
-          </div>
+          </div> */}
 
           {/* Botones de acción */}
           <div className="mt-4 flex flex-col gap-3">
@@ -204,10 +207,10 @@ const ProductDetailKuchara = ({ item, cart, setCart }) => {
               <i className="mdi mdi-cart-plus" size={20} />
               <span>Agregar a mi carrito</span>
             </button>
-            <button className="w-full py-3 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-md flex items-center justify-center gap-2 transition-colors">
+            {/* <button className="w-full py-3 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-md flex items-center justify-center gap-2 transition-colors">
               <i className="mdi mdi-heart" size={20} />
               <span>Lista de favoritos</span>
-            </button>
+            </button> */}
           </div>
         </div>
       </div>

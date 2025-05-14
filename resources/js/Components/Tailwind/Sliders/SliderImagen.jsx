@@ -1,57 +1,32 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import { useEffect, useRef } from "react";
 import { adjustTextColor } from "../../../Functions/adjustTextColor";
 
 const SliderImagen = ({ items, data }) => {
-    const [currentSlide, setCurrentSlide] = useState(0);
-    const [slidesPerView, setSlidesPerView] = useState(5); // Default en desktop
-
-    // Detectar el tamaño de la pantalla para ajustar slidesPerView
-    useEffect(() => {
-        const updateSlidesPerView = () => {
-            const width = window.innerWidth;
-            if (width < 640) setSlidesPerView(1); // Móvil
-            else if (width < 1024) setSlidesPerView(3); // Tablet
-            else setSlidesPerView(5); // Desktop
-        };
-        updateSlidesPerView();
-        window.addEventListener("resize", updateSlidesPerView);
-        return () => window.removeEventListener("resize", updateSlidesPerView);
-    }, []);
-
-    // Calcular el máximo número de desplazamientos permitidos
-    const maxSlide = useMemo(() => {
-        return Math.max(0, Math.ceil(items.length / slidesPerView) - 1);
-    }, [items.length, slidesPerView]);
-
-    // Función para avanzar al siguiente slide
-    const nextSlide = () => {
-        setCurrentSlide((prev) => (prev < maxSlide ? prev + 1 : prev));
-    };
-
-    // Función para retroceder al slide anterior
-    const prevSlide = () => {
-        setCurrentSlide((prev) => (prev > 0 ? prev - 1 : prev));
-    };
-
     const prevSlideRef = useRef(null);
     const nextSlideRef = useRef(null);
+    const swiperRef = useRef(null);
+
+    // Ajustar colores de los botones
     useEffect(() => {
-        adjustTextColor(prevSlideRef.current); // Aplicar a cada botón en el slider
-        adjustTextColor(nextSlideRef.current); // Aplicar a cada botón en el slider
+        adjustTextColor(prevSlideRef.current);
+        adjustTextColor(nextSlideRef.current);
     }, []);
+
     return (
         <div>
-            <h2 className=" text-[36px] leading-tight md:text-5xl text-center font-bold  font-font-primary py-4 md:py-8 bg-[#F7F9FB]">
+            <h2 className="text-[36px] leading-tight md:text-5xl text-center font-bold font-font-primary py-4 md:py-8 bg-[#F7F9FB]">
                 {data?.title}
             </h2>
             <div className="bg-primary py-6 md:py-8">
-                <div className=" mx-auto px-primary 2xl:px-0 2xl:max-w-7xl">
+                <div className="mx-auto px-primary 2xl:px-0 2xl:max-w-7xl">
                     <div className="relative flex items-center justify-center">
                         <button
-                            onClick={prevSlide}
                             ref={prevSlideRef}
-                            disabled={currentSlide === 0}
-                            className="absolute -left-2 z-10 p-2 bg-white rounded-lg shadow-lg"
+                            className="absolute -left-2 z-10 p-2 bg-white rounded-lg shadow-lg hover:scale-105 transition-transform"
                             aria-label="Previous brand"
                         >
                             <svg
@@ -69,36 +44,41 @@ const SliderImagen = ({ items, data }) => {
                             </svg>
                         </button>
 
-                        <div className="overflow-hidden w-full mx-10 2xl:px-4">
-                            {/* Movemos px-4 aquí */}
-                            <div
-                                className="flex items-center transition-all duration-300 ease-in-out w-full"
-                                style={{
-                                    transform: `translateX(-${
-                                        currentSlide * (100 / slidesPerView)
-                                    }%)`,
-                                }}
-                            >
-                                {items.map((brand, index) => (
-                                    <div
-                                        key={index}
-                                        className="group w-full flex items-center justify-center md:items-center md:justify-start px-2 sm:w-1/3 lg:w-1/5 flex-shrink-0 font-font-secondary"
-                                    >
+                        <Swiper
+                            modules={[Navigation]}
+                            navigation={{
+                                prevEl: prevSlideRef.current,
+                                nextEl: nextSlideRef.current,
+                            }}
+                            loop={true}
+                            spaceBetween={16}
+                            slidesPerView={1}
+                            onSwiper={(swiper) => (swiperRef.current = swiper)}
+                            breakpoints={{
+                                640: { slidesPerView: 3 },
+                                1024: {
+                                    slidesPerView: 5,
+                                    centeredSlides: true,
+                                },
+                            }}
+                            className="w-full  !px-10 2xl:!px-4 !flex !justify-between"
+                        >
+                            {items.map((brand, index) => (
+                                <SwiperSlide key={index}>
+                                    <div className="group w-full flex items-center justify-center px-2 font-font-secondary">
                                         <img
                                             src={`/storage/images/brand/${brand.image}`}
                                             alt={brand.name}
-                                            className="h-10 w-full object-contain grayscale brightness-0 invert"
+                                            className="h-10 w-full object-contain grayscale brightness-0 invert hover:scale-105 transition-transform cursor-pointer"
                                         />
                                     </div>
-                                ))}
-                            </div>
-                        </div>
+                                </SwiperSlide>
+                            ))}
+                        </Swiper>
 
                         <button
-                            onClick={nextSlide}
                             ref={nextSlideRef}
-                            disabled={currentSlide >= maxSlide}
-                            className="absolute -right-2 z-10 p-2 bg-white rounded-lg shadow-lg "
+                            className="absolute -right-2 z-10 p-2 bg-white rounded-lg shadow-lg hover:scale-105 transition-transform"
                             aria-label="Next brand"
                         >
                             <svg

@@ -21,6 +21,7 @@ class Sale extends Model
         'fullname',
         'email',
         'phone',
+        'phone_prefix',
         'country',
         'department',
         'province',
@@ -32,6 +33,7 @@ class Sale extends Model
         'comment',
         'amount',
         'delivery',
+        'delivery_type',
         'status_id',
         'culqi_charge_id',
         'payment_status',
@@ -39,10 +41,17 @@ class Sale extends Model
         'documentType',
         'document',
         'businessName',
+        'payment_method',
+        'payment_proof'
     ];
 
     public function details()
     {
         return $this->hasMany(SaleDetail::class);
+    }
+
+    public function status()
+    {
+        return $this->belongsTo(SaleStatus::class);
     }
 }

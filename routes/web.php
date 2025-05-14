@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\SocialController as AdminSocialController;
 use App\Http\Controllers\Admin\StrengthController as AdminStrengthController;
 use App\Http\Controllers\Admin\GeneralController as AdminGeneralController;
 use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
+use App\Http\Controllers\Customer\SaleController as CustomerSaleController;
 use App\Http\Controllers\Admin\AccountController as AdminAccountController;
 use App\Http\Controllers\Admin\BannerController as AdminBannerController;
 use App\Http\Controllers\Admin\ItemController as AdminItemController;
@@ -66,6 +67,12 @@ foreach ($pages as $page) {
 
 Route::get('/base-template', [SystemController::class, 'reactView'])->name('System.jsx');
 Route::get('/login', [AuthController::class, 'loginView'])->name('Login.jsx');
+Route::middleware('auth')->group(
+    function () {
+        Route::get('/profile', [AdminProfileController::class, 'reactView'])->name('Admin/Profile.jsx');
+        Route::get('/account', [AdminAccountController::class, 'reactView'])->name('Admin/Account.jsx');
+    }
+);
 
 // Admin routes
 Route::middleware(['can:Admin', 'auth'])->prefix('admin')->group(function () {
@@ -81,7 +88,7 @@ Route::middleware(['can:Admin', 'auth'])->prefix('admin')->group(function () {
     Route::get('/subcategories', [AdminSubCategoryController::class, 'reactView'])->name('Admin/SubCategories.jsx');
     Route::get('/brands', [AdminBrandController::class, 'reactView'])->name('Admin/Brands.jsx');
     Route::get('/tags', [AdminTagController::class, 'reactView'])->name('Admin/Tags.jsx');
-    Route::get('/prices', [AdminDeliveryPriceController::class, 'reactView'])->name('Admin/DeliveryPrices.jsx');
+    Route::get('/prices', [AdminDeliveryPriceController::class, 'reactView'])->name('Admin/DeliveryPricesType.jsx');
     Route::get('/messages', [AdminSubscriptionController::class, 'reactView'])->name('Admin/Messages.jsx');
     Route::get('/subscriptions', [AdminSubscriptionController::class, 'reactView'])->name('Admin/Subscriptions.jsx');
 
@@ -102,10 +109,13 @@ Route::middleware(['can:Admin', 'auth'])->prefix('admin')->group(function () {
     Route::get('/repository', [AdminRepositoryController::class, 'reactView'])->name('Admin/Repository.jsx');
 
     Route::middleware(['can:Root'])->get('/system', [AdminSystemController::class, 'reactView'])->name('Admin/System.jsx');
-
-    Route::get('/profile', [AdminProfileController::class, 'reactView'])->name('Admin/Profile.jsx');
-    Route::get('/account', [AdminAccountController::class, 'reactView'])->name('Admin/Account.jsx');
 });
+
+Route::middleware(['can:Customer', 'auth'])->prefix('customer')->group(function () {
+    Route::get('/dashboard', [CustomerSaleController::class, 'reactView'])->name('Customer/Sales.jsx');
+    Route::get('/orders', [CustomerSaleController::class, 'reactView'])->name('Customer/Sales.jsx');
+});
+
 
 if (env('APP_ENV') === 'local') {
     Route::get('/cloud/{uuid}', [RepositoryController::class, 'media']);

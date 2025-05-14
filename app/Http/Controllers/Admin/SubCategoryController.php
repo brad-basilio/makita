@@ -17,6 +17,7 @@ class SubCategoryController extends BasicController
     {
         return $model::select('sub_categories.*')
             ->with(['category'])
-            ->join('categories AS category', 'category.id', 'sub_categories.category_id');
+            ->join('categories AS category', 'category.id', 'sub_categories.category_id')
+            ->where('category.status', true);
     }
 }

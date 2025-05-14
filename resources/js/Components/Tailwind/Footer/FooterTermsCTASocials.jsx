@@ -8,7 +8,7 @@ import Global from "../../../Utils/Global";
 import HtmlContent from "../../../Utils/HtmlContent";
 import { X } from "lucide-react";
 
-const FooterB = ({ pages, generals }) => {
+const FooterTermsCTASocials = ({ data, pages, generals }) => {
   const subscriptionsRest = new SubscriptionsRest();
   const emailRef = useRef();
 
@@ -103,7 +103,7 @@ const FooterB = ({ pages, generals }) => {
               </li>
               <li>
                 <a
-                  href="/libro-reclamaciones"
+                  href={data?.complaint_url}
                   className="cursor-pointer flex flex-col gap-2 items-start  "
                 >
                   <span className="hover:font-bold transition-all duration-300">
@@ -141,17 +141,19 @@ const FooterB = ({ pages, generals }) => {
               <input
                 ref={emailRef}
                 type="email"
-                placeholder="Ingresa tu e-mail"
+                placeholder="Ingresa tu correo electrónico"
                 disabled={saving}
-                className="w-full customtext-neutral-dark font-semibold  shadow-xl  py-5 pl-5 border  rounded-[20px] md:rounded-full focus:ring-0 focus:outline-none"
+                className="w-full customtext-neutral-dark font-semibold shadow-xl py-3 pl-5 border rounded-full focus:ring-0 focus:outline-none"
               />
-              <button
-                className="absolute right-3 top-1/2 transform disabled:cursor-not-allowed -translate-y-1/2 py-3 font-bold shadow-xl px-4 bg-primary text-white rounded-xl"
-                aria-label="Suscribirme"
-                disabled={saving}
-              >
-                Suscribirme
-              </button>
+              <Tippy content="Suscribirme">
+                <button
+                  className="absolute right-2 top-1/2 transform disabled:cursor-not-allowed -translate-y-1/2 py-2 px-3 font-bold shadow-xl bg-primary text-white rounded-full"
+                  aria-label="Suscribirme"
+                  disabled={saving}
+                >
+                  <i className="mdi mdi-arrow-right"></i>
+                </button>
+              </Tippy>
             </div>
           </form>
         </div>
@@ -184,4 +186,4 @@ const FooterB = ({ pages, generals }) => {
     </footer>
   );
 };
-export default FooterB;
+export default FooterTermsCTASocials;

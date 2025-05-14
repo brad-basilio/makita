@@ -18,6 +18,7 @@ class SaleDetail extends Model
         'name',
         'price',
         'quantity',
+        'image',
         'colors',
     ];
 }

@@ -1,9 +1,6 @@
-import { useEffect } from "react";
 import General from "../../../Utils/General"
-import { useRef } from "react";
-import { adjustTextColor } from "../../../Functions/adjustTextColor";
 
-const TopBarSimple = ({ }) => {
+const TopBarCopyright = ({ }) => {
   const copyright = General.get('copyright') ?? ''
   const content = copyright.replace(/\{\{([^}]+)\}\}/g, (match, code) => {
     try {
@@ -19,4 +16,4 @@ const TopBarSimple = ({ }) => {
   </div>
 }
 
-export default TopBarSimple
+export default TopBarCopyright

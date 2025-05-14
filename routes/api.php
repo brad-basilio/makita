@@ -21,9 +21,12 @@ use App\Http\Controllers\Admin\BannerController as AdminBannerController;
 use App\Http\Controllers\Admin\BrandController as AdminBrandController;
 
 use App\Http\Controllers\Admin\DeliveryPriceController as AdminDeliveryPriceController;
+use App\Http\Controllers\Admin\TypesDeliveryController as AdminTypesDeliveryController;
 use App\Http\Controllers\Admin\GalleryController as AdminGalleryController;
 use App\Http\Controllers\Admin\ItemController as AdminItemController;
 use App\Http\Controllers\Admin\SaleController as AdminSaleController;
+use App\Http\Controllers\Customer\SaleController as CustomerSaleController;
+
 use App\Http\Controllers\Admin\SubCategoryController as AdminSubCategoryController;
 use App\Http\Controllers\Admin\SystemColorController as AdminSystemColorController;
 use App\Http\Controllers\Admin\SystemController as AdminSystemController;
@@ -47,7 +50,9 @@ use App\Http\Controllers\ItemImportController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\MercadoPagoController;
+use App\Http\Controllers\PersonController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\SaleController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\ScrapController;
 
@@ -62,7 +67,7 @@ use App\Http\Controllers\ScrapController;
 |
 */
 
-
+Route::get('/ubigeo/search', [DeliveryPriceController::class, 'search'])->name('ubigeo.search');
 Route::post('/scrap', [ScrapController::class, 'scrap']);
 Route::post('/scrap-shopsimon', [ScrapController::class, 'scrapShopSimon']);
 
@@ -77,7 +82,7 @@ Route::post('/forgot-password-client', [AuthClientController::class, 'forgotPass
 Route::post('/reset-password-client', [AuthClientController::class, 'resetPassword']);
 
 Route::post('/delivery-prices', [DeliveryPriceController::class, 'getDeliveryPrice']);
-
+Route::post('/prices-type', [DeliveryPriceController::class, 'getPrices']);
 
 Route::get('/banners/media/{uuid}', [AdminBannerController::class, 'media']);
 Route::get('/sliders/media/{uuid}', [AdminSliderController::class, 'media']);
@@ -125,10 +130,17 @@ Route::get('/mercadopago/pending', [MercadoPagoController::class, 'handlePending
 //pedido
 Route::post('/orders', [MercadoPagoController::class, 'getOrder']);
 
+Route::post('/sales', [SaleController::class, 'save']);
+
+Route::get('/person/{dni}', [PersonController::class, 'find']);
 
 Route::middleware('auth')->group(function () {
   Route::delete('logout', [AuthController::class, 'destroy'])
     ->name('logout');
+  Route::get('/profile/{uuid}', [AdminProfileController::class, 'full']);
+  Route::get('/profile/thumbnail/{uuid}', [AdminProfileController::class, 'thumbnail']);
+  Route::post('/profile', [AdminProfileController::class, 'saveProfile']);
+  Route::patch('/profile', [AdminProfileController::class, 'save']);
 
   Route::middleware('can:Admin')->prefix('admin')->group(function () {
 
@@ -246,6 +258,13 @@ Route::middleware('auth')->group(function () {
     Route::patch('/prices/{field}', [AdminDeliveryPriceController::class, 'boolean']);
     Route::delete('/prices/{id}', [AdminDeliveryPriceController::class, 'delete']);
 
+    Route::post('/types_delivery', [AdminTypesDeliveryController::class, 'save']);
+    Route::post('/types_delivery/paginate', [AdminTypesDeliveryController::class, 'paginate']);
+    Route::post('/types_delivery/massive', [AdminTypesDeliveryController::class, 'massive']);
+    Route::patch('/types_delivery/status', [AdminTypesDeliveryController::class, 'status']);
+    Route::patch('/types_delivery/{field}', [AdminTypesDeliveryController::class, 'boolean']);
+    Route::delete('/types_delivery/{id}', [AdminTypesDeliveryController::class, 'delete']);
+
     Route::post('/tags', [AdminTagController::class, 'save']);
     Route::post('/tags/paginate', [AdminTagController::class, 'paginate']);
     Route::patch('/tags/status', [AdminTagController::class, 'status']);
@@ -278,6 +297,8 @@ Route::middleware('auth')->group(function () {
 
       Route::get('/system/fetch-remote-changes', [AdminSystemController::class, 'fetchRemoteChanges']);
       Route::get('/system/has-remote-changes', [AdminSystemController::class, 'hasRemoteChanges']);
+
+      Route::get('/system/related/{model}/{method}', [AdminSystemController::class, 'getRelatedFilter']);
     });
 
     Route::post('/repository', [AdminRepositoryController::class, 'save']);
@@ -295,12 +316,19 @@ Route::middleware('auth')->group(function () {
     Route::patch('/generals/{field}', [AdminGeneralController::class, 'boolean']);
     Route::delete('/generals/{id}', [AdminGeneralController::class, 'delete']);
 
-    Route::get('/profile/{uuid}', [AdminProfileController::class, 'full']);
-    Route::get('/profile/thumbnail/{uuid}', [AdminProfileController::class, 'thumbnail']);
-    Route::post('/profile', [AdminProfileController::class, 'saveProfile']);
-    Route::patch('/profile', [AdminProfileController::class, 'save']);
+
 
     Route::patch('/account/email', [AdminAccountController::class, 'email']);
     Route::patch('/account/password', [AdminAccountController::class, 'password']);
+  });
+
+  Route::middleware('can:Customer')->prefix('customer')->group(function () {
+
+    Route::get('/sales/{id}', [CustomerSaleController::class, 'get']);
+    Route::post('/sales', [CustomerSaleController::class, 'save']);
+    Route::post('/sales/paginate', [CustomerSaleController::class, 'paginate']);
+    Route::patch('/sales/status', [CustomerSaleController::class, 'status']);
+    Route::patch('/sales/{field}', [CustomerSaleController::class, 'boolean']);
+    Route::delete('/sales/{id}', [CustomerSaleController::class, 'delete']);
   });
 });

@@ -2,8 +2,15 @@ import { useEffect, useState } from "react";
 import CartStep from "./Components/CartStep";
 import ShippingStep from "./Components/ShippingStep";
 import ConfirmationStep from "./Components/ConfirmationStep";
+import Global from "../../../Utils/Global";
 
-export default function CheckoutSteps({ cart, setCart, user }) {
+export default function CheckoutSteps({
+    cart,
+    setCart,
+    user,
+    ubigeos = [],
+    items,
+}) {
     const [currentStep, setCurrentStep] = useState(1);
     // Calcular el precio total incluyendo IGV
     const totalPrice = cart.reduce((acc, item) => {
@@ -28,10 +35,10 @@ export default function CheckoutSteps({ cart, setCart, user }) {
     const [delivery, setDelivery] = useState([]);
     useEffect(() => {
         const script = document.createElement("script");
-        script.src = "https://checkout.culqi.com/js/v4";
+        script.src = Global.CULQI_API;
         script.async = true;
         script.onload = () => {
-            console.log("✅ Culqi cargado correctamente.");
+            // console.log("✅ Culqi cargado correctamente.");
 
             // 🔹 Definir culqi() en window para capturar el token
             window.culqi = function () {
@@ -113,6 +120,7 @@ export default function CheckoutSteps({ cart, setCart, user }) {
 
                 {currentStep === 2 && (
                     <ShippingStep
+                        items={items}
                         setCode={setCode}
                         setDelivery={setDelivery}
                         cart={cart}
@@ -126,6 +134,7 @@ export default function CheckoutSteps({ cart, setCart, user }) {
                         igv={igv}
                         totalFinal={totalFinal}
                         user={user}
+                        ubigeos={ubigeos}
                     />
                 )}
 

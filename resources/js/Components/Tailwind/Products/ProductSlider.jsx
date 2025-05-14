@@ -2,6 +2,7 @@ import React from "react"
 import { Swiper, SwiperSlide } from "swiper/react";
 import Number2Currency from "../../../Utils/Number2Currency";
 import Swal from "sweetalert2";
+import { Autoplay } from "swiper/modules";
 
 const ProductSlider = ({ data, items = [], cart, setCart }) => {
 
@@ -32,6 +33,7 @@ const ProductSlider = ({ data, items = [], cart, setCart }) => {
     <Swiper
       spaceBetween={20}
       slidesPerView={1}
+      modules={[Autoplay]}
       pagination={{ clickable: true }}
       autoplay={{
         delay: 2500,

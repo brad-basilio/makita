@@ -10,17 +10,21 @@ const systemRest = new SystemRest()
 
 const DataModal = ({ dataLoaded, setDataLoaded, setSystems, modalRef }) => {
   const [data, setData] = useState(dataLoaded?.data || {})
+  const [methodValues, setMethodValues] = useState([])
 
   const usingRef = {}
   usingRef.model = useRef(null)
   usingRef.filters = useRef(null)
+  usingRef.filtersMethod = useRef(null)
 
   const onDataSubmit = async (e) => {
     e.preventDefault()
     const result = await systemRest.save({
       id: dataLoaded.id,
       data,
-      filters: $(usingRef.filters.current).val()
+      filters: $(usingRef.filters.current).val(),
+      filters_method: dataLoaded?.component?.using?.['filters:method'],
+      filters_method_values: $(usingRef.filtersMethod.current).val()
     })
     if (!result) return
     setDataLoaded(null)
@@ -36,10 +40,18 @@ const DataModal = ({ dataLoaded, setDataLoaded, setSystems, modalRef }) => {
     setData(newData)
     usingRef.model.current.value = dataLoaded?.component?.using?.model ?? ''
     $(usingRef.filters.current).val(dataLoaded?.filters ?? []).trigger('change')
+    $(usingRef.filtersMethod.current).val(dataLoaded?.filtersMethod ?? []).trigger('change')
+
+    const model = dataLoaded?.component?.using?.model
+    const method = dataLoaded?.component?.using?.['filters:method']
+    if (!model || !method) return
+    systemRest.simpleGet(`/api/admin/system/related/${model}/${method}`).then(result => {
+      setMethodValues(result)
+    })
   }, [dataLoaded])
 
   const onBoolChange = (key, value) => {
-    setData({...data, [key]: value })
+    setData({ ...data, [key]: value })
   }
 
   console.log(data)
@@ -52,7 +64,7 @@ const DataModal = ({ dataLoaded, setDataLoaded, setSystems, modalRef }) => {
             Información
           </a>
         </li>
-        <li className="nav-item" hidden={!dataLoaded?.component?.using?.filters}>
+        <li className="nav-item" hidden={!dataLoaded?.component?.using?.filters && !dataLoaded?.component?.using?.['filters:method']}>
           <a href="#tab-db" data-bs-toggle="tab" aria-expanded="true" className="nav-link">
             Base de datos
           </a>
@@ -68,34 +80,34 @@ const DataModal = ({ dataLoaded, setDataLoaded, setSystems, modalRef }) => {
                   {
                     element.startsWith('bool:')
                       ? <div className="form-group">
-                          <label className="form-label">{element.replace('bool:', '')}</label>
-                          <div>
-                            <div className="form-check form-check-inline">
-                              <input
-                                type="radio"
-                                className="form-check-input"
-                                id={`${element}-true`}
-                                name={element}
-                                value="true"
-                                checked={data[element] === true}
-                                onChange={e => onBoolChange(element, e.target.value === 'true')}
-                              />
-                              <label className="form-check-label" htmlFor={`${element}-true`}>Sí</label>
-                            </div>
-                            <div className="form-check form-check-inline">
-                              <input
-                                type="radio"
-                                className="form-check-input"
-                                id={`${element}-false`}
-                                name={element}
-                                value="false"
-                                checked={data[element] === false}
-                                onChange={e => onBoolChange(element, e.target.value === 'true')}
-                              />
-                              <label className="form-check-label" htmlFor={`${element}-false`}>No</label>
-                            </div>
+                        <label className="form-label">{element.replace('bool:', '')}</label>
+                        <div>
+                          <div className="form-check form-check-inline">
+                            <input
+                              type="radio"
+                              className="form-check-input"
+                              id={`${element}-true`}
+                              name={element}
+                              value="true"
+                              checked={data[element] === true}
+                              onChange={e => onBoolChange(element, e.target.value === 'true')}
+                            />
+                            <label className="form-check-label" htmlFor={`${element}-true`}>Sí</label>
+                          </div>
+                          <div className="form-check form-check-inline">
+                            <input
+                              type="radio"
+                              className="form-check-input"
+                              id={`${element}-false`}
+                              name={element}
+                              value="false"
+                              checked={data[element] === false}
+                              onChange={e => onBoolChange(element, e.target.value === 'true')}
+                            />
+                            <label className="form-check-label" htmlFor={`${element}-false`}>No</label>
                           </div>
                         </div>
+                      </div>
                       : <TextareaFormGroup key={index} label={element} value={data[element] ?? ''} rows={1} onChange={e => setData({ ...data, [element]: e.target.value })} />
                   }
                 </>
@@ -112,6 +124,15 @@ const DataModal = ({ dataLoaded, setDataLoaded, setSystems, modalRef }) => {
               ))
             }
           </SelectFormGroup>
+          <div hidden={!dataLoaded?.component?.using?.['filters:method']}>
+            <SelectFormGroup eRef={usingRef.filtersMethod} label={dataLoaded?.component?.using?.['filters:method']?.toTitleCase()} multiple dropdownParent='#tab-db' changeWith={[methodValues]}>
+              {
+                methodValues?.map((item) => (
+                  <option key={item.id} value={item.id}>{item.name}</option>
+                ))
+              }
+            </SelectFormGroup>
+          </div>
         </div>
       </div>
     </Modal>

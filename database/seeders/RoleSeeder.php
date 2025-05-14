@@ -22,9 +22,16 @@ class RoleSeeder extends Seeder
             'relative_id' => Crypto::randomUUID()
         ]);
 
+        $customerJpa = Role::updateOrCreate(['name' => 'Customer'], [
+            'relative_id' => Crypto::randomUUID()
+        ]);
+
         Permission::updateOrCreate(['name' => 'Admin'], ['name' => 'Admin'])
             ->syncRoles([$adminJpa, $rootJpa]);
         Permission::updateOrCreate(['name' => 'Root'], ['name' => 'Root'])
             ->syncRoles([$rootJpa]);
+
+        Permission::updateOrCreate(['name' => 'Customer'], ['name' => 'Customer'])
+            ->syncRoles([$customerJpa]);
     }
 }

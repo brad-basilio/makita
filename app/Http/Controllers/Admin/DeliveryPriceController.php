@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\BasicController;
 use App\Models\DeliveryPrice;
+use App\Models\TypeDelivery;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use SoDe\Extend\File;
@@ -15,7 +16,7 @@ use SoDe\Extend\Text;
 class DeliveryPriceController extends BasicController
 {
     public $model = DeliveryPrice::class;
-    public $reactView = 'Admin/DeliveryPrices';
+    public $reactView = 'Admin/DeliveryPricesType';
 
     public function setReactViewProperties(Request $request)
     {
@@ -29,9 +30,27 @@ class DeliveryPriceController extends BasicController
     {
         $body = $request->all();
         $found = $this->model::where('ubigeo', $body['ubigeo'])->first();
-        if ($found) $body['id'] = $found->id;
+
+        if ($found) {
+            $body['id'] = $found->id;
+        }
+
+        if ($request->has('is_free') && $request->input('is_free')) {
+            $freeType = TypeDelivery::where('slug', 'envio-gratis')->first();
+        } else if ($request->has('is_agency') && $request->input('is_agency')) {
+            $freeType = TypeDelivery::where('slug', 'envio-agencia')->first();
+        } else {
+            $freeType = TypeDelivery::where('slug', 'delivery-normal')->first();
+        }
+
+        if ($freeType) {
+            $body['type_id'] = $freeType->id;
+        }
+
+
         return $body;
     }
+
 
     public function massive(Request $request)
     {
@@ -58,12 +77,34 @@ class DeliveryPriceController extends BasicController
                 $ubigeo = $row[0];
                 $description = $row[1];
                 $price = $row[2];
-
                 $price = $price === '' ? null : $price;
 
+                $is_free = strtolower($row[3]) ===  'sí' || strtolower($row[3]) ===  'si' || $row[3] ===  1 ? 1 : 0;
+                $express_price = $row[4] === '' ? null : $row[4];
+                $is_agency = strtolower($row[5]) ===  'sí' || strtolower($row[5]) ===  'si' || $row[5] ===  1 ? 1 : 0;
+                $agency_price = $row[6] === '' ? null : $row[6];
+
+
+                $freeType = "";
+                $type_id = "";
+                if ($is_free === 1) {
+                    $freeType = TypeDelivery::where('slug', 'envio-gratis')->first();
+                } else if ($is_agency === 1) {
+                    $freeType = TypeDelivery::where('slug', 'delivery-agencia')->first();
+                } else {
+                    $freeType = TypeDelivery::where('slug', 'delivery-normal')->first();
+                }
+
+                if ($freeType) {
+                    $type_id = $freeType->id;
+                }
+
                 $ubigeoObject = collect($ubigeoData)->firstWhere('reniec', $ubigeo);
-                
-                $name = $ubigeoObject ? Text::toTitleCase("{$ubigeoObject['distrito']}, {$ubigeoObject['departamento']}") : null;
+                if (!$ubigeoObject) {
+                    continue; // Saltar a la siguiente iteración si no se encuentra el ubige
+                }
+
+                $name = $ubigeoObject ? Text::toTitleCase("{$ubigeoObject['distrito']}, {$ubigeoObject['departamento']}") : "";
 
                 $deliveryPrice = $this->model::updateOrCreate(
                     ['ubigeo' => $ubigeo],
@@ -71,6 +112,11 @@ class DeliveryPriceController extends BasicController
                         'name' => $name,
                         'description' => $description,
                         'price' => $price,
+                        'is_free' => $is_free,
+                        'express_price' => $express_price,
+                        'is_agency' => $is_agency,
+                        'agency_price' => $agency_price,
+                        'type_id' => $type_id,
                     ]
                 );
 
