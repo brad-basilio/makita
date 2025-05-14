@@ -620,7 +620,7 @@ const DeliveryPricesType = ({ ubigeo = [] }) => {
                             label="Nombre"
                             col="col-12"
                             type="string"
-                            disabled
+                           
                         />
                         <InputFormGroup
                             eRef={descriptionTypeRef}

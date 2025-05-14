@@ -447,12 +447,12 @@ export default function ShippingStep({
                                         key={option.type}
                                         title={
                                             option.type === "free"
-                                                ? "Envío Gratis"
+                                                ? option.deliveryType
                                                 : option.type === "express"
-                                                ? "Envío Express"
+                                                ? option.deliveryType
                                                 : option.type === "agency"
-                                                ? "Envío en Agencia"
-                                                : "Envío Estándar"
+                                                ? option.deliveryType
+                                                : option.deliveryType
                                         }
                                         price={option.price}
                                         description={option.description}
