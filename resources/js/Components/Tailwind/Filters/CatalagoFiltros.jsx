@@ -173,6 +173,11 @@ const [brands,setBrands]=useState([]);
             setLoading(false);
         }
     };
+
+    useEffect(() => {
+        fetchProducts(1);
+      }, []);
+
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
         const categoriaParam = params.get("category");
@@ -234,7 +239,7 @@ const [brands,setBrands]=useState([]);
         }
 
        
-    }, [items])
+    }, [items]);
 
 
     useEffect(() => {
