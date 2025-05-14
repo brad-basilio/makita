@@ -32,7 +32,10 @@ return [
     */
 
     'env' => env('APP_ENV', 'production'),
-    'ubigeo' => collect(JSON::parse(File::get(storage_path('app/utils/ubigeo.json')))),
+    // 'ubigeo' => collect(JSON::parse(File::get(storage_path('app/utils/ubigeo.json')))),
+    // ✅ Solución 2: Usar closure para generar la colección cuando sea necesario
+    'ubigeo' => fn() => collect(JSON::parse(File::get(storage_path('app/utils/ubigeo.json')))),
+
 
     /*
     |--------------------------------------------------------------------------
