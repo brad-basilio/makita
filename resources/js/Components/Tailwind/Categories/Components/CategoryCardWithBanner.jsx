@@ -1,5 +1,6 @@
 const CategoryCardWithBanner = ({
     mainContainer,
+    href,
     color,
     category,
     aspectRatio,
@@ -37,7 +38,7 @@ const CategoryCardWithBanner = ({
                         </p>
                     }
                 </div>
-                <button className={`${buttonBackground || 'bg-primary'} ${buttonColor || 'text-white'} rounded-full px-4 py-1`}>Ver más productos</button>
+                <a href={href} className={`${buttonBackground || 'bg-primary'} ${buttonColor || 'text-white'} rounded-full px-4 py-1`}>Ver más productos</a>
             </div>
             {
                 !mainContainer &&
