@@ -22,4 +22,10 @@ class Brand extends Model
         'visible',
         'status',
     ];
+
+    public function items()
+    {
+        return $this->hasMany(Item::class);
+    }
+
 }
