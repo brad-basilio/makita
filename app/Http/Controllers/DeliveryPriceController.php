@@ -52,8 +52,10 @@ class DeliveryPriceController extends BasicController
             if (!$ubigeo) {
                 $response->status = 400;
                 $response->message = 'Ubigeo no encontrado';
+                //dump($ubigeo);
                 return;
             }
+         //   dump($ubigeo);
             // 1. Buscar el precio de envío
             $deliveryPrice = DeliveryPrice::with(['type'])
                 ->where('ubigeo', $ubigeo)
@@ -63,12 +65,14 @@ class DeliveryPriceController extends BasicController
             if (!$deliveryPrice) {
                 $response->status = 400;
                 $response->message = 'No hay cobertura para esta ubicación';
+            //    dump($deliveryPrice);
                 return;
             }
 
             // 3. Estructurar la respuesta
             $result = [
                 'is_free' => $deliveryPrice->is_free,
+                'is_agency'=>$deliveryPrice->is_agency,
                 'standard' => [
                     'price' => $deliveryPrice->is_free ? 0 : $deliveryPrice->price,
                     'description' => $deliveryPrice->type->description ?? 'Entrega estándar',
@@ -99,12 +103,13 @@ class DeliveryPriceController extends BasicController
                     'characteristics' => $agencyType->characteristics,
                 ];
             }
-
+//dump($result);
             $response->data = $result;
             $response->status = 200;
             $response->message = 'Precios obtenidos correctamente';
         }, function ($e) {
-            \Log::error('Error en getDeliveryPrice: ' . $e->getMessage());
+           \Log::error('Error en getDeliveryPrice: ' . $e->getMessage());
+         //  dump('Error en getDeliveryPrice: ' . $e->getMessage());
         });
 
         return response($response->toArray(), $response->status);

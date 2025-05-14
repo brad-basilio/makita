@@ -82,7 +82,7 @@ export default function ShippingStep({
             const response = await DeliveryPricesRest.getShippingCost({
                 ubigeo: data.inei,
             });
-
+console.log(response);
             const options = [];
             if (response.data.is_free) {
                 options.push({
@@ -102,7 +102,7 @@ export default function ShippingStep({
                         characteristics: response.data.express.characteristics,
                     });
                 }
-            } else if (response.data.agency.price > 0) {
+            } else if (response.data.is_agency) {
                 options.push({
                     type: "agency",
                     price: response.data.agency.price,
@@ -124,6 +124,7 @@ export default function ShippingStep({
             setSelectedOption(options[0].type);
             setEnvio(options[0].price);
         } catch (error) {
+            console.error("Error al obtener precios de envío:", error);
             Notify.add({
                 icon: "/assets/img/icon.svg",
                 title: "Sin cobertura",
