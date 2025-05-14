@@ -156,7 +156,7 @@ class ItemController extends BasicController
         $i4price = clone $builder;
         $minPrice = 0;
         $maxPrice = $i4price->max('final_price');
-        $rangeSize = 50;  // Define el tamaño del rango
+        $rangeSize = round($maxPrice / 6); // Define el tamaño del rango
 
         // Calcular rangos de precio
         $ranges = [];
