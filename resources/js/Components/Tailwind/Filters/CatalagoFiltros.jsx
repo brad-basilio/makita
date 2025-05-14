@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-
+import { motion, AnimatePresence } from "framer-motion";
 import CardHoverBtn from "../Products/Components/CardHoverBtn";
-import { ChevronDown, Filter, Search, Tag, X } from "lucide-react";
+import { ChevronDown, ChevronLeft, ChevronRight, Filter, Search, Tag, X } from "lucide-react";
 import ItemsRest from "../../../Actions/ItemsRest";
 import ArrayJoin from "../../../Utils/ArrayJoin";
 import { Loading } from "../Components/Resources/Loading";
@@ -39,7 +39,12 @@ const SkeletonCard = () => {
 
 //const CatalagoFiltros = ({ items, data, categories, brands, prices, cart, setCart }) => {
 const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
-    const { categories, brands, priceRanges } = filteredData;
+    //const { categories, brands, priceRanges } = filteredData;
+const [brands,setBrands]=useState([]);
+    const [subcategories, setSubcategories] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [priceRanges, setPriceRanges] = useState([]);
+
     const [sections, setSections] = useState({
         marca: true,
         precio: true,
@@ -48,9 +53,11 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
     });
 
     const [selectedFilters, setSelectedFilters] = useState({
+        collection_id: [], // Array para múltiples colecciones
         category_id: [], // Array para múltiples categorías
         brand_id: [], // Array para múltiples marcas
         subcategory_id: [],
+        
         price: null,
         name: null,
         sort_by: "created_at",
@@ -62,12 +69,24 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
     const [pagination, setPagination] = useState({
         currentPage: 1,
         totalPages: 1,
+        totalItems: 0,
+        itemsPerPage: 24,
+        from: 0,
+        to: 0,
     });
 
     const transformFilters = (filters) => {
         const transformedFilters = [];
 
-        // Categorías
+        if (filters.collection_id.length > 0) {
+            const collectionConditions = filters.collection_id.map((id) => [
+                "collection_id",
+                "=",
+                id,
+            ]);
+            transformedFilters.push(["or", ...collectionConditions]);
+        }
+
         if (filters.category_id.length > 0) {
             const categoryConditions = filters.category_id.map((id) => [
                 "category_id",
@@ -76,16 +95,16 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
             ]);
             transformedFilters.push(["or", ...categoryConditions]);
         }
-        //subcategorias
+
         if (filters.subcategory_id.length > 0) {
             const subcategoryConditions = filters.subcategory_id.map((id) => [
                 "subcategory_id",
                 "=",
                 id,
             ]);
-            transformedFilters.push(["and", ...subcategoryConditions]);
+            transformedFilters.push(["or", ...subcategoryConditions]);
         }
-        // Marcas
+
         if (filters.brand_id.length > 0) {
             const brandConditions = filters.brand_id.map((id) => [
                 "brand_id",
@@ -95,10 +114,9 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
             transformedFilters.push(["or", ...brandConditions]);
         }
 
-        // Precio
         if (filters.price) {
             transformedFilters.push([
-                "and",
+                "or",
                 [
                     ["final_price", ">=", filters.price.min],
                     "and",
@@ -107,95 +125,162 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
             ]);
         }
 
-        // Búsqueda (asumiendo que se filtra por título o contenido)
         if (filters.name) {
             transformedFilters.push(["name", "contains", filters.name]);
         }
+
         return transformedFilters;
     };
     // Obtener productos filtrados desde el backend
     const fetchProducts = async (page = 1) => {
         setLoading(true);
         try {
-            // Transformar los filtros al formato esperado por el backend
             const filters = transformFilters(selectedFilters);
             const params = {
-                filter: filters, // Envía los filtros transformados
-                sort: selectedFilters.sort, // Enviar el parámetro de ordenación
-                // page,
-                take: 1000, // Número de productos por página
+                filter: filters,
+                sort: selectedFilters.sort,
+                skip: (page - 1) * pagination.itemsPerPage,
+                take: pagination.itemsPerPage,
+                requireTotalCount: true,
             };
+            console.log(params);
 
             const response = await itemsRest.paginate(params);
+            console.log(response)
 
             setProducts(response.data);
             setPagination({
-                currentPage: response.currentPage,
-                totalPages: response.lastPage,
+                currentPage: page,
+                totalPages: Math.ceil(
+                    response.totalCount / pagination.itemsPerPage
+                ),
+                totalItems: response.totalCount,
+                itemsPerPage: pagination.itemsPerPage,
+                from: (page - 1) * pagination.itemsPerPage + 1,
+                to: Math.min(
+                    page * pagination.itemsPerPage,
+                    response.totalCount
+                ),
             });
+             console.log(response);
+            setBrands(response?.summary.brands);
+            setCategories(response?.summary.categories);
+            setSubcategories(response?.summary.subcategories);
+            setPriceRanges(response?.summary.priceRanges);
         } catch (error) {
-            console.error("Error fetching products:", error);
+            console.log("Error fetching products:", error);
         } finally {
             setLoading(false);
         }
     };
-
-    useEffect(() => {
-        fetchProducts();
-    }, [selectedFilters]);
-
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
         const categoriaParam = params.get("category");
         const subCategoriaParam = params.get("subcategory");
+        const collectionParam = params.get("collection");
+        const searchParam = params.get("search");
+        const campaignParam = params.get("campaign");
+        const sortParam = params.get("sort");
 
         if (categoriaParam) {
             const category = categories.find(
                 (item) => item.slug === categoriaParam
-            ); // Usa .find() en lugar de .filter()
-
+            );
             if (category) {
                 setSelectedFilters((prev) => ({
                     ...prev,
-                    category_id: [category.id], // Asegúrate de que `category.id` exista
+                    category_id: [category.id],
+                }));
+            }
+        }
+        if (subCategoriaParam) {
+            const subcategory = subcategories.find(
+                (item) => item.slug === subCategoriaParam
+            );
+         
+            if (subcategory) {
+                setSelectedFilters((prev) => ({
+                  ...prev,
+                  subcategory_id: [subcategory.id],
                 }));
             }
         }
 
-        if (subCategoriaParam) {
-            // Buscar la subcategoría en todas las categorías y obtener su categoría padre
-            let subCategoryFound = null;
-            let parentCategoryFound = null;
+    
 
-            categories.forEach((category) => {
-                const subCategory = category.subcategories.find(
-                    (item) => item.slug === subCategoriaParam
-                );
-                if (subCategory) {
-                    subCategoryFound = subCategory;
-                    parentCategoryFound = category; // Guardamos la categoría padre
-                }
-            });
-
-            if (subCategoryFound && parentCategoryFound) {
+       /* if (collectionParam) {
+            const collection = collections.find(
+                (item) => item.slug === collectionParam
+            );
+            if (collection) {
                 setSelectedFilters((prev) => ({
                     ...prev,
-                    category_id: [parentCategoryFound.id], // Actualiza con el ID de la categoría padre
-                    subcategory_id: [subCategoryFound.id], // Actualiza con el ID de la subcategoría
+                    collection_id: [collection.id],
                 }));
             }
-        }
-
-        const searchParam = params.get("search");
+        }*/
+      /*if (campaignParam) {
+            const campaign = campaigns.find(
+                (item) => item.slug === campaignParam
+            );
+            setProducts(campaign.items);
+        }*/
 
         if (searchParam) {
             setSelectedFilters((prev) => ({
                 ...prev,
-                name: searchParam, // Asegúrate de que `category.id` exista
+                name: searchParam,
             }));
         }
-    }, [items]); // Agrega `items` como dependencia
 
+       
+    }, [items])
+
+
+    useEffect(() => {
+        fetchProducts(pagination.currentPage);
+    }, [selectedFilters]);
+    const handlePageChange = (page) => {
+        if (page >= 1 && page <= pagination.totalPages) {
+            fetchProducts(page);
+        }
+    };
+
+     // Generar números de página para la paginación
+     const getPageNumbers = () => {
+        const pages = [];
+        const total = pagination.totalPages;
+        const current = pagination.currentPage;
+        const delta = 2;
+
+        for (let i = 1; i <= total; i++) {
+            if (
+                i === 1 ||
+                i === total ||
+                (i >= current - delta && i <= current + delta)
+            ) {
+                pages.push(i);
+            } else if (i === current - delta - 1 || i === current + delta + 1) {
+                pages.push("...");
+            }
+        }
+
+        return pages.filter((page, index, array) => {
+            return page !== "..." || array[index - 1] !== "...";
+        });
+    };
+    // Opciones de ordenación
+    const sortOptions = [
+        { value: "created_at:desc", label: "Más reciente" },
+        { value: "created_at:asc", label: "Mas antiguo" },
+        { value: "final_price:asc", label: "Precio: Menor a Mayor" },
+        { value: "final_price:desc", label: "Precio: Mayor a Menor" },
+        { value: "name:asc", label: "Nombre: A-Z" },
+        { value: "name:desc", label: "Nombre: Z-A" },
+    ];
+
+   
+    //}, [items]);
     // Manejar cambios en los filtros
     const handleFilterChange = (type, value) => {
         setSelectedFilters((prev) => {
@@ -232,21 +317,18 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
         }));
     };
 
-    const sortOptions = [
-        { value: "created_at:desc", label: "Más reciente" },
-        { value: "created_at:asc", label: "Mas antiguo" },
-        { value: "final_price:asc", label: "Precio: Menor a Mayor" },
-        { value: "final_price:desc", label: "Precio: Mayor a Menor" },
-        { value: "name:asc", label: "Nombre: A-Z" },
-        { value: "name:desc", label: "Nombre: Z-A" },
-    ];
+
 
     const [searchCategory, setSearchCategory] = useState("");
+    const [searchSubcategory, setSearchSubcategory] = useState("");
     const [searchBrand, setSearchBrand] = useState("");
 
     // Filtrar categorías según el input
     const filteredCategories = categories.filter((category) =>
         category.name.toLowerCase().includes(searchCategory.toLowerCase())
+    );
+    const filteredSubcategories = subcategories.filter((subcategory) =>
+        subcategory.name.toLowerCase().includes(searchSubcategory.toLowerCase())
     );
 
     // Filtrar marcas según el input
@@ -453,52 +535,6 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                                 </div>
                             )}
                         </div>
-
-                        {/* Precio Section */}
-                        <div className="mb-6">
-                            <button
-                                onClick={() => toggleSection("precio")}
-                                className="flex items-center justify-between w-full mb-4"
-                            >
-                                <span className="font-medium">Precio</span>
-                                <ChevronDown
-                                    className={`h-5 w-5 transform transition-transform ${
-                                        sections.precio ? "" : "-rotate-180"
-                                    }`}
-                                />
-                            </button>
-                            {sections.precio && (
-                                <div className="space-y-3">
-                                    {priceRanges.map((range) => (
-                                        <label
-                                            key={`${range.min}-${range.max}`}
-                                            className="flex items-center space-x-3 customtext-neutral-light"
-                                        >
-                                            <input
-                                                type="checkbox"
-                                                name="precio"
-                                                className="h-4 w-4 rounded border-gray-300"
-                                                onChange={() =>
-                                                    handleFilterChange(
-                                                        "price",
-                                                        range
-                                                    )
-                                                }
-                                                checked={
-                                                    selectedFilters.price &&
-                                                    selectedFilters.price
-                                                        .min === range.min &&
-                                                    selectedFilters.price
-                                                        .max === range.max
-                                                }
-                                            />
-                                            <span>{`S/ ${range.min} - S/ ${range.max}`}</span>
-                                        </label>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
-
                         <div className="mb-6">
                             <button
                                 onClick={() => toggleSection("categoria")}
@@ -591,9 +627,165 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                                 </div>
                             )}
                         </div>
-                        <button className="w-full bg-primary text-white py-3 rounded-xl hover:brightness-90 transition-colors text-sm font-bold">
+
+                        <motion.div className="mb-6" >
+                            <motion.button
+                                onClick={() => toggleSection("subcategoria")}
+                                className="flex items-center justify-between w-full mb-4"
+                                whileHover={{ x: 3 }}
+                            >
+                                <span className="font-medium">
+                                    Sub Categorías
+                                </span>
+                                <ChevronDown
+                                    className={`h-5 w-5 transform transition-transform ${
+                                        sections.subcategoria
+                                            ? ""
+                                            : "-rotate-180"
+                                    }`}
+                                />
+                            </motion.button>
+
+                            <AnimatePresence>
+                                {sections.subcategoria && (
+                                    <motion.div
+                                        className="space-y-1"
+                                        initial="hidden"
+                                        animate="visible"
+                                        exit="hidden"
+                                        variants={{
+                                            hidden: {
+                                                opacity: 0,
+                                                height: 0,
+                                            },
+                                            visible: {
+                                                opacity: 1,
+                                                height: "auto",
+                                                transition: {
+                                                    staggerChildren: 0.1,
+                                                },
+                                            },
+                                        }}
+                                    >
+                                        <motion.div
+                                            className="relative"
+                                          
+                                        >
+                                            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                                            <input
+                                                type="text"
+                                                placeholder="Buscar"
+                                                className="w-full px-4 pl-10 py-3 border customtext-neutral-dark border-neutral-ligth rounded-xl focus:ring-0 focus:outline-0 transition-all duration-300"
+                                                value={searchSubcategory}
+                                                onChange={(e) =>
+                                                    setSearchSubcategory(
+                                                        e.target.value
+                                                    )
+                                                }
+                                            />
+                                        </motion.div>
+
+                                        {filteredSubcategories.map(
+                                            (subcategory) => {
+                                                const isChecked =
+                                                    selectedFilters.subcategory_id?.includes(
+                                                        subcategory.id
+                                                    );
+                                                return (
+                                                    <motion.div
+                                                        key={subcategory.id}
+                                                        className={`group py-2 rounded-md ${
+                                                            isChecked
+                                                                ? "bg-primary "
+                                                                : "bg-transparent"
+                                                        }`}
+                                                      
+                                                    >
+                                                        <label className="flex items-center justify-between space-x-3 px-4 cursor-pointer">
+                                                            <input
+                                                                type="checkbox"
+                                                                className="hidden"
+                                                                onChange={() =>
+                                                                    handleFilterChange(
+                                                                        "subcategory_id",
+                                                                        subcategory.id
+                                                                    )
+                                                                }
+                                                                checked={
+                                                                    isChecked
+                                                                }
+                                                            />
+                                                           
+                                                            <span
+                                                                className={`${
+                                                                    isChecked
+                                                                        ? "text-white"
+                                                                        : "text-gray-700"
+                                                                }`}
+                                                            >
+                                                                {
+                                                                    subcategory.name
+                                                                }
+                                                            </span>
+                                                        </label>
+                                                    </motion.div>
+                                                );
+                                            }
+                                        )}
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+                        </motion.div>
+
+                        {/* Precio Section */}
+                        <div className="mb-6">
+                            <button
+                                onClick={() => toggleSection("precio")}
+                                className="flex items-center justify-between w-full mb-4"
+                            >
+                                <span className="font-medium">Precio</span>
+                                <ChevronDown
+                                    className={`h-5 w-5 transform transition-transform ${
+                                        sections.precio ? "" : "-rotate-180"
+                                    }`}
+                                />
+                            </button>
+                            {sections.precio && (
+                                <div className="space-y-3">
+                                    {priceRanges.map((range) => (
+                                        <label
+                                            key={`${range.min}-${range.max}`}
+                                            className="flex items-center space-x-3 customtext-neutral-light"
+                                        >
+                                            <input
+                                                type="checkbox"
+                                                name="precio"
+                                                className="h-4 w-4 rounded border-gray-300"
+                                                onChange={() =>
+                                                    handleFilterChange(
+                                                        "price",
+                                                        range
+                                                    )
+                                                }
+                                                checked={
+                                                    selectedFilters.price &&
+                                                    selectedFilters.price
+                                                        .min === range.min &&
+                                                    selectedFilters.price
+                                                        .max === range.max
+                                                }
+                                            />
+                                            <span>{`S/ ${range.min} - S/ ${range.max}`}</span>
+                                        </label>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+
+                   
+                    {/* <button className="w-full bg-primary text-white py-3 rounded-xl hover:brightness-90 transition-colors text-sm font-bold">
                             Aplicar Filtro
-                        </button>
+                        </button>*/}
                     </div>
 
                     <div className="w-full lg:w-9/12 py-4">
@@ -630,6 +822,88 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                                 )}
                             </div>
                         )}
+                           {/* Paginación inferior */}
+                           <motion.div
+                            className="flex justify-between items-center mb-4 w-full mt-8"
+                         
+                        >
+                            <div className="customtext-primary font-semibold">
+                                <nav className="flex items-center gap-x-2 min-w-max">
+                                    <motion.button
+                                        className={`p-4 inline-flex items-center ${
+                                            pagination.currentPage === 1
+                                                ? "opacity-50 cursor-not-allowed"
+                                                : ""
+                                        }`}
+                                        onClick={() =>
+                                            handlePageChange(
+                                                pagination.currentPage - 1
+                                            )
+                                        }
+                                        disabled={pagination.currentPage === 1}
+                                        whileHover={{ scale: 1.1 }}
+                                        whileTap={{ scale: 0.9 }}
+                                    >
+                                        <ChevronLeft />
+                                    </motion.button>
+
+                                    {getPageNumbers().map((page, index) => (
+                                        <React.Fragment key={index}>
+                                            {page === "..." ? (
+                                                <span className="w-10 h-10 bg-transparent p-2 inline-flex items-center justify-center rounded-full">
+                                                    ...
+                                                </span>
+                                            ) : (
+                                                <motion.button
+                                                    className={`w-10 h-10 p-2 inline-flex items-center justify-center rounded-full transition-all duration-300 
+                                                        ${
+                                                            page ===
+                                                            pagination.currentPage
+                                                                ? "bg-primary text-white"
+                                                                : "bg-transparent hover:text-white hover:bg-primary"
+                                                        }`}
+                                                    onClick={() =>
+                                                        handlePageChange(page)
+                                                    }
+                                                    whileHover={{ scale: 1.05 }}
+                                                    whileTap={{ scale: 0.95 }}
+                                                >
+                                                    {page}
+                                                </motion.button>
+                                            )}
+                                        </React.Fragment>
+                                    ))}
+
+                                    <motion.button
+                                        className={`p-4 inline-flex items-center ${
+                                            pagination.currentPage ===
+                                            pagination.totalPages
+                                                ? "opacity-50 cursor-not-allowed"
+                                                : ""
+                                        }`}
+                                        onClick={() =>
+                                            handlePageChange(
+                                                pagination.currentPage + 1
+                                            )
+                                        }
+                                        disabled={
+                                            pagination.currentPage ===
+                                            pagination.totalPages
+                                        }
+                                        whileHover={{ scale: 1.1 }}
+                                        whileTap={{ scale: 0.9 }}
+                                    >
+                                        <ChevronRight />
+                                    </motion.button>
+                                </nav>
+                            </div>
+                            <div>
+                                <p className="font-semibold">
+                                    {pagination.from} - {pagination.to} de{" "}
+                                    {pagination.totalItems} Resultados
+                                </p>
+                            </div>
+                        </motion.div>
                     </div>
                 </div>
                 {/* Paginación 

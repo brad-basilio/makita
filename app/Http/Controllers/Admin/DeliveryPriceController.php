@@ -75,7 +75,7 @@ class DeliveryPriceController extends BasicController
                 if (!is_numeric($row[0])) continue;
 
                 $ubigeo = $row[0];
-                $description = $row[1];
+            
                 $price = $row[2];
                 $price = $price === '' ? null : $price;
 
@@ -105,6 +105,7 @@ class DeliveryPriceController extends BasicController
                 }
 
                 $name = $ubigeoObject ? Text::toTitleCase("{$ubigeoObject['distrito']}, {$ubigeoObject['departamento']}") : "";
+                $description = $ubigeoObject ? Text::toTitleCase("{$ubigeoObject['distrito']}-{$ubigeoObject['provincia']}-{$ubigeoObject['departamento']}") : "";
 
                 $deliveryPrice = $this->model::updateOrCreate(
                     ['ubigeo' => $ubigeo],

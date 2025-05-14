@@ -290,12 +290,28 @@
                 "name": "Producto Catalogo Filtro",
                 "image": "products-list.png",
                 "data": ["path", "title", "description", "link_cart"],
-                "using": {
-                    "model": "Item",
-                    "with": ["category", "subcategory", "brand"],
-
-                    "relations": ["category", "tags"]
-                }
+                "options": [
+                    {
+                        "id": "default",
+                        "name": "Lista estándar",
+                        "using": {
+                            "model": "Item",
+                            "with": ["category", "subcategory", "brand"],
+                            "relations": ["category","brand","subcategory", "tags"],
+                            "fields": [
+                                "id",
+                                "name",
+                                "slug",
+                                "price",
+                                "final_price",
+                                "image"
+                             
+                            ]
+                        }
+                    }
+                    
+                    
+                ]
             },
 
             {

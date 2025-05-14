@@ -1310,7 +1310,7 @@
     ]
   },
   "resources/js/Admin/DeliveryPricesType.jsx": {
-    "file": "assets/DeliveryPricesType-eYzS6UML.js",
+    "file": "assets/DeliveryPricesType-C9DbY5Zw.js",
     "name": "DeliveryPricesType",
     "src": "resources/js/Admin/DeliveryPricesType.jsx",
     "isEntry": true,
@@ -3773,7 +3773,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Checkout.jsx": {
-    "file": "assets/Checkout-D5_5OpEB.js",
+    "file": "assets/Checkout-T6oVsX_N.js",
     "name": "Checkout",
     "src": "resources/js/Components/Tailwind/Checkout.jsx",
     "isEntry": true,
@@ -4301,7 +4301,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Filter.jsx": {
-    "file": "assets/Filter-rSYX8zjR.js",
+    "file": "assets/Filter-CCzdCdWc.js",
     "name": "Filter",
     "src": "resources/js/Components/Tailwind/Filter.jsx",
     "isEntry": true,
@@ -4321,7 +4321,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Filters/CatalagoFiltros.jsx": {
-    "file": "assets/CatalagoFiltros-BoAU3GKc.js",
+    "file": "assets/CatalagoFiltros-D2r_a-sX.js",
     "name": "CatalagoFiltros",
     "src": "resources/js/Components/Tailwind/Filters/CatalagoFiltros.jsx",
     "isDynamicEntry": true,
@@ -4336,6 +4336,10 @@
       "_x-DBMwyD6F.js",
       "_chevron-down-DS-mdh9v.js",
       "_search-TwiiKGP5.js",
+      "_proxy-BTYtmp9V.js",
+      "_index-CFtDjG4d.js",
+      "_chevron-left-B2s3ZsB7.js",
+      "_chevron-right-Ckt5D2ka.js",
       "_index-yBjzXJbu.js",
       "resources/js/Components/Tailwind/Components/ProductCard.jsx",
       "resources/js/Components/Tailwind/Headers/HeaderSearch.jsx",
@@ -6629,7 +6633,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-Cg-MMoxC.js",
+    "file": "assets/System-D_BSeiyN.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,

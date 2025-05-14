@@ -372,6 +372,14 @@ const DeliveryPricesType = ({ ubigeo = [] }) => {
                                         </span>
                                     )
                                 );
+                            } else if (data.is_agency > 0) {
+                                container.html(
+                                    renderToString(
+                                        <span>
+                                            S/. {Number2Currency(data.agency_price)}
+                                        </span>
+                                    )
+                                );
                             } else {
                                 container.text("Gratis");
                             }
@@ -612,7 +620,7 @@ const DeliveryPricesType = ({ ubigeo = [] }) => {
                             label="Nombre"
                             col="col-12"
                             type="string"
-                            disabled
+                           
                         />
                         <InputFormGroup
                             eRef={descriptionTypeRef}
