@@ -23,7 +23,7 @@ return new class extends Migration
         Schema::table('delivery_prices', function (Blueprint $table) {
             $table->boolean('is_free')->default(false);
             $table->decimal('express_price', 10, 2)->nullable();
-            $table->foreignUuid('type_id')->constrained('types_delivery')->cascadeOnDelete();
+            $table->foreignUuid('type_id')->nullable()->constrained('types_delivery')->nullOnDelete();
         });
     }
 
