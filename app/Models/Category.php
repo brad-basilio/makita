@@ -24,6 +24,12 @@ class Category extends Model
         'status',
     ];
 
+    protected $casts = [
+        'featured' => 'boolean',
+        'visible' => 'boolean',
+        'status' => 'boolean',
+    ];
+
     public function subcategories()
     {
         return $this->hasMany(SubCategory::class)->where('status', true);
