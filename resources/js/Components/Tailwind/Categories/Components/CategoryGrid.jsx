@@ -63,7 +63,7 @@ export default function CategoryGrid({
                         return (
                             <div key={category.id} className="w-full lg:col-span-2">
                                 <a href={`/catalogo?category=${category.slug}`}>
-                                    <section className="group font-font-general text-white w-full h-[250px] sm:h-full 2xl:max-h-[300px]">
+                                    <section className="group font-font-general text-white w-full h-[250px] sm:h-full sm:max-h-[320px] 2xl:h-[350px]">
                                         <div className="flex gap-4 h-full">
                                             <div
                                                 className="relative w-full h-full overflow-hidden rounded-2xl"
@@ -100,7 +100,7 @@ export default function CategoryGrid({
                         return (
                             <div key={category.id} className="w-full">
                                 <a href={`/catalogo?category=${category.slug}`}>
-                                    <section className="group font-font-general text-white w-full h-[250px] lg:min-h-[400px] 2xl:max-h-[300px] sm:h-full">
+                                    <section className="group font-font-general text-white w-full h-[250px] sm:h-full sm:min-h-[320px] 2xl:min-h-[350px] 2xl:max-h-[350px]">
                                         <div className="flex gap-4 h-full">
                                             <div
                                                 className="relative w-full h-full overflow-hidden rounded-2xl"
@@ -152,7 +152,7 @@ export default function CategoryGrid({
                             {remainderCategories.map(category => (
                                 <div key={category.id} className="w-full">
                                     <a href={`/catalogo?category=${category.slug}`}>
-                                        <section className="group font-font-general text-white w-full h-[250px] sm:h-[425px] 2xl:h-[500px]">
+                                        <section className="group font-font-general text-white w-full h-[250px] sm:h-full max-h-[400px]">
                                             <div className="flex gap-4 h-full">
                                                 <div
                                                     className="relative w-full h-full overflow-hidden rounded-2xl"
@@ -192,7 +192,7 @@ export default function CategoryGrid({
                             {remainderCategories.map(category => (
                                 <div key={category.id} className="w-full">
                                     <a href={`/catalogo?category=${category.slug}`}>
-                                        <section className="group font-font-general text-white w-full h-[250px] sm:h-[400px] 2xl:h-[500px]">
+                                        <section className="group font-font-general text-white w-full h-[250px] sm:h-full max-h-[400px]">
                                             <div className="flex gap-4 h-full">
                                                 <div
                                                     className="relative w-full h-full overflow-hidden rounded-2xl"
@@ -230,7 +230,7 @@ export default function CategoryGrid({
                     return (
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 xl:gap-7 2xl:gap-10 mt-5 xl:mt-7 2xl:mt-10">
                             {remainderCategories.map((category, index) => (
-                                <section key={category.id} className={`group font-font-general text-white w-full h-[250px] ${index === 0 ? 'sm:row-span-2  sm:h-full' : 'sm:h-[400px] 2xl:h-[500px]'}`}>
+                                <section key={category.id} className={`group font-font-general text-white w-full h-[250px] ${index === 0 ? 'sm:row-span-2 sm:h-full' : 'sm:h-[320px] 2xl:h-[350px]'}`}>
                                     <a href={`/catalogo?category=${category.slug}`}>
                                         <div className="flex gap-4 h-full">
                                             <div
