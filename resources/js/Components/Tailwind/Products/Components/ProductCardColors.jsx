@@ -101,7 +101,7 @@ const ProductCardColors = ({ product, setCart, cart }) => {
                             <Tippy content={variant.color} key={variant.slug}>
                             <a
                                 href={`/item/${variant.slug}`}
-                                className="variant-option rounded-full object-fit-cover bg-[#F5F5F5]" 
+                                className="variant-option rounded-full border-2 border-[#e1e0e0] object-fit-cover bg-[#F5F5F5]" 
                             >
                                 <img
                                 className="color-box rounded-full h-7 w-7 sm:h-9 sm:w-9 object-fit-cover"
@@ -120,7 +120,7 @@ const ProductCardColors = ({ product, setCart, cart }) => {
                                 <a
                                     key={product.slug}
                                     href={`/item/${product.slug}`}
-                                    className="variant-option  rounded-full object-fit-cover bg-[#F5F5F5]" 
+                                    className="variant-option  rounded-full border-2 border-[#e1e0e0] object-fit-cover bg-[#F5F5F5]" 
                                 >
                                     <div className="color-box rounded-full h-7 w-7 sm:h-9 sm:w-9 flex flex-col justify-center items-center">
                                         <PlusIcon />
@@ -135,7 +135,7 @@ const ProductCardColors = ({ product, setCart, cart }) => {
                             <Tippy content={variant.color} key={variant.slug}>
                             <a
                                 href={`/item/${variant.slug}`}
-                                className="variant-option rounded-full object-fit-cover bg-[#F5F5F5]" 
+                                className="variant-option rounded-full border-2 border-[#e1e0e0]  object-fit-cover bg-[#F5F5F5]" 
                             >
                                 <img
                                 className="color-box rounded-full h-7 w-7 sm:h-9 sm:w-9 object-fit-cover"
@@ -154,7 +154,7 @@ const ProductCardColors = ({ product, setCart, cart }) => {
                                 <a
                                     key={product.slug}
                                     href={`/item/${product.slug}`}
-                                    className="variant-option  rounded-full object-fit-cover bg-[#F5F5F5]" 
+                                    className="variant-option  rounded-full border-2 border-[#e1e0e0] object-fit-cover bg-[#F5F5F5]" 
                                 >
                                     <div className="color-box rounded-full h-7 w-7 sm:h-9 sm:w-9 flex flex-col justify-center items-center">
                                         <PlusIcon />
