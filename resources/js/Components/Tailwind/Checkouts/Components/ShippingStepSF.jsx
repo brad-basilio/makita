@@ -329,19 +329,12 @@ export default function ShippingStepSF({
 
     const [selectedOption, setSelectedOption] = useState("free");
 
-    const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+    const [showPaymentModal, setShowPaymentModal] = useState(false);
 
-    const handleContinueClick = (e) => {
-        e.preventDefault();
-        setIsPaymentModalOpen(true);
-    };
-    
-    
     const handlePaymentComplete = () => {
-        // Aquí iría la lógica para procesar el pago completado
-        setIsPaymentModalOpen(false)
-        // Redireccionar o mostrar confirmación
-    }
+        console.log("Pago completado");
+        // Aquí puedes redirigir o mostrar un mensaje de éxito
+    };
 
     return (
         <>
@@ -650,7 +643,7 @@ export default function ShippingStepSF({
                             </div>
                         </div>
                         <div className="space-y-2 pt-4">
-                            <ButtonPrimary className={'payment-button'} onClick={handleContinueClick}>
+                            <ButtonPrimary className={'payment-button'} onClick={() => setShowPaymentModal(true)}>
                                 {" "}
                                 Continuar
                             </ButtonPrimary>
@@ -680,6 +673,8 @@ export default function ShippingStepSF({
             </div>
 
             <PaymentModal
+                isOpen={showPaymentModal}
+                onClose={() => setShowPaymentModal(false)}
                 onPaymentComplete={handlePaymentComplete}
             />
         </>
