@@ -28,7 +28,7 @@ const CartModal = ({ data, cart, setCart, modalOpen, setModalOpen }) => {
             isOpen={modalOpen}
             onRequestClose={() => setModalOpen(false)}
             contentLabel="Términos y condiciones"
-            className="absolute right-0 bg-white p-4 rounded-l-2xl shadow-lg w-[95%] max-w-md outline-none h-screen"
+            className="absolute right-0 bg-white p-4 rounded-l-2xl shadow-lg w-[95%] max-w-md outline-none h-[100dvh] max-h-[100dvh] lg:h-screen"
             overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-[200]"
         >
             <div className="flex flex-col font-font-general">
