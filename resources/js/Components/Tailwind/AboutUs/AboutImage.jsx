@@ -13,7 +13,7 @@ const AboutImage = ({ data }) => {
                     </h1>
                     <div className="space-y-8 text-gray-800">
                         <p className="whitespace-pre-line">{data?.description}</p>
-                        <button className="flex items-center border h-10 mt-4 bg-accent customtext-primary  hover:bg-primary font-bold hover:text-white rounded-full px-8 transition-all">Nosotros</button>
+                        <a href={data?.about_url ?? '/about'} className="w-max flex items-center border h-10 mt-4 bg-accent customtext-primary  hover:bg-primary font-bold hover:text-white rounded-full px-8 transition-all">Nosotros</a>
                     </div>
                 </div>
             </div>

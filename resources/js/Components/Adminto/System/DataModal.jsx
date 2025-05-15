@@ -29,7 +29,7 @@ const DataModal = ({ dataLoaded, setDataLoaded, setSystems, modalRef }) => {
     if (!result) return
     setDataLoaded(null)
     $(modalRef.current).modal('hide')
-    setSystems(old => old.map(system => system.id == dataLoaded.id ? result.data : system))
+    setSystems(old => old.map(system => system.id == dataLoaded.id ? result : system))
   }
 
   useEffect(() => {
@@ -53,8 +53,6 @@ const DataModal = ({ dataLoaded, setDataLoaded, setSystems, modalRef }) => {
   const onBoolChange = (key, value) => {
     setData({ ...data, [key]: value })
   }
-
-  console.log(data)
 
   return (
     <Modal modalRef={modalRef} title={dataLoaded?.name} onSubmit={onDataSubmit} size={dataLoaded?.component?.data?.some(x => x.startsWith('code:')) ? 'lg' : 'md'}>

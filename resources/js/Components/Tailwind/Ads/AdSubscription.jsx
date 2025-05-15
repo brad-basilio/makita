@@ -12,7 +12,7 @@ import "swiper/css";
 const AdSubscription = ({ data, items }) => {
   const subscriptionsRest = new SubscriptionsRest();
   const emailRef = useRef();
-  const [modalOpen, setModalOpen] = useState(true);
+  const [modalOpen, setModalOpen] = useState(items.length > 0);
   const [saving, setSaving] = useState(false);
 
   const closeModal = () => setModalOpen(false);
