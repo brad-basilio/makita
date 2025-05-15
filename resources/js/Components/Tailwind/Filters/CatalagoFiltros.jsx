@@ -7,6 +7,7 @@ import ArrayJoin from "../../../Utils/ArrayJoin";
 import { Loading } from "../Components/Resources/Loading";
 import { NoResults } from "../Components/Resources/NoResult";
 import SelectForm from "./Components/SelectForm";
+import { GET } from "sode-extend-react";
 
 const itemsRest = new ItemsRest();
 
@@ -40,7 +41,7 @@ const SkeletonCard = () => {
 //const CatalagoFiltros = ({ items, data, categories, brands, prices, cart, setCart }) => {
 const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
     //const { categories, brands, priceRanges } = filteredData;
-const [brands,setBrands]=useState([]);
+    const [brands, setBrands] = useState([]);
     const [subcategories, setSubcategories] = useState([]);
     const [categories, setCategories] = useState([]);
     const [priceRanges, setPriceRanges] = useState([]);
@@ -49,23 +50,24 @@ const [brands,setBrands]=useState([]);
         marca: true,
         precio: true,
         categoria: true,
+        subcategoria: true,
         colores: false,
     });
 
     const [selectedFilters, setSelectedFilters] = useState({
-        collection_id: [], // Array para múltiples colecciones
-        category_id: [], // Array para múltiples categorías
-        brand_id: [], // Array para múltiples marcas
-        subcategory_id: [],
-        
+        collection_id: [GET.collection].filter(Boolean), // Array para múltiples colecciones
+        category_id: [GET.category].filter(Boolean), // Array para múltiples categorías
+        brand_id:[GET.brand].filter(Boolean), // Array para múltiples marcas
+        subcategory_id: [GET.subcategory].filter(Boolean),
+
         price: null,
-        name: null,
+        name: GET.search || null,
         sort_by: "created_at",
         order: "desc",
     });
-
+    //filtros nuevos
     const [products, setProducts] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [pagination, setPagination] = useState({
         currentPage: 1,
         totalPages: 1,
@@ -89,7 +91,7 @@ const [brands,setBrands]=useState([]);
 
         if (filters.category_id.length > 0) {
             const categoryConditions = filters.category_id.map((id) => [
-                "category_id",
+                "category.slug",
                 "=",
                 id,
             ]);
@@ -98,7 +100,7 @@ const [brands,setBrands]=useState([]);
 
         if (filters.subcategory_id.length > 0) {
             const subcategoryConditions = filters.subcategory_id.map((id) => [
-                "subcategory_id",
+                "subcategory.slug",
                 "=",
                 id,
             ]);
@@ -162,7 +164,7 @@ const [brands,setBrands]=useState([]);
                     response.totalCount
                 ),
             });
-             console.log(response);
+            console.log(response);
             setBrands(response?.summary.brands);
             setCategories(response?.summary.categories);
             setSubcategories(response?.summary.subcategories);
@@ -174,9 +176,7 @@ const [brands,setBrands]=useState([]);
         }
     };
 
-    useEffect(() => {
-        fetchProducts(1);
-      }, []);
+
 
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
@@ -202,34 +202,34 @@ const [brands,setBrands]=useState([]);
             const subcategory = subcategories.find(
                 (item) => item.slug === subCategoriaParam
             );
-         
+
             if (subcategory) {
                 setSelectedFilters((prev) => ({
-                  ...prev,
-                  subcategory_id: [subcategory.id],
+                    ...prev,
+                    subcategory_id: [subcategory.id],
                 }));
             }
         }
 
-    
 
-       /* if (collectionParam) {
-            const collection = collections.find(
-                (item) => item.slug === collectionParam
-            );
-            if (collection) {
-                setSelectedFilters((prev) => ({
-                    ...prev,
-                    collection_id: [collection.id],
-                }));
-            }
-        }*/
-      /*if (campaignParam) {
-            const campaign = campaigns.find(
-                (item) => item.slug === campaignParam
-            );
-            setProducts(campaign.items);
-        }*/
+
+        /* if (collectionParam) {
+             const collection = collections.find(
+                 (item) => item.slug === collectionParam
+             );
+             if (collection) {
+                 setSelectedFilters((prev) => ({
+                     ...prev,
+                     collection_id: [collection.id],
+                 }));
+             }
+         }*/
+        /*if (campaignParam) {
+              const campaign = campaigns.find(
+                  (item) => item.slug === campaignParam
+              );
+              setProducts(campaign.items);
+          }*/
 
         if (searchParam) {
             setSelectedFilters((prev) => ({
@@ -238,11 +238,12 @@ const [brands,setBrands]=useState([]);
             }));
         }
 
-       
-    }, [items]);
+
+    }, [null]);
 
 
     useEffect(() => {
+        console.log("selectd filters", items);
         fetchProducts(pagination.currentPage);
     }, [selectedFilters]);
     const handlePageChange = (page) => {
@@ -251,8 +252,8 @@ const [brands,setBrands]=useState([]);
         }
     };
 
-     // Generar números de página para la paginación
-     const getPageNumbers = () => {
+    // Generar números de página para la paginación
+    const getPageNumbers = () => {
         const pages = [];
         const total = pagination.totalPages;
         const current = pagination.currentPage;
@@ -284,7 +285,7 @@ const [brands,setBrands]=useState([]);
         { value: "name:desc", label: "Nombre: Z-A" },
     ];
 
-   
+
     //}, [items]);
     // Manejar cambios en los filtros
     const handleFilterChange = (type, value) => {
@@ -295,8 +296,8 @@ const [brands,setBrands]=useState([]);
                     ...prev,
                     price:
                         prev.price &&
-                        prev.price.min === value.min &&
-                        prev.price.max === value.max
+                            prev.price.min === value.min &&
+                            prev.price.max === value.max
                             ? null
                             : value,
                 };
@@ -474,11 +475,10 @@ const [brands,setBrands]=useState([]);
                         <Filter className="h-5 w-5" />
                     </button>
                     <div
-                        className={`${
-                            filtersOpen
-                                ? "fixed inset-0 z-50 bg-white p-4 overflow-y-auto"
-                                : "hidden"
-                        } lg:block lg:w-3/12 bg-white p-4 rounded-lg h-max`}
+                        className={`${filtersOpen
+                            ? "fixed inset-0 z-50 bg-white p-4 overflow-y-auto"
+                            : "hidden"
+                            } lg:block lg:w-3/12 bg-white p-4 rounded-lg h-max`}
                     >
                         <div className="flex items-center justify-between mb-6">
                             <h2 className="text-xl font-bold">Filtros</h2>
@@ -498,9 +498,8 @@ const [brands,setBrands]=useState([]);
                             >
                                 <span className="font-medium">Marca</span>
                                 <ChevronDown
-                                    className={`h-5 w-5 transform transition-transform ${
-                                        sections.marca ? "" : "-rotate-180"
-                                    }`}
+                                    className={`h-5 w-5 transform transition-transform ${sections.marca ? "" : "-rotate-180"
+                                        }`}
                                 />
                             </button>
                             {sections.marca && (
@@ -547,9 +546,8 @@ const [brands,setBrands]=useState([]);
                             >
                                 <span className="font-medium">Categoría</span>
                                 <ChevronDown
-                                    className={`h-5 w-5 transform transition-transform ${
-                                        sections.categoria ? "" : "-rotate-180"
-                                    }`}
+                                    className={`h-5 w-5 transform transition-transform ${sections.categoria ? "" : "-rotate-180"
+                                        }`}
                                 />
                             </button>
                             {sections.categoria && (
@@ -643,11 +641,10 @@ const [brands,setBrands]=useState([]);
                                     Sub Categorías
                                 </span>
                                 <ChevronDown
-                                    className={`h-5 w-5 transform transition-transform ${
-                                        sections.subcategoria
-                                            ? ""
-                                            : "-rotate-180"
-                                    }`}
+                                    className={`h-5 w-5 transform transition-transform ${sections.subcategoria
+                                        ? ""
+                                        : "-rotate-180"
+                                        }`}
                                 />
                             </motion.button>
 
@@ -674,7 +671,7 @@ const [brands,setBrands]=useState([]);
                                     >
                                         <motion.div
                                             className="relative"
-                                          
+
                                         >
                                             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                                             <input
@@ -699,12 +696,11 @@ const [brands,setBrands]=useState([]);
                                                 return (
                                                     <motion.div
                                                         key={subcategory.id}
-                                                        className={`group py-2 rounded-md ${
-                                                            isChecked
-                                                                ? "bg-primary "
-                                                                : "bg-transparent"
-                                                        }`}
-                                                      
+                                                        className={`group py-2 rounded-md ${isChecked
+                                                            ? "bg-primary "
+                                                            : "bg-transparent"
+                                                            }`}
+
                                                     >
                                                         <label className="flex items-center justify-between space-x-3 px-4 cursor-pointer">
                                                             <input
@@ -720,13 +716,12 @@ const [brands,setBrands]=useState([]);
                                                                     isChecked
                                                                 }
                                                             />
-                                                           
+
                                                             <span
-                                                                className={`${
-                                                                    isChecked
-                                                                        ? "text-white"
-                                                                        : "text-gray-700"
-                                                                }`}
+                                                                className={`${isChecked
+                                                                    ? "text-white"
+                                                                    : "text-gray-700"
+                                                                    }`}
                                                             >
                                                                 {
                                                                     subcategory.name
@@ -750,9 +745,8 @@ const [brands,setBrands]=useState([]);
                             >
                                 <span className="font-medium">Precio</span>
                                 <ChevronDown
-                                    className={`h-5 w-5 transform transition-transform ${
-                                        sections.precio ? "" : "-rotate-180"
-                                    }`}
+                                    className={`h-5 w-5 transform transition-transform ${sections.precio ? "" : "-rotate-180"
+                                        }`}
                                 />
                             </button>
                             {sections.precio && (
@@ -787,8 +781,8 @@ const [brands,setBrands]=useState([]);
                             )}
                         </div>
 
-                   
-                    {/* <button className="w-full bg-primary text-white py-3 rounded-xl hover:brightness-90 transition-colors text-sm font-bold">
+
+                        {/* <button className="w-full bg-primary text-white py-3 rounded-xl hover:brightness-90 transition-colors text-sm font-bold">
                             Aplicar Filtro
                         </button>*/}
                     </div>
@@ -806,7 +800,7 @@ const [brands,setBrands]=useState([]);
                         ) : (
                             <div className="flex items-center flex-wrap gap-y-8 transition-all duration-300 ease-in-out">
                                 {Array.isArray(products) &&
-                                products.length > 0 ? (
+                                    products.length > 0 ? (
                                     products.map((product) => (
                                         <div
                                             className="   w-1/2 lg:w-1/3 xl:w-1/4 lg:h-[460px] lg:max-h-[460px]  xl:h-[400px] xl:max-h-[400px] 2xl:h-[430px] 2xl:max-h-[430px] flex items-center justify-center"
@@ -827,19 +821,18 @@ const [brands,setBrands]=useState([]);
                                 )}
                             </div>
                         )}
-                           {/* Paginación inferior */}
-                           <motion.div
+                        {/* Paginación inferior */}
+                        <motion.div
                             className="flex justify-between items-center mb-4 w-full mt-8"
-                         
+
                         >
                             <div className="customtext-primary font-semibold">
                                 <nav className="flex items-center gap-x-2 min-w-max">
                                     <motion.button
-                                        className={`p-4 inline-flex items-center ${
-                                            pagination.currentPage === 1
-                                                ? "opacity-50 cursor-not-allowed"
-                                                : ""
-                                        }`}
+                                        className={`p-4 inline-flex items-center ${pagination.currentPage === 1
+                                            ? "opacity-50 cursor-not-allowed"
+                                            : ""
+                                            }`}
                                         onClick={() =>
                                             handlePageChange(
                                                 pagination.currentPage - 1
@@ -861,11 +854,10 @@ const [brands,setBrands]=useState([]);
                                             ) : (
                                                 <motion.button
                                                     className={`w-10 h-10 p-2 inline-flex items-center justify-center rounded-full transition-all duration-300 
-                                                        ${
-                                                            page ===
+                                                        ${page ===
                                                             pagination.currentPage
-                                                                ? "bg-primary text-white"
-                                                                : "bg-transparent hover:text-white hover:bg-primary"
+                                                            ? "bg-primary text-white"
+                                                            : "bg-transparent hover:text-white hover:bg-primary"
                                                         }`}
                                                     onClick={() =>
                                                         handlePageChange(page)
@@ -880,12 +872,11 @@ const [brands,setBrands]=useState([]);
                                     ))}
 
                                     <motion.button
-                                        className={`p-4 inline-flex items-center ${
-                                            pagination.currentPage ===
+                                        className={`p-4 inline-flex items-center ${pagination.currentPage ===
                                             pagination.totalPages
-                                                ? "opacity-50 cursor-not-allowed"
-                                                : ""
-                                        }`}
+                                            ? "opacity-50 cursor-not-allowed"
+                                            : ""
+                                            }`}
                                         onClick={() =>
                                             handlePageChange(
                                                 pagination.currentPage + 1

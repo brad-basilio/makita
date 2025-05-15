@@ -4387,7 +4387,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Filter.jsx": {
-    "file": "assets/Filter-Cv-y1ZcO.js",
+    "file": "assets/Filter-D-RNa7jT.js",
     "name": "Filter",
     "src": "resources/js/Components/Tailwind/Filter.jsx",
     "isEntry": true,
@@ -4407,7 +4407,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Filters/CatalagoFiltros.jsx": {
-    "file": "assets/CatalagoFiltros-BQTNDYB7.js",
+    "file": "assets/CatalagoFiltros-CHbepB1n.js",
     "name": "CatalagoFiltros",
     "src": "resources/js/Components/Tailwind/Filters/CatalagoFiltros.jsx",
     "isDynamicEntry": true,
@@ -4418,6 +4418,7 @@
       "_ItemsRest-DBSKIEqF.js",
       "_NoResult-C9qZVva5.js",
       "_SelectForm-G0J6yhhv.js",
+      "_main-BSEyQEJW.js",
       "_filter-Ci9tsc_e.js",
       "_x-DBMwyD6F.js",
       "_chevron-down-DS-mdh9v.js",
@@ -4429,8 +4430,6 @@
       "_index-yBjzXJbu.js",
       "resources/js/Components/Tailwind/Components/ProductCard.jsx",
       "resources/js/Components/Tailwind/Headers/HeaderSearch.jsx",
-      "_main-BSEyQEJW.js",
-      "____vite-browser-external_commonjs-proxy-0zb4Agf2.js",
       "_index-Bv81MoWS.js",
       "_index-fNjTmf9T.js",
       "_index-Chjiymov.js",
@@ -4442,7 +4441,8 @@
       "_createLucideIcon-Cy5Ya80P.js",
       "_plus-Bot15Khs.js",
       "_BasicRest-DEv02zgs.js",
-      "_check-DQ7QoS0v.js"
+      "_check-DQ7QoS0v.js",
+      "____vite-browser-external_commonjs-proxy-0zb4Agf2.js"
     ]
   },
   "resources/js/Components/Tailwind/Filters/CatalagoFiltrosPidelo.jsx": {
@@ -6719,7 +6719,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-BBruPPAy.js",
+    "file": "assets/System-BKKCIBmY.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,

@@ -39,6 +39,7 @@ import BananaLab from "./Components/Tailwind/BananaLab";
 import { Toaster } from "sonner";
 import Floating from "./Components/Tailwind/Floating";
 import DeliveryZone from "./Components/Tailwind/DeliveryZone";
+import Ad from "./Components/Tailwind/Ad";
 
 const itemsRest = new ItemsRest();
 
@@ -124,6 +125,8 @@ const System = ({
                 return <Indicator which={value} data={data} items={getItems(itemsId)} />
             case "banner":
                 return <Banner which={value} data={data} />
+            case "ads":
+                return <Ad which={value} data={data} items={getItems(itemsId)} />
             case "image":
                 return <Image which={value} data={data} />
             case "step":

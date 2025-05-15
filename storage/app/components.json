@@ -790,6 +790,21 @@
         ]
     },
     {
+        "id": "ads",
+        "name": "Pop-ups",
+        "icon": "mdi mdi-google-ads",
+        "options": [
+            {
+                "id": "AdSubscription",
+                "name": "Suscripción",
+                "using": {
+                    "model": "Ad",
+                    "fields": ["image", "name"]
+                }
+            }
+        ]
+    },
+    {
         "id": "image",
         "icon": "mdi mdi-image-area",
         "name": "Imágenes",
