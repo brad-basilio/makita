@@ -39,6 +39,7 @@ import BananaLab from "./Components/Tailwind/BananaLab";
 import { Toaster } from "sonner";
 import Floating from "./Components/Tailwind/Floating";
 import DeliveryZone from "./Components/Tailwind/DeliveryZone";
+import Ad from "./Components/Tailwind/Ad";
 
 const itemsRest = new ItemsRest();
 
@@ -89,56 +90,18 @@ const System = ({
 
         switch (component) {
             case "top_bar":
-                return (
-                    <TopBar
-                        data={data}
-                        which={value}
-                        items={getItems(itemsId)}
-                        cart={cart}
-                        setCart={setCart}
-                        isUser={session}
-                    />
-                );
+                return <TopBar data={data} which={value} items={getItems(itemsId)} cart={cart} setCart={setCart} isUser={session} />
             case "header":
-                return (
-                    <Header
-                        data={data}
-                        which={value}
-                        items={getItems(itemsId)}
-                        cart={cart}
-                        setCart={setCart}
-                        pages={pages}
-                        isUser={session}
-                        generals={generals}
-                    />
-                );
+                return <Header data={data} which={value} items={getItems(itemsId)} cart={cart} setCart={setCart} pages={pages} isUser={session} generals={generals} />
             case "floating":
-                return (
-                    <Floating
-                        data={data}
-                        which={value}
-                        items={getItems(itemsId)}
-                    />
-                );
+                return <Floating data={data} which={value} items={getItems(itemsId)} />
             case "menu":
-                return (
-                    <Menu
-                        data={data}
-                        which={value}
-                        items={getItems(itemsId)}
-                        cart={cart}
-                        setCart={setCart}
-                        pages={pages}
-                    />
-                );
-
+                return <Menu data={data} which={value} items={getItems(itemsId)} cart={cart} setCart={setCart} pages={pages} />
             case "content":
                 if (!page.id) {
-                    return (
-                        <div className="h-80 w-full bg-gray-300 flex items-center justify-center">
-                            <div>- Tu contenido aquí -</div>
-                        </div>
-                    );
+                    return <div className="h-80 w-full bg-gray-300 flex items-center justify-center">
+                        <div>- Tu contenido aquí -</div>
+                    </div>
                 } else if (page.extends_base) {
                     const contentSystems = SortByAfterField(systems).filter(
                         (x) => Boolean(x.page_id)
@@ -147,177 +110,63 @@ const System = ({
                 }
                 break;
             case "filter":
-                //  return <Filter which={value} data={data} items={getItems(itemsId)} prices={filteredData.PriceRange} category={filteredData.Category} brands={filteredData.Brand} subcategory={filteredData.SubCategory} cart={cart} setCart={setCart} filteredData={filteredData} />
-                return (
-                    <Filter
-                        which={value}
-                        data={data}
-                        items={getItems(itemsId)}
-                        filteredData={filteredData}
-                        cart={cart}
-                        setCart={setCart}
-                    />
-                );
-
+                return <Filter which={value} data={data} items={getItems(itemsId)} filteredData={filteredData} cart={cart} setCart={setCart} />
             case "product":
-                return (
-                    <Product
-                        which={value}
-                        data={data}
-                        items={getItems(itemsId)}
-                        filteredData={filteredData}
-                        cart={cart}
-                        setCart={setCart}
-                        pages={pages}
-                    />
-                );
+                return <Product which={value} data={data} items={getItems(itemsId)} filteredData={filteredData} cart={cart} setCart={setCart} pages={pages} />
             case "category":
-                return (
-                    <Category
-                        which={value}
-                        data={data}
-                        items={getItems(itemsId)}
-                    />
-                );
+                return <Category which={value} data={data} items={getItems(itemsId)} />
             case "collection":
-                return (
-                    <Collection
-                        which={value}
-                        data={data}
-                        items={getItems(itemsId)}
-                    />
-                );
+                return <Collection which={value} data={data} items={getItems(itemsId)} />
             case "slider":
-                return (
-                    <Slider
-                        which={value}
-                        data={data}
-                        sliders={getItems(itemsId)}
-                    />
-                );
+                return <Slider which={value} data={data} sliders={getItems(itemsId)} />
             case "carrusel":
-                return (
-                    <Carrusel
-                        which={value}
-                        data={data}
-                        items={getItems(itemsId)}
-                    />
-                );
-
+                return <Carrusel which={value} data={data} items={getItems(itemsId)} />
             case "indicator":
-                return (
-                    <Indicator
-                        which={value}
-                        data={data}
-                        items={getItems(itemsId)}
-                    />
-                );
+                return <Indicator which={value} data={data} items={getItems(itemsId)} />
             case "banner":
-                return <Banner which={value} data={data} />;
+                return <Banner which={value} data={data} />
+            case "ads":
+                return <Ad which={value} data={data} items={getItems(itemsId)} />
             case "image":
-                return <Image which={value} data={data} />;
+                return <Image which={value} data={data} />
             case "step":
-                return <Step which={value} data={data} />;
+                return <Step which={value} data={data} />
             case 'delivery-zones':
-                return <DeliveryZone which={value} data={data} items={getItems(itemsId)} />;
+                return <DeliveryZone which={value} data={data} items={getItems(itemsId)} />
             case "product-detail":
-                return (
-                    <ProductDetail
-                        which={value}
-                        item={filteredData.Item}
-                        cart={cart}
-                        setCart={setCart}
-                    />
-                );
+                return <ProductDetail which={value} item={filteredData.Item} cart={cart} setCart={setCart} />
             case "cart":
-                return (
-                    <Cart
-                        which={value}
-                        data={data}
-                        cart={cart}
-                        setCart={setCart}
-                    />
-                );
+                return <Cart which={value} data={data} cart={cart} setCart={setCart} />
             case "checkout":
-                return (
-                    <Checkout
-                        which={value}
-                        data={data}
-                        items={getItems(itemsId)}
-                        cart={cart}
-                        setCart={setCart}
-                        isUser={session}
-                        prefixes={jsons?.prefixes ?? []}
-                        ubigeos={jsons?.ubigeos ?? []}
-                    />
-                );
+                return <Checkout which={value} data={data} items={getItems(itemsId)} cart={cart} setCart={setCart} isUser={session} prefixes={jsons?.prefixes ?? []} ubigeos={jsons?.ubigeos ?? []} />
             case "contact":
-                return (
-                    <Contact which={value} data={data} contacts={contacts} />
-                );
+                return <Contact which={value} data={data} contacts={contacts} />
             case "faq":
-                return <Faq which={value} data={data} faqs={faqs} />;
-
+                return <Faq which={value} data={data} faqs={faqs} />
             case "thank":
-                return (
-                    <ThankSimple
-                        which={value}
-                        data={data}
-                        item={filteredData.Sale}
-                    />
-                );
+                return <ThankSimple which={value} data={data} item={filteredData.Sale} />
             case "blog":
-                return (
-                    <Blog
-                        which={value}
-                        data={data}
-                        items={getItems(itemsId)}
-                        headerPosts={headerPosts}
-                        postsLatest={postsLatest}
-                        filteredData={filteredData}
-                    />
-                );
+                return <Blog which={value} data={data} items={getItems(itemsId)} headerPosts={headerPosts} postsLatest={postsLatest} filteredData={filteredData} />
             case "post-detail":
-                return (
-                    <PostDetail
-                        which={value}
-                        data={data}
-                        item={filteredData.Post}
-                    />
-                );
+                return <PostDetail which={value} data={data} item={filteredData.Post} />
             case "about":
-                return (
-                    <AboutUs
-                        which={value}
-                        data={data}
-                        filteredData={filteredData}
-                    />
-                );
+                return <AboutUs which={value} data={data} filteredData={filteredData} />
             case "login":
-                return <Login which={value} data={data} />;
+                return <Login which={value} data={data} />
             case "signup":
-                return <Signup which={value} data={data} />;
+                return <Signup which={value} data={data} />
             case "forgot-password":
-                return <ForgotPassword which={value} data={data} />;
+                return <ForgotPassword which={value} data={data} />
             case "reset-password":
-                return <ResetPassword which={value} data={data} />;
+                return <ResetPassword which={value} data={data} />
             case "frame":
-                return <Frame which={value} data={data} />;
+                return <Frame which={value} data={data} />
             case "footer":
-                return (
-                    <Footer
-                        data={data}
-                        which={value}
-                        items={getItems(itemsId)}
-                        pages={pages}
-                        generals={generals}
-                        contacts={contacts}
-                    />
-                );
+                return <Footer data={data} which={value} items={getItems(itemsId)} pages={pages} generals={generals} contacts={contacts} />
             case "complaints":
-                return <Complaint which={value} generals={generals} />;
+                return <Complaint which={value} generals={generals} />
             case "bananalab":
-                return <BananaLab which={value} generals={generals} />;
+                return <BananaLab which={value} generals={generals} />
         }
     };
 
