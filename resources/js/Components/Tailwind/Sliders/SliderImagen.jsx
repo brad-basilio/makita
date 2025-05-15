@@ -63,7 +63,7 @@ const SliderImagen = ({ items, data }) => {
                             }}
                             className="w-full  !px-10 2xl:!px-4 !flex !justify-between"
                         >
-                            {items.map((brand, index) => (
+                            {items.filter((brand) => brand.image).map((brand, index) => (
                                 <SwiperSlide key={index}>
                                     <div className="group w-full flex items-center justify-center px-2 font-font-secondary">
                                         <img

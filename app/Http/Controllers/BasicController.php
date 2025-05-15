@@ -55,7 +55,7 @@ class BasicController extends Controller
       if ($snake_case === 'item_image') {
         $snake_case = 'item';
       }
-      //dump($snake_case);
+     
       if (Text::has($uuid, '.')) {
         $route = "images/{$snake_case}/{$uuid}";
       } else {
@@ -211,7 +211,7 @@ class BasicController extends Controller
       $response->summary = $this->setPaginationSummary($request, $instance);
       $response->totalCount = $totalCount;
     } catch (\Throwable $th) {
-      $response->status = 400;
+     // dump($th);
       $response->message = $th->getMessage() . ' Ln.' . $th->getLine();
     } finally {
       return response(

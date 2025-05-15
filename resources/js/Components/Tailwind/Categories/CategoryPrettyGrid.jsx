@@ -8,6 +8,7 @@ const CategoryPrettyGrid = ({ data, items }) => {
 
                 <div className="w-full md:w-1/2">
                     <CategoryCardWithBanner
+                        href={`/${data?.path}/${items[0].slug}`}
                         borderRadius={data?.borderRadius}
                         aspectRatio={616 / 500}
                         category={items[0]}
@@ -17,6 +18,7 @@ const CategoryPrettyGrid = ({ data, items }) => {
                 <div className="flex flex-col justify-between gap-[5%] w-full md:w-1/2">
                     {items.slice(1, 3).map((category, index) => (
                         <CategoryCardWithBanner
+                        href={`/${data?.path}/${category.slug}`}
                             borderRadius={data?.borderRadius}
                             aspectRatio={44 / 17}
                             key={category.id}

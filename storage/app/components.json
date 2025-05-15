@@ -297,20 +297,37 @@
                         "using": {
                             "model": "Item",
                             "with": ["category", "subcategory", "brand"],
-                            "relations": ["category","brand","subcategory", "tags"],
+                            "relations": ["category", "tags"],
                             "fields": [
                                 "id",
                                 "name",
                                 "slug",
                                 "price",
                                 "final_price",
-                                "image"
-                             
+                                "image",
+                                "color"
                             ]
                         }
+                    },
+                    {
+                        "id": "with_variants",
+                        "name": "Lista con variantes",
+                        "using": {
+                            "model": "Item",
+                            "with": ["category", "subcategory", "brand"],
+                            "relations": ["category", "tags"],
+                            "fields": [
+                                "id",
+                                "name",
+                                "slug",
+                                "price",
+                                "final_price",
+                                "image",
+                                "color"
+                            ],
+                            "group_by_name": true
+                        }
                     }
-                    
-                    
                 ]
             },
 
@@ -806,6 +823,21 @@
         ]
     },
     {
+        "id": "ads",
+        "name": "Pop-ups",
+        "icon": "mdi mdi-google-ads",
+        "options": [
+            {
+                "id": "AdSubscription",
+                "name": "Suscripción",
+                "using": {
+                    "model": "Ad",
+                    "fields": ["image", "name"]
+                }
+            }
+        ]
+    },
+    {
         "id": "image",
         "icon": "mdi mdi-image-area",
         "name": "Imágenes",
@@ -1049,6 +1081,22 @@
                     "model": "Post",
                     "limit": 3,
                     "with": ["category"]
+                }
+            }
+        ]
+    },
+    {
+        "id": "delivery-zones",
+        "icon": "mdi mdi-map-marker-radius",
+        "name": "Zonas de Cobertura",
+        "options": [
+            {
+                "id": "DeliveryZonesKuchara",
+                "name": "Kuchara",
+                "image": "delivery-zones-kuchara.png",
+                "data": ["image"],
+                "using": {
+                    "model": "DeliveryZone"
                 }
             }
         ]

@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\StrengthController as AdminStrengthController;
 use App\Http\Controllers\Admin\GeneralController as AdminGeneralController;
 use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
 use App\Http\Controllers\Admin\AccountController as AdminAccountController;
+use App\Http\Controllers\Admin\AdController as AdminAdController;
 use App\Http\Controllers\Admin\BannerController as AdminBannerController;
 use App\Http\Controllers\Admin\BrandController as AdminBrandController;
 
@@ -36,6 +37,7 @@ use App\Http\Controllers\Admin\WebDetailController as AdminWebDetailController;
 use App\Http\Controllers\Admin\ItemImageController as AdminItemImageController;
 use App\Http\Controllers\Admin\FaqController as AdminFaqController;
 use App\Http\Controllers\Admin\ComboController as AdminComboController;
+use App\Http\Controllers\Admin\DeliveryZoneController as AdminDeliveryZoneController;
 use App\Http\Controllers\Admin\RepositoryController as AdminRepositoryController;
 use App\Http\Controllers\Admin\SettingController as AdminSettingController;
 use App\Http\Controllers\AuthClientController;
@@ -100,6 +102,7 @@ Route::get('/indicators/media/{uuid}', [AdminIndicatorController::class, 'media'
 
 Route::get('/aboutuses/media/{uuid}', [AdminAboutusController::class, 'media']);
 Route::get('/strengths/media/{uuid}', [AdminStrengthController::class, 'media']);
+Route::get('/ads/media/{uuid}', [AdminAdController::class, 'media'])->withoutMiddleware('throttle');
 
 Route::post('/posts/paginate', [PostController::class, 'paginate']);
 Route::post('/items/paginate', [ItemController::class, 'paginate']);
@@ -161,6 +164,12 @@ Route::middleware('auth')->group(function () {
     Route::patch('/items/status', [AdminItemController::class, 'status']);
     Route::patch('/items/{field}', [AdminItemController::class, 'boolean']);
     Route::delete('/items/{id}', [AdminItemController::class, 'delete']);
+
+    Route::post('/ads', [AdminAdController::class, 'save']);
+    Route::post('/ads/paginate', [AdminAdController::class, 'paginate']);
+    Route::patch('/ads/status', [AdminAdController::class, 'status']);
+    Route::patch('/ads/{field}', [AdminAdController::class, 'boolean']);
+    Route::delete('/ads/{id}', [AdminAdController::class, 'delete']);
 
 
     //Route::get('/items/filters', [AdminItemController::class, 'getFilters']);
@@ -270,6 +279,12 @@ Route::middleware('auth')->group(function () {
     Route::patch('/tags/status', [AdminTagController::class, 'status']);
     Route::patch('/tags/{field}', [AdminTagController::class, 'boolean']);
     Route::delete('/tags/{id}', [AdminTagController::class, 'delete']);
+
+    Route::post('/delivery-zones', [AdminDeliveryZoneController::class, 'save']);
+    Route::post('/delivery-zones/paginate', [AdminDeliveryZoneController::class, 'paginate']);
+    Route::patch('/delivery-zones/status', [AdminDeliveryZoneController::class, 'status']);
+    Route::patch('/delivery-zones/{field}', [AdminDeliveryZoneController::class, 'boolean']);
+    Route::delete('/delivery-zones/{id}', [AdminDeliveryZoneController::class, 'delete']);
 
     Route::post('/strengths', [AdminStrengthController::class, 'save']);
     Route::post('/strengths/paginate', [AdminStrengthController::class, 'paginate']);
