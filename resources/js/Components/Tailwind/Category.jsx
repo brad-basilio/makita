@@ -11,6 +11,7 @@ const CategoryCarousel = React.lazy(() => import('./Categories/CategoryCarousel'
 const InfiniteCategory = React.lazy(() => import('./Categories/InfiniteCategory'))
 const PaginationCategory = React.lazy(() => import('./Categories/PaginationCategory'))
 const CategoryFlex = React.lazy(() => import('./Categories/CategoryFlex'))
+const CategoryGridInfinite = React.lazy(() => import('./Categories/CategoryGridInfinite'))
 const CategoriesScraping = React.lazy(() => import('./Scraping/Components/CategoriesScraping'))
 
 const Category = ({ which, data, items }) => {
@@ -30,6 +31,8 @@ const Category = ({ which, data, items }) => {
         return <PaginationCategory data={data} items={items} />
       case 'CategoryFlex':
         return <CategoryFlex data={data} items={items} />
+      case 'CategoryGridInfinite':
+        return <CategoryGridInfinite data={data} items={items} />
       case 'CategoriesScraping':
         return <CategoriesScraping data={data} items={items} />
       default:

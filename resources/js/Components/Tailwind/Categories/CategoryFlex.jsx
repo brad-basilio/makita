@@ -19,7 +19,7 @@ const CategoryFlex = ({ data, items }) => {
                 )
             }
 
-            <div className="mt-12 flex flex-col md:flex-row gap-5 md:gap-8">
+            <div className="mt-12 flex flex-col md:flex-row gap-5 md:gap-8" id="sectioncategory">
 
                 <div className="flex flex-col justify-between gap-5 md:gap-8 w-full md:w-1/2">
                     {items.slice(0, 2).map((category) => (

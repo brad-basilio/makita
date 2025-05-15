@@ -50,8 +50,6 @@ const ProductCardSimple = ({ product, widthClass = "xl:w-1/5", setCart, cart }) 
                     </div>
                 </div>
 
-
-
                 {/* Información del producto */}
                 <div className='py-4'>
                     <p className="text-base  font-bold mb-1">

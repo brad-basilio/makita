@@ -290,12 +290,28 @@
                 "name": "Producto Catalogo Filtro",
                 "image": "products-list.png",
                 "data": ["path", "title", "description", "link_cart"],
-                "using": {
-                    "model": "Item",
-                    "with": ["category", "subcategory", "brand"],
-
-                    "relations": ["category", "tags"]
-                }
+                "options": [
+                    {
+                        "id": "default",
+                        "name": "Lista estándar",
+                        "using": {
+                            "model": "Item",
+                            "with": ["category", "subcategory", "brand"],
+                            "relations": ["category","brand","subcategory", "tags"],
+                            "fields": [
+                                "id",
+                                "name",
+                                "slug",
+                                "price",
+                                "final_price",
+                                "image"
+                             
+                            ]
+                        }
+                    }
+                    
+                    
+                ]
             },
 
             {
@@ -507,7 +523,16 @@
                 "data": ["path", "title", "description", "link_catalog"],
                 "using": {
                     "model": "Category",
-                    "limit": 3,
+                    "filters": ["featured"]
+                }
+            },
+            {
+                "id": "CategoryGridInfinite",
+                "name": "CategoryGridInfinite",
+                "image": "categories-carousel.png",
+                "data": ["path", "title", "description", "link_catalog"],
+                "using": {
+                    "model": "Category",
                     "filters": ["featured"]
                 }
             },
@@ -671,6 +696,30 @@
                     ],
                     "with": ["category", "subcategory", "brand"],
                     "limit": 8
+                }
+            },
+            {
+                "id": "ProductNavigationSwiper",
+                "name": "NavegacionSwiper",
+                "image": "products-list.png",
+                "data": [
+                    "title",
+                    "path",
+                    "description",
+                    "link_catalog",
+                    "link_cart"
+                ],
+                "using": {
+                    "model": "Item",
+                    "filters": [
+                        "featured",
+                        "recommended",
+                        "offering",
+                        "is_new",
+                        "views"
+                    ],
+                    "with": ["category", "subcategory", "brand"],
+                    "limit": 20
                 }
             },
             {

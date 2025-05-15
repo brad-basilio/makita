@@ -59,6 +59,7 @@ const System = ({
     postsLatest,
     textstatic,
 }) => {
+    
     const getItems = (itemsId) => {
         return systemItems[itemsId] ?? [];
     };

@@ -149,7 +149,7 @@ export default function ProductDetailSF({ item, data, setCart, cart, textstatic}
             const request = {
                 slug: item?.slug,
             };
-
+            
             // Llamar al backend para verificar el combo
             const response = await itemsRest.getVariations(request);
 
@@ -160,9 +160,9 @@ export default function ProductDetailSF({ item, data, setCart, cart, textstatic}
 
             // Actualizar el estado con los productos asociados
             const variations = response;
-
+            
             setVariationsItems(variations.variants);
-            console.log(variations);
+            
         } catch (error) {
             return;
             // Mostrar un mensaje de error al usuario si es necesario
