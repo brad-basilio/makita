@@ -39,6 +39,7 @@ const DeliveryPricesType = ({ ubigeo = [] }) => {
     const [inHome, setInHome] = useState(false);
     const [isFreeChecked, setIsFreeChecked] = useState(false);
     const [isAgencyChecked, setIsAgencyChecked] = useState(false);
+    const [message, setMessage] = useState('');
 
     const onModalOpen = (data) => {
         console.log(data);
@@ -54,11 +55,19 @@ const DeliveryPricesType = ({ ubigeo = [] }) => {
         if (is_freeRef.current) {
             is_freeRef.current.checked = data?.is_free ?? false;
             setIsFreeChecked(data?.is_free ?? false);
+            // Establecer mensaje si es delivery gratis
+            if (data?.is_free) {
+                setMessage('El envío gratis tiene costo 0. Puede agregar un costo adicional para delivery express.');
+            }
         }
 
         if (is_agencyRef.current) {
             is_agencyRef.current.checked = data?.is_agency ?? false;
             setIsAgencyChecked(data?.is_agency ?? false);
+            // Establecer mensaje si es recojo en agencia
+            if (data?.is_agency) {
+                setMessage('Este es un envío que se realizará por empresas de envío como Shalom, Olva Currier u otros.');
+            }
         }
 
         priceRef.current.value = data?.price ?? 0;
@@ -432,43 +441,60 @@ const DeliveryPricesType = ({ ubigeo = [] }) => {
                         dropdownParent="#form-container"
                         required
                     >
-                        {ubigeo.map((x, index) => {
-                            return (
-                                <option key={index} value={x.reniec}>
-                                    {x.reniec} {x.distrito} {x.provincia}{" "}
-                                    {x.departamento}
-                                </option>
-                            );
-                        })}
+                        {ubigeo.map((x, index) => (
+                            <option key={index} value={x.reniec}>
+                                {x.reniec} {x.distrito} {x.provincia}{" "}
+                                {x.departamento}
+                            </option>
+                        ))}
                     </SelectFormGroup>
-                    {/* <SwitchFormGroup
-                        label="Pago en destino"
-                        col="col-6"
-                        onChange={(e) => setInHome(e.target.checked)}
-                        checked={inHome}
-                        refreshable={[inHome]}
-                    />*/}
-                    <div className="row">
-                        <SwitchFormGroup
-                            eRef={is_freeRef}
-                            label="¿Delivery gratis?"
-                            col="col-6"
-                            onChange={(e) => setIsFreeChecked(e.target.checked)}
-                            checked={isFreeChecked}
-                            refreshable={[isFreeChecked]}
-                        />
-                        <SwitchFormGroup
-                            eRef={is_agencyRef}
-                            label="¿Recogo en agencia?"
-                            col="col-6"
-                            onChange={(e) => {
-                                setIsAgencyChecked(e.target.checked),
-                                    setIsFreeChecked(false);
-                            }}
-                            checked={isAgencyChecked}
-                            refreshable={[isAgencyChecked]}
-                        />
+                    
+                    <div className="col-12 mb-3">
+                        <label className="form-label">Tipo de Envío</label>
+                        <div className="row">
+                            <SwitchFormGroup
+                                eRef={is_freeRef}
+                                label="¿Delivery gratis?"
+                                col="col-6"
+                                onChange={(e) => {
+                                    setIsFreeChecked(e.target.checked);
+                                    if (e.target.checked) {
+                                        setIsAgencyChecked(false);
+                                        is_agencyRef.current.checked = false;
+                                        setMessage('El envío gratis tiene costo 0. Puede agregar un costo adicional para delivery express.');
+                                    } else {
+                                        setMessage('');
+                                    }
+                                }}
+                                checked={isFreeChecked}
+                                refreshable={[isFreeChecked]}
+                            />
+                            <SwitchFormGroup
+                                eRef={is_agencyRef}
+                                label="¿Recojo en agencia?"
+                                col="col-6"
+                                onChange={(e) => {
+                                    setIsAgencyChecked(e.target.checked);
+                                    if (e.target.checked) {
+                                        setIsFreeChecked(false);
+                                        is_freeRef.current.checked = false;
+                                        setMessage('Este es un envío que se realizará por empresas de envío como Shalom, Olva Currier u otros.');
+                                    } else {
+                                        setMessage('');
+                                    }
+                                }}
+                                checked={isAgencyChecked}
+                                refreshable={[isAgencyChecked]}
+                            />
+                        </div>
+                        {message && (
+                            <div className="alert alert-info mt-2">
+                                {message}
+                            </div>
+                        )}
                     </div>
+                    
+                  
                     <div
                         className="col-12"
                         hidden={isFreeChecked || isAgencyChecked}
