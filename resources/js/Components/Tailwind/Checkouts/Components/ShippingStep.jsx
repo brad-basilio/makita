@@ -27,19 +27,39 @@ export default function ShippingStep({
     envio,
     ubigeos = [],
 }) {
+    const [selectedUbigeo, setSelectedUbigeo] = useState(null);
+    const [defaultUbigeoOption, setDefaultUbigeoOption] = useState(null);
     const [formData, setFormData] = useState({
         name: user?.name || "",
         lastname: user?.lastname || "",
         email: user?.email || "",
-        department: "",
-        province: "",
-        district: "",
-        address: "",
-        number: "",
+        department: user?.department || "",
+        province: user?.province || "",
+        district: user?.district || "",
+        address: user?.address || "",
+        number: user?.number || "",
         comment: "",
-        reference: "",
-        ubigeo: null,
+        reference: user?.reference || "",
+        ubigeo: user?.ubigeo || null,
     });
+
+    useEffect(() => {
+        if (user?.ubigeo && user?.district && user?.province && user?.department) {
+          const defaultOption = {
+            value: user.ubigeo,
+            label: `${user.district}, ${user.province}, ${user.department}`,
+            data: {
+              reniec: user.ubigeo,
+              departamento: user.department,
+              provincia: user.province,
+              distrito: user.district
+            }
+          };
+          setDefaultUbigeoOption(defaultOption);
+          setSelectedUbigeo(defaultOption); // Actualiza el estado del ubigeo seleccionado
+          handleUbigeoChange(defaultOption);
+        }
+      }, [user]);
 
     const [loading, setLoading] = useState(false);
     const [shippingOptions, setShippingOptions] = useState([]);
@@ -311,13 +331,17 @@ export default function ShippingStep({
                         <AsyncSelect
                             name="ubigeo"
                             cacheOptions
-                            loadOptions={loadOptions}
-                            onChange={handleUbigeoChange}
-                            placeholder="Buscar distrito, provincia o departamento..."
+                            value={selectedUbigeo} // Usa value en lugar de defaultValue
+  loadOptions={loadOptions}
+  onChange={(selected) => {
+    setSelectedUbigeo(selected); // Actualiza el estado al seleccionar
+    handleUbigeoChange(selected);
+  }}
+                            placeholder="Buscar departamento | distrito | provincia ..."
                             loadingMessage={() => "Buscando ubicaciones..."}
                             noOptionsMessage={({ inputValue }) =>
                                 inputValue.length < 3
-                                    ? "Escribe al menos 3 caracteres"
+                                    ? "Buscar departamento | distrito | provincia ..."
                                     : "No se encontraron resultados"
                             }
                             isLoading={loading}

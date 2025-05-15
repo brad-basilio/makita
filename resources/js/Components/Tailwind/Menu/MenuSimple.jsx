@@ -28,9 +28,9 @@ const MenuSimple = ({ pages = [], items }) => {
                             {isMenuOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
                         </button>
                         {isMenuOpen && (
-                            <div className="absolute z-50 top-12 left-0 bg-white shadow-xl border-t rounded-xl transition-all duration-500 ease-in-out w-[calc(100vw-6rem)] max-w-[1200px]">
+                            <div className="absolute z-50 top-12 left-0 bg-white shadow-xl border-t rounded-xl transition-all duration-500 ease-in-out w-[calc(50vw-6rem)] ">
                                 <div className="p-6 overflow-x-auto">
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 min-w-[800px]">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 ">
                                         {items.map((category, index) => (
                                             <div key={index} className="w-full">
                                                 <a
