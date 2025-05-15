@@ -3000,7 +3000,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Ad.jsx": {
-    "file": "assets/Ad-DmcvuS-H.js",
+    "file": "assets/Ad-C8Kuzpch.js",
     "name": "Ad",
     "src": "resources/js/Components/Tailwind/Ad.jsx",
     "isEntry": true,
@@ -3015,7 +3015,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Ads/AdSubscription.jsx": {
-    "file": "assets/AdSubscription-hxUmj5vF.js",
+    "file": "assets/AdSubscription-Bpw-2NRI.js",
     "name": "AdSubscription",
     "src": "resources/js/Components/Tailwind/Ads/AdSubscription.jsx",
     "isDynamicEntry": true,
@@ -3024,17 +3024,14 @@
       "_index-BH53Isel.js",
       "_index-Bv81MoWS.js",
       "resources/js/Components/Tailwind/Blogs/BlogCarousel.jsx",
-      "_navigation-CLaRFmip.js",
       "_autoplay-WTIpEKIn.js",
       "_tippy-react.esm-BWiGTO87.js",
       "resources/js/Components/Tailwind/Components/ProductCard.jsx",
       "_SubscriptionsRest-chXcCgIW.js",
-      "resources/js/Components/Tailwind/Categories/InfiniteCategory.jsx",
       "_x-DBMwyD6F.js",
       "_index-yBjzXJbu.js",
       "_index-fNjTmf9T.js",
       "_index-Chjiymov.js",
-      "_create-element-if-not-defined-BzEE3aGu.js",
       "_index-rimy3MAc.js",
       "_BasicRest-DEv02zgs.js",
       "_main-BSEyQEJW.js",
@@ -4387,7 +4384,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Filter.jsx": {
-    "file": "assets/Filter-D-RNa7jT.js",
+    "file": "assets/Filter-CIubD907.js",
     "name": "Filter",
     "src": "resources/js/Components/Tailwind/Filter.jsx",
     "isEntry": true,
@@ -4407,7 +4404,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Filters/CatalagoFiltros.jsx": {
-    "file": "assets/CatalagoFiltros-CHbepB1n.js",
+    "file": "assets/CatalagoFiltros-COpb0onJ.js",
     "name": "CatalagoFiltros",
     "src": "resources/js/Components/Tailwind/Filters/CatalagoFiltros.jsx",
     "isDynamicEntry": true,
@@ -6719,7 +6716,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-BKKCIBmY.js",
+    "file": "assets/System-DLlxBjU5.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,
@@ -6832,7 +6829,8 @@
       "resources/js/Components/Tailwind/BananaLab/components/Editor/EditorLayout.jsx",
       "resources/js/Components/Tailwind/BananaLab/Editor.jsx",
       "resources/js/Components/Tailwind/Floating/WhatsApp.jsx",
-      "resources/js/Components/Tailwind/DeliveryZones/DeliveryZonesKuchara.jsx"
+      "resources/js/Components/Tailwind/DeliveryZones/DeliveryZonesKuchara.jsx",
+      "resources/js/Components/Tailwind/Ads/AdSubscription.jsx"
     ],
     "css": [
       "swiper.css",
