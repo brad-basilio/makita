@@ -91,11 +91,11 @@ const ProductCardColors = ({ product, setCart, cart }) => {
                 </a>
                 {/* Información del producto */}
                 <div className='py-4'>
-                    <p className="text-sm sm:text-base font-bold mb-1">
+                    <p className="text-sm sm:text-base font-medium mb-1">
                         {product.category.name}
                     </p>
 
-                    <div className="hidden md:flex gap-2 sm:gap-3 items-center justify-start w-full flex-wrap mb-1">
+                    <div className="hidden md:flex gap-2 sm:gap-3 items-center justify-start w-full flex-wrap mb-1 py-1">
                         
                         {variationsItems.slice(0, 4).map((variant) => (
                             <Tippy content={variant.color} key={variant.slug}>
@@ -129,7 +129,7 @@ const ProductCardColors = ({ product, setCart, cart }) => {
                         </Tippy>
                     </div>
 
-                    <div className="flex md:hidden gap-2 sm:gap-3 items-center justify-start w-full flex-wrap mb-1">
+                    <div className="flex md:hidden gap-2 sm:gap-3 items-center justify-start w-full flex-wrap mb-1 py-1">
                         
                         {variationsItems.slice(0, 3).map((variant) => (
                             <Tippy content={variant.color} key={variant.slug}>
