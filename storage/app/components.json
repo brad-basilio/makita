@@ -1109,7 +1109,7 @@
             {
                 "id": "AboutImage",
                 "name": "Con Imagen",
-                "data": ["url_imagen", "title", "description"]
+                "data": ["url_imagen", "title", "description", "about_url"]
             }
         ]
     },
