@@ -12,6 +12,9 @@ import OptionCard from "./OptionCard";
 import { InfoIcon } from "lucide-react";
 import { Notify } from "sode-extend-react";
 import { renderToString } from "react-dom/server";
+import PaymentModal from "./PaymentModal";
+
+
 export default function ShippingStepSF({
     cart,
     setSale,
@@ -326,11 +329,12 @@ export default function ShippingStepSF({
 
     const [selectedOption, setSelectedOption] = useState("free");
 
-    // const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+    const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
 
-    // const handleContinueClick = (e: React.MouseEvent) => {
-    //     e.preventDefault()
-    //     setIsPaymentModalOpen(true)
+    const handleContinueClick = (e) => {
+        e.preventDefault();
+        setIsPaymentModalOpen(true);
+    };
     
     
     const handlePaymentComplete = () => {
@@ -646,7 +650,7 @@ export default function ShippingStepSF({
                             </div>
                         </div>
                         <div className="space-y-2 pt-4">
-                            <ButtonPrimary className={'payment-button'} onClick={handlePayment}>
+                            <ButtonPrimary className={'payment-button'} onClick={handleContinueClick}>
                                 {" "}
                                 Continuar
                             </ButtonPrimary>
@@ -675,11 +679,9 @@ export default function ShippingStepSF({
                 </div>
             </div>
 
-            {/* <PaymentModal
-                isOpen={isPaymentModalOpen}
-                onClose={() => setIsPaymentModalOpen(false)}
+            <PaymentModal
                 onPaymentComplete={handlePaymentComplete}
-            /> */}
+            />
         </>
     );
 }

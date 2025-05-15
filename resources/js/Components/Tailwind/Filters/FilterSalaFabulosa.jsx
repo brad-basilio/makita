@@ -17,6 +17,7 @@ import { NoResults } from "../Components/Resources/NoResult";
 import SelectForm from "./Components/SelectForm";
 import ProductCard from "../Components/ProductCard";
 import ProductCardSimple from "../Products/Components/ProductCardSimple";
+import ProductCardColors from "../Products/Components/ProductCardColors";
 
 const itemsRest = new ItemsRest();
 
@@ -664,11 +665,11 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                         {loading ? (
                             <Loading />
                         ) : (
-                            <div className="flex items-center flex-wrap gap-y-2 lg:gap-y-3 transition-all duration-300 ease-in-out">
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 gap-y-2 lg:gap-y-3 transition-all duration-300 ease-in-out">
                                 {Array.isArray(products) &&
                                 products.length > 0 ? (
                                     products.map((product) => (
-                                        <ProductCardSimple
+                                        <ProductCardColors
                                             key={product.id}
                                             product={product}
                                             widthClass="lg:w-1/3"
