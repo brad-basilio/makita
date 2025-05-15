@@ -66,7 +66,7 @@ const DeliveryPricesType = ({ ubigeo = [] }) => {
             setIsAgencyChecked(data?.is_agency ?? false);
             // Establecer mensaje si es recojo en agencia
             if (data?.is_agency) {
-                setMessage('Este es un envío que se realizará por empresas de envío como Shalom, Olva Currier u otros.');
+                setMessage('Este es un envío que se realizará por empresas de envío como Shalom, Olva Currier u otros, el cliente realizara el pago en destino.');
             }
         }
 
@@ -478,7 +478,7 @@ const DeliveryPricesType = ({ ubigeo = [] }) => {
                                     if (e.target.checked) {
                                         setIsFreeChecked(false);
                                         is_freeRef.current.checked = false;
-                                        setMessage('Este es un envío que se realizará por empresas de envío como Shalom, Olva Currier u otros.');
+                                        setMessage('Este es un envío que se realizará por empresas de envío como Shalom, Olva Currier u otros, el cliente realizara el pago en destino.');
                                     } else {
                                         setMessage('');
                                     }
