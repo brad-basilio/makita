@@ -7,6 +7,7 @@ import ArrayJoin from "../../../Utils/ArrayJoin";
 import { Loading } from "../Components/Resources/Loading";
 import { NoResults } from "../Components/Resources/NoResult";
 import SelectForm from "./Components/SelectForm";
+import { GET } from "sode-extend-react";
 
 const itemsRest = new ItemsRest();
 
@@ -54,13 +55,13 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
     });
 
     const [selectedFilters, setSelectedFilters] = useState({
-        collection_id: [], // Array para múltiples colecciones
-        category_id: [], // Array para múltiples categorías
-        brand_id: [], // Array para múltiples marcas
-        subcategory_id: [],
+        collection_id: [GET.collection].filter(Boolean), // Array para múltiples colecciones
+        category_id: [GET.category].filter(Boolean), // Array para múltiples categorías
+        brand_id:[GET.brand].filter(Boolean), // Array para múltiples marcas
+        subcategory_id: [GET.subcategory].filter(Boolean),
 
         price: null,
-        name: null,
+        name: GET.search || null,
         sort_by: "created_at",
         order: "desc",
     });
@@ -90,7 +91,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
 
         if (filters.category_id.length > 0) {
             const categoryConditions = filters.category_id.map((id) => [
-                "category_id",
+                "category.slug",
                 "=",
                 id,
             ]);
@@ -99,7 +100,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
 
         if (filters.subcategory_id.length > 0) {
             const subcategoryConditions = filters.subcategory_id.map((id) => [
-                "subcategory_id",
+                "subcategory.slug",
                 "=",
                 id,
             ]);
@@ -175,9 +176,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
         }
     };
 
-    useEffect(() => {
-        fetchProducts(1);
-    }, []);
+
 
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
@@ -240,10 +239,11 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
         }
 
 
-    }, [items]);
+    }, [null]);
 
 
     useEffect(() => {
+        console.log("selectd filters", items);
         fetchProducts(pagination.currentPage);
     }, [selectedFilters]);
     const handlePageChange = (page) => {
@@ -476,8 +476,8 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                     </button>
                     <div
                         className={`${filtersOpen
-                                ? "fixed inset-0 z-50 bg-white p-4 overflow-y-auto"
-                                : "hidden"
+                            ? "fixed inset-0 z-50 bg-white p-4 overflow-y-auto"
+                            : "hidden"
                             } lg:block lg:w-3/12 bg-white p-4 rounded-lg h-max`}
                     >
                         <div className="flex items-center justify-between mb-6">
@@ -642,8 +642,8 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                                 </span>
                                 <ChevronDown
                                     className={`h-5 w-5 transform transition-transform ${sections.subcategoria
-                                            ? ""
-                                            : "-rotate-180"
+                                        ? ""
+                                        : "-rotate-180"
                                         }`}
                                 />
                             </motion.button>
@@ -697,8 +697,8 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                                                     <motion.div
                                                         key={subcategory.id}
                                                         className={`group py-2 rounded-md ${isChecked
-                                                                ? "bg-primary "
-                                                                : "bg-transparent"
+                                                            ? "bg-primary "
+                                                            : "bg-transparent"
                                                             }`}
 
                                                     >
@@ -719,8 +719,8 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
 
                                                             <span
                                                                 className={`${isChecked
-                                                                        ? "text-white"
-                                                                        : "text-gray-700"
+                                                                    ? "text-white"
+                                                                    : "text-gray-700"
                                                                     }`}
                                                             >
                                                                 {
@@ -830,8 +830,8 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                                 <nav className="flex items-center gap-x-2 min-w-max">
                                     <motion.button
                                         className={`p-4 inline-flex items-center ${pagination.currentPage === 1
-                                                ? "opacity-50 cursor-not-allowed"
-                                                : ""
+                                            ? "opacity-50 cursor-not-allowed"
+                                            : ""
                                             }`}
                                         onClick={() =>
                                             handlePageChange(
@@ -873,9 +873,9 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
 
                                     <motion.button
                                         className={`p-4 inline-flex items-center ${pagination.currentPage ===
-                                                pagination.totalPages
-                                                ? "opacity-50 cursor-not-allowed"
-                                                : ""
+                                            pagination.totalPages
+                                            ? "opacity-50 cursor-not-allowed"
+                                            : ""
                                             }`}
                                         onClick={() =>
                                             handlePageChange(

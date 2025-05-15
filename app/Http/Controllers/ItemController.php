@@ -78,7 +78,7 @@ class ItemController extends BasicController
         ];
     }
     /*aqui agregar el codigo*/
-    
+
     public function setPaginationInstance(Request $request, string $model)
     {
         //  dump($request->all());
@@ -126,7 +126,6 @@ class ItemController extends BasicController
             });
 
         // Solo aplica agrupación para la página específica
-
         $query->join(
             DB::raw('(SELECT MIN(id) as min_id FROM items GROUP BY name) as grouped'),
             function ($join) {
@@ -153,40 +152,46 @@ class ItemController extends BasicController
             ];
         }*/
 
-        $i4price = clone $builder;
-        $minPrice = 0;
-        $maxPrice = $i4price->max('final_price');
-        $rangeSize = round($maxPrice / 6); // Define el tamaño del rango
+        try {
+            //code...
+            $i4price = clone $builder;
+            $minPrice = 0;
+            $maxPrice = $i4price->max('final_price') ?? 0;
+            $rangeSize = round($maxPrice / 6); // Define el tamaño del rango
 
-        // Calcular rangos de precio
-        $ranges = [];
-        for ($i = $minPrice; $i <= $maxPrice; $i += $rangeSize) {
-            $ranges[] = [
-                'min' => $i,
-                'max' => $i + $rangeSize - 1
+            // Calcular rangos de precio
+            $ranges = [];
+            if ($maxPrice >= 6) {
+                for ($i = $minPrice; $i <= $maxPrice; $i += $rangeSize) {
+                    $ranges[] = [
+                        'min' => $i,
+                        'max' => $i + $rangeSize - 1
+                    ];
+                }
+            }
+
+            $i4collection = clone $builder;
+            $i4category = clone $builder;
+            $i4subcategory = clone $builder;
+            $i4brand = clone $builder;
+            $i4tag = clone $builder;
+            $collections = Item::getForeign($i4collection, Collection::class, 'collection_id');
+            $categories = Item::getForeign($i4category, Category::class, 'category_id');
+            $subcategories = Item::getForeign($i4subcategory, SubCategory::class, 'subcategory_id');
+            $brands = Item::getForeign($i4brand, Brand::class, 'brand_id');
+            $tags = Item::getForeignMany($i4tag, ItemTag::class, Tag::class);
+            return [
+                'priceRanges' => $ranges,
+                'collections' => $collections,
+                'categories' => $categories,
+                'subcategories' => $subcategories,
+                'brands' => $brands,
+                'tags' => $tags
             ];
+        } catch (\Throwable $th) {
+            dump($th->getMessage());
+            return [];
         }
-        $i4collection = clone $builder;
-        $i4category = clone $builder;
-        $i4subcategory = clone $builder;
-        $i4brand = clone $builder;
-        $i4tag = clone $builder;
-        $collections = Item::getForeign($i4collection, Collection::class, 'collection_id');
-        $categories = Item::getForeign($i4category, Category::class, 'category_id');
-        $subcategories = Item::getForeign($i4subcategory, SubCategory::class, 'subcategory_id');
-        $brands = Item::getForeign($i4brand, Brand::class, 'brand_id');
-        $tags = Item::getForeignMany($i4tag, ItemTag::class, Tag::class);
-
-
-
-        return [
-            'priceRanges' => $ranges,
-            'collections' => $collections,
-            'categories' => $categories,
-            'subcategories' => $subcategories,
-            'brands' => $brands,
-            'tags' => $tags
-        ];
     }
 
     public function verifyStock(Request $request)
