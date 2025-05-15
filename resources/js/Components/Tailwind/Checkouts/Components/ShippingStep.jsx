@@ -383,9 +383,9 @@ export default function ShippingStep({
                                     {shippingOptions
                                         .find((o) => o.type === selectedOption)
                                         ?.characteristics?.map((char, index) => (
-                                            <div key={`char-${index}`} className="flex items-start gap-4 bg-[#F7F9FB] p-4 rounded-xl">
+                                            <div key={`char-${index}`} className="flex items-start gap-4 bg-secondary p-4 rounded-xl">
                                                 <div className="w-5 flex-shrink-0">
-                                                    <InfoIcon className="text-primary" />
+                                                    <InfoIcon className="customtext-primary" />
                                                 </div>
                                                 <div className="flex-1">
                                                     <p className="text-sm font-medium customtext-neutral-dark">{char}</p>
