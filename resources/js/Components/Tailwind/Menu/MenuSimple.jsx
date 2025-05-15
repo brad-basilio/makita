@@ -28,23 +28,23 @@ const MenuSimple = ({ pages = [], items }) => {
                             {isMenuOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
                         </button>
                         {isMenuOpen && (
-                            <div className="absolute z-50 top-12 left-0 bg-white shadow-xl border-t rounded-xl transition-all duration-500 ease-in-out min-w-[900px] w-auto">
-                                <div className="p-6">
-                                    <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+                            <div className="absolute z-50 top-12 left-0 bg-white shadow-xl border-t rounded-xl transition-all duration-500 ease-in-out w-[calc(100vw-6rem)] max-w-[1200px]">
+                                <div className="p-6 overflow-x-auto">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 min-w-[800px]">
                                         {items.map((category, index) => (
-                                            <div key={index}>
+                                            <div key={index} className="w-full">
                                                 <a
                                                     href={`/catalogo?category=${category.slug}`}
-                                                    className="customtext-neutral-dark font-bold text-sm mb-3 cursor-pointer hover:customtext-primary transition-colors duration-300"
+                                                    className="customtext-neutral-dark font-bold text-sm mb-3 cursor-pointer hover:customtext-primary transition-colors duration-300 w-full inline-block"
                                                 >
                                                     {category.name}
                                                 </a>
                                                 <ul className="space-y-2">
                                                     {category.subcategories.map((item, itemIndex) => (
-                                                        <li key={itemIndex}>
+                                                        <li key={itemIndex} className="w-full">
                                                             <a
                                                                 href={`/catalogo?subcategory=${item.slug}`}
-                                                                className="customtext-neutral-dark text-sm hover:customtext-primary transition-colors duration-300 cursor-pointer"
+                                                                className="customtext-neutral-dark text-sm hover:customtext-primary transition-colors duration-300 cursor-pointer w-full inline-block whitespace-nowrap overflow-hidden text-ellipsis"
                                                             >
                                                                 {item.name}
                                                             </a>

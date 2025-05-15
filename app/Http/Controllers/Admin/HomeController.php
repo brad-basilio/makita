@@ -8,6 +8,7 @@ use App\Models\Item;
 use App\Models\Sale;
 use App\Models\SaleStatus;
 use Carbon\Carbon;
+use Culqi\Culqi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -87,7 +88,7 @@ class HomeController extends BasicController
             ->orderByDesc('count')
             ->limit(10)
             ->get();
-
+            $latestTransactions = Sale::latest()->take(5)->get();
         return [
             'totalProducts' => $totalProducts,
             'totalStock' => $totalStock,
@@ -100,6 +101,7 @@ class HomeController extends BasicController
             'ordersByStatus' => $ordersByStatus,
             'topProducts' => $topProducts,
             'newFeatured' => $newFeatured,
+            'latestTransactions' => $latestTransactions,
           //  'salesByDevice' => $salesByDevice,
             'salesByLocation' => $salesByLocation,
         ];
