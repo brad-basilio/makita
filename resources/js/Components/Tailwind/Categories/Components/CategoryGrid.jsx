@@ -63,7 +63,7 @@ export default function CategoryGrid({
                         return (
                             <div key={category.id} className="w-full lg:col-span-2">
                                 <a href={`/catalogo?category=${category.slug}`}>
-                                    <section className="group font-font-general text-white w-full h-[250px] sm:h-full">
+                                    <section className="group font-font-general text-white w-full h-[250px] sm:h-full 2xl:max-h-[300px]">
                                         <div className="flex gap-4 h-full">
                                             <div
                                                 className="relative w-full h-full overflow-hidden rounded-2xl"
@@ -100,7 +100,7 @@ export default function CategoryGrid({
                         return (
                             <div key={category.id} className="w-full">
                                 <a href={`/catalogo?category=${category.slug}`}>
-                                    <section className="group font-font-general text-white w-full h-[250px] lg:min-h-[400px] sm:h-full">
+                                    <section className="group font-font-general text-white w-full h-[250px] lg:min-h-[400px] 2xl:max-h-[300px] sm:h-full">
                                         <div className="flex gap-4 h-full">
                                             <div
                                                 className="relative w-full h-full overflow-hidden rounded-2xl"

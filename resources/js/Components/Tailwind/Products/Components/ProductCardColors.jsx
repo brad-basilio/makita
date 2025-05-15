@@ -42,7 +42,7 @@ const ProductCardColors = ({ product, setCart, cart }) => {
             if (!response) {
                 return;
             }
-
+            console.log(response);
             const variations = response;
             
             setVariationsItems(variations.variants);
@@ -93,6 +93,7 @@ const ProductCardColors = ({ product, setCart, cart }) => {
                         {product.category.name}
                     </p>
                     <div className="flex gap-3 items-center justify-start w-full flex-wrap">
+                        
                         {variationsItems.map((variant) => (
                             <Tippy content={variant.color}>
                                 <a

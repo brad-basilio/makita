@@ -36,6 +36,8 @@ class ItemController extends BasicController
         try {
 
             $limite = $request->limit ?? 0;
+
+            
             // Obtener el producto principal por slug
             $product = Item::with(['category', 'brand', 'images', 'specifications'])
                 ->where('slug', $request->slug)
@@ -50,16 +52,17 @@ class ItemController extends BasicController
             $variants = Item::where('name', $product->name)
                 ->where('id', '!=', $product->id)
                 ->when($limite > 0, function($query) use ($limite) {
-                    return $query->take($limite);
+                    return $query->limit($limite);
                 })
                 ->get(['id', 'slug', 'color', 'texture', 'image', 'final_price']);
-
+              
             // Agregar las variantes al producto principal
             $product->variants = $variants;
 
             $response->status = 200;
             $response->message = 'Producto obtenido correctamente';
             $response->data = $product;
+            
         } catch (\Throwable $th) {
             $response->status = 404;
             $response->message = 'Producto no encontrado';
