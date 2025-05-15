@@ -184,8 +184,8 @@
       "_index-BH53Isel.js"
     ]
   },
-  "_InputForm-BF3tk65A.js": {
-    "file": "assets/InputForm-BF3tk65A.js",
+  "_InputForm-DN14ZGms.js": {
+    "file": "assets/InputForm-DN14ZGms.js",
     "name": "InputForm",
     "imports": [
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
@@ -369,15 +369,6 @@
     "name": "SalesRest",
     "imports": [
       "_BasicRest-C_0LADdJ.js"
-    ]
-  },
-  "_Select-aab027f3.esm-kGkkFbxE.js": {
-    "file": "assets/Select-aab027f3.esm-kGkkFbxE.js",
-    "name": "Select-aab027f3.esm",
-    "imports": [
-      "_index-BH53Isel.js",
-      "_hoist-non-react-statics.cjs-kbdZbs82.js",
-      "_index-rimy3MAc.js"
     ]
   },
   "_SelectAPIFormGroup-BYWbn4kr.js": {
@@ -918,6 +909,15 @@
     "name": "upload",
     "imports": [
       "_createLucideIcon-Cy5Ya80P.js"
+    ]
+  },
+  "_useStateManager-7e1e8489.esm-oj4m82YY.js": {
+    "file": "assets/useStateManager-7e1e8489.esm-oj4m82YY.js",
+    "name": "useStateManager-7e1e8489.esm",
+    "imports": [
+      "_index-BH53Isel.js",
+      "_hoist-non-react-statics.cjs-kbdZbs82.js",
+      "_index-rimy3MAc.js"
     ]
   },
   "_user-BvYmyGTY.js": {
@@ -1564,7 +1564,7 @@
     ]
   },
   "resources/js/Admin/Home.jsx": {
-    "file": "assets/Home-BIlhV7vN.js",
+    "file": "assets/Home-6eXycxAu.js",
     "name": "Home",
     "src": "resources/js/Admin/Home.jsx",
     "isEntry": true,
@@ -3856,7 +3856,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Checkout.jsx": {
-    "file": "assets/Checkout-ZFVwybYB.js",
+    "file": "assets/Checkout-CgIrRqyW.js",
     "name": "Checkout",
     "src": "resources/js/Components/Tailwind/Checkout.jsx",
     "isEntry": true,
@@ -4127,7 +4127,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Complaint.jsx": {
-    "file": "assets/Complaint-BO0HwZSY.js",
+    "file": "assets/Complaint-DKSL-CZu.js",
     "name": "Complaint",
     "src": "resources/js/Components/Tailwind/Complaint.jsx",
     "isEntry": true,
@@ -4143,7 +4143,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Complaints/ComplaintSimple.jsx": {
-    "file": "assets/ComplaintSimple-D4K2dVWN.js",
+    "file": "assets/ComplaintSimple-CLtZvdpK.js",
     "name": "ComplaintSimple",
     "src": "resources/js/Components/Tailwind/Complaints/ComplaintSimple.jsx",
     "isDynamicEntry": true,
@@ -4151,7 +4151,7 @@
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
       "_recaptcha-wrapper-hwZdxtK2.js",
       "_index-BH53Isel.js",
-      "_InputForm-BF3tk65A.js",
+      "_InputForm-DN14ZGms.js",
       "_SelectForm-m9ZsfpcY.js",
       "_main-BvVILmTO.js",
       "_index-Bv81MoWS.js",
@@ -4384,7 +4384,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Filter.jsx": {
-    "file": "assets/Filter-DzTWonRt.js",
+    "file": "assets/Filter-Bcv6QI3X.js",
     "name": "Filter",
     "src": "resources/js/Components/Tailwind/Filter.jsx",
     "isEntry": true,
@@ -4670,14 +4670,14 @@
     ]
   },
   "resources/js/Components/Tailwind/Filters/FilterSimple.jsx": {
-    "file": "assets/FilterSimple-BC6ej3MD.js",
+    "file": "assets/FilterSimple-nSQB_DhW.js",
     "name": "FilterSimple",
     "src": "resources/js/Components/Tailwind/Filters/FilterSimple.jsx",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
       "_index-BH53Isel.js",
-      "_Select-aab027f3.esm-kGkkFbxE.js",
+      "_useStateManager-7e1e8489.esm-oj4m82YY.js",
       "_index-rimy3MAc.js",
       "_ItemsRest-BIADNguh.js",
       "_ArrayJoin-D8pAQiSC.js",
@@ -5245,7 +5245,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Login.jsx": {
-    "file": "assets/Login-Dj9qdi11.js",
+    "file": "assets/Login-BdUzUXeu.js",
     "name": "Login",
     "src": "resources/js/Components/Tailwind/Login.jsx",
     "isEntry": true,
@@ -5391,7 +5391,7 @@
     ]
   },
   "resources/js/Components/Tailwind/ProductDetail.jsx": {
-    "file": "assets/ProductDetail-CEaDomlb.js",
+    "file": "assets/ProductDetail-BCmb7KtU.js",
     "name": "ProductDetail",
     "src": "resources/js/Components/Tailwind/ProductDetail.jsx",
     "isEntry": true,
@@ -5411,7 +5411,7 @@
     ]
   },
   "resources/js/Components/Tailwind/ProductDetails/ProductDetailB.jsx": {
-    "file": "assets/ProductDetailB-nwCpeeIf.js",
+    "file": "assets/ProductDetailB-74D4rzqU.js",
     "name": "ProductDetailB",
     "src": "resources/js/Components/Tailwind/ProductDetails/ProductDetailB.jsx",
     "isDynamicEntry": true,
@@ -6716,7 +6716,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-KPMFwprG.js",
+    "file": "assets/System-zYcfO0TI.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,

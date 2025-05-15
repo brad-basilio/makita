@@ -134,7 +134,7 @@ const System = ({
             case 'delivery-zones':
                 return <DeliveryZone which={value} data={data} items={getItems(itemsId)} />
             case "product-detail":
-                return <ProductDetail which={value} item={filteredData.Item} cart={cart} setCart={setCart} />
+                return <ProductDetail which={value} item={filteredData.Item} cart={cart} setCart={setCart} data={data} />
             case "cart":
                 return <Cart which={value} data={data} cart={cart} setCart={setCart} />
             case "checkout":

@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import Select from "react-select";
+import AsyncSelect from "react-select/async";
 import Number2Currency from "../../../../Utils/Number2Currency";
-import ubigeoData from "../../../../../../storage/app/utils/ubigeo.json";
 import DeliveryPricesRest from "../../../../Actions/DeliveryPricesRest";
 import { processCulqiPayment } from "../../../../Actions/culqiPayment";
 import ButtonPrimary from "./ButtonPrimary";
@@ -10,8 +9,6 @@ import InputForm from "./InputForm";
 import OptionCard from "./OptionCard";
 import { InfoIcon } from "lucide-react";
 import { Notify } from "sode-extend-react";
-import { useUbigeo } from "../../../../Utils/useUbigeo";
-import AsyncSelect from "react-select/async";
 import { debounce } from "lodash";
 
 export default function ShippingStep({
@@ -48,27 +45,35 @@ export default function ShippingStep({
     const [shippingOptions, setShippingOptions] = useState([]);
     const [selectedOption, setSelectedOption] = useState(null);
     const [costsGet, setCostsGet] = useState(null);
-    /*useEffect(() => {
-        DeliveryPricesRest.getCosts().then((response) => {
-            setCostsGet(response.data);
-        });
-    }, []);*/
-    console.log(ubigeos);
-    // Funci
-    // Preparar opciones para el select de ubigeo
-    /*   const ubigeoOptions = ubigeoData.map((item) => ({
-        value: item.reniec,
-        label: `${item.distrito}, ${item.provincia}, ${item.departamento}`,
-        data: item,
-    }));*/
+    const [errors, setErrors] = useState({});
+
+    // Función de validación mejorada
+    const validateForm = () => {
+        const newErrors = {};
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!formData.name.trim()) newErrors.name = "Nombre es requerido";
+        if (!formData.lastname.trim()) newErrors.lastname = "Apellido es requerido";
+        if (!formData.email.trim()) {
+            newErrors.email = "Email es requerido";
+        } else if (!emailRegex.test(formData.email)) {
+            newErrors.email = "Email inválido";
+        }
+        if (!formData.ubigeo) newErrors.ubigeo = "Ubicación es requerida";
+        if (!formData.address) newErrors.address = "Dirección es requerida";
+        if (!selectedOption) newErrors.shipping = "Seleccione un método de envío";
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
 
     const handleUbigeoChange = async (selected) => {
         if (!selected) return;
-        console.log("selected", selected);
-
+        
+        setErrors(prev => ({ ...prev, ubigeo: "" }));
         const { data } = selected;
 
-        setFormData((prev) => ({
+        setFormData(prev => ({
             ...prev,
             department: data.departamento,
             province: data.provincia,
@@ -76,7 +81,6 @@ export default function ShippingStep({
             ubigeo: data.reniec,
         }));
 
-        // Consultar precios de envío
         setLoading(true);
         try {
             const response = await DeliveryPricesRest.getShippingCost({
@@ -105,7 +109,7 @@ export default function ShippingStep({
             } else if (response.data.is_agency) {
                 options.push({
                     type: "agency",
-                    price: response.data.agency.price,
+                    price: 0,
                     description: response.data.agency.description,
                     deliveryType: response.data.agency.type,
                     characteristics: response.data.agency.characteristics,
@@ -151,36 +155,14 @@ export default function ShippingStep({
             return;
         }
 
-        const requiredFields = [
-            "name",
-            "lastname",
-            "email",
-            "ubigeo",
-            "address",
-            "reference",
-        ];
-        const missingFields = requiredFields.filter(
-            (field) => !formData[field]
-        );
-        console.log(missingFields);
-
-        if (missingFields.length > 0) {
-            Notify.add({
-                icon: "/assets/img/icon.svg",
-                title: "Campos incompletos",
-                body: "Complete todos los campos obligatorios",
-                type: "danger",
-            });
-            return;
-        }
-
-        if (!selectedOption) {
-            Notify.add({
-                icon: "/assets/img/icon.svg",
-                title: "Seleccione envío",
-                body: "Debe elegir un método de envío",
-                type: "danger",
-            });
+        if (!validateForm()) {
+            const firstErrorKey = Object.keys(errors)[0];
+            if (firstErrorKey) {
+                document.querySelector(`[name="${firstErrorKey}"]`)?.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center"
+                });
+            }
             return;
         }
 
@@ -221,15 +203,12 @@ export default function ShippingStep({
         }
     };
 
-    const { ubigeoOptions, loadingUbigeo, searchUbigeo } = useUbigeo();
-
     const loadOptions = useCallback(
         debounce((inputValue, callback) => {
             if (inputValue.length < 3) {
                 callback([]);
                 return;
             }
-            console.log("inputValue", inputValue);
 
             fetch(`/api/ubigeo/search?q=${encodeURIComponent(inputValue)}`)
                 .then((response) => {
@@ -257,158 +236,112 @@ export default function ShippingStep({
         }, 300),
         []
     );
+
+    useEffect(() => {
+        // Limpiar errores cuando los campos son modificados
+        setErrors(prev => {
+            const newErrors = { ...prev };
+            Object.keys(formData).forEach(key => {
+                if (formData[key]) delete newErrors[key];
+            });
+            return newErrors;
+        });
+    }, [formData]);
+
+    const selectStyles = (hasError) => ({
+        control: (base) => ({
+            ...base,
+            border: `1px solid ${hasError ? '#ef4444' : 'transparent'}`,
+            boxShadow: 'none',
+            minHeight: '50px',
+            '&:hover': { borderColor: hasError ? '#ef4444' : '#6b7280' },
+            borderRadius: '0.75rem',
+        }),
+        menu: (base) => ({
+            ...base,
+            zIndex: 9999,
+            marginTop: '4px',
+            borderRadius: '8px',
+        }),
+        option: (base) => ({
+            ...base,
+            color: '#1f2937',
+            backgroundColor: 'white',
+            '&:hover': { backgroundColor: '#f3f4f6' },
+        }),
+    });
+
     return (
         <div className="grid lg:grid-cols-5 gap-8">
             <div className="lg:col-span-3">
-                <form
-                    className="space-y-6"
-                    onSubmit={(e) => e.preventDefault()}
-                >
+                <form className="space-y-6" onSubmit={handlePayment}>
                     <div className="grid grid-cols-2 gap-4">
                         <InputForm
+                            name="name"
                             label="Nombres"
                             value={formData.name}
-                            onChange={(e) =>
-                                setFormData((prev) => ({
-                                    ...prev,
-                                    name: e.target.value,
-                                }))
-                            }
+                            error={errors.name}
+                            onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                             required
                         />
                         <InputForm
+                            name="lastname"
                             label="Apellidos"
                             value={formData.lastname}
-                            onChange={(e) =>
-                                setFormData((prev) => ({
-                                    ...prev,
-                                    lastname: e.target.value,
-                                }))
-                            }
+                            error={errors.lastname}
+                            onChange={(e) => setFormData(prev => ({ ...prev, lastname: e.target.value }))}
                             required
                         />
                     </div>
 
                     <InputForm
+                        name="email"
                         label="Correo electrónico"
                         type="email"
                         value={formData.email}
-                        onChange={(e) =>
-                            setFormData((prev) => ({
-                                ...prev,
-                                email: e.target.value,
-                            }))
-                        }
+                        error={errors.email}
+                        onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
                         required
                     />
 
                     <div className="form-group">
-                        <label
-                            className={`block text-sm 2xl:text-base mb-1 customtext-neutral-dark `}
-                        >
-                            Ubicación de entrega
+                        <label className="block text-sm 2xl:text-base mb-1 customtext-neutral-dark">
+                            Ubicación de entrega *
                         </label>
                         <AsyncSelect
+                            name="ubigeo"
                             cacheOptions
-                            defaultOptions
                             loadOptions={loadOptions}
                             onChange={handleUbigeoChange}
                             placeholder="Buscar distrito, provincia o departamento..."
                             loadingMessage={() => "Buscando ubicaciones..."}
                             noOptionsMessage={({ inputValue }) =>
                                 inputValue.length < 3
-                                    ? "Buscar distrito, provincia o departamento..."
+                                    ? "Escribe al menos 3 caracteres"
                                     : "No se encontraron resultados"
                             }
                             isLoading={loading}
-                            styles={{
-                                control: (base) => ({
-                                    ...base,
-                                    border: "1px solid transparent",
-                                    boxShadow: "none",
-                                    minHeight: "50px",
-                                    "&:hover": {
-                                        borderColor: "transparent",
-                                    },
-                                    borderRadius: "0.75rem",
-                                }),
-                                menu: (base) => ({
-                                    ...base,
-                                    zIndex: 9999,
-                                    marginTop: "4px",
-                                    borderRadius: "8px",
-                                  //  boxShadow: "none",
-                                }),
-                                option: (base) => ({
-                                    ...base,
-                                    color: "inherit",
-                                    "&:hover": {
-                                        color: "white",
-                                    },
-                                    backgroundColor: "inherit",
-                                    "&:hover": {
-                                        backgroundColor: "#f4f4f5",
-                                    },
-                                }),
-                            }}
+                            styles={selectStyles(!!errors.ubigeo)}
                             formatOptionLabel={({ data }) => (
                                 <div className="text-sm">
-                                    <div className="font-medium">
-                                        {data.distrito}
-                                    </div>
+                                    <div className="font-medium">{data.distrito}</div>
                                     <div className="text-gray-500">
                                         {data.provincia}, {data.departamento}
                                     </div>
                                 </div>
                             )}
-                            className="w-full border focus:bg-primary focus:text-white border-gray-300 rounded-xl  transition-all duration-300"
+                            className="w-full rounded-xl transition-all duration-300"
                             menuPortalTarget={document.body}
-                            menuPosition="fixed"
                         />
-                        {/*} <Select
-                            options={ubigeoOptions}
-                            onChange={handleUbigeoChange}
-                            placeholder="Buscar distrito, provincia o departamento..."
-                            isSearchable
-                            isLoading={loading}
-                            noOptionsMessage={() =>
-                                "No se encontraron ubicaciones"
-                            }
-                            formatOptionLabel={({ data }) => (
-                                <div className="text-sm">
-                                    <div className="font-medium">
-                                        {data.distrito}
-                                    </div>
-                                    <div className="text-gray-500">
-                                        {data.provincia}, {data.departamento}
-                                    </div>
-                                </div>
-                            )}
-                            className={`w-full  px-4 py-1.5 border customtext-neutral-dark  border-neutral-ligth rounded-xl focus:ring-0 focus:outline-0   transition-all duration-300 `}
-                            styles={{
-                                control: (base, state) => ({
-                                    ...base,
-                                    border: "transparent",
-                                    borderColor: state.isFocused
-                                        ? "transparent"
-                                        : "transparent",
-                                    boxShadow: state.isFocused
-                                        ? "none"
-                                        : "none",
-                                }),
-                            }}
-                        />*/}
+                        {errors.ubigeo && <div className="text-red-500 text-sm mt-1">{errors.ubigeo}</div>}
                     </div>
 
                     <InputForm
-                        label="Dirección"
+                        name="address"
+                        label="Dirección *"
                         value={formData.address}
-                        onChange={(e) =>
-                            setFormData((prev) => ({
-                                ...prev,
-                                address: e.target.value,
-                            }))
-                        }
+                        error={errors.address}
+                        onChange={(e) => setFormData(prev => ({ ...prev, address: e.target.value }))}
                         required
                     />
 
@@ -416,104 +349,62 @@ export default function ShippingStep({
                         <InputForm
                             label="Número"
                             value={formData.number}
-                            onChange={(e) =>
-                                setFormData((prev) => ({
-                                    ...prev,
-                                    number: e.target.value,
-                                }))
-                            }
+                            onChange={(e) => setFormData(prev => ({ ...prev, number: e.target.value }))}
                         />
                         <InputForm
                             label="Referencia"
                             value={formData.reference}
-                            onChange={(e) =>
-                                setFormData((prev) => ({
-                                    ...prev,
-                                    reference: e.target.value,
-                                }))
-                            }
-                            required
+                            onChange={(e) => setFormData(prev => ({ ...prev, reference: e.target.value }))}
                         />
                     </div>
 
                     {shippingOptions.length > 0 && (
                         <div className="space-y-4">
-                            <h3 className="text-lg font-semibold">
-                                Método de envío
-                            </h3>
+                            <h3 className="text-lg font-semibold">Método de envío</h3>
+                            {/*errors.shipping && <div className="text-red-500 text-sm">{errors.shipping}</div>*/}
                             <div className="grid grid-cols-2 gap-4">
                                 {shippingOptions.map((option) => (
                                     <OptionCard
                                         key={option.type}
-                                        title={
-                                            option.type === "free"
-                                                ? option.deliveryType
-                                                : option.type === "express"
-                                                ? option.deliveryType
-                                                : option.type === "agency"
-                                                ? option.deliveryType
-                                                : option.deliveryType
-                                        }
+                                        title={option.deliveryType}
                                         price={option.price}
                                         description={option.description}
-                                        selected={
-                                            selectedOption === option.type
-                                        }
+                                        selected={selectedOption === option.type}
                                         onSelect={() => {
                                             setSelectedOption(option.type);
                                             setEnvio(option.price);
+                                            setErrors(prev => ({ ...prev, shipping: '' }));
                                         }}
                                     />
                                 ))}
                             </div>
-                            {console.log(
-                                shippingOptions.find(
-                                    (o) => o.type === selectedOption
-                                )
-                            )}
-
                             {selectedOption && shippingOptions.length > 0 && (
                                 <div className="space-y-4 mt-4">
                                     {shippingOptions
                                         .find((o) => o.type === selectedOption)
-                                        ?.characteristics?.map(
-                                            (char, index) => (
-                                                <div
-                                                    key={`char-${index}`}
-                                                    className="flex items-start gap-4 bg-[#F7F9FB] p-4 rounded-xl"
-                                                >
-                                                    <div className="w-5 flex-shrink-0">
-                                                        <svg
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                            width="20"
-                                                            height="20"
-                                                            viewBox="0 0 24 24"
-                                                            fill="none"
-                                                            stroke="currentColor"
-                                                            strokeWidth="2"
-                                                            strokeLinecap="round"
-                                                            strokeLinejoin="round"
-                                                            className="lucide lucide-info customtext-primary"
-                                                        >
-                                                            <circle
-                                                                cx="12"
-                                                                cy="12"
-                                                                r="10"
-                                                            />
-                                                            <path d="M12 16v-4" />
-                                                            <path d="M12 8h.01" />
-                                                        </svg>
-                                                    </div>
-                                                    <div className="flex-1">
-                                                        <p className="text-sm font-medium customtext-neutral-dark">
-                                                            {char}
-                                                        </p>
-                                                    </div>
+                                        ?.characteristics?.map((char, index) => (
+                                            <div key={`char-${index}`} className="flex items-start gap-4 bg-[#F7F9FB] p-4 rounded-xl">
+                                                <div className="w-5 flex-shrink-0">
+                                                    <InfoIcon className="text-primary" />
                                                 </div>
-                                            )
-                                        )}
+                                                <div className="flex-1">
+                                                    <p className="text-sm font-medium customtext-neutral-dark">{char}</p>
+                                                </div>
+                                            </div>
+                                        ))}
                                 </div>
                             )}
+                        </div>
+                    )}
+
+                    {!noContinue && (
+                        <div className="flex justify-end gap-4">
+                            <ButtonSecondary type="button" onClick={() => window.history.back()}>
+                                Regresar
+                            </ButtonSecondary>
+                            <ButtonPrimary type="submit" loading={loading}>
+                                Continuar
+                            </ButtonPrimary>
                         </div>
                     )}
                 </form>
@@ -533,12 +424,8 @@ export default function ShippingStep({
                             />
                             <div>
                                 <h4 className="font-medium">{item.name}</h4>
-                                <p className="text-sm text-gray-600">
-                                    Cantidad: {item.quantity}
-                                </p>
-                                <p className="text-sm text-gray-600">
-                                    S/ {Number2Currency(item.price)}
-                                </p>
+                                <p className="text-sm text-gray-600">Cantidad: {item.quantity}</p>
+                                <p className="text-sm text-gray-600">S/ {Number2Currency(item.price)}</p>
                             </div>
                         </div>
                     ))}
@@ -565,19 +452,13 @@ export default function ShippingStep({
                         </div>
                     </div>
 
-                    <ButtonPrimary
-                        onClick={handlePayment}
-                        className="w-full mt-6"
-                    >
+                    <ButtonPrimary onClick={handlePayment} className="w-full mt-6">
                         Ir a Pagar
                     </ButtonPrimary>
 
                     <p className="text-xs text-gray-600 mt-4 text-center">
-                        Al completar tu compra aceptas nuestros{" "}
-                        <a
-                            href="/terminos"
-                            className="text-blue-600 hover:underline"
-                        >
+                        Al completar tu compra aceptas nuestros{' '}
+                        <a href="/terminos" className="text-blue-600 hover:underline">
                             Términos y Condiciones
                         </a>
                     </p>

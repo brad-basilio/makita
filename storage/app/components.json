@@ -856,6 +856,7 @@
             {
                 "id": "ProductDetailB",
                 "name": "ProductDetailB",
+                "data": ["link_cart"],
                 "using": {
                     "model": "Item",
                     "flied": "slug"
