@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\StrengthController as AdminStrengthController;
 use App\Http\Controllers\Admin\GeneralController as AdminGeneralController;
 use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
 use App\Http\Controllers\Admin\AccountController as AdminAccountController;
+use App\Http\Controllers\Admin\AdController as AdminAdController;
 use App\Http\Controllers\Admin\BannerController as AdminBannerController;
 use App\Http\Controllers\Admin\BrandController as AdminBrandController;
 
@@ -46,7 +47,6 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\CoverController;
 use App\Http\Controllers\DeliveryPriceController;
-use App\Http\Controllers\DeliveryZoneController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ItemImportController;
 use App\Http\Controllers\MessageController;
@@ -102,6 +102,7 @@ Route::get('/indicators/media/{uuid}', [AdminIndicatorController::class, 'media'
 
 Route::get('/aboutuses/media/{uuid}', [AdminAboutusController::class, 'media']);
 Route::get('/strengths/media/{uuid}', [AdminStrengthController::class, 'media']);
+Route::get('/ads/media/{uuid}', [AdminAdController::class, 'media'])->withoutMiddleware('throttle');
 
 Route::post('/posts/paginate', [PostController::class, 'paginate']);
 Route::post('/items/paginate', [ItemController::class, 'paginate']);
@@ -164,6 +165,12 @@ Route::middleware('auth')->group(function () {
     Route::patch('/items/status', [AdminItemController::class, 'status']);
     Route::patch('/items/{field}', [AdminItemController::class, 'boolean']);
     Route::delete('/items/{id}', [AdminItemController::class, 'delete']);
+
+    Route::post('/ads', [AdminAdController::class, 'save']);
+    Route::post('/ads/paginate', [AdminAdController::class, 'paginate']);
+    Route::patch('/ads/status', [AdminAdController::class, 'status']);
+    Route::patch('/ads/{field}', [AdminAdController::class, 'boolean']);
+    Route::delete('/ads/{id}', [AdminAdController::class, 'delete']);
 
 
     //Route::get('/items/filters', [AdminItemController::class, 'getFilters']);

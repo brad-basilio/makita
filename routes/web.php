@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\GeneralController as AdminGeneralController;
 use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
 use App\Http\Controllers\Customer\SaleController as CustomerSaleController;
 use App\Http\Controllers\Admin\AccountController as AdminAccountController;
+use App\Http\Controllers\Admin\AdController as AdminAdController;
 use App\Http\Controllers\Admin\BannerController as AdminBannerController;
 use App\Http\Controllers\Admin\ItemController as AdminItemController;
 use App\Http\Controllers\Admin\GalleryController as AdminGalleryController;
@@ -32,11 +33,8 @@ use App\Http\Controllers\Admin\SubCategoryController as AdminSubCategoryControll
 
 use App\Http\Controllers\Admin\FaqController as AdminFaqController;
 use App\Http\Controllers\Admin\RepositoryController as AdminRepositoryController;
-use App\Http\Controllers\AuthClientController;
 // Public 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\ComplaintController;
-use App\Http\Controllers\DeliveryZoneController;
 use App\Http\Controllers\RepositoryController;
 use App\Http\Controllers\SystemController;
 use SoDe\Extend\File;
@@ -82,6 +80,7 @@ Route::middleware(['can:Admin', 'auth'])->prefix('admin')->group(function () {
     Route::get('/home', [AdminHomeController::class, 'reactView'])->name('Admin/Home.jsx');
     Route::get('/sales', [AdminSaleController::class, 'reactView'])->name('Admin/Sales.jsx');
     Route::get('/items', [AdminItemController::class, 'reactView'])->name('Admin/Items.jsx');
+    Route::get('/ads', [AdminAdController::class, 'reactView'])->name('Admin/Ads.jsx');
 
     Route::get('/combos', [AdminComboController::class, 'reactView'])->name('Admin/Combos.jsx');
 
