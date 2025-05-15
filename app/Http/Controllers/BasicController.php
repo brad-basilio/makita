@@ -211,7 +211,7 @@ class BasicController extends Controller
       $response->summary = $this->setPaginationSummary($request, $instance);
       $response->totalCount = $totalCount;
     } catch (\Throwable $th) {
-      dump($th);
+     // dump($th);
       $response->message = $th->getMessage() . ' Ln.' . $th->getLine();
     } finally {
       return response(
