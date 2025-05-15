@@ -55,16 +55,15 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
     });
 
     const [selectedFilters, setSelectedFilters] = useState({
-        collection_id: [GET.collection].filter(Boolean), // Array para múltiples colecciones
-        category_id: [GET.category].filter(Boolean), // Array para múltiples categorías
-        brand_id:[GET.brand].filter(Boolean), // Array para múltiples marcas
-        subcategory_id: [GET.subcategory].filter(Boolean),
-
+        collection_id: GET.collection ? GET.collection.split(',') : [],
+        category_id: GET.category ? GET.category.split(',') : [],
+        brand_id: GET.brand ? GET.brand.split(',') : [],
+        subcategory_id: GET.subcategory ? GET.subcategory.split(',') : [],
         price: null,
         name: GET.search || null,
         sort_by: "created_at",
         order: "desc",
-    });
+      });
     //filtros nuevos
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -82,7 +81,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
 
         if (filters.collection_id.length > 0) {
             const collectionConditions = filters.collection_id.map((id) => [
-                "collection_id",
+                "collection.slug",
                 "=",
                 id,
             ]);
@@ -109,7 +108,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
 
         if (filters.brand_id.length > 0) {
             const brandConditions = filters.brand_id.map((id) => [
-                "brand_id",
+                "brand.slug",
                 "=",
                 id,
             ]);
@@ -164,7 +163,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                     response.totalCount
                 ),
             });
-            console.log(response);
+           // console.log(response);
             setBrands(response?.summary.brands);
             setCategories(response?.summary.categories);
             setSubcategories(response?.summary.subcategories);
@@ -178,72 +177,11 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
 
 
 
-    useEffect(() => {
-        const params = new URLSearchParams(window.location.search);
-        const categoriaParam = params.get("category");
-        const subCategoriaParam = params.get("subcategory");
-        const collectionParam = params.get("collection");
-        const searchParam = params.get("search");
-        const campaignParam = params.get("campaign");
-        const sortParam = params.get("sort");
-
-        if (categoriaParam) {
-            const category = categories.find(
-                (item) => item.slug === categoriaParam
-            );
-            if (category) {
-                setSelectedFilters((prev) => ({
-                    ...prev,
-                    category_id: [category.id],
-                }));
-            }
-        }
-        if (subCategoriaParam) {
-            const subcategory = subcategories.find(
-                (item) => item.slug === subCategoriaParam
-            );
-
-            if (subcategory) {
-                setSelectedFilters((prev) => ({
-                    ...prev,
-                    subcategory_id: [subcategory.id],
-                }));
-            }
-        }
-
-
-
-        /* if (collectionParam) {
-             const collection = collections.find(
-                 (item) => item.slug === collectionParam
-             );
-             if (collection) {
-                 setSelectedFilters((prev) => ({
-                     ...prev,
-                     collection_id: [collection.id],
-                 }));
-             }
-         }*/
-        /*if (campaignParam) {
-              const campaign = campaigns.find(
-                  (item) => item.slug === campaignParam
-              );
-              setProducts(campaign.items);
-          }*/
-
-        if (searchParam) {
-            setSelectedFilters((prev) => ({
-                ...prev,
-                name: searchParam,
-            }));
-        }
-
-
-    }, [null]);
+   
 
 
     useEffect(() => {
-        console.log("selectd filters", items);
+        
         fetchProducts(pagination.currentPage);
     }, [selectedFilters]);
     const handlePageChange = (page) => {
@@ -323,8 +261,6 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
         }));
     };
 
-
-
     const [searchCategory, setSearchCategory] = useState("");
     const [searchSubcategory, setSearchSubcategory] = useState("");
     const [searchBrand, setSearchBrand] = useState("");
@@ -341,92 +277,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
     const filteredBrands = brands.filter((brand) =>
         brand.name.toLowerCase().includes(searchBrand.toLowerCase())
     );
-    /* const [sections, setSections] = useState({
-         marca: true,
-         precio: true,
-         categoria: true,
-         colores: false,
-     });
  
-     const [selectedFilters, setSelectedFilters] = useState({
-         marcas: [],
-         categorias: [],
-         subcategorias: [],
-         precio: null,
-     });
- 
-     useEffect(() => {
-         const params = new URLSearchParams(window.location.search);
-         const categoriaParam = params.get("category");
- 
-         if (categoriaParam) {
-             setSelectedFilters((prev) => ({
-                 ...prev,
-                 categorias: [categoriaParam],
-             }));
-         }
-     }, []);
- 
- 
-     const [searchBrand, setSearchBrand] = useState("");
-     const [searchCategory, setSearchCategory] = useState("");
-     const [sortOption, setSortOption] = useState("reciente");
- 
-     const toggleSection = (section) => {
-         setSections((prev) => ({
-             ...prev,
-             [section]: !prev[section],
-         }));
-     };
- 
-     const handleFilterChange = (type, value) => {
-         setSelectedFilters((prev) => {
-             if (type === "precio") {
-                 // Si el mismo rango ya está seleccionado, lo deseleccionamos, de lo contrario, lo asignamos
-                 return { ...prev, precio: prev.precio && prev.precio.min === value.min && prev.precio.max === value.max ? null : value };
-             }
- 
-             const newValues = prev[type].includes(value)
-                 ? prev[type].filter((item) => item !== value)
-                 : [...prev[type], value];
- 
-             return { ...prev, [type]: newValues };
-         });
-     };
- 
- 
- 
-     const filteredBrands = brands.filter((brand) => brand.name.toLowerCase().includes(searchBrand.toLowerCase()));
-     const filteredCategories = categories.filter((category) => category.slug.toLowerCase().includes(searchCategory.toLowerCase()));
- 
-     let filteredItems = items.filter((item) => {
-         const matchBrand = selectedFilters.marcas.length === 0 || selectedFilters.marcas.includes(item.brand?.name);
-         const matchCategory = selectedFilters.categorias.length === 0 || selectedFilters.categorias.includes(item.category?.slug);
-         const matchSubcategory = selectedFilters.subcategorias.length === 0 || selectedFilters.subcategorias.includes(item.subcategory?.name);
-         const matchPrice = !selectedFilters.precio || (item.final_price >= selectedFilters.precio.min && item.final_price <= selectedFilters.precio.max);
- 
-         return matchBrand && matchCategory && matchSubcategory && matchPrice;
-     });
- 
-     // Ordenar los productos según la opción seleccionada
-     filteredItems = [...filteredItems].sort((a, b) => {
-         switch (sortOption) {
-             case "precio_mayor":
-                 return b.final_price - a.final_price;
-             case "precio_menor":
-                 return a.final_price - b.final_price;
-             case "reciente":
-                 return new Date(b.created_at) - new Date(a.created_at);
-             case "antiguo":
-                 return new Date(a.created_at) - new Date(b.created_at);
-             case "nombre_az":
-                 return a.name.localeCompare(b.name);
-             case "nombre_za":
-                 return b.name.localeCompare(a.name);
-             default:
-                 return 0;
-         }
-     });*/
     const [filtersOpen, setFiltersOpen] = useState(false);
 
     return (
@@ -528,7 +379,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                                                     onChange={() =>
                                                         handleFilterChange(
                                                             "brand_id",
-                                                            brand.id
+                                                            brand.slug
                                                         )
                                                     }
                                                 />
@@ -576,11 +427,11 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                                                         onChange={() =>
                                                             handleFilterChange(
                                                                 "category_id",
-                                                                category.id
+                                                                category.slug
                                                             )
                                                         }
                                                         checked={selectedFilters.category_id?.includes(
-                                                            category.id
+                                                            category.slug
                                                         )} // <-- Agregado
                                                     />
                                                     <span>{category.name}</span>
@@ -588,7 +439,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
 
                                                 {/* Mostrar subcategorías si la categoría está seleccionada */}
                                                 {selectedFilters.category_id?.includes(
-                                                    category.id
+                                                    category.slug
                                                 ) &&
                                                     category.subcategories
                                                         ?.length > 0 && (
@@ -607,11 +458,11 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                                                                             onChange={() =>
                                                                                 handleFilterChange(
                                                                                     "subcategory_id",
-                                                                                    sub.id
+                                                                                    sub.slug
                                                                                 )
                                                                             } // <-- Corregido
                                                                             checked={selectedFilters.subcategory_id?.includes(
-                                                                                sub.id
+                                                                                sub.slug
                                                                             )}
                                                                         />
                                                                         <span>
@@ -691,7 +542,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                                             (subcategory) => {
                                                 const isChecked =
                                                     selectedFilters.subcategory_id?.includes(
-                                                        subcategory.id
+                                                        subcategory.slug
                                                     );
                                                 return (
                                                     <motion.div
@@ -709,7 +560,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                                                                 onChange={() =>
                                                                     handleFilterChange(
                                                                         "subcategory_id",
-                                                                        subcategory.id
+                                                                        subcategory.slug
                                                                     )
                                                                 }
                                                                 checked={
