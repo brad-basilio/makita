@@ -36,34 +36,38 @@ class ItemController extends BasicController
         try {
 
             $limite = $request->limit ?? 0;
-
             
             // Obtener el producto principal por slug
             $product = Item::with(['category', 'brand', 'images', 'specifications'])
                 ->where('slug', $request->slug)
                 ->firstOrFail();
-
-            // Obtener las variantes (productos con el mismo nombre pero diferente ID)
             
-            // $variants = Item::where('name', $product->name)
-            //     ->where('id', '!=', $product->id)
-            //     ->get(['id', 'slug', 'color', 'texture', 'image', 'final_price']);
-
-            $variants = Item::where('name', $product->name)
-                ->where('id', '!=', $product->id)
-                ->when($limite > 0, function($query) use ($limite) {
-                    return $query->limit($limite);
-                })
-                ->get(['id', 'slug', 'color', 'texture', 'image', 'final_price']);
+            if ($limite > 0) {
+                $product->load(['variants' => function ($query) use ($limite) {
+                    $query->limit($limite);
+                }]);
+            }else{
+                $product->load(['variants']);
+            }
+            
+            // Obtener las variantes (productos con el mismo nombre pero diferente ID)
+                // $variants = Item::where('name', $product->name)
+                //     ->where('id', '!=', $product->id)
+                //     ->get(['id', 'slug', 'color', 'texture', 'image', 'final_price']);
               
+           
             // Agregar las variantes al producto principal
-            $product->variants = $variants;
-
+            // $product->variants = $variants;
+             
             $response->status = 200;
             $response->message = 'Producto obtenido correctamente';
+            
             $response->data = $product;
             
+           
+            
         } catch (\Throwable $th) {
+            dd($th->getMessage());
             $response->status = 404;
             $response->message = 'Producto no encontrado';
         }

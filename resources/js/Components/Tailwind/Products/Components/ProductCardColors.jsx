@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShoppingCart } from 'lucide-react'; // Icono para la cesta
+import { PlusIcon, ShoppingCart } from 'lucide-react'; // Icono para la cesta
 import Swal from 'sweetalert2';
 import ItemsRest from "../../../../Actions/ItemsRest";
 import { useEffect, useState } from "react";
@@ -34,15 +34,15 @@ const ProductCardColors = ({ product, setCart, cart }) => {
             // Preparar la solicitud
             const request = {
                 slug: item?.slug,
-                limit: 5,
+                limit: 4,
             };
             
             const response = await itemsRest.getVariations(request);
-
+            
             if (!response) {
                 return;
             }
-            console.log(response);
+
             const variations = response;
             
             setVariationsItems(variations.variants);
@@ -51,6 +51,7 @@ const ProductCardColors = ({ product, setCart, cart }) => {
             return;
         }
     };
+           
 
     useEffect(() => {
         if (product?.id) {
@@ -64,69 +65,123 @@ const ProductCardColors = ({ product, setCart, cart }) => {
         <div
             key={product.id}
             className={`group w-full transition-transform duration-300 hover:scale-105 flex-shrink-0 font-font-general customtext-primary cursor-pointer`}
-        >   <a href={`/item/${product.slug}`}>
+        >   
             <div
                 className="bg-white p-0 sm:p-4"
 
-            >
-                {/* Imagen del producto y etiqueta de descuento */}
-                <div className="relative">
-                    {product.discount != null && !isNaN(product.discount) && (
-                        <span className="absolute top-8 right-0 bg-[#F93232] text-white text-base font-bold px-2 py-1 rounded-l-full">
-                            -{Math.abs(Number(100 - Number((product?.discount * 100 / product?.price)))).toFixed(0)}%
-                        </span>
-                    )}
-                    <div className="aspect-square rounded-3xl overflow-hidden flex items-center justify-center  bg-secondary">
-                        <img
-                            src={`/storage/images/item/${product.image}`}
-                            onError={e => e.target.src = '/assets/img/noimage/no_img.jpg'}
-                            alt={product.name}
-                            className="w-full h-full object-cover"
-                            loading='lazy'
-                        />
+            >   
+                <a href={`/item/${product.slug}`}>
+                    {/* Imagen del producto y etiqueta de descuento */}
+                    <div className="relative">
+                        {product.discount != null && !isNaN(product.discount) && (
+                            <span className="absolute top-8 right-0 bg-[#F93232] text-white text-base font-bold px-2 py-1 rounded-l-full">
+                                -{Math.abs(Number(100 - Number((product?.discount * 100 / product?.price)))).toFixed(0)}%
+                            </span>
+                        )}
+                        <div className="aspect-square rounded-3xl overflow-hidden flex items-center justify-center  bg-secondary">
+                            <img
+                                src={`/storage/images/item/${product.image}`}
+                                onError={e => e.target.src = '/assets/img/noimage/no_img.jpg'}
+                                alt={product.name}
+                                className="w-full h-full object-cover"
+                                loading='lazy'
+                            />
+                        </div>
                     </div>
-                </div>
-
+                </a>
                 {/* Información del producto */}
                 <div className='py-4'>
                     <p className="text-sm sm:text-base font-bold mb-1">
                         {product.category.name}
                     </p>
-                    <div className="flex gap-3 items-center justify-start w-full flex-wrap">
+
+                    <div className="hidden md:flex gap-2 sm:gap-3 items-center justify-start w-full flex-wrap mb-1">
                         
-                        {variationsItems.map((variant) => (
-                            <Tippy content={variant.color}>
-                                <a
-                                    key={variant.slug}
-                                    href={`/item/${variant.slug}`}
-                                    className="variant-option  rounded-full object-fit-cover "
-                                >
-                                    <img
-                                        className="color-box rounded-full h-9 w-9 object-fit-cover "
-                                        src={`/storage/images/item/${variant.texture || variant.image}`}
-                                    />
-                                </a>
+                        {variationsItems.slice(0, 4).map((variant) => (
+                            <Tippy content={variant.color} key={variant.slug}>
+                            <a
+                                href={`/item/${variant.slug}`}
+                                className="variant-option rounded-full object-fit-cover bg-[#F5F5F5]" 
+                            >
+                                <img
+                                className="color-box rounded-full h-7 w-7 sm:h-9 sm:w-9 object-fit-cover"
+                                src={`/storage/images/item/${variant.texture || variant.image}`}
+                                alt={variant.color}
+                                onError={(e) =>
+                                    (e.target.src =
+                                        "/api/cover/thumbnail/null")
+                                }
+                                />
+                            </a>
                             </Tippy>
                         ))}
+                       
+                        <Tippy content={product.color}>
+                                <a
+                                    key={product.slug}
+                                    href={`/item/${product.slug}`}
+                                    className="variant-option  rounded-full object-fit-cover bg-[#F5F5F5]" 
+                                >
+                                    <div className="color-box rounded-full h-7 w-7 sm:h-9 sm:w-9 flex flex-col justify-center items-center">
+                                        <PlusIcon />
+                                    </div>
+                                </a>
+                        </Tippy>
                     </div>
-                    <h3 className="text-base sm:text-lg lg:text-xl font-bold mb-2 line-clamp-2 leading-tight">
-                        {product.name}
-                    </h3>
-                    {/* Precio */}
-                    <div className="flex items-baseline gap-4 mt-4">
-                        <span className="text-lg sm:text-xl md:text-2xl font-bold">
-                            S/ {product.final_price}
-                        </span>
-                        {product.discount != null && !isNaN(product.discount) && (
-                            <span className="text-xs sm:text-base font-bold line-through opacity-60">
-                                S/ {product.price}
-                            </span>
-                        )}
 
+                    <div className="flex md:hidden gap-2 sm:gap-3 items-center justify-start w-full flex-wrap mb-1">
+                        
+                        {variationsItems.slice(0, 3).map((variant) => (
+                            <Tippy content={variant.color} key={variant.slug}>
+                            <a
+                                href={`/item/${variant.slug}`}
+                                className="variant-option rounded-full object-fit-cover bg-[#F5F5F5]" 
+                            >
+                                <img
+                                className="color-box rounded-full h-7 w-7 sm:h-9 sm:w-9 object-fit-cover"
+                                src={`/storage/images/item/${variant.texture || variant.image}`}
+                                alt={variant.color}
+                                onError={(e) =>
+                                    (e.target.src =
+                                        "/api/cover/thumbnail/null")
+                                }
+                                />
+                            </a>
+                            </Tippy>
+                        ))}
+                       
+                        <Tippy content={product.color}>
+                                <a
+                                    key={product.slug}
+                                    href={`/item/${product.slug}`}
+                                    className="variant-option  rounded-full object-fit-cover bg-[#F5F5F5]" 
+                                >
+                                    <div className="color-box rounded-full h-7 w-7 sm:h-9 sm:w-9 flex flex-col justify-center items-center">
+                                        <PlusIcon />
+                                    </div>
+                                </a>
+                        </Tippy>
                     </div>
+
+                    <a href={`/item/${product.slug}`}>
+                        <h3 className="text-base sm:text-lg lg:text-xl font-bold mb-2 line-clamp-2 leading-tight">
+                            {product.name}
+                        </h3>
+                        {/* Precio */}
+                        <div className="flex items-baseline gap-4 mt-4">
+                            <span className="text-lg sm:text-xl md:text-2xl font-bold">
+                                S/ {product.final_price}
+                            </span>
+                            {product.discount != null && !isNaN(product.discount) && (
+                                <span className="text-xs sm:text-base font-bold line-through opacity-60">
+                                    S/ {product.price}
+                                </span>
+                            )}
+                        </div>
+                    </a>
                 </div>
             </div >
-            </a>
+            
         </div >
     );
 };
