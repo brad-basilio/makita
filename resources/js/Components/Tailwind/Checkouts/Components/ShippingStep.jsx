@@ -337,7 +337,7 @@ export default function ShippingStep({
 
                     <div className="form-group">
                         <label className="block text-sm 2xl:text-base mb-2 font-medium customtext-neutral-dark">
-                            Ubicación de entrega *
+                            Ubicación de entrega (Departamento | Provincia | Distrito)*
                         </label>
                         <AsyncSelect
                             name="ubigeo"
@@ -348,11 +348,11 @@ export default function ShippingStep({
                                 setSelectedUbigeo(selected);
                                 handleUbigeoChange(selected);
                             }}
-                            placeholder="Buscar departamento | distrito | provincia ..."
+                            placeholder="Buscar por Departamento | Provincia | distrito ..."
                             loadingMessage={() => "Buscando ubicaciones..."}
                             noOptionsMessage={({ inputValue }) =>
                                 inputValue.length < 3
-                                    ? "Ingrese al menos 3 caracteres..."
+                                    ? "Buscar por Departamento | Provincia | distrito ..."
                                     : "No se encontraron resultados"
                             }
                             isLoading={loading}
@@ -367,6 +367,7 @@ export default function ShippingStep({
                             )}
                             className="w-full rounded-xl transition-all duration-300"
                             menuPortalTarget={document.body}
+                            isClearable={true}
                         />
                         {errors.ubigeo && <div className="text-red-500 text-sm mt-1">{errors.ubigeo}</div>}
                     </div>

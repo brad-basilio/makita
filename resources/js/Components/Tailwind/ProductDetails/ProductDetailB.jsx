@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import {
     ShoppingCart,
-    Store, 
+    Store,
     Home,
     Phone,
     CircleUserRound,
@@ -10,15 +10,17 @@ import {
     Plus,
     ChevronUp,
     CircleCheckIcon,
-    Minus
 } from "lucide-react";
 
 import ItemsRest from "../../../Actions/ItemsRest";
+import Swal from "sweetalert2";
 import { Notify } from "sode-extend-react";
 import ProductInfinite from "../Products/ProductInfinite";
 import CartModal from "../Components/CartModal";
 
-const ProductDetail = ({ item, data, setCart, cart }) => {
+
+const ProductDetail=({ item, data, setCart, cart })=> {
+    console.log(item);
     const itemsRest = new ItemsRest();
     const [modalOpen, setModalOpen] = useState(false);
     const [selectedImage, setSelectedImage] = useState({
@@ -26,29 +28,15 @@ const ProductDetail = ({ item, data, setCart, cart }) => {
         type: "main",
     });
 
-    // State management
     const [quantity, setQuantity] = useState(1);
-    const [isExpanded, setIsExpanded] = useState(false);
-    const [associatedItems, setAssociatedItems] = useState([]);
-    const [relationsItems, setRelationsItems] = useState([]);
-    const [expandedSpecificationMain, setExpanded] = useState(false);
-    const [showGallery, setShowGallery] = useState(false);
-
-    // Quantity handlers
-    const incrementQuantity = () => {
-        if (quantity < 10) setQuantity(quantity + 1);
-    };
-
-    const decrementQuantity = () => {
-        if (quantity > 1) setQuantity(quantity - 1);
-    };
-
     const handleChange = (e) => {
         let value = parseInt(e.target.value, 10);
         if (isNaN(value) || value < 1) value = 1;
         if (value > 10) value = 10;
         setQuantity(value);
     };
+    /*ESPECIFICACIONES */
+    const [isExpanded, setIsExpanded] = useState(false);
 
     const onAddClicked = (product) => {
         const newCart = structuredClone(cart);
@@ -59,9 +47,20 @@ const ProductDetail = ({ item, data, setCart, cart }) => {
             newCart[index].quantity++;
         }
         setCart(newCart);
-        setModalOpen(true);
+
+     /*   Swal.fire({
+            title: "Producto agregado",
+            text: `Se agregó ${product.name} al carrito`,
+            icon: "success",
+            timer: 1500,
+        });*/
+        setModalOpen(!modalOpen);
         setTimeout(() => setModalOpen(false), 3000);
     };
+
+    const [associatedItems, setAssociatedItems] = useState([]);
+    const [relationsItems, setRelationsItems] = useState([]);
+    const inCart = cart?.find((x) => x.id == item?.id);
 
     useEffect(() => {
         if (item?.id) {
@@ -69,13 +68,19 @@ const ProductDetail = ({ item, data, setCart, cart }) => {
             obtenerCombo(item);
             handleViewUpdate(item);
         }
-    }, [item]);
-
-    // API calls
+    }, [item]); // Agregar `item` como dependencia
     const handleViewUpdate = async (item) => {
         try {
-            const response = await itemsRest.updateViews({ id: item?.id });
-            if (!response) return;
+            const request = {
+                id: item?.id,
+            };
+            console.log(request);
+            const response = await itemsRest.updateViews(request);
+
+            // Verificar si la respuesta es válida
+            if (!response) {
+                return;
+            }
         } catch (error) {
             return;
         }
@@ -83,33 +88,63 @@ const ProductDetail = ({ item, data, setCart, cart }) => {
 
     const obtenerCombo = async (item) => {
         try {
-            const response = await itemsRest.verifyCombo({ id: item?.id });
-            if (!response) return;
+            // Preparar la solicitud
+            const request = {
+                id: item?.id,
+            };
+
+            // Llamar al backend para verificar el combo
+            const response = await itemsRest.verifyCombo(request);
+
+            // Verificar si la respuesta es válida
+            if (!response) {
+                return;
+            }
+
+            // Actualizar el estado con los productos asociados
             const associated = response[0].associated_items;
+
             setAssociatedItems(Object.values(associated));
         } catch (error) {
             return;
+            // Mostrar un mensaje de error al usuario si es necesario
         }
     };
-
     const productosRelacionados = async (item) => {
         try {
-            const response = await itemsRest.productsRelations({ id: item?.id });
-            if (!response) return;
-            setRelationsItems(Object.values(response));
+            // Preparar la solicitud
+            const request = {
+                id: item?.id,
+            };
+
+            // Llamar al backend para verificar el combo
+            const response = await itemsRest.productsRelations(request);
+
+            // Verificar si la respuesta es válida
+            if (!response) {
+                return;
+            }
+
+            // Actualizar el estado con los productos asociados
+            const relations = response;
+
+            setRelationsItems(Object.values(relations));
+            console.log(relations);
         } catch (error) {
             return;
+            // Mostrar un mensaje de error al usuario si es necesario
         }
     };
-
     const total = associatedItems.reduce(
         (sum, product) => sum + parseFloat(product.final_price),
         0
     );
+    const [expandedSpecificationMain, setExpanded] = useState(false);
 
     const addAssociatedItems = () => {
         setCart((prevCart) => {
-            const newCart = structuredClone(prevCart);
+            const newCart = structuredClone(prevCart); // Clona el estado anterior
+
             [...associatedItems, item].forEach((product) => {
                 const index = newCart.findIndex((x) => x.id === product.id);
                 if (index === -1) {
@@ -118,270 +153,665 @@ const ProductDetail = ({ item, data, setCart, cart }) => {
                     newCart[index].quantity++;
                 }
             });
-            return newCart;
-        });
-        toast.success("Carrito de Compras", {
-            description: `Se agregaron con éxito los productos`,
-            icon: <ShoppingCart className="h-5 w-5 text-green-500" />,
-            duration: 3000,
-            position: "bottom-center",
-        });
-      
-    };
 
+            return newCart; // Devuelve el nuevo estado acumulado
+        });
+        Notify.add({
+            icon: "/assets/img/icon.svg",
+            title: "Carrito de Compras",
+            body: "Se agregaron con éxito los productos",
+        });
+    };
     return (
         <>
-            <div className="px-4 md:px-primary mx-auto py-6 md:py-12 bg-[#F7F9FB]">
+            <div className="px-primary mx-auto py-12 bg-[#F7F9FB] ">
                 <div className="bg-white rounded-xl p-4 md:p-8">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        {/* Mobile Header */}
-                        <div className="md:hidden space-y-4">
-                            <p className="text-sm text-gray-500">
-                                Marca: <span className="text-gray-900">{item?.brand.name}</span>
-                            </p>
-                            <h1 className="text-2xl font-bold text-gray-900">{item?.name}</h1>
-                        </div>
-
-                        {/* Image Gallery */}
+                        {/* Left Column - Images and Delivery Options */}
                         <div className="space-y-6">
-                            <div className="relative">
-                                {/* Main Image */}
-                                <div className="aspect-square rounded-lg overflow-hidden bg-gray-100">
-                                    <img
-                                        src={`/storage/images/item/${selectedImage.url}`}
-                                        alt={item?.name}
-                                        className="w-full h-full object-contain"
-                                        onError={(e) => e.target.src = "/api/cover/thumbnail/null"}
-                                    />
-                                </div>
+                            <div className="mb-6 md:hidden">
+                                <p className="customtext-neutral-light text-sm">
+                                    Marca:{" "}
+                                    <span className="customtext-neutral-dark">
+                                        {item?.brand.name}
+                                    </span>
+                                </p>
+                                <h1 className="customtext-neutral-dark text-[28px] md:text-[40px] font-bold mt-2">
+                                    {item?.name}
+                                </h1>
+                            </div>
 
-                                {/* Thumbnails - Horizontal Scroll on Mobile */}
-                                <div className="mt-4 flex gap-2 overflow-x-auto pb-2">
+                            {/* Product Images */}
+                            <div className="flex gap-6">
+                                {/* Thumbnails */}
+                                <div className="flex flex-col gap-4">
                                     <button
-                                        onClick={() => setSelectedImage({url: item?.image, type: "main"})}
-                                        className={`flex-shrink-0 w-16 h-16 rounded-lg border-2 p-1
-                                            ${selectedImage.url === item?.image ? "border-primary" : "border-gray-200"}`}
+                                        onClick={() =>
+                                            setSelectedImage({
+                                                url: item?.image,
+                                                type: "main",
+                                            })
+                                        }
+                                        className={`w-16 h-16  rounded-lg p-2 border-2 ${
+                                            selectedImage.url === item?.image
+                                                ? "border-primary "
+                                                : "border-gray-200"
+                                        }`}
                                     >
                                         <img
                                             src={`/storage/images/item/${item?.image}`}
-                                            alt="Main"
+                                            alt="Main Thumbnail"
                                             className="w-full h-full object-contain"
-                                            onError={(e) => e.target.src = "/api/cover/thumbnail/null"}
+                                            onError={(e) =>
+                                                (e.target.src =
+                                                    "/api/cover/thumbnail/null")
+                                            }
                                         />
                                     </button>
                                     {item?.images.filter((image, index, self) => 
-                                        index === self.findIndex((img) => img.url === image.url)
-                                    ).map((image, index) => (
+        index === self.findIndex((img) => img.url === image.url) // Filtra duplicados
+    ).map((image, index) => (
                                         <button
                                             key={index}
-                                            onClick={() => setSelectedImage({url: image.url, type: "gallery"})}
-                                            className={`flex-shrink-0 w-16 h-16 rounded-lg border-2 p-1
-                                                ${selectedImage.url === image.url ? "border-primary" : "border-gray-200"}`}
+                                            onClick={() =>
+                                                setSelectedImage({
+                                                    url: image.url,
+                                                    type: "gallery",
+                                                })
+                                            }
+                                            className={`w-16 h-16 border-2 rounded-lg p-2 ${
+                                                selectedImage.url === image.url
+                                                    ? "border-primary"
+                                                    : "border-gray-200"
+                                            }`}
                                         >
                                             <img
                                                 src={`/storage/images/item/${image.url}`}
-                                                alt={`Gallery ${index + 1}`}
+                                                alt={`Thumbnail ${index + 1}`}
                                                 className="w-full h-full object-contain"
-                                                onError={(e) => e.target.src = "/api/cover/thumbnail/null"}
+                                                onError={(e) =>
+                                                    (e.target.src =
+                                                        "/api/cover/thumbnail/null")
+                                                }
                                             />
                                         </button>
                                     ))}
                                 </div>
+
+                                {/* Main Image */}
+                                <div className="flex-1">
+                                    <img
+                                        src={
+                                            selectedImage.type === "main"
+                                                ? `/storage/images/item/${selectedImage.url}`
+                                                : `/storage/images/item/${selectedImage.url}`
+                                        }
+                                        onError={(e) =>
+                                            (e.target.src =
+                                                "/api/cover/thumbnail/null")
+                                        }
+                                        alt="Product main"
+                                        className="w-full h-auto object-contain"
+                                    />
+                                </div>
                             </div>
 
-                            {/* Mobile Product Info */}
-                            <div className="md:hidden space-y-6">
-                                {/* SKU & Stock */}
-                                <div className="flex justify-between text-sm text-gray-500">
-                                    <span>SKU: <span className="text-gray-900">{item?.sku}</span></span>
-                                    <span>
-                                        Disponibilidad: 
-                                        <span className="text-gray-900 ml-1">
-                                            {item?.stock > 0 ? "En stock" : "Agotado"}
-                                        </span>
+                            <div className="flex lg:hidden flex-col customtext-neutral-light justify-start items-start gap-2 text-sm mb-6">
+                                <span className="customtext-neutral-light text-sm">
+                                    SKU:{" "}
+                                    <span className="customtext-neutral-dark">
+                                        {item?.sku}
                                     </span>
-                                </div>
-
-                                {/* Price */}
-                                <div className="space-y-2">
-                                    <div className="flex items-baseline gap-2">
-                                        <span className="text-sm text-gray-500 line-through">S/ {item?.price}</span>
-                                        <span className="bg-red-500 text-white text-xs px-2 py-1 rounded">
-                                            -{Number(item?.discount_percent).toFixed(1)}%
+                                </span>
+                                <span className="ustomtext-neutral-light text-sm">
+                                    Disponibilidad:{" "}
+                                    <span className="customtext-neutral-dark">
+                                        {item?.stock > 0
+                                            ? "En stock"
+                                            : "Agotado"}
+                                    </span>
+                                </span>
+                            </div>
+                            <div className="flex lg:hidden gap-8 border-b-2 pb-8">
+                                {/* Price Section */}
+                                <div className=" w-full ">
+                                    <p className="text-sm customtext-neutral-light mb-1">
+                                        Precio:{" "}
+                                        <span className="line-through line-clamp-1">
+                                            S/ {item?.price}
+                                        </span>
+                                    </p>
+                                    <div className="flex items-center gap-4 ">
+                                        <span className="text-[40px] font-bold line-clamp-1">
+                                            S/ {item?.final_price}
+                                        </span>
+                                        <span className="bg-[#F93232] text-white font-bold px-3 py-2 rounded-xl">
+                                            -
+                                            {Number(
+                                                item?.discount_percent
+                                            ).toFixed(1)}
+                                            %
                                         </span>
                                     </div>
-                                    <span className="text-3xl font-bold">S/ {item?.final_price}</span>
-                                </div>
 
-                                {/* Quantity Selector */}
-                                <div className="flex items-center gap-4">
-                                    <span className="text-sm text-gray-500">Cantidad</span>
-                                    <div className="flex items-center border rounded-lg">
-                                        <button 
-                                            onClick={decrementQuantity}
-                                            className="p-2 hover:bg-gray-100"
-                                        >
-                                            <Minus className="w-4 h-4" />
-                                        </button>
-                                        <input
-                                            type="number"
-                                            value={quantity}
-                                            onChange={handleChange}
-                                            className="w-12 text-center border-x"
-                                            min="1"
-                                            max="10"
-                                        />
-                                        <button 
-                                            onClick={incrementQuantity}
-                                            className="p-2 hover:bg-gray-100"
-                                        >
-                                            <Plus className="w-4 h-4" />
-                                        </button>
+                                    {/* Quantity */}
+                                    <div className="mt-4">
+                                        <div className="flex items-center gap-4 mb-2">
+                                            <div className="flex items-center space-x-4 customtext-neutral-light text-sm">
+                                                <span className="">
+                                                    Cantidad
+                                                </span>
+                                                <div className="relative flex items-center border rounded-md px-2 py-1">
+                                                    <input
+                                                        type="number"
+                                                        value={quantity}
+                                                        onChange={handleChange}
+                                                        min="1"
+                                                        max="10"
+                                                        className="w-10 py-1 customtext-neutral-dark text-center bg-transparent outline-none appearance-none"
+                                                    />
+                                                </div>
+                                                <span className="">
+                                                    Máximo 10 unidades.
+                                                </span>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <span className="text-sm text-gray-500">Máx. 10</span>
-                                </div>
 
-                                {/* Add to Cart Button */}
-                                <button
-                                    onClick={() => onAddClicked(item)}
-                                    className="w-full bg-primary text-white py-3 rounded-xl font-medium hover:opacity-90"
-                                >
-                                    Agregar al carrito
-                                </button>
-
-                                {/* Specifications */}
-                                <div className="bg-gray-50 rounded-lg p-4">
-                                    <h3 className="font-medium mb-4">Especificaciones principales</h3>
-                                    <ul className={`space-y-2 ${!expandedSpecificationMain && "max-h-24 overflow-hidden"}`}>
-                                        {item?.specifications
-                                            .filter(spec => spec.type === "principal")
-                                            .map((spec, index) => (
-                                                <li key={index} className="flex items-center gap-2">
-                                                    <CircleCheckIcon className="text-primary w-5 h-5" />
-                                                    <span className="text-sm">{spec.description}</span>
-                                                </li>
-                                            ))
-                                        }
-                                    </ul>
+                                    {/* Add to Cart */}
                                     <button
-                                        onClick={() => setExpanded(!expandedSpecificationMain)}
-                                        className="text-primary text-sm font-medium mt-4 flex items-center gap-1"
+                                        onClick={() => {
+                                            onAddClicked(item);
+                                            setModalOpen(!modalOpen);
+                                        }}
+                                        className="w-full bg-primary text-white py-3 font-bold shadow-lg rounded-xl hover:opacity-90 transition-all duration-300 mt-4"
                                     >
-                                        {expandedSpecificationMain ? "Ver menos" : "Ver más"}
-                                        {expandedSpecificationMain ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                                        Agregar al carrito
                                     </button>
                                 </div>
-
-                                {/* Associated Products */}
-                                {associatedItems.length > 0 && (
-                                    <div className="space-y-4">
-                                        <div className="flex items-center gap-2">
-                                            <ShoppingCart className="text-primary w-5 h-5" />
-                                            <h3 className="font-medium">Productos complementarios</h3>
-                                        </div>
-                                        
-                                        <div className="flex gap-2 overflow-x-auto pb-2">
-                                            {associatedItems.map((product, index) => (
-                                                <div key={index} className="flex items-center gap-2 flex-shrink-0">
-                                                    <div className="w-20 h-20 bg-gray-100 rounded-lg p-2">
-                                                        <img
-                                                            src={`/storage/images/item/${product.image}`}
-                                                            alt={product.name}
-                                                            className="w-full h-full object-contain"
-                                                            onError={(e) => e.target.src = "/api/cover/thumbnail/null"}
-                                                        />
-                                                    </div>
-                                                    {index < associatedItems.length - 1 && (
-                                                        <Plus className="w-4 h-4" />
-                                                    )}
-                                                </div>
-                                            ))}
-                                        </div>
-
-                                        {/* Associated Products List */}
-                                        <div className="space-y-2">
-                                            {associatedItems.map((product, index) => (
-                                                <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
-                                                    <div>
-                                                        <span className="text-xs text-gray-500">{product.brand.name}</span>
-                                                        <p className="text-sm font-medium">{product.name}</p>
-                                                    </div>
-                                                    <span className="font-bold">S/ {parseFloat(product.final_price).toFixed(2)}</span>
-                                                </div>
-                                            ))}
-                                        </div>
-
-                                        {/* Total and Add Bundle */}
-                                        <div className="bg-gray-50 p-4 rounded-lg">
-                                            <div className="flex justify-between items-center mb-4">
-                                                <span className="text-sm text-gray-500">Total</span>
-                                                <span className="text-lg font-bold">S/ {total.toFixed(2)}</span>
-                                            </div>
-                                            <button
-                                                onClick={addAssociatedItems}
-                                                className="w-full bg-primary text-white py-2 rounded-lg font-medium"
-                                            >
-                                                Agregar conjunto
-                                            </button>
-                                        </div>
-                                    </div>
-                                )}
                             </div>
 
-                            {/* Delivery Options */}
-                            <div className="grid grid-cols-2 gap-4 border rounded-lg p-4">
-                                <div className="text-center">
-                                    <div className="bg-gray-50 p-3 rounded-full w-max mx-auto mb-2">
-                                        <Home className="w-6 h-6 text-primary" />
-                                    </div>
-                                    <p className="text-sm font-medium">Despacho a domicilio</p>
+                            {/* Specifications */}
+                            <div className="block lg:hidden flex-1 w-full ">
+                                <div className="bg-[#F7F9FB] rounded-lg p-6">
+                                    <h3 className="font-medium text-sm mb-4">
+                                        Especificaciones principales
+                                    </h3>
+                                    <ul
+                                        className={`space-y-2  customtext-neutral-light mb-4 transition-all duration-300 ${
+                                            expandedSpecificationMain
+                                                ? "max-h-full"
+                                                : "max-h-24 overflow-hidden"
+                                        }`}
+                                        style={{ listStyleType: "disc" }}
+                                    >
+                                        {item?.specifications.map(
+                                            (spec, index) =>
+                                                spec.type === "principal" && (
+                                                    <li
+                                                        key={index}
+                                                        className="flex gap-2"
+                                                    >
+                                                        <CircleCheckIcon className="customtext-primary" />
+                                                        {spec.description}
+                                                    </li>
+                                                )
+                                        )}
+                                    </ul>
+                                    <button
+                                        className="customtext-primary text-sm font-semibold hover:underline flex items-center gap-1 transition-all duration-300"
+                                        onClick={() =>
+                                            setExpanded(
+                                                !expandedSpecificationMain
+                                            )
+                                        }
+                                    >
+                                        {expandedSpecificationMain
+                                            ? "Ver menos"
+                                            : "Ver más especificaciones"}
+                                        {expandedSpecificationMain ? (
+                                            <ChevronUp className="w-4 h-4" />
+                                        ) : (
+                                            <ChevronDown className="w-4 h-4" />
+                                        )}
+                                    </button>
                                 </div>
-                                <div className="text-center">
-                                    <div className="bg-gray-50 p-3 rounded-full w-max mx-auto mb-2">
-                                        <Store className="w-6 h-6 text-primary" />
+                            </div>
+
+                            <div className="block lg:hidden mt-8 ">
+                                <div className="flex items-center gap-2 mb-6">
+                                    <ShoppingCart className="w-6 h-6 customtext-primary" />
+                                    <h2 className="text-base font-semibold">
+                                        Completa tu compra con estos productos
+                                    </h2>
+                                </div>
+
+                                <div className=" flex gap-4">
+                                    <div className="w-2/3 flex gap-2">
+                                        {associatedItems.map(
+                                            (product, index) => (
+                                                <div
+                                                    key={index}
+                                                    className="flex items-center gap-2"
+                                                >
+                                                    <img
+                                                        src={`/storage/images/item/${product.image}`}
+                                                        className=" rounded-lg aspect-square w-24 h-24 object-cover bg-[#F7F9FB]"
+                                                        onError={(e) =>
+                                                            (e.target.src =
+                                                                "/api/cover/thumbnail/null")
+                                                        }
+                                                    />
+                                                    {index <
+                                                        associatedItems.length -
+                                                            1 && (
+                                                        <span className="text-2xl font-bold">
+                                                            <Plus />
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            )
+                                        )}
                                     </div>
-                                    <p className="text-sm font-medium">Retiro en tienda</p>
+                                </div>
+
+                                {associatedItems.map((product, index) => (
+                                    <div
+                                        key={index}
+                                        className="flex mt-4 gap-4 p-4 border rounded-lg items-center"
+                                    >
+                                        <CheckSquare className="w-5 h-5 customtext-primary" />
+                                        <div className="flex-1 font-semibold">
+                                            <span className="text-[10px] customtext-neutral-dark block">
+                                                {product.brand.name}
+                                            </span>
+                                            <p className="text-sm customtext-neutral-light font-medium">
+                                                {product.name}
+                                            </p>
+                                        </div>
+                                        <p className="font-bold customtext-neutral-dark">
+                                            S/{" "}
+                                            {parseFloat(
+                                                product.final_price
+                                            ).toFixed(2)}
+                                        </p>
+                                    </div>
+                                ))}
+
+                                <div className=" w-full flex flex-col justify-start items-start bg-gray-50 p-4 rounded-lg mt-4">
+                                    <span className="text-xs font-semibold customtext-neutral-light">
+                                        Total
+                                    </span>
+
+                                    <p className="font-bold mb-2 customtext-neutral-dark">
+                                        S/ {total.toFixed(2)}
+                                    </p>
+                                    <button
+                                        onClick={() => addAssociatedItems()}
+                                        className="bg-primary text-xs font-semibold text-white w-max py-3 px-6 rounded-xl hover:opacity-90 transition-all duration-300 hover:shadow-md"
+                                    >
+                                        Agregar al carrito
+                                    </button>
+                                </div>
+                            </div>
+                            {/* Delivery Options */}
+                            <div className="border rounded-lg">
+                                <div className="flex gap-6 items-center justify-center py-4 customtext-neutral-dark">
+                                    <div className="p-4">
+                                        <div className="bg-[#F7F9FB] py-4 px-5 rounded-full w-max h-max">
+                                            <Home className="w-6 h-6 mx-auto mb-1 customtext-primary" />
+                                        </div>
+
+                                        <p className="font-semibold text-sm">
+                                            Despacho
+                                        </p>
+                                        <p className="font-semibold text-sm">
+                                            a domicilio
+                                        </p>
+                                    </div>
+                                    <div className="p-4 text-center">
+                                        <div className="bg-[#F7F9FB] py-4 px-5 rounded-full w-max h-max">
+                                            <Store className="w-6 h-6 mx-auto mb-1 customtext-primary" />
+                                        </div>
+
+                                        <p className="font-semibold text-sm">
+                                            Retira
+                                        </p>
+                                        <p className="font-semibold text-sm">
+                                            en tienda
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
 
                             {/* Support */}
-                            <div className="space-y-3 bg-gray-50 rounded-lg p-4">
-                                <div className="flex items-center gap-2">
-                                    <Phone className="w-5 h-5 text-primary" />
-                                    <span className="text-sm font-medium">¿Necesitas ayuda? Llámanos al 012037074</span>
+                            <div className="mt-8 bg-[#F7F9FB] rounded-lg p-6 space-y-4 customtext-neutral-dark">
+                                <div className="flex items-center gap-2 text-sm">
+                                    <Phone className="w-5 h-5 customtext-primary" />
+                                    <span className="text-sm font-semibold">
+                                        ¿Necesitas ayuda? Llámanos al 012037074
+                                    </span>
                                 </div>
-                                <div className="flex items-center gap-2">
-                                    <CircleUserRound className="w-5 h-5 text-primary" />
-                                    <span className="text-sm font-medium">Soporte técnico</span>
+                                <div className="flex items-center gap-2 text-sm ">
+                                    <CircleUserRound className="w-5 h-5 customtext-primary" />
+                                    <span className="text-sm font-semibold">
+                                        Soporte técnico
+                                    </span>
                                 </div>
                             </div>
                         </div>
 
-                        {/* Desktop Product Info - Keep existing desktop version */}
+                        {/* Right Column - Product Info */}
                         <div className="hidden md:block">
-                            {/* Your existing desktop layout code here */}
+                            {/* Brand and Title */}
+                            <div className="mb-6">
+                                <p className="customtext-neutral-light text-sm">
+                                    Marca:{" "}
+                                    <span className="customtext-neutral-dark">
+                                        {item?.brand.name}
+                                    </span>
+                                </p>
+                                <h1 className="customtext-neutral-dark text-[40px] font-bold mt-2">
+                                    {item?.name}
+                                </h1>
+                            </div>
+
+                            {/* SKU and Availability */}
+                            <div className="flex customtext-neutral-light items-center gap-8 text-sm mb-6">
+                                <span className="customtext-neutral-light text-sm">
+                                    SKU:{" "}
+                                    <span className="customtext-neutral-dark">
+                                        {item?.sku}
+                                    </span>
+                                </span>
+                                <span className="ustomtext-neutral-light text-sm">
+                                    Disponibilidad:{" "}
+                                    <span className="customtext-neutral-dark">
+                                        {item?.stock > 0
+                                            ? "En stock"
+                                            : "Agotado"}
+                                    </span>
+                                </span>
+                            </div>
+                            <div className="flex gap-8 border-b-2 pb-8">
+                                {/* Specifications */}
+                                <div className="flex-1 w-6/12 ">
+                                    <div className="bg-[#F7F9FB] rounded-lg p-6">
+                                        <h3 className="font-medium text-sm mb-4">
+                                            Especificaciones principales
+                                        </h3>
+                                        <ul
+                                            className={`space-y-2  customtext-neutral-light mb-4 transition-all duration-300 ${
+                                                expandedSpecificationMain
+                                                    ? "max-h-full"
+                                                    : "max-h-24 overflow-hidden"
+                                            }`}
+                                            style={{ listStyleType: "disc" }}
+                                        >
+                                            {item?.specifications.map(
+                                                (spec, index) =>
+                                                    spec.type ===
+                                                        "principal" && (
+                                                        <li
+                                                            key={index}
+                                                            className="flex gap-2"
+                                                        >
+                                                            <CircleCheckIcon className="customtext-primary" />
+                                                            {spec.description}
+                                                        </li>
+                                                    )
+                                            )}
+                                        </ul>
+                                        <button
+                                            className="customtext-primary text-sm font-semibold hover:underline flex items-center gap-1 transition-all duration-300"
+                                            onClick={() =>
+                                                setExpanded(
+                                                    !expandedSpecificationMain
+                                                )
+                                            }
+                                        >
+                                            {expandedSpecificationMain
+                                                ? "Ver menos"
+                                                : "Ver más especificaciones"}
+                                            {expandedSpecificationMain ? (
+                                                <ChevronUp className="w-4 h-4" />
+                                            ) : (
+                                                <ChevronDown className="w-4 h-4" />
+                                            )}
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {/* Price Section */}
+                                <div className=" w-6/12 ">
+                                    <p className="text-sm customtext-neutral-light mb-1">
+                                        Precio:{" "}
+                                        <span className="line-through">
+                                            S/ {item?.price}
+                                        </span>
+                                    </p>
+                                    <div className="flex items-center gap-4 relative ">
+                                        <span className="text-[40px] font-bold ">
+                                            S/ {item?.final_price}
+                                        </span>
+                                        <span className=" absolute -top-8 right-0 bg-[#F93232] text-white font-bold px-3 py-2 rounded-xl">
+                                            -
+                                            {Number(
+                                                item?.discount_percent
+                                            ).toFixed(1)}
+                                            %
+                                        </span>
+                                    </div>
+
+                                    {/* Quantity */}
+                                    <div className="mt-4">
+                                        <div className="flex items-center gap-4 mb-2">
+                                            <div className="flex items-center space-x-4 customtext-neutral-light text-sm">
+                                                <span className="">
+                                                    Cantidad
+                                                </span>
+                                                <div className="relative flex items-center border rounded-md px-2 py-1">
+                                                    <input
+                                                        type="number"
+                                                        value={quantity}
+                                                        onChange={handleChange}
+                                                        min="1"
+                                                        max="10"
+                                                        className="w-10 py-1 customtext-neutral-dark text-center bg-transparent outline-none appearance-none"
+                                                    />
+                                                </div>
+                                                <span className="">
+                                                    Máximo 10 unidades.
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Add to Cart */}
+                                    <button
+                                        onClick={() => {
+                                            onAddClicked(item);
+                                            setModalOpen(!modalOpen);
+                                        }}
+                                        className="w-full bg-primary text-white py-3 font-bold shadow-lg rounded-xl hover:opacity-90 transition-all duration-300 mt-4"
+                                    >
+                                        Agregar al carrito
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Complementary Products */}
+                            {associatedItems && associatedItems.length > 0 && (
+                                <div className="mt-8 ">
+                                    <div className="flex items-center gap-2 mb-6">
+                                        <ShoppingCart className="w-6 h-6 customtext-primary" />
+                                        <h2 className="text-base font-semibold">
+                                            Completa tu compra con estos
+                                            productos
+                                        </h2>
+                                    </div>
+
+                                    <div className=" flex gap-4">
+                                        <div className="w-2/3 flex gap-2">
+                                            {associatedItems.map(
+                                                (product, index) => (
+                                                    <div
+                                                        key={index}
+                                                        className="flex items-center gap-2"
+                                                    >
+                                                        <img
+                                                            src={`/storage/images/item/${product.image}`}
+                                                            className=" rounded-lg aspect-square w-24 h-24 object-cover bg-[#F7F9FB]"
+                                                            onError={(e) =>
+                                                                (e.target.src =
+                                                                    "/api/cover/thumbnail/null")
+                                                            }
+                                                        />
+                                                        {index <
+                                                            associatedItems.length -
+                                                                1 && (
+                                                            <span className="text-2xl font-bold">
+                                                                <Plus />
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                )
+                                            )}
+                                        </div>
+                                        <div className=" w-1/3 flex flex-col justify-between items-end bg-gray-50 p-4 rounded-lg mt-4">
+                                            <span className="text-xs font-semibold customtext-neutral-light">
+                                                Total
+                                            </span>
+
+                                            <p className="font-bold mb-2 customtext-neutral-dark">
+                                                S/ {total.toFixed(2)}
+                                            </p>
+                                            <button
+                                                onClick={() =>
+                                                    addAssociatedItems()
+                                                }
+                                                className="bg-primary text-xs font-semibold text-white w-full py-3 rounded-xl hover:opacity-90 transition-all duration-300 hover:shadow-md"
+                                            >
+                                                Agregar al carrito
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {associatedItems.map((product, index) => (
+                                        <div
+                                            key={index}
+                                            className="flex mt-4 gap-4 p-4 border rounded-lg items-center"
+                                        >
+                                            <CheckSquare className="w-5 h-5 customtext-primary" />
+                                            <div className="flex-1 font-semibold">
+                                                <span className="text-[10px] customtext-neutral-dark block">
+                                                    {product.brand.name}
+                                                </span>
+                                                <p className="text-sm customtext-neutral-light font-medium">
+                                                    {product.name}
+                                                </p>
+                                            </div>
+                                            <p className="font-bold customtext-neutral-dark">
+                                                S/{" "}
+                                                {parseFloat(
+                                                    product.final_price
+                                                ).toFixed(2)}
+                                            </p>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
+                <div className=" grid gap-20 md:grid-cols-2 bg-white rounded-xl p-8 mt-12">
+                    {/* Specifications Section */}
+                    <div>
+                        <h2 className="text-2xl font-bold customtext-neutral-dark mb-4 border-b pb-4">
+                            Especificaciones
+                        </h2>
+                        <div className="space-y-1">
+                            {item?.specifications.map(
+                                (spec, index) =>
+                                    spec.type === "general" && (
+                                        <div
+                                            key={index}
+                                            className={`grid grid-cols-2 gap-4 p-4 ${
+                                                index % 2 === 0
+                                                    ? "bg-[#F7F9FB]"
+                                                    : "bg-white"
+                                            }`}
+                                        >
+                                            <div className="customtext-neutral-light">
+                                                {spec.title}
+                                            </div>
+                                            <div className="customtext-neutral-dark">
+                                                {spec.description}
+                                            </div>
+                                        </div>
+                                    )
+                            )}
+                        </div>
+                    </div>
 
-                {/* Keep existing sections */}
-                <div className="grid gap-20 md:grid-cols-2 bg-white rounded-xl p-8 mt-12">
-                    {/* Your existing specifications and additional info sections */}
+                    {/* Additional Information Section */}
+                    <div>
+                        <h2 className="text-2xl font-bold customtext-neutral-dark mb-4 border-b pb-4">
+                            Información adicional
+                        </h2>
+                        <div
+                            className={`space-y-2 ${
+                                !isExpanded
+                                    ? "max-h-[400px] overflow-hidden"
+                                    : ""
+                            }`}
+                        >
+                            <h3 className="text-xl font-semibold customtext-neutral-dark mb-4">
+                                Acerca de este artículo
+                            </h3>
+                            <div
+                                className="customtext-neutral-dark"
+                                dangerouslySetInnerHTML={{
+                                    __html: item?.description,
+                                }}
+                            ></div>
+                            <div className={`pl-10`}>
+                                <ul className="list-disc pl-5 space-y-2">
+                                    {item?.features.map((feature, index) => (
+                                        <li
+                                            key={index}
+                                            className="customtext-neutral-dark"
+                                        >
+                                            {feature.feature}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </div>
+                        <botton
+                            variant="ghost"
+                            className="border-2 border-primary  w-max px-5 py-3  my-8  rounded-xl flex items-center gap-2 customtext-primary font-semibold cursor-pointer"
+                            onClick={() => setIsExpanded(!isExpanded)}
+                        >
+                            Ver más
+                            <ChevronDown
+                                className={`transform transition-transform ${
+                                    isExpanded ? "rotate-180" : ""
+                                }`}
+                            />
+                        </botton>
+                    </div>
                 </div>
             </div>
-
-            {/* Related Products and Cart Modal */}
             {relationsItems.length > 0 && (
-                <ProductInfinite
-                    data={{ title: "Productos relacionados" }}
-                    items={relationsItems}
-                    cart={cart}
-                    setCart={setCart}
-                />
-            )}
-            
+            <ProductInfinite
+                data={{ title: "Productos relacionados" }}
+                items={relationsItems}
+                cart={cart}
+                setCart={setCart}
+            />    )}
             <CartModal
-                data={data}
+            data={data}
                 cart={cart}
                 setCart={setCart}
                 modalOpen={modalOpen}
@@ -390,5 +820,4 @@ const ProductDetail = ({ item, data, setCart, cart }) => {
         </>
     );
 }
-
 export default ProductDetail;
