@@ -13,21 +13,12 @@ const itemsRest = new ItemsRest();
 
 const SkeletonCard = () => {
     return (
-        <div
-            className={`group  animate-pulse  transition-transform duration-300 hover:scale-105 w-1/2 lg:w-1/4 flex-shrink-0 font-font-general customtext-primary cursor-pointer`}
-        >
-            <div className=" px-4">
+        <div className={`group animate-pulse transition-transform duration-300 hover:scale-105 w-1/2 lg:w-1/4 flex-shrink-0 font-font-general customtext-primary cursor-pointer`}>
+            <div className="px-4">
                 <div className="bg-white rounded-3xl">
-                    {/* Imagen del producto y etiqueta de descuento */}
                     <div className="relative">
-                        <div className="aspect-square bg-gray-300 rounded-3xl overflow-hidden flex items-center justify-center  bg-secondary">
-                            <svg
-                                class="w-10 h-10 text-gray-200 "
-                                aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="currentColor"
-                                viewBox="0 0 20 18"
-                            >
+                        <div className="aspect-square bg-gray-300 rounded-3xl overflow-hidden flex items-center justify-center bg-secondary">
+                            <svg className="w-10 h-10 text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
                                 <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z" />
                             </svg>
                         </div>
@@ -38,13 +29,12 @@ const SkeletonCard = () => {
     );
 };
 
-//const CatalagoFiltros = ({ items, data, categories, brands, prices, cart, setCart }) => {
 const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
-    //const { categories, brands, priceRanges } = filteredData;
     const [brands, setBrands] = useState([]);
     const [subcategories, setSubcategories] = useState([]);
     const [categories, setCategories] = useState([]);
     const [priceRanges, setPriceRanges] = useState([]);
+    const [activeSection, setActiveSection] = useState(null);
 
     const [sections, setSections] = useState({
         marca: true,
@@ -63,8 +53,8 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
         name: GET.search || null,
         sort_by: "created_at",
         order: "desc",
-      });
-    //filtros nuevos
+    });
+
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [pagination, setPagination] = useState({
@@ -85,7 +75,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                 "=",
                 id,
             ]);
-            transformedFilters.push([...collectionConditions]);
+            transformedFilters.push(["or", ...collectionConditions]);
         }
 
         if (filters.category_id.length > 0) {
@@ -130,7 +120,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
             transformedFilters.push(["name", "contains", filters.name]);
         }
 
-        return ArrayJoin(transformedFilters,'and');
+        return ArrayJoin(transformedFilters, 'and');
     };
     // Obtener productos filtrados desde el backend
     const fetchProducts = async (page = 1) => {
@@ -163,7 +153,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                     response.totalCount
                 ),
             });
-           // console.log(response);
+            // console.log(response);
             setBrands(response?.summary.brands);
             setCategories(response?.summary.categories);
             setSubcategories(response?.summary.subcategories);
@@ -177,11 +167,11 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
 
 
 
-   
+
 
 
     useEffect(() => {
-        
+
         fetchProducts(pagination.currentPage);
     }, [selectedFilters]);
     const handlePageChange = (page) => {
@@ -277,7 +267,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
     const filteredBrands = brands.filter((brand) =>
         brand.name.toLowerCase().includes(searchBrand.toLowerCase())
     );
- 
+
     const [filtersOpen, setFiltersOpen] = useState(false);
 
     return (
@@ -325,24 +315,25 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                         <h2 className="text-2xl font-bold">Filtros</h2>
                         <Filter className="h-5 w-5" />
                     </button>
-                    <div
-                        className={`${filtersOpen
-                            ? "fixed inset-0 z-50 bg-white p-4 overflow-y-auto"
-                            : "hidden"
-                            } lg:block lg:w-3/12 bg-white p-4 rounded-lg h-max`}
+                    <div className={`${filtersOpen
+                        ? "fixed inset-0 z-50 bg-white flex flex-col h-screen" // Añadido h-screen
+                        : "hidden"
+                        } lg:block lg:w-3/12 lg:bg-white lg:p-4 lg:rounded-lg lg:h-max`}
                     >
-                        <div className="flex items-center justify-between mb-6">
-                            <h2 className="text-xl font-bold">Filtros</h2>
-                            <Filter className="hidden lg:block h-5 w-5" />
-                            <button
-                                className=" lg:hidden "
-                                onClick={() => setFiltersOpen(!filtersOpen)}
-                            >
-                                <X className="h-5 w-5" />
-                            </button>
+                        <div className="fixed top-0 left-0 right-0 bg-white p-4 border-b z-10 lg:relative lg:p-0 lg:border-none">
+                            <div className="flex items-center justify-between mb-0 lg:mb-6">
+                                <h2 className="text-xl font-bold">Filtros</h2>
+                                <button
+                                    className="lg:hidden"
+                                    onClick={() => setFiltersOpen(false)}
+                                >
+                                    <X className="h-5 w-5" />
+                                </button>
+                                <Filter className="hidden lg:block h-5 w-5" />
+                            </div>
                         </div>
 
-                        <div className="mb-6">
+                        <div className="mt-16 pb-20 px-4 overflow-y-auto lg:mt-0 lg:p-0 flex-1">
                             <button
                                 onClick={() => toggleSection("marca")}
                                 className="flex items-center justify-between w-full mb-4"
@@ -390,7 +381,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                                 </div>
                             )}
                         </div>
-                        <div className="mb-6">
+                        <div className="pt-16 pb-20 px-4 overflow-y-auto lg:mt-0 lg:p-0 flex-1">
                             <button
                                 onClick={() => toggleSection("categoria")}
                                 className="flex items-center justify-between w-full mb-4"
@@ -633,9 +624,14 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                         </div>
 
 
-                        {/* <button className="w-full bg-primary text-white py-3 rounded-xl hover:brightness-90 transition-colors text-sm font-bold">
-                            Aplicar Filtro
-                        </button>*/}
+                        <div className="fixed bottom-0 left-0 right-0 bg-white border-t p-4 lg:hidden">
+                            <button
+                                className="w-full bg-primary text-white py-3 rounded-xl font-bold hover:bg-primary-dark transition-colors"
+                                onClick={() => setFiltersOpen(false)}
+                            >
+                                Ver resultados
+                            </button>
+                        </div>
                     </div>
 
                     <div className="w-full lg:w-9/12 py-4">
@@ -674,77 +670,78 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                         )}
                         {/* Paginación inferior */}
                         <motion.div
-                            className="flex justify-between items-center mb-4 w-full mt-8"
-
+                            className="flex flex-col md:flex-row justify-between items-center mb-4 w-full mt-8 gap-4"
                         >
-                            <div className="customtext-primary font-semibold">
-                                <nav className="flex items-center gap-x-2 min-w-max">
-                                    <motion.button
-                                        className={`p-4 inline-flex items-center ${pagination.currentPage === 1
-                                            ? "opacity-50 cursor-not-allowed"
-                                            : ""
-                                            }`}
-                                        onClick={() =>
-                                            handlePageChange(
-                                                pagination.currentPage - 1
-                                            )
-                                        }
-                                        disabled={pagination.currentPage === 1}
-                                        whileHover={{ scale: 1.1 }}
-                                        whileTap={{ scale: 0.9 }}
-                                    >
-                                        <ChevronLeft />
-                                    </motion.button>
+                            <div className="customtext-primary font-semibold w-full md:w-auto">
+                                <div className="overflow-x-auto pb-2">
+                                    <nav className="flex items-center gap-x-2 min-w-max">
+                                        <motion.button
+                                            className={`p-4 inline-flex items-center ${pagination.currentPage === 1
+                                                ? "opacity-50 cursor-not-allowed"
+                                                : ""
+                                                }`}
+                                            onClick={() =>
+                                                handlePageChange(
+                                                    pagination.currentPage - 1
+                                                )
+                                            }
+                                            disabled={pagination.currentPage === 1}
+                                            whileHover={{ scale: 1.1 }}
+                                            whileTap={{ scale: 0.9 }}
+                                        >
+                                            <ChevronLeft />
+                                        </motion.button>
 
-                                    {getPageNumbers().map((page, index) => (
-                                        <React.Fragment key={index}>
-                                            {page === "..." ? (
-                                                <span className="w-10 h-10 bg-transparent p-2 inline-flex items-center justify-center rounded-full">
-                                                    ...
-                                                </span>
-                                            ) : (
-                                                <motion.button
-                                                    className={`w-10 h-10 p-2 inline-flex items-center justify-center rounded-full transition-all duration-300 
+                                        {getPageNumbers().map((page, index) => (
+                                            <React.Fragment key={index}>
+                                                {page === "..." ? (
+                                                    <span className="w-10 h-10 bg-transparent p-2 inline-flex items-center justify-center rounded-full">
+                                                        ...
+                                                    </span>
+                                                ) : (
+                                                    <motion.button
+                                                        className={`w-10 h-10 p-2 inline-flex items-center justify-center rounded-full transition-all duration-300 
                                                         ${page ===
-                                                            pagination.currentPage
-                                                            ? "bg-primary text-white"
-                                                            : "bg-transparent hover:text-white hover:bg-primary"
-                                                        }`}
-                                                    onClick={() =>
-                                                        handlePageChange(page)
-                                                    }
-                                                    whileHover={{ scale: 1.05 }}
-                                                    whileTap={{ scale: 0.95 }}
-                                                >
-                                                    {page}
-                                                </motion.button>
-                                            )}
-                                        </React.Fragment>
-                                    ))}
+                                                                pagination.currentPage
+                                                                ? "bg-primary text-white"
+                                                                : "bg-transparent hover:text-white hover:bg-primary"
+                                                            }`}
+                                                        onClick={() =>
+                                                            handlePageChange(page)
+                                                        }
+                                                        whileHover={{ scale: 1.05 }}
+                                                        whileTap={{ scale: 0.95 }}
+                                                    >
+                                                        {page}
+                                                    </motion.button>
+                                                )}
+                                            </React.Fragment>
+                                        ))}
 
-                                    <motion.button
-                                        className={`p-4 inline-flex items-center ${pagination.currentPage ===
-                                            pagination.totalPages
-                                            ? "opacity-50 cursor-not-allowed"
-                                            : ""
-                                            }`}
-                                        onClick={() =>
-                                            handlePageChange(
-                                                pagination.currentPage + 1
-                                            )
-                                        }
-                                        disabled={
-                                            pagination.currentPage ===
-                                            pagination.totalPages
-                                        }
-                                        whileHover={{ scale: 1.1 }}
-                                        whileTap={{ scale: 0.9 }}
-                                    >
-                                        <ChevronRight />
-                                    </motion.button>
-                                </nav>
+                                        <motion.button
+                                            className={`p-4 inline-flex items-center ${pagination.currentPage ===
+                                                pagination.totalPages
+                                                ? "opacity-50 cursor-not-allowed"
+                                                : ""
+                                                }`}
+                                            onClick={() =>
+                                                handlePageChange(
+                                                    pagination.currentPage + 1
+                                                )
+                                            }
+                                            disabled={
+                                                pagination.currentPage ===
+                                                pagination.totalPages
+                                            }
+                                            whileHover={{ scale: 1.1 }}
+                                            whileTap={{ scale: 0.9 }}
+                                        >
+                                            <ChevronRight />
+                                        </motion.button>
+                                    </nav>
+                                </div>
                             </div>
-                            <div>
+                            <div className="w-full md:w-auto text-center md:text-right">
                                 <p className="font-semibold">
                                     {pagination.from} - {pagination.to} de{" "}
                                     {pagination.totalItems} Resultados
@@ -753,24 +750,6 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                         </motion.div>
                     </div>
                 </div>
-                {/* Paginación 
-                <div>
-                    <button
-                        disabled={pagination.currentPage === 1}
-                        onClick={() => fetchProducts(pagination.currentPage - 1)}
-                    >
-                        Anterior
-                    </button>
-                    <span>
-                        Página {pagination.currentPage} de {pagination.totalPages}
-                    </span>
-                    <button
-                        disabled={pagination.currentPage === pagination.totalPages}
-                        onClick={() => fetchProducts(pagination.currentPage + 1)}
-                    >
-                        Siguiente
-                    </button>
-                </div>*/}
             </div>
         </section>
     );
