@@ -201,6 +201,7 @@ class SaleController extends BasicController
             ]);
             $totalPrice += $itemJpa->final_price * $item['quantity'];
         }
+     
         $jpa->amount = $totalPrice;
         $jpa->save();
         return $jpa;

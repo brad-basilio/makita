@@ -44,19 +44,21 @@ const InfiniteCategory = ({ items, data }) => {
                     <Swiper
                         modules={[Navigation]}
                         spaceBetween={16}
-                        slidesPerView={6}
-                        loop={true} // Hacer que el slider sea infinito
+                        slidesPerView={3}
+                        loop={true}
                         breakpoints={{
-                            640: { slidesPerView: 2 },
-                            1024: { slidesPerView: 3 },
-                            1280: { slidesPerView: 6 },
+                            320: { slidesPerView: 2, spaceBetween: 10 },
+                            480: { slidesPerView: 2, spaceBetween: 10 },
+                            768: { slidesPerView: 3, spaceBetween: 10 },
+                            1024: { slidesPerView: 4, spaceBetween: 16 },
+                            1280: { slidesPerView: 6 }
                         }}
                         onSwiper={setSwiperInstance}
                     >
                         {items.map((category) => (
                             <SwiperSlide
                                 key={category.id}
-                                className="group px-2 "
+                                className="group px-2"
                             >
                                 <a
                                     href={`/catalogo?category=${category.slug}`}

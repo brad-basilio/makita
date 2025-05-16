@@ -26,6 +26,7 @@ use App\Http\Controllers\Admin\TypesDeliveryController as AdminTypesDeliveryCont
 use App\Http\Controllers\Admin\GalleryController as AdminGalleryController;
 use App\Http\Controllers\Admin\ItemController as AdminItemController;
 use App\Http\Controllers\Admin\SaleController as AdminSaleController;
+use App\Http\Controllers\Admin\HomeController as AdminHomeController;
 use App\Http\Controllers\Customer\SaleController as CustomerSaleController;
 
 use App\Http\Controllers\Admin\SubCategoryController as AdminSubCategoryController;
@@ -146,7 +147,7 @@ Route::middleware('auth')->group(function () {
   Route::patch('/profile', [AdminProfileController::class, 'save']);
 
   Route::middleware('can:Admin')->prefix('admin')->group(function () {
-
+    Route::get('/dashboard', [AdminHomeController::class, 'dashboard']);
     Route::get('/sales/{id}', [AdminSaleController::class, 'get']);
     Route::post('/sales', [AdminSaleController::class, 'save']);
     Route::post('/sales/paginate', [AdminSaleController::class, 'paginate']);
