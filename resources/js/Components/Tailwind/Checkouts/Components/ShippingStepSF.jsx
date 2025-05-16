@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Number2Currency from "../../../../Utils/Number2Currency";
 import ubigeoData from "../../../../../../storage/app/utils/ubigeo.json";
 import DeliveryPricesRest from "../../../../Actions/DeliveryPricesRest";
@@ -12,6 +12,9 @@ import OptionCard from "./OptionCard";
 import { InfoIcon } from "lucide-react";
 import { Notify } from "sode-extend-react";
 import { renderToString } from "react-dom/server";
+import { debounce } from "lodash";
+import { useUbigeo } from "../../../../Utils/useUbigeo";
+import AsyncSelect from "react-select/async";
 import PaymentModal from "./PaymentModal";
 
 
@@ -30,6 +33,7 @@ export default function ShippingStepSF({
     setEnvio,
     envio,
     prefixes,
+    ubigeos = [],
 }) {
     
     const [formData, setFormData] = useState({
@@ -44,9 +48,9 @@ export default function ShippingStepSF({
         address: user?.address || "",
         number: user?.number || "",
         comment: user?.comment || "",
-        reference: user?.reference || "",
+        /*reference: user?.reference || "",*/
         shippingOption: "delivery", // Valor predeterminado
-
+        ubigeo: null,
         invoiceType: user?.invoiceType || "boleta", // Nuevo campo para tipo de comprobante
         documentType: user?.documentType || "dni", 
         document: user?.document || "", 
@@ -77,9 +81,15 @@ export default function ShippingStepSF({
     const [departamentos, setDepartamentos] = useState([]);
     const [provincias, setProvincias] = useState([]);
     const [distritos, setDistritos] = useState([]);
-
+    
     // Estado para el precio de envío
     const [shippingCost, setShippingCost] = useState(0);
+
+    // Estado para el ubigeo
+    const [loading, setLoading] = useState(false);
+    const [shippingOptions, setShippingOptions] = useState([]);
+    const [selectedOption, setSelectedOption] = useState(null);
+    const [costsGet, setCostsGet] = useState(null);
 
     // Cargar los departamentos al iniciar el componente
     useEffect(() => {
@@ -88,6 +98,117 @@ export default function ShippingStepSF({
         ];
         setDepartamentos(uniqueDepartamentos);
     }, []);
+
+    const handleUbigeoChange = async (selected) => {
+        if (!selected) return;
+        console.log("selected", selected);
+
+        const { data } = selected;
+
+        setFormData((prev) => ({
+            ...prev,
+            department: data.departamento,
+            province: data.provincia,
+            district: data.distrito,
+            ubigeo: data.reniec,
+        }));
+
+        // Consultar precios de envío
+        setLoading(true);
+        try {
+            const response = await DeliveryPricesRest.getShippingCost({
+                ubigeo: data.reniec,
+            });
+
+            const options = [];
+            if (response.data.is_free) {
+                options.push({
+                    type: "free",
+                    price: 0,
+                    description: response.data.standard.description,
+                    deliveryType: response.data.standard.type,
+                    characteristics: response.data.standard.characteristics,
+                });
+
+                if (response.data.express.price > 0) {
+                    options.push({
+                        type: "express",
+                        price: response.data.express.price,
+                        description: response.data.express.description,
+                        deliveryType: response.data.express.type,
+                        characteristics: response.data.express.characteristics,
+                    });
+                }
+            } else if (response.data.is_agency) {
+                options.push({
+                    type: "agency",
+                    price: response.data.agency.price,
+                    description: response.data.agency.description,
+                    deliveryType: response.data.agency.type,
+                    characteristics: response.data.agency.characteristics,
+                });
+            } else {
+                options.push({
+                    type: "standard",
+                    price: response.data.standard.price,
+                    description: response.data.standard.description,
+                    deliveryType: response.data.standard.type,
+                    characteristics: response.data.standard.characteristics,
+                });
+            }
+
+            setShippingOptions(options);
+            setSelectedOption(options[0].type);
+            setEnvio(options[0].price);
+        } catch (error) {
+            console.error("Error al obtener precios de envío:", error);
+            Notify.add({
+                icon: "/assets/img/icon.svg",
+                title: "Sin cobertura",
+                body: "No realizamos envíos a esta ubicación",
+                type: "danger",
+            });
+            setShippingOptions([]);
+            setSelectedOption(null);
+            setEnvio(0);
+        }
+        setLoading(false);
+    };
+
+    const loadOptions = useCallback(
+        debounce((inputValue, callback) => {
+            if (inputValue.length < 3) {
+                callback([]);
+                return;
+            }
+            console.log("inputValue", inputValue);
+
+            fetch(`/api/ubigeo/search?q=${encodeURIComponent(inputValue)}`)
+                .then((response) => {
+                    if (!response.ok) throw new Error("Error en la respuesta");
+                    return response.json();
+                })
+                .then((data) => {
+                    const options = data.map((item) => ({
+                        value: item.reniec,
+                        label: `${item.distrito}, ${item.provincia}, ${item.departamento}`,
+                        data: {
+                            inei: item.inei,
+                            reniec: item.reniec,
+                            departamento: item.departamento,
+                            provincia: item.provincia,
+                            distrito: item.distrito,
+                        },
+                    }));
+                    callback(options);
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                    callback([]);
+                });
+        }, 300),
+        []
+    );
 
     // Filtrar provincias cuando se selecciona un departamento
     useEffect(() => {
@@ -161,7 +282,9 @@ export default function ShippingStepSF({
     }, [distrito]);
 
     const handlePayment = async (e) => {
-        e.preventDefault();
+        if (e && e.preventDefault) {
+            e.preventDefault();
+        }
         if (!user) {
             Notify.add({
                 icon: "/assets/img/icon.svg",
@@ -195,25 +318,34 @@ export default function ShippingStepSF({
         }
 
         if (
-            !formData.department ||
-            !formData.province ||
-            !formData.district ||
+            // !formData.department ||
+            // !formData.province ||
+            // !formData.district ||
+            // !formData.reference ||
             !formData.name ||
             !formData.lastname ||
             !formData.email ||
             !formData.address ||
-            !formData.reference ||
-            !formData.phone
-
-
+            !formData.phone ||
+            !formData.ubigeo 
         ) {
             Notify.add({
                 icon: "/assets/img/icon.svg",
-                title: "Error en el Formulario",
-                body: "Completar los datos de envío",
+                title: "Campos incompletos",
+                body: "Complete todos los campos obligatorios",
                 type: "danger",
             });
 
+            return;
+        }
+
+        if (!selectedOption) {
+            Notify.add({
+                icon: "/assets/img/icon.svg",
+                title: "Seleccione envío",
+                body: "Debe elegir un método de envío",
+                type: "danger",
+            });
             return;
         }
 
@@ -244,7 +376,7 @@ export default function ShippingStepSF({
                 address: formData?.address || "",
                 number: formData?.number || "",
                 comment: formData?.comment || "",
-                reference: formData?.reference || "",
+                /*reference: formData?.reference || "",*/
                 amount: totalFinal || 0,
                 delivery: envio,
                 cart: cart,
@@ -327,7 +459,6 @@ export default function ShippingStepSF({
         });
     }, [formData.phone_prefix])
 
-    const [selectedOption, setSelectedOption] = useState("free");
 
     const [showPaymentModal, setShowPaymentModal] = useState(false);
 
@@ -345,167 +476,325 @@ export default function ShippingStepSF({
                         className="space-y-6 bg-[#f9f9f9] p-6 rounded-2xl font-font-general"
                         onSubmit={(e) => e.preventDefault()}
                     >
-                        <div className="grid lg:grid-cols-2 gap-4 ">
-                            {/* Nombres */}
-                            <InputForm
-                                type="text"
-                                label="Nombres"
-                                name="name"
-                                value={formData.name}
-                                onChange={handleChange}
-                                placeholder="Nombres"
-                            />
-                            {/* Apellidos */}
-                            <InputForm
-                                label="Apellidos"
-                                type="text"
-                                name="lastname"
-                                value={formData.lastname}
-                                onChange={handleChange}
-                                placeholder="Apellidos"
-                            />
-                        </div>
-                        
-                        <div className="grid lg:grid-cols-2 gap-4 ">
-                        
-                            {/* Correo electrónico */}
-                            <InputForm
-                                label="Correo electrónico"
-                                type="email"
-                                name="email"
-                                value={formData.email}
-                                onChange={handleChange}
-                                placeholder="Ej. hola@gmail.com"
-                            />
+                        <div className="sectionInformation space-y-3.5">
+                            <h3 className={`block text-xl 2xl:text-2xl font-bold mb-4 customtext-neutral-dark `}>
+                                Información del contacto
+                            </h3>
+                            <div className="grid lg:grid-cols-2 gap-4 ">
+                                {/* Nombres */}
+                            
+                                <InputForm
+                                    type="text"
+                                    label="Nombres"
+                                    name="name"
+                                    value={formData.name}
+                                    onChange={handleChange}
+                                    placeholder="Nombres"
+                                />
+                                {/* Apellidos */}
+                                <InputForm
+                                    label="Apellidos"
+                                    type="text"
+                                    name="lastname"
+                                    value={formData.lastname}
+                                    onChange={handleChange}
+                                    placeholder="Apellidos"
+                                />
+                            </div>
+                    
+                            <div className="grid lg:grid-cols-2 gap-4 ">
+                            
+                                {/* Correo electrónico */}
+                                <InputForm
+                                    label="Correo electrónico"
+                                    type="email"
+                                    name="email"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    placeholder="Ej. hola@gmail.com"
+                                />
 
-                            {/* Celular */}
-                            <div className="mb-4">
-                                <label htmlFor="phone" className="block text-sm mb-1">
-                                    Celular
-                                </label>
-                                <div className="flex gap-2">
-                                    <select
-                                        className="select2-prefix-selector w-[200px] p-2 border border-gray-300 rounded"
-                                        onChange={(e) => setSelectedPrefix(e.target.value)}
-                                        name="phone_prefix"
-                                        value={formData.phone_prefix}
-                                    >
-                                        <option value="">Selecciona un país</option>
-                                        {
-                                        prefixes
-                                            .sort((a, b) => a.country.localeCompare(b.country))
-                                            .map((prefix, index) => (
-                                            <option
-                                                key={index}
-                                                value={prefix.realCode}
-                                                data-code={prefix.beautyCode}
-                                                data-flag={prefix.flag}
-                                                data-country={prefix.country}
-                                            >
-                                            </option>
-                                            ))
-                                        }
-                                    </select>
-                                    <input
-                                        type="text"
-                                        id="phone"
-                                        name="phone"
-                                        value={formData.phone}
-                                        onChange={handleChange}
-                                        className="flex-1 p-2 border border-gray-300 rounded"
-                                        placeholder="000 000 000"
-                                    />
+                                {/* Celular */}
+                                <div className="mb-4">
+                                    <label htmlFor="phone" className="block text-sm mb-1">
+                                        Celular
+                                    </label>
+                                    <div className="flex gap-2">
+                                        <select
+                                            className="select2-prefix-selector w-[200px] p-2 border border-gray-300 rounded"
+                                            onChange={(e) => setSelectedPrefix(e.target.value)}
+                                            name="phone_prefix"
+                                            value={formData.phone_prefix}
+                                        >
+                                            <option value="">Selecciona un país</option>
+                                            {
+                                            prefixes
+                                                .sort((a, b) => a.country.localeCompare(b.country))
+                                                .map((prefix, index) => (
+                                                <option
+                                                    key={index}
+                                                    value={prefix.realCode}
+                                                    data-code={prefix.beautyCode}
+                                                    data-flag={prefix.flag}
+                                                    data-country={prefix.country}
+                                                >
+                                                </option>
+                                                ))
+                                            }
+                                        </select>
+                                        <input
+                                            type="text"
+                                            id="phone"
+                                            name="phone"
+                                            value={formData.phone}
+                                            onChange={handleChange}
+                                            className="flex-1 p-2 border border-gray-300 rounded"
+                                            placeholder="000 000 000"
+                                        />
+                                    </div>
                                 </div>
+
+                            </div>
+                        </div>
+
+                        <div className="sectionDelivery space-y-3.5">
+                            
+                            <h3 className={`block text-xl 2xl:text-2xl font-bold mb-4 customtext-neutral-dark `}>
+                                Direccion de envio
+                            </h3>
+
+                            <div className="form-group">
+                                <label
+                                    className={`block text-sm 2xl:text-base mb-1 customtext-neutral-dark `}
+                                >
+                                    Ubicación de entrega
+                                </label>
+                                <AsyncSelect
+                                    cacheOptions
+                                    defaultOptions
+                                    loadOptions={loadOptions}
+                                    onChange={handleUbigeoChange}
+                                    placeholder="Buscar distrito, provincia o departamento..."
+                                    loadingMessage={() => "Buscando ubicaciones..."}
+                                    noOptionsMessage={({ inputValue }) =>
+                                        inputValue.length < 3
+                                            ? "Buscar distrito, provincia o departamento..."
+                                            : "No se encontraron resultados"
+                                    }
+                                    isLoading={loading}
+                                    styles={{
+                                        control: (base) => ({
+                                            ...base,
+                                            border: "1px solid transparent",
+                                            boxShadow: "none",
+                                            minHeight: "50px",
+                                            "&:hover": {
+                                                borderColor: "transparent",
+                                            },
+                                            borderRadius: "0.75rem",
+                                        }),
+                                        menu: (base) => ({
+                                            ...base,
+                                            zIndex: 9999,
+                                            marginTop: "4px",
+                                            borderRadius: "8px",
+                                        //  boxShadow: "none",
+                                        }),
+                                        option: (base) => ({
+                                            ...base,
+                                            color: "inherit",
+                                            "&:hover": {
+                                                color: "white",
+                                            },
+                                            backgroundColor: "inherit",
+                                            "&:hover": {
+                                                backgroundColor: "#f4f4f5",
+                                            },
+                                        }),
+                                    }}
+                                    formatOptionLabel={({ data }) => (
+                                        <div className="text-sm">
+                                            <div className="font-medium">
+                                                {data.distrito}
+                                            </div>
+                                            <div className="text-gray-500">
+                                                {data.provincia}, {data.departamento}
+                                            </div>
+                                        </div>
+                                    )}
+                                    className="w-full border focus:bg-primary focus:text-white border-gray-300 rounded-xl  transition-all duration-300"
+                                    menuPortalTarget={document.body}
+                                    menuPosition="fixed"
+                                />
                             </div>
 
-                        </div>
+                            {/* Departamento */}
+                            {/* <SelectForm
+                                label="Departamento"
+                                options={departamentos}
+                                placeholder="Selecciona un Departamento"
+                                onChange={(value) => {
+                                    setDepartamento(value);
+                                    setFormData((prev) => ({
+                                        ...prev,
+                                        department: departamento,
+                                    }));
+                                }}
+                            /> */}
 
-                        {/* Departamento */}
-                        <SelectForm
-                            label="Departamento"
-                            options={departamentos}
-                            placeholder="Selecciona un Departamento"
-                            onChange={(value) => {
-                                setDepartamento(value);
-                                setFormData((prev) => ({
-                                    ...prev,
-                                    department: departamento,
-                                }));
-                            }}
-                        />
+                            {/* Provincia */}
+                            {/* <SelectForm
+                                disabled={!departamento}
+                                label="Provincia"
+                                options={provincias}
+                                placeholder="Selecciona una Provincia"
+                                onChange={(value) => {
+                                    setProvincia(value);
+                                    setFormData((prev) => ({
+                                        ...prev,
+                                        province: provincia,
+                                    }));
+                                }}
+                            /> */}
 
-                        {/* Provincia */}
-                        <SelectForm
-                            disabled={!departamento}
-                            label="Provincia"
-                            options={provincias}
-                            placeholder="Selecciona una Provincia"
-                            onChange={(value) => {
-                                setProvincia(value);
-                                setFormData((prev) => ({
-                                    ...prev,
-                                    province: provincia,
-                                }));
-                            }}
-                        />
+                            {/* Distrito */}
 
-                        {/* Distrito */}
+                            {/* <SelectForm
+                                disabled={!provincia}
+                                label="Distrito"
+                                options={distritos}
+                                placeholder="Selecciona un Distrito"
+                                onChange={(value) => {
+                                    setDistrito(value);
+                                    setFormData((prev) => ({
+                                        ...prev,
+                                        district: distrito,
+                                    }));
+                                }}
+                            /> */}
 
-                        <SelectForm
-                            disabled={!provincia}
-                            label="Distrito"
-                            options={distritos}
-                            placeholder="Selecciona un Distrito"
-                            onChange={(value) => {
-                                setDistrito(value);
-                                setFormData((prev) => ({
-                                    ...prev,
-                                    district: distrito,
-                                }));
-                            }}
-                        />
-
-                        {/* Dirección */}
-                        <InputForm
-                            label="Avenida / Calle / Jirón"
-                            type="text"
-                            name="address"
-                            value={formData.address}
-                            onChange={handleChange}
-                            placeholder="Ingresa el nombre de la calle"
-                        />
-
-                        <div className="grid lg:grid-cols-2 gap-4">
+                            {/* Dirección */}
                             <InputForm
-                                label="Número"
+                                label="Avenida / Calle / Jirón"
                                 type="text"
-                                name="number"
-                                value={formData.number}
+                                name="address"
+                                value={formData.address}
                                 onChange={handleChange}
-                                placeholder="Ingresa el número de la calle"
+                                placeholder="Ingresa el nombre de la calle"
                             />
 
-                            <InputForm
-                                label="Dpto./ Interior/ Piso/ Lote/ Bloque (opcional)"
+                            <div className="grid lg:grid-cols-2 gap-4">
+                                <InputForm
+                                    label="Número"
+                                    type="text"
+                                    name="number"
+                                    value={formData.number}
+                                    onChange={handleChange}
+                                    placeholder="Ingresa el número de la calle"
+                                />
+
+                                <InputForm
+                                    label="Dpto./ Interior/ Piso/ Lote/ Bloque (opcional)"
+                                    type="text"
+                                    name="comment"
+                                    value={formData.comment}
+                                    onChange={handleChange}
+                                    placeholder="Ej. Casa 3, Dpto 101"
+                                />
+                            </div>
+
+                            {/* Referencia */}
+
+                            {/* <InputForm
+                                label="Referencia"
                                 type="text"
-                                name="comment"
-                                value={formData.comment}
+                                name="reference"
+                                value={formData.reference}
                                 onChange={handleChange}
-                                placeholder="Ej. Casa 3, Dpto 101"
-                            />
+                                placeholder="Ejem. Altura de la avenida..."
+                            /> */}
+                        
+                            {shippingOptions.length > 0 && (
+                                <div className="space-y-4">
+                                    <h3 className="text-lg font-semibold">
+                                        Método de envío
+                                    </h3>
+                                    <div className="grid grid-cols-2 gap-4">
+                                        {shippingOptions.map((option) => (
+                                            <OptionCard
+                                                key={option.type}
+                                                title={
+                                                    option.type === "free"
+                                                        ? option.deliveryType
+                                                        : option.type === "express"
+                                                        ? option.deliveryType
+                                                        : option.type === "agency"
+                                                        ? option.deliveryType
+                                                        : option.deliveryType
+                                                }
+                                                price={option.price}
+                                                description={option.description}
+                                                selected={
+                                                    selectedOption === option.type
+                                                }
+                                                onSelect={() => {
+                                                    setSelectedOption(option.type);
+                                                    setEnvio(option.price);
+                                                }}
+                                            />
+                                        ))}
+                                    </div>
+                                    {console.log(
+                                        shippingOptions.find(
+                                            (o) => o.type === selectedOption
+                                        )
+                                    )}
+
+                                    {selectedOption && shippingOptions.length > 0 && (
+                                        <div className="space-y-4 mt-4">
+                                            {shippingOptions
+                                                .find((o) => o.type === selectedOption)
+                                                ?.characteristics?.map(
+                                                    (char, index) => (
+                                                        <div
+                                                            key={`char-${index}`}
+                                                            className="flex items-start gap-4 bg-[#F7F9FB] p-4 rounded-xl"
+                                                        >
+                                                            <div className="w-5 flex-shrink-0">
+                                                                <svg
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    width="20"
+                                                                    height="20"
+                                                                    viewBox="0 0 24 24"
+                                                                    fill="none"
+                                                                    stroke="currentColor"
+                                                                    strokeWidth="2"
+                                                                    strokeLinecap="round"
+                                                                    strokeLinejoin="round"
+                                                                    className="lucide lucide-info customtext-primary"
+                                                                >
+                                                                    <circle
+                                                                        cx="12"
+                                                                        cy="12"
+                                                                        r="10"
+                                                                    />
+                                                                    <path d="M12 16v-4" />
+                                                                    <path d="M12 8h.01" />
+                                                                </svg>
+                                                            </div>
+                                                            <div className="flex-1">
+                                                                <p className="text-sm font-medium customtext-neutral-dark">
+                                                                    {char}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                )}
+                                        </div>
+                                    )}
+                                </div>
+                            )}
                         </div>
-
-                        {/* Referencia */}
-
-                        <InputForm
-                            label="Referencia"
-                            type="text"
-                            name="reference"
-                            value={formData.reference}
-                            onChange={handleChange}
-                            placeholder="Ejem. Altura de la avenida..."
-                        />
-
 
                         {/* Tipo de comprobante */}
                         <div className="space-y-2">
@@ -539,7 +828,6 @@ export default function ShippingStepSF({
                         </div>
 
                         {/* Documento */}
-                        
                         <InputForm
                                 label={formData.documentType === "dni" ? "DNI" : "RUC"}
                                 type="text"
@@ -550,7 +838,6 @@ export default function ShippingStepSF({
                                 maxLength={formData.documentType === "dni" ? "8" : "11"}
                         />
                         
-
                         {/* Razón Social (solo para factura) */}
                         {formData.invoiceType === "factura" && (
                             <InputForm
@@ -564,18 +851,6 @@ export default function ShippingStepSF({
                         )}    
 
                     </form>
-                    {/* <div className="flex gap-4 mt-4">
-                        <OptionCard
-                            title="Envío gratis"
-                            description="Entrega entre 3 a 10 días hábiles"
-                            selected={selectedOption === "free"}
-                        />
-                        <OptionCard
-                            title="Delivery"
-                            description="Delivery 24 horas"
-                            selected={selectedOption === "express"}
-                        />
-                    </div> */}
                 </div>
                 {/* Resumen de compra */}
                 <div className="bg-[#F7F9FB] rounded-xl shadow-lg p-6 col-span-2 h-max font-font-general">
@@ -675,7 +950,7 @@ export default function ShippingStepSF({
             <PaymentModal
                 isOpen={showPaymentModal}
                 onClose={() => setShowPaymentModal(false)}
-                onPaymentComplete={handlePaymentComplete}
+                onPaymentComplete={handlePayment}
             />
         </>
     );
