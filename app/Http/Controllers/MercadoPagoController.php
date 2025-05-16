@@ -6,7 +6,9 @@ use App\Models\Item;
 use App\Models\Sale;
 use App\Models\SaleDetail;
 use App\Models\SaleStatus;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use MercadoPago\MercadoPagoConfig;
 use MercadoPago\Exceptions\MPApiException;
 use MercadoPago\Client\Preference\PreferenceClient;
@@ -145,6 +147,23 @@ class MercadoPagoController extends Controller
             
             if (!$preference || !isset($preference->id)) {
                 throw new \Exception('No se pudo crear la preferencia de pago');
+            }
+
+             //usuario autenticado actualizar datos de contacto
+             if (Auth::check()) {
+                $userJpa = User::find(Auth::user()->id);
+                $userJpa->phone = $request->phone;
+                $userJpa->dni = $request->dni;
+                $userJpa->country = $request->country;
+                $userJpa->department = $request->department;
+                $userJpa->province = $request->province;
+                $userJpa->district = $request->district;
+                $userJpa->ubigeo = $request->ubigeo;
+                $userJpa->address = $request->address;
+                $userJpa->reference = $request->reference;
+                $userJpa->number = $request->number;
+            
+                $userJpa->save();
             }
 
             return response()->json([
