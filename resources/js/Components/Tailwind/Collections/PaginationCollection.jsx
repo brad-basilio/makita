@@ -5,7 +5,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import './css/pagination-collection.css';
+import './css/PaginationCollection.css';
 
 const PaginationCollection = ({
   items,
@@ -132,7 +132,7 @@ const PaginationCollection = ({
 
           {/* Añadir el contenedor de paginación */}
         </div>
-        <div className="w-full custom-pagination relative flex justify-center space-x-6 mt-16"></div>
+        <div className="w-full custom-pagination relative flex justify-center mt-16 gap-2"></div>
 
       </div>
     </section>
