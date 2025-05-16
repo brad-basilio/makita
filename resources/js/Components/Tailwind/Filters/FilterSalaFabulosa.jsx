@@ -70,7 +70,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
 
         if (filters.collection_id.length > 0) {
             const collectionConditions = filters.collection_id.map((id) => [
-                "collection_id.slug",
+                "collection.slug",
                 "=",
                 id,
             ]);
@@ -80,7 +80,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
 
         if (filters.category_id.length > 0) {
             const categoryConditions = filters.category_id.map((id) => [
-                "category_id.slug",
+                "category.slug",
                 "=",
                 id,
             ]);
@@ -89,7 +89,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
         //subcategorias
         if (filters.subcategory_id.length > 0) {
             const subcategoryConditions = filters.subcategory_id.map((id) => [
-                "subcategory_id.slug",
+                "subcategory.slug",
                 "=",
                 id,
             ]);
@@ -98,7 +98,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
         // Marcas
         if (filters.brand_id.length > 0) {
             const brandConditions = filters.brand_id.map((id) => [
-                "brand_id.slug",
+                "brand.slug",
                 "=",
                 id,
             ]);
@@ -130,6 +130,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
         try {
             // Transformar los filtros al formato esperado por el backend
             const filters = transformFilters(selectedFilters);
+            console.log(filters);
             const params = {
                 filter: filters, // Envía los filtros transformados
                 sort: selectedFilters.sort, // Enviar el parámetro de ordenación
@@ -253,7 +254,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
     const [searchCategory, setSearchCategory] = useState("");
     const [searchCollection, setSearchCollection] = useState("");
     const [searchBrand, setSearchBrand] = useState("");
-    const filteredCollections = collections.filter((collection) =>
+    const filteredCollections = collections?.filter((collection) =>
         collection.name.toLowerCase().includes(searchCollection.toLowerCase())
     );
     // Filtrar categorías según el input
@@ -324,7 +325,9 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                                             />
                                         </div>
                                         <div className="max-h-[200px] overflow-y-auto space-y-2 p-1">
-                                            {filteredCollections.map((collection) => (
+                                            {filteredCollections.map((collection) =>{ 
+                                                      const isChecked = selectedFilters.subcategory_id?.includes(category.slug);
+                                                return(
                                                 <div
                                                     key={collection.id}
                                                     className={`group flex items-center gap-3 p-2 rounded-lg ${selectedFilters.collection_id?.includes(collection.id)
@@ -332,11 +335,12 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                                                         : "hover:bg-gray-50"
                                                         }`}
                                                 >
+                                                     <label className="flex items-center gap-2 px-2 cursor-pointer">
                                                     <input
                                                         type="checkbox"
                                                         className="h-5 w-5 rounded border-gray-300 accent-primary hidden "
-                                                        onChange={() => handleFilterChange("collection_id", collection.id)}
-                                                        checked={selectedFilters.collection_id?.includes(collection.id)}
+                                                        onChange={() => handleFilterChange("collection_id", collection.slug)}
+                                                        checked={isChecked}
                                                     />
                                                     <img
                                                         src={`/storage/images/collection/${collection.image}`}
@@ -344,9 +348,9 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                                                         className="w-8 h-8 rounded-full object-cover"
                                                         alt={collection.name}
                                                     />
-                                                    <span className="text-sm lg:text-base">{collection.name}</span>
+                                                    <span className="text-sm lg:text-base">{collection.name}</span></label>
                                                 </div>
-                                            ))}
+                                            )})}
                                         </div>
                                     </div>
                                 )}
@@ -377,29 +381,36 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                                             />
                                         </div>
                                         <div className="max-h-[200px] overflow-y-auto space-y-2 p-1">
-                                            {filteredCategories.map((category) => (
+                                            
+                                            {filteredCategories.map((category) => {
+                                              
+                                                   const isChecked = selectedFilters.subcategory_id?.includes(category.slug);
+                                            return(
                                                 <div
-                                                    key={category.id}
-                                                    className={`group flex items-center gap-3 p-2 rounded-lg ${selectedFilters.category_id?.includes(category.id)
-                                                        ? "bg-secondary"
-                                                        : "hover:bg-gray-50"
-                                                        }`}
-                                                >
-                                                    <input
-                                                        type="checkbox"
-                                                        className="h-5 w-5 rounded border-gray-300 accent-primary hidden"
-                                                        onChange={() => handleFilterChange("category_id", category.id)}
-                                                        checked={selectedFilters.category_id?.includes(category.id)}
-                                                    />
-                                                    <img
-                                                        src={`/storage/images/category/${category.image}`}
-                                                        onError={(e) => e.target.src = "assets/img/noimage/no_imagen_circular.png"}
-                                                        className="w-8 h-8 rounded-full object-cover"
-                                                        alt={category.name}
-                                                    />
-                                                    <span className="text-sm lg:text-base">{category.name}</span>
-                                                </div>
-                                            ))}
+                                                key={category.id}
+                                                className={`group flex items-center gap-3 p-2 rounded-lg ${isChecked
+                                                    ? "bg-secondary"
+                                                    : "hover:bg-gray-50"
+                                                    }`}
+                                            >
+                                                   <label className="flex items-center gap-2 px-2 cursor-pointer">
+                                                <input
+                                                    type="checkbox"
+                                                    className="h-5 w-5 rounded border-gray-300 accent-primary hidden"
+                                                    onChange={() => handleFilterChange("category_id", category.slug)}
+                                                    checked={isChecked}
+                                                   // checked={selectedFilters.category_id?.includes(category.id)}
+                                                />
+                                                <img
+                                                    src={`/storage/images/category/${category.image}`}
+                                                    onError={(e) => e.target.src = "assets/img/noimage/no_imagen_circular.png"}
+                                                    className="w-8 h-8 rounded-full object-cover"
+                                                    alt={category.name}
+                                                />
+                                                <span className="text-sm lg:text-base">{category.name}</span></label>
+                                            </div>
+                                            )
+})}
                                         </div>
                                     </div>
                                 )}
