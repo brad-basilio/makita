@@ -86,21 +86,41 @@ const ProductInfinite = ({ items, data, setCart, cart }) => {
                         ))}
                     </Swiper>
 
-                    {/* Navigation Buttons - Single Implementation for Both Mobile and Desktop */}
-                    <button
-                        ref={navigationPrevRef}
-                        className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center rounded-lg shadow-lg transition-all duration-300 bg-primary text-white disabled:opacity-50 disabled:cursor-not-allowed hover:scale-110 active:scale-95 transform hover:-translate-x-1"
-                        aria-label="Productos anteriores"
-                    >
-                        <ChevronLeft width="1.2rem" className="animate-pulse" />
-                    </button>
-                    <button
-                        ref={navigationNextRef}
-                        className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center rounded-lg shadow-lg transition-all duration-300 bg-primary text-white disabled:opacity-50 disabled:cursor-not-allowed hover:scale-110 active:scale-95 transform hover:translate-x-1"
-                        aria-label="Siguientes productos"
-                    >
-                        <ChevronRight width="1.2rem" className="animate-pulse" />
-                    </button>
+                    {/* Navigation Buttons - Desktop */}
+                    <div className="hidden md:block">
+                        <button
+                            ref={navigationPrevRef}
+                            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center rounded-lg shadow-lg transition-all duration-300 bg-primary text-white disabled:opacity-50 disabled:cursor-not-allowed hover:scale-110 active:scale-95 transform hover:-translate-x-1"
+                            aria-label="Productos anteriores"
+                        >
+                            <ChevronLeft width="1.2rem" className="animate-pulse" />
+                        </button>
+                        <button
+                            ref={navigationNextRef}
+                            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center rounded-lg shadow-lg transition-all duration-300 bg-primary text-white disabled:opacity-50 disabled:cursor-not-allowed hover:scale-110 active:scale-95 transform hover:translate-x-1"
+                            aria-label="Siguientes productos"
+                        >
+                            <ChevronRight width="1.2rem" className="animate-pulse" />
+                        </button>
+                    </div>
+
+                    {/* Navigation Buttons - Mobile */}
+                    <div className="md:hidden flex justify-end gap-2 mt-4">
+                        <button
+                            ref={navigationPrevRef}
+                            className="z-10 w-10 h-10 flex items-center justify-center rounded-lg shadow-lg transition-all duration-300 bg-primary text-white disabled:opacity-50 disabled:cursor-not-allowed hover:scale-110 active:scale-95"
+                            aria-label="Productos anteriores"
+                        >
+                            <ChevronLeft width="1.2rem" className="animate-pulse" />
+                        </button>
+                        <button
+                            ref={navigationNextRef}
+                            className="z-10 w-10 h-10 flex items-center justify-center rounded-lg shadow-lg transition-all duration-300 bg-primary text-white disabled:opacity-50 disabled:cursor-not-allowed hover:scale-110 active:scale-95"
+                            aria-label="Siguientes productos"
+                        >
+                            <ChevronRight width="1.2rem" className="animate-pulse" />
+                        </button>
+                    </div>
                 </div>
             </div>
 
