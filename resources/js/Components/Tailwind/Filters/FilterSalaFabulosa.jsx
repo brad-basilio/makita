@@ -293,7 +293,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
         <section className="py-6  font-font-general customtext-primary">
             <div className="mx-auto px-primary">
                 <div className="relative flex flex-col sm:flex-row gap-4">
-                    <div className="w-full sm:w-1/5 bg-white p-4 rounded-lg h-max">
+                    <div className="w-full sm:w-1/4 bg-white p-4 rounded-lg h-max">
                         <p className="customtext-primary text-2xl font-bold pb-4 mb-4 border-b">
                             Combina como desees tu sala
                         </p>
@@ -548,7 +548,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                         </div>
                     </div>
 
-                    <div className="w-full sm:w-4/5 py-4">
+                    <div className="w-full sm:w-3/4 py-4">
                         <div className="flex flex-col lg:flex-row lg:justify-between items-center mb-4 w-full">
                             {/* Ordenación <span className='block w-6/12'>Productos seleccionados: <strong>{products?.length}</strong></span>*/}
                             <div className="flex gap-4 items-center">
