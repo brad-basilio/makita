@@ -4499,7 +4499,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Filter.jsx": {
-    "file": "assets/Filter-CNAWGI28.js",
+    "file": "assets/Filter-DcxrGLDz.js",
     "name": "Filter",
     "src": "resources/js/Components/Tailwind/Filter.jsx",
     "isEntry": true,
@@ -4749,7 +4749,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Filters/FilterSalaFabulosa.jsx": {
-    "file": "assets/FilterSalaFabulosa-Dx49bQmC.js",
+    "file": "assets/FilterSalaFabulosa-C87aGsul.js",
     "name": "FilterSalaFabulosa",
     "src": "resources/js/Components/Tailwind/Filters/FilterSalaFabulosa.jsx",
     "isDynamicEntry": true,
@@ -4758,19 +4758,21 @@
       "_index-BH53Isel.js",
       "resources/js/Components/Tailwind/Products/ProductNavigation.jsx",
       "_ItemsRest-DBSKIEqF.js",
+      "_ArrayJoin-2k6ba35P.js",
       "_Loading-B-FwDSWi.js",
       "_NoResult-C9qZVva5.js",
       "_SelectForm-G0J6yhhv.js",
       "resources/js/Components/Tailwind/Components/ProductCard.jsx",
       "_ProductCardColors-BVYYz9f3.js",
+      "_main-BSEyQEJW.js",
+      "_filter-Ci9tsc_e.js",
+      "_x-DBMwyD6F.js",
       "_chevron-up-D78jyEhP.js",
       "_search-TwiiKGP5.js",
       "_chevron-left-B2s3ZsB7.js",
       "_chevron-right-Ckt5D2ka.js",
       "_index-yBjzXJbu.js",
       "resources/js/Components/Tailwind/Headers/HeaderSearch.jsx",
-      "_main-BSEyQEJW.js",
-      "____vite-browser-external_commonjs-proxy-0zb4Agf2.js",
       "resources/js/Components/Tailwind/Checkouts/Components/PaymentModal.jsx",
       "_index-fNjTmf9T.js",
       "_index-Chjiymov.js",
@@ -4783,7 +4785,8 @@
       "_plus-Bot15Khs.js",
       "_BasicRest-DEv02zgs.js",
       "_chevron-down-DS-mdh9v.js",
-      "_check-DQ7QoS0v.js"
+      "_check-DQ7QoS0v.js",
+      "____vite-browser-external_commonjs-proxy-0zb4Agf2.js"
     ],
     "css": [
       "tippy.css"
@@ -6888,7 +6891,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-gu_PprFc.js",
+    "file": "assets/System-HIgWdmSJ.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,

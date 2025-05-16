@@ -342,8 +342,8 @@
                         "name": "Lista estándar",
                         "using": {
                             "model": "Item",
-                            "with": ["category", "subcategory", "brand"],
-                            "relations": ["category", "tags"],
+                            "with": ["category", "subcategory", "brand","collection"],
+                            "relations": ["category", "tags","collection"],
                             "fields": [
                                 "id",
                                 "name",
@@ -360,8 +360,8 @@
                         "name": "Lista con variantes",
                         "using": {
                             "model": "Item",
-                            "with": ["category", "subcategory", "brand"],
-                            "relations": ["category", "tags"],
+                            "with": ["category", "subcategory", "brand","collection"],
+                            "relations": ["category", "tags","collection"],
                             "fields": [
                                 "id",
                                 "name",
