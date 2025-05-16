@@ -55,7 +55,7 @@ php artisan migrate
 
 1.1. Windows:
 ```bash
-mklink /D "public\storage\images" "storage\app\images"
+mklink /D "public\storage\images" "..\..\storage\app\images"
 mklink /D "public\cloud" "storage\app\images\repository"
 ```
 

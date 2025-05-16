@@ -314,16 +314,15 @@
       "resources/js/Components/Tailwind/Components/ProductCard.jsx"
     ]
   },
-  "_ProductCardColors-75_iPsQ7.js": {
-    "file": "assets/ProductCardColors-75_iPsQ7.js",
+  "_ProductCardColors-BPl8-hSd.js": {
+    "file": "assets/ProductCardColors-BPl8-hSd.js",
     "name": "ProductCardColors",
     "imports": [
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
       "_index-BH53Isel.js",
       "resources/js/Components/Tailwind/Components/ProductCard.jsx",
       "_ItemsRest-DBSKIEqF.js",
-      "_tippy-react.esm-BWiGTO87.js",
-      "_plus-Bot15Khs.js"
+      "_tippy-react.esm-BWiGTO87.js"
     ],
     "css": [
       "tippy.css"
@@ -4210,7 +4209,7 @@
     "src": "resources/js/Components/Tailwind/Checkouts/Images/PaymentMethods.svg"
   },
   "resources/js/Components/Tailwind/Collection.jsx": {
-    "file": "assets/Collection-C6xQCrUH.js",
+    "file": "assets/Collection-C2WE9zBu.js",
     "name": "Collection",
     "src": "resources/js/Components/Tailwind/Collection.jsx",
     "isEntry": true,
@@ -4225,7 +4224,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Collections/PaginationCollection.jsx": {
-    "file": "assets/PaginationCollection-Dp4noeMB.js",
+    "file": "assets/PaginationCollection-FIHYyVQ6.js",
     "name": "PaginationCollection",
     "src": "resources/js/Components/Tailwind/Collections/PaginationCollection.jsx",
     "isEntry": true,
@@ -4238,6 +4237,7 @@
       "_index-yBjzXJbu.js"
     ],
     "css": [
+      "PaginationCollection.css",
       "swiper.css"
     ]
   },
@@ -4498,7 +4498,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Filter.jsx": {
-    "file": "assets/Filter-DuCjrl5t.js",
+    "file": "assets/Filter-ua05g5Fo.js",
     "name": "Filter",
     "src": "resources/js/Components/Tailwind/Filter.jsx",
     "isEntry": true,
@@ -4748,7 +4748,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Filters/FilterSalaFabulosa.jsx": {
-    "file": "assets/FilterSalaFabulosa-BuurtZS7.js",
+    "file": "assets/FilterSalaFabulosa-sPB8ALoC.js",
     "name": "FilterSalaFabulosa",
     "src": "resources/js/Components/Tailwind/Filters/FilterSalaFabulosa.jsx",
     "isDynamicEntry": true,
@@ -4761,7 +4761,7 @@
       "_NoResult-C9qZVva5.js",
       "_SelectForm-G0J6yhhv.js",
       "resources/js/Components/Tailwind/Components/ProductCard.jsx",
-      "_ProductCardColors-75_iPsQ7.js",
+      "_ProductCardColors-BPl8-hSd.js",
       "_chevron-up-D78jyEhP.js",
       "_search-TwiiKGP5.js",
       "_chevron-left-B2s3ZsB7.js",
@@ -5490,7 +5490,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Product.jsx": {
-    "file": "assets/Product-DdJvtMHy.js",
+    "file": "assets/Product-CvGkIm59.js",
     "name": "Product",
     "src": "resources/js/Components/Tailwind/Product.jsx",
     "isEntry": true,
@@ -5916,7 +5916,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Products/ProductNavigationSwiper.jsx": {
-    "file": "assets/ProductNavigationSwiper-BgXwJnVq.js",
+    "file": "assets/ProductNavigationSwiper-CWpbw_u-.js",
     "name": "ProductNavigationSwiper",
     "src": "resources/js/Components/Tailwind/Products/ProductNavigationSwiper.jsx",
     "isDynamicEntry": true,
@@ -5925,7 +5925,7 @@
       "_index-BH53Isel.js",
       "resources/js/Components/Tailwind/Products/ProductNavigation.jsx",
       "_adjustTextColor-FzLvY4Q1.js",
-      "_ProductCardColors-75_iPsQ7.js",
+      "_ProductCardColors-BPl8-hSd.js",
       "resources/js/Components/Tailwind/Blogs/BlogCarousel.jsx",
       "_navigation-CLaRFmip.js",
       "resources/js/Components/Tailwind/Categories/InfiniteCategory.jsx",
@@ -6887,7 +6887,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-CD-HSs-8.js",
+    "file": "assets/System-BZdJaTwk.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,

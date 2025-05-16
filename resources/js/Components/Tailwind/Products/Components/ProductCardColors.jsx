@@ -7,7 +7,7 @@ import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 
 const ProductCardColors = ({ product, setCart, cart }) => {
-    
+
     const itemsRest = new ItemsRest();
     const [variationsItems, setVariationsItems] = useState([]);
 
@@ -34,24 +34,24 @@ const ProductCardColors = ({ product, setCart, cart }) => {
             // Preparar la solicitud
             const request = {
                 slug: item?.slug,
-                limit: 4,
+                limit: 999,
             };
-            
+
             const response = await itemsRest.getVariations(request);
-            
+
             if (!response) {
                 return;
             }
 
             const variations = response;
-            
+
             setVariationsItems(variations.variants);
-            
+
         } catch (error) {
             return;
         }
     };
-           
+
 
     useEffect(() => {
         if (product?.id) {
@@ -65,11 +65,11 @@ const ProductCardColors = ({ product, setCart, cart }) => {
         <div
             key={product.id}
             className={`group w-full transition-transform duration-300 hover:scale-105 flex-shrink-0 font-font-general customtext-primary cursor-pointer`}
-        >   
+        >
             <div
                 className="bg-white p-0 sm:p-4"
 
-            >   
+            >
                 <a href={`/item/${product.slug}`}>
                     {/* Imagen del producto y etiqueta de descuento */}
                     <div className="relative">
@@ -95,78 +95,83 @@ const ProductCardColors = ({ product, setCart, cart }) => {
                         {product.category.name}
                     </p>
 
-                    <div className="hidden md:flex gap-2 sm:gap-3 items-center justify-start w-full flex-wrap py-2">
-                        
-                        {variationsItems.slice(0, 4).map((variant) => (
-                            <Tippy content={variant.color} key={variant.slug}>
-                            <a
-                                href={`/item/${variant.slug}`}
-                                className="variant-option rounded-full border-2 border-[#e1e0e0] object-fit-cover bg-[#F5F5F5]" 
-                            >
-                                <img
-                                className="color-box rounded-full h-7 w-7 sm:h-9 sm:w-9 object-fit-cover"
-                                src={`/storage/images/item/${variant.texture || variant.image}`}
-                                alt={variant.color}
-                                onError={(e) =>
-                                    (e.target.src =
-                                        "/api/cover/thumbnail/null")
-                                }
-                                />
-                            </a>
-                            </Tippy>
-                        ))}
-                       
-                        <Tippy content={product.color}>
-                                <a
-                                    key={product.slug}
-                                    href={`/item/${product.slug}`}
-                                    className="variant-option  rounded-full border-2 border-[#e1e0e0] object-fit-cover bg-[#F5F5F5]" 
-                                >
-                                    <div className="color-box rounded-full h-7 w-7 sm:h-9 sm:w-9 flex flex-col justify-center items-center">
-                                        <PlusIcon />
-                                    </div>
-                                </a>
-                        </Tippy>
-                    </div>
-
-                    <div className="flex md:hidden gap-2 sm:gap-3 items-center justify-start w-full flex-wrap py-2">
-                        
-                        {variationsItems.slice(0, 3).map((variant) => (
-                            <Tippy content={variant.color} key={variant.slug}>
-                            <a
-                                href={`/item/${variant.slug}`}
-                                className="variant-option rounded-full border-2 border-[#e1e0e0]  object-fit-cover bg-[#F5F5F5]" 
-                            >
-                                <img
-                                className="color-box rounded-full h-7 w-7 sm:h-9 sm:w-9 object-fit-cover"
-                                src={`/storage/images/item/${variant.texture || variant.image}`}
-                                alt={variant.color}
-                                onError={(e) =>
-                                    (e.target.src =
-                                        "/api/cover/thumbnail/null")
-                                }
-                                />
-                            </a>
-                            </Tippy>
-                        ))}
-                       
-                        <Tippy content={product.color}>
-                                <a
-                                    key={product.slug}
-                                    href={`/item/${product.slug}`}
-                                    className="variant-option  rounded-full border-2 border-[#e1e0e0] object-fit-cover bg-[#F5F5F5]" 
-                                >
-                                    <div className="color-box rounded-full h-7 w-7 sm:h-9 sm:w-9 flex flex-col justify-center items-center">
-                                        <PlusIcon />
-                                    </div>
-                                </a>
-                        </Tippy>
-                    </div>
-
                     <a href={`/item/${product.slug}`}>
                         <h3 className="text-base sm:text-lg lg:text-xl font-bold mb-2 line-clamp-2 leading-tight">
                             {product.name}
                         </h3>
+
+                        <div className="hidden md:flex gap-2 sm:gap-3 items-center justify-start w-full flex-wrap py-2">
+
+                            {variationsItems.slice(0, 4).map((variant) => (
+                                <Tippy content={variant.color} key={variant.slug}>
+                                    <a
+                                        href={`/item/${variant.slug}`}
+                                        className="variant-option rounded-full border shadow-gray-500 shadow-lg border-[#310619] object-fit-cover bg-[#F5F5F5]"
+                                    >
+                                        <img
+                                            className="color-box rounded-full h-7 w-7 sm:h-9 sm:w-9 object-fit-cover"
+                                            src={`/storage/images/item/${variant.texture || variant.image}`}
+                                            alt={variant.color}
+                                            onError={(e) =>
+                                            (e.target.src =
+                                                "/api/cover/thumbnail/null")
+                                            }
+                                        />
+                                    </a>
+                                </Tippy>
+                            ))}
+
+                            {variationsItems.length > 4 && (
+                                <Tippy content={`+${variationsItems.length - 4} colores más`}>
+                                    <a
+                                        key={product.slug}
+                                        href={`/item/${product.slug}`}
+                                        className="variant-option rounded-full border shadow-gray-500 shadow-lg border-[#310619] object-fit-cover bg-[#310619] text-white text-xs font-extrabold"
+                                    >
+                                        <div className="color-box rounded-full h-7 w-7 sm:h-9 sm:w-9 flex flex-col justify-center items-center">
+                                            +{variationsItems.length - 4}
+                                        </div>
+                                    </a>
+                                </Tippy>
+                            )}
+                        </div>
+
+                        <div className="flex md:hidden gap-2 sm:gap-3 items-center justify-start w-full flex-wrap py-2">
+
+                            {variationsItems.slice(0, 3).map((variant) => (
+                                <Tippy content={variant.color} key={variant.slug}>
+                                    <a
+                                        href={`/item/${variant.slug}`}
+                                        className="variant-option rounded-full border shadow-gray-500 shadow-lg border-[#310619]  object-fit-cover bg-[#F5F5F5]"
+                                    >
+                                        <img
+                                            className="color-box rounded-full h-7 w-7 sm:h-9 sm:w-9 object-fit-cover"
+                                            src={`/storage/images/item/${variant.texture || variant.image}`}
+                                            alt={variant.color}
+                                            onError={(e) =>
+                                            (e.target.src =
+                                                "/api/cover/thumbnail/null")
+                                            }
+                                        />
+                                    </a>
+                                </Tippy>
+                            ))}
+
+                            {variationsItems.length > 3 && (
+                                <Tippy content={`+${variationsItems.length - 3} colores más`}>
+                                    <a
+                                        key={product.slug}
+                                        href={`/item/${product.slug}`}
+                                        className="variant-option rounded-full border shadow-gray-500 shadow-lg border-[#310619] object-fit-cover bg-[#310619] text-white text-xs font-extrabold"
+                                    >
+                                        <div className="color-box rounded-full h-7 w-7 sm:h-9 sm:w-9 flex flex-col justify-center items-center">
+                                            +{variationsItems.length - 3}
+                                        </div>
+                                    </a>
+                                </Tippy>
+                            )}
+                        </div>
+
                         {/* Precio */}
                         <div className="flex items-baseline gap-4 mt-4">
                             <span className="text-lg sm:text-xl md:text-2xl font-bold">
@@ -181,7 +186,7 @@ const ProductCardColors = ({ product, setCart, cart }) => {
                     </a>
                 </div>
             </div >
-            
+
         </div >
     );
 };

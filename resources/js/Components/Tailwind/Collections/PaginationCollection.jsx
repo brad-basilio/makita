@@ -5,6 +5,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import './css/pagination-collection.css';
 
 const PaginationCollection = ({
   items,
@@ -48,7 +49,7 @@ const PaginationCollection = ({
     left: alignmentClassPagination === "left" ? "0" : "auto",
     right: alignmentClassPagination === "right" ? "0" : "auto",
     transform: alignmentClassPagination === "center" ? "translateX(-50%)" : "none",
-  };
+  }
 
   return (
     <section className="pt-10 lg:pt-16 font-font-general">
@@ -57,19 +58,20 @@ const PaginationCollection = ({
           {data?.title}
         </h2>
         
-        <div className="relative">
+        <div className="relative py-16">
           <Swiper
             modules={[Navigation, Pagination]}
             navigation={{
               prevEl: navigationPrevRef.current,
               nextEl: navigationNextRef.current,
             }}
+            loop={true}
             pagination={{
               clickable: true,
               renderBullet: (index, className) => {
                 return `
-                  <div class="${className} inline-flex mx-1 w-3 h-3 rounded-full cursor-pointer">
-                    <div class="w-3 h-3 rounded-full"></div>
+                  <div class="${className} inline-flex mx-1 cursor-pointer">
+                    <div class="w-2 h-2 bg-gray-300 rounded-full transition-all duration-200 ease-in-out hover:bg-primary"></div>
                   </div>
                 `;
               },
@@ -90,7 +92,7 @@ const PaginationCollection = ({
                     className="block group"
                   >
                     <div className="bg-transparent rounded-xl p-0 transition-transform duration-300">
-                      <div className="aspect-square relative mb-4 rounded-full overflow-hidden">
+                      <div className="aspect-square relative mb-4 rounded-full overflow-hidden w-3/4 mx-auto">
                         <img
                           src={`/storage/images/collection/${collection.image}`}
                           onError={(e) =>
@@ -127,6 +129,9 @@ const PaginationCollection = ({
           >
             <ChevronRight className="w-6 h-6" />
           </button>
+
+          {/* Añadir el contenedor de paginación */}
+          <div className="w-full custom-pagination relative flex justify-center space-x-2 mt-16"></div>
         </div>
 
       </div>
