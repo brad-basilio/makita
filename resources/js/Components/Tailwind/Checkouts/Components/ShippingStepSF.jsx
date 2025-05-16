@@ -606,7 +606,16 @@ export default function ShippingStepSF({
         // }
     };
    
-
+    useEffect(() => {
+        // Limpiar errores cuando los campos son modificados
+        setErrors(prev => {
+            const newErrors = { ...prev };
+            Object.keys(formData).forEach(key => {
+                if (formData[key]) delete newErrors[key];
+            });
+            return newErrors;
+        });
+    }, [formData]);
 
     
     const selectStyles = (hasError) => ({
