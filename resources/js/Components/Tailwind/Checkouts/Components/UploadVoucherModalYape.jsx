@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 import ReactModal from "react-modal";
+import Global from "../../../../Utils/Global";
+import Tippy from "@tippyjs/react";
+
 
 export default function UploadVoucherModalYape({ 
     isOpen, 
@@ -38,14 +41,40 @@ export default function UploadVoucherModalYape({
         <ReactModal
             isOpen={isOpen}
             onRequestClose={onClose}
-            className="absolute left-1/2 -translate-x-1/2 bg-white rounded-2xl shadow-lg w-[95%] max-w-md top-1/2 -translate-y-1/2 overflow-hidden"
+            className="absolute left-1/2 -translate-x-1/2 bg-white rounded-2xl shadow-lg w-[95%] max-w-lg top-1/2 -translate-y-1/2 overflow-hidden font-font-general"
             overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-50"
             ariaHideApp={false}
         >
-            <div className="p-6">
-                <h2 className="text-xl font-bold text-primary mb-4">
-                    Subir comprobante de {paymentMethod === "yape" ? "Yape" : "Transferencia"}
+            <div className="py-6 px-10 flex flex-col gap-3">
+
+                <div className="flex justify-center items-center z-40">
+                    <a href="/" className="flex items-center gap-2">
+                        <img src={`/assets/resources/logo.png?v=${crypto.randomUUID()}`} alt={Global.APP_NAME} className="h-14 object-contain object-center" onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = '/assets/img/logo-bk.svg';
+                        }} />
+                    </a>
+                </div>
+
+                <h2 className="text-xl md:text-xl 2xl:text-2xl font-bold customtext-primary text-center">
+                    Felicitaciones!
                 </h2>
+
+                <p className="text-primary mt-2 text-sm 2xl:text-base text-center">Estás a un paso de completar tu compra, escanea el código DESDE TU CELULAR DE YAPE Y/O PLIN para realizar el pago</p>
+
+                {/* <img
+                    src={`/storage/images/general/${collection.image}`}
+                    onError={(e) =>
+                    (e.target.src =
+                    "assets/img/noimage/no_imagen_circular.png")
+                    }
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                    loading="lazy"
+                /> */}
+
+                <Tippy content='Yape BCP'>
+                          <img src="/assets/img/banks/yape.png" alt="Yape BCP" className="h-20 object-contain " />
+                </Tippy>
                 
                 <div className="space-y-4">
                     <div>

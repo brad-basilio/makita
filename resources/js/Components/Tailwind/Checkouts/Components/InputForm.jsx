@@ -5,13 +5,15 @@ const InputForm = ({
     label,
     className = '',
     labelClass = '',
+    required = false,
     ...props
 }) => {
     return (
         <div className="w-full">
             {label && (
                 <label className={`block text-sm 2xl:text-base mb-1 customtext-neutral-dark ${labelClass}`}>
-                    {label}
+                    {label} 
+                    {required && <span className="text-red-500 ml-1">*</span>}
                 </label>
             )}
             <input

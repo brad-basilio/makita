@@ -458,12 +458,12 @@ export default function ShippingStepSF({
         e.preventDefault();
     
         if (!validateForm()) {
-            Notify.add({
-                icon: "/assets/img/icon.svg",
-                title: "Campos incompletos",
-                body: "Complete todos los campos obligatorios",
-                type: "danger",
-            });
+            // Notify.add({
+            //     icon: "/assets/img/icon.svg",
+            //     title: "Campos incompletos",
+            //     body: "Complete todos los campos obligatorios",
+            //     type: "danger",
+            // });
             return;
         }
     
@@ -491,7 +491,6 @@ export default function ShippingStepSF({
         if (!formData.address) newErrors.address = "Dirección es requerida";
         if (!formData.document) newErrors.document = "Documento es requerido";
         if (!formData.number) newErrors.number = "Numero es requerido";
-        if (!formData.comment) newErrors.comment = "Referencia es requerido";
     
         setErrors(newErrors);
     
@@ -667,6 +666,7 @@ export default function ShippingStepSF({
                                     error={errors.name}
                                     onChange={handleChange}
                                     placeholder="Nombres"
+                                    required
                                 />
                                 {/* Apellidos */}
                                 <InputForm
@@ -677,6 +677,7 @@ export default function ShippingStepSF({
                                     error={errors.lastname}
                                     onChange={handleChange}
                                     placeholder="Apellidos"
+                                    required
                                 />
                             </div>
                     
@@ -691,12 +692,13 @@ export default function ShippingStepSF({
                                     error={errors.email}
                                     onChange={handleChange}
                                     placeholder="Ej. hola@gmail.com"
+                                    required
                                 />
 
                                 {/* Celular */}
                                 <div className="w-full">
                                     <label htmlFor="phone" className="block text-sm mb-1">
-                                        Celular
+                                        Celular <span className="text-red-500 ml-1">*</span>
                                     </label>
                                     <div className="flex gap-2 w-full">
                                         <select
@@ -748,7 +750,7 @@ export default function ShippingStepSF({
                                 <label
                                     className={`block text-sm 2xl:text-base mb-1 customtext-neutral-dark `}
                                 >
-                                    Ubicación de entrega
+                                    Ubicación de entrega (Departamento | Provincia | Distrito)
                                 </label>
                                 <AsyncSelect
                                     name="ubigeo"
@@ -759,7 +761,7 @@ export default function ShippingStepSF({
                                         setSelectedUbigeo(selected);
                                         handleUbigeoChange(selected);
                                     }}
-                                    placeholder="Buscar departamento | provincia | distrito ..."
+                                    placeholder="Buscar por departamento | provincia | distrito ..."
                                     loadingMessage={() => "Buscando ubicaciones..."}
                                     noOptionsMessage={({ inputValue }) =>
                                         inputValue.length < 3
@@ -836,6 +838,7 @@ export default function ShippingStepSF({
                                 error={errors.address}
                                 onChange={handleChange}
                                 placeholder="Ingresa el nombre de la calle"
+                                required
                             />
 
                             <div className="grid lg:grid-cols-2 gap-4">
@@ -847,6 +850,7 @@ export default function ShippingStepSF({
                                     error={errors.number}
                                     onChange={handleChange}
                                     placeholder="Ingresa el número de la calle"
+                                    required
                                 />
 
                                 <InputForm
@@ -854,7 +858,6 @@ export default function ShippingStepSF({
                                     type="text"
                                     name="comment"
                                     value={formData.comment}
-                                    error={errors.comment}
                                     onChange={handleChange}
                                     placeholder="Ej. Casa 3, Dpto 101"
                                 />
@@ -996,6 +999,7 @@ export default function ShippingStepSF({
                                 onChange={handleChange}
                                 placeholder={`Ingrese su ${formData.documentType === "dni" ? "DNI" : "RUC"}`}
                                 maxLength={formData.documentType === "dni" ? "8" : "11"}
+                                required
                         />
                         
                         {/* Razón Social (solo para factura) */}
