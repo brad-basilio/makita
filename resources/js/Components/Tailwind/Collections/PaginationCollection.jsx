@@ -39,8 +39,8 @@ const PaginationCollection = ({
       spaceBetween: 40,
     },
     1550: {
-        slidesPerView: 6,
-        spaceBetween: 50,
+      slidesPerView: 6,
+      spaceBetween: 50,
     },
   };
 
@@ -52,13 +52,13 @@ const PaginationCollection = ({
   }
 
   return (
-    <section className="pt-10 lg:pt-16 font-font-general">
+    <section className="p-[5%] font-font-general">
       <div className="w-full px-primary">
-        <h2 className="text-3xl sm:text-4xl lg:text-5xl 2xl:text-6xl font-semibold pb-4 sm:pb-8 text-left sm:text-center tracking-normal customtext-neutral-dark max-w-5xl mx-auto 2xl:max-w-7xl">
+        <h2 className="text-6xl pb-4 sm:pb-8 text-left sm:text-center tracking-normal customtext-neutral-dark max-w-5xl mx-auto 2xl:max-w-7xl">
           {data?.title}
         </h2>
-        
-        <div className="relative py-16">
+
+        <div className="relative pt-16">
           <Swiper
             modules={[Navigation, Pagination]}
             navigation={{
@@ -71,7 +71,7 @@ const PaginationCollection = ({
               renderBullet: (index, className) => {
                 return `
                   <div class="${className} inline-flex mx-1 cursor-pointer">
-                    <div class="w-2 h-2 bg-gray-300 rounded-full transition-all duration-200 ease-in-out hover:bg-primary"></div>
+                    <div class="w-4 h-4 bg-gray-300 rounded-full transition-all duration-200 ease-in-out hover:bg-primary"></div>
                   </div>
                 `;
               },
@@ -92,12 +92,12 @@ const PaginationCollection = ({
                     className="block group"
                   >
                     <div className="bg-transparent rounded-xl p-0 transition-transform duration-300">
-                      <div className="aspect-square relative mb-4 rounded-full overflow-hidden w-3/4 mx-auto">
+                      <div className="aspect-square relative mb-8 rounded-full overflow-hidden w-3/4 mx-auto">
                         <img
                           src={`/storage/images/collection/${collection.image}`}
                           onError={(e) =>
-                            (e.target.src =
-                              "assets/img/noimage/no_imagen_circular.png")
+                          (e.target.src =
+                            "assets/img/noimage/no_imagen_circular.png")
                           }
                           alt={collection.name}
                           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
@@ -131,8 +131,8 @@ const PaginationCollection = ({
           </button>
 
           {/* Añadir el contenedor de paginación */}
-          <div className="w-full custom-pagination relative flex justify-center space-x-2 mt-16"></div>
         </div>
+        <div className="w-full custom-pagination relative flex justify-center space-x-6 mt-16"></div>
 
       </div>
     </section>
