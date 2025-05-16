@@ -4912,7 +4912,7 @@
     ]
   },
   "resources/js/Components/Tailwind/ForgotPassword.jsx": {
-    "file": "assets/ForgotPassword-Pu_dNcS-.js",
+    "file": "assets/ForgotPassword-BeI7o-jO.js",
     "name": "ForgotPassword",
     "src": "resources/js/Components/Tailwind/ForgotPassword.jsx",
     "isEntry": true,
@@ -5250,7 +5250,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Login.jsx": {
-    "file": "assets/Login-BdUzUXeu.js",
+    "file": "assets/Login-DeXbzbnP.js",
     "name": "Login",
     "src": "resources/js/Components/Tailwind/Login.jsx",
     "isEntry": true,
@@ -5793,7 +5793,7 @@
     ]
   },
   "resources/js/Components/Tailwind/ResetPassword.jsx": {
-    "file": "assets/ResetPassword-DRzeBvKT.js",
+    "file": "assets/ResetPassword-DdnBKuxr.js",
     "name": "ResetPassword",
     "src": "resources/js/Components/Tailwind/ResetPassword.jsx",
     "isEntry": true,
@@ -5992,7 +5992,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Signup.jsx": {
-    "file": "assets/Signup-BpVUXiQp.js",
+    "file": "assets/Signup-C_ziiOIB.js",
     "name": "Signup",
     "src": "resources/js/Components/Tailwind/Signup.jsx",
     "isEntry": true,
@@ -6711,7 +6711,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-CCvPxN4K.js",
+    "file": "assets/System-NSuUhZUu.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,
