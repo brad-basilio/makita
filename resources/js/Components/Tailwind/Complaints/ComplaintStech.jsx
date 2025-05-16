@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import InputForm from "../Checkouts/Components/InputForm";
 import { Notify } from "sode-extend-react";
+import { toast } from "sonner";
+import { Send } from "lucide-react";
 
 const ComplaintStech = () => {
     const [formData, setFormData] = useState({
@@ -56,20 +58,20 @@ const ComplaintStech = () => {
 
             const result = await response.json();
             setMessage("Reclamo registrado con éxito");
-            Notify.add({
-                type: "success",
-                icon: "/assets/img/icon.svg",
-                title: "Envio correcto",
-                body: "Reclamo registrado con éxito",
+            toast.success("Solicitud enviada", {
+                description: `Pronto nos comunicaremos contigo ¡Gracias!.`,
+                icon: <Send className="h-5 w-5 text-green-500" />,
+                duration: 3000,
+                position: "bottom-center",
             });
             // console.log(result); // Respuesta del servidor
         } catch (error) {
             setMessage("Error al registrar el reclamo: " + error.message);
-            Notify.add({
-                type: "error",
-                icon: "/assets/img/icon.svg",
-                title: "Formulario incorrecto",
-                body: "Error al enviar el reclamo, vuelve a intentarlo.",
+            toast.error("Solicitud rechazada", {
+                description: error || `Lo sentimos, no se envió su solicitud.`,
+                icon: <Send className="h-5 w-5 text-red-500" />,
+                duration: 3000,
+                position: "bottom-center",
             });
         }
     };

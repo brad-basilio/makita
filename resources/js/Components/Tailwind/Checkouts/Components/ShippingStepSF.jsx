@@ -156,24 +156,27 @@ export default function ShippingStepSF({
     const handlePayment = async (e) => {
         e.preventDefault();
         if (!user) {
-            Notify.add({
-                icon: "/assets/img/icon.svg",
-                title: "Iniciar Sesión",
-                body: "Se requiere que incie sesión para realizar la compra",
-                type: "danger",
+            toast.error("Acceso requerido", {
+                description: `Debe iniciar sesión para continuar.`,
+                icon: <UserRoundX className="h-5 w-5 text-red-500" />,
+                duration: 3000,
+                position: "bottom-center",
             });
+
 
             return;
         }
 
         // Validar campos según el tipo de comprobante
         if (!formData.document) {
+
             Notify.add({
                 icon: "/assets/img/icon.svg",
                 title: "Error en el Formulario",
                 body: `El campo ${formData.documentType === "dni" ? "DNI" : "RUC"} es obligatorio`,
                 type: "danger",
             });
+            
             return;
         }
 

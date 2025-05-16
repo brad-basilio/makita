@@ -58,8 +58,9 @@ const ProductInfinite = ({ items, data, setCart, cart }) => {
                         spaceBetween={16}
                         slidesPerView={2}
                         grid={{
-                            rows: 3,
-                            fill: 'row'
+                             fill: 'row',
+                            rows: 3
+                           
                         }}
                         loop={true}
                         onSwiper={setSwiperInstance}
@@ -124,7 +125,7 @@ const ProductInfinite = ({ items, data, setCart, cart }) => {
                 </div>
             </div>
 
-            <style jsx>{`
+            <style jsx="true">{`
                 @keyframes fadeIn {
                     from { opacity: 0; }
                     to { opacity: 1; }
