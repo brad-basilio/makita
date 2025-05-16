@@ -4,104 +4,58 @@ import ShippingStep from "./Components/ShippingStep";
 import ConfirmationStep from "./Components/ConfirmationStep";
 import Global from "../../../Utils/Global";
 
-export default function CheckoutSteps({
-    cart,
-    setCart,
-    user,
-    ubigeos = [],
-    items,
-}) {
+export default function CheckoutSteps({ cart, setCart, user, ubigeos = [], items }) {
     const [currentStep, setCurrentStep] = useState(1);
-    // Calcular el precio total incluyendo IGV
-    const totalPrice = cart.reduce((acc, item) => {
-        const finalPrice = item.final_price;
-        return acc + finalPrice * item.quantity; // Sumar el precio total por cantidad
-    }, 0);
-
-    // Calcular el subtotal sin IGV (precio base)
+    const totalPrice = cart.reduce((acc, item) => acc + item.final_price * item.quantity, 0);
     const subTotal = (totalPrice / 1.18).toFixed(2);
-
-    // Calcular el IGV (18% del subtotal)
     const igv = (subTotal * 0.18).toFixed(2);
-
-    // Estado para el costo de envío
     const [envio, setEnvio] = useState(0);
-
-    // Calcular el total final (subtotal sin IGV + IGV + envío)
-    const totalFinal =
-        parseFloat(subTotal) + parseFloat(igv) + parseFloat(envio);
+    const totalFinal = parseFloat(subTotal) + parseFloat(igv) + parseFloat(envio);
     const [sale, setSale] = useState([]);
     const [code, setCode] = useState([]);
     const [delivery, setDelivery] = useState([]);
+
     useEffect(() => {
         const script = document.createElement("script");
         script.src = Global.CULQI_API;
         script.async = true;
         script.onload = () => {
-            // console.log("✅ Culqi cargado correctamente.");
-
-            // 🔹 Definir culqi() en window para capturar el token
             window.culqi = function () {
                 if (window.Culqi.token) {
                     console.log("✅ Token recibido:", window.Culqi.token.id);
-                    // Aquí puedes enviar el token a tu backend
                 } else if (window.Culqi.order) {
                     console.log("✅ Orden recibida:", window.Culqi.order);
-                } else {
-                    console.error("❌ Error en Culqi:", window.Culqi.error);
                 }
             };
         };
-
         document.body.appendChild(script);
-
-        return () => {
-            document.body.removeChild(script);
-        };
-
-        return null; // No renderiza nada, solo carga Culqi en el contexto de la app
+        return () => document.body.removeChild(script);
     }, []);
+
     return (
-        <div className="min-h-screen bg-[#F7F9FB] py-12 px-primary 2xl:px-0 2xl:max-w-7xl mx-auto">
-            <div className="bg-white   p-8 rounded-xl">
+        <div className="min-h-screen bg-[#F7F9FB] py-4 md:py-12 px-2 sm:px-primary 2xl:px-0 2xl:max-w-7xl mx-auto">
+            <div className="bg-white p-3 md:p-8 rounded-lg md:rounded-xl shadow-sm">
                 {/* Steps indicator */}
-                <div className="mb-8">
-                    <div className="flex items-center justify-between max-w-3xl mx-auto">
-                        <div
-                            className={`text-sm ${
-                                currentStep === 1
-                                    ? "customtext-primary font-medium"
-                                    : "customtext-neutral-dark"
-                            }`}
-                        >
-                            1. Carrito de compra
+                <div className="mb-4 md:mb-8">
+                    <div className="flex items-center justify-between gap-1 md:gap-4 max-w-3xl mx-auto">
+                        <div className={`flex flex-col items-center md:flex-row md:items-center gap-1 md:gap-2 ${currentStep === 1 ? "customtext-primary font-medium" : "customtext-neutral-dark"}`}>
+                            <span className="w-6 h-6 md:w-8 md:h-8 rounded-full border-2 flex items-center justify-center text-xs md:text-sm">1</span>
+                            <span className="text-[10px] md:text-sm text-center">Carrito</span>
                         </div>
-                        <div
-                            className={`text-sm ${
-                                currentStep === 2
-                                    ? "customtext-primary font-medium"
-                                    : "customtext-neutral-dark"
-                            }`}
-                        >
-                            2. Detalles de envío
+                        <div className="flex-1 h-[2px] bg-gray-200 relative">
+                            <div className="absolute inset-0 bg-primary transition-all duration-500" style={{ width: currentStep > 1 ? "100%" : "0%" }} />
                         </div>
-                        <div
-                            className={`text-sm ${
-                                currentStep === 3
-                                    ? "customtext-primary font-medium"
-                                    : "customtext-neutral-dark"
-                            }`}
-                        >
-                            3. Orden confirmada
+                        <div className={`flex flex-col items-center md:flex-row md:items-center gap-1 md:gap-2 ${currentStep === 2 ? "customtext-primary font-medium" : "customtext-neutral-dark"}`}>
+                            <span className="w-6 h-6 md:w-8 md:h-8 rounded-full border-2 flex items-center justify-center text-xs md:text-sm">2</span>
+                            <span className="text-[10px] md:text-sm text-center">Envío</span>
                         </div>
-                    </div>
-                    <div className="mt-4 h-1 max-w-3xl mx-auto bg-gray-200">
-                        <div
-                            className="h-1 bg-primary transition-all duration-500"
-                            style={{
-                                width: `${((currentStep - 1) / 2) * 100}%`,
-                            }}
-                        />
+                        <div className="flex-1 h-[2px] bg-gray-200 relative">
+                            <div className="absolute inset-0 bg-primary transition-all duration-500" style={{ width: currentStep > 2 ? "100%" : "0%" }} />
+                        </div>
+                        <div className={`flex flex-col items-center md:flex-row md:items-center gap-1 md:gap-2 ${currentStep === 3 ? "customtext-primary font-medium" : "customtext-neutral-dark"}`}>
+                            <span className="w-6 h-6 md:w-8 md:h-8 rounded-full border-2 flex items-center justify-center text-xs md:text-sm">3</span>
+                            <span className="text-[10px] md:text-sm text-center">Confirmación</span>
+                        </div>
                     </div>
                 </div>
 

@@ -271,11 +271,12 @@ export default function ShippingStep({
     const selectStyles = (hasError) => ({
         control: (base) => ({
             ...base,
-            border: `1px solid ${hasError ? '#ef4444' : 'transparent'}`,
+            border: `1px solid ${hasError ? '#ef4444' : '#e5e7eb'}`, // Added default border color
             boxShadow: 'none',
             minHeight: '50px',
             '&:hover': { borderColor: hasError ? '#ef4444' : '#6b7280' },
             borderRadius: '0.75rem',
+            padding: '2px 8px',
         }),
         menu: (base) => ({
             ...base,
@@ -288,14 +289,15 @@ export default function ShippingStep({
             color: '#1f2937',
             backgroundColor: 'white',
             '&:hover': { backgroundColor: '#f3f4f6' },
+            padding: '12px 16px',
         }),
     });
 
     return (
-        <div className="grid lg:grid-cols-5 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-5 md:gap-8">
             <div className="lg:col-span-3">
-                <form className="space-y-6" onSubmit={handlePayment}>
-                    <div className="grid grid-cols-2 gap-4">
+                <form className="space-y-4 md:space-y-6 bg-white p-4 md:p-6 rounded-xl shadow-sm" onSubmit={handlePayment}>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <InputForm
                             name="name"
                             label="Nombres"
@@ -303,6 +305,7 @@ export default function ShippingStep({
                             error={errors.name}
                             onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                             required
+                            className="border-gray-200"
                         />
                         <InputForm
                             name="lastname"
@@ -311,6 +314,7 @@ export default function ShippingStep({
                             error={errors.lastname}
                             onChange={(e) => setFormData(prev => ({ ...prev, lastname: e.target.value }))}
                             required
+                            className="border-gray-200"
                         />
                     </div>
 
@@ -322,32 +326,33 @@ export default function ShippingStep({
                         error={errors.email}
                         onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
                         required
+                        className="border-gray-200"
                     />
 
                     <div className="form-group">
-                        <label className="block text-sm 2xl:text-base mb-1 customtext-neutral-dark">
+                        <label className="block text-sm 2xl:text-base mb-2 font-medium customtext-neutral-dark">
                             Ubicación de entrega *
                         </label>
                         <AsyncSelect
                             name="ubigeo"
                             cacheOptions
-                            value={selectedUbigeo} // Usa value en lugar de defaultValue
-  loadOptions={loadOptions}
-  onChange={(selected) => {
-    setSelectedUbigeo(selected); // Actualiza el estado al seleccionar
-    handleUbigeoChange(selected);
-  }}
+                            value={selectedUbigeo}
+                            loadOptions={loadOptions}
+                            onChange={(selected) => {
+                                setSelectedUbigeo(selected);
+                                handleUbigeoChange(selected);
+                            }}
                             placeholder="Buscar departamento | distrito | provincia ..."
                             loadingMessage={() => "Buscando ubicaciones..."}
                             noOptionsMessage={({ inputValue }) =>
                                 inputValue.length < 3
-                                    ? "Buscar departamento | distrito | provincia ..."
+                                    ? "Ingrese al menos 3 caracteres..."
                                     : "No se encontraron resultados"
                             }
                             isLoading={loading}
                             styles={selectStyles(!!errors.ubigeo)}
                             formatOptionLabel={({ data }) => (
-                                <div className="text-sm">
+                                <div className="text-sm py-1">
                                     <div className="font-medium">{data.distrito}</div>
                                     <div className="text-gray-500">
                                         {data.provincia}, {data.departamento}
@@ -367,26 +372,28 @@ export default function ShippingStep({
                         error={errors.address}
                         onChange={(e) => setFormData(prev => ({ ...prev, address: e.target.value }))}
                         required
+                        className="border-gray-200"
                     />
 
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <InputForm
                             label="Número"
                             value={formData.number}
                             onChange={(e) => setFormData(prev => ({ ...prev, number: e.target.value }))}
+                            className="border-gray-200"
                         />
                         <InputForm
                             label="Referencia"
                             value={formData.reference}
                             onChange={(e) => setFormData(prev => ({ ...prev, reference: e.target.value }))}
+                            className="border-gray-200"
                         />
                     </div>
 
                     {shippingOptions.length > 0 && (
                         <div className="space-y-4">
                             <h3 className="text-lg font-semibold">Método de envío</h3>
-                            {/*errors.shipping && <div className="text-red-500 text-sm">{errors.shipping}</div>*/}
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {shippingOptions.map((option) => (
                                     <OptionCard
                                         key={option.type}
@@ -403,11 +410,11 @@ export default function ShippingStep({
                                 ))}
                             </div>
                             {selectedOption && shippingOptions.length > 0 && (
-                                <div className="space-y-4 mt-4">
+                                <div className="space-y-3 mt-4">
                                     {shippingOptions
                                         .find((o) => o.type === selectedOption)
                                         ?.characteristics?.map((char, index) => (
-                                            <div key={`char-${index}`} className="flex items-start gap-4 bg-secondary p-4 rounded-xl">
+                                            <div key={`char-${index}`} className="flex items-start gap-3 bg-gray-50 p-4 rounded-xl">
                                                 <div className="w-5 flex-shrink-0">
                                                     <InfoIcon className="customtext-primary" />
                                                 </div>
@@ -422,11 +429,11 @@ export default function ShippingStep({
                     )}
 
                     {!noContinue && (
-                        <div className="flex justify-end gap-4">
-                            <ButtonSecondary type="button" onClick={() => window.history.back()}>
+                        <div className="flex flex-col md:flex-row justify-end gap-3 md:gap-4 mt-6">
+                            <ButtonSecondary type="button" onClick={() => window.history.back()} className="w-full md:w-auto">
                                 Regresar
                             </ButtonSecondary>
-                            <ButtonPrimary type="submit" loading={loading}>
+                            <ButtonPrimary type="submit" loading={loading} className="w-full md:w-auto">
                                 Continuar
                             </ButtonPrimary>
                         </div>
