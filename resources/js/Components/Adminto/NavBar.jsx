@@ -62,7 +62,7 @@ const NavBar = ({ session = {}, title = 'Pagina' }) => {
 
 
       <div className="logo-box">
-        <a href="/home" className="logo logo-light text-center">
+        <a href="/" className="logo logo-light text-center">
           <span className="logo-sm">
             <img src="/assets/resources/icon.png" alt="" height="22" onError={(e) => {
               e.target.onerror = null;
@@ -76,7 +76,7 @@ const NavBar = ({ session = {}, title = 'Pagina' }) => {
             }} />
           </span>
         </a>
-        <a href="/home" className="logo logo-dark text-center">
+        <a href="/" className="logo logo-dark text-center">
           <span className="logo-sm">
             <img src="/assets/resources/icon.png" alt="" height="22" onError={(e) => {
               e.target.onerror = null;

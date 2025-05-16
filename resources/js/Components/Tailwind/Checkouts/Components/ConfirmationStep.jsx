@@ -1,92 +1,123 @@
 import Number2Currency from "../../../../Utils/Number2Currency";
 import ButtonPrimary from "./ButtonPrimary";
+import { motion } from "framer-motion";
 
 export default function ConfirmationStep({ cart, code, delivery }) {
-
-
     const totalPrice = cart.reduce((acc, item) => {
         const finalPrice = item.final_price;
-        return acc + finalPrice * item.quantity; // Sumar el precio total por cantidad
+        return acc + finalPrice * item.quantity;
     }, 0);
 
-    // Calcular el subtotal sin IGV (precio base)
     const subTotal = (totalPrice / 1.18).toFixed(2);
-
-    // Calcular el IGV (18% del subtotal)
     const igv = (subTotal * 0.18).toFixed(2);
-
-
-
-
-    // Calcular el total final (subtotal sin IGV + IGV + envío)
     const totalFinal = parseFloat(subTotal) + parseFloat(igv) + parseFloat(delivery);
+
     return (
-        <div className="mx-auto">
-            <div className="bg-white rounded-lg shadow p-6">
-                <div className="text-center space-y-4">
-                    <h2 className="text-[20px] customtext-neutral-light">Gracias por tu compra 🎉</h2>
-                    <p className="customtext-neutral-dark text-5xl font-semibold">Tu orden ha sido recibida</p>
+        <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-12"
+        >
+            <div className="bg-white rounded-2xl shadow-xl p-6 md:p-10">
+                <motion.div 
+                    initial={{ scale: 0.9 }}
+                    animate={{ scale: 1 }}
+                    transition={{ delay: 0.3 }}
+                    className="text-center space-y-6"
+                >
+                    <motion.div
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ type: "spring", delay: 0.5 }}
+                        className="w-20 h-20 bg-green-100 rounded-full mx-auto flex items-center justify-center"
+                    >
+                        <span className="text-4xl">✓</span>
+                    </motion.div>
 
-                    <div className="py-4">
-                        <div className=" customtext-neutral-light">Código de pedido</div>
-                        <div className="customtext-neutral-dark text-lg font-semibold">{`#${code}`}</div>
-                    </div>
+                    <h2 className="text-2xl md:text-3xl customtext-neutral-light animate-bounce">
+                        ¡Gracias por tu compra! 🎉
+                    </h2>
+                    <p className="customtext-neutral-dark text-3xl md:text-5xl font-bold">
+                        Tu orden ha sido recibida
+                    </p>
 
-                    <div className="space-y-4 max-w-lg bg-[#F7F9FB] mx-auto p-8 rounded-xl">
+                    <motion.div 
+                        whileHover={{ scale: 1.05 }}
+                        className="py-6 px-4 bg-green-50 rounded-xl inline-block"
+                    >
+                        <div className="customtext-neutral-light">Código de pedido</div>
+                        <div className="customtext-neutral-dark text-xl font-bold">{`#${code}`}</div>
+                    </motion.div>
+
+                    <div className="space-y-6 bg-[#F7F9FB] p-6 md:p-8 rounded-xl shadow-inner">
                         <div className="space-y-6 border-b-2 pb-6">
                             {cart.map((item, index) => (
-                                <div key={index} className="rounded-lg">
-                                    <div className="flex   gap-4">
-                                        <div className="bg-white p-2 rounded-xl w-max">
+                                <motion.div 
+                                    key={index}
+                                    initial={{ x: -20, opacity: 0 }}
+                                    animate={{ x: 0, opacity: 1 }}
+                                    transition={{ delay: index * 0.2 }}
+                                    className="bg-white rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow duration-300"
+                                >
+                                    <div className="flex flex-col sm:flex-row gap-6 items-center sm:items-start">
+                                        <div className="bg-gray-50 p-3 rounded-xl">
                                             <img
                                                 src={`/storage/images/item/${item.image}`}
                                                 alt={item.name}
-                                                className="w-20 h-20 object-cover rounded  "
+                                                className="w-24 h-24 object-cover rounded-lg"
                                             />
                                         </div>
-                                        <div className=" text-start">
-                                            <h3 className="font-medium text-lg mb-2">{item.name}</h3>
-                                            <p className="text-sm customtext-neutral-light">Marca: <span className="customtext-neutral-dark">{item.brand.name}</span></p>
-                                            <p className="text-sm customtext-neutral-light">Cantidad: <span className="customtext-neutral-dark">{item.quantity} </span></p>
-                                            <p className="text-sm customtext-neutral-light">SKU: <span className="customtext-neutral-dark">{item.sku}</span></p>
+                                        <div className="text-center sm:text-left flex-1">
+                                            <h3 className="font-semibold text-xl mb-3">{item.name}</h3>
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                                <p className="text-sm customtext-neutral-light">Marca: <span className="customtext-neutral-dark font-medium">{item.brand.name}</span></p>
+                                                <p className="text-sm customtext-neutral-light">Cantidad: <span className="customtext-neutral-dark font-medium">{item.quantity}</span></p>
+                                                <p className="text-sm customtext-neutral-light">SKU: <span className="customtext-neutral-dark font-medium">{item.sku}</span></p>
+                                            </div>
                                         </div>
-
                                     </div>
-                                </div>
+                                </motion.div>
                             ))}
                         </div>
 
-                        <div className="space-y-4 mt-6">
-                            <div className="flex justify-between">
-                                <span className="customtext-neutral-dark">Subtotal</span>
-                                <span className="font-semibold">S/ {Number2Currency(subTotal)}</span>
-                            </div>
-                            <div className="flex justify-between">
-                                <span className="customtext-neutral-dark">IGV</span>
-                                <span className="font-semibold">S/ {Number2Currency(igv)}</span>
-                            </div>
-                            <div className="flex justify-between">
-                                <span className="customtext-neutral-dark">Envío</span>
-                                <span className="font-semibold">S/ {Number2Currency(delivery)}</span>
-                            </div>
-                            <div className="py-3 border-y-2 mt-6">
-                                <div className="flex justify-between font-bold text-[20px] items-center">
+                        <motion.div 
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.8 }}
+                            className="space-y-4 mt-6"
+                        >
+                            {[
+                                { label: "Subtotal", value: subTotal },
+                                { label: "IGV", value: igv },
+                                { label: "Envío", value: delivery }
+                            ].map((item, index) => (
+                                <div key={index} className="flex justify-between items-center py-2">
+                                    <span className="customtext-neutral-dark">{item.label}</span>
+                                    <span className="font-semibold">S/ {Number2Currency(item.value)}</span>
+                                </div>
+                            ))}
+                            
+                            <div className="py-4 border-y-2 mt-6">
+                                <div className="flex justify-between font-bold text-xl md:text-2xl items-center">
                                     <span>Total</span>
                                     <span>S/ {Number2Currency(totalFinal)}</span>
                                 </div>
                             </div>
-                        </div>
-                        <div className="pt-3">
-                            <ButtonPrimary href="/catalogo" >  Seguir Comprando</ButtonPrimary>
+                        </motion.div>
 
-                        </div>
-
+                        <motion.div 
+                            className="pt-6"
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                        >
+                            <ButtonPrimary href="/catalogo" className="w-full md:w-auto">
+                                Seguir Comprando
+                            </ButtonPrimary>
+                        </motion.div>
                     </div>
-
-
-                </div>
+                </motion.div>
             </div>
-        </div>
-    )
+        </motion.div>
+    );
 }
-

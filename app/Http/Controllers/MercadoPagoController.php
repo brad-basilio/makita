@@ -18,6 +18,7 @@ class MercadoPagoController extends Controller
     public function createPreference(Request $request)
     {
         try {
+           
             // Configurar SDK de MercadoPago
             MercadoPagoConfig::setAccessToken(config('services.mercadopago.access_token'));
             

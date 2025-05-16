@@ -85,7 +85,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                 "=",
                 id,
             ]);
-            transformedFilters.push(["or", ...collectionConditions]);
+            transformedFilters.push([...collectionConditions]);
         }
 
         if (filters.category_id.length > 0) {
@@ -94,7 +94,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                 "=",
                 id,
             ]);
-            transformedFilters.push(["or", ...categoryConditions]);
+            transformedFilters.push([...categoryConditions]);
         }
 
         if (filters.subcategory_id.length > 0) {
@@ -103,7 +103,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                 "=",
                 id,
             ]);
-            transformedFilters.push(["or", ...subcategoryConditions]);
+            transformedFilters.push([...subcategoryConditions]);
         }
 
         if (filters.brand_id.length > 0) {
@@ -112,7 +112,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                 "=",
                 id,
             ]);
-            transformedFilters.push(["or", ...brandConditions]);
+            transformedFilters.push([...brandConditions]);
         }
 
         if (filters.price) {
@@ -130,7 +130,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
             transformedFilters.push(["name", "contains", filters.name]);
         }
 
-        return transformedFilters;
+        return ArrayJoin(transformedFilters,'and');
     };
     // Obtener productos filtrados desde el backend
     const fetchProducts = async (page = 1) => {

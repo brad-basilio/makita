@@ -49,7 +49,9 @@ const Checkout = ({
                         cart={cart}
                         setCart={setCart}
                         user={isUser}
+                        ubigeos={ubigeos}
                         prefixes={prefixes}
+                        items={items}
                     />
                 );
             default:

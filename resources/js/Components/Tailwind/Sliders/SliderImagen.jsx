@@ -2,19 +2,40 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { adjustTextColor } from "../../../Functions/adjustTextColor";
 
 const SliderImagen = ({ items, data }) => {
     const prevSlideRef = useRef(null);
     const nextSlideRef = useRef(null);
     const swiperRef = useRef(null);
+    const [imagesLoaded, setImagesLoaded] = useState(false);
+    const [maxHeight, setMaxHeight] = useState(0);
 
-    // Ajustar colores de los botones
+    // Adjust button colors
     useEffect(() => {
         adjustTextColor(prevSlideRef.current);
         adjustTextColor(nextSlideRef.current);
     }, []);
+
+    // Handle image loading and height calculation
+    const handleImagesLoad = () => {
+        const imageElements = document.querySelectorAll('.brand-logo');
+        let loadedImages = 0;
+        let maxImageHeight = 0;
+
+        imageElements.forEach(img => {
+            if (img.complete) {
+                loadedImages++;
+                maxImageHeight = Math.max(maxImageHeight, img.naturalHeight);
+            }
+        });
+
+        if (loadedImages === imageElements.length) {
+            setMaxHeight(maxImageHeight);
+            setImagesLoaded(true);
+        }
+    };
 
     return (
         <div>
@@ -51,7 +72,7 @@ const SliderImagen = ({ items, data }) => {
                                 nextEl: nextSlideRef.current,
                             }}
                             loop={true}
-                            spaceBetween={16}
+                            spaceBetween={30}
                             slidesPerView={1}
                             onSwiper={(swiper) => (swiperRef.current = swiper)}
                             breakpoints={{
@@ -61,15 +82,24 @@ const SliderImagen = ({ items, data }) => {
                                     centeredSlides: true,
                                 },
                             }}
-                            className="w-full  !px-10 2xl:!px-4 !flex !justify-between"
+                            className="w-full !px-10 2xl:!px-4 !flex !justify-between"
                         >
                             {items.filter((brand) => brand.image).map((brand, index) => (
                                 <SwiperSlide key={index}>
-                                    <div className="group w-full flex items-center justify-center px-2 font-font-secondary">
+                                    <div 
+                                        className="group w-full flex items-center justify-center px-2 font-font-secondary"
+                                        style={{ height: imagesLoaded ? '80px' : 'auto' }}
+                                    >
                                         <img
                                             src={`/storage/images/brand/${brand.image}`}
                                             alt={brand.name}
-                                            className="h-10 w-full object-contain grayscale brightness-0 invert hover:scale-105 transition-transform cursor-pointer"
+                                            className="brand-logo max-h-[60px] w-auto object-contain grayscale brightness-0 invert hover:scale-105 transition-transform cursor-pointer"
+                                            onLoad={handleImagesLoad}
+                                            style={{
+                                                maxWidth: '80%',
+                                                objectFit: 'contain',
+                                                objectPosition: 'center'
+                                            }}
                                         />
                                     </div>
                                 </SwiperSlide>

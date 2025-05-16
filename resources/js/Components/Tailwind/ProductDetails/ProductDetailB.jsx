@@ -19,6 +19,7 @@ import ProductInfinite from "../Products/ProductInfinite";
 import CartModal from "../Components/CartModal";
 
 export default function ProductDetail({ item, data, setCart, cart }) {
+    console.log(data);
     const itemsRest = new ItemsRest();
     const [modalOpen, setModalOpen] = useState(false);
     const [selectedImage, setSelectedImage] = useState({
@@ -46,12 +47,14 @@ export default function ProductDetail({ item, data, setCart, cart }) {
         }
         setCart(newCart);
 
-        Swal.fire({
+     /*   Swal.fire({
             title: "Producto agregado",
             text: `Se agregó ${product.name} al carrito`,
             icon: "success",
             timer: 1500,
-        });
+        });*/
+        setModalOpen(!modalOpen);
+        setTimeout(() => setModalOpen(false), 3000);
     };
 
     const [associatedItems, setAssociatedItems] = useState([]);
@@ -204,7 +207,9 @@ export default function ProductDetail({ item, data, setCart, cart }) {
                                             }
                                         />
                                     </button>
-                                    {item?.images.map((image, index) => (
+                                    {item?.images.filter((image, index, self) => 
+        index === self.findIndex((img) => img.url === image.url) // Filtra duplicados
+    ).map((image, index) => (
                                         <button
                                             key={index}
                                             onClick={() =>
@@ -804,6 +809,7 @@ export default function ProductDetail({ item, data, setCart, cart }) {
                 setCart={setCart}
             />
             <CartModal
+            data={data}
                 cart={cart}
                 setCart={setCart}
                 modalOpen={modalOpen}

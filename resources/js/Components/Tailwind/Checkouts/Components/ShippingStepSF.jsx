@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Number2Currency from "../../../../Utils/Number2Currency";
 import ubigeoData from "../../../../../../storage/app/utils/ubigeo.json";
 import DeliveryPricesRest from "../../../../Actions/DeliveryPricesRest";
@@ -12,8 +12,11 @@ import OptionCard from "./OptionCard";
 import { InfoIcon } from "lucide-react";
 import { Notify } from "sode-extend-react";
 import { renderToString } from "react-dom/server";
+import { debounce } from "lodash";
+import { useUbigeo } from "../../../../Utils/useUbigeo";
+import AsyncSelect from "react-select/async";
 import PaymentModal from "./PaymentModal";
-
+import UploadVoucherModalYape from "./UploadVoucherModalYape";
 
 export default function ShippingStepSF({
     cart,
@@ -30,8 +33,10 @@ export default function ShippingStepSF({
     setEnvio,
     envio,
     prefixes,
+    ubigeos = [],
 }) {
-    
+    const [selectedUbigeo, setSelectedUbigeo] = useState(null);
+    const [defaultUbigeoOption, setDefaultUbigeoOption] = useState(null);
     const [formData, setFormData] = useState({
         name: user?.name || "",
         lastname: user?.lastname || "",
@@ -44,14 +49,32 @@ export default function ShippingStepSF({
         address: user?.address || "",
         number: user?.number || "",
         comment: user?.comment || "",
-        reference: user?.reference || "",
+        /*reference: user?.reference || "",*/
         shippingOption: "delivery", // Valor predeterminado
-
+        ubigeo: null,
         invoiceType: user?.invoiceType || "boleta", // Nuevo campo para tipo de comprobante
         documentType: user?.documentType || "dni", 
         document: user?.document || "", 
         businessName: user?.businessName || "", // Nuevo campo para Razón Social
     });
+    
+    useEffect(() => {
+        if (user?.ubigeo && user?.district && user?.province && user?.department) {
+          const defaultOption = {
+            value: user.ubigeo,
+            label: `${user.district}, ${user.province}, ${user.department}`,
+            data: {
+              reniec: user.ubigeo,
+              departamento: user.department,
+              provincia: user.province,
+              distrito: user.district
+            }
+          };
+          setDefaultUbigeoOption(defaultOption);
+          setSelectedUbigeo(defaultOption); // Actualiza el estado del ubigeo seleccionado
+          handleUbigeoChange(defaultOption);
+        }
+      }, [user]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -69,99 +92,219 @@ export default function ShippingStepSF({
     };
 
     // Estados para manejar los valores seleccionados
-    const [departamento, setDepartamento] = useState("");
-    const [provincia, setProvincia] = useState("");
-    const [distrito, setDistrito] = useState("");
+    // const [departamento, setDepartamento] = useState("");
+    // const [provincia, setProvincia] = useState("");
+    // const [distrito, setDistrito] = useState("");
 
     // Estados para las opciones dinámicas
-    const [departamentos, setDepartamentos] = useState([]);
-    const [provincias, setProvincias] = useState([]);
-    const [distritos, setDistritos] = useState([]);
-
+    // const [departamentos, setDepartamentos] = useState([]);
+    // const [provincias, setProvincias] = useState([]);
+    // const [distritos, setDistritos] = useState([]);
+    
     // Estado para el precio de envío
     const [shippingCost, setShippingCost] = useState(0);
 
+    // Estado para el ubigeo
+    const [loading, setLoading] = useState(false);
+    const [shippingOptions, setShippingOptions] = useState([]);
+    const [selectedOption, setSelectedOption] = useState(null);
+    const [costsGet, setCostsGet] = useState(null);
+    const [errors, setErrors] = useState({});
+
     // Cargar los departamentos al iniciar el componente
-    useEffect(() => {
-        const uniqueDepartamentos = [
-            ...new Set(ubigeoData.map((item) => item.departamento)),
-        ];
-        setDepartamentos(uniqueDepartamentos);
-    }, []);
+    // useEffect(() => {
+    //     const uniqueDepartamentos = [
+    //         ...new Set(ubigeoData.map((item) => item.departamento)),
+    //     ];
+    //     setDepartamentos(uniqueDepartamentos);
+    // }, []);
+
+    const handleUbigeoChange = async (selected) => {
+        if (!selected) return;
+        
+        setErrors(prev => ({ ...prev, ubigeo: "" }));
+        const { data } = selected;
+
+        setFormData(prev => ({
+            ...prev,
+            department: data.departamento,
+            province: data.provincia,
+            district: data.distrito,
+            ubigeo: data.reniec,
+        }));
+
+        setLoading(true);
+        try {
+            const response = await DeliveryPricesRest.getShippingCost({
+                ubigeo: data.reniec,
+            });
+
+            const options = [];
+            if (response.data.is_free) {
+                options.push({
+                    type: "free",
+                    price: 0,
+                    description: response.data.standard.description,
+                    deliveryType: response.data.standard.type,
+                    characteristics: response.data.standard.characteristics,
+                });
+
+                if (response.data.express.price > 0) {
+                    options.push({
+                        type: "express",
+                        price: response.data.express.price,
+                        description: response.data.express.description,
+                        deliveryType: response.data.express.type,
+                        characteristics: response.data.express.characteristics,
+                    });
+                }
+            } else if (response.data.is_agency) {
+                options.push({
+                    type: "agency",
+                    price: 0,
+                    description: response.data.agency.description,
+                    deliveryType: response.data.agency.type,
+                    characteristics: response.data.agency.characteristics,
+                });
+            } else {
+                options.push({
+                    type: "standard",
+                    price: response.data.standard.price,
+                    description: response.data.standard.description,
+                    deliveryType: response.data.standard.type,
+                    characteristics: response.data.standard.characteristics,
+                });
+            }
+
+            setShippingOptions(options);
+            setSelectedOption(options[0].type);
+            setEnvio(options[0].price);
+        } catch (error) {
+            console.error("Error al obtener precios de envío:", error);
+            Notify.add({
+                icon: "/assets/img/icon.svg",
+                title: "Sin cobertura",
+                body: "No realizamos envíos a esta ubicación",
+                type: "danger",
+            });
+            setShippingOptions([]);
+            setSelectedOption(null);
+            setEnvio(0);
+        }
+        setLoading(false);
+    };
+
+    const loadOptions = useCallback(
+        debounce((inputValue, callback) => {
+            if (inputValue.length < 3) {
+                callback([]);
+                return;
+            }
+
+            fetch(`/api/ubigeo/search?q=${encodeURIComponent(inputValue)}`)
+                .then((response) => {
+                    if (!response.ok) throw new Error("Error en la respuesta");
+                    return response.json();
+                })
+                .then((data) => {
+                    const options = data.map((item) => ({
+                        value: item.reniec,
+                        label: `${item.distrito}, ${item.provincia}, ${item.departamento}`,
+                        data: {
+                            inei: item.inei,
+                            reniec: item.reniec,
+                            departamento: item.departamento,
+                            provincia: item.provincia,
+                            distrito: item.distrito,
+                        },
+                    }));
+                    callback(options);
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                    callback([]);
+                });
+        }, 300),
+        []
+    );
 
     // Filtrar provincias cuando se selecciona un departamento
-    useEffect(() => {
-        if (departamento) {
-            const filteredProvincias = [
-                ...new Set(
-                    ubigeoData
-                        .filter((item) => item.departamento === departamento)
-                        .map((item) => item.provincia)
-                ),
-            ];
-            setProvincias(filteredProvincias);
-            setProvincia(""); // Reiniciar provincia
-            setDistrito(""); // Reiniciar distrito
-            setDistritos([]); // Limpiar distritos
-            setFormData((prev) => ({
-                ...prev,
-                department: departamento,
-                province: "",
-                district: "",
-            }));
-        }
-    }, [departamento]);
+    // useEffect(() => {
+    //     if (departamento) {
+    //         const filteredProvincias = [
+    //             ...new Set(
+    //                 ubigeoData
+    //                     .filter((item) => item.departamento === departamento)
+    //                     .map((item) => item.provincia)
+    //             ),
+    //         ];
+    //         setProvincias(filteredProvincias);
+    //         setProvincia(""); // Reiniciar provincia
+    //         setDistrito(""); // Reiniciar distrito
+    //         setDistritos([]); // Limpiar distritos
+    //         setFormData((prev) => ({
+    //             ...prev,
+    //             department: departamento,
+    //             province: "",
+    //             district: "",
+    //         }));
+    //     }
+    // }, [departamento]);
 
     // Filtrar distritos cuando se selecciona una provincia
-    useEffect(() => {
-        if (provincia) {
-            const filteredDistritos = ubigeoData
-                .filter(
-                    (item) =>
-                        item.departamento === departamento &&
-                        item.provincia === provincia
-                )
-                .map((item) => item.distrito);
-            setDistritos(filteredDistritos);
-            setDistrito(""); // Reiniciar distrito
-            setFormData((prev) => ({
-                ...prev,
-                province: provincia,
-                district: "",
-            }));
-        }
-    }, [provincia]);
+    // useEffect(() => {
+    //     if (provincia) {
+    //         const filteredDistritos = ubigeoData
+    //             .filter(
+    //                 (item) =>
+    //                     item.departamento === departamento &&
+    //                     item.provincia === provincia
+    //             )
+    //             .map((item) => item.distrito);
+    //         setDistritos(filteredDistritos);
+    //         setDistrito(""); // Reiniciar distrito
+    //         setFormData((prev) => ({
+    //             ...prev,
+    //             province: provincia,
+    //             district: "",
+    //         }));
+    //     }
+    // }, [provincia]);
 
     // Consultar el precio de envío cuando se selecciona un distrito
-    useEffect(() => {
-        if (distrito) {
-            setFormData((prev) => ({ ...prev, district: distrito }));
+    // useEffect(() => {
+    //     if (distrito) {
+    //         setFormData((prev) => ({ ...prev, district: distrito }));
 
-            // Llamar a la API para obtener el precio de envío
-            const fetchShippingCost = async () => {
-                try {
-                    const response = await DeliveryPricesRest.getShippingCost({
-                        department: departamento,
-                        district: distrito,
-                    });
-                    setEnvio(response.data.price);
-                    if (Number2Currency(response.data.price) > 0) {
-                        setSelectedOption("express");
-                    } else {
-                        setSelectedOption("free");
-                    }
-                } catch (error) {
-                    console.error("Error fetching shipping cost:", error);
-                    alert("No se pudo obtener el costo de envío.");
-                }
-            };
+    //         // Llamar a la API para obtener el precio de envío
+    //         const fetchShippingCost = async () => {
+    //             try {
+    //                 const response = await DeliveryPricesRest.getShippingCost({
+    //                     department: departamento,
+    //                     district: distrito,
+    //                 });
+    //                 setEnvio(response.data.price);
+    //                 if (Number2Currency(response.data.price) > 0) {
+    //                     setSelectedOption("express");
+    //                 } else {
+    //                     setSelectedOption("free");
+    //                 }
+    //             } catch (error) {
+    //                 console.error("Error fetching shipping cost:", error);
+    //                 alert("No se pudo obtener el costo de envío.");
+    //             }
+    //         };
 
-            fetchShippingCost();
-        }
-    }, [distrito]);
+    //         fetchShippingCost();
+    //     }
+    // }, [distrito]);
 
     const handlePayment = async (e) => {
-        e.preventDefault();
+        
+        if (e && e.preventDefault) {
+            e.preventDefault();
+        }
+
         if (!user) {
             Notify.add({
                 icon: "/assets/img/icon.svg",
@@ -195,32 +338,32 @@ export default function ShippingStepSF({
         }
 
         if (
-            !formData.department ||
-            !formData.province ||
-            !formData.district ||
             !formData.name ||
             !formData.lastname ||
             !formData.email ||
             !formData.address ||
-            !formData.reference ||
-            !formData.phone
-
-
+            !formData.phone ||
+            !formData.ubigeo 
         ) {
             Notify.add({
                 icon: "/assets/img/icon.svg",
-                title: "Error en el Formulario",
-                body: "Completar los datos de envío",
+                title: "Campos incompletos",
+                body: "Complete todos los campos obligatorios",
                 type: "danger",
             });
 
             return;
         }
 
-        // if (!window.Culqi) {
-        //     console.error("❌ Culqi aún no se ha cargado.");
-        //     return;
-        // }
+        if (!selectedOption) {
+            Notify.add({
+                icon: "/assets/img/icon.svg",
+                title: "Seleccione envío",
+                body: "Debe elegir un método de envío",
+                type: "danger",
+            });
+            return;
+        }
 
         if (!window.MercadoPago) {
             console.error("❌ MercadoPago aún no se ha cargado.")
@@ -237,14 +380,14 @@ export default function ShippingStepSF({
                 email: formData?.email || "",
                 phone: `${formData.phone_prefix}${formData.phone}`,
                 country: "Perú",
-                department: departamento || "",
-                province: provincia || "",
-                district: distrito || "",
-                ubigeo: null,
+                department: formData?.department || "",
+                province: formData?.province || "",
+                district: formData?.district || "",
+                ubigeo: formData?.ubigeo || "",
                 address: formData?.address || "",
                 number: formData?.number || "",
                 comment: formData?.comment || "",
-                reference: formData?.reference || "",
+                /*reference: formData?.reference || "",*/
                 amount: totalFinal || 0,
                 delivery: envio,
                 cart: cart,
@@ -254,7 +397,6 @@ export default function ShippingStepSF({
                 businessName: formData.businessName || "",
             };
            
-            // const response = await processCulqiPayment(request);
             const response = await processMercadoPagoPayment(request)
             const data = response;
             
@@ -327,14 +469,148 @@ export default function ShippingStepSF({
         });
     }, [formData.phone_prefix])
 
-    const [selectedOption, setSelectedOption] = useState("free");
 
     const [showPaymentModal, setShowPaymentModal] = useState(false);
+    const [showVoucherModal, setShowVoucherModal] = useState(false);
+    const [currentPaymentMethod, setCurrentPaymentMethod] = useState(null);
 
-    const handlePaymentComplete = () => {
-        console.log("Pago completado");
-        // Aquí puedes redirigir o mostrar un mensaje de éxito
+    const handleContinueClick = (e) => {
+        e.preventDefault();
+        
+        if (!formData.name || !formData.lastname || !formData.email || 
+            !formData.phone || !formData.ubigeo || !formData.address || 
+            !formData.document) {
+            Notify.add({
+                icon: "/assets/img/icon.svg",
+                title: "Campos incompletos",
+                body: "Complete todos los campos obligatorios",
+                type: "danger",
+            });
+            return;
+        }
+
+        if (!selectedOption) {
+            Notify.add({
+                icon: "/assets/img/icon.svg",
+                title: "Seleccione envío",
+                body: "Debe elegir un método de envío",
+                type: "danger",
+            });
+            return;
+        }
+
+        setShowPaymentModal(true);
     };
+
+    const handlePaymentComplete = async (paymentMethod) => {  // Cambiado de 'method' a 'paymentMethod'
+        try {
+            setShowPaymentModal(false);
+            
+            if (paymentMethod === "tarjeta") {
+                // Procesar pago con tarjeta (MercadoPago)
+                const request = {
+                    user_id: user?.id || "",
+                    name: formData?.name || "",
+                    lastname: formData?.lastname || "",
+                    fullname: `${formData?.name} ${formData?.lastname}`,
+                    phone_prefix: formData?.phone_prefix || "51",
+                    email: formData?.email || "",
+                    phone: `${formData.phone_prefix}${formData.phone}`,
+                    country: "Perú",
+                    department: formData?.department || "",
+                    province: formData?.province || "",
+                    district: formData?.district || "",
+                    ubigeo: formData?.ubigeo || "",
+                    address: formData?.address || "",
+                    number: formData?.number || "",
+                    comment: formData?.comment || "",
+                    amount: totalFinal || 0,
+                    delivery: envio,
+                    cart: cart,
+                    invoiceType: formData.invoiceType || "",
+                    documentType: formData.documentType || "",
+                    document: formData.document || "",
+                    businessName: formData.businessName || "",
+                    paymentMethod: paymentMethod // Añadimos el método de pago a la request
+                };
+    
+                const response = await processMercadoPagoPayment(request);
+                const data = response;
+                
+                if (data.status) {
+                    setSale(data.sale);
+                    setDelivery(data.delivery);
+                    setCode(data.code);
+                } else {
+                    Notify.add({
+                        icon: "/assets/img/icon.svg",
+                        title: "Error en el Pago",
+                        body: "El pago ha sido rechazado",
+                        type: "danger",
+                    });
+                }
+            } else {
+                // Lógica para otros métodos de pago (Yape/Plin o Transferencia)
+                Notify.add({
+                    icon: "/assets/img/icon.svg",
+                    title: "Método seleccionado",
+                    body: `Has seleccionado pagar con ${paymentMethod}. Pronto te contactaremos con las instrucciones.`,
+                    type: "info",
+                });
+            }
+        } catch (error) {
+            console.error("Error en el pago:", error);
+            Notify.add({
+                icon: "/assets/img/icon.svg",
+                title: "Error en el Pago",
+                body: "No se pudo procesar el pago",
+                type: "danger",
+            });
+        }
+    };
+
+    // const validateForm = () => {
+    //     const newErrors = {};
+        
+    //     if (!formData.name) newErrors.name = "Nombre es requerido";
+    //     if (!formData.lastname) newErrors.lastname = "Apellido es requerido";
+    //     if (!formData.email) newErrors.email = "Email es requerido";
+    //     if (!formData.phone) newErrors.phone = "Teléfono es requerido";
+    //     if (!formData.ubigeo) newErrors.ubigeo = "Ubigeo es requerido";
+    //     if (!formData.address) newErrors.address = "Dirección es requerida";
+    //     if (!formData.document) newErrors.document = "Documento es requerido";
+        
+    //     setErrors(newErrors);
+        
+    //     return Object.keys(newErrors).length === 0;
+    // };
+
+
+    
+    const selectStyles = (hasError) => ({
+        control: (base) => ({
+            ...base,
+            border: `1px solid ${hasError ? '#ef4444' : '#e5e7eb'}`, // Added default border color
+            boxShadow: 'none',
+            minHeight: '50px',
+            '&:hover': { borderColor: hasError ? '#ef4444' : '#6b7280' },
+            borderRadius: '0.75rem',
+            padding: '2px 8px',
+        }),
+        menu: (base) => ({
+            ...base,
+            zIndex: 9999,
+            marginTop: '4px',
+            borderRadius: '8px',
+        }),
+        option: (base) => ({
+            ...base,
+            color: '#1f2937',
+            backgroundColor: 'white',
+            '&:hover': { backgroundColor: '#f3f4f6' },
+            padding: '12px 16px',
+        }),
+    });
 
     return (
         <>
@@ -342,170 +618,305 @@ export default function ShippingStepSF({
                 <div className="lg:col-span-3">
                     {/* Formulario */}
                     <form
-                        className="space-y-6 bg-[#f9f9f9] p-6 rounded-2xl font-font-general"
+                        className="space-y-6 bg-[#f9f9f9] py-6 px-4 sm:px-6 rounded-2xl font-font-general"
                         onSubmit={(e) => e.preventDefault()}
                     >
-                        <div className="grid lg:grid-cols-2 gap-4 ">
-                            {/* Nombres */}
-                            <InputForm
-                                type="text"
-                                label="Nombres"
-                                name="name"
-                                value={formData.name}
-                                onChange={handleChange}
-                                placeholder="Nombres"
-                            />
-                            {/* Apellidos */}
-                            <InputForm
-                                label="Apellidos"
-                                type="text"
-                                name="lastname"
-                                value={formData.lastname}
-                                onChange={handleChange}
-                                placeholder="Apellidos"
-                            />
-                        </div>
-                        
-                        <div className="grid lg:grid-cols-2 gap-4 ">
-                        
-                            {/* Correo electrónico */}
-                            <InputForm
-                                label="Correo electrónico"
-                                type="email"
-                                name="email"
-                                value={formData.email}
-                                onChange={handleChange}
-                                placeholder="Ej. hola@gmail.com"
-                            />
+                        <div className="sectionInformation space-y-3.5">
+                            <h3 className={`block text-xl 2xl:text-2xl font-bold mb-4 customtext-neutral-dark `}>
+                                Información del contacto
+                            </h3>
+                            <div className="grid lg:grid-cols-2 gap-4">
+                                {/* Nombres */}
+                            
+                                <InputForm
+                                    type="text"
+                                    label="Nombres"
+                                    name="name"
+                                    value={formData.name}
+                                    onChange={handleChange}
+                                    placeholder="Nombres"
+                                />
+                                {/* Apellidos */}
+                                <InputForm
+                                    label="Apellidos"
+                                    type="text"
+                                    name="lastname"
+                                    value={formData.lastname}
+                                    onChange={handleChange}
+                                    placeholder="Apellidos"
+                                />
+                            </div>
+                    
+                            <div className="grid lg:grid-cols-2 gap-4 ">
+                            
+                                {/* Correo electrónico */}
+                                <InputForm
+                                    label="Correo electrónico"
+                                    type="email"
+                                    name="email"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    placeholder="Ej. hola@gmail.com"
+                                />
 
-                            {/* Celular */}
-                            <div className="mb-4">
-                                <label htmlFor="phone" className="block text-sm mb-1">
-                                    Celular
-                                </label>
-                                <div className="flex gap-2">
-                                    <select
-                                        className="select2-prefix-selector w-[200px] p-2 border border-gray-300 rounded"
-                                        onChange={(e) => setSelectedPrefix(e.target.value)}
-                                        name="phone_prefix"
-                                        value={formData.phone_prefix}
-                                    >
-                                        <option value="">Selecciona un país</option>
-                                        {
-                                        prefixes
-                                            .sort((a, b) => a.country.localeCompare(b.country))
-                                            .map((prefix, index) => (
-                                            <option
-                                                key={index}
-                                                value={prefix.realCode}
-                                                data-code={prefix.beautyCode}
-                                                data-flag={prefix.flag}
-                                                data-country={prefix.country}
-                                            >
-                                            </option>
-                                            ))
-                                        }
-                                    </select>
-                                    <input
-                                        type="text"
-                                        id="phone"
-                                        name="phone"
-                                        value={formData.phone}
-                                        onChange={handleChange}
-                                        className="flex-1 p-2 border border-gray-300 rounded"
-                                        placeholder="000 000 000"
-                                    />
+                                {/* Celular */}
+                                <div className="w-full">
+                                    <label htmlFor="phone" className="block text-sm mb-1">
+                                        Celular
+                                    </label>
+                                    <div className="flex gap-2 w-full">
+                                        <select
+                                            className="select2-prefix-selector max-w-[120px] p-2 border border-gray-300 rounded"
+                                            onChange={(e) => setSelectedPrefix(e.target.value)}
+                                            name="phone_prefix"
+                                            value={formData.phone_prefix}
+                                        >
+                                            <option value="">Selecciona un país</option>
+                                            {
+                                            prefixes
+                                                .sort((a, b) => a.country.localeCompare(b.country))
+                                                .map((prefix, index) => (
+                                                <option
+                                                    key={index}
+                                                    value={prefix.realCode}
+                                                    data-code={prefix.beautyCode}
+                                                    data-flag={prefix.flag}
+                                                    data-country={prefix.country}
+                                                >
+                                                </option>
+                                                ))
+                                            }
+                                        </select>
+                                        <input
+                                            type="text"
+                                            id="phone"
+                                            name="phone"
+                                            value={formData.phone}
+                                            onChange={handleChange}
+                                            className="flex-1 p-2 border border-gray-300 rounded"
+                                            placeholder="000 000 000"
+                                        />
+                                    </div>
                                 </div>
+
+                            </div>
+                        </div>
+
+                        <div className="bg-[#66483966] py-[0.6px]"></div>    
+
+                        <div className="sectionDelivery space-y-3.5">
+                            
+                            <h3 className={`block text-xl 2xl:text-2xl font-bold mb-4 customtext-neutral-dark`}>
+                                Dirección de envío
+                            </h3>
+
+                            <div className="form-group">
+                                <label
+                                    className={`block text-sm 2xl:text-base mb-1 customtext-neutral-dark `}
+                                >
+                                    Ubicación de entrega
+                                </label>
+                                <AsyncSelect
+                                    name="ubigeo"
+                                    cacheOptions
+                                    value={selectedUbigeo}
+                                    loadOptions={loadOptions}
+                                    onChange={(selected) => {
+                                        setSelectedUbigeo(selected);
+                                        handleUbigeoChange(selected);
+                                    }}
+                                    placeholder="Buscar departamento | distrito | provincia ..."
+                                    loadingMessage={() => "Buscando ubicaciones..."}
+                                    noOptionsMessage={({ inputValue }) =>
+                                        inputValue.length < 3
+                                            ? "Ingrese al menos 3 caracteres..."
+                                            : "No se encontraron resultados"
+                                    }
+                                    isLoading={loading}
+                                    styles={selectStyles(!!errors.ubigeo)}
+                                    formatOptionLabel={({ data }) => (
+                                        <div className="text-sm py-1">
+                                            <div className="font-medium">{data.distrito}</div>
+                                            <div className="text-gray-500">
+                                                {data.provincia}, {data.departamento}
+                                            </div>
+                                        </div>
+                                    )}
+                                    className="w-full rounded-xl transition-all duration-300"
+                                    menuPortalTarget={document.body}
+                                />
+                                {errors.ubigeo && <div className="text-red-500 text-sm mt-1">{errors.ubigeo}</div>}
                             </div>
 
-                        </div>
+                            {/* Departamento */}
+                            {/* <SelectForm
+                                label="Departamento"
+                                options={departamentos}
+                                placeholder="Selecciona un Departamento"
+                                onChange={(value) => {
+                                    setDepartamento(value);
+                                    setFormData((prev) => ({
+                                        ...prev,
+                                        department: departamento,
+                                    }));
+                                }}
+                            /> */}
 
-                        {/* Departamento */}
-                        <SelectForm
-                            label="Departamento"
-                            options={departamentos}
-                            placeholder="Selecciona un Departamento"
-                            onChange={(value) => {
-                                setDepartamento(value);
-                                setFormData((prev) => ({
-                                    ...prev,
-                                    department: departamento,
-                                }));
-                            }}
-                        />
+                            {/* Provincia */}
+                            {/* <SelectForm
+                                disabled={!departamento}
+                                label="Provincia"
+                                options={provincias}
+                                placeholder="Selecciona una Provincia"
+                                onChange={(value) => {
+                                    setProvincia(value);
+                                    setFormData((prev) => ({
+                                        ...prev,
+                                        province: provincia,
+                                    }));
+                                }}
+                            /> */}
 
-                        {/* Provincia */}
-                        <SelectForm
-                            disabled={!departamento}
-                            label="Provincia"
-                            options={provincias}
-                            placeholder="Selecciona una Provincia"
-                            onChange={(value) => {
-                                setProvincia(value);
-                                setFormData((prev) => ({
-                                    ...prev,
-                                    province: provincia,
-                                }));
-                            }}
-                        />
+                            {/* Distrito */}
 
-                        {/* Distrito */}
+                            {/* <SelectForm
+                                disabled={!provincia}
+                                label="Distrito"
+                                options={distritos}
+                                placeholder="Selecciona un Distrito"
+                                onChange={(value) => {
+                                    setDistrito(value);
+                                    setFormData((prev) => ({
+                                        ...prev,
+                                        district: distrito,
+                                    }));
+                                }}
+                            /> */}
 
-                        <SelectForm
-                            disabled={!provincia}
-                            label="Distrito"
-                            options={distritos}
-                            placeholder="Selecciona un Distrito"
-                            onChange={(value) => {
-                                setDistrito(value);
-                                setFormData((prev) => ({
-                                    ...prev,
-                                    district: distrito,
-                                }));
-                            }}
-                        />
-
-                        {/* Dirección */}
-                        <InputForm
-                            label="Avenida / Calle / Jirón"
-                            type="text"
-                            name="address"
-                            value={formData.address}
-                            onChange={handleChange}
-                            placeholder="Ingresa el nombre de la calle"
-                        />
-
-                        <div className="grid lg:grid-cols-2 gap-4">
+                            {/* Dirección */}
                             <InputForm
-                                label="Número"
+                                label="Avenida / Calle / Jirón"
                                 type="text"
-                                name="number"
-                                value={formData.number}
+                                name="address"
+                                value={formData.address}
                                 onChange={handleChange}
-                                placeholder="Ingresa el número de la calle"
+                                placeholder="Ingresa el nombre de la calle"
                             />
 
-                            <InputForm
-                                label="Dpto./ Interior/ Piso/ Lote/ Bloque (opcional)"
+                            <div className="grid lg:grid-cols-2 gap-4">
+                                <InputForm
+                                    label="Número"
+                                    type="text"
+                                    name="number"
+                                    value={formData.number}
+                                    onChange={handleChange}
+                                    placeholder="Ingresa el número de la calle"
+                                />
+
+                                <InputForm
+                                    label="Dpto./ Interior/ Piso/ Lote/ Bloque (opcional)"
+                                    type="text"
+                                    name="comment"
+                                    value={formData.comment}
+                                    onChange={handleChange}
+                                    placeholder="Ej. Casa 3, Dpto 101"
+                                />
+                            </div>
+
+                            {/* Referencia */}
+
+                            {/* <InputForm
+                                label="Referencia"
                                 type="text"
-                                name="comment"
-                                value={formData.comment}
+                                name="reference"
+                                value={formData.reference}
                                 onChange={handleChange}
-                                placeholder="Ej. Casa 3, Dpto 101"
-                            />
+                                placeholder="Ejem. Altura de la avenida..."
+                            /> */}
+                        
+                            {shippingOptions.length > 0 && (
+                                <div className="space-y-4">
+                                    <h3 className="block text-xl 2xl:text-2xl font-bold mb-4 customtext-neutral-dark">
+                                        Método de envío
+                                    </h3>
+                                    <div className="grid grid-cols-2 gap-4">
+                                        {shippingOptions.map((option) => (
+                                            <OptionCard
+                                                key={option.type}
+                                                title={
+                                                    option.type === "free"
+                                                        ? option.deliveryType
+                                                        : option.type === "express"
+                                                        ? option.deliveryType
+                                                        : option.type === "agency"
+                                                        ? option.deliveryType
+                                                        : option.deliveryType
+                                                }
+                                                price={option.price}
+                                                description={option.description}
+                                                selected={
+                                                    selectedOption === option.type
+                                                }
+                                                onSelect={() => {
+                                                    setSelectedOption(option.type);
+                                                    setEnvio(option.price);
+                                                }}
+                                            />
+                                        ))}
+                                    </div>
+                                    {console.log(
+                                        shippingOptions.find(
+                                            (o) => o.type === selectedOption
+                                        )
+                                    )}
+
+                                    {selectedOption && shippingOptions.length > 0 && (
+                                        <div className="space-y-4 mt-4">
+                                            {shippingOptions
+                                                .find((o) => o.type === selectedOption)
+                                                ?.characteristics?.map(
+                                                    (char, index) => (
+                                                        <div
+                                                            key={`char-${index}`}
+                                                            className="flex items-start gap-4 bg-[#F7F9FB] p-4 rounded-xl"
+                                                        >
+                                                            <div className="w-5 flex-shrink-0">
+                                                                <svg
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    width="20"
+                                                                    height="20"
+                                                                    viewBox="0 0 24 24"
+                                                                    fill="none"
+                                                                    stroke="currentColor"
+                                                                    strokeWidth="2"
+                                                                    strokeLinecap="round"
+                                                                    strokeLinejoin="round"
+                                                                    className="lucide lucide-info customtext-primary"
+                                                                >
+                                                                    <circle
+                                                                        cx="12"
+                                                                        cy="12"
+                                                                        r="10"
+                                                                    />
+                                                                    <path d="M12 16v-4" />
+                                                                    <path d="M12 8h.01" />
+                                                                </svg>
+                                                            </div>
+                                                            <div className="flex-1">
+                                                                <p className="text-sm font-medium customtext-neutral-dark">
+                                                                    {char}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                )}
+                                        </div>
+                                    )}
+                                </div>
+                            )}
                         </div>
 
-                        {/* Referencia */}
-
-                        <InputForm
-                            label="Referencia"
-                            type="text"
-                            name="reference"
-                            value={formData.reference}
-                            onChange={handleChange}
-                            placeholder="Ejem. Altura de la avenida..."
-                        />
-
+                        <div className="bg-[#66483966] py-[0.6px]"></div>      
 
                         {/* Tipo de comprobante */}
                         <div className="space-y-2">
@@ -539,7 +950,6 @@ export default function ShippingStepSF({
                         </div>
 
                         {/* Documento */}
-                        
                         <InputForm
                                 label={formData.documentType === "dni" ? "DNI" : "RUC"}
                                 type="text"
@@ -550,7 +960,6 @@ export default function ShippingStepSF({
                                 maxLength={formData.documentType === "dni" ? "8" : "11"}
                         />
                         
-
                         {/* Razón Social (solo para factura) */}
                         {formData.invoiceType === "factura" && (
                             <InputForm
@@ -564,18 +973,6 @@ export default function ShippingStepSF({
                         )}    
 
                     </form>
-                    {/* <div className="flex gap-4 mt-4">
-                        <OptionCard
-                            title="Envío gratis"
-                            description="Entrega entre 3 a 10 días hábiles"
-                            selected={selectedOption === "free"}
-                        />
-                        <OptionCard
-                            title="Delivery"
-                            description="Delivery 24 horas"
-                            selected={selectedOption === "express"}
-                        />
-                    </div> */}
                 </div>
                 {/* Resumen de compra */}
                 <div className="bg-[#F7F9FB] rounded-xl shadow-lg p-6 col-span-2 h-max font-font-general">
@@ -643,7 +1040,14 @@ export default function ShippingStepSF({
                             </div>
                         </div>
                         <div className="space-y-2 pt-4">
-                            <ButtonPrimary className={'payment-button'} onClick={() => setShowPaymentModal(true)}>
+                            <ButtonPrimary className={'payment-button'}
+                                // onClick={() => {
+                                //     if (validateForm()) {
+                                //         setShowPaymentModal(true);
+                                //     }
+                                // }}
+                                onClick={handleContinueClick}
+                            >
                                 {" "}
                                 Continuar
                             </ButtonPrimary>
@@ -676,6 +1080,7 @@ export default function ShippingStepSF({
                 isOpen={showPaymentModal}
                 onClose={() => setShowPaymentModal(false)}
                 onPaymentComplete={handlePaymentComplete}
+                
             />
         </>
     );
