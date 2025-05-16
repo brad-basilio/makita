@@ -14,12 +14,14 @@
 .swiper-pagination-bullet-active div::after {
     content: '';
     border: 1px solid #310619!important;
-    top: -3px;
-    left: -2.5px;
+    top: 50%;
+    left: 50%;
     position: absolute;
-    /* transform: translate(-50%, -50%)!important; */
-    padding: 5px!important;
+    transform: translate(-50%, -50%)!important;
+    /* padding: 6px !important; */
     /* transform: scale(2); */
+    width: 22px;
+    height: 22px;
     display: block;
     border-radius: 50%;
 }

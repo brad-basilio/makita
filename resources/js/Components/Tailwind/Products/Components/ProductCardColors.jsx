@@ -78,7 +78,7 @@ const ProductCardColors = ({ product, setCart, cart }) => {
                                 -{Math.abs(Number(100 - Number((product?.discount * 100 / product?.price)))).toFixed(0)}%
                             </span>
                         )}
-                        <div className="aspect-square rounded-3xl overflow-hidden flex items-center justify-center  bg-secondary">
+                        <div className="aspect-square rounded-3xl overflow-hidden flex items-center justify-center  bg-secondary border bg-white">
                             <img
                                 src={`/storage/images/item/${product.image}`}
                                 onError={e => e.target.src = '/assets/img/noimage/no_img.jpg'}
@@ -106,7 +106,7 @@ const ProductCardColors = ({ product, setCart, cart }) => {
                                 <Tippy content={variant.color} key={variant.slug}>
                                     <a
                                         href={`/item/${variant.slug}`}
-                                        className="variant-option rounded-full border shadow-gray-500 shadow-lg border-[#310619] object-fit-cover bg-[#F5F5F5]"
+                                        className="variant-option rounded-full border shadow-gray-500 object-fit-cover bg-[#F5F5F5]"
                                     >
                                         <img
                                             className="color-box rounded-full h-7 w-7 sm:h-9 sm:w-9 object-fit-cover"
@@ -126,7 +126,7 @@ const ProductCardColors = ({ product, setCart, cart }) => {
                                     <a
                                         key={product.slug}
                                         href={`/item/${product.slug}`}
-                                        className="variant-option rounded-full border shadow-gray-500 shadow-lg border-[#310619] object-fit-cover bg-[#310619] text-white text-xs font-extrabold"
+                                        className="variant-option rounded-full border shadow-gray-500 object-fit-cover bg-[#310619] text-white text-xs font-extrabold"
                                     >
                                         <div className="color-box rounded-full h-7 w-7 sm:h-9 sm:w-9 flex flex-col justify-center items-center">
                                             +{variationsItems.length - 4}
@@ -142,7 +142,7 @@ const ProductCardColors = ({ product, setCart, cart }) => {
                                 <Tippy content={variant.color} key={variant.slug}>
                                     <a
                                         href={`/item/${variant.slug}`}
-                                        className="variant-option rounded-full border shadow-gray-500 shadow-lg border-[#310619]  object-fit-cover bg-[#F5F5F5]"
+                                        className="variant-option rounded-full border shadow-gray-500  object-fit-cover bg-[#F5F5F5]"
                                     >
                                         <img
                                             className="color-box rounded-full h-7 w-7 sm:h-9 sm:w-9 object-fit-cover"
@@ -162,7 +162,7 @@ const ProductCardColors = ({ product, setCart, cart }) => {
                                     <a
                                         key={product.slug}
                                         href={`/item/${product.slug}`}
-                                        className="variant-option rounded-full border shadow-gray-500 shadow-lg border-[#310619] object-fit-cover bg-[#310619] text-white text-xs font-extrabold"
+                                        className="variant-option rounded-full border shadow-gray-500 object-fit-cover bg-[#310619] text-white text-xs font-extrabold"
                                     >
                                         <div className="color-box rounded-full h-7 w-7 sm:h-9 sm:w-9 flex flex-col justify-center items-center">
                                             +{variationsItems.length - 3}
