@@ -51,7 +51,7 @@ export default function ShippingStepSF({
         comment: user?.comment || "",
         /*reference: user?.reference || "",*/
         shippingOption: "delivery", // Valor predeterminado
-        ubigeo: null,
+        ubigeo: user?.ubigeo || null,
         invoiceType: user?.invoiceType || "boleta", // Nuevo campo para tipo de comprobante
         documentType: user?.documentType || "dni", 
         document: user?.document || "", 
@@ -316,34 +316,14 @@ export default function ShippingStepSF({
             return;
         }
 
-        // Validar campos según el tipo de comprobante
-        if (!formData.document) {
-            Notify.add({
-                icon: "/assets/img/icon.svg",
-                title: "Error en el Formulario",
-                body: `El campo ${formData.documentType === "dni" ? "DNI" : "RUC"} es obligatorio`,
-                type: "danger",
-            });
-            return;
-        }
-
-        if (formData.invoiceType === "factura" && !formData.businessName) {
-            Notify.add({
-                icon: "/assets/img/icon.svg",
-                title: "Error en el Formulario",
-                body: "El campo Razón Social es obligatorio para factura",
-                type: "danger",
-            });
-            return;
-        }
-
         if (
             !formData.name ||
             !formData.lastname ||
             !formData.email ||
             !formData.address ||
             !formData.phone ||
-            !formData.ubigeo 
+            !formData.ubigeo || 
+            !formData.number 
         ) {
             Notify.add({
                 icon: "/assets/img/icon.svg",
@@ -476,10 +456,8 @@ export default function ShippingStepSF({
 
     const handleContinueClick = (e) => {
         e.preventDefault();
-        
-        if (!formData.name || !formData.lastname || !formData.email || 
-            !formData.phone || !formData.ubigeo || !formData.address || 
-            !formData.document) {
+    
+        if (!validateForm()) {
             Notify.add({
                 icon: "/assets/img/icon.svg",
                 title: "Campos incompletos",
@@ -488,7 +466,7 @@ export default function ShippingStepSF({
             });
             return;
         }
-
+    
         if (!selectedOption) {
             Notify.add({
                 icon: "/assets/img/icon.svg",
@@ -498,8 +476,26 @@ export default function ShippingStepSF({
             });
             return;
         }
-
+    
         setShowPaymentModal(true);
+    };
+    
+    const validateForm = () => {
+        const newErrors = {};
+    
+        if (!formData.name) newErrors.name = "Nombre es requerido";
+        if (!formData.lastname) newErrors.lastname = "Apellido es requerido";
+        if (!formData.email) newErrors.email = "Email es requerido";
+        if (!formData.phone) newErrors.phone = "Teléfono es requerido";
+        if (!formData.ubigeo) newErrors.ubigeo = "Ubigeo es requerido";
+        if (!formData.address) newErrors.address = "Dirección es requerida";
+        if (!formData.document) newErrors.document = "Documento es requerido";
+        if (!formData.number) newErrors.number = "Numero es requerido";
+        if (!formData.comment) newErrors.comment = "Referencia es requerido";
+    
+        setErrors(newErrors);
+    
+        return Object.keys(newErrors).length === 0;
     };
 
     const handlePaymentComplete = async (paymentMethod) => {  // Cambiado de 'method' a 'paymentMethod'
@@ -550,13 +546,7 @@ export default function ShippingStepSF({
                     });
                 }
             } else {
-                // Lógica para otros métodos de pago (Yape/Plin o Transferencia)
-                Notify.add({
-                    icon: "/assets/img/icon.svg",
-                    title: "Método seleccionado",
-                    body: `Has seleccionado pagar con ${paymentMethod}. Pronto te contactaremos con las instrucciones.`,
-                    type: "info",
-                });
+                setShowVoucherModal(true);
             }
         } catch (error) {
             console.error("Error en el pago:", error);
@@ -569,21 +559,53 @@ export default function ShippingStepSF({
         }
     };
 
-    // const validateForm = () => {
-    //     const newErrors = {};
-        
-    //     if (!formData.name) newErrors.name = "Nombre es requerido";
-    //     if (!formData.lastname) newErrors.lastname = "Apellido es requerido";
-    //     if (!formData.email) newErrors.email = "Email es requerido";
-    //     if (!formData.phone) newErrors.phone = "Teléfono es requerido";
-    //     if (!formData.ubigeo) newErrors.ubigeo = "Ubigeo es requerido";
-    //     if (!formData.address) newErrors.address = "Dirección es requerida";
-    //     if (!formData.document) newErrors.document = "Documento es requerido";
-        
-    //     setErrors(newErrors);
-        
-    //     return Object.keys(newErrors).length === 0;
-    // };
+    const handleVoucherUpload = async (voucherData) => {
+        console.log("Subiendo comprobante:");
+        // try {
+        //     // Construye la request con los datos del comprobante
+        //     const request = {
+        //         // ... (todos los datos del formulario)
+        //         payment_method: currentPaymentMethod,
+        //         voucher_reference: voucherData.referenceNumber,
+        //         voucher_file: voucherData.file,
+        //         // ... otros campos necesarios
+        //     };
+
+        //     // Envía la request al servidor
+        //     const response = await fetch('/api/payments/upload-voucher', {
+        //         method: 'POST',
+        //         body: JSON.stringify(request),
+        //         headers: {
+        //             'Content-Type': 'application/json'
+        //         }
+        //     });
+
+        //     const data = await response.json();
+            
+        //     if (data.success) {
+        //         setSale(data.sale);
+        //         setDelivery(data.delivery);
+        //         setCode(data.code);
+        //         Notify.add({
+        //             icon: "/assets/img/icon.svg",
+        //             title: "Comprobante recibido",
+        //             body: "Hemos recibido tu comprobante y estamos procesando tu pedido",
+        //             type: "success",
+        //         });
+        //     } else {
+        //         throw new Error(data.message || "Error al procesar comprobante");
+        //     }
+        // } catch (error) {
+        //     console.error("Error:", error);
+        //     Notify.add({
+        //         icon: "/assets/img/icon.svg",
+        //         title: "Error",
+        //         body: error.message || "Error al subir comprobante",
+        //         type: "danger",
+        //     });
+        // }
+    };
+   
 
 
     
@@ -633,6 +655,7 @@ export default function ShippingStepSF({
                                     label="Nombres"
                                     name="name"
                                     value={formData.name}
+                                    error={errors.name}
                                     onChange={handleChange}
                                     placeholder="Nombres"
                                 />
@@ -642,6 +665,7 @@ export default function ShippingStepSF({
                                     type="text"
                                     name="lastname"
                                     value={formData.lastname}
+                                    error={errors.lastname}
                                     onChange={handleChange}
                                     placeholder="Apellidos"
                                 />
@@ -655,6 +679,7 @@ export default function ShippingStepSF({
                                     type="email"
                                     name="email"
                                     value={formData.email}
+                                    error={errors.email}
                                     onChange={handleChange}
                                     placeholder="Ej. hola@gmail.com"
                                 />
@@ -687,13 +712,13 @@ export default function ShippingStepSF({
                                                 ))
                                             }
                                         </select>
-                                        <input
+                                        <InputForm
                                             type="text"
                                             id="phone"
                                             name="phone"
                                             value={formData.phone}
+                                            error={errors.phone}
                                             onChange={handleChange}
-                                            className="flex-1 p-2 border border-gray-300 rounded"
                                             placeholder="000 000 000"
                                         />
                                     </div>
@@ -725,7 +750,7 @@ export default function ShippingStepSF({
                                         setSelectedUbigeo(selected);
                                         handleUbigeoChange(selected);
                                     }}
-                                    placeholder="Buscar departamento | distrito | provincia ..."
+                                    placeholder="Buscar departamento | provincia | distrito ..."
                                     loadingMessage={() => "Buscando ubicaciones..."}
                                     noOptionsMessage={({ inputValue }) =>
                                         inputValue.length < 3
@@ -799,6 +824,7 @@ export default function ShippingStepSF({
                                 type="text"
                                 name="address"
                                 value={formData.address}
+                                error={errors.address}
                                 onChange={handleChange}
                                 placeholder="Ingresa el nombre de la calle"
                             />
@@ -809,6 +835,7 @@ export default function ShippingStepSF({
                                     type="text"
                                     name="number"
                                     value={formData.number}
+                                    error={errors.number}
                                     onChange={handleChange}
                                     placeholder="Ingresa el número de la calle"
                                 />
@@ -818,6 +845,7 @@ export default function ShippingStepSF({
                                     type="text"
                                     name="comment"
                                     value={formData.comment}
+                                    error={errors.comment}
                                     onChange={handleChange}
                                     placeholder="Ej. Casa 3, Dpto 101"
                                 />
@@ -955,6 +983,7 @@ export default function ShippingStepSF({
                                 type="text"
                                 name="document"
                                 value={formData.document}
+                                error={errors.document}
                                 onChange={handleChange}
                                 placeholder={`Ingrese su ${formData.documentType === "dni" ? "DNI" : "RUC"}`}
                                 maxLength={formData.documentType === "dni" ? "8" : "11"}
@@ -1082,6 +1111,14 @@ export default function ShippingStepSF({
                 onPaymentComplete={handlePaymentComplete}
                 
             />
+
+            <UploadVoucherModalYape
+                isOpen={showVoucherModal}
+                onClose={() => setShowVoucherModal(false)}
+                onUpload={handleVoucherUpload}
+                paymentMethod={currentPaymentMethod}
+            />
+
         </>
     );
 }
