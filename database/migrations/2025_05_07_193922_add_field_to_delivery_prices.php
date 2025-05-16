@@ -36,6 +36,8 @@ return new class extends Migration
         Schema::table('delivery_prices', function (Blueprint $table) {
             $table->dropColumn('is_free');
             $table->dropColumn('express_price');
+            $table->dropForeign(['type_id']);
+            $table->dropColumn('type_id');
         });
     }
 };

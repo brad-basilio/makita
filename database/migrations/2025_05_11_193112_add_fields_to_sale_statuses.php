@@ -24,7 +24,9 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('sale_statuses', function (Blueprint $table) {
-            //
+            $table->dropColumn('color');
+            $table->dropColumn('editable');
+            $table->dropColumn('reversible');
         });
     }
 };
