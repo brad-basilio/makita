@@ -3,13 +3,9 @@
     "file": "assets/ArrayDetails2Object-DR0Igcn7.js",
     "name": "ArrayDetails2Object"
   },
-  "_ArrayJoin-D8pAQiSC.js": {
-    "file": "assets/ArrayJoin-D8pAQiSC.js",
-    "name": "ArrayJoin",
-    "imports": [
-      "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
-      "_index-BH53Isel.js"
-    ]
+  "_ArrayJoin-2k6ba35P.js": {
+    "file": "assets/ArrayJoin-2k6ba35P.js",
+    "name": "ArrayJoin"
   },
   "_AuthClientRest-B8DPT9OB.js": {
     "file": "assets/AuthClientRest-B8DPT9OB.js",
@@ -152,6 +148,14 @@
   "_DxButton-DV0H-ZcL.js": {
     "file": "assets/DxButton-DV0H-ZcL.js",
     "name": "DxButton"
+  },
+  "_FilterPagination-DCLrjB48.js": {
+    "file": "assets/FilterPagination-DCLrjB48.js",
+    "name": "FilterPagination",
+    "imports": [
+      "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
+      "_index-BH53Isel.js"
+    ]
   },
   "_GalleryRest-CQyebKr5.js": {
     "file": "assets/GalleryRest-CQyebKr5.js",
@@ -2182,7 +2186,7 @@
     ]
   },
   "resources/js/Blog.jsx": {
-    "file": "assets/Blog-yDCA2AKa.js",
+    "file": "assets/Blog-4YbDmqCg.js",
     "name": "Blog",
     "src": "resources/js/Blog.jsx",
     "isEntry": true,
@@ -2196,9 +2200,10 @@
       "_SubscriptionsRest-qjIAHRwm.js",
       "_Global-ErywZRdd.js",
       "_em-DRiSFGEW.js",
-      "_ArrayJoin-D8pAQiSC.js",
+      "_FilterPagination-DCLrjB48.js",
       "_PostCard-6am_5jYW.js",
       "_PostsRest-BqZothTP.js",
+      "_ArrayJoin-2k6ba35P.js",
       "_ArrayDetails2Object-DR0Igcn7.js",
       "_index-yBjzXJbu.js",
       "_index.esm-CveLAcri.js",
@@ -4389,7 +4394,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Filter.jsx": {
-    "file": "assets/Filter-CfjCcjw2.js",
+    "file": "assets/Filter-BWOxCxva.js",
     "name": "Filter",
     "src": "resources/js/Components/Tailwind/Filter.jsx",
     "isEntry": true,
@@ -4409,7 +4414,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Filters/CatalagoFiltros.jsx": {
-    "file": "assets/CatalagoFiltros-E7CyMN8x.js",
+    "file": "assets/CatalagoFiltros-BTMDlbRF.js",
     "name": "CatalagoFiltros",
     "src": "resources/js/Components/Tailwind/Filters/CatalagoFiltros.jsx",
     "isDynamicEntry": true,
@@ -4418,6 +4423,7 @@
       "_index-BH53Isel.js",
       "resources/js/Components/Tailwind/Products/ProductNavigation.jsx",
       "_ItemsRest-BIADNguh.js",
+      "_ArrayJoin-2k6ba35P.js",
       "_NoResult-C9qZVva5.js",
       "_SelectForm-G0J6yhhv.js",
       "_main-BvVILmTO.js",
@@ -4675,7 +4681,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Filters/FilterSimple.jsx": {
-    "file": "assets/FilterSimple-nSQB_DhW.js",
+    "file": "assets/FilterSimple-BPm97lN3.js",
     "name": "FilterSimple",
     "src": "resources/js/Components/Tailwind/Filters/FilterSimple.jsx",
     "isDynamicEntry": true,
@@ -4685,7 +4691,8 @@
       "_useStateManager-7e1e8489.esm-oj4m82YY.js",
       "_index-rimy3MAc.js",
       "_ItemsRest-BIADNguh.js",
-      "_ArrayJoin-D8pAQiSC.js",
+      "_FilterPagination-DCLrjB48.js",
+      "_ArrayJoin-2k6ba35P.js",
       "_ProductCard-C55XHKcm.js",
       "_index-yBjzXJbu.js",
       "_hoist-non-react-statics.cjs-kbdZbs82.js",
@@ -5312,7 +5319,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Menu.jsx": {
-    "file": "assets/Menu-DM7WK_Yh.js",
+    "file": "assets/Menu-DS_Koq3a.js",
     "name": "Menu",
     "src": "resources/js/Components/Tailwind/Menu.jsx",
     "isEntry": true,
@@ -6463,7 +6470,7 @@
     ]
   },
   "resources/js/Courses.jsx": {
-    "file": "assets/Courses-CoeA7vb1.js",
+    "file": "assets/Courses-BUOFhTmD.js",
     "name": "Courses",
     "src": "resources/js/Courses.jsx",
     "isEntry": true,
@@ -6474,9 +6481,10 @@
       "_CreateReactScript-Bq8gMpEh.js",
       "_Base-BqMzv0Ch.js",
       "_em-DRiSFGEW.js",
-      "_ArrayJoin-D8pAQiSC.js",
+      "_FilterPagination-DCLrjB48.js",
       "_CourseCard-CbDLljRi.js",
       "_CoursesRest-qGnqE-k3.js",
+      "_ArrayJoin-2k6ba35P.js",
       "_chevron-up-D78jyEhP.js",
       "_chevron-down-DS-mdh9v.js",
       "_ArrayDetails2Object-DR0Igcn7.js",
@@ -6711,7 +6719,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-NSuUhZUu.js",
+    "file": "assets/System-BeNK6yGF.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,
