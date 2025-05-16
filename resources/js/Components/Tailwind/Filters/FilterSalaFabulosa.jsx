@@ -326,11 +326,11 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                                         </div>
                                         <div className="max-h-[200px] overflow-y-auto space-y-2 p-1">
                                             {filteredCollections.map((collection) =>{ 
-                                                      const isChecked = selectedFilters.subcategory_id?.includes(category.slug);
+                                                      const isChecked = selectedFilters.collection_id?.includes(collection.slug);
                                                 return(
                                                 <div
                                                     key={collection.id}
-                                                    className={`group flex items-center gap-3 p-2 rounded-lg ${selectedFilters.collection_id?.includes(collection.id)
+                                                    className={`group flex items-center gap-3 p-2 rounded-lg ${ isChecked
                                                         ? "bg-secondary"
                                                         : "hover:bg-gray-50"
                                                         }`}
@@ -384,7 +384,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                                             
                                             {filteredCategories.map((category) => {
                                               
-                                                   const isChecked = selectedFilters.subcategory_id?.includes(category.slug);
+                                                   const isChecked = selectedFilters.category_id?.includes(category.slug);
                                             return(
                                                 <div
                                                 key={category.id}
