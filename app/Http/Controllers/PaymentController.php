@@ -22,10 +22,11 @@ class PaymentController extends Controller
     public function charge(Request $request)
     {
         try {
+            
             $culqi = new Culqi([
                 'api_key' => config('services.culqi.secret_key'),
             ]);
-
+            
             // Crear el intento de pago
             $charge = $culqi->Charges->create([
                 "amount" => $request->amount * 100,

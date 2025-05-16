@@ -16,7 +16,7 @@ import { debounce } from "lodash";
 import { useUbigeo } from "../../../../Utils/useUbigeo";
 import AsyncSelect from "react-select/async";
 import PaymentModal from "./PaymentModal";
-
+import UploadVoucherModalYape from "./UploadVoucherModalYape";
 
 export default function ShippingStepSF({
     cart,
@@ -35,7 +35,8 @@ export default function ShippingStepSF({
     prefixes,
     ubigeos = [],
 }) {
-    
+    const [selectedUbigeo, setSelectedUbigeo] = useState(null);
+    const [defaultUbigeoOption, setDefaultUbigeoOption] = useState(null);
     const [formData, setFormData] = useState({
         name: user?.name || "",
         lastname: user?.lastname || "",
@@ -56,6 +57,24 @@ export default function ShippingStepSF({
         document: user?.document || "", 
         businessName: user?.businessName || "", // Nuevo campo para Razón Social
     });
+    
+    useEffect(() => {
+        if (user?.ubigeo && user?.district && user?.province && user?.department) {
+          const defaultOption = {
+            value: user.ubigeo,
+            label: `${user.district}, ${user.province}, ${user.department}`,
+            data: {
+              reniec: user.ubigeo,
+              departamento: user.department,
+              provincia: user.province,
+              distrito: user.district
+            }
+          };
+          setDefaultUbigeoOption(defaultOption);
+          setSelectedUbigeo(defaultOption); // Actualiza el estado del ubigeo seleccionado
+          handleUbigeoChange(defaultOption);
+        }
+      }, [user]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -73,14 +92,14 @@ export default function ShippingStepSF({
     };
 
     // Estados para manejar los valores seleccionados
-    const [departamento, setDepartamento] = useState("");
-    const [provincia, setProvincia] = useState("");
-    const [distrito, setDistrito] = useState("");
+    // const [departamento, setDepartamento] = useState("");
+    // const [provincia, setProvincia] = useState("");
+    // const [distrito, setDistrito] = useState("");
 
     // Estados para las opciones dinámicas
-    const [departamentos, setDepartamentos] = useState([]);
-    const [provincias, setProvincias] = useState([]);
-    const [distritos, setDistritos] = useState([]);
+    // const [departamentos, setDepartamentos] = useState([]);
+    // const [provincias, setProvincias] = useState([]);
+    // const [distritos, setDistritos] = useState([]);
     
     // Estado para el precio de envío
     const [shippingCost, setShippingCost] = useState(0);
@@ -90,22 +109,23 @@ export default function ShippingStepSF({
     const [shippingOptions, setShippingOptions] = useState([]);
     const [selectedOption, setSelectedOption] = useState(null);
     const [costsGet, setCostsGet] = useState(null);
+    const [errors, setErrors] = useState({});
 
     // Cargar los departamentos al iniciar el componente
-    useEffect(() => {
-        const uniqueDepartamentos = [
-            ...new Set(ubigeoData.map((item) => item.departamento)),
-        ];
-        setDepartamentos(uniqueDepartamentos);
-    }, []);
+    // useEffect(() => {
+    //     const uniqueDepartamentos = [
+    //         ...new Set(ubigeoData.map((item) => item.departamento)),
+    //     ];
+    //     setDepartamentos(uniqueDepartamentos);
+    // }, []);
 
     const handleUbigeoChange = async (selected) => {
         if (!selected) return;
-        console.log("selected", selected);
-
+        
+        setErrors(prev => ({ ...prev, ubigeo: "" }));
         const { data } = selected;
 
-        setFormData((prev) => ({
+        setFormData(prev => ({
             ...prev,
             department: data.departamento,
             province: data.provincia,
@@ -113,7 +133,6 @@ export default function ShippingStepSF({
             ubigeo: data.reniec,
         }));
 
-        // Consultar precios de envío
         setLoading(true);
         try {
             const response = await DeliveryPricesRest.getShippingCost({
@@ -142,7 +161,7 @@ export default function ShippingStepSF({
             } else if (response.data.is_agency) {
                 options.push({
                     type: "agency",
-                    price: response.data.agency.price,
+                    price: 0,
                     description: response.data.agency.description,
                     deliveryType: response.data.agency.type,
                     characteristics: response.data.agency.characteristics,
@@ -181,7 +200,6 @@ export default function ShippingStepSF({
                 callback([]);
                 return;
             }
-            console.log("inputValue", inputValue);
 
             fetch(`/api/ubigeo/search?q=${encodeURIComponent(inputValue)}`)
                 .then((response) => {
@@ -211,80 +229,82 @@ export default function ShippingStepSF({
     );
 
     // Filtrar provincias cuando se selecciona un departamento
-    useEffect(() => {
-        if (departamento) {
-            const filteredProvincias = [
-                ...new Set(
-                    ubigeoData
-                        .filter((item) => item.departamento === departamento)
-                        .map((item) => item.provincia)
-                ),
-            ];
-            setProvincias(filteredProvincias);
-            setProvincia(""); // Reiniciar provincia
-            setDistrito(""); // Reiniciar distrito
-            setDistritos([]); // Limpiar distritos
-            setFormData((prev) => ({
-                ...prev,
-                department: departamento,
-                province: "",
-                district: "",
-            }));
-        }
-    }, [departamento]);
+    // useEffect(() => {
+    //     if (departamento) {
+    //         const filteredProvincias = [
+    //             ...new Set(
+    //                 ubigeoData
+    //                     .filter((item) => item.departamento === departamento)
+    //                     .map((item) => item.provincia)
+    //             ),
+    //         ];
+    //         setProvincias(filteredProvincias);
+    //         setProvincia(""); // Reiniciar provincia
+    //         setDistrito(""); // Reiniciar distrito
+    //         setDistritos([]); // Limpiar distritos
+    //         setFormData((prev) => ({
+    //             ...prev,
+    //             department: departamento,
+    //             province: "",
+    //             district: "",
+    //         }));
+    //     }
+    // }, [departamento]);
 
     // Filtrar distritos cuando se selecciona una provincia
-    useEffect(() => {
-        if (provincia) {
-            const filteredDistritos = ubigeoData
-                .filter(
-                    (item) =>
-                        item.departamento === departamento &&
-                        item.provincia === provincia
-                )
-                .map((item) => item.distrito);
-            setDistritos(filteredDistritos);
-            setDistrito(""); // Reiniciar distrito
-            setFormData((prev) => ({
-                ...prev,
-                province: provincia,
-                district: "",
-            }));
-        }
-    }, [provincia]);
+    // useEffect(() => {
+    //     if (provincia) {
+    //         const filteredDistritos = ubigeoData
+    //             .filter(
+    //                 (item) =>
+    //                     item.departamento === departamento &&
+    //                     item.provincia === provincia
+    //             )
+    //             .map((item) => item.distrito);
+    //         setDistritos(filteredDistritos);
+    //         setDistrito(""); // Reiniciar distrito
+    //         setFormData((prev) => ({
+    //             ...prev,
+    //             province: provincia,
+    //             district: "",
+    //         }));
+    //     }
+    // }, [provincia]);
 
     // Consultar el precio de envío cuando se selecciona un distrito
-    useEffect(() => {
-        if (distrito) {
-            setFormData((prev) => ({ ...prev, district: distrito }));
+    // useEffect(() => {
+    //     if (distrito) {
+    //         setFormData((prev) => ({ ...prev, district: distrito }));
 
-            // Llamar a la API para obtener el precio de envío
-            const fetchShippingCost = async () => {
-                try {
-                    const response = await DeliveryPricesRest.getShippingCost({
-                        department: departamento,
-                        district: distrito,
-                    });
-                    setEnvio(response.data.price);
-                    if (Number2Currency(response.data.price) > 0) {
-                        setSelectedOption("express");
-                    } else {
-                        setSelectedOption("free");
-                    }
-                } catch (error) {
-                    console.error("Error fetching shipping cost:", error);
-                    alert("No se pudo obtener el costo de envío.");
-                }
-            };
+    //         // Llamar a la API para obtener el precio de envío
+    //         const fetchShippingCost = async () => {
+    //             try {
+    //                 const response = await DeliveryPricesRest.getShippingCost({
+    //                     department: departamento,
+    //                     district: distrito,
+    //                 });
+    //                 setEnvio(response.data.price);
+    //                 if (Number2Currency(response.data.price) > 0) {
+    //                     setSelectedOption("express");
+    //                 } else {
+    //                     setSelectedOption("free");
+    //                 }
+    //             } catch (error) {
+    //                 console.error("Error fetching shipping cost:", error);
+    //                 alert("No se pudo obtener el costo de envío.");
+    //             }
+    //         };
 
-            fetchShippingCost();
-        }
-    }, [distrito]);
+    //         fetchShippingCost();
+    //     }
+    // }, [distrito]);
 
     const handlePayment = async (e) => {
+        
         if (e && e.preventDefault) {
             e.preventDefault();
         }
+
         if (!user) {
             Notify.add({
                 icon: "/assets/img/icon.svg",
@@ -318,10 +338,6 @@ export default function ShippingStepSF({
         }
 
         if (
-            // !formData.department ||
-            // !formData.province ||
-            // !formData.district ||
-            // !formData.reference ||
             !formData.name ||
             !formData.lastname ||
             !formData.email ||
@@ -349,11 +365,6 @@ export default function ShippingStepSF({
             return;
         }
 
-        // if (!window.Culqi) {
-        //     console.error("❌ Culqi aún no se ha cargado.");
-        //     return;
-        // }
-
         if (!window.MercadoPago) {
             console.error("❌ MercadoPago aún no se ha cargado.")
             return
@@ -369,10 +380,10 @@ export default function ShippingStepSF({
                 email: formData?.email || "",
                 phone: `${formData.phone_prefix}${formData.phone}`,
                 country: "Perú",
-                department: departamento || "",
-                province: provincia || "",
-                district: distrito || "",
-                ubigeo: null,
+                department: formData?.department || "",
+                province: formData?.province || "",
+                district: formData?.district || "",
+                ubigeo: formData?.ubigeo || "",
                 address: formData?.address || "",
                 number: formData?.number || "",
                 comment: formData?.comment || "",
@@ -386,7 +397,6 @@ export default function ShippingStepSF({
                 businessName: formData.businessName || "",
             };
            
-            // const response = await processCulqiPayment(request);
             const response = await processMercadoPagoPayment(request)
             const data = response;
             
@@ -461,11 +471,146 @@ export default function ShippingStepSF({
 
 
     const [showPaymentModal, setShowPaymentModal] = useState(false);
+    const [showVoucherModal, setShowVoucherModal] = useState(false);
+    const [currentPaymentMethod, setCurrentPaymentMethod] = useState(null);
 
-    const handlePaymentComplete = () => {
-        console.log("Pago completado");
-        // Aquí puedes redirigir o mostrar un mensaje de éxito
+    const handleContinueClick = (e) => {
+        e.preventDefault();
+        
+        if (!formData.name || !formData.lastname || !formData.email || 
+            !formData.phone || !formData.ubigeo || !formData.address || 
+            !formData.document) {
+            Notify.add({
+                icon: "/assets/img/icon.svg",
+                title: "Campos incompletos",
+                body: "Complete todos los campos obligatorios",
+                type: "danger",
+            });
+            return;
+        }
+
+        if (!selectedOption) {
+            Notify.add({
+                icon: "/assets/img/icon.svg",
+                title: "Seleccione envío",
+                body: "Debe elegir un método de envío",
+                type: "danger",
+            });
+            return;
+        }
+
+        setShowPaymentModal(true);
     };
+
+    const handlePaymentComplete = async (paymentMethod) => {  // Cambiado de 'method' a 'paymentMethod'
+        try {
+            setShowPaymentModal(false);
+            
+            if (paymentMethod === "tarjeta") {
+                // Procesar pago con tarjeta (MercadoPago)
+                const request = {
+                    user_id: user?.id || "",
+                    name: formData?.name || "",
+                    lastname: formData?.lastname || "",
+                    fullname: `${formData?.name} ${formData?.lastname}`,
+                    phone_prefix: formData?.phone_prefix || "51",
+                    email: formData?.email || "",
+                    phone: `${formData.phone_prefix}${formData.phone}`,
+                    country: "Perú",
+                    department: formData?.department || "",
+                    province: formData?.province || "",
+                    district: formData?.district || "",
+                    ubigeo: formData?.ubigeo || "",
+                    address: formData?.address || "",
+                    number: formData?.number || "",
+                    comment: formData?.comment || "",
+                    amount: totalFinal || 0,
+                    delivery: envio,
+                    cart: cart,
+                    invoiceType: formData.invoiceType || "",
+                    documentType: formData.documentType || "",
+                    document: formData.document || "",
+                    businessName: formData.businessName || "",
+                    paymentMethod: paymentMethod // Añadimos el método de pago a la request
+                };
+    
+                const response = await processMercadoPagoPayment(request);
+                const data = response;
+                
+                if (data.status) {
+                    setSale(data.sale);
+                    setDelivery(data.delivery);
+                    setCode(data.code);
+                } else {
+                    Notify.add({
+                        icon: "/assets/img/icon.svg",
+                        title: "Error en el Pago",
+                        body: "El pago ha sido rechazado",
+                        type: "danger",
+                    });
+                }
+            } else {
+                // Lógica para otros métodos de pago (Yape/Plin o Transferencia)
+                Notify.add({
+                    icon: "/assets/img/icon.svg",
+                    title: "Método seleccionado",
+                    body: `Has seleccionado pagar con ${paymentMethod}. Pronto te contactaremos con las instrucciones.`,
+                    type: "info",
+                });
+            }
+        } catch (error) {
+            console.error("Error en el pago:", error);
+            Notify.add({
+                icon: "/assets/img/icon.svg",
+                title: "Error en el Pago",
+                body: "No se pudo procesar el pago",
+                type: "danger",
+            });
+        }
+    };
+
+    // const validateForm = () => {
+    //     const newErrors = {};
+        
+    //     if (!formData.name) newErrors.name = "Nombre es requerido";
+    //     if (!formData.lastname) newErrors.lastname = "Apellido es requerido";
+    //     if (!formData.email) newErrors.email = "Email es requerido";
+    //     if (!formData.phone) newErrors.phone = "Teléfono es requerido";
+    //     if (!formData.ubigeo) newErrors.ubigeo = "Ubigeo es requerido";
+    //     if (!formData.address) newErrors.address = "Dirección es requerida";
+    //     if (!formData.document) newErrors.document = "Documento es requerido";
+        
+    //     setErrors(newErrors);
+        
+    //     return Object.keys(newErrors).length === 0;
+    // };
+
+
+    
+    const selectStyles = (hasError) => ({
+        control: (base) => ({
+            ...base,
+            border: `1px solid ${hasError ? '#ef4444' : '#e5e7eb'}`, // Added default border color
+            boxShadow: 'none',
+            minHeight: '50px',
+            '&:hover': { borderColor: hasError ? '#ef4444' : '#6b7280' },
+            borderRadius: '0.75rem',
+            padding: '2px 8px',
+        }),
+        menu: (base) => ({
+            ...base,
+            zIndex: 9999,
+            marginTop: '4px',
+            borderRadius: '8px',
+        }),
+        option: (base) => ({
+            ...base,
+            color: '#1f2937',
+            backgroundColor: 'white',
+            '&:hover': { backgroundColor: '#f3f4f6' },
+            padding: '12px 16px',
+        }),
+    });
 
     return (
         <>
@@ -473,14 +618,14 @@ export default function ShippingStepSF({
                 <div className="lg:col-span-3">
                     {/* Formulario */}
                     <form
-                        className="space-y-6 bg-[#f9f9f9] p-6 rounded-2xl font-font-general"
+                        className="space-y-6 bg-[#f9f9f9] py-6 px-4 sm:px-6 rounded-2xl font-font-general"
                         onSubmit={(e) => e.preventDefault()}
                     >
                         <div className="sectionInformation space-y-3.5">
                             <h3 className={`block text-xl 2xl:text-2xl font-bold mb-4 customtext-neutral-dark `}>
                                 Información del contacto
                             </h3>
-                            <div className="grid lg:grid-cols-2 gap-4 ">
+                            <div className="grid lg:grid-cols-2 gap-4">
                                 {/* Nombres */}
                             
                                 <InputForm
@@ -515,13 +660,13 @@ export default function ShippingStepSF({
                                 />
 
                                 {/* Celular */}
-                                <div className="mb-4">
+                                <div className="w-full">
                                     <label htmlFor="phone" className="block text-sm mb-1">
                                         Celular
                                     </label>
-                                    <div className="flex gap-2">
+                                    <div className="flex gap-2 w-full">
                                         <select
-                                            className="select2-prefix-selector w-[200px] p-2 border border-gray-300 rounded"
+                                            className="select2-prefix-selector max-w-[120px] p-2 border border-gray-300 rounded"
                                             onChange={(e) => setSelectedPrefix(e.target.value)}
                                             name="phone_prefix"
                                             value={formData.phone_prefix}
@@ -557,10 +702,12 @@ export default function ShippingStepSF({
                             </div>
                         </div>
 
+                        <div className="bg-[#66483966] py-[0.6px]"></div>    
+
                         <div className="sectionDelivery space-y-3.5">
                             
-                            <h3 className={`block text-xl 2xl:text-2xl font-bold mb-4 customtext-neutral-dark `}>
-                                Direccion de envio
+                            <h3 className={`block text-xl 2xl:text-2xl font-bold mb-4 customtext-neutral-dark`}>
+                                Dirección de envío
                             </h3>
 
                             <div className="form-group">
@@ -570,62 +717,35 @@ export default function ShippingStepSF({
                                     Ubicación de entrega
                                 </label>
                                 <AsyncSelect
+                                    name="ubigeo"
                                     cacheOptions
-                                    defaultOptions
+                                    value={selectedUbigeo}
                                     loadOptions={loadOptions}
-                                    onChange={handleUbigeoChange}
-                                    placeholder="Buscar distrito, provincia o departamento..."
+                                    onChange={(selected) => {
+                                        setSelectedUbigeo(selected);
+                                        handleUbigeoChange(selected);
+                                    }}
+                                    placeholder="Buscar departamento | distrito | provincia ..."
                                     loadingMessage={() => "Buscando ubicaciones..."}
                                     noOptionsMessage={({ inputValue }) =>
                                         inputValue.length < 3
-                                            ? "Buscar distrito, provincia o departamento..."
+                                            ? "Ingrese al menos 3 caracteres..."
                                             : "No se encontraron resultados"
                                     }
                                     isLoading={loading}
-                                    styles={{
-                                        control: (base) => ({
-                                            ...base,
-                                            border: "1px solid transparent",
-                                            boxShadow: "none",
-                                            minHeight: "50px",
-                                            "&:hover": {
-                                                borderColor: "transparent",
-                                            },
-                                            borderRadius: "0.75rem",
-                                        }),
-                                        menu: (base) => ({
-                                            ...base,
-                                            zIndex: 9999,
-                                            marginTop: "4px",
-                                            borderRadius: "8px",
-                                        //  boxShadow: "none",
-                                        }),
-                                        option: (base) => ({
-                                            ...base,
-                                            color: "inherit",
-                                            "&:hover": {
-                                                color: "white",
-                                            },
-                                            backgroundColor: "inherit",
-                                            "&:hover": {
-                                                backgroundColor: "#f4f4f5",
-                                            },
-                                        }),
-                                    }}
+                                    styles={selectStyles(!!errors.ubigeo)}
                                     formatOptionLabel={({ data }) => (
-                                        <div className="text-sm">
-                                            <div className="font-medium">
-                                                {data.distrito}
-                                            </div>
+                                        <div className="text-sm py-1">
+                                            <div className="font-medium">{data.distrito}</div>
                                             <div className="text-gray-500">
                                                 {data.provincia}, {data.departamento}
                                             </div>
                                         </div>
                                     )}
-                                    className="w-full border focus:bg-primary focus:text-white border-gray-300 rounded-xl  transition-all duration-300"
+                                    className="w-full rounded-xl transition-all duration-300"
                                     menuPortalTarget={document.body}
-                                    menuPosition="fixed"
                                 />
+                                {errors.ubigeo && <div className="text-red-500 text-sm mt-1">{errors.ubigeo}</div>}
                             </div>
 
                             {/* Departamento */}
@@ -716,7 +836,7 @@ export default function ShippingStepSF({
                         
                             {shippingOptions.length > 0 && (
                                 <div className="space-y-4">
-                                    <h3 className="text-lg font-semibold">
+                                    <h3 className="block text-xl 2xl:text-2xl font-bold mb-4 customtext-neutral-dark">
                                         Método de envío
                                     </h3>
                                     <div className="grid grid-cols-2 gap-4">
@@ -795,6 +915,8 @@ export default function ShippingStepSF({
                                 </div>
                             )}
                         </div>
+
+                        <div className="bg-[#66483966] py-[0.6px]"></div>      
 
                         {/* Tipo de comprobante */}
                         <div className="space-y-2">
@@ -918,7 +1040,14 @@ export default function ShippingStepSF({
                             </div>
                         </div>
                         <div className="space-y-2 pt-4">
-                            <ButtonPrimary className={'payment-button'} onClick={() => setShowPaymentModal(true)}>
+                            <ButtonPrimary className={'payment-button'}
+                                // onClick={() => {
+                                //     if (validateForm()) {
+                                //         setShowPaymentModal(true);
+                                //     }
+                                // }}
+                                onClick={handleContinueClick}
+                            >
                                 {" "}
                                 Continuar
                             </ButtonPrimary>
@@ -950,7 +1079,8 @@ export default function ShippingStepSF({
             <PaymentModal
                 isOpen={showPaymentModal}
                 onClose={() => setShowPaymentModal(false)}
-                onPaymentComplete={handlePayment}
+                onPaymentComplete={handlePaymentComplete}
+                
             />
         </>
     );

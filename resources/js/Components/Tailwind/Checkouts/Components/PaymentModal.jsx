@@ -3,26 +3,21 @@
 import { useState, useEffect } from "react";
 import ReactModal from "react-modal";
 
-export default function PaymentModal({ isOpen, onClose, onPaymentComplete }) {
+export default function PaymentModal({ isOpen, onClose, onPaymentComplete, selectedPaymentMethod }) {
     
     const [paymentMethod, setPaymentMethod] = useState("tarjeta");
     const [saving, setSaving] = useState(false);
     
-    useEffect(() => {
-        if (paymentMethod === "tarjeta" && isOpen) {
-            handlePayment();
-        }
-    }, [paymentMethod, isOpen]);
+    // useEffect(() => {
+    //     if (paymentMethod === "tarjeta" && isOpen) {
+    //         handlePayment();
+    //     }
+    // }, [paymentMethod, isOpen]);
 
 
     const handlePayment = () => {
         setSaving(true);
-        // Simular procesamiento de pago
-        onPaymentComplete();
-        setTimeout(() => {
-            setSaving(false);
-            onClose();
-        }, 1000);
+        onPaymentComplete(paymentMethod);
     };
 
     return (

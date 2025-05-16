@@ -42,7 +42,7 @@ export default function ShippingStep({
         reference: user?.reference || "",
         ubigeo: user?.ubigeo || null,
     });
-
+   
     useEffect(() => {
         if (user?.ubigeo && user?.district && user?.province && user?.department) {
           const defaultOption = {
