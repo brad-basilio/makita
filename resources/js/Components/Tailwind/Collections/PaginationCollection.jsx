@@ -49,7 +49,7 @@ const PaginationCollection = ({
     left: alignmentClassPagination === "left" ? "0" : "auto",
     right: alignmentClassPagination === "right" ? "0" : "auto",
     transform: alignmentClassPagination === "center" ? "translateX(-50%)" : "none",
-  };
+  }
 
   return (
     <section className="pt-10 lg:pt-16 font-font-general">
@@ -58,7 +58,7 @@ const PaginationCollection = ({
           {data?.title}
         </h2>
         
-        <div className="relative pb-8">
+        <div className="relative py-16">
           <Swiper
             modules={[Navigation, Pagination]}
             navigation={{
@@ -131,7 +131,7 @@ const PaginationCollection = ({
           </button>
 
           {/* Añadir el contenedor de paginación */}
-          <div className="w-full custom-pagination absolute bottom-0 flex justify-center space-x-2 mt-4"></div>
+          <div className="w-full custom-pagination relative flex justify-center space-x-2 mt-16"></div>
         </div>
 
       </div>
