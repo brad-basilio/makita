@@ -3,7 +3,6 @@ import CartStep from "./Components/CartStep";
 import ShippingStep from "./Components/ShippingStep";
 import ConfirmationStep from "./Components/ConfirmationStep";
 import Global from "../../../Utils/Global";
-
 export default function CheckoutSteps({ cart, setCart, user, ubigeos = [], items }) {
     const [currentStep, setCurrentStep] = useState(1);
     const totalPrice = cart.reduce((acc, item) => acc + item.final_price * item.quantity, 0);
@@ -14,7 +13,6 @@ export default function CheckoutSteps({ cart, setCart, user, ubigeos = [], items
     const [sale, setSale] = useState([]);
     const [code, setCode] = useState([]);
     const [delivery, setDelivery] = useState([]);
-
     useEffect(() => {
         const script = document.createElement("script");
         script.src = Global.CULQI_API;

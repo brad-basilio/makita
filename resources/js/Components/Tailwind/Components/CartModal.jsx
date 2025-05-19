@@ -26,7 +26,7 @@ const CartModal = ({ data, cart, setCart, modalOpen, setModalOpen }) => {
             onRequestClose={() => setModalOpen(false)}
             contentLabel="Carrito de compras"
             closeTimeoutMS={300}
-            className="fixed z-[99999] inset-0 md:inset-auto md:top-0 md:right-0 bg-white p-6 shadow-2xl w-full max-w-[480px] h-[100dvh] lg:h-screen flex flex-col outline-none md:rounded-l-xl animate-slide-in"
+            className="fixed z-[99999] inset-0 md:inset-auto md:top-0 md:right-0 bg-white p-6 shadow-2xl w-full max-w-[480px] h-[100dvh] max-h-[100dvh] lg:h-screen flex flex-col outline-none md:rounded-l-xl animate-slide-in"
             overlayClassName="fixed inset-0 bg-black/50 z-[200] backdrop-blur-sm transition-opacity"
         >
             <div className="flex flex-col flex-1">
