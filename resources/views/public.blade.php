@@ -27,7 +27,7 @@
     <link href="/lte/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
     <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com" defer></script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -163,15 +163,15 @@
     @inertia
 
     <!-- Vendor js -->
-    <script src="/lte/assets/js/vendor.min.js"></script>
+    <script src="/lte/assets/js/vendor.min.js" defer></script>
 
-    <script src="/lte/assets/libs/select2/js/select2.full.min.js"></script>
+    <script src="/lte/assets/libs/select2/js/select2.full.min.js" defer></script>
     <!-- App js -->
-    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.js"></script>
-    <script src="/lte/assets/libs/moment/min/moment.min.js"></script>
-    <script src="/lte/assets/libs/moment/moment-timezone.js"></script>
-    <script src="/lte/assets/libs/moment/locale/es.js"></script>
-    <script src="/lte/assets/libs/quill/quill.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.js" defer></script>
+    <script src="/lte/assets/libs/moment/min/moment.min.js" defer></script>
+    <script src="/lte/assets/libs/moment/moment-timezone.js" defer></script>
+    <script src="/lte/assets/libs/moment/locale/es.js" defer></script>
+    <script src="/lte/assets/libs/quill/quill.min.js" defer></script>
     <script>
         document.addEventListener('click', function(event) {
             const target = event.target;
