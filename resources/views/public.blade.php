@@ -223,10 +223,4 @@
 
 </body>
 
-<!-- Script moderno para navegadores que soportan ES modules -->
-<script type="module" src="{{ Vite::asset('resources/js/System.jsx') }}"></script>
-
-<!-- Script de respaldo para navegadores antiguos (opcional) -->
-<script nomodule src="{{ asset('js/legacy-bundle.js') }}"></script>
-
 </html>

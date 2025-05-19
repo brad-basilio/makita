@@ -1,1 +1,0 @@
-import{d as e,f as a}from"./swiper-react-CRhJ2vE3.js";function r(r,s,t,c){return r.params.createElements&&Object.keys(c).forEach((o=>{if(!t[o]&&!0===t.auto){let p=e(r.el,`.${c[o]}`)[0];p||(p=a("div",c[o]),p.className=c[o],r.el.append(p)),t[o]=p,s[o]=p}})),t}export{r as c};

@@ -1,1 +1,0 @@
-import{j as e}from"./System-Bybt2Brn.js";import"./vendor-BiOv2i5T.js";const t=({data:t})=>{var a;return e.jsx("img",{className:"w-full object-cover object-center aspect-square",src:null==t?void 0:t.image,style:{aspectRatio:null!=(a=null==t?void 0:t.aspect_ratio)?a:1}})};export{t as default};
