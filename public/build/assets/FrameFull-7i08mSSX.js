@@ -1,0 +1,1 @@
+import{j as t}from"./System-Bybt2Brn.js";import{H as s}from"./HtmlContent-C-2ncp8S.js";import"./vendor-BiOv2i5T.js";const l=({data:l})=>{var o;return t.jsx("section",{className:"w-full",children:t.jsx(s,{html:null!=(o=null==l?void 0:l["code:html"])?o:""})})};export{l as default};

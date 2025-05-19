@@ -1,0 +1,1 @@
+import{j as e}from"./System-Bybt2Brn.js";import{H as t}from"./HtmlContent-C-2ncp8S.js";import"./vendor-BiOv2i5T.js";const l=({data:l})=>{var s;return e.jsx("div",{className:"bg-white",children:e.jsx("div",{className:"px-[5%] replace-max-w-here w-full mx-auto py-[5%] md:py-[2.5%]",children:e.jsx(t,{html:null!=(s=null==l?void 0:l["code:html"])?s:""})})})};export{l as default};
