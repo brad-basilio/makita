@@ -12,25 +12,44 @@ const ProductInfinite = ({ items, data, setCart, cart }) => {
     const [swiperInstance, setSwiperInstance] = useState(null);
     const navigationPrevRef = useRef(null);
     const navigationNextRef = useRef(null);
-
+   
+    const navigationDesktopPrevRef = useRef(null);
+    const navigationDesktopNextRef = useRef(null);
+    const navigationMobilePrevRef = useRef(null);
+    const navigationMobileNextRef = useRef(null);
     // Ajuste de colores para los botones
     useEffect(() => {
-        if (navigationPrevRef.current) adjustTextColor(navigationPrevRef.current);
-        if (navigationNextRef.current) adjustTextColor(navigationNextRef.current);
+        [navigationDesktopPrevRef, navigationDesktopNextRef, navigationMobilePrevRef, navigationMobileNextRef].forEach(ref => {
+            if (ref.current) adjustTextColor(ref.current);
+        });
     }, []);
-
     // Actualizar navegación cuando la instancia de Swiper esté lista
     useEffect(() => {
-        if (swiperInstance) {
-            swiperInstance.params.navigation.prevEl = navigationPrevRef.current;
-            swiperInstance.params.navigation.nextEl = navigationNextRef.current;
+        if (!swiperInstance) return;
+
+        const handleResize = () => {
+            const isDesktop = window.innerWidth >= 768;
+            swiperInstance.params.navigation.prevEl = isDesktop 
+                ? navigationDesktopPrevRef.current 
+                : navigationMobilePrevRef.current;
+            
+            swiperInstance.params.navigation.nextEl = isDesktop 
+                ? navigationDesktopNextRef.current 
+                : navigationMobileNextRef.current;
+
+            swiperInstance.navigation.destroy();
             swiperInstance.navigation.init();
             swiperInstance.navigation.update();
-        }
+        };
+
+        window.addEventListener('resize', handleResize);
+        handleResize(); // Ejecutar inicialmente
+
+        return () => window.removeEventListener('resize', handleResize);
     }, [swiperInstance]);
 
     return (
-        <section className="relative bg-sections-color">
+        <section className="relative bg-sections-color py-4">
             <div className="relative mx-auto px-[5%] py-[2.5%]">
                 {/* Header */}
                 <div className="md:flex justify-between items-center mb-8 pb-4 border-b customborder-neutral-light">
@@ -39,10 +58,10 @@ const ProductInfinite = ({ items, data, setCart, cart }) => {
                     </h2>
                     <a
                         href={data?.link_catalog}
-                        className="bg-primary transition-all duration-300 text-white border-none flex justify-center flex-row items-center gap-3 px-10 py-4 text-base rounded-xl tracking-wide font-bold cursor-pointer hover:opacity-90 hover:scale-105 animate-slideIn"
+                        className="hidden md:flex bg-primary animate-bounce transition-all duration-300 text-white border-none  justify-center flex-row items-center gap-3 px-10 py-4 text-base rounded-xl tracking-wide font-bold cursor-pointer hover:opacity-90 hover:scale-105 animate-slideIn"
                     >
                         Ver todos
-                        <Tag width="1rem" className="rotate-90 animate-bounce" />
+                        <Tag width="1rem" className="rotate-90" />
                     </a>
                 </div>
 
@@ -51,26 +70,27 @@ const ProductInfinite = ({ items, data, setCart, cart }) => {
                     <Swiper
                         modules={[Navigation, Grid]}
                         navigation={{
-                            prevEl: navigationPrevRef.current,
-                            nextEl: navigationNextRef.current,
+                            prevEl: navigationDesktopPrevRef.current,
+                            nextEl: navigationDesktopNextRef.current,
                             enabled: true,
                         }}
                         spaceBetween={16}
                         slidesPerView={2}
                         grid={{
                              fill: 'row',
-                            rows: 3
+                            rows: 3,
+                            
                            
                         }}
                         loop={true}
                         onSwiper={setSwiperInstance}
                         breakpoints={{
-                            640: { slidesPerView: 2 },
+                            640: { slidesPerView: 2},
                             768: { slidesPerView: 3, grid: { rows: 1 } },
                             1024: { slidesPerView: 4, grid: { rows: 1 } },
                             1280: { slidesPerView: 5, grid: { rows: 1 } },
                         }}
-                        className="lg:h-[500px] lg:max-h-[500px] lg:!flex lg:items-center lg:justify-center animate-fadeIn"
+                        className="lg:h-[550px] lg:max-h-[550px] lg:!flex lg:items-center lg:justify-center animate-fadeIn"
                     >
                         {items.map((product, index) => (
                             <SwiperSlide
@@ -90,15 +110,15 @@ const ProductInfinite = ({ items, data, setCart, cart }) => {
                     {/* Navigation Buttons - Desktop */}
                     <div className="hidden md:block">
                         <button
-                            ref={navigationPrevRef}
-                            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center rounded-lg shadow-lg transition-all duration-300 bg-primary text-white disabled:opacity-50 disabled:cursor-not-allowed hover:scale-110 active:scale-95 transform hover:-translate-x-1"
+                            ref={navigationDesktopPrevRef}
+                            className="absolute -left-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center rounded-lg shadow-lg transition-all duration-300 bg-primary text-white disabled:opacity-50 disabled:cursor-not-allowed hover:scale-110 active:scale-95 transform hover:-translate-x-1"
                             aria-label="Productos anteriores"
                         >
                             <ChevronLeft width="1.2rem" className="animate-pulse" />
                         </button>
                         <button
-                            ref={navigationNextRef}
-                            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center rounded-lg shadow-lg transition-all duration-300 bg-primary text-white disabled:opacity-50 disabled:cursor-not-allowed hover:scale-110 active:scale-95 transform hover:translate-x-1"
+                            ref={navigationDesktopNextRef}
+                            className="absolute -right-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center rounded-lg shadow-lg transition-all duration-300 bg-primary text-white disabled:opacity-50 disabled:cursor-not-allowed hover:scale-110 active:scale-95 transform hover:translate-x-1"
                             aria-label="Siguientes productos"
                         >
                             <ChevronRight width="1.2rem" className="animate-pulse" />
@@ -108,14 +128,14 @@ const ProductInfinite = ({ items, data, setCart, cart }) => {
                     {/* Navigation Buttons - Mobile */}
                     <div className="md:hidden flex justify-end gap-2 mt-4">
                         <button
-                            ref={navigationPrevRef}
+                            ref={navigationMobilePrevRef}
                             className="z-10 w-10 h-10 flex items-center justify-center rounded-lg shadow-lg transition-all duration-300 bg-primary text-white disabled:opacity-50 disabled:cursor-not-allowed hover:scale-110 active:scale-95"
                             aria-label="Productos anteriores"
                         >
                             <ChevronLeft width="1.2rem" className="animate-pulse" />
                         </button>
                         <button
-                            ref={navigationNextRef}
+                            ref={navigationMobileNextRef}
                             className="z-10 w-10 h-10 flex items-center justify-center rounded-lg shadow-lg transition-all duration-300 bg-primary text-white disabled:opacity-50 disabled:cursor-not-allowed hover:scale-110 active:scale-95"
                             aria-label="Siguientes productos"
                         >

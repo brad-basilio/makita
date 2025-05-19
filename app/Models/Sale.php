@@ -54,4 +54,16 @@ class Sale extends Model
     {
         return $this->belongsTo(SaleStatus::class);
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function scopeWithUser($query)
+    {
+        return $query->with(['user' => function ($q) {
+            $q->select('id', 'name');
+        }]);
+    }
 }
