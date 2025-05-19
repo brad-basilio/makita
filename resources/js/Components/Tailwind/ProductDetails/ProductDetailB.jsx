@@ -187,9 +187,9 @@ const ProductDetail = ({ item, data, setCart, cart }) => {
                 {/* Header Estilo App */}
                 <div className="sticky top-0 bg-white shadow-sm z-20">
                     <div className="flex items-center p-4 gap-4 border-b">
-                      {/* <button onClick={() => window.history.back()} className="text-gray-600">
+                        {/* <button onClick={() => window.history.back()} className="text-gray-600">
                             <ChevronLeft size={24} />
-                        </button>*/}  
+                        </button>*/}
                         <h1 className="text-lg font-bold flex-1 line-clamp-5">{item?.name}</h1>
                     </div>
                 </div>
@@ -381,7 +381,7 @@ const ProductDetail = ({ item, data, setCart, cart }) => {
                 {/* Bottom Navigation */}
                 <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg z-[999]">
                     <div className="p-4 flex gap-4">
-                        <button className="flex-1 bg-primary text-white py-3 rounded-xl font-medium active:scale-95 transition-transform">
+                        <button onClick={() => { onAddClicked(item); window.location.href = "/cart" }} className="flex-1 bg-primary text-white py-3 rounded-xl font-medium active:scale-95 transition-transform">
                             Comprar ahora
                         </button>
                         <button
