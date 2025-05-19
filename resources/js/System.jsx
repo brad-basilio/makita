@@ -189,9 +189,9 @@ const System = ({
                 return <Frame which={value} data={data} />
             case "footer":
                 return (
-                    <Suspense fallback={<LoadingFallback />}>
+               
                         <Footer {...componentProps} contacts={contacts} />
-                    </Suspense>
+                   
                 );
             
             default:
