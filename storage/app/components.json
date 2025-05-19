@@ -800,7 +800,8 @@
                 "using": {
                     "model": "Ad",
                     "fields": ["image", "name"]
-                }
+                },
+                "generals": ["privacy_policy"]
             }
         ]
     },
