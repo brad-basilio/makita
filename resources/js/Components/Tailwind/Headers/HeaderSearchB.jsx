@@ -109,8 +109,8 @@ const HeaderSearchB = ({
     ];
 
     return (
-        <header className={`w-full ${openMenu ? "fixed w-screen h-screen bg-white z-50" : "relative"}`}>
-            <div className="px-primary 2xl:px-0 2xl:max-w-7xl mx-auto py-4 font-font-secondary text-base font-semibold">
+        <header className={`w-full  ${openMenu ? "fixed w-screen h-screen bg-transparent z-50" : "relative"}`}>
+            <div className="px-primary  bg-white 2xl:px-0 2xl:max-w-7xl mx-auto py-4 font-font-secondary text-base font-semibold">
                 <div className="flex items-center justify-between gap-4">
                     {/* Logo */}
                     <a href="/" className="flex items-center gap-2 z-[51]">
@@ -380,7 +380,7 @@ const HeaderSearchB = ({
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -20 }}
                         transition={{ duration: 0.2 }}
-                        className="lg:hidden bg-white text-textWhite shadow-lg w-full min-h-screen absolute z-10 top-20"
+                        className="lg:hidden bg-transparent text-textWhite shadow-lg w-full min-h-screen absolute z-10 top-20"
                     >
                         <MobileMenu
                             search={search}
@@ -401,7 +401,7 @@ const HeaderSearchB = ({
             />
 
             <div className="flex justify-end w-full mx-auto z-[100] relative">
-                <div className="fixed bottom-6 sm:bottom-[2rem] lg:bottom-[4rem] z-20 cursor-pointer">
+                <div className="hidden lg:block fixed bottom-6 sm:bottom-[2rem] lg:bottom-[4rem] z-20 cursor-pointer">
                     <a
                         target="_blank"
                         id="whatsapp-toggle"

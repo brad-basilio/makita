@@ -11,7 +11,7 @@ export default function LoginSimple() {
     const jsEncrypt = new JSEncrypt();
     jsEncrypt.setPublicKey(Global.PUBLIC_RSA_KEY);
 
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const emailRef = useRef();
     const passwordRef = useRef();
     const rememberRef = useRef();
