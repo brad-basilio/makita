@@ -12,20 +12,20 @@ const LoadingFallback = () => (
 
 const Base = ({ children, summary, socials, generals }) => {
   return <>
-    <Suspense fallback={<LoadingFallback />}>
+
       <TopBar socials={socials} />
-    </Suspense>
-    <Suspense fallback={<LoadingFallback />}>
+   
+  
       <Header socials={socials} generals={generals} />
-    </Suspense>
+  
     <main className="overflow-hidden min-h-[360px]">
-      <Suspense fallback={<LoadingFallback />}>
+    
         {children}
-      </Suspense>
+     
     </main>
-    <Suspense fallback={<LoadingFallback />}>
+ 
       <Footer summary={summary} socials={socials} generals={generals} />
-    </Suspense>
+  
   </>
 }
 

@@ -21,8 +21,8 @@
       "_main-BvVILmTO.js"
     ]
   },
-  "_Base-CJyP5WnT.js": {
-    "file": "assets/Base-CJyP5WnT.js",
+  "_Base-DPxK4AN8.js": {
+    "file": "assets/Base-DPxK4AN8.js",
     "name": "Base",
     "imports": [
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
@@ -964,7 +964,7 @@
     "isEntry": true
   },
   "resources/js/About.jsx": {
-    "file": "assets/About-DS5wHGU9.js",
+    "file": "assets/About-DnOEoYkR.js",
     "name": "About",
     "src": "resources/js/About.jsx",
     "isEntry": true,
@@ -973,7 +973,7 @@
       "_index-BH53Isel.js",
       "_CreateReactScript-Bq8gMpEh.js",
       "resources/js/Utils/ReactAppend.jsx",
-      "_Base-CJyP5WnT.js",
+      "_Base-DPxK4AN8.js",
       "_YouTube.esm-CalHMD6O.js",
       "_em-DRiSFGEW.js",
       "_Weare-DzhH2Vjy.js",
@@ -2238,7 +2238,7 @@
     ]
   },
   "resources/js/Blog.jsx": {
-    "file": "assets/Blog-DSyQUzw9.js",
+    "file": "assets/Blog-_ubHleJZ.js",
     "name": "Blog",
     "src": "resources/js/Blog.jsx",
     "isEntry": true,
@@ -2247,7 +2247,7 @@
       "_index-BH53Isel.js",
       "_CreateReactScript-Bq8gMpEh.js",
       "resources/js/Utils/ReactAppend.jsx",
-      "_Base-CJyP5WnT.js",
+      "_Base-DPxK4AN8.js",
       "resources/js/Components/Tailwind/Components/ProductCard.jsx",
       "_SubscriptionsRest-D2mgT7KB.js",
       "_Global-ErywZRdd.js",
@@ -2279,7 +2279,7 @@
     ]
   },
   "resources/js/BlogArticle.jsx": {
-    "file": "assets/BlogArticle-DOwKx1vS.js",
+    "file": "assets/BlogArticle-CkbP1Xuj.js",
     "name": "BlogArticle",
     "src": "resources/js/BlogArticle.jsx",
     "isEntry": true,
@@ -2288,7 +2288,7 @@
       "_index-BH53Isel.js",
       "_CreateReactScript-Bq8gMpEh.js",
       "resources/js/Utils/ReactAppend.jsx",
-      "_Base-CJyP5WnT.js",
+      "_Base-DPxK4AN8.js",
       "_HtmlContent-FTivcJrM.js",
       "_tippy-react.esm-BWiGTO87.js",
       "_proxy-BTYtmp9V.js",
@@ -6596,7 +6596,7 @@
     ]
   },
   "resources/js/Contact.jsx": {
-    "file": "assets/Contact-7I95LgSb.js",
+    "file": "assets/Contact-BRF3L4ne.js",
     "name": "Contact",
     "src": "resources/js/Contact.jsx",
     "isEntry": true,
@@ -6605,7 +6605,7 @@
       "_index-BH53Isel.js",
       "_CreateReactScript-Bq8gMpEh.js",
       "resources/js/Utils/ReactAppend.jsx",
-      "_Base-CJyP5WnT.js",
+      "_Base-DPxK4AN8.js",
       "_Global-ErywZRdd.js",
       "_createLucideIcon-Cy5Ya80P.js",
       "_phone-BZ94M50k.js",
@@ -6634,7 +6634,7 @@
     ]
   },
   "resources/js/CourseDetails.jsx": {
-    "file": "assets/CourseDetails-CNFFlVdC.js",
+    "file": "assets/CourseDetails-_-8rUfp5.js",
     "name": "CourseDetails",
     "src": "resources/js/CourseDetails.jsx",
     "isEntry": true,
@@ -6643,7 +6643,7 @@
       "_index-BH53Isel.js",
       "resources/js/Utils/ReactAppend.jsx",
       "_main-BvVILmTO.js",
-      "_Base-CJyP5WnT.js",
+      "_Base-DPxK4AN8.js",
       "_CreateReactScript-Bq8gMpEh.js",
       "_HtmlContent-FTivcJrM.js",
       "_Number2Currency-e57Tgsuk.js",
@@ -6666,7 +6666,7 @@
     ]
   },
   "resources/js/Courses.jsx": {
-    "file": "assets/Courses-CNvHtU4Y.js",
+    "file": "assets/Courses-XCuR_dVG.js",
     "name": "Courses",
     "src": "resources/js/Courses.jsx",
     "isEntry": true,
@@ -6675,7 +6675,7 @@
       "_index-BH53Isel.js",
       "resources/js/Utils/ReactAppend.jsx",
       "_CreateReactScript-Bq8gMpEh.js",
-      "_Base-CJyP5WnT.js",
+      "_Base-DPxK4AN8.js",
       "_em-DRiSFGEW.js",
       "_FilterPagination-DCLrjB48.js",
       "_CourseCard-CbDLljRi.js",
@@ -6753,7 +6753,7 @@
     "isEntry": true
   },
   "resources/js/Home.jsx": {
-    "file": "assets/Home-BcfXOITB.js",
+    "file": "assets/Home-Bi3AjhGc.js",
     "name": "Home",
     "src": "resources/js/Home.jsx",
     "isEntry": true,
@@ -6761,7 +6761,7 @@
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
       "_index-BH53Isel.js",
       "resources/js/Utils/ReactAppend.jsx",
-      "_Base-CJyP5WnT.js",
+      "_Base-DPxK4AN8.js",
       "_CreateReactScript-Bq8gMpEh.js",
       "_Weare-DzhH2Vjy.js",
       "resources/js/Components/Tailwind/Blogs/BlogCarousel.jsx",
