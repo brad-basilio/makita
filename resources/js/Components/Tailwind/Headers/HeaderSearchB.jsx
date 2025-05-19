@@ -124,7 +124,7 @@ const HeaderSearchB = ({
                             }}
                         />
                     </a>
-                    <div className="flex gap-8">
+                    <div className="flex gap-8 lg:hidden">
                         <div className={`${searchMobile ? "hidden" : "flex"} items-center gap-4`}>
                             {isUser ? (
                                 <div ref={menuRef} className="relative">
@@ -327,7 +327,7 @@ const HeaderSearchB = ({
                     </div>
                 </div>
 
-                <div className="flex justify-between items-center mt-4">
+               {/*   <div className="flex justify-between items-center mt-4">*/}
                     {/* Mobile Search and Menu */}
                     {/* <div ref={searchRef} className="flex md:hidden relative w-full">
                         <div className="flex w-full items-center justify-between gap-4">
@@ -447,7 +447,7 @@ const HeaderSearchB = ({
                             )}
                         </AnimatePresence>
                     </div>*/}
-                </div>
+                {/*</div>*/}
             </div>
 
             <AnimatePresence>

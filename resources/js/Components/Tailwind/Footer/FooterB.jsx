@@ -78,7 +78,7 @@ const FooterB = ({ pages, generals }) => {
                         <h3 className="customtext-primary font-bold mb-6 text-base">
                             Menú
                         </h3>
-                        <ul className="text-white flex gap-2 items-center">
+                        <ul className="text-white flex lg:flex-col gap-2 items-center lg:items-start">
                             {pages.map((page, index) =>
                                 page.menuable && (
                                     <li key={index}>
@@ -90,7 +90,7 @@ const FooterB = ({ pages, generals }) => {
                                         </a>
                                         
                                         {index !== pages.filter(p => p.menuable).length + 2 && (
-                                            <span className="text-white ml-2">|</span>
+                                            <span className="text-white ml-2 lg:hidden">|</span>
                                         )}
                                     </li>
                                 )
