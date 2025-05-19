@@ -379,7 +379,7 @@ const ProductDetail = ({ item, data, setCart, cart }) => {
                 </div>
 
                 {/* Bottom Navigation */}
-                <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg z-[999]">
+                <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg z-[99]">
                     <div className="p-4 flex gap-4">
                         <button onClick={() => { onAddClicked(item); window.location.href = "/cart" }} className="flex-1 bg-primary text-white py-3 rounded-xl font-medium active:scale-95 transition-transform">
                             Comprar ahora

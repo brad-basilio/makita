@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import ReactModal from "react-modal";
 import CartItemRow from "./CartItemRow";
 import Number2Currency from "../../../Utils/Number2Currency";
-import Global from "../../../Utils/Global";
-import { Local } from "sode-extend-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 ReactModal.setAppElement("#app");
 
@@ -18,65 +17,92 @@ const CartModal = ({ data, cart, setCart, modalOpen, setModalOpen }) => {
         }
     }, [modalOpen]);
 
-    const totalPrice = cart.reduce((acc, item) => {
-        const finalPrice = item.final_price;
-        return acc + finalPrice * item.quantity;
-    }, 0);
-
+    const totalPrice = cart.reduce((acc, item) => acc + (item.final_price * item.quantity), 0);
     const isEmpty = cart.length === 0;
 
     return (
         <ReactModal
             isOpen={modalOpen}
             onRequestClose={() => setModalOpen(false)}
-            contentLabel="Términos y condiciones"
-            className="absolute Z-[99999] right-0 bg-white p-4 rounded-l-2xl shadow-lg w-[95%] max-w-md mx-auto         lg:mx-0 outline-none h-[100dvh] max-h-[100dvh] lg:h-screen flex flex-col"
-            overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-[200]"
+            contentLabel="Carrito de compras"
+            closeTimeoutMS={300}
+            className="fixed z-[99999] inset-0 md:inset-auto md:top-0 md:right-0 bg-white p-6 shadow-2xl w-full max-w-[480px] h-[100dvh] lg:h-screen flex flex-col outline-none md:rounded-l-xl animate-slide-in"
+            overlayClassName="fixed inset-0 bg-black/50 z-[200] backdrop-blur-sm transition-opacity"
         >
-            <div className="flex flex-col font-font-general flex-1">
-                <div className="flex justify-between items-center mb-2">
-                    <h2 className="text-xl font-bold">Carrito</h2>
-                    <button onClick={() => setModalOpen(false)}>
-                        <i className="mdi mdi-close text-xl"></i>
+            <div className="flex flex-col flex-1">
+                {/* Header */}
+                <div className="flex justify-between items-center mb-6 pb-4 border-b border-gray-100">
+                    <motion.h2 
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="text-2xl font-bold text-gray-900"
+                    >
+                        Tu Carrito
+                    </motion.h2>
+                    <button 
+                        onClick={() => setModalOpen(false)}
+                        className="p-2 rounded-full hover:bg-gray-50 transition-colors"
+                    >
+                        <i className="mdi mdi-close text-2xl text-gray-500 hover:text-gray-700 transition-colors"></i>
                     </button>
                 </div>
-                <div className="overflow-y-auto flex-1 mb-4 scroll__carrito">
-                    {isEmpty ? (
-                        <div className="flex flex-col items-center justify-center h-full text-gray-500">
-                            <i className="mdi mdi-cart-outline text-6xl mb-2"></i>
-                            <p>Tu carrito está vacío</p>
-                        </div>
-                    ) : (
-                        <table className="w-full font-font-general">
-                            <tbody id="itemsCarrito">
+
+                {/* Contenido desplazable */}
+                <div className="flex-1 overflow-y-auto  max-h-[calc(100dvh-20dvh)]  lg:max-h-[calc(100vh-38vh)] pb-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+                    <AnimatePresence mode="wait">
+                        {isEmpty ? (
+                            <motion.div
+                                key="empty"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                className="flex flex-col items-center justify-center h-full text-center p-8"
+                            >
+                                <div className="mb-6 text-gray-300">
+                                    <i className="mdi mdi-cart-outline text-7xl"></i>
+                                </div>
+                                <p className="text-gray-500 text-lg font-medium mb-4">
+                                    Tu carrito está vacío
+                                </p>
+                            </motion.div>
+                        ) : (
+                            <motion.div
+                                key="items"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                className="space-y-4 pr-2"
+                            >
                                 {cart.map((item, index) => (
                                     <CartItemRow
-                                        key={index}
+                                        key={item.id}
                                         {...item}
                                         setCart={setCart}
+                                        index={index}
                                     />
                                 ))}
-                            </tbody>
-                        </table>
-                    )}
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
                 </div>
-            </div>
-            <div className="font-font-general flex flex-col gap-2 pt-2 sticky bottom-0 bg-white">
-                <div className="text-[#141718] font-semibold text-xl flex justify-between items-center">
-                    <b>Total</b>
-                    <b id="itemsTotal">S/. {Number2Currency(totalPrice)}</b>
-                </div>
-                <div>
+
+                {/* Footer */}
+                <div className="pt-6 border-t border-gray-100 bg-white">
+                    <div className="flex justify-between items-center mb-6">
+                        <span className="text-lg font-semibold text-gray-900">Total:</span>
+                        <span className="text-xl font-bold text-gray-900">
+                            S/. {Number2Currency(totalPrice)}
+                        </span>
+                    </div>
                     <button
-                        onClick={() => window.location.href = data?.link_cart}
+                        onClick={() => (window.location.href = data?.link_cart)}
                         disabled={isEmpty}
-                        className={`font-semibold text-base py-3 px-5 rounded-2xl w-full inline-block text-center transition-all duration-300 ${
+                        className={`w-full py-4 rounded-xl font-semibold transition-all duration-300 ${
                             isEmpty 
-                            ? 'bg-gray-300 cursor-not-allowed opacity-50' 
-                            : 'bg-primary text-white hover:bg-primary/90 active:scale-95'
+                            ? 'bg-gray-200 text-gray-400 cursor-not-allowed' 
+                            : 'bg-primary  text-white hover:shadow-lg hover:scale-[1.02] active:scale-100'
                         }`}
                     >
-                        Ir al Carrito
+                        Ir al carrito
                     </button>
                 </div>
             </div>
