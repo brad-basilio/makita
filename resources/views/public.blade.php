@@ -174,7 +174,7 @@
     @inertia
 
     <!-- Vendor js -->
-    <script src="/lte/assets/js/vendor.min.js"></script>
+    <script src="/lte/assets/js/vendor.min.js" defer></script>
 
     <script src="/lte/assets/libs/select2/js/select2.full.min.js" defer></script>
     <!-- App js -->
