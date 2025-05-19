@@ -231,9 +231,9 @@ const System = ({
 CreateReactScript((el, properties) => {
     createRoot(el).render(
      
-        <Suspense fallback={<LoadingFallback />}>
+       
         <System {...properties} />
-    </Suspense>
+
        
     );
 });
