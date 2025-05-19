@@ -3,6 +3,7 @@ import CartStep from "./Components/CartStep";
 import ShippingStep from "./Components/ShippingStep";
 import ConfirmationStep from "./Components/ConfirmationStep";
 import Global from "../../../Utils/Global";
+
 export default function CheckoutSteps({ cart, setCart, user, ubigeos = [], items }) {
     const [currentStep, setCurrentStep] = useState(1);
     const totalPrice = cart.reduce((acc, item) => acc + item.final_price * item.quantity, 0);
@@ -13,6 +14,7 @@ export default function CheckoutSteps({ cart, setCart, user, ubigeos = [], items
     const [sale, setSale] = useState([]);
     const [code, setCode] = useState([]);
     const [delivery, setDelivery] = useState([]);
+
     useEffect(() => {
         const script = document.createElement("script");
         script.src = Global.CULQI_API;
@@ -29,6 +31,12 @@ export default function CheckoutSteps({ cart, setCart, user, ubigeos = [], items
         document.body.appendChild(script);
         return () => document.body.removeChild(script);
     }, []);
+
+    // Function to handle step changes and scroll to top
+    const handleStepChange = (newStep) => {
+        setCurrentStep(newStep);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
 
     return (
         <div className="min-h-screen bg-[#F7F9FB] py-4 md:py-12 px-2 sm:px-primary 2xl:px-0 2xl:max-w-7xl mx-auto">
@@ -62,7 +70,7 @@ export default function CheckoutSteps({ cart, setCart, user, ubigeos = [], items
                     <CartStep
                         cart={cart}
                         setCart={setCart}
-                        onContinue={() => setCurrentStep(2)}
+                        onContinue={() => handleStepChange(2)}
                         subTotal={subTotal}
                         envio={envio}
                         igv={igv}
@@ -78,8 +86,8 @@ export default function CheckoutSteps({ cart, setCart, user, ubigeos = [], items
                         cart={cart}
                         setSale={setSale}
                         setCart={setCart}
-                        onContinue={() => setCurrentStep(3)}
-                        noContinue={() => setCurrentStep(1)}
+                        onContinue={() => handleStepChange(3)}
+                        noContinue={() => handleStepChange(1)}
                         subTotal={subTotal}
                         envio={envio}
                         setEnvio={setEnvio}
