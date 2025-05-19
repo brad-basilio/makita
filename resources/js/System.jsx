@@ -3,9 +3,9 @@ import { createRoot } from "react-dom/client";
 import CreateReactScript from "./Utils/CreateReactScript";
 
 // Componente de carga para usar con Suspense
-const LoadingFallback = () => (
+/*const LoadingFallback = () => (
     <div className="fixed inset-0 flex flex-col justify-center items-center bg-white/90 backdrop-blur-sm z-50">
-        {/* Logo con efecto de rebote */}
+ 
         <div className="animate-bounce">
             <img
 
@@ -20,7 +20,7 @@ const LoadingFallback = () => (
             />
         </div>
 
-        {/* Spinner doble con colores primarios */}
+  
         <div className="relative mt-8">
             <div className="absolute inset-0 flex items-center justify-center">
                 <div className="w-24 h-24 border-4 border-primary/20 rounded-full animate-none"></div>
@@ -31,17 +31,17 @@ const LoadingFallback = () => (
             </div>
         </div>
 
-        {/* Texto con animación suave */}
+      
         <p className="mt-8 text-lg font-semibold text-primary animate-pulse">
             Cargando tu experiencia...
         </p>
 
-        {/* Barra de progreso decorativa */}
+    
         <div className="absolute bottom-0 left-0 right-0 h-2 bg-gray-100">
             <div className="h-full bg-gradient-to-r from-primary to-secondary animate-progress"></div>
         </div>
     </div>
-);
+);*/
 
 // Importaciones lazy
 const TopBar = React.lazy(() => import("./Components/Tailwind/TopBar"));
@@ -251,8 +251,11 @@ const System = ({
 
 CreateReactScript((el, properties) => {
     createRoot(el).render(
-        <Suspense fallback={<LoadingFallback />}>
+     
             <System {...properties} />
-        </Suspense>
+       
     );
 });
+/* <Suspense fallback={<LoadingFallback />}>
+            <System {...properties} />
+        </Suspense> */
