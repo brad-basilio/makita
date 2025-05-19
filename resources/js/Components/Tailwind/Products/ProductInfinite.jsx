@@ -74,12 +74,11 @@ const ProductInfinite = ({ items, data, setCart, cart }) => {
                             nextEl: navigationDesktopNextRef.current,
                             enabled: true,
                         }}
-                        spaceBetween={16}
+                     
                         slidesPerView={2}
                         grid={{
                              fill: 'row',
                             rows: 3,
-                            
                            
                         }}
                         loop={true}
@@ -95,7 +94,7 @@ const ProductInfinite = ({ items, data, setCart, cart }) => {
                         {items.map((product, index) => (
                             <SwiperSlide
                                 key={index}
-                                className="!h-full lg:!flex lg:items-center lg:justify-center animate-slideIn"
+                                className="py-2 px-1 md:p-0 !h-full lg:!flex lg:items-center lg:justify-center animate-slideIn"
                             >
                                 <CardHoverBtn
                                     product={product}
