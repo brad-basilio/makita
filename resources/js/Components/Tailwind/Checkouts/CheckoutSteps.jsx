@@ -58,7 +58,7 @@ export default function CheckoutSteps({ cart, setCart, user, ubigeos = [], items
                         <div className="mb-4 lg:mb-0  flex-1 h-[2px] bg-gray-200 relative">
                             <div className="absolute inset-0 bg-primary transition-all duration-500" style={{ width: currentStep > 2 ? "100%" : "0%" }} />
                         </div>
-                        <div className={`flex flex-col items-center md:flex-row md:items-center gap-1 md:gap-2 ${currentStep === 3 ? "text-white font-medium" : "customtext-neutral-dark"}`}>
+                        <div className={`flex flex-col items-center md:flex-row md:items-center gap-1 md:gap-2 ${currentStep === 3 ? "customtext-primary  font-medium" : "customtext-neutral-dark"}`}>
                             <span className={`w-8 h-8 rounded-full border-2 flex items-center justify-center text-xs md:text-sm ${currentStep === 3 ?"bg-primary text-white":"bg-white customtext-primary"}`}>3</span>
                             <span className="text-[10px] md:text-sm text-center">Confirmación</span>
                         </div>
