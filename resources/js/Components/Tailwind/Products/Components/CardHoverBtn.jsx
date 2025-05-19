@@ -120,6 +120,7 @@ const CardHoverBtn = ({
                             <span className="md:hidden flex gap-2 text-sm items-center" > Ver <LucideEye width="1.1rem" /></span>
                         </a>
                         <button
+                        aria-label="Agregar al carrito"
                             className="py-2 px-2.5 border border-primary rounded-lg customtext-primary transition-all duration-300  hover:opacity-90"
                             onClick={() => onAddClicked(product)}
                         >

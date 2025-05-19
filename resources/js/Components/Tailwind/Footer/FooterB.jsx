@@ -38,12 +38,12 @@ const FooterB = ({ pages, generals }) => {
 
         if (!result) return;
 
-       /* Swal.fire({
-            title: "¡Éxito!",
-            text: `Te has suscrito correctamente al blog de ${Global.APP_NAME}.`,
-            icon: "success",
-            confirmButtonText: "Ok",
-        });*/
+        /* Swal.fire({
+             title: "¡Éxito!",
+             text: `Te has suscrito correctamente al blog de ${Global.APP_NAME}.`,
+             icon: "success",
+             confirmButtonText: "Ok",
+         });*/
         toast.error("¡Suscrito!", {
             description: `Te has suscrito correctamente al blog de ${Global.APP_NAME}.`,
             icon: <CircleCheckBig className="h-5 w-5 text-green-500" />,
@@ -88,7 +88,7 @@ const FooterB = ({ pages, generals }) => {
                                         >
                                             {page.name}
                                         </a>
-                                        
+
                                         {index !== pages.filter(p => p.menuable).length + 2 && (
                                             <span className="text-white ml-2 lg:hidden">|</span>
                                         )}
@@ -114,6 +114,8 @@ const FooterB = ({ pages, generals }) => {
                             </li>
                             <li>
                                 <a
+                                    type="button"
+                                    href="#"
                                     onClick={() => openModal(1)}
                                     className="cursor-pointer hover:customtext-primary hover:font-bold transition-all duration-300"
                                 >
@@ -122,6 +124,8 @@ const FooterB = ({ pages, generals }) => {
                             </li>
                             <li>
                                 <a
+                                 type="button"
+                                    href="#"
                                     onClick={() => openModal(2)}
                                     className="cursor-pointer hover:customtext-primary hover:font-bold transition-all duration-300"
                                 >
@@ -130,6 +134,8 @@ const FooterB = ({ pages, generals }) => {
                             </li>
                             <li>
                                 <a
+                        
+                                 
                                     href="/libro-reclamaciones"
                                     className="cursor-pointer flex flex-col gap-2 items-start  "
                                 >

@@ -14,6 +14,7 @@
     <title>{{ $data['name'] ?? 'Página' }} | {{ env('APP_NAME', 'Stech Perú') }}</title>
 
     <link rel="shortcut icon" href="/assets/resources/icon.png?v={{ uniqid() }}" type="image/png">
+    <meta name="description" content="Stech Perú">
     @isset($data['description'])
         <meta name="description" content="{{ $data['description'] }}">
     @endisset
