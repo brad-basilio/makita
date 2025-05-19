@@ -16,7 +16,7 @@ const LoadingFallback = () => (
                     e.target.src = "/assets/img/logo-bk.svg";
                 }}
 
-                className="w-auto transition-all duration-300 transform hover:scale-105"
+                className=" w-64 lg:w-96 transition-all duration-300 transform hover:scale-105"
             />
         </div>
 
