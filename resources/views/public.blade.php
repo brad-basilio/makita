@@ -23,7 +23,7 @@
 
     <meta name="author" content="Powered by Manuel Gamboa">
 
-    <link href="/lte/assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
+    <link href="/lte/assets/libs/select2/css/select2.min.css"  rel="stylesheet" type="text/css" />
     <link href="/lte/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
     <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
@@ -163,7 +163,7 @@
     @inertia
 
     <!-- Vendor js -->
-    <script src="/lte/assets/js/vendor.min.js" defer></script>
+    <script src="/lte/assets/js/vendor.min.js"></script>
 
     <script src="/lte/assets/libs/select2/js/select2.full.min.js" defer></script>
     <!-- App js -->
