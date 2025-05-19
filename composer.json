@@ -24,6 +24,7 @@
         "predis/predis": "*",
         "sode/extend": "dev-master",
         "spatie/laravel-permission": "^6.7",
+        "spatie/laravel-sitemap": "^7.3",
         "stichoza/google-translate-php": "^5.2"
     },
     "require-dev": {

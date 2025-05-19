@@ -232,7 +232,7 @@ CreateReactScript((el, properties) => {
     createRoot(el).render(
      
        
-        <Suspense fallback={<LoadingFallback />}>
+    <Suspense fallback={<LoadingFallback />}>
         <System {...properties} />
     </Suspense>
 
