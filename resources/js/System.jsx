@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import CreateReactScript from "./Utils/CreateReactScript";
 
 // Componente de carga para usar con Suspense
-/*const LoadingFallback = () => (
+const LoadingFallback = () => (
     <div className="fixed inset-0 flex flex-col justify-center items-center bg-white/90 backdrop-blur-sm z-50">
  
         <div className="animate-bounce">
@@ -19,29 +19,8 @@ import CreateReactScript from "./Utils/CreateReactScript";
                 className=" w-64 lg:w-96 transition-all duration-300 transform hover:scale-105"
             />
         </div>
-
-  
-        <div className="relative mt-8">
-            <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-24 h-24 border-4 border-primary/20 rounded-full animate-none"></div>
-            </div>
-            <div className="relative">
-                <div className="w-24 h-24 border-4 border-primary rounded-full animate-spin border-t-transparent"></div>
-                <div className="absolute top-0 left-0 w-24 h-24 border-4 border-secondary rounded-full animate-spin border-b-transparent opacity-30"></div>
-            </div>
-        </div>
-
-      
-        <p className="mt-8 text-lg font-semibold text-primary animate-pulse">
-            Cargando tu experiencia...
-        </p>
-
-    
-        <div className="absolute bottom-0 left-0 right-0 h-2 bg-gray-100">
-            <div className="h-full bg-gradient-to-r from-primary to-secondary animate-progress"></div>
-        </div>
     </div>
-);*/
+);
 
 // Importaciones lazy
 const TopBar = React.lazy(() => import("./Components/Tailwind/TopBar"));
@@ -252,7 +231,9 @@ const System = ({
 CreateReactScript((el, properties) => {
     createRoot(el).render(
      
-            <System {...properties} />
+        <Suspense fallback={<LoadingFallback />}>
+        <System {...properties} />
+    </Suspense>
        
     );
 });
