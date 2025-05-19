@@ -1,45 +1,54 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import CreateReactScript from "./Utils/CreateReactScript";
 
-import TopBar from "./Components/Tailwind/TopBar";
-import Header from "./Components/Tailwind/Header";
-import Footer from "./Components/Tailwind/Footer";
-import SortByAfterField from "./Utils/SortByAfterField";
-import Slider from "./Components/Tailwind/Slider";
-import Product from "./Components/Tailwind/Product";
-import Banner from "./Components/Tailwind/Banner";
-import Category from "./Components/Tailwind/Category";
-import Collection from "./Components/Tailwind/Collection";
-import Cart from "./Components/Tailwind/Cart";
-import Step from "./Components/Tailwind/Step";
+// Componente de carga para usar con Suspense
+const LoadingFallback = () => (
+    <div className="flex justify-center items-center min-h-[200px]">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+    </div>
+);
+
+// Importaciones lazy
+const TopBar = React.lazy(() => import("./Components/Tailwind/TopBar"));
+const Header = React.lazy(() => import("./Components/Tailwind/Header"));
+const Footer = React.lazy(() => import("./Components/Tailwind/Footer"));
+const Slider = React.lazy(() => import("./Components/Tailwind/Slider"));
+const Product = React.lazy(() => import("./Components/Tailwind/Product"));
+const Banner = React.lazy(() => import("./Components/Tailwind/Banner"));
+const Category = React.lazy(() => import("./Components/Tailwind/Category"));
+const Collection = React.lazy(() => import("./Components/Tailwind/Collection"));
+const Cart = React.lazy(() => import("./Components/Tailwind/Cart"));
+const Step = React.lazy(() => import("./Components/Tailwind/Step"));
+const Filter = React.lazy(() => import("./Components/Tailwind/Filter"));
+const ProductDetail = React.lazy(() => import("./Components/Tailwind/ProductDetail"));
+const Contact = React.lazy(() => import("./Components/Tailwind/Contact"));
+const Frame = React.lazy(() => import("./Components/Tailwind/Frame"));
+const Checkout = React.lazy(() => import("./Components/Tailwind/Checkout"));
+const Menu = React.lazy(() => import("./Components/Tailwind/Menu"));
+const Carrusel = React.lazy(() => import("./Components/Tailwind/Carrusel"));
+const Faq = React.lazy(() => import("./Components/Tailwind/Faq"));
+const PostDetail = React.lazy(() => import("./Components/Tailwind/PostDetail"));
+const Blog = React.lazy(() => import("./Components/Tailwind/Blog"));
+const AboutUs = React.lazy(() => import("./Components/Tailwind/AboutUs"));
+const Login = React.lazy(() => import("./Components/Tailwind/Login"));
+const Signup = React.lazy(() => import("./Components/Tailwind/Signup"));
+const ForgotPassword = React.lazy(() => import("./Components/Tailwind/ForgotPassword"));
+const ResetPassword = React.lazy(() => import("./Components/Tailwind/ResetPassword"));
+const Complaint = React.lazy(() => import("./Components/Tailwind/Complaint"));
+const Indicator = React.lazy(() => import("./Components/Tailwind/Indicator"));
+const ThankSimple = React.lazy(() => import("./Components/Tailwind/Thanks/ThankSimple"));
+const Image = React.lazy(() => import("./Components/Tailwind/Image"));
+const BananaLab = React.lazy(() => import("./Components/Tailwind/BananaLab"));
+const Floating = React.lazy(() => import("./Components/Tailwind/Floating"));
+const DeliveryZone = React.lazy(() => import("./Components/Tailwind/DeliveryZone"));
+const Ad = React.lazy(() => import("./Components/Tailwind/Ad"));
+
 import { Local } from "sode-extend-react";
 import Global from "./Utils/Global";
 import ItemsRest from "./Actions/ItemsRest";
-import Filter from "./Components/Tailwind/Filter";
-import ProductDetail from "./Components/Tailwind/ProductDetail";
-import Contact from "./Components/Tailwind/Contact";
-import Frame from "./Components/Tailwind/Frame";
-import Checkout from "./Components/Tailwind/Checkout";
-import Menu from "./Components/Tailwind/Menu";
-import Carrusel from "./Components/Tailwind/Carrusel";
-import Faq from "./Components/Tailwind/Faq";
-import PostDetail from "./Components/Tailwind/PostDetail";
-import Blog from "./Components/Tailwind/Blog";
-import AboutUs from "./Components/Tailwind/AboutUs";
-import Login from "./Components/Tailwind/Login";
-import Signup from "./Components/Tailwind/Signup";
-import ForgotPassword from "./Components/Tailwind/ForgotPassword";
-import ResetPassword from "./Components/Tailwind/ResetPassword";
-import Complaint from "./Components/Tailwind/Complaint";
-import Indicator from "./Components/Tailwind/Indicator";
-import ThankSimple from "./Components/Tailwind/Thanks/ThankSimple";
-import Image from "./Components/Tailwind/Image";
-import BananaLab from "./Components/Tailwind/BananaLab";
+import SortByAfterField from "./Utils/SortByAfterField";
 import { Toaster } from "sonner";
-import Floating from "./Components/Tailwind/Floating";
-import DeliveryZone from "./Components/Tailwind/DeliveryZone";
-import Ad from "./Components/Tailwind/Ad";
 
 const itemsRest = new ItemsRest();
 
@@ -88,15 +97,34 @@ const System = ({
     const getSystem = ({ component, value, data, itemsId, visible }) => {
         if (visible == 0) return <></>;
 
+        const componentProps = {
+            data,
+            which: value,
+            items: getItems(itemsId),
+            cart,
+            setCart,
+            pages,
+            isUser: session,
+            generals
+        };
+
         switch (component) {
             case "top_bar":
-                return <TopBar data={data} which={value} items={getItems(itemsId)} cart={cart} setCart={setCart} isUser={session} />
+                return (
+                    <Suspense fallback={<LoadingFallback />}>
+                        <TopBar {...componentProps} />
+                    </Suspense>
+                );
             case "header":
-                return <Header data={data} which={value} items={getItems(itemsId)} cart={cart} setCart={setCart} pages={pages} isUser={session} generals={generals} />
-            case "floating":
-                return <Floating data={data} which={value} items={getItems(itemsId)} />
+                return (
+                    <Suspense fallback={<LoadingFallback />}>
+                        <Header {...componentProps} />
+                    </Suspense>
+                );
             case "menu":
-                return <Menu data={data} which={value} items={getItems(itemsId)} cart={cart} setCart={setCart} pages={pages} />
+                return (<Suspense fallback={<LoadingFallback />}>
+                    <Menu data={data} which={value} items={getItems(itemsId)} cart={cart} setCart={setCart} pages={pages} />
+                </Suspense>)
             case "content":
                 if (!page.id) {
                     return <div className="h-80 w-full bg-gray-300 flex items-center justify-center">
@@ -110,23 +138,44 @@ const System = ({
                 }
                 break;
             case "filter":
-                return <Filter which={value} data={data} items={getItems(itemsId)} filteredData={filteredData} cart={cart} setCart={setCart} />
+                return (<Suspense fallback={<LoadingFallback />}>
+                    <Filter which={value} data={data} items={getItems(itemsId)} filteredData={filteredData} cart={cart} setCart={setCart} />
+                </Suspense>)
             case "product":
-                return <Product which={value} data={data} items={getItems(itemsId)} filteredData={filteredData} cart={cart} setCart={setCart} pages={pages} />
+                return (
+                    <Suspense fallback={<LoadingFallback />}>
+                        <Product which={value} data={data} items={getItems(itemsId)} filteredData={filteredData} cart={cart} setCart={setCart} pages={pages} />
+                    </Suspense>
+                )
             case "category":
-                return <Category which={value} data={data} items={getItems(itemsId)} />
+                return (
+                    <Suspense fallback={<LoadingFallback />}>
+                        <Category which={value} data={data} items={getItems(itemsId)} />
+                    </Suspense>
+                )
             case "collection":
-                return <Collection which={value} data={data} items={getItems(itemsId)} />
+                return (<Suspense fallback={<LoadingFallback />}>
+                    <Collection which={value} data={data} items={getItems(itemsId)} />
+                </Suspense>)
             case "slider":
-                return <Slider which={value} data={data} sliders={getItems(itemsId)} />
+                return (<Suspense fallback={<LoadingFallback />}>
+                    <Slider which={value} data={data} sliders={getItems(itemsId)} />
+                </Suspense>)
             case "carrusel":
-                return <Carrusel which={value} data={data} items={getItems(itemsId)} />
+                return (<Suspense fallback={<LoadingFallback />}><Carrusel which={value} data={data} items={getItems(itemsId)} /></Suspense>)
             case "indicator":
-                return <Indicator which={value} data={data} items={getItems(itemsId)} />
+                return (<Suspense fallback={<LoadingFallback />}><Indicator which={value} data={data} items={getItems(itemsId)} /></Suspense>)
             case "banner":
-                return <Banner which={value} data={data} />
+                return (
+                    <Suspense fallback={<LoadingFallback />}>
+                        <Banner which={value} data={data} />
+                    </Suspense>)
             case "ads":
-                return <Ad which={value} data={data} items={getItems(itemsId)} />
+                return (
+                    <Suspense fallback={<LoadingFallback />}>
+                        <Ad which={value} data={data} items={getItems(itemsId)} />
+                    </Suspense>)
+
             case "image":
                 return <Image which={value} data={data} />
             case "step":
@@ -162,11 +211,18 @@ const System = ({
             case "frame":
                 return <Frame which={value} data={data} />
             case "footer":
-                return <Footer data={data} which={value} items={getItems(itemsId)} pages={pages} generals={generals} contacts={contacts} />
-            case "complaints":
-                return <Complaint which={value} generals={generals} />
-            case "bananalab":
-                return <BananaLab which={value} generals={generals} />
+                return (
+                    <Suspense fallback={<LoadingFallback />}>
+                        <Footer {...componentProps} contacts={contacts} />
+                    </Suspense>
+                );
+
+            default:
+                return (
+                    <div className="w-full px-[5%] replace-max-w-here p-4 mx-auto">
+                        - No Hay componente <b>{which}</b> -
+                    </div>
+                );
         }
     };
 
@@ -183,5 +239,9 @@ const System = ({
 };
 
 CreateReactScript((el, properties) => {
-    createRoot(el).render(<System {...properties} />);
+    createRoot(el).render(
+        <Suspense fallback={<LoadingFallback />}>
+            <System {...properties} />
+        </Suspense>
+    );
 });
