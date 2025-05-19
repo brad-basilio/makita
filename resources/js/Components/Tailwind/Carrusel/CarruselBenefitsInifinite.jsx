@@ -41,6 +41,7 @@ const CarruselBenefitsInifinite = ({ items }) => {
                 <div className="relative w-16 h-16 flex items-center justify-center">
                   <div className="relative z-10 text-3xl p-3">
                     <img
+                    alt={benefit.name}
                       src={`/storage/images/indicator/${benefit.symbol}`}
                       className="w-full h-auto aspect-square"
                       onError={(e) => {

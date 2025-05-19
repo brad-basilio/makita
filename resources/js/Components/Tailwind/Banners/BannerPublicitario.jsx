@@ -38,6 +38,7 @@ const BannerPublicitario = ({ data }) => {
                                 transition={{ duration: 1, type: "spring" }}
                                 src={`/storage/images/system/${data?.image}`}
                                 className="w-full h-auto object-cover"
+                                alt={data?.name}
                             />
                         </motion.div>
 

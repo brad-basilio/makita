@@ -39,7 +39,7 @@ const HeaderSearchB = ({
     const [searchMobile, setSearchMobile] = useState(false);
     const [search, setSearch] = useState("");
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    
+
     const menuRef = useRef(null);
     const searchRef = useRef(null);
 
@@ -60,7 +60,7 @@ const HeaderSearchB = ({
     }, []);
 
     const menuVariants = {
-        hidden: { 
+        hidden: {
             opacity: 0,
             y: -10,
             scale: 0.95
@@ -126,7 +126,9 @@ const HeaderSearchB = ({
                     </a>
 
                     <button
+                        aria-label="Menú"
                         onClick={() => setOpenMenu(!openMenu)}
+
                         className="flex md:hidden items-center justify-center bg-primary rounded-lg w-auto h-auto p-2 text-white fill-white transition-all duration-300 z-[51]"
                     >
                         {!openMenu ? (
@@ -187,6 +189,7 @@ const HeaderSearchB = ({
                         <div ref={menuRef}>
                             {isUser ? (
                                 <button
+                                    aria-label="user"
                                     className="customtext-neutral-dark flex items-center gap-2 hover:customtext-primary pr-6 transition-colors duration-300"
                                     onClick={() => setIsMenuOpen(!isMenuOpen)}
                                 >
@@ -215,6 +218,7 @@ const HeaderSearchB = ({
                                                     <li key={index}>
                                                         {item.onClick ? (
                                                             <button
+                                                                aria-label="menu-items"
                                                                 onClick={item.onClick}
                                                                 className="flex w-full items-center gap-3 customtext-neutral-dark text-sm hover:customtext-primary transition-colors duration-300"
                                                             >
@@ -240,6 +244,7 @@ const HeaderSearchB = ({
                         </div>
 
                         <button
+                            aria-label="cart"
                             onClick={() => setModalOpen(true)}
                             className="flex items-center gap-2 text-sm relative hover:customtext-primary transition-colors duration-300"
                         >
@@ -271,6 +276,7 @@ const HeaderSearchB = ({
                                 {isUser ? (
                                     <div ref={menuRef} className="relative">
                                         <button
+                                            aria-label="user"
                                             className="flex items-center gap-2 hover:customtext-primary transition-colors duration-300"
                                             onClick={() => setIsMenuOpen(!isMenuOpen)}
                                         >
@@ -292,6 +298,7 @@ const HeaderSearchB = ({
                                                                 <li key={index}>
                                                                     {item.onClick ? (
                                                                         <button
+                                                                        aria-label="menu-items"
                                                                             onClick={item.onClick}
                                                                             className="flex w-full items-center gap-3 customtext-neutral-dark text-sm hover:customtext-primary transition-colors duration-300"
                                                                         >
@@ -322,6 +329,7 @@ const HeaderSearchB = ({
                                 )}
 
                                 <button
+                                aria-label="cart"
                                     onClick={() => setModalOpen(true)}
                                     className="flex items-center relative"
                                 >
@@ -352,6 +360,7 @@ const HeaderSearchB = ({
                                         />
                                         <div className="absolute right-3 top-1/2 -translate-y-1/2 flex gap-2">
                                             <button
+                                                aria-label="Cerrar"
                                                 onClick={() => setSearchMobile(false)}
                                                 className="p-2 bg-gray-200 text-gray-600 rounded-lg"
                                             >
