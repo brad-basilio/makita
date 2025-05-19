@@ -124,47 +124,115 @@ const HeaderSearchB = ({
                             }}
                         />
                     </a>
+                    <div className="flex gap-8">
+                        <div className={`${searchMobile ? "hidden" : "flex"} items-center gap-4`}>
+                            {isUser ? (
+                                <div ref={menuRef} className="relative">
+                                    <button
+                                        aria-label="user"
+                                        className="flex items-center gap-2 hover:customtext-primary transition-colors duration-300"
+                                        onClick={() => setIsMenuOpen(!isMenuOpen)}
+                                    >
+                                        <CircleUser className="customtext-primary" width="1.5rem" />
+                                    </button>
 
-                    <button
-                        aria-label="Menú"
-                        onClick={() => setOpenMenu(!openMenu)}
+                                    <AnimatePresence>
+                                        {isMenuOpen && (
+                                            <motion.div
+                                                initial="hidden"
+                                                animate="visible"
+                                                exit="exit"
+                                                variants={menuVariants}
+                                                className="absolute z-50 top-full right-0 bg-white shadow-xl border-t rounded-xl w-48 mt-2"
+                                            >
+                                                <div className="p-4">
+                                                    <ul className="space-y-3">
+                                                        {menuItems.map((item, index) => (
+                                                            <li key={index}>
+                                                                {item.onClick ? (
+                                                                    <button
+                                                                        aria-label="menu-items"
+                                                                        onClick={item.onClick}
+                                                                        className="flex w-full items-center gap-3 customtext-neutral-dark text-sm hover:customtext-primary transition-colors duration-300"
+                                                                    >
+                                                                        {item.icon}
+                                                                        <span>{item.label}</span>
+                                                                    </button>
+                                                                ) : (
+                                                                    <a
+                                                                        href={item.href}
+                                                                        className="flex items-center gap-3 customtext-neutral-dark text-sm hover:customtext-primary transition-colors duration-300"
+                                                                    >
+                                                                        {item.icon}
+                                                                        <span>{item.label}</span>
+                                                                    </a>
+                                                                )}
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
+                                </div>
+                            ) : (
+                                <a href="/iniciar-sesion" className="flex items-center">
+                                    <CircleUser className="customtext-primary" width="1.5rem" />
+                                </a>
+                            )}
 
-                        className="flex md:hidden items-center justify-center bg-primary rounded-lg w-auto h-auto p-2 text-white fill-white transition-all duration-300 z-[51]"
-                    >
-                        {!openMenu ? (
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
+                            <button
+                                aria-label=""
+                                onClick={() => setModalOpen(true)}
+                                className="flex items-center relative"
                             >
-                                <path
-                                    d="M10 5H20"
-                                    stroke="white"
-                                    strokeWidth="1.5"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                />
-                                <path
-                                    d="M4 12H20"
-                                    stroke="white"
-                                    strokeWidth="1.5"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                />
-                                <path
-                                    d="M4 19H14"
-                                    stroke="white"
-                                    strokeWidth="1.5"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                />
-                            </svg>
-                        ) : (
-                            <XIcon />
-                        )}
-                    </button>
+                                <ShoppingCart className="customtext-primary" width="1.5rem" />
+                                <span className="absolute -right-2 -top-2 inline-flex items-center justify-center w-4 h-4 bg-primary text-white rounded-full text-[8px]">
+                                    {totalCount}
+                                </span>
+                            </button>
+                        </div>
+                        <button
+                            aria-label="Menú"
+                            onClick={() => setOpenMenu(!openMenu)}
+
+                            className="flex md:hidden items-center justify-center bg-primary rounded-lg w-auto h-auto p-2 text-white fill-white transition-all duration-300 z-[51]"
+                        >
+                            {!openMenu ? (
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                >
+                                    <path
+                                        d="M10 5H20"
+                                        stroke="white"
+                                        strokeWidth="1.5"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                    />
+                                    <path
+                                        d="M4 12H20"
+                                        stroke="white"
+                                        strokeWidth="1.5"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                    />
+                                    <path
+                                        d="M4 19H14"
+                                        stroke="white"
+                                        strokeWidth="1.5"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                    />
+                                </svg>
+                            ) : (
+                                <XIcon />
+                            )}
+                        </button>
+                    </div>
 
                     {/* Search Bar */}
                     <div className="hidden md:block relative w-full max-w-xl mx-auto">
@@ -261,7 +329,7 @@ const HeaderSearchB = ({
 
                 <div className="flex justify-between items-center mt-4">
                     {/* Mobile Search and Menu */}
-                    <div ref={searchRef} className="flex md:hidden relative w-full">
+                    {/* <div ref={searchRef} className="flex md:hidden relative w-full">
                         <div className="flex w-full items-center justify-between gap-4">
                             <button
                                 onClick={() => setSearchMobile(!searchMobile)}
@@ -270,9 +338,9 @@ const HeaderSearchB = ({
                             >
                                 <Search width="1rem" />
                             </button>
-
-                            {/* Mobile Account and Cart */}
-                            <div className={`${searchMobile ? "hidden" : "flex"} items-center gap-4`}>
+*/}
+                    {/* Mobile Account and Cart */}
+                    {/* <div className={`${searchMobile ? "hidden" : "flex"} items-center gap-4`}>
                                 {isUser ? (
                                     <div ref={menuRef} className="relative">
                                         <button
@@ -329,7 +397,7 @@ const HeaderSearchB = ({
                                 )}
 
                                 <button
-                                aria-label="cart"
+                                aria-label=""
                                     onClick={() => setModalOpen(true)}
                                     className="flex items-center relative"
                                 >
@@ -378,7 +446,7 @@ const HeaderSearchB = ({
                                 </motion.div>
                             )}
                         </AnimatePresence>
-                    </div>
+                    </div>*/}
                 </div>
             </div>
 

@@ -78,19 +78,22 @@ const FooterB = ({ pages, generals }) => {
                         <h3 className="customtext-primary font-bold mb-6 text-base">
                             Menú
                         </h3>
-                        <ul className="space-y-3 text-white">
-                            {pages.map(
-                                (page, index) =>
-                                    page.menuable && ( // Simplified conditional rendering
-                                        <li key={index}>
-                                            <a
-                                                href={page.path}
-                                                className="hover:customtext-primary hover:font-semibold text-sm cursor-pointer transition-all duration-300  "
-                                            >
-                                                {page.name}
-                                            </a>
-                                        </li>
-                                    )
+                        <ul className="text-white flex gap-2 items-center">
+                            {pages.map((page, index) =>
+                                page.menuable && (
+                                    <li key={index}>
+                                        <a
+                                            href={page.path}
+                                            className="hover:customtext-primary hover:font-semibold text-sm cursor-pointer transition-all duration-300"
+                                        >
+                                            {page.name}
+                                        </a>
+                                        
+                                        {index !== pages.filter(p => p.menuable).length + 2 && (
+                                            <span className="text-white ml-2">|</span>
+                                        )}
+                                    </li>
+                                )
                             )}
                         </ul>
                     </div>
