@@ -4,9 +4,43 @@ import CreateReactScript from "./Utils/CreateReactScript";
 
 // Componente de carga para usar con Suspense
 const LoadingFallback = () => (
-  <div className="flex justify-center items-center min-h-[200px]">
-    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-  </div>
+    <div className="fixed inset-0 flex flex-col justify-center items-center bg-white/90 backdrop-blur-sm z-50">
+        {/* Logo con efecto de rebote */}
+        <div className="animate-bounce">
+            <img
+
+                src={`/assets/resources/logo.png?v=${crypto.randomUUID()}`}
+                alt={Global.APP_NAME}
+                onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "/assets/img/logo-bk.svg";
+                }}
+
+                className="w-auto transition-all duration-300 transform hover:scale-105"
+            />
+        </div>
+
+        {/* Spinner doble con colores primarios */}
+        <div className="relative mt-8">
+            <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-24 h-24 border-4 border-primary/20 rounded-full animate-none"></div>
+            </div>
+            <div className="relative">
+                <div className="w-24 h-24 border-4 border-primary rounded-full animate-spin border-t-transparent"></div>
+                <div className="absolute top-0 left-0 w-24 h-24 border-4 border-secondary rounded-full animate-spin border-b-transparent opacity-30"></div>
+            </div>
+        </div>
+
+        {/* Texto con animación suave */}
+        <p className="mt-8 text-lg font-semibold text-primary animate-pulse">
+            Cargando tu experiencia...
+        </p>
+
+        {/* Barra de progreso decorativa */}
+        <div className="absolute bottom-0 left-0 right-0 h-2 bg-gray-100">
+            <div className="h-full bg-gradient-to-r from-primary to-secondary animate-progress"></div>
+        </div>
+    </div>
 );
 
 // Importaciones lazy
@@ -111,15 +145,15 @@ const System = ({
         switch (component) {
             case "top_bar":
                 return (
-                    
-                        <TopBar {...componentProps} />
-                   
+
+                    <TopBar {...componentProps} />
+
                 );
             case "header":
                 return (
-                 
-                        <Header {...componentProps} />
-             
+
+                    <Header {...componentProps} />
+
                 );
             case "menu":
                 return <Menu data={data} which={value} items={getItems(itemsId)} cart={cart} setCart={setCart} pages={pages} />
@@ -189,11 +223,11 @@ const System = ({
                 return <Frame which={value} data={data} />
             case "footer":
                 return (
-               
-                        <Footer {...componentProps} contacts={contacts} />
-                   
+
+                    <Footer {...componentProps} contacts={contacts} />
+
                 );
-            
+
             default:
                 return (
                     <div className="w-full px-[5%] replace-max-w-here p-4 mx-auto">
