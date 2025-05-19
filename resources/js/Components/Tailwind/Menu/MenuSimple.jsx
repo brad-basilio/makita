@@ -30,16 +30,16 @@ const MenuSimple = ({ pages = [], items }) => {
                         {isMenuOpen && (
                             <div className="absolute z-50 top-12 left-0 bg-white shadow-xl border-t rounded-xl transition-all duration-500 ease-in-out w-[calc(60vw-6rem)]">
                                 <div className="p-8">
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                                    <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-8">
                                         {items.map((category, index) => (
-                                            <div key={index} className="w-full min-h-[200px]">
+                                            <div key={index} className="w-full break-inside-avoid-column mb-8">
                                                 <a
                                                     href={`/catalogo?category=${category.slug}`}
                                                     className="customtext-neutral-dark font-bold text-base mb-4 cursor-pointer hover:customtext-primary transition-colors duration-300 w-full inline-block border-b pb-2"
                                                 >
                                                     {category.name}
                                                 </a>
-                                                <ul className="space-y-3">
+                                                <ul className="space-y-1">
                                                     {category.subcategories.map((item, itemIndex) => (
                                                         <li key={itemIndex} className="w-full">
                                                             <a
