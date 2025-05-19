@@ -6,8 +6,10 @@ use App\Models\Item;
 use App\Models\Sale;
 use App\Models\SaleDetail;
 use App\Models\SaleStatus;
+use App\Models\User;
 use Culqi\Culqi;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PaymentController extends Controller
 {
@@ -88,6 +90,23 @@ class PaymentController extends Controller
                 ]);
 
                 Item::where('id', $itemId)->decrement('stock', $itemQuantity);
+            }
+
+            //usuario autenticado actualizar datos de contacto
+            if (Auth::check()) {
+                $userJpa = User::find(Auth::user()->id);
+                $userJpa->phone = $request->phone;
+                $userJpa->dni = $request->dni;
+                $userJpa->country = $request->country;
+                $userJpa->department = $request->department;
+                $userJpa->province = $request->province;
+                $userJpa->district = $request->district;
+                $userJpa->ubigeo = $request->ubigeo;
+                $userJpa->address = $request->address;
+                $userJpa->reference = $request->reference;
+                $userJpa->number = $request->number;
+            
+                $userJpa->save();
             }
 
             return response()->json([

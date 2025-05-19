@@ -63,123 +63,126 @@ export default function SignUpSimple() {
         }
     };
     return (
-        <div className="w-full px-primary mx-auto py-16 bg-white">
-            <div className="lg:grid lg:grid-cols-2 gap-8 bg-[#f9f9f9] rounded-xl">
-                <div className="hidden lg:block">
-                    <img
-                        src={
-                            `/assets/${Global.APP_CORRELATIVE}/signup.png` ||
-                            image
-                        }
-                        alt="Imagen decorativa"
-                        className="h-full w-full object-cover rounded-xl transform "
-                    />
-                </div>
-                <div className="flex items-center justify-center p-8">
-                    <div className="mx-auto w-full max-w-md space-y-6">
-                        <div className="space-y-2">
-                            <h5 className="text-sky-500 font-medium">
-                                Vamos a crear!
-                            </h5>
-                            <h1 className="text-3xl font-bold">
-                                Crear una nueva cuenta
-                            </h1>
-                            <p className="text-gray-500">
-                                Class aptent taciti sociosqu ad litora torquent
-                                per conubia nostra, per inceptos himenaeos.
-                            </p>
+        <div className="min-h-screen flex items-center justify-center bg-[#F7F9FB] px-primary 2xl:px-0 ">
+            <div className="2xl:max-w-7xl w-full mx-auto py-16">
+                <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+                    <div className="flex flex-col lg:flex-row">
+
+                        <div className="hidden lg:block lg:w-1/2 relative">
+                            <img
+                                src={`/assets/${Global.APP_CORRELATIVE}/signup.png` || image}
+                                alt="Imagen decorativa"
+                                className="absolute inset-0 w-full h-full object-cover"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
                         </div>
-                        <form className="space-y-4" onSubmit={onSignUpSubmit}>
-                            <div className="space-y-2">
-                                <label
-                                    className="block text-sm mb-1 customtext-neutral-dark"
-                                    htmlFor="name"
-                                >
-                                    Nombres
-                                </label>
-                                <input
-                                    id="name"
-                                    ref={nameRef}
-                                    name="name"
-                                    type="text"
-                                    placeholder="Carlos Soria de la Flor"
-                                    className="w-full px-4 py-3 border customtext-neutral-dark  border-neutral-ligth rounded-xl focus:ring-0 focus:outline-0   transition-all duration-300"
-                                    required
-                                />
+                        <div className="w-full lg:w-1/2 px-6 py-12 sm:px-12 lg:px-16">
+                            <div className="max-w-md mx-auto">
+                                <div className="space-y-2">
+                                    <h5 className="customtext-primary font-medium">
+                                        Vamos a crear!
+                                    </h5>
+                                    <h1 className="text-3xl font-bold">
+                                        Crear una nueva cuenta
+                                    </h1>
+                                    <p className="customtext-neutral-light">
+                                        Class aptent taciti sociosqu ad litora torquent
+                                        per conubia nostra, per inceptos himenaeos.
+                                    </p>
+                                </div>
+                                <form className="space-y-4 mt-4" onSubmit={onSignUpSubmit}>
+                                    <div className="space-y-2">
+                                        <label
+                                            className="block text-sm mb-1 customtext-neutral-dark"
+                                            htmlFor="name"
+                                        >
+                                            Nombres
+                                        </label>
+                                        <input
+                                            id="name"
+                                            ref={nameRef}
+                                            name="name"
+                                            type="text"
+                                            placeholder="Carlos Soria de la Flor"
+                                            className="w-full px-4 py-3 border customtext-neutral-dark  border-neutral-ligth rounded-xl focus:ring-0 focus:outline-0   transition-all duration-300"
+                                            required
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label
+                                            className="block text-sm mb-1 customtext-neutral-dark"
+                                            htmlFor="name"
+                                        >
+                                            Apellidos
+                                        </label>
+                                        <input
+                                            id="lastname"
+                                            ref={lastnameRef}
+                                            name="lastname"
+                                            type="text"
+                                            placeholder="Carlos Soria de la Flor"
+                                            className="w-full px-4 py-3 border customtext-neutral-dark  border-neutral-ligth rounded-xl focus:ring-0 focus:outline-0   transition-all duration-300"
+                                            required
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label
+                                            className="block text-sm mb-1 customtext-neutral-dark"
+                                            htmlFor="email"
+                                        >
+                                            Email
+                                        </label>
+                                        <input
+                                            id="email"
+                                            ref={emailRef}
+                                            name="email"
+                                            type="email"
+                                            placeholder="hola@mail.com"
+                                            className="w-full px-4 py-3 border customtext-neutral-dark  border-neutral-ligth rounded-xl focus:ring-0 focus:outline-0   transition-all duration-300"
+                                            required
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label
+                                            className="block text-sm mb-1 customtext-neutral-dark"
+                                            htmlFor="password"
+                                        >
+                                            Contraseña
+                                        </label>
+                                        <input
+                                            id="password"
+                                            ref={passwordRef}
+                                            name="password"
+                                            type="password"
+                                            className="w-full px-4 py-3 border customtext-neutral-dark  border-neutral-ligth rounded-xl focus:ring-0 focus:outline-0   transition-all duration-300"
+                                            required
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label
+                                            className="block text-sm mb-1 customtext-neutral-dark"
+                                            htmlFor="confirm-password"
+                                        >
+                                            Confirmar contraseña
+                                        </label>
+                                        <input
+                                            id="confirm-password"
+                                            ref={confirmationRef}
+                                            name="confirm-password"
+                                            type="password"
+                                            className="w-full px-4 py-3 border customtext-neutral-dark  border-neutral-ligth rounded-xl focus:ring-0 focus:outline-0   transition-all duration-300"
+                                            required
+                                        />
+                                    </div>
+                                    <button
+                                        type="submit"
+                                        className="w-full rounded-xl font-semibold  bg-primary px-4 py-3 text-white hover:opacity-90 focus:outline-none focus:ring-2 transition-all duration-300"
+                                    >
+                                        Crear cuenta
+                                    </button>
+                                </form>
                             </div>
-                            <div className="space-y-2">
-                                <label
-                                    className="block text-sm mb-1 customtext-neutral-dark"
-                                    htmlFor="name"
-                                >
-                                    Apellidos
-                                </label>
-                                <input
-                                    id="lastname"
-                                    ref={lastnameRef}
-                                    name="lastname"
-                                    type="text"
-                                    placeholder="Carlos Soria de la Flor"
-                                    className="w-full px-4 py-3 border customtext-neutral-dark  border-neutral-ligth rounded-xl focus:ring-0 focus:outline-0   transition-all duration-300"
-                                    required
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <label
-                                    className="block text-sm mb-1 customtext-neutral-dark"
-                                    htmlFor="email"
-                                >
-                                    Email
-                                </label>
-                                <input
-                                    id="email"
-                                    ref={emailRef}
-                                    name="email"
-                                    type="email"
-                                    placeholder="hola@mail.com"
-                                    className="w-full px-4 py-3 border customtext-neutral-dark  border-neutral-ligth rounded-xl focus:ring-0 focus:outline-0   transition-all duration-300"
-                                    required
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <label
-                                    className="block text-sm mb-1 customtext-neutral-dark"
-                                    htmlFor="password"
-                                >
-                                    Contraseña
-                                </label>
-                                <input
-                                    id="password"
-                                    ref={passwordRef}
-                                    name="password"
-                                    type="password"
-                                    className="w-full px-4 py-3 border customtext-neutral-dark  border-neutral-ligth rounded-xl focus:ring-0 focus:outline-0   transition-all duration-300"
-                                    required
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <label
-                                    className="block text-sm mb-1 customtext-neutral-dark"
-                                    htmlFor="confirm-password"
-                                >
-                                    Confirmar contraseña
-                                </label>
-                                <input
-                                    id="confirm-password"
-                                    ref={confirmationRef}
-                                    name="confirm-password"
-                                    type="password"
-                                    className="w-full px-4 py-3 border customtext-neutral-dark  border-neutral-ligth rounded-xl focus:ring-0 focus:outline-0   transition-all duration-300"
-                                    required
-                                />
-                            </div>
-                            <button
-                                type="submit"
-                                className="w-full rounded-xl font-semibold  bg-primary px-4 py-3 text-white hover:opacity-90 focus:outline-none focus:ring-2 transition-all duration-300"
-                            >
-                                Crear cuenta
-                            </button>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>

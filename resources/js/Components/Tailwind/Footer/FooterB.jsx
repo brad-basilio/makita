@@ -6,7 +6,8 @@ import Swal from "sweetalert2";
 import SubscriptionsRest from "../../../Actions/SubscriptionsRest";
 import Global from "../../../Utils/Global";
 import HtmlContent from "../../../Utils/HtmlContent";
-import { X } from "lucide-react";
+import { CircleCheckBig, X } from "lucide-react";
+import { toast } from "sonner";
 
 const FooterB = ({ pages, generals }) => {
     const subscriptionsRest = new SubscriptionsRest();
@@ -37,11 +38,17 @@ const FooterB = ({ pages, generals }) => {
 
         if (!result) return;
 
-        Swal.fire({
-            title: "¡Éxito!",
-            text: `Te has suscrito correctamente al blog de ${Global.APP_NAME}.`,
-            icon: "success",
-            confirmButtonText: "Ok",
+        /* Swal.fire({
+             title: "¡Éxito!",
+             text: `Te has suscrito correctamente al blog de ${Global.APP_NAME}.`,
+             icon: "success",
+             confirmButtonText: "Ok",
+         });*/
+        toast.error("¡Suscrito!", {
+            description: `Te has suscrito correctamente al blog de ${Global.APP_NAME}.`,
+            icon: <CircleCheckBig className="h-5 w-5 text-green-500" />,
+            duration: 3000,
+            position: "top-center",
         });
 
         emailRef.current.value = null;
@@ -71,19 +78,22 @@ const FooterB = ({ pages, generals }) => {
                         <h3 className="customtext-primary font-bold mb-6 text-base">
                             Menú
                         </h3>
-                        <ul className="space-y-3 text-white">
-                            {pages.map(
-                                (page, index) =>
-                                    page.menuable && ( // Simplified conditional rendering
-                                        <li key={index}>
-                                            <a
-                                                href={page.path}
-                                                className="hover:customtext-primary hover:font-semibold text-sm cursor-pointer transition-all duration-300  "
-                                            >
-                                                {page.name}
-                                            </a>
-                                        </li>
-                                    )
+                        <ul className="text-white flex lg:flex-col gap-2 items-center lg:items-start">
+                            {pages.map((page, index) =>
+                                page.menuable && (
+                                    <li key={index}>
+                                        <a
+                                            href={page.path}
+                                            className="hover:customtext-primary hover:font-semibold text-sm cursor-pointer transition-all duration-300"
+                                        >
+                                            {page.name}
+                                        </a>
+
+                                        {index !== pages.filter(p => p.menuable).length + 2 && (
+                                            <span className="text-white ml-2 lg:hidden">|</span>
+                                        )}
+                                    </li>
+                                )
                             )}
                         </ul>
                     </div>
@@ -104,6 +114,8 @@ const FooterB = ({ pages, generals }) => {
                             </li>
                             <li>
                                 <a
+                                    type="button"
+                                    href="#"
                                     onClick={() => openModal(1)}
                                     className="cursor-pointer hover:customtext-primary hover:font-bold transition-all duration-300"
                                 >
@@ -112,6 +124,8 @@ const FooterB = ({ pages, generals }) => {
                             </li>
                             <li>
                                 <a
+                                 type="button"
+                                    href="#"
                                     onClick={() => openModal(2)}
                                     className="cursor-pointer hover:customtext-primary hover:font-bold transition-all duration-300"
                                 >
@@ -120,6 +134,8 @@ const FooterB = ({ pages, generals }) => {
                             </li>
                             <li>
                                 <a
+                        
+                                 
                                     href="/libro-reclamaciones"
                                     className="cursor-pointer flex flex-col gap-2 items-start  "
                                 >

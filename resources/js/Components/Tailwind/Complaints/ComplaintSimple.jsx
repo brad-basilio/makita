@@ -3,10 +3,11 @@ import { useEffect, useRef, useState } from "react";
 import InputForm from "../Checkouts/Components/InputForm";
 import ubigeoData from "../../../../../storage/app/utils/ubigeo.json";
 import SelectForm from "../Checkouts/Components/SelectForm";
-import { Notify } from "sode-extend-react";
+
 import ReactModal from "react-modal";
 import HtmlContent from "../../../Utils/HtmlContent";
-import { X } from "lucide-react";
+import { Send, X } from "lucide-react";
+import { toast } from "sonner";
 export default function ComplaintSimple({ generals }) {
     const recaptchaRef = useRef(null);
     const [messageCaptcha, setMessageCaptcha] = useState("");
@@ -59,29 +60,31 @@ export default function ComplaintSimple({ generals }) {
             .then((data) => {
                 console.log(data);
                 if (data.type === "success")
-                    Notify.add({
-                        type: "success",
-                        icon: "/assets/img/icon.svg",
-                        title: "Solitud enviada con éxito",
-                        body: data.message,
+                    toast.success("Solicitud enviada", {
+                        description: `Pronto nos comunicaremos contigo ¡Gracias!.`,
+                        icon: <Send className="h-5 w-5 text-green-500" />,
+                        duration: 3000,
+                        position: "bottom-center",
                     });
+
                 else {
-                    Notify.add({
-                        type: "danger",
-                        icon: "/assets/img/icon.svg",
-                        title: "Envio Fallido",
-                        body: data.message,
+                    toast.error("Solicitud rechazada", {
+                        description: `Lo sentimos, no se envió su solicitud.`,
+                        icon: <Send className="h-5 w-5 text-red-500" />,
+                        duration: 3000,
+                        position: "bottom-center",
                     });
+
                 }
             })
-            .catch((error) =>
-                Notify.add({
-                    type: "danger",
-                    icon: "/assets/img/icon.svg",
-                    title: "Error",
-                    body: error,
-                })
-            );
+            .catch((error) => {
+                toast.error("Solicitud rechazada", {
+                    description: error || `Lo sentimos, no se envió su solicitud.`,
+                    icon: <Send className="h-5 w-5 text-red-500" />,
+                    duration: 3000,
+                    position: "bottom-center",
+                });
+            });
     };
 
     // Estados para manejar los valores seleccionados

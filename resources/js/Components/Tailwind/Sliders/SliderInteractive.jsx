@@ -17,13 +17,12 @@ const SliderInteractive = ({ items, data }) => {
 
     const infiniteLoop = parseInfiniteLoop(data?.infiniteLoop);
 
-    const [currentIndex, setCurrentIndex] = useState(1); // Empezamos en 1 para evitar el salto brusco
+    const [currentIndex, setCurrentIndex] = useState(1);
     const sliderRef = useRef(null);
     const isDragging = useRef(false);
     const startX = useRef(0);
     const currentTranslate = useRef(0);
 
-    //TODO: Duplicamos los slides al principio y al final para crear el efecto de loop infinito
     const duplicatedItems = [items[items.length - 1], ...items, items[0]];
     const validAlignments = ["center", "left", "right"];
     const validPosition = ["yes", "true", "si"];
@@ -37,12 +36,8 @@ const SliderInteractive = ({ items, data }) => {
         ? data?.navigationAlignment
         : "true";
 
-    //TODO: Funciones del Slider
-
     const nextSlide = () => {
-        setCurrentIndex(
-            (prevIndex) => (prevIndex + 1) % duplicatedItems.length
-        );
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % duplicatedItems.length);
     };
 
     const prevSlide = () => {
@@ -51,6 +46,48 @@ const SliderInteractive = ({ items, data }) => {
         );
     };
 
+    // Handle touch events for mobile
+    const handleTouchStart = (e) => {
+        isDragging.current = true;
+        startX.current = e.touches[0].pageX;
+        sliderRef.current.style.transition = "none";
+    };
+
+    const handleTouchMove = (e) => {
+        if (!isDragging.current) return;
+
+        const deltaX = e.touches[0].pageX - startX.current;
+        currentTranslate.current =
+            -currentIndex * 100 + (deltaX / window.innerWidth) * 100;
+        sliderRef.current.style.transform = `translateX(${currentTranslate.current}%)`;
+    };
+
+    const handleTouchEnd = () => {
+        if (!isDragging.current) return;
+
+        isDragging.current = false;
+        sliderRef.current.style.transition = "transform 0.5s ease-in-out";
+
+        const threshold = 20;
+        const deltaX = Math.abs(
+            (currentTranslate.current + currentIndex * 100) *
+                (window.innerWidth / 100)
+        );
+
+        if (deltaX > threshold) {
+            if (currentTranslate.current > -currentIndex * 100) {
+                prevSlide();
+            } else {
+                nextSlide();
+            }
+        } else {
+            setCurrentIndex(currentIndex);
+        }
+
+        sliderRef.current.style.transform = `translateX(-${currentIndex * 100}%)`;
+    };
+
+    // Mouse events for desktop
     const handleMouseDown = (e) => {
         isDragging.current = true;
         startX.current = e.pageX;
@@ -88,9 +125,7 @@ const SliderInteractive = ({ items, data }) => {
             setCurrentIndex(currentIndex);
         }
 
-        sliderRef.current.style.transform = `translateX(-${
-            currentIndex * 100
-        }%)`;
+        sliderRef.current.style.transform = `translateX(-${currentIndex * 100}%)`;
     };
 
     const handleMouseLeave = () => {
@@ -109,34 +144,35 @@ const SliderInteractive = ({ items, data }) => {
             return () => clearInterval(interval);
         }, [currentIndex]);
     }
+
     //TODO: Efecto para manejar el loop infinito sin saltos bruscos
     useEffect(() => {
         if (currentIndex === 0) {
             setTimeout(() => {
-                sliderRef.current.style.transition = "none"; // Desactivar transición
-                setCurrentIndex(duplicatedItems.length - 2); // Ir al penúltimo elemento
+                sliderRef.current.style.transition = "none";
+                setCurrentIndex(duplicatedItems.length - 2);
                 requestAnimationFrame(() => {
                     sliderRef.current.style.transform = `translateX(-${
                         (duplicatedItems.length - 2) * 100
                     }%)`;
                     setTimeout(() => {
                         sliderRef.current.style.transition =
-                            "transform 0.5s ease-in-out"; // Reactivar transición
-                    }, 50); // Pequeño retraso para evitar saltos visibles
+                            "transform 0.5s ease-in-out";
+                    }, 50);
                 });
             }, 500);
         } else if (currentIndex === duplicatedItems.length - 1) {
             setTimeout(() => {
-                sliderRef.current.style.transition = "none"; // Desactivar transición
-                setCurrentIndex(1); // Ir al segundo elemento
+                sliderRef.current.style.transition = "none";
+                setCurrentIndex(1);
                 requestAnimationFrame(() => {
                     sliderRef.current.style.transform = `translateX(-${
                         1 * 100
                     }%)`;
                     setTimeout(() => {
                         sliderRef.current.style.transition =
-                            "transform 0.5s ease-in-out"; // Reactivar transición
-                    }, 50); // Pequeño retraso para evitar saltos visibles
+                            "transform 0.5s ease-in-out";
+                    }, 50);
                 });
             }, 500);
         }
@@ -146,9 +182,9 @@ const SliderInteractive = ({ items, data }) => {
 
     useEffect(() => {
         buttonsRef.current.forEach((button) => {
-            if (button) adjustTextColor(button); // Aplicar a cada botón en el slider
+            if (button) adjustTextColor(button);
         });
-    }, [items]); // Se ejecuta cada vez que cambian los elementos del slider
+    }, [items]);
 
     return (
         <div className="relative w-full mx-auto">
@@ -158,6 +194,9 @@ const SliderInteractive = ({ items, data }) => {
                 onMouseMove={handleMouseMove}
                 onMouseUp={handleMouseUp}
                 onMouseLeave={handleMouseLeave}
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
             >
                 <div
                     ref={sliderRef}
@@ -209,10 +248,9 @@ const SliderInteractive = ({ items, data }) => {
                                             ref={(el) =>
                                                 (buttonsRef.current[index] = el)
                                             }
-                                            className="bg-primary   border-none flex flex-row items-center gap-3 px-10  py-4 text-base rounded-xl tracking-wide font-bold hover:opacity-90 transition-all duration-300"
+                                            className="bg-primary border-none flex flex-row items-center gap-3 px-10 py-4 text-base rounded-xl tracking-wide font-bold hover:opacity-90 transition-all duration-300"
                                         >
                                             {item.button_text}
-
                                             <Tag
                                                 width={"1.25rem"}
                                                 className="transform rotate-90"
@@ -233,7 +271,7 @@ const SliderInteractive = ({ items, data }) => {
                     >
                         <button
                             onClick={prevSlide}
-                            className="bg-accent  rounded-lg customtext-neutral-light w-8 h-8 flex items-center justify-center  transition-colors duration-300"
+                            className="bg-accent rounded-lg customtext-neutral-light w-8 h-8 flex items-center justify-center transition-colors duration-300"
                         >
                             <ChevronLeft width={"1rem"} />
                         </button>
@@ -243,7 +281,7 @@ const SliderInteractive = ({ items, data }) => {
                     >
                         <button
                             onClick={nextSlide}
-                            className="bg-accent rounded-lg customtext-neutral-light w-8 h-8 flex items-center justify-center  transition-colors duration-300"
+                            className="bg-accent rounded-lg customtext-neutral-light w-8 h-8 flex items-center justify-center transition-colors duration-300"
                         >
                             <ChevronRight width={"1rem"} />
                         </button>

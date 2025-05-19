@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
     ShoppingCart,
     Store,
@@ -10,6 +10,10 @@ import {
     Plus,
     ChevronUp,
     CircleCheckIcon,
+    ChevronLeft,
+    Share2,
+    CheckCircle2,
+    ChevronRight,
 } from "lucide-react";
 
 import ItemsRest from "../../../Actions/ItemsRest";
@@ -18,7 +22,16 @@ import { Notify } from "sode-extend-react";
 import ProductInfinite from "../Products/ProductInfinite";
 import CartModal from "../Components/CartModal";
 
-export default function ProductDetail({ item, data, setCart, cart }) {
+import { Navigation, Grid, Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/grid";
+import { Swiper, SwiperSlide } from "swiper/react";
+
+
+
+const ProductDetail = ({ item, data, setCart, cart }) => {
+    console.log(item);
     const itemsRest = new ItemsRest();
     const [modalOpen, setModalOpen] = useState(false);
     const [selectedImage, setSelectedImage] = useState({
@@ -46,12 +59,14 @@ export default function ProductDetail({ item, data, setCart, cart }) {
         }
         setCart(newCart);
 
-        Swal.fire({
-            title: "Producto agregado",
-            text: `Se agregó ${product.name} al carrito`,
-            icon: "success",
-            timer: 1500,
-        });
+        /*   Swal.fire({
+               title: "Producto agregado",
+               text: `Se agregó ${product.name} al carrito`,
+               icon: "success",
+               timer: 1500,
+           });*/
+        setModalOpen(!modalOpen);
+        setTimeout(() => setModalOpen(false), 3000);
     };
 
     const [associatedItems, setAssociatedItems] = useState([]);
@@ -158,9 +173,229 @@ export default function ProductDetail({ item, data, setCart, cart }) {
             body: "Se agregaron con éxito los productos",
         });
     };
+
+    // Swiper Refs
+    const mainSwiperRef = useRef(null);
+    const thumbSwiperRef = useRef(null);
+    const navigationPrevRef = useRef(null);
+    const navigationNextRef = useRef(null);
+
     return (
         <>
-            <div className="px-primary mx-auto py-12 bg-[#F7F9FB] ">
+            {/* Versión Mobile */}
+            <div className="md:hidden bg-gray-50 min-h-screen">
+                {/* Header Estilo App */}
+                <div className="sticky top-0 bg-white shadow-sm z-20">
+                    <div className="flex items-center p-4 gap-4 border-b">
+                        {/* <button onClick={() => window.history.back()} className="text-gray-600">
+                            <ChevronLeft size={24} />
+                        </button>*/}
+                        <h1 className="text-lg font-bold flex-1 line-clamp-5">{item?.name}</h1>
+                    </div>
+                </div>
+
+                {/* Contenido Principal */}
+                <div className="p-4 pb-24">
+                    {/* Carrusel Principal */}
+                    <div className="relative aspect-square mb-4 rounded-2xl overflow-hidden shadow-lg">
+                        <Swiper
+                            ref={mainSwiperRef}
+                            modules={[Navigation, Pagination]}
+                            navigation={{
+                                prevEl: navigationPrevRef.current,
+                                nextEl: navigationNextRef.current,
+                            }}
+                            pagination={{
+                                clickable: true,
+                                renderBullet: (_, className) =>
+                                    `<span class="${className} !w-2 !h-2 !bg-white/50 !mx-1"></span>`,
+                            }}
+                            loop={true}
+                            onSwiper={(swiper) => {
+                                mainSwiperRef.current = swiper;
+                            }}
+                            className="h-full"
+                        >
+                            {[item?.image, ...item?.images]
+                                .filter((image, index, self) =>
+                                    index === self.findIndex((img) => img.url === image.url)
+                                )
+                                .map((img, i) => (
+                                    <SwiperSlide key={i}>
+                                        <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+                                            <img
+                                                src={`/storage/images/item/${img.url || img}`}
+                                                className="w-full h-full object-contain"
+                                                loading="lazy"
+                                                onError={(e) => (e.target.src = "/api/cover/thumbnail/null")}
+                                            />
+                                        </div>
+                                    </SwiperSlide>
+                                ))}
+                        </Swiper>
+
+                        {/* Botones de navegación */}
+                        <div className="absolute top-1/2 w-full flex justify-between px-2 transform -translate-y-1/2 z-10">
+                            <button
+                                ref={navigationPrevRef}
+                                className="w-8 h-8 flex items-center justify-center rounded-full bg-white/80 shadow-lg hover:scale-110 transition-transform"
+                            >
+                                <ChevronLeft className="text-gray-800" size={20} />
+                            </button>
+                            <button
+                                ref={navigationNextRef}
+                                className="w-8 h-8 flex items-center justify-center rounded-full bg-white/80 shadow-lg hover:scale-110 transition-transform"
+                            >
+                                <ChevronRight className="text-gray-800" size={20} />
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Sección de Precio */}
+                    <div className="bg-white p-4 rounded-2xl shadow-sm mb-4">
+                        <div className="flex justify-between items-start">
+                            <div>
+                                <div className="text-3xl font-bold customtext-primary">
+                                    S/ {item?.final_price}
+                                    <span className="ml-2 text-sm line-through text-gray-400">
+                                        S/ {item?.price}
+                                    </span>
+                                </div>
+                                <div className="text-xs text-gray-500 mt-1">SKU: {item?.sku}</div>
+                            </div>
+                            <div className="bg-secondary customtext-primary px-3 py-1 rounded-full text-sm">
+                                {Number(item?.discount_percent).toFixed(0)}% OFF
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Selector Cantidad */}
+                    <div className="bg-white p-4 rounded-2xl shadow-sm mb-4">
+                        <div className="flex items-center justify-between">
+                            <span className="font-medium">Cantidad</span>
+                            <div className="flex items-center gap-3">
+                                <button
+                                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                                    className="w-8 h-8 rounded-full bg-secondary customtext-primary flex items-center justify-center"
+                                >
+                                    -
+                                </button>
+                                <span className="w-8 text-center font-medium">{quantity}</span>
+                                <button
+                                    onClick={() => setQuantity(Math.min(10, quantity + 1))}
+                                    className="w-8 h-8 rounded-full bg-secondary customtext-primary flex items-center justify-center"
+                                >
+                                    +
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Acordeones */}
+                    <div className="space-y-2">
+                        {/* Especificaciones */}
+                        <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+                            <div className="border-b">
+                                <button
+                                    onClick={() => setExpanded(!expandedSpecificationMain)}
+                                    className="w-full p-4 flex justify-between items-center"
+                                >
+                                    <span className="font-medium">Especificaciones técnicas</span>
+                                    <ChevronDown
+                                        className={`transform transition-transform ${expandedSpecificationMain ? "rotate-180" : ""
+                                            }`}
+                                    />
+                                </button>
+                            </div>
+                            {expandedSpecificationMain && (
+                                <div className="p-4">
+                                    {item?.specifications.map((spec, i) => (
+                                        <div key={i} className="flex items-start gap-3 text-sm mb-2">
+                                            <CheckCircle2 className="min-w-4 min-h-4 max-w-4 max-h-4 mt-0.5 customtext-primary" />
+                                            <span>{spec.description}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Descripción */}
+                        <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+                            <div className="border-b">
+                                <button
+                                    onClick={() => setIsExpanded(!isExpanded)}
+                                    className="w-full p-4 flex justify-between items-center"
+                                >
+                                    <span className="font-medium">Descripción del producto</span>
+                                    <ChevronDown
+                                        className={`transform transition-transform ${isExpanded ? "rotate-180" : ""
+                                            }`}
+                                    />
+                                </button>
+                            </div>
+                            {isExpanded && (
+                                <div className="p-4">
+                                    <div dangerouslySetInnerHTML={{ __html: item?.description }} />
+                                    <ul className="list-disc pl-5 mt-2">
+                                        {item?.features?.map((feature, i) => (
+                                            <li key={i} className="text-sm">{feature.feature}</li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Entrega y Soporte 
+                    <div className="mt-6 space-y-4">
+                        <div className="bg-white p-4 rounded-2xl shadow-sm">
+                            <div className="flex items-center gap-4">
+                                <div className="bg-gray-100 p-2 rounded-full">
+                                    <Home className="w-6 h-6 customtext-primary" />
+                                </div>
+                                <div>
+                                    <p className="font-medium">Despacho a domicilio</p>
+                                    <p className="text-sm text-gray-500">Disponible para esta zona</p>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-4 mt-4">
+                                <div className="bg-gray-100 p-2 rounded-full">
+                                    <Store className="w-6 h-6 customtext-primary" />
+                                </div>
+                                <div>
+                                    <p className="font-medium">Retiro en tienda</p>
+                                    <p className="text-sm text-gray-500">Ver horarios de atención</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="bg-white p-4 rounded-2xl shadow-sm">
+                            <div className="flex items-center gap-3">
+                                <Phone className="w-5 h-5 customtext-primary" />
+                                <span className="font-medium">Soporte: 01 203 7074</span>
+                            </div>
+                        </div>
+                    </div>*/}
+                </div>
+
+                {/* Bottom Navigation */}
+                <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg z-[99]">
+                    <div className="p-4 flex gap-4">
+                        <button onClick={() => { onAddClicked(item); window.location.href = "/cart" }} className="flex-1 bg-primary text-white py-3 rounded-xl font-medium active:scale-95 transition-transform">
+                            Comprar ahora
+                        </button>
+                        <button
+                            onClick={() => onAddClicked(item)}
+                            className="flex-1 bg-gray-100 customtext-primary py-3 rounded-xl font-medium border border-primary active:scale-95 transition-transform"
+                        >
+                            Añadir al carrito
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            {/* Desktop View */}
+            <div className="px-primary mx-auto py-12 bg-[#F7F9FB] hidden md:block ">
                 <div className="bg-white rounded-xl p-4 md:p-8">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         {/* Left Column - Images and Delivery Options */}
@@ -188,23 +423,24 @@ export default function ProductDetail({ item, data, setCart, cart }) {
                                                 type: "main",
                                             })
                                         }
-                                        className={`w-16 h-16  rounded-lg p-2 border-2 ${
-                                            selectedImage.url === item?.image
-                                                ? "border-primary "
-                                                : "border-gray-200"
-                                        }`}
+                                        className={`w-16 h-16  rounded-lg p-2 border-2 ${selectedImage.url === item?.image
+                                            ? "border-primary "
+                                            : "border-gray-200"
+                                            }`}
                                     >
                                         <img
                                             src={`/storage/images/item/${item?.image}`}
                                             alt="Main Thumbnail"
                                             className="w-full h-full object-contain"
                                             onError={(e) =>
-                                                (e.target.src =
-                                                    "/api/cover/thumbnail/null")
+                                            (e.target.src =
+                                                "/api/cover/thumbnail/null")
                                             }
                                         />
                                     </button>
-                                    {item?.images.map((image, index) => (
+                                    {item?.images.filter((image, index, self) =>
+                                        index === self.findIndex((img) => img.url === image.url) // Filtra duplicados
+                                    ).map((image, index) => (
                                         <button
                                             key={index}
                                             onClick={() =>
@@ -213,19 +449,18 @@ export default function ProductDetail({ item, data, setCart, cart }) {
                                                     type: "gallery",
                                                 })
                                             }
-                                            className={`w-16 h-16 border-2 rounded-lg p-2 ${
-                                                selectedImage.url === image.url
-                                                    ? "border-primary"
-                                                    : "border-gray-200"
-                                            }`}
+                                            className={`w-16 h-16 border-2 rounded-lg p-2 ${selectedImage.url === image.url
+                                                ? "border-primary"
+                                                : "border-gray-200"
+                                                }`}
                                         >
                                             <img
                                                 src={`/storage/images/item/${image.url}`}
                                                 alt={`Thumbnail ${index + 1}`}
                                                 className="w-full h-full object-contain"
                                                 onError={(e) =>
-                                                    (e.target.src =
-                                                        "/api/cover/thumbnail/null")
+                                                (e.target.src =
+                                                    "/api/cover/thumbnail/null")
                                                 }
                                             />
                                         </button>
@@ -241,8 +476,8 @@ export default function ProductDetail({ item, data, setCart, cart }) {
                                                 : `/storage/images/item/${selectedImage.url}`
                                         }
                                         onError={(e) =>
-                                            (e.target.src =
-                                                "/api/cover/thumbnail/null")
+                                        (e.target.src =
+                                            "/api/cover/thumbnail/null")
                                         }
                                         alt="Product main"
                                         className="w-full h-auto object-contain"
@@ -332,11 +567,10 @@ export default function ProductDetail({ item, data, setCart, cart }) {
                                         Especificaciones principales
                                     </h3>
                                     <ul
-                                        className={`space-y-2  customtext-neutral-light mb-4 transition-all duration-300 ${
-                                            expandedSpecificationMain
-                                                ? "max-h-full"
-                                                : "max-h-24 overflow-hidden"
-                                        }`}
+                                        className={`space-y-2  customtext-neutral-light mb-4 transition-all duration-300 ${expandedSpecificationMain
+                                            ? "max-h-full"
+                                            : "max-h-24 overflow-hidden"
+                                            }`}
                                         style={{ listStyleType: "disc" }}
                                     >
                                         {item?.specifications.map(
@@ -392,17 +626,17 @@ export default function ProductDetail({ item, data, setCart, cart }) {
                                                         src={`/storage/images/item/${product.image}`}
                                                         className=" rounded-lg aspect-square w-24 h-24 object-cover bg-[#F7F9FB]"
                                                         onError={(e) =>
-                                                            (e.target.src =
-                                                                "/api/cover/thumbnail/null")
+                                                        (e.target.src =
+                                                            "/api/cover/thumbnail/null")
                                                         }
                                                     />
                                                     {index <
                                                         associatedItems.length -
-                                                            1 && (
-                                                        <span className="text-2xl font-bold">
-                                                            <Plus />
-                                                        </span>
-                                                    )}
+                                                        1 && (
+                                                            <span className="text-2xl font-bold">
+                                                                <Plus />
+                                                            </span>
+                                                        )}
                                                 </div>
                                             )
                                         )}
@@ -535,17 +769,16 @@ export default function ProductDetail({ item, data, setCart, cart }) {
                                             Especificaciones principales
                                         </h3>
                                         <ul
-                                            className={`space-y-2  customtext-neutral-light mb-4 transition-all duration-300 ${
-                                                expandedSpecificationMain
-                                                    ? "max-h-full"
-                                                    : "max-h-24 overflow-hidden"
-                                            }`}
+                                            className={`space-y-2  customtext-neutral-light mb-4 transition-all duration-300 ${expandedSpecificationMain
+                                                ? "max-h-full"
+                                                : "max-h-24 overflow-hidden"
+                                                }`}
                                             style={{ listStyleType: "disc" }}
                                         >
                                             {item?.specifications.map(
                                                 (spec, index) =>
                                                     spec.type ===
-                                                        "principal" && (
+                                                    "principal" && (
                                                         <li
                                                             key={index}
                                                             className="flex gap-2"
@@ -657,17 +890,17 @@ export default function ProductDetail({ item, data, setCart, cart }) {
                                                             src={`/storage/images/item/${product.image}`}
                                                             className=" rounded-lg aspect-square w-24 h-24 object-cover bg-[#F7F9FB]"
                                                             onError={(e) =>
-                                                                (e.target.src =
-                                                                    "/api/cover/thumbnail/null")
+                                                            (e.target.src =
+                                                                "/api/cover/thumbnail/null")
                                                             }
                                                         />
                                                         {index <
                                                             associatedItems.length -
-                                                                1 && (
-                                                            <span className="text-2xl font-bold">
-                                                                <Plus />
-                                                            </span>
-                                                        )}
+                                                            1 && (
+                                                                <span className="text-2xl font-bold">
+                                                                    <Plus />
+                                                                </span>
+                                                            )}
                                                     </div>
                                                 )
                                             )}
@@ -730,11 +963,10 @@ export default function ProductDetail({ item, data, setCart, cart }) {
                                     spec.type === "general" && (
                                         <div
                                             key={index}
-                                            className={`grid grid-cols-2 gap-4 p-4 ${
-                                                index % 2 === 0
-                                                    ? "bg-[#F7F9FB]"
-                                                    : "bg-white"
-                                            }`}
+                                            className={`grid grid-cols-2 gap-4 p-4 ${index % 2 === 0
+                                                ? "bg-[#F7F9FB]"
+                                                : "bg-white"
+                                                }`}
                                         >
                                             <div className="customtext-neutral-light">
                                                 {spec.title}
@@ -754,11 +986,10 @@ export default function ProductDetail({ item, data, setCart, cart }) {
                             Información adicional
                         </h2>
                         <div
-                            className={`space-y-2 ${
-                                !isExpanded
-                                    ? "max-h-[400px] overflow-hidden"
-                                    : ""
-                            }`}
+                            className={`space-y-2 ${!isExpanded
+                                ? "max-h-[400px] overflow-hidden"
+                                : ""
+                                }`}
                         >
                             <h3 className="text-xl font-semibold customtext-neutral-dark mb-4">
                                 Acerca de este artículo
@@ -789,21 +1020,22 @@ export default function ProductDetail({ item, data, setCart, cart }) {
                         >
                             Ver más
                             <ChevronDown
-                                className={`transform transition-transform ${
-                                    isExpanded ? "rotate-180" : ""
-                                }`}
+                                className={`transform transition-transform ${isExpanded ? "rotate-180" : ""
+                                    }`}
                             />
                         </botton>
                     </div>
                 </div>
             </div>
-            <ProductInfinite
-                data={{ title: "Productos relacionados" }}
-                items={relationsItems}
-                cart={cart}
-                setCart={setCart}
-            />
+            {relationsItems.length > 0 && (
+                <ProductInfinite
+                    data={{ title: "Productos relacionados" }}
+                    items={relationsItems}
+                    cart={cart}
+                    setCart={setCart}
+                />)}
             <CartModal
+                data={data}
                 cart={cart}
                 setCart={setCart}
                 modalOpen={modalOpen}
@@ -812,3 +1044,4 @@ export default function ProductDetail({ item, data, setCart, cart }) {
         </>
     );
 }
+export default ProductDetail;

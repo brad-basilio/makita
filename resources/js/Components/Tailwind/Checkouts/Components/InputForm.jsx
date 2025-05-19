@@ -1,6 +1,7 @@
 import React from 'react';
 
 const InputForm = ({
+    error,
     label,
     className = '',
     labelClass = '',
@@ -14,9 +15,10 @@ const InputForm = ({
                 </label>
             )}
             <input
-                className={`w-full px-4 py-3 border customtext-neutral-dark  border-neutral-ligth rounded-xl focus:ring-0 focus:outline-0   transition-all duration-300 ${className}`}
+                className={`w-full px-4 py-3 border customtext-neutral-dark  border-neutral-ligth rounded-xl focus:ring-0 focus:outline-0   transition-all duration-300 ${className} ${error && 'border-red-500'}	`}
                 {...props}
             />
+              {error && <div className="text-red-500 text-sm mt-1">{error}</div>}
         </div>
     );
 };
