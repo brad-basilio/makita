@@ -6,7 +6,8 @@ import Swal from "sweetalert2";
 import SubscriptionsRest from "../../../Actions/SubscriptionsRest";
 import Global from "../../../Utils/Global";
 import HtmlContent from "../../../Utils/HtmlContent";
-import { X } from "lucide-react";
+import { CircleCheckBig, X } from "lucide-react";
+import { toast } from "sonner";
 
 const FooterB = ({ pages, generals }) => {
     const subscriptionsRest = new SubscriptionsRest();
@@ -37,11 +38,17 @@ const FooterB = ({ pages, generals }) => {
 
         if (!result) return;
 
-        Swal.fire({
+       /* Swal.fire({
             title: "¡Éxito!",
             text: `Te has suscrito correctamente al blog de ${Global.APP_NAME}.`,
             icon: "success",
             confirmButtonText: "Ok",
+        });*/
+        toast.error("¡Suscrito!", {
+            description: `Te has suscrito correctamente al blog de ${Global.APP_NAME}.`,
+            icon: <CircleCheckBig className="h-5 w-5 text-green-500" />,
+            duration: 3000,
+            position: "top-center",
         });
 
         emailRef.current.value = null;

@@ -1,6 +1,8 @@
-import { Cookies, Fetch, Notify } from "sode-extend-react";
+import { Cookies, Fetch } from "sode-extend-react";
+import { toast } from "sonner";
 
 class BasicRest {
+    is_use_notify = true;
     path = null;
     hasFiles = false;
     controller = null;
@@ -17,11 +19,12 @@ class BasicRest {
                 );
             return result.data ?? true;
         } catch (error) {
-            Notify.add({
-                icon: "/assets/img/icon.svg",
-                title: "Error",
-                body: error.message,
-                type: "danger",
+           
+            toast.error("¡Error!", {
+                description: error.message,
+                duration: 3000,
+                position: "bottom-center",
+               richColors:true
             });
             return null;
         }
@@ -74,20 +77,27 @@ class BasicRest {
                     result?.message || "Ocurrio un error inesperado"
                 );
 
-            Notify.add({
-                icon: "/assets/img/icon.svg",
-                title: "Correcto",
-                body: result.message,
-                type: "success",
-            });
+              if(this.is_use_notify){
+                toast.success("¡Excelente!", {
+                    description: result.message,
+                  
+                    duration: 3000,
+                    position: "bottom-center",
+                   richColors:true
+                });
+              }
+                
+         
             callback?.();
             return result?.data ?? true;
         } catch (error) {
-            Notify.add({
-                icon: "/assets/img/icon.svg",
-                title: "Error",
-                body: error.message,
-                type: "danger",
+            
+               toast.error("¡Error!", {
+                description: error.message,
+              
+                duration: 3000,
+                position: "bottom-center",
+               richColors:true
             });
             return null;
         }
@@ -107,20 +117,22 @@ class BasicRest {
                     result?.message ?? "Ocurrio un error inesperado"
                 );
 
-            Notify.add({
-                icon: "/assets/img/icon.svg",
-                title: "Correcto",
-                body: result.message,
-                type: "success",
-            });
+            toast.success("¡Excelente!", {
+                    description: result.message,
+                  
+                    duration: 3000,
+                    position: "bottom-center",
+                   richColors:true
+                });
 
             return true;
         } catch (error) {
-            Notify.add({
-                icon: "/assets/img/icon.svg",
-                title: "Error",
-                body: error.message,
-                type: "danger",
+               toast.error("¡Error!", {
+                description: error.message,
+              
+                duration: 3000,
+                position: "bottom-center",
+               richColors:true
             });
 
             return false;
@@ -141,20 +153,22 @@ class BasicRest {
                     result?.message ?? "Ocurrio un error inesperado"
                 );
 
-            Notify.add({
-                icon: "/assets/img/icon.svg",
-                title: "Correcto",
-                body: result.message,
-                type: "success",
-            });
+            toast.success("¡Excelente!", {
+                    description: result.message,
+                  
+                    duration: 3000,
+                    position: "bottom-center",
+                   richColors:true
+                });
 
             return true;
         } catch (error) {
-            Notify.add({
-                icon: "/assets/img/icon.svg",
-                title: "Error",
-                body: error.message,
-                type: "danger",
+               toast.error("¡Error!", {
+                description: error.message,
+              
+                duration: 3000,
+                position: "bottom-center",
+               richColors:true
             });
 
             return false;
@@ -174,20 +188,22 @@ class BasicRest {
                     result?.message ?? "Ocurrio un error inesperado"
                 );
 
-            Notify.add({
-                icon: "/assets/img/icon.svg",
-                title: "Correcto",
-                body: result.message,
-                type: "success",
-            });
+            toast.success("¡Excelente!", {
+                    description: result.message,
+                  
+                    duration: 3000,
+                    position: "bottom-center",
+                   richColors:true
+                });
 
             return true;
         } catch (error) {
-            Notify.add({
-                icon: "/assets/img/icon.svg",
-                title: "Error",
-                body: error.message,
-                type: "danger",
+               toast.error("¡Error!", {
+                description: error.message,
+              
+                duration: 3000,
+                position: "bottom-center",
+               richColors:true
             });
 
             return false;
@@ -238,11 +254,12 @@ class BasicRest {
 
             return await response.json();
         } catch (error) {
-            Notify.add({
-                icon: "/assets/img/icon.svg",
-                title: "Error",
-                body: error.message,
-                type: "danger",
+               toast.error("¡Error!", {
+                description: error.message,
+              
+                duration: 3000,
+                position: "bottom-center",
+               richColors:true
             });
             return null;
         }

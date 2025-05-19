@@ -1,4 +1,7 @@
-import { Fetch, Notify } from "sode-extend-react";
+import { CheckCircle } from "lucide-react";
+import React from "react";
+import { Fetch } from "sode-extend-react";
+import { toast } from "sonner";
 
 class DeliveryPricesRest {
     static getShippingCost = async (request) => {
@@ -10,20 +13,25 @@ class DeliveryPricesRest {
             if (!status)
                 throw new Error(result?.message || "Error al obtener datos");
 
-            Notify.add({
-                icon: "/assets/img/icon.svg",
-                title: "Operacion correcta",
-                body: "Se obtuvo correctamente el precio de envio",
+            toast.success("¡Excelente!", {
+                description: "Obtuvimos el precio de envio correctamente",
+              
+                duration: 3000,
+                position: "bottom-center",
+               richColors:true
             });
+           
 
             return result;
         } catch (error) {
-            Notify.add({
-                icon: "/assets/img/icon.svg",
-                title: "Error",
-                body: error.message,
-                type: "danger",
+            toast.error("¡Error!", {
+                description: error.message,
+              
+                duration: 3000,
+                position: "bottom-center",
+               richColors:true
             });
+           
             return false;
         }
     };
@@ -35,19 +43,24 @@ class DeliveryPricesRest {
             });
             if (!status)
                 throw new Error(result?.message || "Error al obtener datos");
-            Notify.add({
-                icon: "/assets/img/icon.svg",
-                title: "Operacion correcta",
-                body: "Se obtuvo correctamente el precio de envio",
+
+            toast.success("¡Excelente!", {
+                description: "Obtuvimos el precio de envio correctamente",
+              
+                duration: 3000,
+                position: "bottom-center",
+               richColors:true
             });
+         
 
             return result;
         } catch (error) {
-            Notify.add({
-                icon: "/assets/img/icon.svg",
-                title: "Error",
-                body: error.message,
-                type: "danger",
+            toast.error("¡Error!", {
+                description: error.message,
+              
+                duration: 3000,
+                position: "bottom-center",
+               richColors:true
             });
             return false;
         }
