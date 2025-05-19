@@ -4,9 +4,9 @@ import CreateReactScript from "./Utils/CreateReactScript";
 
 // Componente de carga para usar con Suspense
 const LoadingFallback = () => (
-    <div className="flex justify-center items-center min-h-[200px]">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-    </div>
+  <div className="flex justify-center items-center min-h-[200px]">
+    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+  </div>
 );
 
 // Importaciones lazy
@@ -111,20 +111,18 @@ const System = ({
         switch (component) {
             case "top_bar":
                 return (
-                    <Suspense fallback={<LoadingFallback />}>
+                    
                         <TopBar {...componentProps} />
-                    </Suspense>
+                   
                 );
             case "header":
                 return (
-                    <Suspense fallback={<LoadingFallback />}>
+                 
                         <Header {...componentProps} />
-                    </Suspense>
+             
                 );
             case "menu":
-                return (<Suspense fallback={<LoadingFallback />}>
-                    <Menu data={data} which={value} items={getItems(itemsId)} cart={cart} setCart={setCart} pages={pages} />
-                </Suspense>)
+                return <Menu data={data} which={value} items={getItems(itemsId)} cart={cart} setCart={setCart} pages={pages} />
             case "content":
                 if (!page.id) {
                     return <div className="h-80 w-full bg-gray-300 flex items-center justify-center">
@@ -138,44 +136,23 @@ const System = ({
                 }
                 break;
             case "filter":
-                return (<Suspense fallback={<LoadingFallback />}>
-                    <Filter which={value} data={data} items={getItems(itemsId)} filteredData={filteredData} cart={cart} setCart={setCart} />
-                </Suspense>)
+                return <Filter which={value} data={data} items={getItems(itemsId)} filteredData={filteredData} cart={cart} setCart={setCart} />
             case "product":
-                return (
-                    <Suspense fallback={<LoadingFallback />}>
-                        <Product which={value} data={data} items={getItems(itemsId)} filteredData={filteredData} cart={cart} setCart={setCart} pages={pages} />
-                    </Suspense>
-                )
+                return <Product which={value} data={data} items={getItems(itemsId)} filteredData={filteredData} cart={cart} setCart={setCart} pages={pages} />
             case "category":
-                return (
-                    <Suspense fallback={<LoadingFallback />}>
-                        <Category which={value} data={data} items={getItems(itemsId)} />
-                    </Suspense>
-                )
+                return <Category which={value} data={data} items={getItems(itemsId)} />
             case "collection":
-                return (<Suspense fallback={<LoadingFallback />}>
-                    <Collection which={value} data={data} items={getItems(itemsId)} />
-                </Suspense>)
+                return <Collection which={value} data={data} items={getItems(itemsId)} />
             case "slider":
-                return (<Suspense fallback={<LoadingFallback />}>
-                    <Slider which={value} data={data} sliders={getItems(itemsId)} />
-                </Suspense>)
+                return <Slider which={value} data={data} sliders={getItems(itemsId)} />
             case "carrusel":
-                return (<Suspense fallback={<LoadingFallback />}><Carrusel which={value} data={data} items={getItems(itemsId)} /></Suspense>)
+                return <Carrusel which={value} data={data} items={getItems(itemsId)} />
             case "indicator":
-                return (<Suspense fallback={<LoadingFallback />}><Indicator which={value} data={data} items={getItems(itemsId)} /></Suspense>)
+                return <Indicator which={value} data={data} items={getItems(itemsId)} />
             case "banner":
-                return (
-                    <Suspense fallback={<LoadingFallback />}>
-                        <Banner which={value} data={data} />
-                    </Suspense>)
+                return <Banner which={value} data={data} />
             case "ads":
-                return (
-                    <Suspense fallback={<LoadingFallback />}>
-                        <Ad which={value} data={data} items={getItems(itemsId)} />
-                    </Suspense>)
-
+                return <Ad which={value} data={data} items={getItems(itemsId)} />
             case "image":
                 return <Image which={value} data={data} />
             case "step":
@@ -216,7 +193,7 @@ const System = ({
                         <Footer {...componentProps} contacts={contacts} />
                     </Suspense>
                 );
-
+            
             default:
                 return (
                     <div className="w-full px-[5%] replace-max-w-here p-4 mx-auto">
