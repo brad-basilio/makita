@@ -30,3 +30,4 @@ composer.lock
 /public/assets/resources/logo-footer.png
 /vite.config.js.timestamp*
 /storage/app/*_backup.sql
+/public/sitemap.xml
