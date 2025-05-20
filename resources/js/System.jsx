@@ -201,12 +201,11 @@ const System = ({
             case "frame":
                 return <Frame which={value} data={data} />
             case "footer":
-                return (
-
-                    <Footer {...componentProps} contacts={contacts} />
-
-                );
-
+                return <Footer {...componentProps} contacts={contacts} />
+            case "complaint":
+                return <Complaint which={value} data={data} />
+            case "floating":
+                return <Floating which={value} data={data} />
             default:
                 return (
                     <div className="w-full px-[5%] replace-max-w-here p-4 mx-auto">
