@@ -202,8 +202,8 @@ const System = ({
                 return <Frame which={value} data={data} />
             case "footer":
                 return <Footer {...componentProps} contacts={contacts} />
-            case "complaint":
-                return <Complaint which={value} data={data} />
+            case "complaints":
+                return <Complaint which={value} data={data} generals={generals} />
             case "floating":
                 return <Floating which={value} data={data} />
             default:
