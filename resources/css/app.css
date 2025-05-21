@@ -27,7 +27,22 @@
 }
 
 
-  
+.filepond--label-action{
+  @apply w-full h-full cursor-pointer;
+}
+
+#formVoucher{
+  @apply  cursor-pointer ;
+}
+
+.filepond--list-scroller{
+  margin-top: 20px!important;
+}
+
+.filepond--list-scroller{
+  @apply  !z-50;
+}
+
   /*  */
   
   /* @layer utilities {

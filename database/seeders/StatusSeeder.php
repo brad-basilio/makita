@@ -15,7 +15,7 @@ class StatusSeeder extends Seeder
     {
         $statuses = [
             [
-                'id' => 'f13fa605-72dd-4729-beaa-ee14c9bbc47b',
+                'id' => 'e13a417d-a2f0-4f5f-93d8-462d57f13d3c',
                 'name' => 'Pendiente',
                 'color' => '#6c757d',
                 'editable' => false

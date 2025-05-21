@@ -58,6 +58,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\ScrapController;
+use App\Http\Controllers\TemporalyImageController;  
 
 /*
 |--------------------------------------------------------------------------
@@ -130,6 +131,13 @@ Route::post('/mercadopago/preference', [MercadoPagoController::class, 'createPre
 Route::get('/mercadopago/success', [MercadoPagoController::class, 'handleSuccess']);
 Route::get('/mercadopago/failure', [MercadoPagoController::class, 'handleFailure']);
 Route::get('/mercadopago/pending', [MercadoPagoController::class, 'handlePending']);
+
+Route::post('/temporaly-image', [TemporalyImageController::class, 'save'])->name('save_temporaly_image');
+Route::post('/temporaly-image/{id}', [TemporalyImageController::class, 'delete'])->name('delete_temporaly_image');
+
+Route::post('/vouchers/temp', [TemporalyImageController::class, 'storeTemp'])->name('voucher.temp');
+Route::delete('/vouchers/temp/{id}', [TemporalyImageController::class, 'deleteTemp'])->name('voucher.delete');
+Route::post('/guardarvoucher', [TemporalyImageController::class, 'guardarVoucher'])->name('guardarvoucher');
 
 //pedido
 Route::post('/orders', [MercadoPagoController::class, 'getOrder']);

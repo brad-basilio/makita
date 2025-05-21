@@ -17,6 +17,8 @@ import { useUbigeo } from "../../../../Utils/useUbigeo";
 import AsyncSelect from "react-select/async";
 import PaymentModal from "./PaymentModal";
 import UploadVoucherModalYape from "./UploadVoucherModalYape";
+import UploadVoucherModalBancs from "./UploadVoucherModalBancs";
+
 
 export default function ShippingStepSF({
     cart,
@@ -452,18 +454,28 @@ export default function ShippingStepSF({
 
     const [showPaymentModal, setShowPaymentModal] = useState(false);
     const [showVoucherModal, setShowVoucherModal] = useState(false);
+    const [showVoucherModalBancs, setShowVoucherModalBancs] = useState(false);
     const [currentPaymentMethod, setCurrentPaymentMethod] = useState(null);
+    const [paymentRequest, setPaymentRequest] = useState(null);
 
     const handleContinueClick = (e) => {
         e.preventDefault();
-    
+        
+        if (e && e.preventDefault) {
+            e.preventDefault();
+        }
+
+        if (!user) {
+            Notify.add({
+                icon: "/assets/img/icon.svg",
+                title: "Iniciar Sesión",
+                body: "Se requiere que incie sesión para realizar la compra",
+                type: "danger",
+            });
+            return;
+        }
+
         if (!validateForm()) {
-            // Notify.add({
-            //     icon: "/assets/img/icon.svg",
-            //     title: "Campos incompletos",
-            //     body: "Complete todos los campos obligatorios",
-            //     type: "danger",
-            // });
             return;
         }
     
@@ -476,10 +488,10 @@ export default function ShippingStepSF({
             });
             return;
         }
-    
+        
         setShowPaymentModal(true);
     };
-    
+
     const validateForm = () => {
         const newErrors = {};
     
@@ -499,10 +511,73 @@ export default function ShippingStepSF({
 
     const handlePaymentComplete = async (paymentMethod) => {  // Cambiado de 'method' a 'paymentMethod'
         try {
-            setShowPaymentModal(false);
             
+            setShowPaymentModal(false);
+            setCurrentPaymentMethod(paymentMethod);
+
             if (paymentMethod === "tarjeta") {
                 // Procesar pago con tarjeta (MercadoPago)
+                if (!window.MercadoPago) {
+                    console.error("❌ MercadoPago aún no se ha cargado.")
+                    return
+                }
+
+                const request = {
+                    user_id: user?.id || "",
+                    name: formData?.name || "",
+                    lastname: formData?.lastname || "",
+                    fullname: `${formData?.name} ${formData?.lastname}`,
+                    phone_prefix: formData?.phone_prefix || "51",
+                    email: formData?.email || "",
+                    phone: `${formData.phone_prefix}${formData.phone}`,
+                    country: "Perú",
+                    department: formData?.department || "",
+                    province: formData?.province || "",
+                    district: formData?.district || "",
+                    ubigeo: formData?.ubigeo || "",
+                    address: formData?.address || "",
+                    number: formData?.number || "",
+                    comment: formData?.comment || "",
+                    /*reference: formData?.reference || "",*/
+                    amount: totalFinal || 0,
+                    delivery: envio,
+                    cart: cart,
+                    invoiceType: formData.invoiceType || "",
+                    documentType: formData.documentType || "",
+                    document: formData.document || "",
+                    businessName: formData.businessName || "",
+                    payment_method: paymentMethod || null,
+                    payment_proof: voucher || null,
+                };
+                
+                try {
+                    const response = await processMercadoPagoPayment(request)
+                    const data = response;
+                    
+                    if (data.status) {
+                        setSale(data.sale);
+                        setDelivery(data.delivery);
+                        setCode(data.code);
+                        
+                    } else {
+                        Notify.add({
+                            icon: "/assets/img/icon.svg",
+                            title: "Error en el Pago",
+                            body: "El pago ha sido rechazado",
+                            type: "danger",
+                        });
+                    }
+                } catch (error) {
+                    console.log(error);
+                    Notify.add({
+                        icon: "/assets/img/icon.svg",
+                        title: "Error en el Pago",
+                        body: "No se llegó a procesar el pago",
+                        type: "danger",
+                    });
+                }
+            }else if(paymentMethod === "yape") {
+
                 const request = {
                     user_id: user?.id || "",
                     name: formData?.name || "",
@@ -526,26 +601,42 @@ export default function ShippingStepSF({
                     documentType: formData.documentType || "",
                     document: formData.document || "",
                     businessName: formData.businessName || "",
-                    paymentMethod: paymentMethod // Añadimos el método de pago a la request
+                    payment_method: paymentMethod || null,
+                    payment_proof: null, // Se actualizará después con el voucher
                 };
-    
-                const response = await processMercadoPagoPayment(request);
-                const data = response;
-                
-                if (data.status) {
-                    setSale(data.sale);
-                    setDelivery(data.delivery);
-                    setCode(data.code);
-                } else {
-                    Notify.add({
-                        icon: "/assets/img/icon.svg",
-                        title: "Error en el Pago",
-                        body: "El pago ha sido rechazado",
-                        type: "danger",
-                    });
-                }
-            } else {
+
+                setPaymentRequest(request);
                 setShowVoucherModal(true);
+            }else if(paymentMethod === "transferencia") {
+
+                const request = {
+                    user_id: user?.id || "",
+                    name: formData?.name || "",
+                    lastname: formData?.lastname || "",
+                    fullname: `${formData?.name} ${formData?.lastname}`,
+                    phone_prefix: formData?.phone_prefix || "51",
+                    email: formData?.email || "",
+                    phone: `${formData.phone_prefix}${formData.phone}`,
+                    country: "Perú",
+                    department: formData?.department || "",
+                    province: formData?.province || "",
+                    district: formData?.district || "",
+                    ubigeo: formData?.ubigeo || "",
+                    address: formData?.address || "",
+                    number: formData?.number || "",
+                    comment: formData?.comment || "",
+                    amount: totalFinal || 0,
+                    delivery: envio,
+                    cart: cart,
+                    invoiceType: formData.invoiceType || "",
+                    documentType: formData.documentType || "",
+                    document: formData.document || "",
+                    businessName: formData.businessName || "",
+                    payment_method: paymentMethod || null,
+                    payment_proof: null, // Se actualizará después con el voucher
+                };
+                setPaymentRequest(request);
+                setShowVoucherModalBancs(true);
             }
         } catch (error) {
             console.error("Error en el pago:", error);
@@ -558,53 +649,6 @@ export default function ShippingStepSF({
         }
     };
 
-    const handleVoucherUpload = async (voucherData) => {
-        console.log("Subiendo comprobante:");
-        // try {
-        //     // Construye la request con los datos del comprobante
-        //     const request = {
-        //         // ... (todos los datos del formulario)
-        //         payment_method: currentPaymentMethod,
-        //         voucher_reference: voucherData.referenceNumber,
-        //         voucher_file: voucherData.file,
-        //         // ... otros campos necesarios
-        //     };
-
-        //     // Envía la request al servidor
-        //     const response = await fetch('/api/payments/upload-voucher', {
-        //         method: 'POST',
-        //         body: JSON.stringify(request),
-        //         headers: {
-        //             'Content-Type': 'application/json'
-        //         }
-        //     });
-
-        //     const data = await response.json();
-            
-        //     if (data.success) {
-        //         setSale(data.sale);
-        //         setDelivery(data.delivery);
-        //         setCode(data.code);
-        //         Notify.add({
-        //             icon: "/assets/img/icon.svg",
-        //             title: "Comprobante recibido",
-        //             body: "Hemos recibido tu comprobante y estamos procesando tu pedido",
-        //             type: "success",
-        //         });
-        //     } else {
-        //         throw new Error(data.message || "Error al procesar comprobante");
-        //     }
-        // } catch (error) {
-        //     console.error("Error:", error);
-        //     Notify.add({
-        //         icon: "/assets/img/icon.svg",
-        //         title: "Error",
-        //         body: error.message || "Error al subir comprobante",
-        //         type: "danger",
-        //     });
-        // }
-    };
-   
     useEffect(() => {
         // Limpiar errores cuando los campos son modificados
         setErrors(prev => {
@@ -1127,8 +1171,25 @@ export default function ShippingStepSF({
 
             <UploadVoucherModalYape
                 isOpen={showVoucherModal}
+                cart={cart}
+                subTotal={subTotal}
+                igv={igv}
+                totalFinal={totalFinal}
+                envio={envio}
+                request={paymentRequest}
                 onClose={() => setShowVoucherModal(false)}
-                onUpload={handleVoucherUpload}
+                paymentMethod={currentPaymentMethod}
+            />
+
+            <UploadVoucherModalBancs
+                isOpen={showVoucherModalBancs}
+                cart={cart}
+                subTotal={subTotal}
+                igv={igv}
+                totalFinal={totalFinal}
+                envio={envio}
+                request={paymentRequest}
+                onClose={() => setShowVoucherModalBancs(false)}
                 paymentMethod={currentPaymentMethod}
             />
 

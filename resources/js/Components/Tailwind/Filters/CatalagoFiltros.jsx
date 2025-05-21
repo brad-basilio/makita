@@ -13,21 +13,12 @@ const itemsRest = new ItemsRest();
 
 const SkeletonCard = () => {
     return (
-        <div
-            className={`group  animate-pulse  transition-transform duration-300 hover:scale-105 w-1/2 lg:w-1/4 flex-shrink-0 font-font-general customtext-primary cursor-pointer`}
-        >
-            <div className=" px-4">
+        <div className={`group animate-pulse transition-transform duration-300 hover:scale-105 w-1/2 lg:w-1/4 flex-shrink-0 font-font-general customtext-primary cursor-pointer`}>
+            <div className="px-4">
                 <div className="bg-white rounded-3xl">
-                    {/* Imagen del producto y etiqueta de descuento */}
                     <div className="relative">
-                        <div className="aspect-square bg-gray-300 rounded-3xl overflow-hidden flex items-center justify-center  bg-secondary">
-                            <svg
-                                class="w-10 h-10 text-gray-200 "
-                                aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="currentColor"
-                                viewBox="0 0 20 18"
-                            >
+                        <div className="aspect-square bg-gray-300 rounded-3xl overflow-hidden flex items-center justify-center bg-secondary">
+                            <svg className="w-10 h-10 text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
                                 <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z" />
                             </svg>
                         </div>
@@ -38,13 +29,12 @@ const SkeletonCard = () => {
     );
 };
 
-//const CatalagoFiltros = ({ items, data, categories, brands, prices, cart, setCart }) => {
 const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
-    //const { categories, brands, priceRanges } = filteredData;
     const [brands, setBrands] = useState([]);
     const [subcategories, setSubcategories] = useState([]);
     const [categories, setCategories] = useState([]);
     const [priceRanges, setPriceRanges] = useState([]);
+    const [activeSection, setActiveSection] = useState(null);
 
     const [sections, setSections] = useState({
         marca: true,
@@ -63,8 +53,8 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
         name: GET.search || null,
         sort_by: "created_at",
         order: "desc",
-      });
-    //filtros nuevos
+    });
+
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [pagination, setPagination] = useState({
@@ -85,7 +75,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                 "=",
                 id,
             ]);
-            transformedFilters.push([...collectionConditions]);
+            transformedFilters.push(["or", ...collectionConditions]);
         }
 
         if (filters.category_id.length > 0) {
@@ -130,7 +120,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
             transformedFilters.push(["name", "contains", filters.name]);
         }
 
-        return ArrayJoin(transformedFilters,'and');
+        return ArrayJoin(transformedFilters, 'and');
     };
     // Obtener productos filtrados desde el backend
     const fetchProducts = async (page = 1) => {
@@ -163,7 +153,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                     response.totalCount
                 ),
             });
-           // console.log(response);
+            // console.log(response);
             setBrands(response?.summary.brands);
             setCategories(response?.summary.categories);
             setSubcategories(response?.summary.subcategories);
@@ -177,11 +167,11 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
 
 
 
-   
+
 
 
     useEffect(() => {
-        
+
         fetchProducts(pagination.currentPage);
     }, [selectedFilters]);
     const handlePageChange = (page) => {
@@ -277,7 +267,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
     const filteredBrands = brands.filter((brand) =>
         brand.name.toLowerCase().includes(searchBrand.toLowerCase())
     );
- 
+
     const [filtersOpen, setFiltersOpen] = useState(false);
 
     return (
@@ -287,13 +277,13 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                     <h2 className="text-[32px] md:text-4xl font-bold md:w-6/12">
                         {data?.title}
                     </h2>
-                    <div className="flex items-center gap-4 md:w-5/12">
-                        <span className="block w-6/12">
+                    <div className="flex flex-col w-full  items-center gap-4 md:flex-row md:w-5/12">
+                        <span className="block md:w-6/12 order-1 md:order-none">
                             Productos seleccionados:{" "}
                             <strong>{products?.length}</strong>
                         </span>
                         {/* Ordenación */}
-                        <div className="w-6/12">
+                        <div className="w-full md:w-6/12">
                             <SelectForm
                                 options={sortOptions}
                                 placeholder="Ordenar por"
@@ -325,317 +315,239 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                         <h2 className="text-2xl font-bold">Filtros</h2>
                         <Filter className="h-5 w-5" />
                     </button>
-                    <div
-                        className={`${filtersOpen
-                            ? "fixed inset-0 z-50 bg-white p-4 overflow-y-auto"
-                            : "hidden"
-                            } lg:block lg:w-3/12 bg-white p-4 rounded-lg h-max`}
+                    <div className={`${filtersOpen
+                        ? "fixed inset-0  bg-white flex flex-col h-screen z-[999]"
+                        : "hidden"
+                        } lg:block lg:w-3/12 lg:bg-white lg:p-4 lg:rounded-lg lg:h-max`}
                     >
-                        <div className="flex items-center justify-between mb-6">
+                        {/* Header fijo para mobile */}
+                        <div className="fixed top-0 left-0 right-0 bg-white p-4 border-b z-10 h-16 flex items-center justify-between lg:relative lg:p-0 lg:border-none lg:h-auto">
                             <h2 className="text-xl font-bold">Filtros</h2>
-                            <Filter className="hidden lg:block h-5 w-5" />
                             <button
-                                className=" lg:hidden "
-                                onClick={() => setFiltersOpen(!filtersOpen)}
+                                className="lg:hidden"
+                                onClick={() => setFiltersOpen(false)}
                             >
                                 <X className="h-5 w-5" />
                             </button>
+                            <Filter className="hidden lg:block h-5 w-5" />
                         </div>
 
-                        <div className="mb-6">
-                            <button
-                                onClick={() => toggleSection("marca")}
-                                className="flex items-center justify-between w-full mb-4"
-                            >
-                                <span className="font-medium">Marca</span>
-                                <ChevronDown
-                                    className={`h-5 w-5 transform transition-transform ${sections.marca ? "" : "-rotate-180"
-                                        }`}
-                                />
-                            </button>
-                            {sections.marca && (
-                                <div className="space-y-4">
-                                    <div className="relative">
-                                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                                        <input
-                                            type="text"
-                                            placeholder="Buscar"
-                                            className={`w-full px-4 pl-10 py-3 border customtext-neutral-dark  border-neutral-ligth rounded-xl focus:ring-0 focus:outline-0   transition-all duration-300`}
-                                            value={searchBrand}
-                                            onChange={(e) =>
-                                                setSearchBrand(e.target.value)
-                                            }
-                                        />
-                                    </div>
-                                    <div className="space-y-3 max-h-80 overflow-y-auto">
-                                        {filteredBrands.map((brand) => (
-                                            <label
-                                                key={brand.id}
-                                                className="flex items-center space-x-3 customtext-neutral-light"
-                                            >
-                                                <input
-                                                    type="checkbox"
-                                                    className="h-4 w-4 rounded border-gray-300"
-                                                    onChange={() =>
-                                                        handleFilterChange(
-                                                            "brand_id",
-                                                            brand.slug
-                                                        )
-                                                    }
-                                                />
-                                                <span>{brand.name}</span>
-                                            </label>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-                        <div className="mb-6">
-                            <button
-                                onClick={() => toggleSection("categoria")}
-                                className="flex items-center justify-between w-full mb-4"
-                            >
-                                <span className="font-medium">Categoría</span>
-                                <ChevronDown
-                                    className={`h-5 w-5 transform transition-transform ${sections.categoria ? "" : "-rotate-180"
-                                        }`}
-                                />
-                            </button>
-                            {sections.categoria && (
-                                <div className="space-y-4">
-                                    <div className="relative">
-                                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                                        <input
-                                            type="text"
-                                            placeholder="Buscar"
-                                            className={`w-full px-4 pl-10 py-3 border customtext-neutral-dark  border-neutral-ligth rounded-xl focus:ring-0 focus:outline-0   transition-all duration-300`}
-                                            value={searchCategory}
-                                            onChange={(e) =>
-                                                setSearchCategory(
-                                                    e.target.value
-                                                )
-                                            }
-                                        />
-                                    </div>
-                                    <div className="space-y-3 max-h-80 overflow-y-auto">
-                                        {filteredCategories.map((category) => (
-                                            <div key={category.id}>
-                                                <label className="flex items-center space-x-3 customtext-neutral-light">
-                                                    <input
-                                                        type="checkbox"
-                                                        className="h-4 w-4 rounded border-gray-300"
-                                                        onChange={() =>
-                                                            handleFilterChange(
-                                                                "category_id",
-                                                                category.slug
-                                                            )
-                                                        }
-                                                        checked={selectedFilters.category_id?.includes(
-                                                            category.slug
-                                                        )} // <-- Agregado
-                                                    />
-                                                    <span>{category.name}</span>
-                                                </label>
-
-                                                {/* Mostrar subcategorías si la categoría está seleccionada */}
-                                                {selectedFilters.category_id?.includes(
-                                                    category.slug
-                                                ) &&
-                                                    category.subcategories
-                                                        ?.length > 0 && (
-                                                        <ul className="ml-6 mt-2 space-y-2">
-                                                            {category.subcategories.map(
-                                                                (sub) => (
-                                                                    <label
-                                                                        key={
-                                                                            sub.id
-                                                                        }
-                                                                        className="flex items-center space-x-3 customtext-neutral-light"
-                                                                    >
-                                                                        <input
-                                                                            type="checkbox"
-                                                                            className="h-4 w-4 rounded border-gray-300"
-                                                                            onChange={() =>
-                                                                                handleFilterChange(
-                                                                                    "subcategory_id",
-                                                                                    sub.slug
-                                                                                )
-                                                                            } // <-- Corregido
-                                                                            checked={selectedFilters.subcategory_id?.includes(
-                                                                                sub.slug
-                                                                            )}
-                                                                        />
-                                                                        <span>
-                                                                            {
-                                                                                sub.name
-                                                                            }
-                                                                        </span>
-                                                                    </label>
-                                                                )
-                                                            )}
-                                                        </ul>
-                                                    )}
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-
-                        <motion.div className="mb-6" >
-                            <motion.button
-                                onClick={() => toggleSection("subcategoria")}
-                                className="flex items-center justify-between w-full mb-4"
-                                whileHover={{ x: 3 }}
-                            >
-                                <span className="font-medium">
-                                    Sub Categorías
-                                </span>
-                                <ChevronDown
-                                    className={`h-5 w-5 transform transition-transform ${sections.subcategoria
-                                        ? ""
-                                        : "-rotate-180"
-                                        }`}
-                                />
-                            </motion.button>
-
-                            <AnimatePresence>
-                                {sections.subcategoria && (
-                                    <motion.div
-                                        className="space-y-1"
-                                        initial="hidden"
-                                        animate="visible"
-                                        exit="hidden"
-                                        variants={{
-                                            hidden: {
-                                                opacity: 0,
-                                                height: 0,
-                                            },
-                                            visible: {
-                                                opacity: 1,
-                                                height: "auto",
-                                                transition: {
-                                                    staggerChildren: 0.1,
-                                                },
-                                            },
-                                        }}
-                                    >
-                                        <motion.div
-                                            className="relative"
-
-                                        >
-                                            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                        {/* Contenido principal con scroll */}
+                        <div className="flex-1 overflow-y-auto px-4 mt-16 pb-20 lg:mt-0 lg:pb-0 lg:px-0">
+                            {/* Sección Marcas */}
+                            <div className="mb-6">
+                                <button
+                                    onClick={() => toggleSection("marca")}
+                                    className="flex items-center justify-between w-full mb-4 p-2 lg:p-0"
+                                >
+                                    <span className="font-medium">Marca</span>
+                                    <ChevronDown
+                                        className={`h-5 w-5 transform transition-transform ${sections.marca ? "" : "-rotate-180"
+                                            }`}
+                                    />
+                                </button>
+                                {sections.marca && (
+                                    <div className="space-y-4">
+                                        <div className="relative">
+                                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                                             <input
                                                 type="text"
                                                 placeholder="Buscar"
-                                                className="w-full px-4 pl-10 py-3 border customtext-neutral-dark border-neutral-ligth rounded-xl focus:ring-0 focus:outline-0 transition-all duration-300"
-                                                value={searchSubcategory}
-                                                onChange={(e) =>
-                                                    setSearchSubcategory(
-                                                        e.target.value
-                                                    )
-                                                }
+                                                className="w-full pl-10 pr-4 py-3 border rounded-xl focus:ring-0 focus:outline-0"
+                                                value={searchBrand}
+                                                onChange={(e) => setSearchBrand(e.target.value)}
                                             />
-                                        </motion.div>
-
-                                        {filteredSubcategories.map(
-                                            (subcategory) => {
-                                                const isChecked =
-                                                    selectedFilters.subcategory_id?.includes(
-                                                        subcategory.slug
-                                                    );
-                                                return (
-                                                    <motion.div
-                                                        key={subcategory.id}
-                                                        className={`group py-2 rounded-md ${isChecked
-                                                            ? "bg-primary "
-                                                            : "bg-transparent"
-                                                            }`}
-
-                                                    >
-                                                        <label className="flex items-center justify-between space-x-3 px-4 cursor-pointer">
-                                                            <input
-                                                                type="checkbox"
-                                                                className="hidden"
-                                                                onChange={() =>
-                                                                    handleFilterChange(
-                                                                        "subcategory_id",
-                                                                        subcategory.slug
-                                                                    )
-                                                                }
-                                                                checked={
-                                                                    isChecked
-                                                                }
-                                                            />
-
-                                                            <span
-                                                                className={`${isChecked
-                                                                    ? "text-white"
-                                                                    : "text-gray-700"
-                                                                    }`}
-                                                            >
-                                                                {
-                                                                    subcategory.name
-                                                                }
-                                                            </span>
-                                                        </label>
-                                                    </motion.div>
-                                                );
-                                            }
-                                        )}
-                                    </motion.div>
+                                        </div>
+                                        <div className="space-y-3 max-h-[200px] overflow-y-auto p-1">
+                                            {filteredBrands.map((brand) => (
+                                                <label
+                                                    key={brand.id}
+                                                    className="flex items-center gap-2 py-1.5"
+                                                >
+                                                    <input
+                                                        type="checkbox"
+                                                        className="h-5 w-5 rounded border-gray-300 accent-primary"
+                                                        onChange={() => handleFilterChange("brand_id", brand.slug)}
+                                                    />
+                                                    <span className="text-sm lg:text-base">{brand.name}</span>
+                                                </label>
+                                            ))}
+                                        </div>
+                                    </div>
                                 )}
-                            </AnimatePresence>
-                        </motion.div>
+                            </div>
 
-                        {/* Precio Section */}
-                        <div className="mb-6">
-                            <button
-                                onClick={() => toggleSection("precio")}
-                                className="flex items-center justify-between w-full mb-4"
-                            >
-                                <span className="font-medium">Precio</span>
-                                <ChevronDown
-                                    className={`h-5 w-5 transform transition-transform ${sections.precio ? "" : "-rotate-180"
-                                        }`}
-                                />
-                            </button>
-                            {sections.precio && (
-                                <div className="space-y-3">
-                                    {priceRanges.map((range) => (
-                                        <label
-                                            key={`${range.min}-${range.max}`}
-                                            className="flex items-center space-x-3 customtext-neutral-light"
-                                        >
+                            {/* Sección Categorías */}
+                            <div className="mb-6">
+                                <button
+                                    onClick={() => toggleSection("categoria")}
+                                    className="flex items-center justify-between w-full mb-4 p-2 lg:p-0"
+                                >
+                                    <span className="font-medium">Categoría</span>
+                                    <ChevronDown
+                                        className={`h-5 w-5 transform transition-transform ${sections.categoria ? "" : "-rotate-180"
+                                            }`}
+                                    />
+                                </button>
+                                {sections.categoria && (
+                                    <div className="space-y-4">
+                                        <div className="relative">
+                                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                                             <input
-                                                type="checkbox"
-                                                name="precio"
-                                                className="h-4 w-4 rounded border-gray-300"
-                                                onChange={() =>
-                                                    handleFilterChange(
-                                                        "price",
-                                                        range
-                                                    )
-                                                }
-                                                checked={
-                                                    selectedFilters.price &&
-                                                    selectedFilters.price
-                                                        .min === range.min &&
-                                                    selectedFilters.price
-                                                        .max === range.max
-                                                }
+                                                type="text"
+                                                placeholder="Buscar"
+                                                className="w-full pl-10 pr-4 py-3 border rounded-xl focus:ring-0 focus:outline-0"
+                                                value={searchCategory}
+                                                onChange={(e) => setSearchCategory(e.target.value)}
                                             />
-                                            <span>{`S/ ${range.min} - S/ ${range.max}`}</span>
-                                        </label>
-                                    ))}
-                                </div>
-                            )}
+                                        </div>
+                                        <div className="space-y-3 max-h-[200px] overflow-y-auto p-1">
+                                            {filteredCategories.map((category) => (
+                                                <div key={category.id}>
+                                                    <label className="flex items-center gap-2 py-1.5">
+                                                        <input
+                                                            type="checkbox"
+                                                            className="h-5 w-5 rounded border-gray-300 accent-primary"
+                                                            onChange={() => handleFilterChange("category_id", category.slug)}
+                                                            checked={selectedFilters.category_id?.includes(category.slug)}
+                                                        />
+                                                        <span className="text-sm lg:text-base">{category.name}</span>
+                                                    </label>
+
+                                                    {selectedFilters.category_id?.includes(category.slug) && (
+                                                        <ul className="ml-4 pl-3 mt-1 space-y-2 border-l-2 border-gray-200">
+                                                            {category.subcategories?.map((sub) => (
+                                                                <label key={sub.id} className="flex items-center gap-2 py-1.5">
+                                                                    <input
+                                                                        type="checkbox"
+                                                                        className="h-4 w-4 rounded border-gray-300 accent-primary"
+                                                                        onChange={() => handleFilterChange("subcategory_id", sub.slug)}
+                                                                        checked={selectedFilters.subcategory_id?.includes(sub.slug)}
+                                                                    />
+                                                                    <span className="text-sm lg:text-base">{sub.name}</span>
+                                                                </label>
+                                                            ))}
+                                                        </ul>
+                                                    )}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Sección Subcategorías */}
+                            <motion.div className="mb-6">
+                                <motion.button
+                                    onClick={() => toggleSection("subcategoria")}
+                                    className="flex items-center justify-between w-full mb-4 p-2 lg:p-0"
+                                    whileHover={{ x: 3 }}
+                                >
+                                    <span className="font-medium">Sub Categorías</span>
+                                    <ChevronDown
+                                        className={`h-5 w-5 transform transition-transform ${sections.subcategoria ? "" : "-rotate-180"
+                                            }`}
+                                    />
+                                </motion.button>
+
+                                <AnimatePresence>
+                                    {sections.subcategoria && (
+                                        <motion.div
+                                            className="space-y-1"
+                                            initial="hidden"
+                                            animate="visible"
+                                            exit="hidden"
+                                            variants={{
+                                                hidden: { opacity: 0, height: 0 },
+                                                visible: { opacity: 1, height: "auto" }
+                                            }}
+                                        >
+                                            <div className="relative">
+                                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                                                <input
+                                                    type="text"
+                                                    placeholder="Buscar"
+                                                    className="w-full pl-10 pr-4 py-3 border rounded-xl focus:ring-0 focus:outline-0"
+                                                    value={searchSubcategory}
+                                                    onChange={(e) => setSearchSubcategory(e.target.value)}
+                                                />
+                                            </div>
+
+                                            <div className="max-h-[200px] overflow-y-auto p-1">
+                                                {filteredSubcategories.map((subcategory) => {
+                                                    const isChecked = selectedFilters.subcategory_id?.includes(subcategory.slug);
+                                                    return (
+                                                        <motion.div
+                                                            key={subcategory.id}
+                                                            className={`group py-2 rounded-md ${isChecked ? "bg-primary" : "bg-transparent"
+                                                                }`}
+                                                        >
+                                                            <label className="flex items-center gap-2 px-2 cursor-pointer">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    className="hidden"
+                                                                    onChange={() => handleFilterChange("subcategory_id", subcategory.slug)}
+                                                                    checked={isChecked}
+                                                                />
+                                                                <span className={`text-sm lg:text-base ${isChecked ? "text-white" : "text-gray-700"
+                                                                    }`}>
+                                                                    {subcategory.name}
+                                                                </span>
+                                                            </label>
+                                                        </motion.div>
+                                                    );
+                                                })}
+                                            </div>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
+                            </motion.div>
+
+                            {/* Sección Precio */}
+                            <div className="mb-6">
+                                <button
+                                    onClick={() => toggleSection("precio")}
+                                    className="flex items-center justify-between w-full mb-4 p-2 lg:p-0"
+                                >
+                                    <span className="font-medium">Precio</span>
+                                    <ChevronDown
+                                        className={`h-5 w-5 transform transition-transform ${sections.precio ? "" : "-rotate-180"
+                                            }`}
+                                    />
+                                </button>
+                                {sections.precio && (
+                                    <div className="space-y-3 p-1">
+                                        {priceRanges.map((range) => (
+                                            <label
+                                                key={`${range.min}-${range.max}`}
+                                                className="flex items-center gap-2 py-1.5"
+                                            >
+                                                <input
+                                                    type="checkbox"
+                                                    className="h-5 w-5 rounded border-gray-300 accent-primary"
+                                                    onChange={() => handleFilterChange("price", range)}
+                                                    checked={
+                                                        selectedFilters.price?.min === range.min &&
+                                                        selectedFilters.price?.max === range.max
+                                                    }
+                                                />
+                                                <span className="text-sm lg:text-base">{`S/ ${range.min} - S/ ${range.max}`}</span>
+                                            </label>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
                         </div>
 
-
-                        {/* <button className="w-full bg-primary text-white py-3 rounded-xl hover:brightness-90 transition-colors text-sm font-bold">
-                            Aplicar Filtro
-                        </button>*/}
+                        {/* Footer móvil */}
+                        <div className="fixed bottom-0 left-0 right-0 bg-white border-t p-4 h-20 flex items-center lg:hidden">
+                            <button
+                                className="w-full bg-primary text-white py-3 rounded-xl font-bold hover:bg-primary-dark transition-colors"
+                                onClick={() => setFiltersOpen(false)}
+                            >
+                                Ver resultados
+                            </button>
+                        </div>
                     </div>
 
                     <div className="w-full lg:w-9/12 py-4">
@@ -674,77 +586,78 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                         )}
                         {/* Paginación inferior */}
                         <motion.div
-                            className="flex justify-between items-center mb-4 w-full mt-8"
-
+                            className="flex flex-col md:flex-row justify-between items-center mb-4 w-full mt-8 gap-4"
                         >
-                            <div className="customtext-primary font-semibold">
-                                <nav className="flex items-center gap-x-2 min-w-max">
-                                    <motion.button
-                                        className={`p-4 inline-flex items-center ${pagination.currentPage === 1
-                                            ? "opacity-50 cursor-not-allowed"
-                                            : ""
-                                            }`}
-                                        onClick={() =>
-                                            handlePageChange(
-                                                pagination.currentPage - 1
-                                            )
-                                        }
-                                        disabled={pagination.currentPage === 1}
-                                        whileHover={{ scale: 1.1 }}
-                                        whileTap={{ scale: 0.9 }}
-                                    >
-                                        <ChevronLeft />
-                                    </motion.button>
+                            <div className="customtext-primary font-semibold w-full md:w-auto">
+                                <div className="overflow-x-auto pb-2">
+                                    <nav className="flex items-center gap-x-2 min-w-max">
+                                        <motion.button
+                                            className={`p-4 inline-flex items-center ${pagination.currentPage === 1
+                                                ? "opacity-50 cursor-not-allowed"
+                                                : ""
+                                                }`}
+                                            onClick={() =>
+                                                handlePageChange(
+                                                    pagination.currentPage - 1
+                                                )
+                                            }
+                                            disabled={pagination.currentPage === 1}
+                                            whileHover={{ scale: 1.1 }}
+                                            whileTap={{ scale: 0.9 }}
+                                        >
+                                            <ChevronLeft />
+                                        </motion.button>
 
-                                    {getPageNumbers().map((page, index) => (
-                                        <React.Fragment key={index}>
-                                            {page === "..." ? (
-                                                <span className="w-10 h-10 bg-transparent p-2 inline-flex items-center justify-center rounded-full">
-                                                    ...
-                                                </span>
-                                            ) : (
-                                                <motion.button
-                                                    className={`w-10 h-10 p-2 inline-flex items-center justify-center rounded-full transition-all duration-300 
+                                        {getPageNumbers().map((page, index) => (
+                                            <React.Fragment key={index}>
+                                                {page === "..." ? (
+                                                    <span className="w-10 h-10 bg-transparent p-2 inline-flex items-center justify-center rounded-full">
+                                                        ...
+                                                    </span>
+                                                ) : (
+                                                    <motion.button
+                                                        className={`w-10 h-10 p-2 inline-flex items-center justify-center rounded-full transition-all duration-300 
                                                         ${page ===
-                                                            pagination.currentPage
-                                                            ? "bg-primary text-white"
-                                                            : "bg-transparent hover:text-white hover:bg-primary"
-                                                        }`}
-                                                    onClick={() =>
-                                                        handlePageChange(page)
-                                                    }
-                                                    whileHover={{ scale: 1.05 }}
-                                                    whileTap={{ scale: 0.95 }}
-                                                >
-                                                    {page}
-                                                </motion.button>
-                                            )}
-                                        </React.Fragment>
-                                    ))}
+                                                                pagination.currentPage
+                                                                ? "bg-primary text-white"
+                                                                : "bg-transparent hover:text-white hover:bg-primary"
+                                                            }`}
+                                                        onClick={() =>
+                                                            handlePageChange(page)
+                                                        }
+                                                        whileHover={{ scale: 1.05 }}
+                                                        whileTap={{ scale: 0.95 }}
+                                                    >
+                                                        {page}
+                                                    </motion.button>
+                                                )}
+                                            </React.Fragment>
+                                        ))}
 
-                                    <motion.button
-                                        className={`p-4 inline-flex items-center ${pagination.currentPage ===
-                                            pagination.totalPages
-                                            ? "opacity-50 cursor-not-allowed"
-                                            : ""
-                                            }`}
-                                        onClick={() =>
-                                            handlePageChange(
-                                                pagination.currentPage + 1
-                                            )
-                                        }
-                                        disabled={
-                                            pagination.currentPage ===
-                                            pagination.totalPages
-                                        }
-                                        whileHover={{ scale: 1.1 }}
-                                        whileTap={{ scale: 0.9 }}
-                                    >
-                                        <ChevronRight />
-                                    </motion.button>
-                                </nav>
+                                        <motion.button
+                                            className={`p-4 inline-flex items-center ${pagination.currentPage ===
+                                                pagination.totalPages
+                                                ? "opacity-50 cursor-not-allowed"
+                                                : ""
+                                                }`}
+                                            onClick={() =>
+                                                handlePageChange(
+                                                    pagination.currentPage + 1
+                                                )
+                                            }
+                                            disabled={
+                                                pagination.currentPage ===
+                                                pagination.totalPages
+                                            }
+                                            whileHover={{ scale: 1.1 }}
+                                            whileTap={{ scale: 0.9 }}
+                                        >
+                                            <ChevronRight />
+                                        </motion.button>
+                                    </nav>
+                                </div>
                             </div>
-                            <div>
+                            <div className="w-full md:w-auto text-center md:text-right">
                                 <p className="font-semibold">
                                     {pagination.from} - {pagination.to} de{" "}
                                     {pagination.totalItems} Resultados
@@ -753,24 +666,6 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                         </motion.div>
                     </div>
                 </div>
-                {/* Paginación 
-                <div>
-                    <button
-                        disabled={pagination.currentPage === 1}
-                        onClick={() => fetchProducts(pagination.currentPage - 1)}
-                    >
-                        Anterior
-                    </button>
-                    <span>
-                        Página {pagination.currentPage} de {pagination.totalPages}
-                    </span>
-                    <button
-                        disabled={pagination.currentPage === pagination.totalPages}
-                        onClick={() => fetchProducts(pagination.currentPage + 1)}
-                    >
-                        Siguiente
-                    </button>
-                </div>*/}
             </div>
         </section>
     );
