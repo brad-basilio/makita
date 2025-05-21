@@ -59,7 +59,7 @@ const HeaderSearchMenuSF = ({
 
 
   return (
-    <header id="main-header" className="fixed top-0 w-full z-20 bg-white font-font-general">
+    <header id="main-header" className="sticky top-0 w-full z-20 bg-white font-font-general">
 
       <TopBarCart
         data={data}
