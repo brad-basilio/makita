@@ -144,6 +144,13 @@
                     "model": "Indicator"
                 }
             },
+               {
+                "id": "CarruselBenefitsPaani",
+                "name": "Beneficios Paani",
+                "using": {
+                    "model": "Indicator"
+                }
+            },
             {
                 "id": "CarruselBenefitsSimple",
                 "name": "Beneficios Simple",

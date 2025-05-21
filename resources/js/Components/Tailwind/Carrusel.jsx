@@ -3,6 +3,9 @@ import React from "react";
 const CarruselBenefitsInifinite = React.lazy(() =>
     import("./Carrusel/CarruselBenefitsInifinite")
 );
+const CarruselBenefitsPaani = React.lazy(() =>
+    import("./Carrusel/CarruselBenefitsPaani")
+);
 const CarruselBenefitsSimple = React.lazy(() =>
     import("./Carrusel/CarruselBenefitsSimple")
 );
@@ -14,6 +17,8 @@ const Carrusel = ({ which, data, items }) => {
         switch (which) {
             case "CarruselBenefitsInifinite":
                 return <CarruselBenefitsInifinite data={data} items={items} />;
+                  case "CarruselBenefitsPaani":
+                return <CarruselBenefitsPaani data={data} items={items} />;
             case "CarruselBenefitsSimple":
                 return <CarruselBenefitsSimple data={data} items={items} />;
             case "CarruselBananaLab":
