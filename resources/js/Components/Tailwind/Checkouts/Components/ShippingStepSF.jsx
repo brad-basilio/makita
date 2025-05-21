@@ -569,12 +569,12 @@ export default function ShippingStepSF({
                     }
                 } catch (error) {
                     console.log(error);
-                    Notify.add({
-                        icon: "/assets/img/icon.svg",
-                        title: "Error en el Pago",
-                        body: "No se llegó a procesar el pago",
-                        type: "danger",
-                    });
+                    // Notify.add({
+                    //     icon: "/assets/img/icon.svg",
+                    //     title: "Error en el Pago",
+                    //     body: "No se llegó a procesar el pago",
+                    //     type: "danger",
+                    // });
                 }
             }else if(paymentMethod === "yape") {
 
