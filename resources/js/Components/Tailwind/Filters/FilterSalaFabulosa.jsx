@@ -242,6 +242,19 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
         }));
     };
 
+    // const toggleSection = (section) => {
+    //     setSections((prev) => {
+    //       // Si la sección clickeada ya está abierta, no hacemos nada
+    //       if (prev[section]) return prev;
+          
+    //       // Crear nuevo estado con solo esta sección abierta
+    //       return Object.keys(prev).reduce((acc, key) => {
+    //         acc[key] = key === section;
+    //         return acc;
+    //       }, {});
+    //     });
+    // };
+
     const sortOptions = [
         { value: "created_at:desc", label: "Más reciente" },
         { value: "created_at:asc", label: "Mas antiguo" },
@@ -267,6 +280,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
         brand.name.toLowerCase().includes(searchBrand.toLowerCase())
     );
     const [filtersOpen, setFiltersOpen] = useState(false); // Añadir estado para mobile
+
     return (
         <section className="py-6 font-font-general customtext-primary">
             <div className="mx-auto px-primary">
@@ -314,7 +328,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                                 </button>
                                 {sections.collection && (
                                     <div className="space-y-4">
-                                        <div className="relative">
+                                        <div className="relative hidden md:flex">
                                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                                             <input
                                                 type="text"
@@ -370,7 +384,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                                 </button>
                                 {sections.categoria && (
                                     <div className="space-y-4">
-                                        <div className="relative">
+                                        <div className="relative hidden md:flex">
                                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                                             <input
                                                 type="text"
@@ -381,36 +395,35 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                                             />
                                         </div>
                                         <div className="max-h-[200px] overflow-y-auto space-y-2 p-1">
-                                            
                                             {filteredCategories.map((category) => {
-                                              
-                                                   const isChecked = selectedFilters.category_id?.includes(category.slug);
-                                            return(
-                                                <div
-                                                key={category.id}
-                                                className={`group flex items-center gap-3 p-2 rounded-lg ${isChecked
-                                                    ? "bg-secondary"
-                                                    : "hover:bg-gray-50"
-                                                    }`}
-                                            >
-                                                   <label className="flex items-center gap-2 px-2 cursor-pointer">
-                                                <input
-                                                    type="checkbox"
-                                                    className="h-5 w-5 rounded border-gray-300 accent-primary hidden"
-                                                    onChange={() => handleFilterChange("category_id", category.slug)}
-                                                    checked={isChecked}
-                                                   // checked={selectedFilters.category_id?.includes(category.id)}
-                                                />
-                                                <img
-                                                    src={`/storage/images/category/${category.image}`}
-                                                    onError={(e) => e.target.src = "assets/img/noimage/no_imagen_circular.png"}
-                                                    className="w-8 h-8 rounded-full object-cover"
-                                                    alt={category.name}
-                                                />
-                                                <span className="text-sm lg:text-base">{category.name}</span></label>
-                                            </div>
-                                            )
-})}
+                                                
+                                                    const isChecked = selectedFilters.category_id?.includes(category.slug);
+                                                return(
+                                                    <div
+                                                    key={category.id}
+                                                    className={`group flex items-center gap-3 p-2 rounded-lg ${isChecked
+                                                        ? "bg-secondary"
+                                                        : "hover:bg-gray-50"
+                                                        }`}
+                                                >
+                                                    <label className="flex items-center gap-2 px-2 cursor-pointer">
+                                                    <input
+                                                        type="checkbox"
+                                                        className="h-5 w-5 rounded border-gray-300 accent-primary hidden"
+                                                        onChange={() => handleFilterChange("category_id", category.slug)}
+                                                        checked={isChecked}
+                                                    // checked={selectedFilters.category_id?.includes(category.id)}
+                                                    />
+                                                    <img
+                                                        src={`/storage/images/category/${category.image}`}
+                                                        onError={(e) => e.target.src = "assets/img/noimage/no_imagen_circular.png"}
+                                                        className="w-8 h-8 rounded-full object-cover"
+                                                        alt={category.name}
+                                                    />
+                                                    <span className="text-sm lg:text-base">{category.name}</span></label>
+                                                </div>
+                                                )
+                                            })}
                                         </div>
                                     </div>
                                 )}

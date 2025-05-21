@@ -4644,7 +4644,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Filter.jsx": {
-    "file": "assets/Filter-1I3Td4hN.js",
+    "file": "assets/Filter-c4-7wP2y.js",
     "name": "Filter",
     "src": "resources/js/Components/Tailwind/Filter.jsx",
     "isEntry": true,
@@ -4896,7 +4896,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Filters/FilterSalaFabulosa.jsx": {
-    "file": "assets/FilterSalaFabulosa-6l3bkGH2.js",
+    "file": "assets/FilterSalaFabulosa-BJ1ahO2F.js",
     "name": "FilterSalaFabulosa",
     "src": "resources/js/Components/Tailwind/Filters/FilterSalaFabulosa.jsx",
     "isDynamicEntry": true,
@@ -7050,7 +7050,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-BKGQQyOs.js",
+    "file": "assets/System-DOw44rbG.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,
