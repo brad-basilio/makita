@@ -287,7 +287,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                 {/* Botón para móvil */}
                 <button
                     onClick={() => setFiltersOpen(true)}
-                    className="w-full lg:hidden flex gap-2 items-center mb-4 p-3 bg-white rounded-lg shadow-sm"
+                    className="w-auto lg:hidden flex gap-2 items-center mb-4 p-3 bg-white rounded-lg shadow-sm"
                 >
                     <Filter className="h-5 w-5" />
                     <span className="font-semibold">Mostrar filtros</span>
@@ -318,7 +318,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                             <div className="mb-6">
                                 <button
                                     onClick={() => toggleSection("collection")}
-                                    className="flex items-center justify-between w-full mb-4 p-2 lg:p-0"
+                                    className="flex items-center justify-between w-full mb-0 p-2 lg:p-0"
                                 >
                                     <span className="font-medium">Colecciones</span>
                                     <ChevronUp

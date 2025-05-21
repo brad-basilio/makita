@@ -796,7 +796,7 @@ export default function ShippingStepSF({
                                 <label
                                     className={`block text-sm 2xl:text-base mb-1 customtext-neutral-dark `}
                                 >
-                                    Ubicación de entrega (Departamento | Provincia | Distrito)
+                                    Ubicación de entrega (Distrito | Provincia | Departamento)
                                 </label>
                                 <AsyncSelect
                                     name="ubigeo"
@@ -826,6 +826,27 @@ export default function ShippingStepSF({
                                     )}
                                     className="w-full rounded-xl transition-all duration-300"
                                     menuPortalTarget={document.body}
+                                    isClearable={true}
+                                    components={{
+                                    ClearIndicator: (props) => (
+                                        <div {...props.innerProps} className="p-1 cursor-pointer">
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            className="h-5 w-5 text-red-400 hover:text-red-600"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke="currentColor"
+                                        >
+                                            <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M6 18L18 6M6 6l12 12"
+                                            />
+                                        </svg>
+                                        </div>
+                                    ),
+                                    }}
                                 />
                                 {errors.ubigeo && <div className="text-red-500 text-sm mt-1">{errors.ubigeo}</div>}
                             </div>
