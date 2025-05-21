@@ -129,7 +129,7 @@ const HeaderSearchMenuSF = ({
 
             <div
               className={`${openMenu ? "block" : "hidden"
-                }  lg:hidden bg-white w-full min-h-screen absolute z-50 top-28 left-0`}
+                }  lg:hidden bg-white w-full min-h-screen absolute z-50 top-[120px] left-0`}
             >
               <MobileMenuSF
                 search={search}

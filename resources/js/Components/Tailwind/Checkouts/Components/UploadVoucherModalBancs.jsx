@@ -12,7 +12,7 @@ import General from "../../../../Utils/General";
 import SalesRest from "../../../../Actions/SalesRest";
 import { Notify } from "sode-extend-react";
 import { Local } from "sode-extend-react";
-
+import { toast } from "sonner";
 const salesRest = new SalesRest()
 
 export default function UploadVoucherModalBancs({ 
@@ -36,11 +36,11 @@ export default function UploadVoucherModalBancs({
         if (saving) return; // Evita múltiples ejecuciones
         
         if (!voucher) {
-            Notify.add({
-                icon: "/assets/img/icon.svg",
-                title: "Error al subir comprobante",
-                body: "Por favor, sube tu comprobante de pago",
-                type: "danger",
+            toast.success('Error al procesar el pago:', {
+                description: `Ocurrió un error al procesar tu pago`,
+                icon: <CircleX className="h-5 w-5 text-red-500" />,
+                duration: 3000,
+                position: 'top-right',
             });
             return;
         }
@@ -70,11 +70,11 @@ export default function UploadVoucherModalBancs({
             }
         } catch (error) {
             console.error("Error al procesar el pago:", );
-            Notify.add({
-                icon: "/assets/img/icon.svg",
-                title: "Ocurrió un error al procesar tu pago",
-                body: error,
-                type: "danger",
+            toast.success('Error al procesar el pago:', {
+                description: `Ocurrió un error al procesar tu pago`,
+                icon: <CircleX className="h-5 w-5 text-red-500" />,
+                duration: 3000,
+                position: 'top-right',
             });
         } finally {
             setSaving(false); // Rehabilita el botón en caso de error

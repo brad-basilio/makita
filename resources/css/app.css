@@ -43,6 +43,11 @@
   @apply  !z-50;
 }
 
+#main-header {
+  position: -webkit-sticky; /* Para Safari */
+  position: sticky;
+  top: 0;
+}
   /*  */
   
   /* @layer utilities {

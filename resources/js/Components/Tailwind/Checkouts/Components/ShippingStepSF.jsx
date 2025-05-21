@@ -9,7 +9,7 @@ import ButtonSecondary from "./ButtonSecondary";
 import InputForm from "./InputForm";
 import SelectForm from "./SelectForm";
 import OptionCard from "./OptionCard";
-import { CheckCircleIcon, InfoIcon } from "lucide-react";
+import { CheckCircleIcon, CircleX, InfoIcon } from "lucide-react";
 import { Notify } from "sode-extend-react";
 import { renderToString } from "react-dom/server";
 import { debounce } from "lodash";
@@ -184,12 +184,12 @@ export default function ShippingStepSF({
             setEnvio(options[0].price);
         } catch (error) {
             console.error("Error al obtener precios de envío:", error);
-            // Notify.add({
-            //     icon: "/assets/img/icon.svg",
-            //     title: "Sin cobertura",
-            //     body: "No realizamos envíos a esta ubicación",
-            //     type: "danger",
-            // });
+            toast.success('Sin cobertura', {
+                description: `No realizamos envíos a esta ubicación`,
+                icon: <CircleX className="h-5 w-5 text-red-500" />,
+                duration: 3000,
+                position: 'top-right',
+            });
             
             setShippingOptions([]);
             setSelectedOption(null);
@@ -467,32 +467,26 @@ export default function ShippingStepSF({
             e.preventDefault();
         }
 
-        if (!user) {
-            // Notify.add({
-            //     icon: "/assets/img/icon.svg",
-            //     title: "Iniciar Sesión",
-            //     body: "Se requiere que incie sesión para realizar la compra",
-            //     type: "danger",
-            // });
-            toast.success('Iniciar Sesión', {
-                description: `Se requiere que incie sesión para realizar la compra`,
-                icon: <CheckCircleIcon className="h-5 w-5 text-green-500" />,
-                duration: 3000,
-                position: 'top-right',
-            });
-            return;
-        }
+        // if (!user) {
+        //     toast.success('Iniciar Sesión', {
+        //         description: `Se requiere que incie sesión para realizar la compra`,
+        //         icon: <CircleX className="h-5 w-5 text-red-500" />,
+        //         duration: 3000,
+        //         position: 'top-right',
+        //     });
+        //     return;
+        // }
 
         if (!validateForm()) {
             return;
         }
     
         if (!selectedOption) {
-            Notify.add({
-                icon: "/assets/img/icon.svg",
-                title: "Seleccione envío",
-                body: "Debe elegir un método de envío",
-                type: "danger",
+            toast.success('Seleccione envío', {
+                description: `Debe elegir un método de envío`,
+                icon: <CircleX className="h-5 w-5 text-red-500" />,
+                duration: 3000,
+                position: 'top-right',
             });
             return;
         }
@@ -568,21 +562,21 @@ export default function ShippingStepSF({
                         setCode(data.code);
                         
                     } else {
-                        Notify.add({
-                            icon: "/assets/img/icon.svg",
-                            title: "Error en el Pago",
-                            body: "El pago ha sido rechazado",
-                            type: "danger",
+                        toast.success('Error en el Pago', {
+                            description: `El pago ha sido rechazado`,
+                            icon: <CircleX className="h-5 w-5 text-red-500" />,
+                            duration: 3000,
+                            position: 'top-right',
                         });
                     }
                 } catch (error) {
                     console.log(error);
-                    // Notify.add({
-                    //     icon: "/assets/img/icon.svg",
-                    //     title: "Error en el Pago",
-                    //     body: "No se llegó a procesar el pago",
-                    //     type: "danger",
-                    // });
+                    toast.success('Error en el Pago', {
+                        description: `No se llegó a procesar el pago`,
+                        icon: <CircleX className="h-5 w-5 text-red-500" />,
+                        duration: 3000,
+                        position: 'top-right',
+                    });
                 }
             }else if(paymentMethod === "yape") {
 
@@ -648,11 +642,11 @@ export default function ShippingStepSF({
             }
         } catch (error) {
             console.error("Error en el pago:", error);
-            Notify.add({
-                icon: "/assets/img/icon.svg",
-                title: "Error en el Pago",
-                body: "No se pudo procesar el pago",
-                type: "danger",
+            toast.success('Error en el Pago', {
+                description: `No se llegó a procesar el pago`,
+                icon: <CircleX className="h-5 w-5 text-red-500" />,
+                duration: 3000,
+                position: 'top-right',
             });
         }
     };
