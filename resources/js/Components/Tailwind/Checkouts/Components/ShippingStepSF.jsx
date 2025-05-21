@@ -9,7 +9,7 @@ import ButtonSecondary from "./ButtonSecondary";
 import InputForm from "./InputForm";
 import SelectForm from "./SelectForm";
 import OptionCard from "./OptionCard";
-import { InfoIcon } from "lucide-react";
+import { CheckCircleIcon, InfoIcon } from "lucide-react";
 import { Notify } from "sode-extend-react";
 import { renderToString } from "react-dom/server";
 import { debounce } from "lodash";
@@ -18,7 +18,8 @@ import AsyncSelect from "react-select/async";
 import PaymentModal from "./PaymentModal";
 import UploadVoucherModalYape from "./UploadVoucherModalYape";
 import UploadVoucherModalBancs from "./UploadVoucherModalBancs";
-
+import { toast } from "sonner";
+import Global from "../../../../Utils/Global";
 
 export default function ShippingStepSF({
     cart,
@@ -183,12 +184,13 @@ export default function ShippingStepSF({
             setEnvio(options[0].price);
         } catch (error) {
             console.error("Error al obtener precios de envío:", error);
-            Notify.add({
-                icon: "/assets/img/icon.svg",
-                title: "Sin cobertura",
-                body: "No realizamos envíos a esta ubicación",
-                type: "danger",
-            });
+            // Notify.add({
+            //     icon: "/assets/img/icon.svg",
+            //     title: "Sin cobertura",
+            //     body: "No realizamos envíos a esta ubicación",
+            //     type: "danger",
+            // });
+            
             setShippingOptions([]);
             setSelectedOption(null);
             setEnvio(0);
@@ -466,11 +468,17 @@ export default function ShippingStepSF({
         }
 
         if (!user) {
-            Notify.add({
-                icon: "/assets/img/icon.svg",
-                title: "Iniciar Sesión",
-                body: "Se requiere que incie sesión para realizar la compra",
-                type: "danger",
+            // Notify.add({
+            //     icon: "/assets/img/icon.svg",
+            //     title: "Iniciar Sesión",
+            //     body: "Se requiere que incie sesión para realizar la compra",
+            //     type: "danger",
+            // });
+            toast.success('Iniciar Sesión', {
+                description: `Se requiere que incie sesión para realizar la compra`,
+                icon: <CheckCircleIcon className="h-5 w-5 text-green-500" />,
+                duration: 3000,
+                position: 'top-right',
             });
             return;
         }
