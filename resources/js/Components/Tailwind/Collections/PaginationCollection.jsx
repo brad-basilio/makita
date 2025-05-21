@@ -54,7 +54,7 @@ const PaginationCollection = ({
   return (
     <section className="p-[5%] font-font-general">
       <div className="w-full px-primary">
-        <h2 className="text-6xl pb-4 sm:pb-8 text-left sm:text-center tracking-normal customtext-neutral-dark max-w-5xl mx-auto 2xl:max-w-7xl">
+        <h2 className="text-3xl sm:text-4xl lg:text-[42px] 2xl:text-5xl font-semibold tracking-normal customtext-neutral-dark max-w-5xl 2xl:max-w-6xl">
           {data?.title}
         </h2>
 

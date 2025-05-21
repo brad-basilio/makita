@@ -21,6 +21,20 @@ const HeaderSearchMenuSF = ({
   const [openMenu, setOpenMenu] = useState(false);
   const menuRef = useRef(null);
 
+  // Efecto para controlar el overflow del body
+  useEffect(() => {
+    if (openMenu) {
+      document.body.classList.add('overflow-hidden');
+    } else {
+      document.body.classList.remove('overflow-hidden');
+    }
+
+    // Limpieza al desmontar el componente
+    return () => {
+      document.body.classList.remove('overflow-hidden');
+    };
+  }, [openMenu]);
+
   const getContact = (correlative) => {
     return (
         contacts.find((contact) => contact.correlative === correlative)
@@ -141,7 +155,6 @@ const HeaderSearchMenuSF = ({
             </div>
           </nav>
         </div>
-
       </div>
 
       <div className="flex justify-end relative">
