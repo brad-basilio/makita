@@ -45,7 +45,7 @@ const HeaderSearchMenuSF = ({
 
 
   return (
-    <header id="main-header" className="sticky top-0 w-full z-20 bg-white font-font-general">
+    <header id="main-header" className="fixed top-0 w-full z-20 bg-white font-font-general">
 
       <TopBarCart
         data={data}
@@ -54,7 +54,6 @@ const HeaderSearchMenuSF = ({
         setCart={setCart}
         isUser={isUser}
       />
-
 
       <div className="left-0 right-0">
         <div className="flex justify-between w-full px-[5%]">
@@ -144,7 +143,6 @@ const HeaderSearchMenuSF = ({
         </div>
 
       </div>
-
 
       <div className="flex justify-end relative">
         <div className="fixed bottom-[36px] z-[10] right-[15px] md:right-[25px] animate-bounce animate-twice">
