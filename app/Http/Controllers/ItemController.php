@@ -154,14 +154,19 @@ class ItemController extends BasicController
 
         try {
             //code...
+          
             $i4price = clone $builder;
-            $minPrice = 0;
+            $minPrice = $i4price->min('final_price');
             $maxPrice = $i4price->max('final_price') ?? 0;
             $rangeSize = round($maxPrice / 6); // Define el tamaño del rango
 
             // Calcular rangos de precio
+            $countQuery = clone $builder;
+            $countQuery->getQuery()->limit = null;
+            $countQuery->getQuery()->offset = null;
+            $totalItems = $countQuery->count();
             $ranges = [];
-            if ($maxPrice >= 6) {
+            if ($totalItems > 10 && $maxPrice >= 6) {
                 for ($i = $minPrice; $i <= $maxPrice; $i += $rangeSize) {
                     $ranges[] = [
                         'min' => $i,
@@ -189,7 +194,7 @@ class ItemController extends BasicController
                 'tags' => $tags
             ];
         } catch (\Throwable $th) {
-           // dump($th->getMessage());
+            // dump($th->getMessage());
             return [];
         }
     }
