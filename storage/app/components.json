@@ -57,7 +57,7 @@
                 "name": "Menu - Stech",
                 "image": "top-bar-simple.png",
                 "data": [
-                    "showCategoqries"
+                    "showCategories"
                   
                 ],
                 "using": {
