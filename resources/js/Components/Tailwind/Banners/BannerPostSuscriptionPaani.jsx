@@ -81,26 +81,26 @@ const BannerPostSuscriptionPaani = ({ data, items }) => {
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
             variants={containerVariants}
-            className="w-full mx-auto px-[5%] font-paragraph customtext-neutral-dark mb-8 2xl:px-0 2xl:max-w-7xl"
+            className="py-10  w-full mx-auto px-primary font-paragraph customtext-neutral-dark 2xl:px-0 2xl:max-w-7xl"
         >
-            <motion.div variants={itemVariants} className="flex flex-col lg:flex-row justify-between lg:items-center mb-6">
-                <h2 className="text-[32px] leading-9 font-semibold mb-2 md:mb-0">
+            <motion.div variants={itemVariants} className="flex flex-col lg:flex-row justify-between lg:items-center ">
+                <h2 className="text-[32px] leading-9 font-semibold  md:mb-0">
                     {data?.title}
                 </h2>
                 <motion.a
-                    href={data?.button_link}
+                    href={data?.link_button}
                     className="font-bold"
                     whileHover={{ x: 5 }}
                     transition={{ type: "spring", stiffness: 300 }}
                 >
-                    {data?.button_text}{" "}
+                    {data?.text_button}{" "}
                     <i className="mdi mdi-chevron-right"></i>
                 </motion.a>
             </motion.div>
 
             <motion.div
                 variants={containerVariants}
-                className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-16"
+                className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-10"
             >
                 <motion.div
                     variants={itemVariants}
@@ -151,7 +151,7 @@ const BannerPostSuscriptionPaani = ({ data, items }) => {
                         rotate: 0.5,
                         transition: { type: "spring", damping: 10 }
                     }}
-                    className="col-span-1 md:col-span-1 lg:col-span-1 rounded-2xl mt-2"
+                    className="col-span-1 md:col-span-1 lg:col-span-1 rounded-2xl"
                 >
                     <div className=" rounded-3xl overflow-hidden shadow-sm h-[500px] lg:h-full" style={{ backgroundImage: `url(/storage/images/system/${data?.background})`, backgroundSize: "cover", backgroundPosition: "top" }}>
 

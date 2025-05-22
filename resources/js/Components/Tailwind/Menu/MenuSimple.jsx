@@ -21,7 +21,7 @@ const MenuSimple = ({ pages = [], items,data }) => {
                 <ul className="flex items-center gap-6 text-sm">
                     {data?.showCategories && <li className="relative py-3">
                         <button
-                            className="customtext-neutral-dark flex items-center gap-2 hover:customtext-primary pr-6 transition-colors duration-300 relative before:absolute before:right-0 before:top-1/2 before:-translate-y-1/2 before:h-3 before:w-[1px] before:bg-[#262624]"
+                            className="font-medium customtext-neutral-dark flex items-center gap-2 hover:customtext-primary pr-6 transition-colors duration-300 relative before:absolute before:right-0 before:top-1/2 before:-translate-y-1/2 before:h-3 before:w-[1px] before:bg-[#262624]"
                             onClick={() => setIsMenuOpen(!isMenuOpen)}
                         >
                             Categorias
@@ -65,7 +65,7 @@ const MenuSimple = ({ pages = [], items,data }) => {
                                 <a
                                     href={page.path}
                                     className={
-                                        "hover:customtext-primary cursor-pointer transition-all duration-300 pr-6 relative" +
+                                        "font-medium hover:customtext-primary cursor-pointer transition-all duration-300 pr-6 relative" +
                                         (index !== arr.length - 1
                                             ? " before:absolute before:right-0 before:top-1/2 before:-translate-y-1/2 before:h-3 before:w-[1px] before:bg-[#262624]"
                                             : "")

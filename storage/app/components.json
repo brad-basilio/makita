@@ -1022,8 +1022,8 @@
                 "name": "BannerPostSuscriptionPaani",
                 "data": [
                     "title",
-                    "button_text",
-                    "button_link"
+                    "text_button",
+                    "link_button"
                 ],
                 "using": {
                     "model": "Post",

@@ -3449,7 +3449,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Banner.jsx": {
-    "file": "assets/Banner-BteQ8QFt.js",
+    "file": "assets/Banner-CK647ELH.js",
     "name": "Banner",
     "src": "resources/js/Components/Tailwind/Banner.jsx",
     "isDynamicEntry": true,
@@ -3515,7 +3515,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Banners/BannerPostSuscriptionPaani.jsx": {
-    "file": "assets/BannerPostSuscriptionPaani-DNl0ycBT.js",
+    "file": "assets/BannerPostSuscriptionPaani-aIBF-K6F.js",
     "name": "BannerPostSuscriptionPaani",
     "src": "resources/js/Components/Tailwind/Banners/BannerPostSuscriptionPaani.jsx",
     "isDynamicEntry": true,
@@ -5541,7 +5541,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Menu.jsx": {
-    "file": "assets/Menu-B_tHbTvF.js",
+    "file": "assets/Menu-Cy0YUblK.js",
     "name": "Menu",
     "src": "resources/js/Components/Tailwind/Menu.jsx",
     "isDynamicEntry": true,
@@ -6302,7 +6302,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Slider.jsx": {
-    "file": "assets/Slider-C57rT6YX.js",
+    "file": "assets/Slider-naVWKGC0.js",
     "name": "Slider",
     "src": "resources/js/Components/Tailwind/Slider.jsx",
     "isDynamicEntry": true,
@@ -7045,7 +7045,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-CoutVFPH.js",
+    "file": "assets/System-DpdRKxhG.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,
