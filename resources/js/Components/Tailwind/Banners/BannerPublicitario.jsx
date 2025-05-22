@@ -13,7 +13,7 @@ const BannerPublicitario = ({ data }) => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -100 }}
                 transition={{ duration: 1, ease: "easeOut" }}
-                className="px-primary 2xl:px-0 2xl:max-w-7xl mx-auto py-4 md:py-12"
+                className="px-primary font-paragraph 2xl:px-0 2xl:max-w-7xl mx-auto py-4 md:py-12"
             >
                 <motion.div
                     initial={{ scale: 0.95, opacity: 0 }}
@@ -30,7 +30,7 @@ const BannerPublicitario = ({ data }) => {
                     <div className={`flex flex-col md:flex-row items-center justify-between h-full gap-8 ${imagePosition === "left" ? "md:flex-row-reverse" : ""}`}>
                         {/* Imagen */}
                         <motion.div 
-                            className="order-1 md:order-none w-full md:w-7/12 relative z-10 flex items-center justify-center h-full"
+                            className="-mt-10 order-1 md:order-none w-full md:w-7/12 relative z-10 flex items-center justify-center h-full"
                         >
                             <motion.img
                                 whileHover={{ 
@@ -55,14 +55,14 @@ const BannerPublicitario = ({ data }) => {
                             initial={{ x: 200, opacity: 0 }}
                             animate={{ x: 0, opacity: 1 }}
                             transition={{ duration: 1, delay: 0.7 }}
-                            className={`md:order-1 md:w-5/12 text-white z-10 ${imagePosition === "left" ? "pl-16" : ""}`}
+                            className={`md:order-1 md:w-5/12 text-white z-10 ${imagePosition === "left" ? "lg:pl-16" : ""}`}
                         >
-                            <div className="max-w-lg bg-black/40 md:bg-transparent rounded-2xl p-4 md:p-0">
+                            <div className="w-full lg:max-w-lg bg-transparent rounded-2xl p-4 md:p-0">
                                 <motion.h1 
                                     initial={{ y: 50, opacity: 0 }}
                                     animate={{ y: 0, opacity: 1 }}
                                     transition={{ duration: 0.8, delay: 1 }}
-                                    className="text-[32px] md:text-5xl font-bold mb-4 font-font-primary drop-shadow-lg"
+                                    className="text-[32px] md:text-5xl font-bold mb-4 font-title drop-shadow-lg"
                                 >
                                     {data?.name}
                                 </motion.h1>
@@ -70,7 +70,7 @@ const BannerPublicitario = ({ data }) => {
                                     initial={{ y: 50, opacity: 0 }}
                                     animate={{ y: 0, opacity: 1 }}
                                     transition={{ duration: 0.8, delay: 1.2 }}
-                                    className="text-base md:text-lg mb-8 font-font-secondary drop-shadow"
+                                    className="text-base md:text-lg mb-8 font-paragraph drop-shadow"
                                 >
                                     {data?.description}
                                 </motion.p>

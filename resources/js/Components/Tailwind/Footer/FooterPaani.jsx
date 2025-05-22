@@ -89,7 +89,7 @@ export default function FooterPaani({ data = footerData, generals, socials }) {
                     {/* Logo y métodos de pago */}
                     <div className="md:col-span-3 flex flex-col items-start space-y-6">
 
-                        <img src={`/assets/resources/logo-footer.png?v=${crypto.randomUUID()}`} alt={Global.APP_NAME} className="h-24 object-contain" onError={(e) => {
+                        <img src={`/assets/resources/logo-footer.png?v=${crypto.randomUUID()}`} alt={Global.APP_NAME} className="h-20 lg:h-24 object-contain" onError={(e) => {
                             e.target.onerror = null;
                             e.target.src = '/assets/img/logo-bk.svg';
                         }} />
@@ -104,12 +104,12 @@ export default function FooterPaani({ data = footerData, generals, socials }) {
                                         <Tippy
                                             key={idx}
                                             content={`${name}`}>
-                                            <div key={trimmed} className="bg-white p-1 rounded-lg w-12 h-8 flex items-center justify-center">
+                                            <div key={trimmed} className="bg-white p-1 rounded-lg w-10 lg:w-12 h-8 flex items-center justify-center">
                                                 <span className="sr-only">{trimmed}</span>
                                                 <img
                                                     src={`/assets/payment-icons/${trimmed.toLowerCase().replace(/\s/g, "")}.png`}
                                                     alt={trimmed}
-                                                    className="h-8 object-contain"
+                                                    className="h-6 lg:h-8 object-contain"
                                                     onError={e => { e.target.src = "/assets/payment-icons/default.png"; }}
                                                 />
                                             </div>
@@ -119,11 +119,11 @@ export default function FooterPaani({ data = footerData, generals, socials }) {
                         </div>
                     </div>
 
-                    <div className="md:col-span-2 grid  md:grid-cols-2 gap-8">
+                    <div className="md:col-span-2 grid grid-cols-2 gap-8">
                         {/* Ubicación */}
                         <div className="flex flex-col space-y-4">
-                            <h3 className="text-xl font-semibold">Ubicanos</h3>
-                            <div className="space-y-2">
+                            <h3 className="text-base lg:text-xl font-semibold">Ubicanos</h3>
+                            <div className="text-sm lg:text-base space-y-2">
                                 <p>{getContact("address")}</p>
                                 <p>Teléfono: {getContact("support_phone")}</p>
                                 <p>Correo: {getContact("support_email")}</p>
@@ -132,10 +132,10 @@ export default function FooterPaani({ data = footerData, generals, socials }) {
 
                         {/* Políticas */}
                         <div>
-                            <h3 className="text-white font-bold mb-4 text-base">
+                            <h3 className="text-base lg:text-xl font-semibold text-white  mb-4 ">
                                 Políticas
                             </h3>
-                            <ul className="space-y-3 text-white">
+                            <ul className="text-sm lg:text-base  space-y-3 text-white">
                                 <li>
                                     <a
                                         onClick={() => openModal(0)}
@@ -183,8 +183,8 @@ export default function FooterPaani({ data = footerData, generals, socials }) {
 
                         {/* Horarios */}
                         <div className="flex flex-col space-y-4">
-                            <h3 className="text-xl font-semibold">Horario de atención</h3>
-                            <div className="space-y-1">
+                            <h3 className="text-base lg:text-xl font-semibold">Horario de atención</h3>
+                            <div className="text-sm lg:text-base  space-y-1">
                                 <p>{getContact("opening_hours")}</p>
 
                             </div>
@@ -192,8 +192,8 @@ export default function FooterPaani({ data = footerData, generals, socials }) {
 
                         {/* Redes sociales */}
                         <div className="flex flex-col space-y-4">
-                            <h3 className="text-xl font-semibold">Nuestras redes</h3>
-                            <div className="flex space-x-3">
+                            <h3 className="text-base  lg:text-xl font-semibold">Nuestras redes</h3>
+                            <div className="grid grid-cols-3 gap-y-3 lg:flex lg:space-x-3">
                                 {
                                     socials.map((social, index) => (
                                         <Tippy

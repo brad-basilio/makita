@@ -26,7 +26,7 @@ const TestimonialsPaani = ({items}) => {
     );
   };
     return (
-        <section className="w-full py-12 md:py-24 bg-white px-primary 2xl:px-0 2xl:max-w-7xl mx-auto  overflow-hidden">
+        <section className="hidden lg:block w-full py-12 md:py-24 bg-white px-primary 2xl:px-0 2xl:max-w-7xl mx-auto  overflow-hidden">
             <div className="  ">
                 <div className="grid grid-cols-1 md:grid-cols-5 gap-8 items-center ">
                    

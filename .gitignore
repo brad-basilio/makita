@@ -31,3 +31,5 @@ composer.lock
 /vite.config.js.timestamp*
 /storage/app/*_backup.sql
 /public/sitemap.xml
+/.env-useTunnel
+/vite.config-useTunnel.js

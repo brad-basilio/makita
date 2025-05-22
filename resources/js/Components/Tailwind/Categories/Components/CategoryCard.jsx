@@ -5,8 +5,8 @@ export default function CategoryCard({
 }) {
     return (
         <section
-            className={`group font-font-general text-white  w-full ${
-                featured ? " h-[500px]" : "h-[238px]"
+            className={`group font-paragraph text-white  w-full ${
+                featured ? "h-[300px] lg:h-[500px]" : "h-[238px]"
             }`}
         >
             <a href={`/catalogo?category=${category.slug}`} className={` ${flex && "flex gap-4 h-full"}`}>

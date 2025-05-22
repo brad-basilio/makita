@@ -83,7 +83,7 @@ const BannerPostSuscriptionPaani = ({ data, items }) => {
             variants={containerVariants}
             className="w-full mx-auto px-[5%] font-paragraph customtext-neutral-dark mb-8 2xl:px-0 2xl:max-w-7xl"
         >
-            <motion.div variants={itemVariants} className="flex justify-between items-center mb-6">
+            <motion.div variants={itemVariants} className="flex flex-col lg:flex-row justify-between lg:items-center mb-6">
                 <h2 className="text-[32px] leading-9 font-semibold mb-2 md:mb-0">
                     {data?.title}
                 </h2>
@@ -153,7 +153,7 @@ const BannerPostSuscriptionPaani = ({ data, items }) => {
                     }}
                     className="col-span-1 md:col-span-1 lg:col-span-1 rounded-2xl mt-2"
                 >
-                    <div className=" rounded-3xl overflow-hidden shadow-sm h-full" style={{ backgroundImage: `url(/storage/images/system/${data?.background})`, backgroundSize: "cover", backgroundPosition: "top" }}>
+                    <div className=" rounded-3xl overflow-hidden shadow-sm h-[500px] lg:h-full" style={{ backgroundImage: `url(/storage/images/system/${data?.background})`, backgroundSize: "cover", backgroundPosition: "top" }}>
 
                         <div className="relative z-10 flex flex-col justify-end h-full px-6 py-10 w-full">
                             <h2 className="text-3xl md:text-4xl font-bold text-white mb-3 drop-shadow-lg">

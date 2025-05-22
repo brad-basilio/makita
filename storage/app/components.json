@@ -201,6 +201,7 @@
             {
                 "id": "CarruselBenefitsPaani",
                 "name": "Beneficios Paani",
+               
                 "using": {
                     "model": "Indicator"
                 }
@@ -741,6 +742,7 @@
                     "path",
                     "title",
                     "description",
+                    "text_button",
                     "link_catalog"
                 ],
                 "using": {

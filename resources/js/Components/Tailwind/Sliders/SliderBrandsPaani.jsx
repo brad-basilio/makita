@@ -42,7 +42,7 @@ const SliderBrandsPaani = ({ items, data }) => {
                             disableOnInteraction: false,
                         }}
                         spaceBetween={30}
-                        slidesPerView={1}
+                        slidesPerView={1.5}
                         breakpoints={{
                             640: { slidesPerView: 3 },
                             1024: {
@@ -56,15 +56,15 @@ const SliderBrandsPaani = ({ items, data }) => {
                             <SwiperSlide key={index}>
                                 <div 
                                     className="group w-full flex items-center justify-center px-2 font-font-secondary"
-                                    style={{ height: imagesLoaded ? '80px' : 'auto' }}
+                                    style={{ height: imagesLoaded ? '100px' : 'auto' }} // Aumenta la altura base en mobile
                                 >
                                     <img
                                         src={`/storage/images/brand/${brand.image}`}
                                         alt={brand.name}
-                                        className="brand-logo max-h-[60px] w-auto object-contain  hover:scale-105 transition-transform cursor-pointer"
+                                        className="brand-logo max-h-[90px] md:max-h-[60px] w-auto object-contain hover:scale-105 transition-transform cursor-pointer"
                                         onLoad={handleImagesLoad}
                                         style={{
-                                            maxWidth: '80%',
+                                            maxWidth: '100%',
                                             objectFit: 'contain',
                                             objectPosition: 'center'
                                         }}

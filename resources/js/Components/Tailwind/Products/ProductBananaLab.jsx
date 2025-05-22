@@ -46,7 +46,7 @@ const ProductBananaLab = ({ items, data, setCart, cart ,setFavorites,favorites})
                     </h2>
                     <a
                         href={data?.link_catalog}
-                        className="bg-white customtext-primary border border-primary transition-all duration-300   flex justify-center flex-row items-center gap-3   px-10  py-3 text-base rounded-full  tracking-wide font-bold cursor-pointer hover:opacity-90 lg:bg-primary "
+                        className="hidden lg:flex bg-white customtext-primary border border-primary transition-all duration-300    justify-center flex-row items-center gap-3   px-10  py-3 text-base rounded-full  tracking-wide font-bold cursor-pointer hover:opacity-90 lg:bg-primary "
                     >
                             {data?.text_button || 'Ver más recomendaciones'} 
                     </a>
