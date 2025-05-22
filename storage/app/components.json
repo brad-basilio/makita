@@ -58,7 +58,6 @@
                 "image": "top-bar-simple.png",
                 "data": [
                     "showCategories"
-                  
                 ],
                 "using": {
                     "model": "Category",

@@ -2,7 +2,7 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import Global from "../../../Utils/Global";
 
-const MenuSimple = ({ pages = [], items,data }) => {
+const MenuSimple = ({ pages = [], items, data }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const menuRef = useRef(null);
 
@@ -15,6 +15,7 @@ const MenuSimple = ({ pages = [], items,data }) => {
         document.addEventListener("pointerdown", handleClickOutside);
         return () => document.removeEventListener("pointerdown", handleClickOutside);
     }, []);
+console.log("items", data)
 
     return (
         <nav className={`${Global.APP_CORRELATIVE==="stechperu"? "hidden":"overflow-x-hidden w-full"} md:block bg-secondary font-paragraph text-sm`} ref={menuRef}>
