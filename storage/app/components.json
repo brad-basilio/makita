@@ -1147,6 +1147,21 @@
                     "flied": "slug"
                 }
             },
+             {
+                "id": "ProductDetailPaani",
+                "name": "ProductDetailPaani",
+                "data": [
+                    "link_cart"
+                ],
+                "using": {
+                    "model": "Item",
+                    "flied": "slug"
+                },
+                "generals": [
+                    "phone_whatsapp",
+                    "message_whatsapp"
+                ]
+            },
             {
                 "id": "ProductDetailSF",
                 "name": "ProductDetailSF",
