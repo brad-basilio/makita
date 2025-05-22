@@ -120,9 +120,7 @@ export default function BlogHeader({
           {
             data?.description &&
             <p className="customtext-neutral-dark opacity-80 text-base 2xl:text-xl">
-              Nuestros juguetes están diseñados para inspirar, educar
-              y divertir, desarrollando habilidades esenciales desde
-              temprana edad.
+            { data?.description}
             </p>
           }
         </div>
@@ -169,7 +167,7 @@ export default function BlogHeader({
 
         {/* Featured Posts */}
         {!isFilter && (
-          <div className="mt-12 flex gap-8 bg-accent p-[2.5%] rounded-2xl">
+          <div className="mt-12 flex gap-8 py-[2.5%] rounded-2xl">
             <div className="w-full md:w-1/2">
               <BlogPostCard data={data} featured post={headerPosts[0]} />
             </div>

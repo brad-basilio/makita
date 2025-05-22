@@ -3595,7 +3595,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Blog.jsx": {
-    "file": "assets/Blog-s9-zjv47.js",
+    "file": "assets/Blog-CtiMdyfX.js",
     "name": "Blog",
     "src": "resources/js/Components/Tailwind/Blog.jsx",
     "isDynamicEntry": true,
@@ -3635,7 +3635,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Blogs/BlogSimple.jsx": {
-    "file": "assets/BlogSimple-C1Su4UAR.js",
+    "file": "assets/BlogSimple-nNgjHo6m.js",
     "name": "BlogSimple",
     "src": "resources/js/Components/Tailwind/Blogs/BlogSimple.jsx",
     "isEntry": true,
@@ -5541,7 +5541,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Menu.jsx": {
-    "file": "assets/Menu-Cy0YUblK.js",
+    "file": "assets/Menu-Ci6pQ0h9.js",
     "name": "Menu",
     "src": "resources/js/Components/Tailwind/Menu.jsx",
     "isDynamicEntry": true,
@@ -7090,7 +7090,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-DkB7nwwh.js",
+    "file": "assets/System-CrrKbaWg.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,

@@ -1,5 +1,6 @@
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import Global from "../../../Utils/Global";
 
 const MenuSimple = ({ pages = [], items,data }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -16,9 +17,9 @@ const MenuSimple = ({ pages = [], items,data }) => {
     }, []);
 
     return (
-        <nav className="hidden md:block bg-secondary font-paragraph text-sm" ref={menuRef}>
-            <div className="px-primary 2xl:px-0 2xl:max-w-7xl mx-auto">
-                <ul className="flex items-center gap-6 text-sm">
+        <nav className={`${Global.APP_CORRELATIVE==="stechperu"? "hidden":"overflow-x-hidden w-full"} md:block bg-secondary font-paragraph text-sm`} ref={menuRef}>
+            <div className="px-primary  2xl:px-0 2xl:max-w-7xl mx-auto">
+                <ul className="flex items-center gap-4 lg:gap-6 text-sm">
                     {data?.showCategories && <li className="relative py-3">
                         <button
                             className="font-medium customtext-neutral-dark flex items-center gap-2 hover:customtext-primary pr-6 transition-colors duration-300 relative before:absolute before:right-0 before:top-1/2 before:-translate-y-1/2 before:h-3 before:w-[1px] before:bg-[#262624]"
