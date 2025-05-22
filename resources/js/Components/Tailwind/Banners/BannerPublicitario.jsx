@@ -30,7 +30,7 @@ const BannerPublicitario = ({ data }) => {
                     <div className={`flex flex-col md:flex-row items-center justify-between h-full gap-8 ${imagePosition === "left" ? "md:flex-row-reverse" : ""}`}>
                         {/* Imagen */}
                         <motion.div 
-                            className="-mt-10 order-1 md:order-none w-full md:w-7/12 relative z-10 flex items-center justify-center h-full"
+                            className="-mt-10 lg:mt-0  order-1 md:order-none w-full md:w-7/12 relative z-10 flex items-center justify-center h-full"
                         >
                             <motion.img
                                 whileHover={{ 

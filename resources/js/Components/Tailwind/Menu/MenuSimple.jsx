@@ -16,7 +16,7 @@ const MenuSimple = ({ pages = [], items,data }) => {
     }, []);
 
     return (
-        <nav className="hidden md:block bg-secondary font-font-secondary font-normal text-sm" ref={menuRef}>
+        <nav className="hidden md:block bg-secondary font-paragraph text-sm" ref={menuRef}>
             <div className="px-primary 2xl:px-0 2xl:max-w-7xl mx-auto">
                 <ul className="flex items-center gap-6 text-sm">
                     {data?.showCategories && <li className="relative py-3">

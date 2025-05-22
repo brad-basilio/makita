@@ -28,7 +28,7 @@ const SliderBrandsPaani = ({ items, data }) => {
     return (
         <div className="bg-secondary">
           <div className="w-full flex items-center justify-center">
-              <h2 className="text-[36px] max-w-sm leading-tight md:text-5xl text-center font-bold font-title customtext-primary py-4 md:py-8">
+              <h2 className="text-[36px] max-w-sm leading-tight md:text-5xl lg:max-w-lg  text-center font-bold font-title customtext-primary py-4 md:py-8">
                 {data?.title}
             </h2>
           </div>
