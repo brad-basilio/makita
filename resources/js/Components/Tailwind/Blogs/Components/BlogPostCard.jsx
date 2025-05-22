@@ -22,7 +22,7 @@ export default function BlogPostCard({ data, flex = false, post, featured = fals
           <h3 className="text-lg line-clamp-3 lg:line-clamp-4 2xl:text-2xl font-semibold customtext-neutral-dark group-hover:customtext-primary leading-tight">
             {post?.name}
           </h3>
-          <p className="line-clamp-3 font-title customtext-neutral-dark opacity-85 text-sm 2xl:text-xl leading-tight">
+          <p className="line-clamp-3  customtext-neutral-dark opacity-85 text-sm 2xl:text-xl leading-tight">
             {post?.summary}
           </p>
           <div className="flex items-center gap-2 text-sm text-gray-500">

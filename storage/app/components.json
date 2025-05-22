@@ -461,7 +461,11 @@
                     "path",
                     "title",
                     "description",
-                    "link_cart"
+                    "link_cart",
+                    "collection",
+                    "category",
+                    "brand",
+                    "color"
                 ],
                 "options": [
                     {

@@ -5,9 +5,11 @@ import {
     ChevronDown,
     ChevronLeft,
     ChevronRight,
+    ChevronUp,
     Filter,
     Search,
     Tag,
+    X,
 } from "lucide-react";
 import ItemsRest from "../../../Actions/ItemsRest";
 import ArrayJoin from "../../../Utils/ArrayJoin";
@@ -15,35 +17,45 @@ import { Loading } from "../Components/Resources/Loading";
 import { NoResults } from "../Components/Resources/NoResult";
 import SelectForm from "./Components/SelectForm";
 import ProductCard from "../Components/ProductCard";
-import ProductCardSimple from "../Products/Components/ProductCardSimple";
+
+import ProductCardColors from "../Products/Components/ProductCardColors.jsx";
+import { GET } from "sode-extend-react";
 
 const itemsRest = new ItemsRest();
 
 //const FilterSalaFabulosa = ({ items, data, categories, brands, prices, cart, setCart }) => {
 const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
-    const { collections, categories, brands, priceRanges } = filteredData;
-    console.log(collections);
+    // const { collections, categories, brands, priceRanges } = filteredData;
+    const [collections, setCollections] = useState([]);
+    const [brands, setBrands] = useState([]);
+    const [subcategories, setSubcategories] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [priceRanges, setPriceRanges] = useState([]);
+
+
+
+
     const [sections, setSections] = useState({
-        collection: true,
-        marca: true,
+        collection: data?.collection ? true : false,
+        marca: data?.brand ? true : false,
         precio: true,
-        categoria: true,
-        colores: false,
+        categoria: data?.category ? true : false,
+        colores: data?.color ? true : false,
     });
 
     const [selectedFilters, setSelectedFilters] = useState({
-        collection_id: [],
-        category_id: [], // Array para múltiples categorías
-        brand_id: [], // Array para múltiples marcas
-        subcategory_id: [],
+        collection_id: GET.collection ? GET.collection.split(',') : [],
+        category_id: GET.category ? GET.category.split(',') : [],
+        brand_id: GET.brand ? GET.brand.split(',') : [],
+        subcategory_id: GET.subcategory ? GET.subcategory.split(',') : [],
         price: null,
-        name: null,
+        name: GET.search || null,
         sort_by: "created_at",
         order: "desc",
     });
 
     const [products, setProducts] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [pagination, setPagination] = useState({
         currentPage: 1,
         totalPages: 1,
@@ -58,45 +70,46 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
 
         if (filters.collection_id.length > 0) {
             const collectionConditions = filters.collection_id.map((id) => [
-                "collection_id",
+                "collection.slug",
                 "=",
                 id,
             ]);
-            transformedFilters.push(["or", ...collectionConditions]);
+            transformedFilters.push([...collectionConditions]);
         }
         // Categorías
 
         if (filters.category_id.length > 0) {
             const categoryConditions = filters.category_id.map((id) => [
-                "category_id",
+                "category.slug",
                 "=",
                 id,
             ]);
-            transformedFilters.push(["or", ...categoryConditions]);
+            transformedFilters.push([...categoryConditions]);
         }
         //subcategorias
         if (filters.subcategory_id.length > 0) {
             const subcategoryConditions = filters.subcategory_id.map((id) => [
-                "subcategory_id",
+                "subcategory.slug",
                 "=",
                 id,
             ]);
-            transformedFilters.push(["and", ...subcategoryConditions]);
+            transformedFilters.push([...subcategoryConditions]);
         }
         // Marcas
         if (filters.brand_id.length > 0) {
             const brandConditions = filters.brand_id.map((id) => [
-                "brand_id",
+                "brand.slug",
                 "=",
                 id,
             ]);
-            transformedFilters.push(["or", ...brandConditions]);
+            transformedFilters.push([...brandConditions]);
         }
 
         // Precio
+
         if (filters.price) {
             transformedFilters.push([
-                "and",
+                "or",
                 [
                     ["final_price", ">=", filters.price.min],
                     "and",
@@ -109,7 +122,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
         if (filters.name) {
             transformedFilters.push(["name", "contains", filters.name]);
         }
-        return transformedFilters;
+        return ArrayJoin(transformedFilters, 'and');
     };
     // Obtener productos filtrados desde el backend
     const fetchProducts = async (page = 1) => {
@@ -117,6 +130,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
         try {
             // Transformar los filtros al formato esperado por el backend
             const filters = transformFilters(selectedFilters);
+            console.log(filters);
             const params = {
                 filter: filters, // Envía los filtros transformados
                 sort: selectedFilters.sort, // Enviar el parámetro de ordenación
@@ -142,6 +156,12 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                     response.totalCount
                 ),
             });
+            console.log(response);
+            setCollections(response?.summary.collections);
+            setBrands(response?.summary.brands);
+            setCategories(response?.summary.categories);
+            setSubcategories(response?.summary.subcategories);
+            setPriceRanges(response?.summary.priceRanges);
         } catch (error) {
             console.error("Error fetching products:", error);
         } finally {
@@ -184,47 +204,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
         });
     };
 
-    useEffect(() => {
-        const params = new URLSearchParams(window.location.search);
-        const categoriaParam = params.get("category");
 
-        if (categoriaParam) {
-            const category = categories.find(
-                (item) => item.slug === categoriaParam
-            ); // Usa .find() en lugar de .filter()
-
-            if (category) {
-                setSelectedFilters((prev) => ({
-                    ...prev,
-                    category_id: [category.id], // Asegúrate de que `category.id` exista
-                }));
-            }
-        }
-
-        const collectionParam = params.get("collection");
-
-        if (collectionParam) {
-            const collection = collections.find(
-                (item) => item.slug === collectionParam
-            ); // Usa .find() en lugar de .filter()
-
-            if (collection) {
-                setSelectedFilters((prev) => ({
-                    ...prev,
-                    collection_id: [collection.id], // Asegúrate de que `category.id` exista
-                }));
-            }
-        }
-
-        const searchParam = params.get("search");
-
-        if (searchParam) {
-            setSelectedFilters((prev) => ({
-                ...prev,
-                name: searchParam, // Asegúrate de que `category.id` exista
-            }));
-        }
-    }, [items]); // Agrega `items` como dependencia
 
     // Manejar cambios en los filtros
     const handleFilterChange = (type, value) => {
@@ -235,8 +215,8 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                     ...prev,
                     price:
                         prev.price &&
-                        prev.price.min === value.min &&
-                        prev.price.max === value.max
+                            prev.price.min === value.min &&
+                            prev.price.max === value.max
                             ? null
                             : value,
                 };
@@ -262,6 +242,19 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
         }));
     };
 
+    // const toggleSection = (section) => {
+    //     setSections((prev) => {
+    //       // Si la sección clickeada ya está abierta, no hacemos nada
+    //       if (prev[section]) return prev;
+
+    //       // Crear nuevo estado con solo esta sección abierta
+    //       return Object.keys(prev).reduce((acc, key) => {
+    //         acc[key] = key === section;
+    //         return acc;
+    //       }, {});
+    //     });
+    // };
+
     const sortOptions = [
         { value: "created_at:desc", label: "Más reciente" },
         { value: "created_at:asc", label: "Mas antiguo" },
@@ -274,7 +267,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
     const [searchCategory, setSearchCategory] = useState("");
     const [searchCollection, setSearchCollection] = useState("");
     const [searchBrand, setSearchBrand] = useState("");
-    const filteredCollections = collections.filter((collection) =>
+    const filteredCollections = collections?.filter((collection) =>
         collection.name.toLowerCase().includes(searchCollection.toLowerCase())
     );
     // Filtrar categorías según el input
@@ -286,267 +279,205 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
     const filteredBrands = brands.filter((brand) =>
         brand.name.toLowerCase().includes(searchBrand.toLowerCase())
     );
+    const [filtersOpen, setFiltersOpen] = useState(false); // Añadir estado para mobile
 
     return (
-        <section className="py-6  font-font-general customtext-primary">
+        <section className="py-6 font-font-general customtext-primary">
             <div className="mx-auto px-primary">
-                <div className="relative flex flex-col sm:flex-row gap-4">
-                    <div className="w-full sm:w-1/5 bg-white p-4 rounded-lg h-max">
-                        <p className="customtext-primary text-2xl font-bold pb-4 mb-4 border-b">
-                            Combina como desees tu sala
-                        </p>
+                {/* Botón para móvil */}
+                <button
+                    onClick={() => setFiltersOpen(true)}
+                    className="w-auto lg:hidden flex gap-2 items-center mb-4 p-3 bg-white rounded-lg shadow-sm"
+                >
+                    <Filter className="h-5 w-5" />
+                    <span className="font-semibold">Mostrar filtros</span>
+                </button>
 
-                        {/* <div className="mb-6">
-                            <button
-                                onClick={() => toggleSection("marca")}
-                                className="flex items-center justify-between w-full mb-4"
-                            >
-                                <span className="font-semibold text-lg">
-                                    Marca
-                                </span>
-                                <ChevronDown
-                                    className={`h-5 w-5 transform transition-transform ${
-                                        sections.marca ? "" : "-rotate-180"
-                                    }`}
-                                />
+                <div className="relative flex flex-col sm:flex-row gap-4">
+                    {/* Contenedor de Filtros (Modificado para mobile) */}
+                    <div className={`${filtersOpen
+                        ? "fixed inset-0 z-50 bg-white flex flex-col h-screen"
+                        : "hidden"
+                        } lg:block lg:w-1/4 lg:bg-white lg:p-4 lg:rounded-lg lg:h-max`}
+                    >
+                        {/* Header móvil */}
+                        <div className="fixed top-0 left-0 right-0 bg-white p-4 border-b z-10 h-16 flex items-center justify-between lg:hidden">
+                            <h2 className="text-xl font-bold">Filtros</h2>
+                            <button onClick={() => setFiltersOpen(false)}>
+                                <X className="h-5 w-5" />
                             </button>
-                            {sections.marca && (
-                                <div className="space-y-4">
-                                    <div className="relative">
-                                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                                        <input
-                                            type="text"
-                                            placeholder="Buscar"
-                                            className={`w-full px-4 pl-10 py-3 border customtext-neutral-dark  border-neutral-ligth rounded-xl focus:ring-0 focus:outline-0   transition-all duration-300`}
-                                            value={searchBrand}
-                                            onChange={(e) =>
-                                                setSearchBrand(e.target.value)
-                                            }
-                                        />
+                        </div>
+
+                        {/* Contenido con scroll */}
+                        <div className="flex-1 overflow-y-auto px-4 mt-16 pb-20 lg:mt-0 lg:pb-0 lg:px-0">
+                            <p className="customtext-primary text-2xl font-bold pb-4 mb-4 border-b lg:block hidden">
+                                {data?.title}
+                            </p>
+
+                            {/* Colecciones (Mejorado) */}
+                            {data?.collection && (<div className="mb-6">
+                                <button
+                                    onClick={() => toggleSection("collection")}
+                                    className="flex items-center justify-between w-full mb-0 p-2 lg:p-0"
+                                >
+                                    <span className="font-medium">Colecciones</span>
+                                    <ChevronUp
+                                        className={`h-5 w-5 transform transition-transform ${sections.collection ? "" : "-rotate-180"
+                                            }`}
+                                    />
+                                </button>
+                                {sections.collection && (
+                                    <div className="space-y-4">
+                                        <div className="relative hidden md:flex">
+                                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                                            <input
+                                                type="text"
+                                                placeholder="Buscar"
+                                                className="w-full pl-10 pr-4 py-3 border rounded-xl focus:ring-0 focus:outline-0"
+                                                value={searchCollection}
+                                                onChange={(e) => setSearchCollection(e.target.value)}
+                                            />
+                                        </div>
+                                        <div className="max-h-[200px] overflow-y-auto space-y-2 p-1">
+                                            {filteredCollections.map((collection) => {
+                                                const isChecked = selectedFilters.collection_id?.includes(collection.slug);
+                                                return (
+                                                    <div
+                                                        key={collection.id}
+                                                        className={`group flex items-center gap-3 p-2 rounded-lg ${isChecked
+                                                            ? "bg-secondary"
+                                                            : "hover:bg-gray-50"
+                                                            }`}
+                                                    >
+                                                        <label className="flex items-center gap-2 px-2 cursor-pointer">
+                                                            <input
+                                                                type="checkbox"
+                                                                className="h-5 w-5 rounded border-gray-300 accent-primary hidden "
+                                                                onChange={() => handleFilterChange("collection_id", collection.slug)}
+                                                                checked={isChecked}
+                                                            />
+                                                            <img
+                                                                src={`/storage/images/collection/${collection.image}`}
+                                                                onError={(e) => e.target.src = "assets/img/noimage/no_imagen_circular.png"}
+                                                                className="w-8 h-8 rounded-full object-cover"
+                                                                alt={collection.name}
+                                                            />
+                                                            <span className="text-sm lg:text-base">{collection.name}</span></label>
+                                                    </div>
+                                                )
+                                            })}
+                                        </div>
                                     </div>
-                                    <div className="space-y-3">
-                                        {filteredBrands.map((brand) => (
+                                )}
+                            </div>)}
+
+                            {/* Categorías (Mejorado) */}
+                            <div className="mb-6">
+                                <button
+                                    onClick={() => toggleSection("categoria")}
+                                    className="flex items-center justify-between w-full mb-4 p-2 lg:p-0"
+                                >
+                                    <span className="font-medium">Categorías</span>
+                                    <ChevronUp
+                                        className={`h-5 w-5 transform transition-transform ${sections.categoria ? "" : "-rotate-180"
+                                            }`}
+                                    />
+                                </button>
+                                {sections.categoria && (
+                                    <div className="space-y-4">
+                                        <div className="relative hidden md:flex">
+                                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                                            <input
+                                                type="text"
+                                                placeholder="Buscar"
+                                                className="w-full pl-10 pr-4 py-3 border rounded-xl focus:ring-0 focus:outline-0"
+                                                value={searchCategory}
+                                                onChange={(e) => setSearchCategory(e.target.value)}
+                                            />
+                                        </div>
+                                        <div className="max-h-[200px] overflow-y-auto space-y-2 p-1">
+                                            {filteredCategories.map((category) => {
+
+                                                const isChecked = selectedFilters.category_id?.includes(category.slug);
+                                                return (
+                                                    <div
+                                                        key={category.id}
+                                                        className={`group flex items-center gap-3 p-2 rounded-lg ${isChecked
+                                                            ? "bg-secondary"
+                                                            : "hover:bg-gray-50"
+                                                            }`}
+                                                    >
+                                                        <label className="flex items-center gap-2 px-2 cursor-pointer">
+                                                            <input
+                                                                type="checkbox"
+                                                                className="h-5 w-5 rounded border-gray-300 accent-primary hidden"
+                                                                onChange={() => handleFilterChange("category_id", category.slug)}
+                                                                checked={isChecked}
+                                                            // checked={selectedFilters.category_id?.includes(category.id)}
+                                                            />
+                                                            <img
+                                                                src={`/storage/images/category/${category.image}`}
+                                                                onError={(e) => e.target.src = "assets/img/noimage/no_imagen_circular.png"}
+                                                                className="w-8 h-8 rounded-full object-cover"
+                                                                alt={category.name}
+                                                            />
+                                                            <span className="text-sm lg:text-base">{category.name}</span></label>
+                                                    </div>
+                                                )
+                                            })}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Precio (Mejorado) */}
+                            <div className="mb-6">
+                                <button
+                                    onClick={() => toggleSection("precio")}
+                                    className="flex items-center justify-between w-full mb-4 p-2 lg:p-0"
+                                >
+                                    <span className="font-medium">Precio</span>
+                                    <ChevronUp
+                                        className={`h-5 w-5 transform transition-transform ${sections.precio ? "" : "-rotate-180"
+                                            }`}
+                                    />
+                                </button>
+                                {sections.precio && (
+                                    <div className="space-y-3 p-1">
+                                        {priceRanges.map((range) => (
                                             <label
-                                                key={brand.id}
-                                                className="flex items-center space-x-3"
+                                                key={`${range.min}-${range.max}`}
+                                                className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50"
                                             >
                                                 <input
                                                     type="checkbox"
-                                                    className="h-4 w-4 rounded border-gray-300"
-                                                    onChange={() =>
-                                                        handleFilterChange(
-                                                            "brand_id",
-                                                            brand.id
-                                                        )
+                                                    className="h-5 w-5 rounded border-gray-300 accent-primary"
+                                                    onChange={() => handleFilterChange("price", range)}
+                                                    checked={
+                                                        selectedFilters.price?.min === range.min &&
+                                                        selectedFilters.price?.max === range.max
                                                     }
                                                 />
-                                                <span>{brand.name}</span>
+                                                <span className="text-sm lg:text-base">{`S/ ${range.min} - S/ ${range.max}`}</span>
                                             </label>
                                         ))}
                                     </div>
-                                </div>
-                            )}
-                        </div> */}
-                        
-                        {/*Categoria Seccion */}
-                        <div className="mb-6">
-                            <button
-                                onClick={() => toggleSection("collection")}
-                                className="flex items-center justify-between w-full mb-4"
-                            >
-                                <span className="font-medium">Colecciones</span>
-                                <ChevronDown
-                                    className={`h-5 w-5 transform transition-transform ${
-                                        sections.collection ? "" : "-rotate-180"
-                                    }`}
-                                />
-                            </button>
-                            {sections.collection && (
-                                <div className="space-y-1">
-                                    <div className="relative">
-                                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                                        <input
-                                            type="text"
-                                            placeholder="Buscar"
-                                            className={`w-full px-4 pl-10 py-3 border customtext-neutral-dark  border-neutral-ligth rounded-xl focus:ring-0 focus:outline-0   transition-all duration-300`}
-                                            value={searchCollection}
-                                            onChange={(e) =>
-                                                setSearchCollection(
-                                                    e.target.value
-                                                )
-                                            }
-                                        />
-                                    </div>
-                                    {filteredCollections.map((collection) => {
-                                        const isChecked =
-                                            selectedFilters.collection_id?.includes(
-                                                collection.id
-                                            );
-                                        return (
-                                            <div
-                                                key={collection.id}
-                                                className={`group py-1 rounded-md ${
-                                                    isChecked
-                                                        ? "bg-secondary"
-                                                        : "bg-transparent"
-                                                }`}
-                                            >
-                                                <label className="flex items-center space-x-3 ">
-                                                    <input
-                                                        type="checkbox"
-                                                        className="h-4 hidden w-4 rounded border-gray-300"
-                                                        onChange={() =>
-                                                            handleFilterChange(
-                                                                "collection_id",
-                                                                collection.id
-                                                            )
-                                                        }
-                                                        checked={selectedFilters.collection_id?.includes(
-                                                            collection.id
-                                                        )}
-                                                    />
-                                                    <img
-                                                        src={`/storage/images/collection/${collection.image}`}
-                                                        onError={(e) =>
-                                                            (e.target.src =
-                                                                "assets/img/noimage/no_imagen_circular.png")
-                                                        }
-                                                        alt={collection.name}
-                                                        className="w-8 h-8 rounded-full object-cover"
-                                                        loading="lazy"
-                                                    />
-                                                    <span>
-                                                        {collection.name}
-                                                    </span>
-                                                </label>
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                            )}
-                        </div>
-                        <div className="mb-6">
-                            <button
-                                onClick={() => toggleSection("categoria")}
-                                className="flex items-center justify-between w-full mb-4"
-                            >
-                                <span className="font-medium">Categorias</span>
-                                <ChevronDown
-                                    className={`h-5 w-5 transform transition-transform ${
-                                        sections.categoria ? "" : "-rotate-180"
-                                    }`}
-                                />
-                            </button>
-                            {sections.categoria && (
-                                <div className="space-y-1">
-                                    <div className="relative">
-                                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                                        <input
-                                            type="text"
-                                            placeholder="Buscar"
-                                            className={`w-full px-4 pl-10 py-3 border customtext-neutral-dark  border-neutral-ligth rounded-xl focus:ring-0 focus:outline-0   transition-all duration-300`}
-                                            value={searchCategory}
-                                            onChange={(e) =>
-                                                setSearchCategory(
-                                                    e.target.value
-                                                )
-                                            }
-                                        />
-                                    </div>
-                                    {filteredCategories.map((category) => {
-                                        const isChecked =
-                                            selectedFilters.category_id?.includes(
-                                                category.id
-                                            );
-                                        return (
-                                            <div
-                                                key={category.id}
-                                                className={`group py-2 rounded-md ${
-                                                    isChecked
-                                                        ? "bg-secondary"
-                                                        : "bg-transparent"
-                                                }`}
-                                            >
-                                                <label className="flex items-center space-x-3 ">
-                                                    <input
-                                                        type="checkbox"
-                                                        className="h-4 hidden w-4 rounded border-gray-300"
-                                                        onChange={() =>
-                                                            handleFilterChange(
-                                                                "category_id",
-                                                                category.id
-                                                            )
-                                                        }
-                                                        checked={selectedFilters.category_id?.includes(
-                                                            category.id
-                                                        )}
-                                                    />
-                                                    <img
-                                                        src={`/storage/images/category/${category.image}`}
-                                                        onError={(e) =>
-                                                            (e.target.src =
-                                                                "assets/img/noimage/no_imagen_circular.png")
-                                                        }
-                                                        alt={category.name}
-                                                        className="w-8 h-8 rounded-full object-cover"
-                                                        loading="lazy"
-                                                    />
-                                                    <span>{category.name}</span>
-                                                </label>
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                            )}
+                                )}
+                            </div>
                         </div>
 
-                        {/* Precio Section */}
-                        <div className="mb-6">
+                        {/* Footer móvil */}
+                        <div className="fixed bottom-0 left-0 right-0 bg-white border-t p-4 h-20 flex items-center lg:hidden">
                             <button
-                                onClick={() => toggleSection("precio")}
-                                className="flex items-center justify-between w-full mb-4"
+                                className="w-full bg-primary text-white py-3 rounded-xl font-bold hover:bg-primary-dark transition-colors"
+                                onClick={() => setFiltersOpen(false)}
                             >
-                                <span className="font-medium">Precio</span>
-                                <ChevronDown
-                                    className={`h-5 w-5 transform transition-transform ${
-                                        sections.precio ? "" : "-rotate-180"
-                                    }`}
-                                />
+                                Ver resultados
                             </button>
-                            {sections.precio && (
-                                <div className="space-y-3">
-                                    {priceRanges.map((range) => (
-                                        <label
-                                            key={`${range.min}-${range.max}`}
-                                            className="flex items-center space-x-3"
-                                        >
-                                            <input
-                                                type="checkbox"
-                                                name="precio"
-                                                className="h-4 w-4 rounded border-gray-300"
-                                                onChange={() =>
-                                                    handleFilterChange(
-                                                        "price",
-                                                        range
-                                                    )
-                                                }
-                                                checked={
-                                                    selectedFilters.price &&
-                                                    selectedFilters.price
-                                                        .min === range.min &&
-                                                    selectedFilters.price
-                                                        .max === range.max
-                                                }
-                                            />
-                                            <span>{`S/ ${range.min} - S/ ${range.max}`}</span>
-                                        </label>
-                                    ))}
-                                </div>
-                            )}
                         </div>
                     </div>
 
-                    <div className="w-full sm:w-4/5 py-4">
+                    <div className="w-full sm:w-3/4 py-4">
                         <div className="flex flex-col lg:flex-row lg:justify-between items-center mb-4 w-full">
                             {/* Ordenación <span className='block w-6/12'>Productos seleccionados: <strong>{products?.length}</strong></span>*/}
                             <div className="flex gap-4 items-center">
@@ -580,15 +511,14 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                                     <div className="customtext-primary font-semibold">
                                         <nav className="flex items-center gap-x-2 min-w-max">
                                             <button
-                                                className={`p-4 inline-flex items-center ${
-                                                    pagination.currentPage === 1
-                                                        ? "opacity-50 cursor-not-allowed"
-                                                        : ""
-                                                }`}
+                                                className={`p-4 inline-flex items-center ${pagination.currentPage === 1
+                                                    ? "opacity-50 cursor-not-allowed"
+                                                    : ""
+                                                    }`}
                                                 onClick={() =>
                                                     handlePageChange(
                                                         pagination.currentPage -
-                                                            1
+                                                        1
                                                     )
                                                 }
                                                 disabled={
@@ -608,11 +538,10 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                                                         ) : (
                                                             <button
                                                                 className={`w-10 h-10 p-2 inline-flex items-center justify-center rounded-full transition-all duration-300 
-                                            ${
-                                                page === pagination.currentPage
-                                                    ? "bg-primary text-white"
-                                                    : "bg-transparent hover:text-white hover:bg-primary"
-                                            }`}
+                                            ${page === pagination.currentPage
+                                                                        ? "bg-primary text-white"
+                                                                        : "bg-transparent hover:text-white hover:bg-primary"
+                                                                    }`}
                                                                 onClick={() =>
                                                                     handlePageChange(
                                                                         page
@@ -627,16 +556,15 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                                             )}
 
                                             <button
-                                                className={`p-4 inline-flex items-center ${
-                                                    pagination.currentPage ===
+                                                className={`p-4 inline-flex items-center ${pagination.currentPage ===
                                                     pagination.totalPages
-                                                        ? "opacity-50 cursor-not-allowed"
-                                                        : ""
-                                                }`}
+                                                    ? "opacity-50 cursor-not-allowed"
+                                                    : ""
+                                                    }`}
                                                 onClick={() =>
                                                     handlePageChange(
                                                         pagination.currentPage +
-                                                            1
+                                                        1
                                                     )
                                                 }
                                                 disabled={
@@ -663,11 +591,11 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                         {loading ? (
                             <Loading />
                         ) : (
-                            <div className="flex items-center flex-wrap gap-y-2 lg:gap-y-3 transition-all duration-300 ease-in-out">
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 gap-y-2 lg:gap-y-3 transition-all duration-300 ease-in-out">
                                 {Array.isArray(products) &&
-                                products.length > 0 ? (
+                                    products.length > 0 ? (
                                     products.map((product) => (
-                                        <ProductCardSimple
+                                        <ProductCardColors
                                             key={product.id}
                                             product={product}
                                             widthClass="lg:w-1/3"
@@ -686,15 +614,14 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                                     <div className="customtext-primary font-semibold">
                                         <nav className="flex items-center gap-x-2 min-w-max">
                                             <button
-                                                className={`p-4 inline-flex items-center ${
-                                                    pagination.currentPage === 1
-                                                        ? "opacity-50 cursor-not-allowed"
-                                                        : ""
-                                                }`}
+                                                className={`p-4 inline-flex items-center ${pagination.currentPage === 1
+                                                    ? "opacity-50 cursor-not-allowed"
+                                                    : ""
+                                                    }`}
                                                 onClick={() =>
                                                     handlePageChange(
                                                         pagination.currentPage -
-                                                            1
+                                                        1
                                                     )
                                                 }
                                                 disabled={
@@ -714,11 +641,10 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                                                         ) : (
                                                             <button
                                                                 className={`w-10 h-10 p-2 inline-flex items-center justify-center rounded-full transition-all duration-300 
-                                            ${
-                                                page === pagination.currentPage
-                                                    ? "bg-primary text-white"
-                                                    : "bg-transparent hover:text-white hover:bg-primary"
-                                            }`}
+                                            ${page === pagination.currentPage
+                                                                        ? "bg-primary text-white"
+                                                                        : "bg-transparent hover:text-white hover:bg-primary"
+                                                                    }`}
                                                                 onClick={() =>
                                                                     handlePageChange(
                                                                         page
@@ -733,16 +659,15 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                                             )}
 
                                             <button
-                                                className={`p-4 inline-flex items-center ${
-                                                    pagination.currentPage ===
+                                                className={`p-4 inline-flex items-center ${pagination.currentPage ===
                                                     pagination.totalPages
-                                                        ? "opacity-50 cursor-not-allowed"
-                                                        : ""
-                                                }`}
+                                                    ? "opacity-50 cursor-not-allowed"
+                                                    : ""
+                                                    }`}
                                                 onClick={() =>
                                                     handlePageChange(
                                                         pagination.currentPage +
-                                                            1
+                                                        1
                                                     )
                                                 }
                                                 disabled={
