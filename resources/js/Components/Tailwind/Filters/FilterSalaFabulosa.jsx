@@ -293,9 +293,14 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
 
     const [filtersOpen, setFiltersOpen] = useState(false); // Añadir estado para mobile
     const [isOpen, setIsOpen] = useState(false)
-    const openModal = () => setIsOpen(true)
-    const closeModal = () => setIsOpen(false)
-
+    const openModal = () => {
+        setIsOpen(true);
+        document.body.style.overflow = 'hidden';
+    };
+    const closeModal = () => {
+        setIsOpen(false);
+        document.body.style.overflow = 'auto';
+    };
     const customStyles = {
         overlay: {
           backgroundColor: "rgba(0, 0, 0, 0.5)",
@@ -309,7 +314,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
           borderRadius: "1rem 1rem 0 0",
           border: "none",
           padding: "0",
-          height: "80vh", // Altura del drawer
+          height: "93vh", // Altura del drawer
           transform: isOpen ? "translateY(0)" : "translateY(100%)",
           transition: "transform 0.3s ease-in-out",
         },
@@ -456,11 +461,11 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                     />
                 </button>
                 {sections.precio && (
-                    <div className="space-y-3 p-1">
+                    <div className="max-h-[200px] overflow-y-auto space-y-3 p-1">
                         {priceRanges.map((range) => (
                             <label
                                 key={`${range.min}-${range.max}`}
-                                className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50"
+                                className=" flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50"
                             >
                                 <input
                                     type="checkbox"
@@ -507,6 +512,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                 onRequestClose={closeModal}
                 style={customStyles}
                 closeTimeoutMS={300}
+                ariaHideApp={false}
         >
             {renderFilters()}
         </Modal>
