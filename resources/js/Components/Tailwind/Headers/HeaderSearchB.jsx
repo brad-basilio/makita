@@ -558,7 +558,7 @@ const HeaderSearchB = ({
                         <img
                             src="/assets/img/whatsapp.svg"
                             alt="whatsapp"
-                            className="mr-3 w-16 h-16 md:w-[100px] md:h-[100px] animate-bounce duration-300"
+                            className="mr-3 w-16 h-16 md:w-[80px] md:h-[80px] animate-bounce duration-300"
                         />
                     </a>
                 </div>

@@ -1446,10 +1446,13 @@
                 "data": [
                     "title"
                 ],
-                "using": {
+               "using": {
                     "model": "Post",
-                    "flied": "slug",
+                    "field": "slug",
                     "with": [
+                        "category"       
+                    ],
+                    "relations": [
                         "category"
                     ]
                 }

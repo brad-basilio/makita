@@ -116,6 +116,8 @@ const System = ({
         });
     }, [null]);
 
+    console.log("FilteredData", filteredData);
+
     const getSystem = ({ component, value, data, itemsId, visible }) => {
         if (visible == 0) return <></>;
 

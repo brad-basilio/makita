@@ -206,6 +206,7 @@ class SystemController extends BasicController
                 $props['filteredData'][$key] = $using['static'];
             }
         }
+        dump($props['filteredData']);
         $props['headerPosts'] = Post::with('category')->where('status', true)->latest()->take(3)->get();
         $props['postsLatest'] = Post::with('category')->where('status', true)->latest()->take(6)->get();
 
