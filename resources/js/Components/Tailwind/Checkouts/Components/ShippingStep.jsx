@@ -67,6 +67,7 @@ export default function ShippingStep({
     const [selectedOption, setSelectedOption] = useState(null);
     const [costsGet, setCostsGet] = useState(null);
     const [errors, setErrors] = useState({});
+    const [searchInput, setSearchInput] = useState("");
 
     // Función de validación mejorada
     const validateForm = () => {
@@ -337,7 +338,7 @@ export default function ShippingStep({
 
                     <div className="form-group">
                         <label className="block text-sm 2xl:text-base mb-2 font-medium customtext-neutral-dark">
-                            Ubicación de entrega (Departamento | Provincia | Distrito)*
+                            Ubicación de entrega (Distrito)*
                         </label>
                         <AsyncSelect
                             name="ubigeo"
@@ -347,12 +348,27 @@ export default function ShippingStep({
                             onChange={(selected) => {
                                 setSelectedUbigeo(selected);
                                 handleUbigeoChange(selected);
+                                setSearchInput(""); // Limpiar input al seleccionar
                             }}
-                            placeholder="Buscar por Departamento | Provincia | distrito ..."
+                            inputValue={searchInput}
+                            onInputChange={(value, { action }) => {
+                                if (action === "input-change") setSearchInput(value);
+                            }}
+                            onFocus={() => {
+                                setSelectedUbigeo(null); // Limpiar selección al enfocar
+                                setSearchInput("");      // Limpiar input de búsqueda
+                            }}
+                            onMenuOpen={() => {
+                                if (selectedUbigeo) {
+                                    setSelectedUbigeo(null);
+                                    setSearchInput("");
+                                }
+                            }}
+                            placeholder="Buscar por Distrito ..."
                             loadingMessage={() => "Buscando ubicaciones..."}
                             noOptionsMessage={({ inputValue }) =>
                                 inputValue.length < 3
-                                    ? "Buscar por Departamento | Provincia | distrito ..."
+                                    ? "Buscar por Distrito ..."
                                     : "No se encontraron resultados"
                             }
                             isLoading={loading}
