@@ -6,14 +6,14 @@ export default function PostDetailSimple({ item }) {
             <div className="px-[5%] py-8 flex flex-col justify-center">
                 {/* Metadata */}
                 <div className="flex items-center gap-2 text-base mb-4 text-[#91502D] font-semibold 2xl:text-lg max-w-xl mx-auto">
-                    <span className="">{item.category.name}</span>
+                    <span className="">{item?.category?.name}</span>
                     <span>|</span>
-                    <time>{item.created_at}</time>
+                    <time>{item?.created_at}</time>
                 </div>
 
                 {/* Title */}
                 <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-8 max-w-5xl mx-auto text-center 2xl:max-w-6xl">
-                    {item.name}
+                    {item?.name}
                 </h1>
 
                 {/* Featured Image */}
@@ -30,7 +30,7 @@ export default function PostDetailSimple({ item }) {
 
                 {/* Content */}
                 <div className="prose prose-lg max-w-none customtext-neutral-dark text-base xl:text-lg">
-                    {item.description}
+                    {item?.description}
                 </div>
 
                 {/* Share buttons */}
