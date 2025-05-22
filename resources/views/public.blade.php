@@ -176,7 +176,7 @@
 
 </head>
 
-<body class="font-general">
+<body class="font-paragraph">
     @inertia
 
     <!-- Vendor js -->

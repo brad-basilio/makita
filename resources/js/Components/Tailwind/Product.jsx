@@ -20,6 +20,8 @@ const Product = ({
     setCart,
     pages,
     filteredData,
+    favorites,
+    setFavorites,
 }) => {
     const getProduct = () => {
         switch (which) {
@@ -75,6 +77,8 @@ const Product = ({
                         items={items}
                         cart={cart}
                         setCart={setCart}
+                        favorites={favorites}   
+                        setFavorites={setFavorites}
                     />
                 );
             case "Scraping":

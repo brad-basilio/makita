@@ -8,6 +8,9 @@ const SliderInteractive = React.lazy(() =>
 );
 const SliderBananaLab = React.lazy(() => import("./Sliders/SliderBananaLab"));
 const SliderImagen = React.lazy(() => import("./Sliders/SliderImagen"));
+const SliderBrandsPaani = React.lazy(() =>
+    import("./Sliders/SliderBrandsPaani")
+);
 const SliderJustImage = React.lazy(() => import("./Sliders/SliderJustImage"));
 
 const Slider = ({ which, data, sliders }) => {
@@ -25,8 +28,11 @@ const Slider = ({ which, data, sliders }) => {
                 return <SliderBananaLab data={data} items={sliders} />;
             case "SliderImagen":
                 return <SliderImagen data={data} items={sliders} />;
+         
             case "SliderJustImage":
                 return <SliderJustImage data={data} items={sliders} />;
+            case "SliderBrandsPaani":
+                return <SliderBrandsPaani data={data} items={sliders} />;
             default:
                 return (
                     <div className="w-full px-[5%] replace-max-w-here p-4 mx-auto">

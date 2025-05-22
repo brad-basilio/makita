@@ -1,6 +1,7 @@
 import { ChevronLeft, ChevronRight, Tag } from "lucide-react";
 import React, { useState, useRef, useEffect } from "react";
 import { adjustTextColor } from "../../../Functions/adjustTextColor";
+import Global from "../../../Utils/Global";
 
 const SliderInteractive = ({ items, data }) => {
     //TODO: Validación y conversión de infiniteLoop
@@ -186,6 +187,43 @@ const SliderInteractive = ({ items, data }) => {
         });
     }, [items]);
 
+    // Estado para saber si la imagen actual es oscura
+    const [isDarkBg, setIsDarkBg] = useState(false);
+
+    // Función para detectar si la imagen es oscura
+    const checkImageDarkness = (src) => {
+        const img = new window.Image();
+        img.crossOrigin = "Anonymous";
+        img.src = src;
+        img.onload = function () {
+            const canvas = document.createElement("canvas");
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0, img.width, img.height);
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            let colorSum = 0;
+            for (let i = 0; i < imageData.data.length; i += 4) {
+                const r = imageData.data[i];
+                const g = imageData.data[i + 1];
+                const b = imageData.data[i + 2];
+                // brillo promedio
+                const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+                colorSum += brightness;
+            }
+            const avg = colorSum / (imageData.data.length / 4);
+            setIsDarkBg(avg < 128); // umbral: 128
+        };
+    };
+
+    // Cada vez que cambia el slide, revisa si la imagen es oscura
+    useEffect(() => {
+        const currentItem = duplicatedItems[currentIndex];
+        if (currentItem?.bg_image) {
+            checkImageDarkness(`/storage/images/slider/${currentItem.bg_image}`);
+        }
+    }, [currentIndex, duplicatedItems]);
+
     return (
         <div className="relative w-full mx-auto">
             <div
@@ -216,33 +254,32 @@ const SliderInteractive = ({ items, data }) => {
                                 }`}
                                 alt={item.name}
                                 loading="lazy"
-                                className="absolute top-0  left-0 h-full md:h-full  w-screen md:w-full object-cover object-right-25  md:object-center  z-0  md:mr-20 lg:mr-0"
+                                className={`absolute top-0  left-0 h-full md:h-full  w-screen md:w-full object-cover ${data?.imageBgPosition || "object-right-25 "} md:object-center  z-0  md:mr-20 lg:mr-0`}
                             />
 
-                            <div className="md:hidden absolute inset-0 bg-gradient-to-b from-transparent to-white"></div>
+                          {data?.overlayMobile && (
+                              <div className="md:hidden absolute inset-0 bg-gradient-to-b from-transparent to-white"></div>
+                          )}
 
-                            <div className=" relative w-full px-primary 2xl:px-0 2xl:max-w-7xl  mx-auto  h-[530px] md:h-[600px] flex flex-col items-start justify-end md:justify-center">
+                            <div className={`relative w-full px-primary 2xl:px-0 2xl:max-w-7xl  mx-auto  h-[530px] md:h-[600px] flex flex-col items-start justify-end md:justify-center ${isDarkBg ? "text-white" : "customtext-neutral-dark"}`}>
                                 <div className="flex flex-col gap-5 lg:gap-10 items-start">
                                     <h2
-                                        className="w-9/12 md:w-full md:max-w-md font-font-primary customtext-neutral-dark text-[40px] leading-tight sm:text-5xl md:text-6xl tracking-normal font-bold "
+                                        className={`${Global.APP_CORRELATIVE==="stechperu" ?"w-9/12" :"w-full"}  md:w-full md:max-w-md font-title text-[40px] leading-tight sm:text-5xl md:text-6xl tracking-normal font-bold ${isDarkBg ? "text-white" : "customtext-neutral-dark"}`}
                                         style={{
-                                            textShadow:
-                                                "0 0 20px rgba(0, 0, 0, .25)",
+                                            textShadow: "0 0 20px rgba(0, 0, 0, .25)",
                                         }}
                                     >
                                         {item.name}
                                     </h2>
                                     <p
-                                        className="w-8/12 md:w-full md:max-w-md customtext-neutral-dark text-lg leading-tight font-font-secondary
-                                         font-normal"
+                                        className={`${Global.APP_CORRELATIVE==="stechperu" ?"w-8/12" :"w-full"} md:w-full md:max-w-md text-lg leading-tight font-paragraph ${isDarkBg ? "text-white" : "customtext-neutral-dark"}`}
                                         style={{
-                                            textShadow:
-                                                "0 0 20px rgba(0, 0, 0, .25)",
+                                            textShadow: "0 0 20px rgba(0, 0, 0, .25)",
                                         }}
                                     >
                                         {item.description}
                                     </p>
-                                    <div className="flex flex-row gap-5 md:gap-10 justify-center items-start">
+                                    {item.button_text && item.button_link && (  <div className="flex flex-row gap-5 md:gap-10 justify-center items-start">
                                         <a
                                             href={item.button_link}
                                             ref={(el) =>
@@ -256,7 +293,8 @@ const SliderInteractive = ({ items, data }) => {
                                                 className="transform rotate-90"
                                             />
                                         </a>
-                                    </div>
+                                    </div>)}
+                                  
                                 </div>
                             </div>
                         </div>

@@ -4,7 +4,7 @@ import CardHoverBtn from "./Components/CardHoverBtn";
 import { adjustTextColor } from "../../../Functions/adjustTextColor";
 import CardProductBananaLab from "./Components/CardProductBananaLab";
 
-const ProductBananaLab = ({ items, data, setCart, cart }) => {
+const ProductBananaLab = ({ items, data, setCart, cart ,setFavorites,favorites}) => {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [slidesPerView, setSlidesPerView] = useState(6); // Default en desktop
 
@@ -73,6 +73,8 @@ const ProductBananaLab = ({ items, data, setCart, cart }) => {
                                     setCart={setCart}
                                     cart={cart}
                                     data={data}
+                                    setFavorites={setFavorites}
+                                    favorites={favorites}
                                 />
                             ))}
                         </div>
@@ -93,6 +95,8 @@ const ProductBananaLab = ({ items, data, setCart, cart }) => {
                                     setCart={setCart}
                                     cart={cart}
                                     data={data}
+                                      setFavorites={setFavorites}
+                                    favorites={favorites}
                                 />
                             ))}
                         </div>

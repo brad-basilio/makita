@@ -8,7 +8,9 @@
                 "id": "TopBarSimple",
                 "name": "Simple - Stech",
                 "image": "top-bar-simple.png",
-                "generals": ["cintillo"]
+                "generals": [
+                    "cintillo"
+                ]
             },
             {
                 "id": "TopBarSocials",
@@ -17,7 +19,9 @@
                 "using": {
                     "model": "Social"
                 },
-                "generals": ["cintillo"]
+                "generals": [
+                    "cintillo"
+                ]
             },
             {
                 "id": "TopBarCart",
@@ -26,14 +30,20 @@
                 "using": {
                     "model": "Social"
                 },
-                "generals": ["cintillo"],
-                "data": ["link_cart"]
+                "generals": [
+                    "cintillo"
+                ],
+                "data": [
+                    "link_cart"
+                ]
             },
             {
                 "id": "TopBarCopyright",
                 "name": "Copyright",
                 "image": "top-bar-copyright.png",
-                "generals": ["copyright"]
+                "generals": [
+                    "copyright"
+                ]
             }
         ]
     },
@@ -46,9 +56,15 @@
                 "id": "MenuSimple",
                 "name": "Menu - Stech",
                 "image": "top-bar-simple.png",
+                "data": [
+                    "showCategoqries"
+                  
+                ],
                 "using": {
                     "model": "Category",
-                    "with": ["subcategories"]
+                    "with": [
+                        "subcategories"
+                    ]
                 }
             },
             {
@@ -57,7 +73,9 @@
                 "image": "top-bar-simple.png",
                 "using": {
                     "model": "Category",
-                    "with": ["subcategories"]
+                    "with": [
+                        "subcategories"
+                    ]
                 }
             }
         ]
@@ -71,49 +89,83 @@
                 "id": "HeaderSearch",
                 "name": "Con barra de búsqueda",
                 "image": "header-with-search.png",
-                "data": ["class", "link_cart"]
+                "data": [
+                    "class",
+                    "link_cart"
+                ]
             },
             {
                 "id": "HeaderSearchB",
                 "name": "HeaderSearchB",
                 "image": "header-with-search.png",
-                "data": ["class", "link_cart"],
+                "data": [
+                    "class",
+                    "link_cart",
+                    "showLoginCart"
+                   
+                    
+                ],
                 "using": {
                     "model": "Category",
-                    "with": ["subcategories"]
+                    "with": [
+                        "subcategories"
+                    ]
                 },
-                "generals": ["phone_whatsapp", "message_whatsapp"]
+                "generals": [
+                    "phone_whatsapp",
+                    "message_whatsapp"
+                ]
             },
             {
                 "id": "HeaderSearchContact",
                 "name": "Header - Kuchara",
                 "image": "header-with-search-contact.png",
-                "data": ["class", "link_cart", "path_product"],
-                "generals": ["phone_whatsapp", "message_whatsapp"]
+                "data": [
+                    "class",
+                    "link_cart",
+                    "path_product"
+                ],
+                "generals": [
+                    "phone_whatsapp",
+                    "message_whatsapp"
+                ]
             },
-
             {
                 "id": "HeaderSearchMenu",
                 "name": "Con busqueda y menu",
                 "image": "header-with-search.png",
-                "data": ["class", "link_cart"]
+                "data": [
+                    "class",
+                    "link_cart"
+                ]
             },
             {
                 "id": "Header - Sala Fabulosa",
                 "name": "Con busqueda y menu SF",
                 "image": "header-with-search.png",
-                "data": ["class", "link_cart"]
+                "data": [
+                    "class",
+                    "link_cart"
+                ]
             },
             {
                 "id": "HeaderBananaLab",
                 "name": "Header - Banana Lab",
                 "image": "header-with-search.png",
-                "data": ["class", "link_cart"],
+                "data": [
+                    "class",
+                    "link_cart"
+                ],
                 "using": {
                     "model": "Category",
-                    "with": ["subcategories"]
+                    "with": [
+                        "subcategories"
+                    ]
                 },
-                "generals": ["phone_whatsapp", "message_whatsapp"]
+                "generals": [
+                    "phone_whatsapp",
+                    "message_whatsapp"
+                ]
             }
         ]
     },
@@ -127,11 +179,13 @@
                 "icon": "mdi mdi-whatsapp",
                 "name": "WhatsApp",
                 "image": "floating-whatsapp.png",
-                "generals": ["phone_whatsapp", "message_whatsapp"]
+                "generals": [
+                    "phone_whatsapp",
+                    "message_whatsapp"
+                ]
             }
         ]
     },
-
     {
         "id": "carrusel",
         "icon": "mdi mdi-view-carousel",
@@ -144,7 +198,7 @@
                     "model": "Indicator"
                 }
             },
-               {
+            {
                 "id": "CarruselBenefitsPaani",
                 "name": "Beneficios Paani",
                 "using": {
@@ -154,7 +208,9 @@
             {
                 "id": "CarruselBenefitsSimple",
                 "name": "Beneficios Simple",
-                "data": ["background"],
+                "data": [
+                    "background"
+                ],
                 "using": {
                     "model": "Indicator"
                 }
@@ -162,7 +218,9 @@
             {
                 "id": "CarruselBananaLab",
                 "name": "CarruselBananaLab",
-                "data": ["background"],
+                "data": [
+                    "background"
+                ],
                 "using": {
                     "model": "Indicator"
                 }
@@ -193,7 +251,9 @@
                 "id": "SliderSimple",
                 "name": "Simple",
                 "image": "slider-simple.png",
-                "data": ["pagination"],
+                "data": [
+                    "pagination"
+                ],
                 "using": {
                     "model": "Slider",
                     "fields": [
@@ -211,14 +271,22 @@
                 "image": "slider-just-image.png",
                 "using": {
                     "model": "Slider",
-                    "fields": ["bg_type", "bg_image", "bg_video", "button_link"]
+                    "fields": [
+                        "bg_type",
+                        "bg_image",
+                        "bg_video",
+                        "button_link"
+                    ]
                 }
             },
             {
                 "id": "SliderSearch",
                 "name": "Search",
                 "image": "slider-search.png",
-                "data": ["link_catalog", "placeholder"],
+                "data": [
+                    "link_catalog",
+                    "placeholder"
+                ],
                 "using": {
                     "model": "Slider",
                     "fields": [
@@ -237,7 +305,9 @@
                 "data": [
                     "infiniteLoop",
                     "paginationAlignment",
-                    "showNavigation"
+                    "showNavigation",
+                    "imageBgPosition",
+                    "overlayMobile"
                 ],
                 "using": {
                     "model": "Slider",
@@ -254,7 +324,6 @@
                 "id": "SliderBananaLab",
                 "name": "SliderBananaLab",
                 "image": "slider-simple.png",
-
                 "using": {
                     "model": "Slider",
                     "fields": [
@@ -270,10 +339,32 @@
                 "id": "SliderImagen",
                 "name": "Imagen",
                 "image": "slider-simple.png",
-                "data": ["title"],
+                "data": [
+                    "title"
+                ],
                 "using": {
                     "model": "Brand",
-                    "fields": ["name", "description", "image"]
+                    "fields": [
+                        "name",
+                        "description",
+                        "image"
+                    ]
+                }
+            },
+            {
+                "id": "SliderBrandsPaani",
+                "name": "Brand Paani",
+                "image": "slider-simple.png",
+                "data": [
+                    "title"
+                ],
+                "using": {
+                    "model": "Brand",
+                    "fields": [
+                        "name",
+                        "description",
+                        "image"
+                    ]
                 }
             }
         ]
@@ -287,7 +378,12 @@
                 "id": "FilterSimple",
                 "name": "Simple",
                 "image": "filters-simple.png",
-                "data": ["path", "title", "description", "link_cart"],
+                "data": [
+                    "path",
+                    "title",
+                    "description",
+                    "link_cart"
+                ],
                 "using": {
                     "model": "Item"
                 }
@@ -296,15 +392,27 @@
                 "id": "CatalagoFiltros",
                 "name": "Producto Catalogo Filtro",
                 "image": "products-list.png",
-                "data": ["path", "title", "description", "link_cart"],
+                "data": [
+                    "path",
+                    "title",
+                    "description",
+                    "link_cart"
+                ],
                 "options": [
                     {
                         "id": "default",
                         "name": "Lista estándar",
                         "using": {
                             "model": "Item",
-                            "with": ["category", "subcategory", "brand"],
-                            "relations": ["category", "tags"],
+                            "with": [
+                                "category",
+                                "subcategory",
+                                "brand"
+                            ],
+                            "relations": [
+                                "category",
+                                "tags"
+                            ],
                             "fields": [
                                 "id",
                                 "name",
@@ -321,8 +429,15 @@
                         "name": "Lista con variantes",
                         "using": {
                             "model": "Item",
-                            "with": ["category", "subcategory", "brand"],
-                            "relations": ["category", "tags"],
+                            "with": [
+                                "category",
+                                "subcategory",
+                                "brand"
+                            ],
+                            "relations": [
+                                "category",
+                                "tags"
+                            ],
                             "fields": [
                                 "id",
                                 "name",
@@ -337,20 +452,31 @@
                     }
                 ]
             },
-
             {
                 "id": "FilterSalaFabulosa",
                 "name": "Filtro SalaFabulosa",
                 "image": "products-list.png",
-                "data": ["path", "title", "description", "link_cart"],
+                "data": [
+                    "path",
+                    "title",
+                    "description",
+                    "link_cart"
+                ],
                 "options": [
                     {
                         "id": "default",
                         "name": "Lista estándar",
                         "using": {
                             "model": "Item",
-                            "with": ["category", "subcategory", "brand"],
-                            "relations": ["category", "tags"],
+                            "with": [
+                                "category",
+                                "subcategory",
+                                "brand"
+                            ],
+                            "relations": [
+                                "category",
+                                "tags"
+                            ],
                             "fields": [
                                 "id",
                                 "name",
@@ -367,8 +493,15 @@
                         "name": "Lista con variantes",
                         "using": {
                             "model": "Item",
-                            "with": ["category", "subcategory", "brand"],
-                            "relations": ["category", "tags"],
+                            "with": [
+                                "category",
+                                "subcategory",
+                                "brand"
+                            ],
+                            "relations": [
+                                "category",
+                                "tags"
+                            ],
                             "fields": [
                                 "id",
                                 "name",
@@ -387,15 +520,27 @@
                 "id": "FilterBananaLab",
                 "name": "Filtro FilterBananaLab",
                 "image": "products-list.png",
-                "data": ["path", "title", "description", "link_cart"],
+                "data": [
+                    "path",
+                    "title",
+                    "description",
+                    "link_cart"
+                ],
                 "options": [
                     {
                         "id": "default",
                         "name": "Lista estándar",
                         "using": {
                             "model": "Item",
-                            "with": ["category", "subcategory", "brand"],
-                            "relations": ["category", "tags"],
+                            "with": [
+                                "category",
+                                "subcategory",
+                                "brand"
+                            ],
+                            "relations": [
+                                "category",
+                                "tags"
+                            ],
                             "fields": [
                                 "id",
                                 "name",
@@ -412,8 +557,15 @@
                         "name": "Lista con variantes",
                         "using": {
                             "model": "Item",
-                            "with": ["category", "subcategory", "brand"],
-                            "relations": ["category", "tags"],
+                            "with": [
+                                "category",
+                                "subcategory",
+                                "brand"
+                            ],
+                            "relations": [
+                                "category",
+                                "tags"
+                            ],
                             "fields": [
                                 "id",
                                 "name",
@@ -432,15 +584,26 @@
                 "id": "FilterCategoryImage",
                 "name": "Categoría con Imagen",
                 "image": "filters-category-image.png",
-                "data": ["path", "title", "card"],
+                "data": [
+                    "path",
+                    "title",
+                    "card"
+                ],
                 "options": [
                     {
                         "id": "default",
                         "name": "Lista estándar",
                         "using": {
                             "model": "Item",
-                            "with": ["category", "subcategory", "brand"],
-                            "relations": ["category", "tags"],
+                            "with": [
+                                "category",
+                                "subcategory",
+                                "brand"
+                            ],
+                            "relations": [
+                                "category",
+                                "tags"
+                            ],
                             "fields": [
                                 "id",
                                 "name",
@@ -457,8 +620,15 @@
                         "name": "Lista con variantes",
                         "using": {
                             "model": "Item",
-                            "with": ["category", "subcategory", "brand"],
-                            "relations": ["category", "tags"],
+                            "with": [
+                                "category",
+                                "subcategory",
+                                "brand"
+                            ],
+                            "relations": [
+                                "category",
+                                "tags"
+                            ],
                             "fields": [
                                 "id",
                                 "name",
@@ -483,7 +653,9 @@
                 "id": "CategorySimple",
                 "name": "Simple",
                 "image": "categories-simple.png",
-                "data": ["path"],
+                "data": [
+                    "path"
+                ],
                 "using": {
                     "model": "Category",
                     "limit": 10
@@ -493,7 +665,9 @@
                 "id": "CategoryOneLine",
                 "name": "Una Linea",
                 "image": "categories-one-line.png",
-                "data": ["path"],
+                "data": [
+                    "path"
+                ],
                 "using": {
                     "model": "Category"
                 }
@@ -502,18 +676,27 @@
                 "id": "CategoryPrettyGrid",
                 "name": "Pretty Grid",
                 "image": "categories-pretty-grid.png",
-                "data": ["path", "borderRadius"],
+                "data": [
+                    "path",
+                    "borderRadius"
+                ],
                 "using": {
                     "model": "Category",
                     "limit": 3,
-                    "filters": ["featured", "ignoreVisibility"]
+                    "filters": [
+                        "featured",
+                        "ignoreVisibility"
+                    ]
                 }
             },
             {
                 "id": "InfiniteCategory",
                 "name": "category-infinito",
                 "image": "categories-simple.png",
-                "data": ["title", "path"],
+                "data": [
+                    "title",
+                    "path"
+                ],
                 "using": {
                     "model": "Category",
                     "limit": 10
@@ -523,7 +706,10 @@
                 "id": "PaginationCategory",
                 "name": "paginacion",
                 "image": "categories-simple.png",
-                "data": ["title", "path"],
+                "data": [
+                    "title",
+                    "path"
+                ],
                 "using": {
                     "model": "Category",
                     "limit": 10
@@ -533,33 +719,53 @@
                 "id": "CategoryCarousel",
                 "name": "Carousel",
                 "image": "categories-carousel.png",
-                "data": ["path", "title", "description", "link_catalog"],
+                "data": [
+                    "path",
+                    "title",
+                    "description",
+                    "link_catalog"
+                ],
                 "using": {
                     "model": "Category",
                     "limit": 10,
-                    "filters": ["featured"]
+                    "filters": [
+                        "featured"
+                    ]
                 }
             },
             {
                 "id": "CategoryFlex",
                 "name": "Flex",
                 "image": "categories-carousel.png",
-                "data": ["path", "title", "description", "link_catalog"],
+                "data": [
+                    "path",
+                    "title",
+                    "description",
+                    "link_catalog"
+                ],
                 "using": {
                     "model": "Category",
-                    "limit": 3,
-                    "filters": ["featured"]
+                    "filters": [
+                        "featured"
+                    ]
                 }
             },
             {
                 "id": "CategoriesScraping",
                 "name": "CategoriesScraping",
                 "image": "categories-carousel.png",
-                "data": ["path", "title", "description", "link_catalog"],
+                "data": [
+                    "path",
+                    "title",
+                    "description",
+                    "link_catalog"
+                ],
                 "using": {
                     "model": "Category",
                     "limit": 10,
-                    "filters": ["featured"]
+                    "filters": [
+                        "featured"
+                    ]
                 }
             }
         ]
@@ -572,7 +778,10 @@
                 "id": "PaginationCollection",
                 "name": "paginacion",
                 "image": "categories-simple.png",
-                "data": ["title", "path"],
+                "data": [
+                    "title",
+                    "path"
+                ],
                 "using": {
                     "model": "Collection",
                     "limit": 10
@@ -620,7 +829,11 @@
                         "offering",
                         "is_new"
                     ],
-                    "with": ["category", "subcategory", "brand"],
+                    "with": [
+                        "category",
+                        "subcategory",
+                        "brand"
+                    ],
                     "limit": 10
                 }
             },
@@ -662,7 +875,12 @@
                 ],
                 "using": {
                     "model": "Item",
-                    "filters": ["featured", "recommended", "offering", "is_new"]
+                    "filters": [
+                        "featured",
+                        "recommended",
+                        "offering",
+                        "is_new"
+                    ]
                 }
             },
             {
@@ -685,7 +903,11 @@
                         "is_new",
                         "views"
                     ],
-                    "with": ["category", "subcategory", "brand"],
+                    "with": [
+                        "category",
+                        "subcategory",
+                        "brand"
+                    ],
                     "limit": 10
                 }
             },
@@ -709,7 +931,11 @@
                         "is_new",
                         "views"
                     ],
-                    "with": ["category", "subcategory", "brand"],
+                    "with": [
+                        "category",
+                        "subcategory",
+                        "brand"
+                    ],
                     "limit": 8
                 }
             },
@@ -718,6 +944,8 @@
                 "name": "ProductBananaLab",
                 "image": "products-list.png",
                 "data": [
+                    "style_offer",
+                    "support_favorite",
                     "title",
                     "path",
                     "description",
@@ -734,7 +962,11 @@
                         "is_new",
                         "views"
                     ],
-                    "with": ["category", "subcategory", "brand"],
+                    "with": [
+                        "category",
+                        "subcategory",
+                        "brand"
+                    ],
                     "limit": 4
                 }
             },
@@ -750,7 +982,11 @@
                         "offering",
                         "is_new"
                     ],
-                    "with": ["category", "subcategory", "brand"],
+                    "with": [
+                        "category",
+                        "subcategory",
+                        "brand"
+                    ],
                     "limit": 8
                 }
             }
@@ -767,12 +1003,30 @@
             {
                 "id": "BannerAd",
                 "name": "Anuncio",
-                "data": ["background_color"]
+                "data": [
+                    "background_color"
+                ]
             },
             {
                 "id": "BannerPublicitario",
                 "name": "BannerPublicitario",
-                "data": ["title"]
+                "data": [
+                    "title",
+                    "image_position"
+                ]
+            },
+            {
+                "id": "BannerPostSuscriptionPaani",
+                "name": "BannerPostSuscriptionPaani",
+                "data": [
+                    "title",
+                    "button_text",
+                    "button_link"
+                ],
+                "using": {
+                    "model": "Post",
+                    "limit": 2
+                }
             },
             {
                 "id": "BannerFullWidth",
@@ -806,9 +1060,14 @@
                 "name": "Suscripción",
                 "using": {
                     "model": "Ad",
-                    "fields": ["image", "name"]
+                    "fields": [
+                        "image",
+                        "name"
+                    ]
                 },
-                "generals": ["privacy_policy"]
+                "generals": [
+                    "privacy_policy"
+                ]
             }
         ]
     },
@@ -820,7 +1079,10 @@
             {
                 "id": "ImageSimple",
                 "name": "Simple",
-                "data": ["image", "aspect_ratio"]
+                "data": [
+                    "image",
+                    "aspect_ratio"
+                ]
             }
         ]
     },
@@ -831,12 +1093,18 @@
             {
                 "id": "StepSimple",
                 "name": "Simple",
-                "data": ["steps", "selected"]
+                "data": [
+                    "steps",
+                    "selected"
+                ]
             },
             {
                 "id": "StepKuchara",
                 "name": "Kuchara",
-                "data": ["steps", "selected"]
+                "data": [
+                    "steps",
+                    "selected"
+                ]
             }
         ]
     },
@@ -849,8 +1117,11 @@
                 "name": "Simple",
                 "using": {
                     "model": "Item",
-
-                    "with": ["category", "subcategory", "brand"]
+                    "with": [
+                        "category",
+                        "subcategory",
+                        "brand"
+                    ]
                 }
             },
             {
@@ -858,13 +1129,17 @@
                 "name": "Kuchara",
                 "using": {
                     "model": "Item",
-                    "with": ["category"]
+                    "with": [
+                        "category"
+                    ]
                 }
             },
             {
                 "id": "ProductDetailB",
                 "name": "ProductDetailB",
-                "data": ["link_cart"],
+                "data": [
+                    "link_cart"
+                ],
                 "using": {
                     "model": "Item",
                     "flied": "slug"
@@ -882,7 +1157,11 @@
                         "specifications",
                         "features"
                     ],
-                    "relations": ["category", "brand", "subcategory"]
+                    "relations": [
+                        "category",
+                        "brand",
+                        "subcategory"
+                    ]
                 }
             },
             {
@@ -897,7 +1176,11 @@
                         "specifications",
                         "features"
                     ],
-                    "relations": ["category", "brand", "subcategory"]
+                    "relations": [
+                        "category",
+                        "brand",
+                        "subcategory"
+                    ]
                 }
             },
             {
@@ -914,13 +1197,21 @@
             {
                 "id": "CartSimple",
                 "name": "Simple",
-                "data": ["url_catalog", "url_checkout"]
+                "data": [
+                    "url_catalog",
+                    "url_checkout"
+                ]
             },
             {
                 "id": "CartKuchara",
                 "name": "Kuchara",
-                "data": ["url_catalog", "url_checkout"],
-                "generals": ["igv_checkout"]
+                "data": [
+                    "url_catalog",
+                    "url_checkout"
+                ],
+                "generals": [
+                    "igv_checkout"
+                ]
             }
         ]
     },
@@ -931,18 +1222,26 @@
             {
                 "id": "CheckoutCulqi",
                 "name": "Culqi",
-                "data": ["url_thanks"]
+                "data": [
+                    "url_thanks"
+                ]
             },
             {
                 "id": "CheckoutKuchara",
                 "name": "Kuchara",
-                "data": ["url_thanks"],
+                "data": [
+                    "url_thanks"
+                ],
                 "json": {
                     "prefixes": "./prefijocelular.json"
                 },
                 "using": {
                     "model": "DeliveryPrice",
-                    "field": ["name", "price", "data"]
+                    "field": [
+                        "name",
+                        "price",
+                        "data"
+                    ]
                 },
                 "generals": [
                     "igv_checkout",
@@ -962,12 +1261,16 @@
             {
                 "id": "CheckoutSteps",
                 "name": "Steps",
-                "data": ["title"]
+                "data": [
+                    "title"
+                ]
             },
             {
                 "id": "CheckoutStepsSF",
                 "name": "StepsSF",
-                "data": ["title"]
+                "data": [
+                    "title"
+                ]
             }
         ]
     },
@@ -978,12 +1281,16 @@
             {
                 "id": "ContactSimple",
                 "name": "Simple",
-                "data": ["redirect"]
+                "data": [
+                    "redirect"
+                ]
             },
             {
                 "id": "ContactGrid",
                 "name": "Grid",
-                "data": ["redirect"]
+                "data": [
+                    "redirect"
+                ]
             }
         ]
     },
@@ -994,12 +1301,16 @@
             {
                 "id": "Simple",
                 "name": "Simple",
-                "data": ["code:html"]
+                "data": [
+                    "code:html"
+                ]
             },
             {
                 "id": "Full",
                 "name": "Full Width",
-                "data": ["code:html"]
+                "data": [
+                    "code:html"
+                ]
             }
         ]
     },
@@ -1010,7 +1321,9 @@
             {
                 "id": "FaqSimple",
                 "name": "Simple",
-                "data": ["title"]
+                "data": [
+                    "title"
+                ]
             }
         ]
     },
@@ -1044,17 +1357,26 @@
                 "using": {
                     "model": "Post",
                     "limit": 3,
-                    "with": ["category"]
+                    "with": [
+                        "category"
+                    ]
                 }
             },
             {
                 "id": "BlogCarruselBananaLab",
                 "name": "BlogCarruselBananaLab",
-                "data": ["title", "description", "button_text", "link_blog"],
+                "data": [
+                    "title",
+                    "description",
+                    "button_text",
+                    "link_blog"
+                ],
                 "using": {
                     "model": "Post",
                     "limit": 3,
-                    "with": ["category"]
+                    "with": [
+                        "category"
+                    ]
                 }
             }
         ]
@@ -1068,7 +1390,9 @@
                 "id": "DeliveryZonesKuchara",
                 "name": "Kuchara",
                 "image": "delivery-zones-kuchara.png",
-                "data": ["image"],
+                "data": [
+                    "image"
+                ],
                 "using": {
                     "model": "DeliveryZone"
                 }
@@ -1082,8 +1406,13 @@
             {
                 "id": "ThankSimple",
                 "name": "Simple",
-                "data": ["url_catalog", "bool:send_whatsapp"],
-                "generals": ["phone_whatsapp"]
+                "data": [
+                    "url_catalog",
+                    "bool:send_whatsapp"
+                ],
+                "generals": [
+                    "phone_whatsapp"
+                ]
             }
         ]
     },
@@ -1094,11 +1423,15 @@
             {
                 "id": "PostDetailSimple",
                 "name": "Simple",
-                "data": ["title"],
+                "data": [
+                    "title"
+                ],
                 "using": {
                     "model": "Post",
                     "flied": "slug",
-                    "with": ["category"]
+                    "with": [
+                        "category"
+                    ]
                 }
             }
         ]
@@ -1110,7 +1443,9 @@
             {
                 "id": "AboutSimple",
                 "name": "Simple",
-                "data": ["title"],
+                "data": [
+                    "title"
+                ],
                 "using": {
                     "model": "Aboutus"
                 }
@@ -1118,7 +1453,12 @@
             {
                 "id": "AboutImage",
                 "name": "Con Imagen",
-                "data": ["url_imagen", "title", "description", "about_url"]
+                "data": [
+                    "url_imagen",
+                    "title",
+                    "description",
+                    "about_url"
+                ]
             }
         ]
     },
@@ -1199,12 +1539,36 @@
                     "support_phone",
                     "support_email"
                 ]
+            }, 
+            {
+                "id": "FooterPaani",
+                "name": "FooterPaani",
+                "image": "footer-simple.png",
+                "data": [
+                    "methodPayment"
+                ],
+                "using": {
+                    "model": "Social",
+                    "limit": 10
+                },
+                "generals": [
+                    "terms_conditions",
+                    "privacy_policy",
+                    "delivery_policy",
+                    "saleback_policy",
+                    "address",
+                    "support_phone",
+                    "support_email",
+                    "opening_hours"
+                ]
             },
             {
                 "id": "FooterTermsCTASocials",
                 "name": "Politicas, CTA y Redes",
                 "image": "footer-terms-cta-socials.png",
-                "data": ["complaint_url"],
+                "data": [
+                    "complaint_url"
+                ],
                 "using": {
                     "model": "Social",
                     "limit": 10
@@ -1241,18 +1605,25 @@
                 "id": "FooterCallToAction",
                 "name": "Llamada a la acción",
                 "image": "footer-call-to-action.png",
-                "data": ["summary"],
+                "data": [
+                    "summary"
+                ],
                 "using": {
                     "model": "Social",
                     "limit": 10
                 },
-                "generals": ["terms_conditions", "privacy_policy"]
+                "generals": [
+                    "terms_conditions",
+                    "privacy_policy"
+                ]
             },
             {
                 "id": "FooterSimpleCallToAction",
                 "name": "Llamada a la acción simple",
                 "image": "footer-call-to-action-simple.png",
-                "data": ["summary"],
+                "data": [
+                    "summary"
+                ],
                 "using": {
                     "model": "Social",
                     "limit": 10
@@ -1276,13 +1647,35 @@
             {
                 "id": "ComplaintStech",
                 "name": "Stech",
-                "data": ["steps", "selected"]
+                "data": [
+                    "steps",
+                    "selected"
+                ]
             },
             {
                 "id": "ComplaintSimple",
                 "name": "Simple",
-                "data": ["steps", "selected"],
-                "generals": ["terms_conditions"]
+                "data": [
+                    "steps",
+                    "selected"
+                ],
+                "generals": [
+                    "terms_conditions"
+                ]
+            }
+        ]
+    },
+     {
+        "id": "testimonials",
+        "name": "Testimonials",
+        "options": [
+            {
+                "id": "TestimonialsPaani",
+                "name": "Paani",
+               "using": {
+                    "model": "Testimony"
+                  
+                }
             }
         ]
     },
@@ -1293,22 +1686,34 @@
             {
                 "id": "Canva1",
                 "name": "Canva1",
-                "data": ["steps", "selected"]
+                "data": [
+                    "steps",
+                    "selected"
+                ]
             },
             {
                 "id": "Canva2",
                 "name": "Canva2",
-                "data": ["steps", "selected"]
+                "data": [
+                    "steps",
+                    "selected"
+                ]
             },
             {
                 "id": "Canva3",
                 "name": "Canva3",
-                "data": ["steps", "selected"]
+                "data": [
+                    "steps",
+                    "selected"
+                ]
             },
             {
                 "id": "Editor",
                 "name": "Editor",
-                "data": ["steps", "selected"]
+                "data": [
+                    "steps",
+                    "selected"
+                ]
             }
         ]
     }

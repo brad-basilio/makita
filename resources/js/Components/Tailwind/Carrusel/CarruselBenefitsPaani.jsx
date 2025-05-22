@@ -2,6 +2,8 @@ import { useEffect, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { adjustTextColor } from "../../../Functions/adjustTextColor";
 import "swiper/css";
+import Global from "../../../Utils/Global";
+
 
 const CarruselBenefitsPaani = ({ items }) => {
   const benefitsRef = useRef(null);
@@ -10,8 +12,7 @@ const CarruselBenefitsPaani = ({ items }) => {
     adjustTextColor(benefitsRef.current);
   }, []);
 
-  // Helper to highlight **text** in description
-  const highlightDescription = (desc) => {
+   const highlightText = (desc) => {
     const parts = desc.split(/(\*[^*]+\*)/g);
     return parts.map((part, i) =>
       part.startsWith("*") && part.endsWith("*") ? (
@@ -25,7 +26,18 @@ const CarruselBenefitsPaani = ({ items }) => {
   };
 
   return (
-    <div ref={benefitsRef} className="bg-primary py-10 overflow-hidden">
+    <div ref={benefitsRef} className="bg-primary py-10 overflow-hidden relative">
+         <img
+                src={`/assets/${Global.APP_CORRELATIVE}/overlay.png`}
+                alt={`${Global.APP_NAME} - ${Global.APP_CORRELATIVE}`}
+                className="pointer-events-none select-none absolute inset-0 w-full h-full object-cover opacity-50 z-0"
+                style={{
+                    objectPosition: "center",
+                    mixBlendMode: "overlay",
+                }}
+                aria-hidden="true"
+                loading="lazy"
+            />
       <div className="px-primary 2xl:px-0 2xl:max-w-7xl mx-auto relative">
         <Swiper
           slidesPerView={1}
@@ -43,20 +55,20 @@ const CarruselBenefitsPaani = ({ items }) => {
           {items.map((benefit, index) => (
             <SwiperSlide key={index}>
               <div className="flex flex-col h-full ">
-                <div className="flex flex-col md:flex-row items-center md:items-center gap-4 md:gap-6 h-full  transition   duration-200">
-                  <div className="flex-shrink-0 flex items-center justify-center bg-white rounded-full shadow-md w-20 h-20 md:w-16 md:h-16 p-2">
+                <div className="flex flex-row  items-center gap-6 h-full  transition   duration-200">
+                  <div className="flex-shrink-0 flex items-center justify-center bg-white rounded-full shadow-md w-16 h-16 p-2">
                     <img
                       alt={benefit.name}
                       src={`/storage/images/indicator/${benefit.symbol}`}
-                      className="w-14 h-14 md:w-12 md:h-12 object-contain"
+                      className="w-12 h-12 object-contain"
                       onError={(e) => {
                         e.target.src = "/api/cover/thumbnail/null";
                       }}
                     />
                   </div>
-                  <div className="flex-1 flex flex-col justify-center items-center md:items-start text-center md:text-left">
+                  <div className="flex-1 flex flex-col justify-center items-start text-left">
                     <p className="text-base leading-tight text-primary-900">
-                      {highlightDescription(benefit.description)}
+                      {highlightText(benefit.description)}
                     </p>
                   </div>
                 </div>

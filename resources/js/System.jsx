@@ -56,6 +56,7 @@ const BananaLab = React.lazy(() => import("./Components/Tailwind/BananaLab"));
 const Floating = React.lazy(() => import("./Components/Tailwind/Floating"));
 const DeliveryZone = React.lazy(() => import("./Components/Tailwind/DeliveryZone"));
 const Ad = React.lazy(() => import("./Components/Tailwind/Ad"));
+const Testimonials = React.lazy(() => import("./Components/Tailwind/Testimonials"));
 
 import { Local } from "sode-extend-react";
 import Global from "./Utils/Global";
@@ -92,6 +93,14 @@ const System = ({
     useEffect(() => {
         Local.set(`${Global.APP_CORRELATIVE}_cart`, cart);
     }, [cart]);
+
+     const [favorites, setFavorites] = useState(
+        Local.get(`${Global.APP_CORRELATIVE}_favorites`) ?? []
+    );
+
+    useEffect(() => {
+        Local.set(`${Global.APP_CORRELATIVE}_favorites`, favorites);
+    }, [favorites]);
 
     useEffect(() => {
         itemsRest.verifyStock(cart.map((x) => x.id)).then((items) => {
@@ -151,7 +160,8 @@ const System = ({
             case "filter":
                 return <Filter which={value} data={data} items={getItems(itemsId)} filteredData={filteredData} cart={cart} setCart={setCart} />
             case "product":
-                return <Product which={value} data={data} items={getItems(itemsId)} filteredData={filteredData} cart={cart} setCart={setCart} pages={pages} />
+                return <Product which={value} data={data} items={getItems(itemsId)} filteredData={filteredData} cart={cart} setCart={setCart} pages={pages}      favorites={favorites}
+                        setFavorites={setFavorites}/>
             case "category":
                 return <Category which={value} data={data} items={getItems(itemsId)} />
             case "collection":
@@ -163,7 +173,7 @@ const System = ({
             case "indicator":
                 return <Indicator which={value} data={data} items={getItems(itemsId)} />
             case "banner":
-                return <Banner which={value} data={data} />
+                return <Banner which={value} data={data} items={getItems(itemsId)} />
             case "ads":
                 return <Ad which={value} data={data} items={getItems(itemsId)} />
             case "image":
@@ -201,11 +211,13 @@ const System = ({
             case "frame":
                 return <Frame which={value} data={data} />
             case "footer":
-                return <Footer {...componentProps} contacts={contacts} />
+                return <Footer {...componentProps} contacts={contacts} generals={generals} data={data}  />
             case "complaints":
                 return <Complaint which={value} data={data} generals={generals} />
             case "floating":
                 return <Floating which={value} data={data} />
+            case "testimonials":
+                return <Testimonials which={value} data={data} items={getItems(itemsId)} />
             default:
                 return (
                     <div className="w-full px-[5%] replace-max-w-here p-4 mx-auto">
