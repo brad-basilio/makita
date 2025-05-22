@@ -688,6 +688,35 @@ export default function ShippingStepSF({
         }),
     });
 
+    const customStyles = {
+        control: (provided, state) => ({
+          ...provided,
+          padding: '0.5rem',
+          borderColor: state.isFocused ? '#d1d5db' : '#d1d5db', // gray-300
+          borderRadius: '0.75rem', // rounded-xl
+          boxShadow: 'none',
+          '&:hover': {
+            borderColor: '#9ca3af', // gray-400
+          },
+        }),
+        input: (provided) => ({
+          ...provided,
+          color: '#374151', // gray-700
+        }),
+        option: (provided, state) => ({
+          ...provided,
+          backgroundColor: state.isSelected ? '#3b82f6' : 'white', // blue-500 when selected
+          color: state.isSelected ? 'white' : '#374151', // gray-700
+          '&:hover': {
+            backgroundColor: '#e5e7eb', // gray-200
+          },
+        }),
+        singleValue: (provided) => ({
+          ...provided,
+          color: '#374151', // gray-700
+        }),
+      };
+
     return (
         <>
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-y-8 lg:gap-8 ">
@@ -752,6 +781,8 @@ export default function ShippingStepSF({
                                             onChange={(e) => setSelectedPrefix(e.target.value)}
                                             name="phone_prefix"
                                             value={formData.phone_prefix}
+                                            styles={customStyles}
+                                            classNamePrefix="select"
                                         >
                                             <option value="">Selecciona un país</option>
                                             {

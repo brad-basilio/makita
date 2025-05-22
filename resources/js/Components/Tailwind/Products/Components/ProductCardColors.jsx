@@ -67,7 +67,7 @@ const ProductCardColors = ({ product, setCart, cart }) => {
             className={`group w-full transition-transform duration-300 hover:scale-105 flex-shrink-0 font-font-general customtext-primary cursor-pointer`}
         >
             <div
-                className="bg-white p-0 sm:p-4"
+                className="bg-white p-0"
 
             >
                 <a href={`/item/${product.slug}`}>
