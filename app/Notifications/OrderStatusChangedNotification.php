@@ -7,6 +7,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use App\Mail\RawHtmlMail;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class OrderStatusChangedNotification extends Notification implements ShouldQueue
@@ -51,7 +52,7 @@ class OrderStatusChangedNotification extends Notification implements ShouldQueue
         // Construir array de productos para el bloque repetible
         $productos = [];
         Log::info('Detalles recibidos:', (array) $this->details);
-          Log::info('Entrando al foreach de detalles...');
+        Log::info('Entrando al foreach de detalles...');
         foreach ($this->details as $detail) {
           
             Log::info('Producto: ' . $detail->name . ' | imgPath: ' . $imgPath . ' | imgUrl: ' . $imgUrl);
