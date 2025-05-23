@@ -294,14 +294,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
     const [filtersOpen, setFiltersOpen] = useState(false); // Añadir estado para mobile
     const [isOpen, setIsOpen] = useState(false)
     const [isVisible, setIsVisible] = useState(false);
-    // const openModal = () => {
-    //     setIsOpen(true);
-    //     document.body.style.overflow = 'hidden';
-    // };
-    // const closeModal = () => {
-    //     setIsOpen(false);
-    //     document.body.style.overflow = 'auto';
-    // };
+ 
     const openModal = () => {
         setIsOpen(true);
         // Forzamos un pequeño delay para que React actualice el DOM antes de la animación
