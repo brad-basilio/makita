@@ -51,19 +51,29 @@ class OrderStatusChangedNotification extends Notification implements ShouldQueue
         // Construir array de productos para el bloque repetible
         $productos = [];
         foreach ($this->details as $detail) {
-            // Determinar la ruta de la imagen (puede estar en detail->image o en detail->item->image)
+            // Obtener la ruta de la imagen (puede estar en detail->image o en detail->item->image)
             $imgPath = $detail->image ?? ($detail->item->image ?? '');
-            // Si la ruta ya contiene 'storage/', úsala tal cual, si no, prepéndela
-            if ($imgPath && strpos($imgPath, 'storage/') === false) {
-                $imgPath = 'storage/images/item/' . ltrim($imgPath, '/');
+            $imgUrl = '';
+            if ($imgPath) {
+                // Si ya es una URL absoluta, úsala tal cual
+                if (preg_match('/^https?:\/\//i', $imgPath)) {
+                    $imgUrl = $imgPath;
+                } else {
+                    // Si la ruta ya contiene 'storage/', úsala con url()
+                    if (strpos($imgPath, 'storage/') === 0) {
+                        $imgUrl = url($imgPath);
+                    } else {
+                        // Asume que es una imagen de item en storage
+                        $imgUrl = url('storage/images/item/' . ltrim($imgPath, '/'));
+                    }
+                }
             }
-            $imgUrl = $imgPath ? url($imgPath) : '';
             $productos[] = [
                 'nombre'    => $detail->name,
                 'cantidad'  => $detail->quantity,
                 'precio'    => number_format($detail->price, 2),
                 'categoria' => $detail->item->category->name ?? '',
-                'imagen'    => $imgUrl,
+                'imagen'     => $imgUrl, // CLAVE CORRECTA PARA LA PLANTILLA
             ];
         }
 
@@ -77,6 +87,7 @@ class OrderStatusChangedNotification extends Notification implements ShouldQueue
                 'productos'    => $productos,
             ])
             : 'Plantilla no encontrada';
+        $body = str_replace('data-src=', 'src=', $body);
         return (new RawHtmlMail(
             $body,
             'Estado de tu pedido actualizado',
