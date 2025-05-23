@@ -56,7 +56,7 @@ class OrderStatusChangedNotification extends Notification implements ShouldQueue
                 'cantidad'  => $detail->quantity,
                 'precio'    => number_format($detail->price, 2),
                 'categoria' => $detail->item->category->name ?? '',
-                'imagen'     => $detail->image ?? ($detail->item->image ?? ''),
+                'imagen'     => asset(Storage::url("/images/item/".$detail->image ?? ($detail->item->image ?? ''))),
             ];
         }
 
