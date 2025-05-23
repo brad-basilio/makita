@@ -10,13 +10,11 @@ use Illuminate\Notifications\Messages\MailMessage;
 class VerifyAccountNotification extends Notification implements ShouldQueue
 {
     use Queueable;
-    protected $clientCorrelative;
     protected $verificationUrl;
 
-    public function __construct($verificationUrl, $correlative = null)
+    public function __construct($verificationUrl)
     {
         $this->verificationUrl = $verificationUrl;
-        $this->clientCorrelative = $correlative ?? env('APP_CORRELATIVE', 'default');
     }
 
 
@@ -24,20 +22,19 @@ class VerifyAccountNotification extends Notification implements ShouldQueue
     {
         return ['mail'];
     }
-    public function setClientCorrelative($correlative)
-    {
-        $this->clientCorrelative = $correlative;
-    }
     public function toMail($notifiable)
     {
-        $view = 'emails.' . $this->clientCorrelative . '.verify_account';
-        if (!view()->exists($view)) {
-            $view = 'emails.default.verify_account';
-        }
+        $template = \App\Models\General::where('correlative', 'verify_account_email')->first();
+        $body = $template
+            ? \Illuminate\Support\Facades\Blade::render($template->description, [
+                'verificationUrl' => $this->verificationUrl
+            ])
+            : 'Plantilla no encontrada';
         return (new MailMessage)
             ->subject('Verifica tu cuenta')
-            ->view($view, [
-                'verificationUrl' => $this->verificationUrl
+            ->view('emails.email_wrapper', [
+                'slot' => $body,
+                'subject' => 'Verifica tu cuenta',
             ]);
     }
 }

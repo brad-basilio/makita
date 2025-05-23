@@ -12,32 +12,35 @@ class ClaimNotification extends Notification implements ShouldQueue
     use Queueable;
 
     protected $complaint;
-    protected $clientCorrelative ;
-    public function __construct($complaint, $correlative = null)
+    public function __construct($complaint)
     {
         $this->complaint = $complaint;
-        $this->clientCorrelative = $correlative ?? env('APP_CORRELATIVE', 'default');
     }
 
     public function via($notifiable)
     {
         return ['mail'];
     }
-    public function setClientCorrelative($correlative)
-    {
-        $this->clientCorrelative = $correlative;
-    }
 
     public function toMail($notifiable)
     {
-        $view = 'emails.' . $this->clientCorrelative . '.claim';
-        if (!view()->exists($view)) {
-            $view = 'emails.default.claim';
-        }
+        $template = \App\Models\General::where('correlative', 'claim_email')->first();
+        $body = $template
+            ? \Illuminate\Support\Facades\Blade::render($template->description, [
+                'nombre' => $this->complaint->nombre ?? 'cliente',
+                'tipo_reclamo' => $this->complaint->tipo_reclamo,
+                'detalle_reclamo' => $this->complaint->detalle_reclamo,
+                'fecha_ocurrencia' => $this->complaint->fecha_ocurrencia ?? 'No especificada',
+                'monto_reclamado' => $this->complaint->monto_reclamado ?? 'No especificado',
+                'descripcion_producto' => $this->complaint->descripcion_producto,
+                'numero_pedido' => $this->complaint->numero_pedido ?? 'No especificado',
+            ])
+            : 'Plantilla no encontrada';
         return (new MailMessage)
             ->subject('Hemos recibido tu reclamo')
-            ->view($view, [
-                'complaint' => $this->complaint
+            ->view('emails.email_wrapper', [
+                'slot' => $body,
+                'subject' => 'Hemos recibido tu reclamo',
             ]);
     }
 }

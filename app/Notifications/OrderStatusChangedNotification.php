@@ -11,15 +11,12 @@ class OrderStatusChangedNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    protected $orderId;
-    protected $status;
-    protected $clientCorrelative;
-    public function __construct($orderId, $status, $correlative = null)
+    protected $sale;
+   
+    public function __construct($sale)
     {
-        $this->orderId = $orderId;
-        $this->status = $status;
-        // Permite que funcione tanto con el servicio como con notify() directo
-        $this->clientCorrelative = $correlative ?? env('APP_CORRELATIVE', 'default');
+        $this->sale = $sale;
+       
     }
 
     public function via($notifiable)
@@ -28,21 +25,39 @@ class OrderStatusChangedNotification extends Notification implements ShouldQueue
     }
 
 
-    public function setClientCorrelative($correlative)
-    {
-        $this->clientCorrelative = $correlative;
-    }
     public function toMail($notifiable)
     {
-        $view = 'emails.' . $this->clientCorrelative . '.order_status_changed';
-        if (!view()->exists($view)) {
-            $view = 'emails.default.order_status_changed';
+        $template = \App\Models\General::where('correlative', 'order_status_changed_email')->first();
+
+        // Limpieza forzada de llaves y variables (más robusta)
+        $content = $template ? $template->description : '';
+      
+    
+        // Validación extra: si sigue fallando, muestra el contenido limpio y lanza excepción personalizada
+        try {
+            $body = $template
+                ? \Illuminate\Support\Facades\Blade::render($content, [
+                    'orderId' => $this->sale->code,
+                    'status' => $this->sale->status->name,
+                    'name' => $this->sale->user->name,
+                ])
+                : 'Plantilla no encontrada';
+        } catch (\Throwable $e) {
+            \Log::error('Error al renderizar Blade:', [
+                'content' => $content,
+                'orderId' => $this->sale->code,
+                'status' => $this->sale->status->name,
+                'name' => $this->sale->user->name,
+                'exception' => $e->getMessage(),
+            ]);
+            throw new \Exception('Error al renderizar el template de correo: ' . $e->getMessage() . "\nContenido limpio: " . $content);
         }
+
         return (new MailMessage)
             ->subject('Estado de tu pedido actualizado')
-            ->view($view, [
-                'orderId' => $this->orderId,
-                'status' => $this->status
+            ->view('emails.email_wrapper', [
+                'slot' => $body,
+                'subject' => 'Estado de tu pedido actualizado',
             ]);
     }
 }

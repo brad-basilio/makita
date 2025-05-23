@@ -12,32 +12,29 @@ class PasswordResetLinkNotification extends Notification implements ShouldQueue
     use Queueable;
 
     protected $resetUrl;
-    protected $clientCorrelative;
-    public function __construct($resetUrl, $correlative = null)
+    public function __construct($resetUrl)
     {
         $this->resetUrl = $resetUrl;
-        $this->clientCorrelative = $correlative ?? env('APP_CORRELATIVE', 'default');
     }
 
     public function via($notifiable)
     {
         return ['mail'];
     }
-    public function setClientCorrelative($correlative)
-    {
-        $this->clientCorrelative = $correlative;
-    }
 
     public function toMail($notifiable)
     {
-        $view = 'emails.' . $this->clientCorrelative . '.reset_password';
-        if (!view()->exists($view)) {
-            $view = 'emails.default.reset_password';
-        }
+        $template = \App\Models\General::where('correlative', 'reset_password_email')->first();
+        $body = $template
+            ? \Illuminate\Support\Facades\Blade::render($template->description, [
+                'resetUrl' => $this->resetUrl
+            ])
+            : 'Plantilla no encontrada';
         return (new MailMessage)
             ->subject('Restablece tu contraseña')
-            ->view($view, [
-                'resetUrl' => $this->resetUrl
+            ->view('emails.email_wrapper', [
+                'slot' => $body,
+                'subject' => 'Restablece tu contraseña',
             ]);
     }
 }

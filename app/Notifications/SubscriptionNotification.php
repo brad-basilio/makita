@@ -10,28 +10,25 @@ use Illuminate\Notifications\Messages\MailMessage;
 class SubscriptionNotification extends Notification implements ShouldQueue
 {
     use Queueable;
-    protected $clientCorrelative;
-    public function __construct($correlative = null)
+    public function __construct()
     {
-        $this->clientCorrelative = $correlative ?? env('APP_CORRELATIVE', 'default');
     }
     public function via($notifiable)
     {
         return ['mail'];
     }
 
-    public function setClientCorrelative($correlative)
-    {
-        $this->clientCorrelative = $correlative;
-    }
     public function toMail($notifiable)
     {
-        $view = 'emails.' . $this->clientCorrelative . '.subscription';
-        if (!view()->exists($view)) {
-            $view = 'emails.default.subscription';
-        }
+        $template = \App\Models\General::where('correlative', 'subscription_email')->first();
+        $body = $template
+            ? \Illuminate\Support\Facades\Blade::render($template->description)
+            : 'Plantilla no encontrada';
         return (new MailMessage)
             ->subject('¡Gracias por suscribirte!')
-            ->view($view);
+            ->view('emails.email_wrapper', [
+                'slot' => $body,
+                'subject' => '¡Gracias por suscribirte!',
+            ]);
     }
 }

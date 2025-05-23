@@ -32,7 +32,7 @@ class SaleController extends BasicController
 
         // Notificar al cliente sobre el cambio de estado
         if ($saleJpa && $saleJpa->email && $saleJpa->status) {
-            $saleJpa->notify(new OrderStatusChangedNotification($saleJpa->code, $saleJpa->status->name));
+            $saleJpa->notify(new OrderStatusChangedNotification($saleJpa));
         }
 
         return $saleJpa;

@@ -13,20 +13,14 @@ class PurchaseSummaryNotification extends Notification implements ShouldQueue
 
     protected $sale;
     protected $details;
-    protected $clientCorrelative;
 
-    public function __construct($sale, $details, $correlative = null)
+    public function __construct($sale, $details)
     {
         $this->sale = $sale;
         $this->details = $details;
-        $this->clientCorrelative = $correlative ?? env('APP_CORRELATIVE', 'default');
     }
 
     // Recibe el correlative del cliente
-    public function setClientCorrelative($correlative)
-    {
-        $this->clientCorrelative = $correlative;
-    }
 
     public function via($notifiable)
     {
@@ -35,16 +29,28 @@ class PurchaseSummaryNotification extends Notification implements ShouldQueue
 
     public function toMail($notifiable)
     {
-        $view = 'emails.' . $this->clientCorrelative . '.purchase_summary';
-        // Si la vista no existe, usar la default
-        if (!view()->exists($view)) {
-            $view = 'emails.default.purchase_summary';
+        $template = \App\Models\General::where('correlative', 'purchase_summary_email')->first();
+        $productosHtml = '';
+        foreach ($this->details as $detail) {
+            $productosHtml .= '<tr>' .
+                '<td>' . e($detail->name) . '</td>' .
+                '<td>' . e($detail->quantity) . '</td>' .
+                '<td>S/ ' . number_format($detail->price, 2) . '</td>' .
+            '</tr>';
         }
+        $body = $template
+            ? \Illuminate\Support\Facades\Blade::render($template->description, [
+                'nombre' => $this->sale->name ?? 'cliente',
+                'codigo' => $this->sale->code,
+                'total' => number_format($this->sale->amount, 2),
+                'productos' => $productosHtml,
+            ])
+            : 'Plantilla no encontrada';
         return (new MailMessage)
             ->subject('¡Gracias por tu compra!')
-            ->view($view, [
-                'sale' => $this->sale,
-                'details' => $this->details
+            ->view('emails.email_wrapper', [
+                'slot' => $body,
+                'subject' => '¡Gracias por tu compra!',
             ]);
     }
 }

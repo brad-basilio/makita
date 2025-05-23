@@ -20,7 +20,14 @@ const Generals = ({ generals }) => {
     generals.find((x) => x.correlative == "location")?.description ?? "0,0";
 
   // First add these to your formData state
+  // Filtrar solo los generales que son plantillas de email (excluyendo correo de soporte)
+  const emailTemplates = generals.filter(g => g.correlative.endsWith('_email') && g.correlative !== 'support_email');
+  const [showPreview, setShowPreview] = useState(false);
+  const [selectedEmailCorrelative, setSelectedEmailCorrelative] = useState(emailTemplates[0]?.correlative || "");
   const [formData, setFormData] = useState({
+    email_templates: Object.fromEntries(
+      emailTemplates.map(t => [t.correlative, t.description ?? ""])
+    ),
     phones: generals
       .find((x) => x.correlative == "phone_contact")
       ?.description?.split(",")
@@ -126,7 +133,14 @@ const Generals = ({ generals }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // Guardar solo el template seleccionado
       await generalsRest.save([
+        // Guardar solo el template seleccionado
+        ...Object.keys(formData.email_templates).map(correlative => ({
+          correlative,
+          name: emailTemplates.find(t => t.correlative === correlative)?.name || correlative,
+          description: formData.email_templates[correlative],
+        })),
         {
           correlative: "phone_contact",
           name: "Teléfono de contacto",
@@ -334,9 +348,70 @@ const Generals = ({ generals }) => {
               Ubicación
             </button>
           </li>
+
+        <li className="nav-item" role="presentation">
+          <button
+            className={`nav-link ${activeTab === "email" ? "active" : ""}`}
+            onClick={() => setActiveTab("email")}
+            type="button"
+            role="tab"
+          >
+            Email
+          </button>
+        </li>
         </ul>
 
         <div className="tab-content" id="generalTabsContent">
+          <div
+            className={`tab-pane fade ${activeTab === "email" ? "show active" : ""}`}
+            role="tabpanel"
+          >
+            <div className="mb-2">
+              <label htmlFor="email_correlative" className="form-label">
+                Tipo de Email
+              </label>
+              <select
+                id="email_correlative"
+                className="form-select mb-3"
+                value={selectedEmailCorrelative}
+                onChange={e => setSelectedEmailCorrelative(e.target.value)}
+              >
+                {emailTemplates.map(t => (
+                  <option key={t.correlative} value={t.correlative}>{t.name || t.correlative}</option>
+                ))}
+              </select>
+              <label htmlFor="email_template_area" className="form-label">
+                Plantilla de Email (HTML/Blade)
+                <small className="d-block text-muted">Puedes usar variables Blade como <code>{`{{$variable}}`}</code>. Usa solo HTML seguro.</small>
+              </label>
+              <textarea
+                className="form-control"
+                id="email_template_area"
+                style={{ minHeight: 200, maxHeight: 400, overflowY: 'auto', fontFamily: 'monospace', whiteSpace: 'pre', tabSize: 2 }}
+                value={formData.email_templates[selectedEmailCorrelative] || ""}
+                onChange={e => setFormData({
+                  ...formData,
+                  email_templates: {
+                    ...formData.email_templates,
+                    [selectedEmailCorrelative]: e.target.value
+                  }
+                })}
+                placeholder="<html>... Usa HTML y Blade aquí ...</html>"
+              />
+              <button
+                type="button"
+                className="btn btn-outline-secondary mt-2"
+                onClick={() => setShowPreview(!showPreview)}
+              >
+                {showPreview ? 'Ocultar' : 'Vista previa'}
+              </button>
+            </div>
+            {showPreview && (
+              <div className="border rounded p-3 mt-2 bg-light" style={{ minHeight: 200, maxHeight: 400, overflowY: 'auto' }}>
+                <div dangerouslySetInnerHTML={{ __html: formData.email_templates[selectedEmailCorrelative] || '' }} />
+              </div>
+            )}
+          </div>
           <div
             className={`tab-pane fade ${activeTab === "general" ? "show active" : ""
               }`}

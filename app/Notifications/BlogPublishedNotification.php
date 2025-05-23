@@ -13,13 +13,11 @@ class BlogPublishedNotification extends Notification implements ShouldQueue
 
     protected $title;
     protected $url;
-    protected $clientCorrelative;
 
-    public function __construct($title, $url, $correlative = null)
+    public function __construct($title, $url)
     {
         $this->title = $title;
         $this->url = $url;
-          $this->clientCorrelative = $correlative ?? env('APP_CORRELATIVE', 'default');
     }
 
     public function via($notifiable)
@@ -27,21 +25,20 @@ class BlogPublishedNotification extends Notification implements ShouldQueue
         return ['mail'];
     }
 
-    public function setClientCorrelative($correlative)
-    {
-        $this->clientCorrelative = $correlative;
-    }
     public function toMail($notifiable)
     {
-        $view = 'emails.' . $this->clientCorrelative . '.blog_published';
-        if (!view()->exists($view)) {
-            $view = 'emails.default.blog_published';
-        }
-        return (new MailMessage)
-            ->subject('Nuevo blog publicado: ' . $this->title)
-            ->view($view, [
+        $template = \App\Models\General::where('correlative', 'blog_published_email')->first();
+        $body = $template
+            ? \Illuminate\Support\Facades\Blade::render($template->description, [
                 'title' => $this->title,
                 'url' => $this->url
+            ])
+            : 'Plantilla no encontrada';
+        return (new MailMessage)
+            ->subject('Nuevo blog publicado: ' . $this->title)
+            ->view('emails.email_wrapper', [
+                'slot' => $body,
+                'subject' => 'Nuevo blog publicado: ' . $this->title,
             ]);
     }
 }

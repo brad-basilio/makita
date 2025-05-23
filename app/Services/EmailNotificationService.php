@@ -18,9 +18,6 @@ class EmailNotificationService
     public function sendToUser($notifiable, Notification $notification)
     {
         // Inyecta el correlative si la notificación tiene el método
-        if (method_exists($notification, 'setClientCorrelative')) {
-            $notification->setClientCorrelative(env('APP_CORRELATIVE', 'default'));
-        }
         NotificationFacade::send($notifiable, $notification);
     }
 

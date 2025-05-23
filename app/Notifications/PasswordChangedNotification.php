@@ -10,13 +10,8 @@ use Illuminate\Notifications\Messages\MailMessage;
 class PasswordChangedNotification extends Notification implements ShouldQueue
 {
     use Queueable;
-    protected $clientCorrelative;
-
-    public function __construct($correlative = null)
+    public function __construct()
     {
-
-        // Permite que funcione tanto con el servicio como con notify() directo
-        $this->clientCorrelative = $correlative ?? env('APP_CORRELATIVE', 'default');
     }
 
 
@@ -25,18 +20,17 @@ class PasswordChangedNotification extends Notification implements ShouldQueue
         return ['mail'];
     }
 
-    public function setClientCorrelative($correlative)
-    {
-        $this->clientCorrelative = $correlative;
-    }
     public function toMail($notifiable)
     {
-        $view = 'emails.' . $this->clientCorrelative . '.password_changed';
-        if (!view()->exists($view)) {
-            $view = 'emails.default.password_changed';
-        }
+        $template = \App\Models\General::where('correlative', 'password_changed_email')->first();
+        $body = $template
+            ? \Illuminate\Support\Facades\Blade::render($template->description)
+            : 'Plantilla no encontrada';
         return (new MailMessage)
             ->subject('Tu contraseña ha sido cambiada')
-            ->view($view);
+            ->view('emails.email_wrapper', [
+                'slot' => $body,
+                'subject' => 'Tu contraseña ha sido cambiada',
+            ]);
     }
 }
