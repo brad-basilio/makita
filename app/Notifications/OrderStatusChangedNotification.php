@@ -50,7 +50,11 @@ class OrderStatusChangedNotification extends Notification implements ShouldQueue
 
         // Construir array de productos para el bloque repetible
         $productos = [];
+        Log::info('Detalles recibidos:', (array) $this->details);
+          Log::info('Entrando al foreach de detalles...');
         foreach ($this->details as $detail) {
+          
+            Log::info('Producto: ' . $detail->name . ' | imgPath: ' . $imgPath . ' | imgUrl: ' . $imgUrl);
             // Obtener la ruta de la imagen (puede estar en detail->image o en detail->item->image)
             $imgPath = $detail->image ?? ($detail->item->image ?? '');
             $imgUrl = '';
@@ -68,7 +72,8 @@ class OrderStatusChangedNotification extends Notification implements ShouldQueue
                     }
                 }
             }
-            \Log::info('Producto: ' . $detail->name . ' | imgPath: ' . $imgPath . ' | imgUrl: ' . $imgUrl);
+            Log::info('Productos array generado:', $productos);
+           
             $productos[] = [
                 'nombre'    => $detail->name,
                 'cantidad'  => $detail->quantity,
