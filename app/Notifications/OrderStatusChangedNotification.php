@@ -87,7 +87,7 @@ class OrderStatusChangedNotification extends Notification implements ShouldQueue
                 'productos'    => $productos,
             ])
             : 'Plantilla no encontrada';
-      
+        \Log::info($imgUrl);
         // Limpia cualquier base antepuesta a {{imagen}} en src
         $body = preg_replace('/(<img[^>]+src=[\'"])([^\'"]*?\{\{imagen\}\})[\'"]/i', '$1{{imagen}}"', $body);
         \Log::info('Cuerpo: ' . $body);
