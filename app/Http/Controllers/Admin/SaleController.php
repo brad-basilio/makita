@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\BasicController;
 use App\Models\Sale;
 use App\Models\SaleStatus;
+use App\Notifications\OrderStatusChangedNotification;
 use Illuminate\Http\Request;
 
 class SaleController extends BasicController
@@ -28,6 +29,12 @@ class SaleController extends BasicController
     public function afterSave(Request $request, object $jpa, ?bool $isNew)
     {
         $saleJpa = Sale::with($this->with4get)->find($jpa->id);
+
+        // Notificar al cliente sobre el cambio de estado
+        if ($saleJpa && $saleJpa->email && $saleJpa->status) {
+            $saleJpa->notify(new OrderStatusChangedNotification($saleJpa->code, $saleJpa->status->name));
+        }
+
         return $saleJpa;
     }
 }
