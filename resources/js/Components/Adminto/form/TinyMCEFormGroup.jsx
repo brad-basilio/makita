@@ -29,6 +29,7 @@ const TinyMCEFormGroup = ({ label, value, onChange, height = 400, variables = []
                 remove_script_host: false,
                 convert_urls: true,
                 automatic_uploads: true,
+                extended_valid_elements: 'img[data-src|src|alt|style|width|height|class]',
                 images_upload_handler: function (blobInfo) {
                     const formData = new FormData();
                     formData.append('file', blobInfo.blob());
