@@ -87,16 +87,9 @@ class OrderStatusChangedNotification extends Notification implements ShouldQueue
                 'productos'    => $productos,
             ])
             : 'Plantilla no encontrada';
-        $body = preg_replace_callback(
-            '/<img([^>]+)src=[\"\\\']([^\"\\\']*\\{\\{imagen\\}\\}[^\"\\\']*)[\"\\\']/i',
-            function ($matches) {
-                // Deja solo src="{{imagen}}"
-                $nuevoSrc = 'src="{{imagen}}"';
-                // Mantiene los otros atributos
-                return '<img' . $matches[1] . $nuevoSrc;
-            },
-            $body
-        );
+      
+        // Limpia cualquier base antepuesta a {{imagen}} en src
+        $body = preg_replace('/(<img[^>]+src=[\'"])([^\'"]*?\{\{imagen\}\})[\'"]/i', '$1{{imagen}}"', $body);
         \Log::info('Cuerpo: ' . $body);
         return (new RawHtmlMail(
             $body,
