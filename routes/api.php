@@ -39,6 +39,8 @@ use App\Http\Controllers\Admin\ItemImageController as AdminItemImageController;
 use App\Http\Controllers\Admin\FaqController as AdminFaqController;
 use App\Http\Controllers\Admin\ComboController as AdminComboController;
 use App\Http\Controllers\Admin\DeliveryZoneController as AdminDeliveryZoneController;
+use App\Http\Controllers\Admin\ImageUploadController;
+use App\Http\Controllers\Admin\NotificationVariableController;
 use App\Http\Controllers\Admin\RepositoryController as AdminRepositoryController;
 use App\Http\Controllers\Admin\SettingController as AdminSettingController;
 use App\Http\Controllers\AuthClientController;
@@ -139,6 +141,8 @@ Route::post('/sales', [SaleController::class, 'save']);
 Route::get('/person/{dni}', [PersonController::class, 'find']);
 
 Route::middleware('auth')->group(function () {
+  Route::get('/notification-variables/{type}', [NotificationVariableController::class, 'variables']);
+  Route::post('/upload-image', [ImageUploadController::class, 'store']);
   Route::delete('logout', [AuthController::class, 'destroy'])
     ->name('logout');
   Route::get('/profile/{uuid}', [AdminProfileController::class, 'full']);

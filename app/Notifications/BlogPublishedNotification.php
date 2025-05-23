@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use App\Mail\RawHtmlMail;
 
 class BlogPublishedNotification extends Notification implements ShouldQueue
 {
@@ -20,6 +21,17 @@ class BlogPublishedNotification extends Notification implements ShouldQueue
         $this->url = $url;
     }
 
+      /**
+     * Variables disponibles para la plantilla de email.
+     */
+    public static function availableVariables()
+    {
+        return [
+            'title' => 'Título del blog',
+            'url'   => 'Enlace al blog',
+        ];
+    }
+
     public function via($notifiable)
     {
         return ['mail'];
@@ -29,16 +41,11 @@ class BlogPublishedNotification extends Notification implements ShouldQueue
     {
         $template = \App\Models\General::where('correlative', 'blog_published_email')->first();
         $body = $template
-            ? \Illuminate\Support\Facades\Blade::render($template->description, [
+            ? \App\Helpers\Text::replaceData($template->description, [
                 'title' => $this->title,
                 'url' => $this->url
             ])
             : 'Plantilla no encontrada';
-        return (new MailMessage)
-            ->subject('Nuevo blog publicado: ' . $this->title)
-            ->view('emails.email_wrapper', [
-                'slot' => $body,
-                'subject' => 'Nuevo blog publicado: ' . $this->title,
-            ]);
+        return (new RawHtmlMail($body, 'Nuevo blog publicado: ' . $this->title));
     }
 }

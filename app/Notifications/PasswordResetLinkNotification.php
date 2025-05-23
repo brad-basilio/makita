@@ -6,6 +6,8 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Mail\Mailable;
+use App\Mail\RawHtmlMail;
 
 class PasswordResetLinkNotification extends Notification implements ShouldQueue
 {
@@ -22,19 +24,25 @@ class PasswordResetLinkNotification extends Notification implements ShouldQueue
         return ['mail'];
     }
 
+        /**
+     * Variables disponibles para la plantilla de email.
+     */
+    public static function availableVariables()
+    {
+        return [
+            'resetUrl' => 'Enlace para restablecer la contraseña',
+        ];
+    }
+
     public function toMail($notifiable)
     {
         $template = \App\Models\General::where('correlative', 'reset_password_email')->first();
         $body = $template
-            ? \Illuminate\Support\Facades\Blade::render($template->description, [
+            ? \App\Helpers\Text::replaceData($template->description, [
                 'resetUrl' => $this->resetUrl
             ])
             : 'Plantilla no encontrada';
-        return (new MailMessage)
-            ->subject('Restablece tu contraseña')
-            ->view('emails.email_wrapper', [
-                'slot' => $body,
-                'subject' => 'Restablece tu contraseña',
-            ]);
+        // Usar Mailable personalizado para enviar HTML puro
+        return (new RawHtmlMail($body, 'Restablece tu contraseña'));
     }
 }

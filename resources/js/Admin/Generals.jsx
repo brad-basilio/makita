@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 
 // Asume que tienes un servicio para guardar los datos
@@ -7,10 +7,11 @@ import GeneralsRest from "../Actions/Admin/GeneralsRest";
 import CreateReactScript from "../Utils/CreateReactScript";
 import { createRoot } from "react-dom/client";
 import QuillFormGroup from "../Components/Adminto/form/QuillFormGroup";
-import TextareaFormGroup from "../Components/Adminto/form/TextareaFormGroup";
+import TinyMCEFormGroup from "../Components/Adminto/form/TinyMCEFormGroup";
 import Global from "../Utils/Global";
 import GalleryRest from "../Actions/Admin/GalleryRest";
 import Tippy from "@tippyjs/react";
+import TextareaFormGroup from "../Components/Adminto/form/TextareaFormGroup";
 
 const generalsRest = new GeneralsRest();
 const galleryRest = new GalleryRest();
@@ -24,6 +25,41 @@ const Generals = ({ generals }) => {
   const emailTemplates = generals.filter(g => g.correlative.endsWith('_email') && g.correlative !== 'support_email');
   const [showPreview, setShowPreview] = useState(false);
   const [selectedEmailCorrelative, setSelectedEmailCorrelative] = useState(emailTemplates[0]?.correlative || "");
+  const [templateVariables, setTemplateVariables] = useState({});
+  const [loadingVars, setLoadingVars] = useState(false);
+  const [varsError, setVarsError] = useState(null);
+  // Fetch variables for selected template
+  useEffect(() => {
+    if (!selectedEmailCorrelative) return;
+    // Map correlatives to API types
+    const correlativeToType = {
+      purchase_summary_email: "purchase_summary",
+      order_status_changed_email: "order_status_changed",
+      blog_published_email: "blog_published",
+      claim_email: "claim",
+      password_changed_email: "password_changed",
+      reset_password_email: "password_reset",
+      subscription_email: "subscription",
+      verify_account_email: "verify_account",
+    };
+    const type = correlativeToType[selectedEmailCorrelative];
+    if (!type) {
+      setTemplateVariables({});
+      return;
+    }
+    setLoadingVars(true);
+    setVarsError(null);
+    fetch(`/api/notification-variables/${type}`)
+      .then(res => res.json())
+      .then(data => {
+        setTemplateVariables(data.variables || {});
+        setLoadingVars(false);
+      })
+      .catch(err => {
+        setVarsError("No se pudieron cargar las variables.");
+        setLoadingVars(false);
+      });
+  }, [selectedEmailCorrelative]);
   const [formData, setFormData] = useState({
     email_templates: Object.fromEntries(
       emailTemplates.map(t => [t.correlative, t.description ?? ""])
@@ -380,37 +416,40 @@ const Generals = ({ generals }) => {
                   <option key={t.correlative} value={t.correlative}>{t.name || t.correlative}</option>
                 ))}
               </select>
-              <label htmlFor="email_template_area" className="form-label">
-                Plantilla de Email (HTML/Blade)
-                <small className="d-block text-muted">Puedes usar variables Blade como <code>{`{{$variable}}`}</code>. Usa solo HTML seguro.</small>
-              </label>
-              <textarea
-                className="form-control"
-                id="email_template_area"
-                style={{ minHeight: 200, maxHeight: 400, overflowY: 'auto', fontFamily: 'monospace', whiteSpace: 'pre', tabSize: 2 }}
+              <TinyMCEFormGroup
+                label={
+                  <>
+                    Plantilla de Email (HTML seguro, variables: <code>{`{{variable}}`}</code>)
+                    <small className="d-block text-muted">
+                      No se permite código PHP ni Blade. Solo variables seguras.<br />
+                      {loadingVars && <span>Cargando variables...</span>}
+                      {varsError && <span className="text-danger">{varsError}</span>}
+                      {!loadingVars && !varsError && (
+                        <>
+                          <b>Variables disponibles:</b>{" "}
+                          {Object.keys(templateVariables).length === 0
+                            ? <span>No hay variables para esta notificación.</span>
+                            : Object.entries(templateVariables).map(([key, desc]) => (
+                                <span key={key} style={{display:'inline-block', marginRight:8}}>
+                                  <code>{`{{${key}}}`}</code> <span className="text-muted">({desc})</span>{" "}
+                                </span>
+                              ))
+                          }
+                        </>
+                      )}
+                    </small>
+                  </>
+                }
                 value={formData.email_templates[selectedEmailCorrelative] || ""}
-                onChange={e => setFormData({
+                onChange={content => setFormData({
                   ...formData,
                   email_templates: {
                     ...formData.email_templates,
-                    [selectedEmailCorrelative]: e.target.value
+                    [selectedEmailCorrelative]: content
                   }
                 })}
-                placeholder="<html>... Usa HTML y Blade aquí ...</html>"
               />
-              <button
-                type="button"
-                className="btn btn-outline-secondary mt-2"
-                onClick={() => setShowPreview(!showPreview)}
-              >
-                {showPreview ? 'Ocultar' : 'Vista previa'}
-              </button>
             </div>
-            {showPreview && (
-              <div className="border rounded p-3 mt-2 bg-light" style={{ minHeight: 200, maxHeight: 400, overflowY: 'auto' }}>
-                <div dangerouslySetInnerHTML={{ __html: formData.email_templates[selectedEmailCorrelative] || '' }} />
-              </div>
-            )}
           </div>
           <div
             className={`tab-pane fade ${activeTab === "general" ? "show active" : ""

@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use App\Mail\RawHtmlMail;
 
 class SubscriptionNotification extends Notification implements ShouldQueue
 {
@@ -18,17 +19,22 @@ class SubscriptionNotification extends Notification implements ShouldQueue
         return ['mail'];
     }
 
+        /**
+     * Variables disponibles para la plantilla de email.
+     */
+    public static function availableVariables()
+    {
+        return [
+            // No hay variables dinámicas para este email
+        ];
+    }
+
     public function toMail($notifiable)
     {
         $template = \App\Models\General::where('correlative', 'subscription_email')->first();
         $body = $template
-            ? \Illuminate\Support\Facades\Blade::render($template->description)
+            ? \App\Helpers\Text::replaceData($template->description, [])
             : 'Plantilla no encontrada';
-        return (new MailMessage)
-            ->subject('¡Gracias por suscribirte!')
-            ->view('emails.email_wrapper', [
-                'slot' => $body,
-                'subject' => '¡Gracias por suscribirte!',
-            ]);
+        return (new RawHtmlMail($body, '¡Gracias por suscribirte!'));
     }
 }

@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use App\Mail\RawHtmlMail;
 
 class VerifyAccountNotification extends Notification implements ShouldQueue
 {
@@ -17,6 +18,15 @@ class VerifyAccountNotification extends Notification implements ShouldQueue
         $this->verificationUrl = $verificationUrl;
     }
 
+        /**
+     * Variables disponibles para la plantilla de email.
+     */
+    public static function availableVariables()
+    {
+        return [
+            'verificationUrl' => 'Enlace para verificar la cuenta',
+        ];
+    }
 
     public function via($notifiable)
     {
@@ -26,15 +36,10 @@ class VerifyAccountNotification extends Notification implements ShouldQueue
     {
         $template = \App\Models\General::where('correlative', 'verify_account_email')->first();
         $body = $template
-            ? \Illuminate\Support\Facades\Blade::render($template->description, [
+            ? \App\Helpers\Text::replaceData($template->description, [
                 'verificationUrl' => $this->verificationUrl
             ])
             : 'Plantilla no encontrada';
-        return (new MailMessage)
-            ->subject('Verifica tu cuenta')
-            ->view('emails.email_wrapper', [
-                'slot' => $body,
-                'subject' => 'Verifica tu cuenta',
-            ]);
+        return (new RawHtmlMail($body, 'Verifica tu cuenta'));
     }
 }

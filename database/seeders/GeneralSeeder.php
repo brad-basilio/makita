@@ -15,7 +15,7 @@ class GeneralSeeder extends Seeder
     {
         // Helper para limpiar llaves y caracteres invisibles
         $clean_blade_vars = function($html) {
-            // Reemplaza llaves y comillas raras por las normales
+            // Reemplaza comillas y caracteres raros por los normales
             $html = str_replace([
                 '“', '”', '‘', '’', '′', '‵', '‹', '›', '«', '»',
                 '‐', '–', '—', '−',
@@ -27,15 +27,14 @@ class GeneralSeeder extends Seeder
             ], $html);
             // Elimina espacios invisibles
             $html = preg_replace('/[\x{00A0}\x{200B}\x{200C}\x{200D}\x{FEFF}]/u', '', $html);
-            // Normaliza las llaves Blade
+            // Normaliza las llaves: {{   variable   }} => {{variable}}
             $html = preg_replace('/\{\s*\{\s*/', '{{', $html);
             $html = preg_replace('/\s*}\s*}/', '}}', $html);
-            // Asegura que todas las variables tengan el signo $
-            $html = preg_replace_callback('/{{\s*([^\s$][a-zA-Z0-9_]+)\s*}}/', function($m) {
-                // No aplica si es una función como config('app.name') o date('Y')
-                if (preg_match('/[\(\)\'\"]/', $m[1])) return $m[0];
-                return '{{ $' . $m[1] . ' }}';
-            }, $html);
+            // Elimina $ en variables tipo {{ $variable }} => {{variable}}
+            $html = preg_replace('/{{\s*\$([a-zA-Z0-9_]+)\s*}}/', '{{$1}}', $html);
+            // Elimina cualquier instrucción Blade o PHP
+            $html = preg_replace('/@\w+\s*\(.*?\)/', '', $html); // directivas @if, @foreach, etc
+            $html = preg_replace('/{{\s*[^\s}]+\(.*?\)\s*}}/', '', $html); // funciones dentro de {{ }}
             return $html;
         };
         $generalData = [

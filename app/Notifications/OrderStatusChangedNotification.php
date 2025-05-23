@@ -6,17 +6,34 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use App\Mail\RawHtmlMail;
+use Illuminate\Support\Facades\Storage;
 
 class OrderStatusChangedNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
     protected $sale;
-   
-    public function __construct($sale)
+    protected $details;
+
+    public function __construct($sale, $details = null)
     {
         $this->sale = $sale;
-       
+        $this->details = $details ?? $sale->details;
+    }
+    /**
+     * Variables disponibles para la plantilla de email.
+     */
+    public static function availableVariables()
+    {
+        return [
+            'orderId'      => 'Código del pedido',
+            'status'       => 'Estado actual',
+            'status_color' => 'Color para mostrar el estado',
+            'name'         => 'Nombre del cliente',
+            'year'         => 'Año actual',
+            'productos'    => 'Bloque repetible de productos: {{#productos}}...{{/productos}}. Variables: nombre, cantidad, precio, categoria, image',
+        ];
     }
 
     public function via($notifiable)
@@ -27,37 +44,36 @@ class OrderStatusChangedNotification extends Notification implements ShouldQueue
 
     public function toMail($notifiable)
     {
+        \Log::info('Enviando a: ' . $notifiable->email);
         $template = \App\Models\General::where('correlative', 'order_status_changed_email')->first();
-
-        // Limpieza forzada de llaves y variables (más robusta)
         $content = $template ? $template->description : '';
-      
-    
-        // Validación extra: si sigue fallando, muestra el contenido limpio y lanza excepción personalizada
-        try {
-            $body = $template
-                ? \Illuminate\Support\Facades\Blade::render($content, [
-                    'orderId' => $this->sale->code,
-                    'status' => $this->sale->status->name,
-                    'name' => $this->sale->user->name,
-                ])
-                : 'Plantilla no encontrada';
-        } catch (\Throwable $e) {
-            \Log::error('Error al renderizar Blade:', [
-                'content' => $content,
-                'orderId' => $this->sale->code,
-                'status' => $this->sale->status->name,
-                'name' => $this->sale->user->name,
-                'exception' => $e->getMessage(),
-            ]);
-            throw new \Exception('Error al renderizar el template de correo: ' . $e->getMessage() . "\nContenido limpio: " . $content);
+
+        // Construir array de productos para el bloque repetible
+        $productos = [];
+        foreach ($this->details as $detail) {
+            $productos[] = [
+                'nombre'    => $detail->name,
+                'cantidad'  => $detail->quantity,
+                'precio'    => number_format($detail->price, 2),
+                'categoria' => $detail->item->category->name ?? '',
+                'imagen'     => $detail->image ?? ($detail->item->image ?? ''),
+            ];
         }
 
-        return (new MailMessage)
-            ->subject('Estado de tu pedido actualizado')
-            ->view('emails.email_wrapper', [
-                'slot' => $body,
-                'subject' => 'Estado de tu pedido actualizado',
-            ]);
+        $body = $template
+            ? \App\Helpers\Text::replaceData($content, [
+                'orderId'      => $this->sale->code,
+                'status'       => $this->sale->status->name,
+                'status_color' => optional(\App\Models\SaleStatus::where('name', $this->sale->status->name)->first())->color ?? '#6c757d',
+                'name'         => $this->sale->user->name,
+                'year'         => date('Y'),
+                'productos'    => $productos,
+            ])
+            : 'Plantilla no encontrada';
+        return (new RawHtmlMail(
+            $body,
+            'Estado de tu pedido actualizado',
+            $notifiable->email
+        ));
     }
 }

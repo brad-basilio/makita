@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use App\Mail\RawHtmlMail;
 
 class PurchaseSummaryNotification extends Notification implements ShouldQueue
 {
@@ -18,6 +19,19 @@ class PurchaseSummaryNotification extends Notification implements ShouldQueue
     {
         $this->sale = $sale;
         $this->details = $details;
+    }
+
+        /**
+     * Variables disponibles para la plantilla de email.
+     */
+    public static function availableVariables()
+    {
+        return [
+            'nombre'    => 'Nombre del cliente',
+            'codigo'    => 'Código de la compra',
+            'total'     => 'Total de la compra',
+            'productos' => 'Tabla HTML con el detalle de productos comprados (ya formateada)',
+        ];
     }
 
     // Recibe el correlative del cliente
@@ -39,18 +53,13 @@ class PurchaseSummaryNotification extends Notification implements ShouldQueue
             '</tr>';
         }
         $body = $template
-            ? \Illuminate\Support\Facades\Blade::render($template->description, [
+            ? \App\Helpers\Text::replaceData($template->description, [
                 'nombre' => $this->sale->name ?? 'cliente',
                 'codigo' => $this->sale->code,
                 'total' => number_format($this->sale->amount, 2),
                 'productos' => $productosHtml,
             ])
             : 'Plantilla no encontrada';
-        return (new MailMessage)
-            ->subject('¡Gracias por tu compra!')
-            ->view('emails.email_wrapper', [
-                'slot' => $body,
-                'subject' => '¡Gracias por tu compra!',
-            ]);
+        return (new RawHtmlMail($body, '¡Gracias por tu compra!'));
     }
 }

@@ -504,11 +504,11 @@
       "_BasicRest-B3rfI5GY.js"
     ]
   },
-  "_YouTube.esm-CalHMD6O.js": {
-    "file": "assets/YouTube.esm-CalHMD6O.js",
+  "_YouTube.esm-DfKjJDaL.js": {
+    "file": "assets/YouTube.esm-DfKjJDaL.js",
     "name": "YouTube.esm",
     "imports": [
-      "_index-duZ_MKqr.js",
+      "_index-BVYA1enw.js",
       "_index-BH53Isel.js",
       "_index-BSWw-p5k.js"
     ]
@@ -689,6 +689,14 @@
       "_index-BH53Isel.js"
     ]
   },
+  "_index-BVYA1enw.js": {
+    "file": "assets/index-BVYA1enw.js",
+    "name": "index",
+    "imports": [
+      "_index-BH53Isel.js",
+      "_index-Chjiymov.js"
+    ]
+  },
   "_index-Bv81MoWS.js": {
     "file": "assets/index-Bv81MoWS.js",
     "name": "index",
@@ -728,14 +736,6 @@
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
       "_index-BH53Isel.js",
       "_index-BSWw-p5k.js"
-    ]
-  },
-  "_index-duZ_MKqr.js": {
-    "file": "assets/index-duZ_MKqr.js",
-    "name": "index",
-    "imports": [
-      "_index-BH53Isel.js",
-      "_index-Chjiymov.js"
     ]
   },
   "_index-fNjTmf9T.js": {
@@ -843,12 +843,12 @@
       "_index-BH53Isel.js"
     ]
   },
-  "_recaptcha-wrapper-hwZdxtK2.js": {
-    "file": "assets/recaptcha-wrapper-hwZdxtK2.js",
+  "_recaptcha-wrapper-DoyLjbcj.js": {
+    "file": "assets/recaptcha-wrapper-DoyLjbcj.js",
     "name": "recaptcha-wrapper",
     "imports": [
       "_index-BH53Isel.js",
-      "_index-duZ_MKqr.js",
+      "_index-BVYA1enw.js",
       "_hoist-non-react-statics.cjs-kbdZbs82.js"
     ]
   },
@@ -967,7 +967,7 @@
     "isEntry": true
   },
   "resources/js/About.jsx": {
-    "file": "assets/About-B8WXTPo7.js",
+    "file": "assets/About-CFqxwpyD.js",
     "name": "About",
     "src": "resources/js/About.jsx",
     "isEntry": true,
@@ -977,7 +977,7 @@
       "_CreateReactScript-Bq8gMpEh.js",
       "resources/js/Utils/ReactAppend.jsx",
       "_Base-lKAvvvDT.js",
-      "_YouTube.esm-CalHMD6O.js",
+      "_YouTube.esm-DfKjJDaL.js",
       "_em-DRiSFGEW.js",
       "_Weare-DJYJ0vNh.js",
       "resources/js/Components/Tailwind/Blogs/BlogCarousel.jsx",
@@ -997,7 +997,7 @@
       "_preload-helper-BfFHrpNk.js",
       "resources/js/Components/Tailwind/Footer.jsx",
       "resources/js/Components/Tailwind/TopBar.jsx",
-      "_index-duZ_MKqr.js",
+      "_index-BVYA1enw.js",
       "_index-Chjiymov.js",
       "_index-BSWw-p5k.js",
       "_HtmlContent-FTivcJrM.js",
@@ -1574,7 +1574,7 @@
     ]
   },
   "resources/js/Admin/Generals.jsx": {
-    "file": "assets/Generals-LNQnoycs.js",
+    "file": "assets/Generals-1RuYLLJE.js",
     "name": "Generals",
     "src": "resources/js/Admin/Generals.jsx",
     "isEntry": true,
@@ -1587,10 +1587,11 @@
       "_CreateReactScript-Bq8gMpEh.js",
       "resources/js/Utils/ReactAppend.jsx",
       "_QuillFormGroup-D8zDHSfJ.js",
-      "_TextareaFormGroup-DVzYJtLM.js",
+      "resources/js/Components/Adminto/form/TinyMCEFormGroup.jsx",
       "_Global-ErywZRdd.js",
       "_GalleryRest-CNY6kr1H.js",
       "_tippy-react.esm-BWiGTO87.js",
+      "_TextareaFormGroup-DVzYJtLM.js",
       "_index-yBjzXJbu.js",
       "_index-rimy3MAc.js",
       "_index-fNjTmf9T.js",
@@ -1601,7 +1602,9 @@
       "_index.esm-CveLAcri.js",
       "_index-CMHsc23u.js",
       "_General-BmbBKdsB.js",
-      "_LaravelSession-Dz9cpV3l.js"
+      "_LaravelSession-Dz9cpV3l.js",
+      "_index-BVYA1enw.js",
+      "_index-Chjiymov.js"
     ],
     "css": [
       "tippy.css",
@@ -2754,6 +2757,19 @@
       "_index-yBjzXJbu.js"
     ]
   },
+  "resources/js/Components/Adminto/form/TinyMCEFormGroup.jsx": {
+    "file": "assets/TinyMCEFormGroup-DsLftacR.js",
+    "name": "TinyMCEFormGroup",
+    "src": "resources/js/Components/Adminto/form/TinyMCEFormGroup.jsx",
+    "isEntry": true,
+    "imports": [
+      "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
+      "_index-BH53Isel.js",
+      "_index-BVYA1enw.js",
+      "_index-yBjzXJbu.js",
+      "_index-Chjiymov.js"
+    ]
+  },
   "resources/js/Components/Adminto/form/TippyButton.jsx": {
     "file": "assets/TippyButton-Oso-2tcn.js",
     "name": "TippyButton",
@@ -3607,7 +3623,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Blog.jsx": {
-    "file": "assets/Blog-BxaT3qtL.js",
+    "file": "assets/Blog-BU3hYH4P.js",
     "name": "Blog",
     "src": "resources/js/Components/Tailwind/Blog.jsx",
     "isDynamicEntry": true,
@@ -4299,7 +4315,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Complaint.jsx": {
-    "file": "assets/Complaint-BpwsC6-j.js",
+    "file": "assets/Complaint-JK8CpaYn.js",
     "name": "Complaint",
     "src": "resources/js/Components/Tailwind/Complaint.jsx",
     "isDynamicEntry": true,
@@ -4315,13 +4331,13 @@
     ]
   },
   "resources/js/Components/Tailwind/Complaints/ComplaintSimple.jsx": {
-    "file": "assets/ComplaintSimple-CZs_Vd62.js",
+    "file": "assets/ComplaintSimple--d0p3S2T.js",
     "name": "ComplaintSimple",
     "src": "resources/js/Components/Tailwind/Complaints/ComplaintSimple.jsx",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
-      "_recaptcha-wrapper-hwZdxtK2.js",
+      "_recaptcha-wrapper-DoyLjbcj.js",
       "_index-BH53Isel.js",
       "_InputForm-DN14ZGms.js",
       "_SelectForm-m9ZsfpcY.js",
@@ -4331,7 +4347,7 @@
       "_x-DBMwyD6F.js",
       "_send-BiBlJCqH.js",
       "_index-yBjzXJbu.js",
-      "_index-duZ_MKqr.js",
+      "_index-BVYA1enw.js",
       "_index-Chjiymov.js",
       "_hoist-non-react-statics.cjs-kbdZbs82.js",
       "_chevron-down-DS-mdh9v.js",
@@ -7048,7 +7064,7 @@
     ]
   },
   "resources/js/Register.jsx": {
-    "file": "assets/Register-BZZqqqCO.js",
+    "file": "assets/Register-Bk-6GgOr.js",
     "name": "Register",
     "src": "resources/js/Register.jsx",
     "isEntry": true,
@@ -7058,7 +7074,7 @@
       "_JSEncrypt-BF8AmNNu.js",
       "_index-BH53Isel.js",
       "resources/js/Utils/ReactAppend.jsx",
-      "_recaptcha-wrapper-hwZdxtK2.js",
+      "_recaptcha-wrapper-DoyLjbcj.js",
       "resources/js/Components/Tailwind/Components/ProductCard.jsx",
       "_AuthRest-BhueY2Kk.js",
       "_SelectFormGroup-YqB1XVb8.js",
@@ -7068,7 +7084,7 @@
       "_index-yBjzXJbu.js",
       "____vite-browser-external_commonjs-proxy-0zb4Agf2.js",
       "_index-fNjTmf9T.js",
-      "_index-duZ_MKqr.js",
+      "_index-BVYA1enw.js",
       "_index-Chjiymov.js",
       "_hoist-non-react-statics.cjs-kbdZbs82.js",
       "_main-BvVILmTO.js",
@@ -7153,7 +7169,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-D2PVwTBr.js",
+    "file": "assets/System-CLEkAxYu.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,
