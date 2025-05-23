@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Subscription;
+use App\Notifications\SubscriptionNotification;
+use App\Services\EmailNotificationService;
 use Illuminate\Http\Request;
 use SoDe\Extend\Text;
 
@@ -19,5 +21,16 @@ class SubscriptionController extends BasicController
             'name' => $provider,
             'description' => $request->email
         ];
+    }
+
+    public function afterSave(Request $request, $jpa, ?bool $isNew)
+    {
+        // Enviar correo de agradecimiento por suscripción
+        if ($isNew && $jpa && $jpa->description) {
+            // $jpa ya es una instancia de Subscription y ahora es Notifiable
+            $notificationService = new EmailNotificationService();
+            $notificationService->sendToUser($jpa, new SubscriptionNotification());
+        }
+        return null;
     }
 }

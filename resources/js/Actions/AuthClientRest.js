@@ -1,4 +1,6 @@
 import { Cookies, Fetch, Notify } from "sode-extend-react";
+import { toast } from "sonner";
+import Global from "../Utils/Global";
 class AuthClientRest {
     static login = async (request) => {
         console.log(request);
@@ -10,29 +12,34 @@ class AuthClientRest {
             });
 
             if (!status || result.status !== 200) {
-                Notify.add({
-                    icon: "/assets/img/icon.svg",
-                    title: "Operación incorrecta",
-                    body: result?.message || "Error al iniciar sesión",
-                    type: "danger",
+                toast.error("Error al iniciar sesión", {
+                    description: result.message || "Ocurrió un error inesperado.",
+                    duration: 3000,
+                    position: "top-right",
+                    richColors: true,
                 });
                 return false;
             }
 
-            Notify.add({
-                icon: "/assets/img/icon.svg",
-                title: "Operación correcta",
-                body: "Se inició sesión correctamente",
+
+            toast.success("¡Inicio de sesión exitoso!", {
+                description: `Bienvenido${result?.data?.name ? `, ${result.data.name}` : ""} a ${Global.APP_NAME}.`,
+                duration: 3000,
+                position: "top-right",
+                richColors: true,
             });
 
             return result; // Devuelve el resultado para que el frontend decida qué hacer
         } catch (error) {
-            Notify.add({
-                icon: "/assets/img/icon.svg",
-                title: "Error",
-                body: error.message,
-                type: "danger",
+
+            toast.error("Error al iniciar sesión", {
+                description: error.message || "Ocurrió un error inesperado.",
+                duration: 3000,
+                position: "top-right",
+                richColors: true,
             });
+
+
             return false;
         }
     };
@@ -48,20 +55,23 @@ class AuthClientRest {
                     result?.message || "Error al registrar el usuario"
                 );
 
-            Notify.add({
-                icon: "/assets/img/icon.svg",
-                title: "Operacion correcta",
-                body: "Se registro el usuario correctamente",
+
+            toast.success("¡Registro exitoso!", {
+                description: `Bienvenido${result?.data?.name ? `, ${result.data.name}` : ""} a ${Global.APP_NAME}. Tu cuenta ha sido creada correctamente.`,
+                duration: 3000,
+                position: "top-right",
+                richColors: true,
             });
 
             return result.data;
         } catch (error) {
-            Notify.add({
-                icon: "/assets/img/icon.svg",
-                title: "Error",
-                body: error.message,
-                type: "danger",
+            toast.error("¡Registro fallido!", {
+                description: error.message || "Ocurrió un error inesperado.",
+                duration: 3000,
+                position: "top-right",
+                richColors: true,
             });
+
             return null;
         }
     };
@@ -78,21 +88,22 @@ class AuthClientRest {
             if (!status)
                 throw new Error(
                     result?.message ||
-                        "Error al solicitar el restablecimiento de contraseña"
+                    "Error al solicitar el restablecimiento de contraseña"
                 );
-
-            Notify.add({
-                icon: "/assets/img/icon.svg",
-                title: "Operacion correcta",
-                body: "Se ha enviado un enlace para restablecer tu contraseña.",
+            toast.success("¡Correo enviado!", {
+                description: `Se ha enviado un enlace para restablecer tu contraseña a tu correo electrónico.`,
+                duration: 3000,
+                position: "top-right",
+                richColors: true,
             });
+
             return true;
         } catch (error) {
-            Notify.add({
-                icon: "/assets/img/icon.svg",
-                title: "Error",
-                body: error.message,
-                type: "danger",
+            toast.error("Error al solicitar el restablecimiento de contraseña", {
+                description: error.message || "Ocurrió un error inesperado.",
+                duration: 3000,
+                position: "top-right",
+                richColors: true,
             });
             return false;
         }
@@ -111,13 +122,19 @@ class AuthClientRest {
                 throw new Error(
                     result?.message || "Error al restablecer la contraseña"
                 );
+            toast.success("¡Contraseña restablecida!", {
+                description: `Tu contraseña ha sido restablecida correctamente. Puedes iniciar sesión con tu nueva contraseña.`,
+                duration: 3000,
+                position: "top-right",
+                richColors: true,
+            });
             return true;
         } catch (error) {
-            Notify.add({
-                icon: "/assets/img/icon.svg",
-                title: "Error",
-                body: error.message,
-                type: "danger",
+            toast.error("Error al restablecer la contraseña", {
+                description: error.message || "Ocurrió un error inesperado.",
+                duration: 3000,
+                position: "top-right",
+                richColors: true,
             });
             return false;
         }

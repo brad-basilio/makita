@@ -3,6 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Classes\EmailConfig;
+use App\Services\EmailNotificationService;
+use App\Notifications\VerifyAccountNotification;
+use App\Notifications\PasswordChangedNotification;
+use App\Notifications\SubscriptionNotification;
+use App\Notifications\BlogPublishedNotification;
+use App\Notifications\OrderStatusChangedNotification;
+use App\Notifications\ClaimNotification;
 use App\Http\Services\ReCaptchaService;
 use App\Models\Constant;
 use App\Models\ModelHasRoles;
@@ -191,15 +198,15 @@ class AuthController extends Controller
         'specialties' => JSON::stringify($body['specialties'])
       ]);
 
-      $content = Constant::value('confirm-email');
-      $content = str_replace('{URL_CONFIRM}', env('APP_URL') . '/confirmation/' . $preUserJpa->confirmation_token, $content);
 
-      $mailer = EmailConfig::config();
-      $mailer->Subject = 'Confirmacion - ' . env('APP_NAME');
-      $mailer->Body = $content;
-      $mailer->addAddress($preUserJpa->email);
-      $mailer->isHTML(true);
-      $mailer->send();
+      // Enviar correo de verificación usando notificación
+      $verificationUrl = env('APP_URL') . '/confirmation/' . $preUserJpa->confirmation_token;
+      $userFake = new User([
+        'name' => $preUserJpa->name,
+        'email' => $preUserJpa->email
+      ]);
+      $notificationService = new EmailNotificationService();
+      $notificationService->sendToUser($userFake, new VerifyAccountNotification($verificationUrl));
 
       $response->status = 200;
       $response->message = 'Operacion correcta';

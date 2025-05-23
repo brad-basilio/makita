@@ -5,8 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\BasicController;
 use App\Models\Post;
 use App\Models\PostTag;
+use App\Models\Subscription;
 use App\Models\Tag;
 use App\Models\WebDetail;
+use App\Notifications\BlogPublishedNotification;
+use App\Services\EmailNotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
@@ -55,5 +58,14 @@ class PostController extends BasicController
                 ]);
             }
         });
+
+        // Notificar a los suscriptores si es nuevo blog (usando colas)
+        if ($isNew) {
+            $subscribers = Subscription::all();
+            $blogUrl = url('/post/' . $jpa->slug); // Ajusta la URL según tu ruta
+            foreach ($subscribers as $subscriber) {
+                $subscriber->notify(new BlogPublishedNotification($jpa->title, $blogUrl));
+            }
+        }
     }
 }

@@ -10,7 +10,7 @@ export default function ForgotPasswordSimple() {
     jsEncrypt.setPublicKey(Global.PUBLIC_RSA_KEY);
 
     // Estados
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     const emailRef = useRef();
 
@@ -82,13 +82,21 @@ export default function ForgotPasswordSimple() {
                                             placeholder="hola@mail.com"
                                             className="w-full px-4 py-3 border customtext-neutral-dark  border-neutral-ligth rounded-xl focus:ring-0 focus:outline-0   transition-all duration-300"
                                             required
+                                            disabled={loading}
                                         />
                                     </div>
                                     <button
+                                        disabled={loading}
                                         type="submit"
-                                        className="w-full rounded-xl font-semibold  bg-primary px-4 py-3 text-white hover:opacity-90 focus:outline-none focus:ring-2 transition-all duration-300"
+                                        className="w-full rounded-xl font-semibold  bg-primary px-4 py-3 text-white hover:opacity-90 focus:outline-none focus:ring-2 transition-all duration-300 flex items-center justify-center"
                                     >
-                                        Enviar
+                                        {loading ? (
+                                            <svg className="animate-spin h-5 w-5 mr-2 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                                            </svg>
+                                        ) : null}
+                                        {loading ? "Enviando..." : "Enviar"}
                                     </button>
                                 </form>
                             </div>

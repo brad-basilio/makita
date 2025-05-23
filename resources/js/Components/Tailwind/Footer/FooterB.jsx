@@ -32,6 +32,7 @@ const FooterB = ({ pages, generals }) => {
 
         const request = {
             email: emailRef.current.value,
+            status: 1,
         };
         const result = await subscriptionsRest.save(request);
         setSaving(false);
@@ -44,7 +45,7 @@ const FooterB = ({ pages, generals }) => {
              icon: "success",
              confirmButtonText: "Ok",
          });*/
-        toast.error("¡Suscrito!", {
+        toast.success("¡Suscrito!", {
             description: `Te has suscrito correctamente al blog de ${Global.APP_NAME}.`,
             icon: <CircleCheckBig className="h-5 w-5 text-green-500" />,
             duration: 3000,
@@ -182,18 +183,42 @@ const FooterB = ({ pages, generals }) => {
                                 type="email"
                                 placeholder="Ingresa tu e-mail"
                                 className="w-full customtext-neutral-dark font-semibold  shadow-xl  py-5 pl-5 border  rounded-[20px] md:rounded-full focus:ring-0 focus:outline-none"
+                                disabled={saving}
                             />
                             <button
-                                className="absolute right-3 top-1/2 transform -translate-y-1/2 py-3 font-bold shadow-xl px-4 bg-primary text-white rounded-xl"
+                                disabled={saving}
+                                className="absolute right-3 top-1/2 transform -translate-y-1/2 py-3 font-bold shadow-xl px-4 bg-primary text-white rounded-xl flex items-center justify-center min-w-[120px]"
                                 aria-label="Suscribite"
                             >
-                                Suscribirme
+                                {saving ? (
+                                    <span className="flex items-center gap-2">
+                                        <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
+                                            <circle
+                                                className="opacity-25"
+                                                cx="12"
+                                                cy="12"
+                                                r="10"
+                                                stroke="currentColor"
+                                                strokeWidth="4"
+                                                fill="none"
+                                            />
+                                            <path
+                                                className="opacity-75"
+                                                fill="currentColor"
+                                                d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                                            />
+                                        </svg>
+                                        Enviando...
+                                    </span>
+                                ) : (
+                                    "Suscribirme"
+                                )}
                             </button>
                         </div>
                     </form>
                 </div>
-            </div>
-            {Object.keys(policyItems).map((key, index) => {
+                </div>
+                {Object.keys(policyItems).map((key, index) => {
                 const title = policyItems[key];
                 const content =
                     generals.find((x) => x.correlative == key)?.description ??
