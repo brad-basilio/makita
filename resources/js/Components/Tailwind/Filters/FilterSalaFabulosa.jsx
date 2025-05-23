@@ -293,18 +293,34 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
 
     const [filtersOpen, setFiltersOpen] = useState(false); // Añadir estado para mobile
     const [isOpen, setIsOpen] = useState(false)
+    const [isVisible, setIsVisible] = useState(false);
+    // const openModal = () => {
+    //     setIsOpen(true);
+    //     document.body.style.overflow = 'hidden';
+    // };
+    // const closeModal = () => {
+    //     setIsOpen(false);
+    //     document.body.style.overflow = 'auto';
+    // };
     const openModal = () => {
         setIsOpen(true);
+        // Forzamos un pequeño delay para que React actualice el DOM antes de la animación
+        setTimeout(() => setIsVisible(true), 10);
         document.body.style.overflow = 'hidden';
     };
+
     const closeModal = () => {
-        setIsOpen(false);
+        setIsVisible(false);
+        // Esperamos a que termine la animación antes de cerrar completamente
+        setTimeout(() => setIsOpen(false), 300);
         document.body.style.overflow = 'auto';
     };
+
     const customStyles = {
         overlay: {
-          backgroundColor: "rgba(0, 0, 0, 0.5)",
+          backgroundColor: isVisible ? "rgba(0, 0, 0, 0.5)" : "rgba(0, 0, 0, 0)",
           zIndex: 50,
+          transition: 'background-color 300ms ease-in-out',
         },
         content: {
           top: "auto",
@@ -314,11 +330,12 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
           borderRadius: "1rem 1rem 0 0",
           border: "none",
           padding: "0",
-          height: "93vh", // Altura del drawer
-          transform: isOpen ? "translateY(0)" : "translateY(100%)",
-          transition: "transform 0.3s ease-in-out",
+          height: "85vh",
+          transform: isVisible ? "translateY(0)" : "translateY(100%)",
+          transition: "transform 300ms ease-in-out",
+          willChange: 'transform', // Mejora el rendimiento de la animación
         },
-    }
+      };
 
     const renderFilters = () => (
         <div className="flex-1 overflow-y-auto px-4 pb-20 lg:pb-0 lg:px-0">
@@ -508,12 +525,14 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
         </button>
 
         <Modal
-                isOpen={isOpen}
-                onRequestClose={closeModal}
-                style={customStyles}
-                closeTimeoutMS={300}
-                ariaHideApp={false}
-        >
+            isOpen={isOpen}
+            onRequestClose={closeModal}
+            style={customStyles}
+            closeTimeoutMS={300}
+            ariaHideApp={false}
+            shouldCloseOnOverlayClick={true}
+            shouldCloseOnEsc={true}
+            >
             {renderFilters()}
         </Modal>
 
