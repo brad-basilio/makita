@@ -13,11 +13,13 @@ class BlogPublishedNotification extends Notification implements ShouldQueue
 
     protected $title;
     protected $url;
+    protected $clientCorrelative;
 
-    public function __construct($title, $url)
+    public function __construct($title, $url, $correlative = null)
     {
         $this->title = $title;
         $this->url = $url;
+          $this->clientCorrelative = $correlative ?? env('APP_CORRELATIVE', 'default');
     }
 
     public function via($notifiable)
@@ -25,12 +27,21 @@ class BlogPublishedNotification extends Notification implements ShouldQueue
         return ['mail'];
     }
 
+    public function setClientCorrelative($correlative)
+    {
+        $this->clientCorrelative = $correlative;
+    }
     public function toMail($notifiable)
     {
+        $view = 'emails.' . $this->clientCorrelative . '.blog_published';
+        if (!view()->exists($view)) {
+            $view = 'emails.default.blog_published';
+        }
         return (new MailMessage)
             ->subject('Nuevo blog publicado: ' . $this->title)
-            ->greeting('¡Hola!')
-            ->line('Se ha publicado un nuevo blog: ' . $this->title)
-            ->action('Leer blog', $this->url);
+            ->view($view, [
+                'title' => $this->title,
+                'url' => $this->url
+            ]);
     }
 }

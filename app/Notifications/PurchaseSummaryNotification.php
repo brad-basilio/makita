@@ -13,11 +13,19 @@ class PurchaseSummaryNotification extends Notification implements ShouldQueue
 
     protected $sale;
     protected $details;
+    protected $clientCorrelative;
 
-    public function __construct($sale, $details)
+    public function __construct($sale, $details, $correlative = null)
     {
         $this->sale = $sale;
         $this->details = $details;
+        $this->clientCorrelative = $correlative ?? env('APP_CORRELATIVE', 'default');
+    }
+
+    // Recibe el correlative del cliente
+    public function setClientCorrelative($correlative)
+    {
+        $this->clientCorrelative = $correlative;
     }
 
     public function via($notifiable)
@@ -27,18 +35,16 @@ class PurchaseSummaryNotification extends Notification implements ShouldQueue
 
     public function toMail($notifiable)
     {
-        $mail = (new MailMessage)
-            ->subject('¡Gracias por tu compra!')
-            ->greeting('¡Hola ' . ($this->sale->name ?? 'cliente') . '!')
-            ->line('Tu pago fue exitoso. Aquí tienes el resumen de tu compra:')
-            ->line('Código de pedido: ' . $this->sale->code)
-            ->line('Total: S/ ' . number_format($this->sale->amount, 2));
-
-        foreach ($this->details as $detail) {
-            $mail->line('Producto: ' . $detail->name . ' | Cantidad: ' . $detail->quantity . ' | Precio: S/ ' . number_format($detail->price, 2));
+        $view = 'emails.' . $this->clientCorrelative . '.purchase_summary';
+        // Si la vista no existe, usar la default
+        if (!view()->exists($view)) {
+            $view = 'emails.default.purchase_summary';
         }
-
-        $mail->line('¡Gracias por confiar en nosotros!');
-        return $mail;
+        return (new MailMessage)
+            ->subject('¡Gracias por tu compra!')
+            ->view($view, [
+                'sale' => $this->sale,
+                'details' => $this->details
+            ]);
     }
 }

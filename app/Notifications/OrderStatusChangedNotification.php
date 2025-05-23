@@ -13,11 +13,13 @@ class OrderStatusChangedNotification extends Notification implements ShouldQueue
 
     protected $orderId;
     protected $status;
-
-    public function __construct($orderId, $status)
+    protected $clientCorrelative;
+    public function __construct($orderId, $status, $correlative = null)
     {
         $this->orderId = $orderId;
         $this->status = $status;
+        // Permite que funcione tanto con el servicio como con notify() directo
+        $this->clientCorrelative = $correlative ?? env('APP_CORRELATIVE', 'default');
     }
 
     public function via($notifiable)
@@ -25,12 +27,22 @@ class OrderStatusChangedNotification extends Notification implements ShouldQueue
         return ['mail'];
     }
 
+
+    public function setClientCorrelative($correlative)
+    {
+        $this->clientCorrelative = $correlative;
+    }
     public function toMail($notifiable)
     {
+        $view = 'emails.' . $this->clientCorrelative . '.order_status_changed';
+        if (!view()->exists($view)) {
+            $view = 'emails.default.order_status_changed';
+        }
         return (new MailMessage)
             ->subject('Estado de tu pedido actualizado')
-            ->greeting('¡Hola!')
-            ->line('El estado de tu pedido #' . $this->orderId . ' ha cambiado a: ' . $this->status)
-            ->line('Gracias por tu compra.');
+            ->view($view, [
+                'orderId' => $this->orderId,
+                'status' => $this->status
+            ]);
     }
 }

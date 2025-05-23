@@ -30,6 +30,7 @@ export default function ComplaintSimple({ generals }) {
         detalle_reclamo: "",
         acepta_terminos: false,
     });
+    const [loading, setLoading] = useState(false);
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -40,10 +41,13 @@ export default function ComplaintSimple({ generals }) {
     };
 
     const handleSubmit = (e) => {
+
         e.preventDefault();
+        setLoading(true);
         const recaptchaValue = recaptchaRef.current.getValue();
         if (!recaptchaValue) {
             setMessageCaptcha("Por favor, verifica el reCAPTCHA.");
+            setLoading(false);
             return;
         }
 
@@ -59,14 +63,15 @@ export default function ComplaintSimple({ generals }) {
             .then((response) => response.json())
             .then((data) => {
                 console.log(data);
-                if (data.type === "success")
+                if (data.type === "success") {
                     toast.success("Solicitud enviada", {
                         description: `Pronto nos comunicaremos contigo ¡Gracias!.`,
                         icon: <Send className="h-5 w-5 text-green-500" />,
                         duration: 3000,
                         position: "bottom-center",
                     });
-
+                    setLoading(false);
+                }
                 else {
                     toast.error("Solicitud rechazada", {
                         description: `Lo sentimos, no se envió su solicitud.`,
@@ -74,6 +79,7 @@ export default function ComplaintSimple({ generals }) {
                         duration: 3000,
                         position: "bottom-center",
                     });
+                    setLoading(false);
 
                 }
             })
@@ -84,6 +90,7 @@ export default function ComplaintSimple({ generals }) {
                     duration: 3000,
                     position: "bottom-center",
                 });
+                setLoading(false);
             });
     };
 
@@ -463,10 +470,17 @@ export default function ComplaintSimple({ generals }) {
                     {/* Botón de envío */}
                     <div>
                         <button
+                            disabled={loading}
                             type="submit"
-                            className="bg-primary text-white px-6 py-3 font-medium rounded-lg"
+                            className="bg-primary text-white px-6 py-3 font-medium rounded-lg flex items-center justify-center gap-2"
                         >
-                            Enviar a libro de reclamaciones
+                            {loading && (
+                                <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                                </svg>
+                            )}
+                            {loading ? "Enviando..." : "Enviar a libro de reclamaciones"}
                         </button>
                     </div>
                 </form>

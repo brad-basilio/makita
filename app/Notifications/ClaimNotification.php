@@ -12,30 +12,32 @@ class ClaimNotification extends Notification implements ShouldQueue
     use Queueable;
 
     protected $complaint;
-
-    public function __construct($complaint)
+    protected $clientCorrelative ;
+    public function __construct($complaint, $correlative = null)
     {
         $this->complaint = $complaint;
+        $this->clientCorrelative = $correlative ?? env('APP_CORRELATIVE', 'default');
     }
 
     public function via($notifiable)
     {
         return ['mail'];
     }
+    public function setClientCorrelative($correlative)
+    {
+        $this->clientCorrelative = $correlative;
+    }
 
     public function toMail($notifiable)
     {
-        $mail = (new MailMessage)
+        $view = 'emails.' . $this->clientCorrelative . '.claim';
+        if (!view()->exists($view)) {
+            $view = 'emails.default.claim';
+        }
+        return (new MailMessage)
             ->subject('Hemos recibido tu reclamo')
-            ->greeting('¡Hola ' . ($this->complaint->nombre ?? 'cliente') . '!')
-            ->line('Hemos recibido tu reclamo/queja y te enviamos un respaldo de lo que registraste:')
-            ->line('Tipo: ' . $this->complaint->tipo_reclamo)
-            ->line('Detalle: ' . $this->complaint->detalle_reclamo)
-            ->line('Fecha: ' . ($this->complaint->fecha_ocurrencia ?? 'No especificada'))
-            ->line('Monto reclamado: S/ ' . ($this->complaint->monto_reclamado ?? 'No especificado'))
-            ->line('Producto/Servicio: ' . $this->complaint->descripcion_producto)
-            ->line('Número de pedido: ' . ($this->complaint->numero_pedido ?? 'No especificado'))
-            ->line('Gracias por confiar en nosotros. Nos pondremos en contacto contigo pronto.');
-        return $mail;
+            ->view($view, [
+                'complaint' => $this->complaint
+            ]);
     }
 }

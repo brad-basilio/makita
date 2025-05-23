@@ -12,24 +12,32 @@ class PasswordResetLinkNotification extends Notification implements ShouldQueue
     use Queueable;
 
     protected $resetUrl;
-
-    public function __construct($resetUrl)
+    protected $clientCorrelative;
+    public function __construct($resetUrl, $correlative = null)
     {
         $this->resetUrl = $resetUrl;
+        $this->clientCorrelative = $correlative ?? env('APP_CORRELATIVE', 'default');
     }
 
     public function via($notifiable)
     {
         return ['mail'];
     }
+    public function setClientCorrelative($correlative)
+    {
+        $this->clientCorrelative = $correlative;
+    }
 
     public function toMail($notifiable)
     {
+        $view = 'emails.' . $this->clientCorrelative . '.reset_password';
+        if (!view()->exists($view)) {
+            $view = 'emails.default.reset_password';
+        }
         return (new MailMessage)
             ->subject('Restablece tu contraseña')
-            ->greeting('¡Hola!')
-            ->line('Recibimos una solicitud para restablecer tu contraseña.')
-            ->action('Restablecer contraseña', $this->resetUrl)
-            ->line('Si no solicitaste este cambio, puedes ignorar este correo.');
+            ->view($view, [
+                'resetUrl' => $this->resetUrl
+            ]);
     }
 }
