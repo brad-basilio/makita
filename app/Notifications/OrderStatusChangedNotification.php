@@ -32,7 +32,7 @@ class OrderStatusChangedNotification extends Notification implements ShouldQueue
             'status_color' => 'Color para mostrar el estado',
             'name'         => 'Nombre del cliente',
             'year'         => 'Año actual',
-            'productos'    => 'Bloque repetible de productos: {{#productos}}...{{/productos}}. Variables: nombre, cantidad, precio, categoria, image',
+            'productos'    => 'Bloque repetible de productos: {{#productos}}...{{/productos}}. Variables: nombre, cantidad, precio, categoria, imagen',
         ];
     }
 
@@ -73,7 +73,7 @@ class OrderStatusChangedNotification extends Notification implements ShouldQueue
                 'cantidad'  => $detail->quantity,
                 'precio'    => number_format($detail->price, 2),
                 'categoria' => $detail->item->category->name ?? '',
-                'imagen'     => $imgUrl, // CLAVE CORRECTA PARA LA PLANTILLA
+                'imagen'    => $imgUrl, // SOLO "imagen"
             ];
         }
 
@@ -88,6 +88,7 @@ class OrderStatusChangedNotification extends Notification implements ShouldQueue
             ])
             : 'Plantilla no encontrada';
         $body = str_replace('data-src=', 'src=', $body);
+        \Log::info('Cuerpo: ' . $body);
         return (new RawHtmlMail(
             $body,
             'Estado de tu pedido actualizado',
