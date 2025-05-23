@@ -4662,7 +4662,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Filter.jsx": {
-    "file": "assets/Filter-B_WTnO8B.js",
+    "file": "assets/Filter-DBdnp_c3.js",
     "name": "Filter",
     "src": "resources/js/Components/Tailwind/Filter.jsx",
     "isEntry": true,
@@ -4914,7 +4914,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Filters/FilterSalaFabulosa.jsx": {
-    "file": "assets/FilterSalaFabulosa-DcsLGp6W.js",
+    "file": "assets/FilterSalaFabulosa-WWMIJ2GW.js",
     "name": "FilterSalaFabulosa",
     "src": "resources/js/Components/Tailwind/Filters/FilterSalaFabulosa.jsx",
     "isDynamicEntry": true,
@@ -4926,6 +4926,7 @@
       "_ArrayJoin-2k6ba35P.js",
       "_Loading-B-FwDSWi.js",
       "_NoResult-C9qZVva5.js",
+      "_SelectForm-G0J6yhhv.js",
       "resources/js/Components/Tailwind/Components/ProductCard.jsx",
       "_ProductCardColors-DO0WYGP_.js",
       "_main-BSEyQEJW.js",
@@ -4947,6 +4948,8 @@
       "_createLucideIcon-Cy5Ya80P.js",
       "_plus-Bot15Khs.js",
       "_BasicRest-DEv02zgs.js",
+      "_chevron-down-DS-mdh9v.js",
+      "_check-DQ7QoS0v.js",
       "____vite-browser-external_commonjs-proxy-0zb4Agf2.js",
       "_index-Chjiymov.js"
     ],
@@ -7065,7 +7068,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-DhGTWCsw.js",
+    "file": "assets/System-HYk-Ir8N.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,
