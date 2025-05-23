@@ -263,8 +263,6 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
         });
     };
 
-    
-
     const sortOptions = [
         { value: "created_at:desc", label: "Más reciente" },
         { value: "created_at:asc", label: "Mas antiguo" },
