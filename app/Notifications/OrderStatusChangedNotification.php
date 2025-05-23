@@ -68,6 +68,7 @@ class OrderStatusChangedNotification extends Notification implements ShouldQueue
                     }
                 }
             }
+            \Log::info('Producto: ' . $detail->name . ' | imgPath: ' . $imgPath . ' | imgUrl: ' . $imgUrl);
             $productos[] = [
                 'nombre'    => $detail->name,
                 'cantidad'  => $detail->quantity,
