@@ -20,7 +20,7 @@ class ImageUploadController extends Controller
             $path = "images/image_emails/{$uuid}.{$ext}";
             Storage::put($path, file_get_contents($full));
 
-            $url_de_la_imagen = asset(Storage::url($path)); // Esto genera la URL absoluta
+            $url_de_la_imagen = url(Storage::url($path)); // Esto genera la URL absoluta
             return response()->json(['location' => $url_de_la_imagen]);
         }
         return response()->json(['error' => 'No file uploaded'], 400);
