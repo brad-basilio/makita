@@ -25,6 +25,9 @@ const TinyMCEFormGroup = ({ label, value, onChange, height = 400, variables = []
                 image_advtab: true,
                 // Removed table_toolbar, as all table controls are now in the main toolbar and menubar
                 image_title: true,
+                relative_urls: false,
+                remove_script_host: false,
+                convert_urls: true,
                 automatic_uploads: true,
                 images_upload_handler: function (blobInfo) {
                     const formData = new FormData();
