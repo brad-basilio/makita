@@ -17,7 +17,7 @@ class ImageUploadController extends Controller
             $full = $request->file('file');
             $uuid = Crypto::randomUUID();
             $ext = $full->getClientOriginalExtension();
-            $path = "/images/image_emails/{$uuid}.{$ext}";
+            $path = "images/image_emails/{$uuid}.{$ext}";
             Storage::put($path, file_get_contents($full));
 
             $url_de_la_imagen = asset(Storage::url($path)); // Esto genera la URL absoluta
