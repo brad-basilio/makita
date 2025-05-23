@@ -330,7 +330,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
           borderRadius: "1rem 1rem 0 0",
           border: "none",
           padding: "0",
-          height: "85vh",
+          height: "75vh",
           transform: isVisible ? "translateY(0)" : "translateY(100%)",
           transition: "transform 300ms ease-in-out",
           willChange: 'transform', // Mejora el rendimiento de la animación
