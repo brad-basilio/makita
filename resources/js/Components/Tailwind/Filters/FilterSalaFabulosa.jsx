@@ -351,10 +351,10 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
             </p>
 
             {/* Colecciones */}
-            <div className="mb-6">
+            <div className="mt-2 mb-4">
                 <button
                     onClick={() => toggleSection("collection")}
-                    className="flex items-center justify-between w-full mb-0 p-2 lg:p-0"
+                    className="flex items-center justify-between w-full mb-2 p-2 lg:p-0"
                 >
                     <span className="font-medium">Colecciones</span>
                     <ChevronUp
@@ -375,7 +375,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                                 onChange={(e) => setSearchCollection(e.target.value)}
                             />
                         </div>
-                        <div className="max-h-[200px] overflow-y-auto space-y-2 p-1">
+                        <div className="max-h-[200px] xl:max-h-none overflow-y-auto space-y-1 md:space-y-2">
                             {filteredCollections.map((collection) => {
                                 const isChecked = selectedFilters.collection_id?.includes(collection.slug);
                                 return (
@@ -386,7 +386,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                                             : "hover:bg-gray-50"
                                             }`}
                                     >
-                                        <label className="flex items-center gap-2 px-2 cursor-pointer">
+                                        <label className="flex items-center gap-2 cursor-pointer">
                                             <input
                                                 type="checkbox"
                                                 className="h-5 w-5 rounded border-gray-300 accent-primary hidden "
@@ -409,10 +409,10 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
             </div>
 
             {/* Categorías */}
-            <div className="mb-6">
+            <div className="mb-4">
                 <button
                     onClick={() => toggleSection("categoria")}
-                    className="flex items-center justify-between w-full mb-4 p-2 lg:p-0"
+                    className="flex items-center justify-between w-full mb-2 p-2 lg:p-0"
                 >
                     <span className="font-medium">Categorías</span>
                     <ChevronUp
@@ -432,7 +432,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                                 onChange={(e) => setSearchCategory(e.target.value)}
                             />
                         </div>
-                        <div className="max-h-[200px] overflow-y-auto space-y-2 p-1">
+                        <div className="max-h-[200px] xl:max-h-none overflow-y-auto space-y-1 md:space-y-2">
                             {filteredCategories.map((category) => {
                                 const isChecked = selectedFilters.category_id?.includes(category.slug);
                                 return (
@@ -443,7 +443,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                                             : "hover:bg-gray-50"
                                             }`}
                                     >
-                                        <label className="flex items-center gap-2 px-2 cursor-pointer">
+                                        <label className="flex items-center gap-2 cursor-pointer">
                                             <input
                                                 type="checkbox"
                                                 className="h-5 w-5 rounded border-gray-300 accent-primary hidden"
@@ -466,10 +466,10 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
             </div>
 
             {/* Precio */}
-            <div className="mb-6">
+            <div className="mb-4">
                 <button
                     onClick={() => toggleSection("precio")}
-                    className="flex items-center justify-between w-full mb-4 p-2 lg:p-0"
+                    className="flex items-center justify-between w-full mb-2 p-2 lg:p-0"
                 >
                     <span className="font-medium">Precio</span>
                     <ChevronUp
@@ -478,7 +478,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                     />
                 </button>
                 {sections.precio && (
-                    <div className="max-h-[200px] overflow-y-auto space-y-3 p-1">
+                    <div className="max-h-[200px] xl:max-h-none overflow-y-auto space-y-1 md:space-y-2">
                         {priceRanges.map((range) => (
                             <label
                                 key={`${range.min}-${range.max}`}
@@ -539,13 +539,14 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
         <section className="py-6 font-font-general customtext-primary">
             <div className="mx-auto px-primary">
                 {/* Botón para móvil */}
-                {/* <button
-                    onClick={() => setFiltersOpen(true)}
+                <button
+                    // onClick={() => setFiltersOpen(true)}
+                    onClick={openModal}
                     className="w-auto xl:hidden flex gap-2 items-center mb-4 p-3 bg-white rounded-lg shadow-sm"
                 >
                     <Filter className="h-5 w-5" />
-                    <span className="font-semibold">Mostrar filtros</span>
-                </button> */}
+                    <span className="font-semibold">Filtros</span>
+                </button>
 
                 <div className="relative flex flex-col xl:flex-row gap-10">
                     {/* Contenedor de Filtros (Modificado para mobile) */}
@@ -556,7 +557,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                     <div className="w-full pb-4">
                         <div className="flex flex-col lg:flex-row lg:justify-between items-center mb-4 lg:mb-8 w-full gap-5">
                             {/* Ordenación <span className='block w-6/12'>Productos seleccionados: <strong>{products?.length}</strong></span>*/}
-                            <div className="flex flex-row justify-between gap-4 items-center lg:max-w-xs w-full">
+                            {/* <div className="flex flex-row justify-between gap-4 items-center lg:max-w-xs w-full">
                                 <label className="font-semibold text-base 2xl:text-lg w-auto">
                                     Ordenar por
                                 </label>
@@ -583,7 +584,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                                         className="border-primary rounded-full customtext-primary w-full"
                                     />
                                 </div>
-                            </div>
+                            </div> */}
                             
                             <div className="customtext-primary font-semibold w-full lg:w-auto">
                                 <div className="flex gap-3 items-center w-full">
