@@ -55,14 +55,14 @@ class OrderStatusChangedNotification extends Notification implements ShouldQueue
         Log::info('Entrando al foreach de detalles...');
         foreach ($this->details as $detail) {
            
-            Log::info('Producto: ' . ($detail->name ?? '[sin nombre]') . ' | imgPath: ' . $imgPath . ' | imgUrl: ' . $imgUrl);
+           
             Log::info('Productos array generado:', $productos);
             $productos[] = [
                 'nombre'    => $detail->name ?? '',
                 'cantidad'  => $detail->quantity ?? '',
                 'precio'    => isset($detail->price) ? number_format($detail->price, 2) : '',
                 'categoria' => isset($detail->item) && isset($detail->item->category) && isset($detail->item->category->name) ? $detail->item->category->name : '',
-                'imagen'    => url(Storage::url($detail->item->image ?? '')), // SOLO "imagen"
+                'imagen'    => url(Storage::url("images/image_emails/".$detail->item->image ?? '')), // SOLO "imagen"
             ];
         }
 
