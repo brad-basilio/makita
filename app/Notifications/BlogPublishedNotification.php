@@ -48,7 +48,7 @@ class BlogPublishedNotification extends Notification implements ShouldQueue
             ? \App\Helpers\Text::replaceData($template->description, [
                 'imagen' => url(Storage::url("images/post/".$this->blog->image ?? '')),
                 'titulo' => $this->blog->name,
-                'descripcion' => strip_tags($this->blog->description),
+                'descripcion' => mb_substr(strip_tags($this->blog->description), 0, 180) . (mb_strlen(strip_tags($this->blog->description)) > 180 ? '...' : ''),
                 'url' =>  url('/post/' . $this->blog->slug),
                 'name'         => $notifiable->description ?? '',
                 'year'         => date('Y'),
