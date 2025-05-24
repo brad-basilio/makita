@@ -110,14 +110,11 @@ class OrderStatusChangedNotification extends Notification implements ShouldQueue
                 if (strpos($src, '#') !== false) {
                     $src = substr($src, strrpos($src, '#') + 1);
                 }
-                // Si es variable tipo {{imagen}}
-                if (preg_match('/{{[^}]+}}/', $src, $varMatch)) {
-                    $src = $varMatch[0];
-                } else {
-                    // Si hay un https:// o http://, toma solo desde ahí (quita cualquier prefijo)
-                    if (preg_match('/https?:\/\/.+/i', $src, $urlMatch)) {
-                        $src = $urlMatch[0];
-                    }
+                // Busca todas las variables {{...}} o URLs absolutas
+                preg_match_all('/({{[^}]+}}|https?:\/\/[^"\'\']+)/i', $src, $allMatches);
+                if (!empty($allMatches[1])) {
+                    // Toma la última ocurrencia válida
+                    $src = end($allMatches[1]);
                 }
                 return $matches[1] . $src . $matches[3];
             },
