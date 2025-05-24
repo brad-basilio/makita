@@ -29,6 +29,7 @@ class OrderStatusChangedNotification extends Notification implements ShouldQueue
     {
         return [
             'orderId'      => 'Código del pedido',
+            'fecha_pedido' => 'Fecha del pedido',
             'status'       => 'Estado actual',
             'status_color' => 'Color para mostrar el estado',
             'name'         => 'Nombre del cliente',
@@ -74,6 +75,8 @@ class OrderStatusChangedNotification extends Notification implements ShouldQueue
                 'name'         => $this->sale->user->name,
                 'year'         => date('Y'),
                 'productos'    => $productos,
+                //quiero que sea algo asi la fecha de pedido 15 Mayo 2024
+                'fecha_pedido' => date('d \d\e F \d\e Y', strtotime($this->sale->created_at)),
             ])
             : 'Plantilla no encontrada';
         
