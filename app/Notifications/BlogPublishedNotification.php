@@ -7,18 +7,19 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use App\Mail\RawHtmlMail;
+use Illuminate\Support\Facades\Storage;
 
 class BlogPublishedNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    protected $title;
-    protected $url;
+    protected $blog;
+    
 
-    public function __construct($title, $url)
+    public function __construct($blog)
     {
-        $this->title = $title;
-        $this->url = $url;
+        $this->blog = $blog;
+      
     }
 
       /**
@@ -27,7 +28,9 @@ class BlogPublishedNotification extends Notification implements ShouldQueue
     public static function availableVariables()
     {
         return [
-            'title' => 'Título del blog',
+            'imagen'=> 'Imagen del blog',
+            'titulo' => 'Título del blog',
+            'descripcion' => 'Descripción del blog',
             'url'   => 'Enlace al blog',
         ];
     }
@@ -42,10 +45,12 @@ class BlogPublishedNotification extends Notification implements ShouldQueue
         $template = \App\Models\General::where('correlative', 'blog_published_email')->first();
         $body = $template
             ? \App\Helpers\Text::replaceData($template->description, [
-                'title' => $this->title,
-                'url' => $this->url
+                'imagen' => url(Storage::url("images/post/".$this->blog->image ?? '')),
+                'titulo' => $this->blog->name,
+                'descripcion' => $this->blog->description,
+                'url' =>  url('/post/' . $this->blog->slug)
             ])
             : 'Plantilla no encontrada';
-        return (new RawHtmlMail($body, 'Nuevo blog publicado: ' . $this->title));
+        return (new RawHtmlMail($body, 'Nuevo blog publicado: ' . $this->blog->name, $notifiable->email));
     }
 }
