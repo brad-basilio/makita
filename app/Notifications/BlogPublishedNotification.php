@@ -42,6 +42,7 @@ class BlogPublishedNotification extends Notification implements ShouldQueue
 
     public function toMail($notifiable)
     {
+         \Log::info('Enviando a: ' . $notifiable->description);
         $template = \App\Models\General::where('correlative', 'blog_published_email')->first();
         $body = $template
             ? \App\Helpers\Text::replaceData($template->description, [
@@ -51,6 +52,6 @@ class BlogPublishedNotification extends Notification implements ShouldQueue
                 'url' =>  url('/post/' . $this->blog->slug)
             ])
             : 'Plantilla no encontrada';
-        return (new RawHtmlMail($body, 'Nuevo blog publicado: ' . $this->blog->name, $notifiable->email));
+        return (new RawHtmlMail($body, 'Nuevo blog publicado: ' . $this->blog->name, $notifiable->description));
     }
 }
