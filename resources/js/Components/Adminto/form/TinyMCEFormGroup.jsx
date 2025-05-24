@@ -55,17 +55,22 @@ const TinyMCEFormGroup = ({ label, value, onChange, height = 400, variables = []
                 },
                 content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
                 setup: (editor) => {
-                    // No tocar src con {{...}}
+                    // Limpia cualquier base (incluyendo dominios y /admin/) antes de variables o URLs absolutas
+                    const cleanSrc = (html) => {
+                        // 1. Para variables tipo {{imagen}}
+                        html = html.replace(/src="[^"]*({{[^}]+}})"/g, 'src="$1"');
+                        // 2. Para URLs absolutas duplicadas (ej: /admin/https://...)
+                        html = html.replace(/src="[^"]*(https?:\/\/[^"}]+)"/g, 'src="$1"');
+                        return html;
+                    };
                     editor.on('BeforeSetContent', function (e) {
                         if (e.content && typeof e.content === 'string') {
-                            // Reemplaza src="http://localhost:8000/admin/{{imagen}}" por src="{{imagen}}"
-                            e.content = e.content.replace(/src="[^"]*({{[^}]+}})"/g, 'src="$1"');
+                            e.content = cleanSrc(e.content);
                         }
                     });
                     editor.on('PostProcess', function (e) {
                         if (e.content && typeof e.content === 'string') {
-                            // Al guardar, limpia cualquier base antepuesta a {{imagen}}
-                            e.content = e.content.replace(/src="[^"]*({{[^}]+}})"/g, 'src="$1"');
+                            e.content = cleanSrc(e.content);
                         }
                     });
                 }
