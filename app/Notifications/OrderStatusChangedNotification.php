@@ -99,8 +99,9 @@ class OrderStatusChangedNotification extends Notification implements ShouldQueue
             ])
             : 'Plantilla no encontrada';
         \Log::info($imgUrl);
-        // Limpia cualquier base antepuesta a {{imagen}} en src
-        $body = preg_replace('/(<img[^>]+src=[\'"])([^\'"]*?\{\{imagen\}\})[\'"]/i', '$1{{imagen}}"', $body);
+
+        // Limpia cualquier base antepuesta a una URL absoluta (por si TinyMCE antepone /admin/ o dominio a una URL absoluta)
+        $body = preg_replace('/(<img[^>]+src=[\'"])[^\'"]*(https?:\/\/[^\'"}]+)[\'"]/i', '$1$2"', $body);
         \Log::info('Cuerpo: ' . $body);
         return (new RawHtmlMail(
             $body,
