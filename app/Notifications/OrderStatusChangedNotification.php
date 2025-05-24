@@ -100,9 +100,29 @@ class OrderStatusChangedNotification extends Notification implements ShouldQueue
             : 'Plantilla no encontrada';
         \Log::info($imgUrl);
 
-        // Limpia cualquier base antepuesta a una variable o a una URL absoluta (por si TinyMCE antepone /admin/ o dominio)
-        $body = preg_replace('/(<img[^>]+src=[\'\"][^\'\"]*)(https?:\\/\\/[^\'\"#}]+)[^\'\"]*[\'\"]/i', '$1$2"', $body);
-        $body = preg_replace('/(<img[^>]+src=[\'\"][^#]+#)(https?:\\/\\/[^\'\"]+)[\'\"]/i', '$1$2"', $body);
+        // Limpia cualquier prefijo antes de una URL absoluta o variable en src="..."
+        // 1. Quita cualquier cosa antes de https:// o http:// en src="..."
+        $body = preg_replace_callback(
+            '/(<img[^>]+src=[\'\"])([^\'\"]+)([\'\"])/i',
+            function ($matches) {
+                $src = $matches[2];
+                // Si hay un # (gmail proxy), toma solo lo que sigue al último #
+                if (strpos($src, '#') !== false) {
+                    $src = substr($src, strrpos($src, '#') + 1);
+                }
+                // Si es variable tipo {{imagen}}
+                if (preg_match('/{{[^}]+}}/', $src, $varMatch)) {
+                    $src = $varMatch[0];
+                } else {
+                    // Si hay un https:// o http://, toma solo desde ahí (quita cualquier prefijo)
+                    if (preg_match('/https?:\/\/.+/i', $src, $urlMatch)) {
+                        $src = $urlMatch[0];
+                    }
+                }
+                return $matches[1] . $src . $matches[3];
+            },
+            $body
+        );
         \Log::info('Cuerpo: ' . $body);
         return (new RawHtmlMail(
             $body,
