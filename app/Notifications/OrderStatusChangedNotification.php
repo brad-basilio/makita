@@ -74,7 +74,9 @@ class OrderStatusChangedNotification extends Notification implements ShouldQueue
                 'status_color' => optional(\App\Models\SaleStatus::where('name', $this->sale->status->name)->first())->color ?? '#6c757d',
                 'name'         => $this->sale->user->name ?? $this->sale->name ?? '',
                 'year'         => date('Y'),
-                'fecha_pedido' => $this->sale->created_at ? $this->sale->created_at->format('d/m/Y H:i') : '',
+                'fecha_pedido' => $this->sale->created_at 
+                    ? $this->sale->created_at->translatedFormat('d \d\e F \d\e\l Y') 
+                    : '',
                 'productos'    => $productos,
             ])
             : 'Plantilla no encontrada';
