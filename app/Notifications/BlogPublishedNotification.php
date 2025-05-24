@@ -48,8 +48,13 @@ class BlogPublishedNotification extends Notification implements ShouldQueue
             ? \App\Helpers\Text::replaceData($template->description, [
                 'imagen' => url(Storage::url("images/post/".$this->blog->image ?? '')),
                 'titulo' => $this->blog->name,
-                'descripcion' => $this->blog->description,
-                'url' =>  url('/post/' . $this->blog->slug)
+                'descripcion' => strip_tags($this->blog->description),
+                'url' =>  url('/post/' . $this->blog->slug),
+                'name'         => $notifiable->description ?? '',
+                'year'         => date('Y'),
+                'fecha_publicacion' => $this->blog->created_at
+                    ? $this->blog->created_at->translatedFormat('d \d\e F \d\e\l Y')
+                    : '',
             ])
             : 'Plantilla no encontrada';
         return (new RawHtmlMail($body, 'Nuevo blog publicado: ' . $this->blog->name, $notifiable->description));
