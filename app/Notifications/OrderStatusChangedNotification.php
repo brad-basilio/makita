@@ -54,6 +54,20 @@ class OrderStatusChangedNotification extends Notification implements ShouldQueue
         Log::info('Detalles recibidos:', (array) $this->details);
         Log::info('Entrando al foreach de detalles...');
         foreach ($this->details as $detail) {
+            $imgPath = $detail->item->image ?? '';
+            $imgUrl = '';
+            if (preg_match('/^https?:\/\//i', $imgPath)) {
+                // Si ya es URL absoluta, úsala tal cual
+                $imgUrl = $imgPath;
+            } elseif (preg_match('/^\/admin\/(https?:\/\/.*)$/i', $imgPath, $m)) {
+                // Si viene con /admin/https://... quita el /admin/
+                $imgUrl = $m[1];
+            } elseif ($imgPath) {
+                // Si es relativa, usa Storage::url y url()
+                $imgUrl = url(Storage::url($imgPath));
+            } else {
+                $imgUrl = '';
+            }
             Log::info('Producto: ' . ($detail->name ?? '[sin nombre]') . ' | imgPath: ' . $imgPath . ' | imgUrl: ' . $imgUrl);
             Log::info('Productos array generado:', $productos);
             $productos[] = [
@@ -61,7 +75,7 @@ class OrderStatusChangedNotification extends Notification implements ShouldQueue
                 'cantidad'  => $detail->quantity ?? '',
                 'precio'    => isset($detail->price) ? number_format($detail->price, 2) : '',
                 'categoria' => isset($detail->item) && isset($detail->item->category) && isset($detail->item->category->name) ? $detail->item->category->name : '',
-                'imagen'    => url(Storage::url($detail->item->image)), // SOLO "imagen"
+                'imagen'    => $imgUrl, // SOLO "imagen"
             ];
         }
 
