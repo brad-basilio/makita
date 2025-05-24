@@ -156,9 +156,9 @@ class ItemController extends BasicController
 */
     public function setReactViewProperties(Request $request)
     {
-        $categories = Category::all();
-        $brands = Brand::all();
-        $collections = Collection::all();
+        $categories = Category::where('status', 1)->get();
+        $brands = Brand::where('status', 1)->get();
+        $collections = Collection::where('status', 1)->get();
 
         return [
             'categories' => $categories,

@@ -40,6 +40,7 @@ export default function ProductDetailSF({ item, data, setCart, cart, textstatic}
         setQuantity(value);
     };
 
+    
     /*TEXTOS */
     const textProductRelation = textstatic.find(x => x.correlative == 'detailproduct-relation-title')?.title ?? '';
     

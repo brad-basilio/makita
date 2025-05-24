@@ -10,7 +10,7 @@ const ProductDetailBananaLab = React.lazy(() => import('./ProductDetails/Product
 const ProductDetailKuchara = React.lazy(() => import('./ProductDetails/ProductDetailKuchara'))
 const ProductDetailPaani = React.lazy(() => import('./ProductDetails/ProductDetailPaani'))
 
-const ProductDetail = ({ which, item, cart, setCart,data,generals = [],favorites,setFavorites }) => {
+const ProductDetail = ({ which, item, cart, setCart,data,generals = [],favorites,setFavorites, textstatic }) => {
   const getProductDetail = () => {
     switch (which) {
       case 'ProductDetailSimple':
