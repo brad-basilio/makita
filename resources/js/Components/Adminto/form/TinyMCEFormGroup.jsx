@@ -53,7 +53,22 @@ const TinyMCEFormGroup = ({ label, value, onChange, height = 400, variables = []
                             throw new Error('Error al subir la imagen: ' + error.message);
                         });
                 },
-                content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+                content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+                setup: (editor) => {
+                    // No tocar src con {{...}}
+                    editor.on('BeforeSetContent', function (e) {
+                        if (e.content && typeof e.content === 'string') {
+                            // Reemplaza src="http://localhost:8000/admin/{{imagen}}" por src="{{imagen}}"
+                            e.content = e.content.replace(/src="[^"]*({{[^}]+}})"/g, 'src="$1"');
+                        }
+                    });
+                    editor.on('PostProcess', function (e) {
+                        if (e.content && typeof e.content === 'string') {
+                            // Al guardar, limpia cualquier base antepuesta a {{imagen}}
+                            e.content = e.content.replace(/src="[^"]*({{[^}]+}})"/g, 'src="$1"');
+                        }
+                    });
+                }
             }}
             onEditorChange={onChange}
         />

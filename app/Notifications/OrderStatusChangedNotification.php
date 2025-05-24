@@ -54,11 +54,15 @@ class OrderStatusChangedNotification extends Notification implements ShouldQueue
         Log::info('Detalles recibidos:', (array) $this->details);
         Log::info('Entrando al foreach de detalles...');
         foreach ($this->details as $detail) {
-          
-            Log::info('Producto: ' . $detail->name . ' | imgPath: ' . $imgPath . ' | imgUrl: ' . $imgUrl);
-            // Obtener la ruta de la imagen (puede estar en detail->image o en detail->item->image)
-            $imgPath = $detail->image ?? ($detail->item->image ?? '');
+            // Inicializar variables
+            $imgPath = '';
             $imgUrl = '';
+            // Obtener la ruta de la imagen (puede estar en detail->image o en detail->item->image)
+            if (isset($detail->image) && $detail->image) {
+                $imgPath = $detail->image;
+            } elseif (isset($detail->item) && isset($detail->item->image) && $detail->item->image) {
+                $imgPath = $detail->item->image;
+            }
             if ($imgPath) {
                 // Si ya es una URL absoluta, úsala tal cual
                 if (preg_match('/^https?:\/\//i', $imgPath)) {
@@ -73,13 +77,13 @@ class OrderStatusChangedNotification extends Notification implements ShouldQueue
                     }
                 }
             }
+            Log::info('Producto: ' . ($detail->name ?? '[sin nombre]') . ' | imgPath: ' . $imgPath . ' | imgUrl: ' . $imgUrl);
             Log::info('Productos array generado:', $productos);
-           
             $productos[] = [
-                'nombre'    => $detail->name,
-                'cantidad'  => $detail->quantity,
-                'precio'    => number_format($detail->price, 2),
-                'categoria' => $detail->item->category->name ?? '',
+                'nombre'    => $detail->name ?? '',
+                'cantidad'  => $detail->quantity ?? '',
+                'precio'    => isset($detail->price) ? number_format($detail->price, 2) : '',
+                'categoria' => isset($detail->item) && isset($detail->item->category) && isset($detail->item->category->name) ? $detail->item->category->name : '',
                 'imagen'    => $imgUrl, // SOLO "imagen"
             ];
         }
