@@ -72,19 +72,19 @@ class OrderStatusChangedNotification extends Notification implements ShouldQueue
                 'orderId'      => $this->sale->code,
                 'status'       => $this->sale->status->name,
                 'status_color' => optional(\App\Models\SaleStatus::where('name', $this->sale->status->name)->first())->color ?? '#6c757d',
-                'name'         => $this->sale->user->name,
+                'name'         => $this->sale->user->name ?? $this->sale->name ?? '',
                 'year'         => date('Y'),
+                'fecha_pedido' => $this->sale->created_at ? $this->sale->created_at->format('d/m/Y H:i') : '',
                 'productos'    => $productos,
-                //quiero que sea algo asi la fecha de pedido 15 Mayo 2024
-                'fecha_pedido' => date('d \d\e F \d\e Y', strtotime($this->sale->created_at)),
             ])
             : 'Plantilla no encontrada';
         
         \Log::info('Cuerpo: ' . $body);
+        $toEmail = $this->sale->user->email ?? $this->sale->email ?? $notifiable->email;
         return (new RawHtmlMail(
             $body,
             'Estado de tu pedido actualizado',
-            $notifiable->email
+            $toEmail
         ));
     }
 }
