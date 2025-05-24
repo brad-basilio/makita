@@ -41,7 +41,7 @@ const Testimonies = ({ countries, details }) => {
             .val(data?.country_id ?? "89")
             .trigger("change");
         descriptionRef.current.value = data?.description ?? "";
-        imageRef.image.src = `/storage/images/testimonies/${data?.image}`;
+        imageRef.image.src = `/storage/images/testimony/${data?.image}`;
         imageRef.current.value = null;
 
         $(modalRef.current).modal("show");
@@ -62,16 +62,11 @@ const Testimonies = ({ countries, details }) => {
         for (const key in request) {
             formData.append(key, request[key]);
         }
-        const file = imageRef.current.files[0];
-        if (file) {
-            const { thumbnail, type, ...rest } = await File.compress(file, {
-                square: false,
-            });
-            formData.append(
-                "image",
-                await File.fromURL(`data:${type};base64,${thumbnail}`)
-            );
-        }
+     
+       const file = imageRef.current.files[0]
+    if (file) {
+      formData.append('image', file)
+    }
 
         const result = await testimoniesRest.save(formData);
         if (!result) return;
@@ -152,7 +147,7 @@ const Testimonies = ({ countries, details }) => {
                                     [
                                         <img
                                             className="avatar-xs rounded-circle"
-                                            src={`/storage/images/testimonies/${data.image}`}
+                                            src={`/storage/images/testimony/${data.image}`}
                                             alt={data.name}
                                         />,
                                         <p

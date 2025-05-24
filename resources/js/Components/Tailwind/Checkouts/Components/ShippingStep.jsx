@@ -7,9 +7,10 @@ import ButtonPrimary from "./ButtonPrimary";
 import ButtonSecondary from "./ButtonSecondary";
 import InputForm from "./InputForm";
 import OptionCard from "./OptionCard";
-import { InfoIcon } from "lucide-react";
+import { InfoIcon, UserRoundX, XOctagonIcon } from "lucide-react";
 import { Notify } from "sode-extend-react";
 import { debounce } from "lodash";
+import { toast } from "sonner";
 
 export default function ShippingStep({
     cart,
@@ -66,6 +67,7 @@ export default function ShippingStep({
     const [selectedOption, setSelectedOption] = useState(null);
     const [costsGet, setCostsGet] = useState(null);
     const [errors, setErrors] = useState({});
+    const [searchInput, setSearchInput] = useState("");
 
     // Función de validación mejorada
     const validateForm = () => {
@@ -149,12 +151,13 @@ export default function ShippingStep({
             setEnvio(options[0].price);
         } catch (error) {
             console.error("Error al obtener precios de envío:", error);
-            Notify.add({
-                icon: "/assets/img/icon.svg",
-                title: "Sin cobertura",
-                body: "No realizamos envíos a esta ubicación",
-                type: "danger",
+            toast.error("Sin cobertura", {
+                description: `No realizamos envíos a esta ubicación.`,
+                icon: <XOctagonIcon className="h-5 w-5 text-red-500" />,
+                duration: 3000,
+                position: "bottom-center",
             });
+          
             setShippingOptions([]);
             setSelectedOption(null);
             setEnvio(0);
@@ -166,12 +169,13 @@ export default function ShippingStep({
         e.preventDefault();
 
         if (!user) {
-            Notify.add({
-                icon: "/assets/img/icon.svg",
-                title: "Acceso requerido",
-                body: "Debe iniciar sesión para continuar",
-                type: "danger",
+            toast.error("Acceso requerido", {
+                description: `Debe iniciar sesión para continuar.`,
+                icon: <UserRoundX className="h-5 w-5 text-red-500" />,
+                duration: 3000,
+                position: "bottom-center",
             });
+          
             return;
         }
 
@@ -206,20 +210,23 @@ export default function ShippingStep({
                 setCart([]);
                 onContinue();
             } else {
-                Notify.add({
-                    icon: "/assets/img/icon.svg",
-                    title: "Error en el pago",
-                    body: response.message || "Pago rechazado",
-                    type: "danger",
-                });
+             
+            
+                toast.error("Error en el pago", {
+                    description: response.message || "Pago rechazado",
+                    icon: <ShoppingCart className="h-5 w-5 text-red-500" />,
+                    duration: 3000,
+                    position: "bottom-center",
+                })
             }
         } catch (error) {
-            Notify.add({
-                icon: "/assets/img/icon.svg",
-                title: "Error",
-                body: "Ocurrió un error al procesar el pedido",
-                type: "danger",
+            toast.error("Lo sentimos, no puede continuar con la compra", {
+                description: `Ocurrió un error al procesar el pedido.`,
+                icon: <XOctagonIcon className="h-5 w-5 text-red-500" />,
+                duration: 3000,
+                position: "bottom-center",
             });
+           
         }
     };
 
@@ -331,7 +338,7 @@ export default function ShippingStep({
 
                     <div className="form-group">
                         <label className="block text-sm 2xl:text-base mb-2 font-medium customtext-neutral-dark">
-                            Ubicación de entrega *
+                            Ubicación de entrega (Distrito)*
                         </label>
                         <AsyncSelect
                             name="ubigeo"
@@ -341,12 +348,27 @@ export default function ShippingStep({
                             onChange={(selected) => {
                                 setSelectedUbigeo(selected);
                                 handleUbigeoChange(selected);
+                                setSearchInput(""); // Limpiar input al seleccionar
                             }}
-                            placeholder="Buscar departamento | distrito | provincia ..."
+                            inputValue={searchInput}
+                            onInputChange={(value, { action }) => {
+                                if (action === "input-change") setSearchInput(value);
+                            }}
+                            onFocus={() => {
+                                setSelectedUbigeo(null); // Limpiar selección al enfocar
+                                setSearchInput("");      // Limpiar input de búsqueda
+                            }}
+                            onMenuOpen={() => {
+                                if (selectedUbigeo) {
+                                    setSelectedUbigeo(null);
+                                    setSearchInput("");
+                                }
+                            }}
+                            placeholder="Buscar por Distrito ..."
                             loadingMessage={() => "Buscando ubicaciones..."}
                             noOptionsMessage={({ inputValue }) =>
                                 inputValue.length < 3
-                                    ? "Ingrese al menos 3 caracteres..."
+                                    ? "Buscar por Distrito ..."
                                     : "No se encontraron resultados"
                             }
                             isLoading={loading}
@@ -361,6 +383,7 @@ export default function ShippingStep({
                             )}
                             className="w-full rounded-xl transition-all duration-300"
                             menuPortalTarget={document.body}
+                            isClearable={true}
                         />
                         {errors.ubigeo && <div className="text-red-500 text-sm mt-1">{errors.ubigeo}</div>}
                     </div>

@@ -68,7 +68,7 @@ const InfiniteCategory = ({ items, data }) => {
                                         <div className="aspect-square relative mb-4">
                                             <img
                                                 src={`/storage/images/category/${category.image}`}
-                                                alt={category.name}
+                                                alt={`categoia ${category.name}`}
                                                 className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-110"
                                                 loading="lazy"
                                                 onError={(e) =>

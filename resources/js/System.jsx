@@ -1,46 +1,68 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import CreateReactScript from "./Utils/CreateReactScript";
 
-import TopBar from "./Components/Tailwind/TopBar";
-import Header from "./Components/Tailwind/Header";
-import Footer from "./Components/Tailwind/Footer";
-import SortByAfterField from "./Utils/SortByAfterField";
-import Slider from "./Components/Tailwind/Slider";
-import Product from "./Components/Tailwind/Product";
-import Banner from "./Components/Tailwind/Banner";
-import Category from "./Components/Tailwind/Category";
-import Collection from "./Components/Tailwind/Collection";
-import Cart from "./Components/Tailwind/Cart";
-import Step from "./Components/Tailwind/Step";
+// Componente de carga para usar con Suspense
+const LoadingFallback = () => (
+    <div className="fixed inset-0 flex flex-col justify-center items-center bg-white/90 backdrop-blur-sm z-50">
+ 
+        <div className="animate-bounce">
+            <img
+
+                src={`/assets/resources/logo.png?v=${crypto.randomUUID()}`}
+                alt={Global.APP_NAME}
+                onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "/assets/img/logo-bk.svg";
+                }}
+
+                className=" w-64 lg:w-96 transition-all duration-300 transform hover:scale-105"
+            />
+        </div>
+    </div>
+);
+
+// Importaciones lazy
+const TopBar = React.lazy(() => import("./Components/Tailwind/TopBar"));
+const Header = React.lazy(() => import("./Components/Tailwind/Header"));
+const Footer = React.lazy(() => import("./Components/Tailwind/Footer"));
+const Slider = React.lazy(() => import("./Components/Tailwind/Slider"));
+const Product = React.lazy(() => import("./Components/Tailwind/Product"));
+const Banner = React.lazy(() => import("./Components/Tailwind/Banner"));
+const Category = React.lazy(() => import("./Components/Tailwind/Category"));
+const Collection = React.lazy(() => import("./Components/Tailwind/Collection"));
+const Cart = React.lazy(() => import("./Components/Tailwind/Cart"));
+const Step = React.lazy(() => import("./Components/Tailwind/Step"));
+const Filter = React.lazy(() => import("./Components/Tailwind/Filter"));
+const ProductDetail = React.lazy(() => import("./Components/Tailwind/ProductDetail"));
+const Contact = React.lazy(() => import("./Components/Tailwind/Contact"));
+const Frame = React.lazy(() => import("./Components/Tailwind/Frame"));
+const Checkout = React.lazy(() => import("./Components/Tailwind/Checkout"));
+const Menu = React.lazy(() => import("./Components/Tailwind/Menu"));
+const Carrusel = React.lazy(() => import("./Components/Tailwind/Carrusel"));
+const Faq = React.lazy(() => import("./Components/Tailwind/Faq"));
+const PostDetail = React.lazy(() => import("./Components/Tailwind/PostDetail"));
+const Blog = React.lazy(() => import("./Components/Tailwind/Blog"));
+const AboutUs = React.lazy(() => import("./Components/Tailwind/AboutUs"));
+const Login = React.lazy(() => import("./Components/Tailwind/Login"));
+const Signup = React.lazy(() => import("./Components/Tailwind/Signup"));
+const ForgotPassword = React.lazy(() => import("./Components/Tailwind/ForgotPassword"));
+const ResetPassword = React.lazy(() => import("./Components/Tailwind/ResetPassword"));
+const Complaint = React.lazy(() => import("./Components/Tailwind/Complaint"));
+const Indicator = React.lazy(() => import("./Components/Tailwind/Indicator"));
+const ThankSimple = React.lazy(() => import("./Components/Tailwind/Thanks/ThankSimple"));
+const Image = React.lazy(() => import("./Components/Tailwind/Image"));
+const BananaLab = React.lazy(() => import("./Components/Tailwind/BananaLab"));
+const Floating = React.lazy(() => import("./Components/Tailwind/Floating"));
+const DeliveryZone = React.lazy(() => import("./Components/Tailwind/DeliveryZone"));
+const Ad = React.lazy(() => import("./Components/Tailwind/Ad"));
+const Testimonials = React.lazy(() => import("./Components/Tailwind/Testimonials"));
+
 import { Local } from "sode-extend-react";
 import Global from "./Utils/Global";
 import ItemsRest from "./Actions/ItemsRest";
-import Filter from "./Components/Tailwind/Filter";
-import ProductDetail from "./Components/Tailwind/ProductDetail";
-import Contact from "./Components/Tailwind/Contact";
-import Frame from "./Components/Tailwind/Frame";
-import Checkout from "./Components/Tailwind/Checkout";
-import Menu from "./Components/Tailwind/Menu";
-import Carrusel from "./Components/Tailwind/Carrusel";
-import Faq from "./Components/Tailwind/Faq";
-import PostDetail from "./Components/Tailwind/PostDetail";
-import Blog from "./Components/Tailwind/Blog";
-import AboutUs from "./Components/Tailwind/AboutUs";
-import Login from "./Components/Tailwind/Login";
-import Signup from "./Components/Tailwind/Signup";
-import ForgotPassword from "./Components/Tailwind/ForgotPassword";
-import ResetPassword from "./Components/Tailwind/ResetPassword";
-import Complaint from "./Components/Tailwind/Complaint";
-import Indicator from "./Components/Tailwind/Indicator";
-import ThankSimple from "./Components/Tailwind/Thanks/ThankSimple";
-import Image from "./Components/Tailwind/Image";
-import BananaLab from "./Components/Tailwind/BananaLab";
-import Agradecimientos from "./Components/Tailwind/Agradecimientos";
+import SortByAfterField from "./Utils/SortByAfterField";
 import { Toaster } from "sonner";
-import Floating from "./Components/Tailwind/Floating";
-import DeliveryZone from "./Components/Tailwind/DeliveryZone";
-import Ad from "./Components/Tailwind/Ad";
 
 const itemsRest = new ItemsRest();
 
@@ -74,6 +96,14 @@ const System = ({
         Local.set(`${Global.APP_CORRELATIVE}_cart`, cart);
     }, [cart]);
 
+     const [favorites, setFavorites] = useState(
+        Local.get(`${Global.APP_CORRELATIVE}_favorites`) ?? []
+    );
+
+    useEffect(() => {
+        Local.set(`${Global.APP_CORRELATIVE}_favorites`, favorites);
+    }, [favorites]);
+
     useEffect(() => {
         itemsRest.verifyStock(cart.map((x) => x.id)).then((items) => {
             const newCart = items.map((item) => {
@@ -88,29 +118,37 @@ const System = ({
         });
     }, [null]);
 
+    console.log("FilteredData", filteredData);
+
     const getSystem = ({ component, value, data, itemsId, visible }) => {
         if (visible == 0) return <></>;
 
+        const componentProps = {
+            data,
+            which: value,
+            items: getItems(itemsId),
+            cart,
+            setCart,
+            pages,
+            isUser: session,
+            generals,
+            headerPosts,
+            contacts
+        };
+
         switch (component) {
             case "top_bar":
-                return <TopBar data={data} which={value} items={getItems(itemsId)} cart={cart} setCart={setCart} isUser={session} />
+                return (
+
+                    <TopBar {...componentProps} />
+
+                );
             case "header":
                 return (
-                    <Header
-                        data={data}
-                        which={value}
-                        items={getItems(itemsId)}
-                        cart={cart}
-                        setCart={setCart}
-                        pages={pages}
-                        isUser={session}
-                        generals={generals}
-                        headerPosts={headerPosts} 
-                        contacts={contacts}
-                    />
+
+                    <Header {...componentProps} />
+
                 );
-            case "floating":
-                return <Floating data={data} which={value} items={getItems(itemsId)} />
             case "menu":
                 return <Menu data={data} which={value} items={getItems(itemsId)} cart={cart} setCart={setCart} pages={pages} />
             case "content":
@@ -128,7 +166,8 @@ const System = ({
             case "filter":
                 return <Filter which={value} data={data} items={getItems(itemsId)} filteredData={filteredData} cart={cart} setCart={setCart} />
             case "product":
-                return <Product which={value} data={data} items={getItems(itemsId)} filteredData={filteredData} cart={cart} setCart={setCart} pages={pages} />
+                return <Product which={value} data={data} items={getItems(itemsId)} filteredData={filteredData} cart={cart} setCart={setCart} pages={pages}      favorites={favorites}
+                        setFavorites={setFavorites}/>
             case "category":
                 return <Category which={value} data={data} items={getItems(itemsId)} />
             case "collection":
@@ -140,7 +179,7 @@ const System = ({
             case "indicator":
                 return <Indicator which={value} data={data} items={getItems(itemsId)} />
             case "banner":
-                return <Banner which={value} data={data} />
+                return <Banner which={value} data={data} items={getItems(itemsId)} />
             case "ads":
                 return <Ad which={value} data={data} items={getItems(itemsId)} />
             case "image":
@@ -150,15 +189,7 @@ const System = ({
             case 'delivery-zones':
                 return <DeliveryZone which={value} data={data} items={getItems(itemsId)} />
             case "product-detail":
-                return (
-                    <ProductDetail
-                        which={value}
-                        item={filteredData.Item}
-                        cart={cart}
-                        setCart={setCart}
-                        textstatic={textstatic}
-                    />
-                );
+                return <ProductDetail which={value} item={filteredData.Item} cart={cart} setCart={setCart} data={data} generals={generals} favorites={favorites} setFavorites={setFavorites} />
             case "cart":
                 return <Cart which={value} data={data} cart={cart} setCart={setCart} />
             case "checkout":
@@ -186,13 +217,19 @@ const System = ({
             case "frame":
                 return <Frame which={value} data={data} />
             case "footer":
-                return <Footer data={data} which={value} items={getItems(itemsId)} pages={pages} generals={generals} contacts={contacts} />
+                return <Footer {...componentProps} contacts={contacts} generals={generals} data={data}  />
             case "complaints":
-                return <Complaint which={value} generals={generals} />
-            case "bananalab":
-                return <BananaLab which={value} generals={generals} />;
-            case "agradecimiento":
-                return <Agradecimientos which={value} data={data} contacts={contacts} />;
+                return <Complaint which={value} data={data} generals={generals} />
+            case "floating":
+                return <Floating which={value} data={data} />
+            case "testimonials":
+                return <Testimonials which={value} data={data} items={getItems(itemsId)} />
+            default:
+                return (
+                    <div className="w-full px-[5%] replace-max-w-here p-4 mx-auto">
+                        - No Hay componente <b>{value}</b> -
+                    </div>
+                );
         }
     };
 
@@ -209,5 +246,16 @@ const System = ({
 };
 
 CreateReactScript((el, properties) => {
-    createRoot(el).render(<System {...properties} />);
+    createRoot(el).render(
+     
+       
+    <Suspense fallback={<LoadingFallback />}>
+        <System {...properties} />
+    </Suspense>
+
+       
+    );
 });
+/* <Suspense fallback={<LoadingFallback />}>
+            <System {...properties} />
+        </Suspense> */

@@ -1,7 +1,8 @@
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import Global from "../../../Utils/Global";
 
-const MenuSimple = ({ pages = [], items }) => {
+const MenuSimple = ({ pages = [], items, data }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const menuRef = useRef(null);
 
@@ -14,14 +15,15 @@ const MenuSimple = ({ pages = [], items }) => {
         document.addEventListener("pointerdown", handleClickOutside);
         return () => document.removeEventListener("pointerdown", handleClickOutside);
     }, []);
+console.log("items", data)
 
     return (
-        <nav className="hidden md:block bg-secondary font-font-secondary font-normal text-sm" ref={menuRef}>
-            <div className="px-primary 2xl:px-0 2xl:max-w-7xl mx-auto">
-                <ul className="flex items-center gap-6 text-sm">
-                    <li className="relative py-3">
+        <nav className={`${Global.APP_CORRELATIVE==="stechperu"? "hidden":"overflow-x-hidden w-full"} md:block bg-secondary font-paragraph text-sm`} ref={menuRef}>
+            <div className="px-primary  2xl:px-0 2xl:max-w-7xl mx-auto">
+                <ul className="flex items-center gap-4 lg:gap-6 text-sm">
+                    {data?.showCategories && <li className="relative py-3">
                         <button
-                            className="customtext-neutral-dark flex items-center gap-2 hover:customtext-primary pr-6 transition-colors duration-300 relative before:absolute before:right-0 before:top-1/2 before:-translate-y-1/2 before:h-3 before:w-[1px] before:bg-[#262624]"
+                            className="font-medium customtext-neutral-dark flex items-center gap-2 hover:customtext-primary pr-6 transition-colors duration-300 relative before:absolute before:right-0 before:top-1/2 before:-translate-y-1/2 before:h-3 before:w-[1px] before:bg-[#262624]"
                             onClick={() => setIsMenuOpen(!isMenuOpen)}
                         >
                             Categorias
@@ -30,16 +32,16 @@ const MenuSimple = ({ pages = [], items }) => {
                         {isMenuOpen && (
                             <div className="absolute z-50 top-12 left-0 bg-white shadow-xl border-t rounded-xl transition-all duration-500 ease-in-out w-[calc(60vw-6rem)]">
                                 <div className="p-8">
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                                    <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-8">
                                         {items.map((category, index) => (
-                                            <div key={index} className="w-full min-h-[200px]">
+                                            <div key={index} className="w-full break-inside-avoid-column mb-8">
                                                 <a
                                                     href={`/catalogo?category=${category.slug}`}
                                                     className="customtext-neutral-dark font-bold text-base mb-4 cursor-pointer hover:customtext-primary transition-colors duration-300 w-full inline-block border-b pb-2"
                                                 >
                                                     {category.name}
                                                 </a>
-                                                <ul className="space-y-3">
+                                                <ul className="space-y-1">
                                                     {category.subcategories.map((item, itemIndex) => (
                                                         <li key={itemIndex} className="w-full">
                                                             <a
@@ -57,20 +59,24 @@ const MenuSimple = ({ pages = [], items }) => {
                                 </div>
                             </div>
                         )}
-                    </li>
-                    {pages.map(
-                        (page, index) =>
-                            page.menuable && (
-                                <li key={index} className="py-3">
-                                    <a
-                                        href={page.path}
-                                        className="hover:customtext-primary cursor-pointer transition-all duration-300 pr-6 relative before:absolute before:right-0 before:top-1/2 before:-translate-y-1/2 before:h-3 before:w-[1px] before:bg-[#262624]"
-                                    >
-                                        {page.name}
-                                    </a>
-                                </li>
-                            )
-                    )}
+                    </li>}
+                    {pages
+                        .filter(page => page.menuable)
+                        .map((page, index, arr) => (
+                            <li key={index} className="py-3">
+                                <a
+                                    href={page.path}
+                                    className={
+                                        "font-medium hover:customtext-primary cursor-pointer transition-all duration-300 pr-6 relative" +
+                                        (index !== arr.length - 1
+                                            ? " before:absolute before:right-0 before:top-1/2 before:-translate-y-1/2 before:h-3 before:w-[1px] before:bg-[#262624]"
+                                            : "")
+                                    }
+                                >
+                                    {page.name}
+                                </a>
+                            </li>
+                        ))}
                 </ul>
             </div>
         </nav>

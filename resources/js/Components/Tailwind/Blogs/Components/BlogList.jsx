@@ -5,7 +5,7 @@ import { NoResults } from "../../Components/Resources/NoResult";
 export default function BlogList({ data, posts, postsLatest, loading, isFilter }) {
   return (
     <section
-      className={`font-font-general ${isFilter ? "pb-16" : "pt-8 pb-16"}`}
+      className={`font-paragraph ${isFilter ? "pb-16" : "pt-8 pb-16"}`}
     >
       <div className="px-[5%]  mx-auto">
         {!isFilter ? (
@@ -22,7 +22,7 @@ export default function BlogList({ data, posts, postsLatest, loading, isFilter }
                 convallis. Aenean dignissim nec sem quis consequat.
               </p>
             }
-            <div className="grid grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-8">
               {Array.isArray(postsLatest) &&
                 postsLatest.length > 0 ? (
                 postsLatest.map((post, index) => (

@@ -66,28 +66,29 @@ class ComplaintController extends BasicController
             }
 
             // Guardar en la base de datos
-            $complaint = Complaint::create(
-                [
-                    'nombre' => $request->nombre,
-                    'tipo_documento' => $request->tipo_documento,
-                    'numero_identidad' => $request->numero_identidad,
-                    'celular' => $request->celular,
-                    'correo_electronico' => $request->correo_electronico,
-                    'departamento' => $request->departamento,
-                    'provincia' => $request->provincia,
-                    'distrito' => $request->distrito,
-                    'direccion' => $request->direccion,
-                    'tipo_producto' => $request->tipo_producto,
-                    'monto_reclamado' => $request->monto_reclamado,
-                    'descripcion_producto' => $request->descripcion_producto,
-                    'tipo_reclamo' => $request->tipo_reclamo,
-                    'fecha_ocurrencia' => $request->fecha_ocurrencia,
-                    'numero_pedido' => $request->numero_pedido,
-                    'detalle_reclamo' => $request->detalle_reclamo,
-                    'acepta_terminos' => $request->acepta_terminos,
-                    'recaptcha_token' => $request->recaptcha_token,
-                ]
-            );
+            $complaint = Complaint::create([
+                'nombre' => $request->nombre,
+                'tipo_documento' => $request->tipo_documento,
+                'numero_identidad' => $request->numero_identidad,
+                'celular' => $request->celular,
+                'correo_electronico' => $request->correo_electronico,
+                'departamento' => $request->departamento,
+                'provincia' => $request->provincia,
+                'distrito' => $request->distrito,
+                'direccion' => $request->direccion,
+                'tipo_producto' => $request->tipo_producto,
+                'monto_reclamado' => $request->monto_reclamado,
+                'descripcion_producto' => $request->descripcion_producto,
+                'tipo_reclamo' => $request->tipo_reclamo,
+                'fecha_ocurrencia' => $request->fecha_ocurrencia,
+                'numero_pedido' => $request->numero_pedido,
+                'detalle_reclamo' => $request->detalle_reclamo,
+                'acepta_terminos' => $request->acepta_terminos,
+                'recaptcha_token' => $request->recaptcha_token,
+            ]);
+
+            // Notificar al cliente con respaldo del reclamo
+            $complaint->notify(new \App\Notifications\ClaimNotification($complaint));
             //dump(DB::getQueryLog());
             // dump($complaint);
 

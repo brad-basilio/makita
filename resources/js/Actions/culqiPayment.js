@@ -1,5 +1,6 @@
 import { Fetch, Notify } from "sode-extend-react";
 import Global from "../Utils/Global";
+import { toast } from "sonner";
 
 function generarNumeroOrdenConPrefijoYFecha() {
     let numeroOrden = "";
@@ -75,20 +76,23 @@ export const processCulqiPayment = (request) => {
                     window.Culqi.close();
 
                     // ✅ Notificar éxito
-                    Notify.add({
-                        icon: "/assets/img/icon.svg",
-                        title: "Pago Exitoso",
-                        body: "El pago se procesó correctamente.",
-                        type: "success",
+
+                    toast.success("¡Pago exitoso!", {
+                        description: "Tu pago se procesó correctamente. Pronto recibirás la confirmación de tu pedido.",
+                        duration: 3000,
+                        position: "top-right",
+                        richColors: true,
                     });
+
+
 
                     resolve(result);
                 } catch (error) {
-                    Notify.add({
-                        icon: "/assets/img/icon.svg",
-                        title: "Error en el Pago",
-                        body: error.message,
-                        type: "danger",
+                    toast.error("¡Error en el Pago!", {
+                        description: error.message,
+                        duration: 3000,
+                        position: "top-right",
+                        richColors: true,
                     });
                     reject(error.message || "Error en el pago");
                 }
@@ -96,21 +100,22 @@ export const processCulqiPayment = (request) => {
 
             // ✅ Manejar errores de Culqi
             document.addEventListener("culqi.error", function (event) {
-                Notify.add({
-                    icon: "/assets/img/icon.svg",
-                    title: "Error en Culqi",
-                    body: event.detail?.message || "Error desconocido",
-                    type: "danger",
+                toast.error("¡Error en Culqi!", {
+                    description: event.detail?.message || "Error desconocido",
+                    duration: 3000,
+                    position: "top-right",
+                    richColors: true,
                 });
                 reject(event.detail?.message || "Error desconocido");
             });
         } catch (error) {
-            Notify.add({
-                icon: "/assets/img/icon.svg",
-                title: "Error",
-                body: error.message,
-                type: "danger",
+            toast.error("¡Error en la integración con Culqi!", {
+                description: error.message,
+                duration: 3000,
+                position: "top-right",
+                richColors: true,
             });
+
             reject("Error en la integración con Culqi");
         }
     });

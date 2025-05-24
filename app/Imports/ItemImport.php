@@ -48,28 +48,28 @@ class ItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsOnFailur
                 ['slug' => str()->slug($row['categoria'])]
             );
 
-          /*  $collection = Collection::firstOrCreate(
-                ['name' => $row['collection']],
-                ['slug' => str()->slug($row['collection'])]
-            );*/
+            $collection = Collection::firstOrCreate(
+                ['name' => $row['colleccion']],
+                ['slug' => str()->slug($row['colleccion'])]
+            );
 
-          // 2️⃣ Obtener o crear la subcategoría
-             $subCategory = SubCategory::firstOrCreate(
+            // 2️⃣ Obtener o crear la subcategoría
+            $subCategory = SubCategory::firstOrCreate(
                 ['name' => $row['subcategoria'], 'category_id' => $category->id],
-               ['slug' => str()->slug($row['subcategoria'])]
-          );
+                ['slug' => str()->slug($row['subcategoria'])]
+            );
 
-       //    3️⃣ Obtener o crear la marca
-           $brand = Brand::firstOrCreate(
-             ['name' => $row['marca']],
-             ['slug' => str()->slug($row['marca'])]
-          );
+            //    3️⃣ Obtener o crear la marca
+            $brand = Brand::firstOrCreate(
+                ['name' => $row['marca']],
+                ['slug' => str()->slug($row['marca'])]
+            );
             $slug = "";
             if ($row['nombre_de_producto']) {
                 $slug = Str::slug($row['nombre_de_producto']);
                 $slugExists = Item::where('slug', $slug)->exists();
                 if ($slugExists) {
-                  $slug = $slug . '-' . Crypto::short();
+                    $slug = $slug . '-' . Crypto::short();
                 }
             }
 
@@ -86,13 +86,13 @@ class ItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsOnFailur
                 'discount_percent' => isset($row['descuento']) && $row['descuento'] > 0 ? round((100 - ($row['descuento'] / $row['precio']) * 100)) : NULL,
                 'category_id' => $category->id,
                 'subcategory_id' => $subCategory->id,
-               // 'collection_id' => $collection->id ?? NULL,
+                // 'collection_id' => $collection->id ?? NULL,
                 'brand_id' => $brand->id,
                 'image' => $this->getMainImage($row['sku']),
-               // 'slug' => str()->slug($row['nombre_de_producto'] .'-'. $row['color']),
-               'slug' => str()->slug($row['nombre_de_producto']),
+                // 'slug' => str()->slug($row['nombre_de_producto'] .'-'. $row['color']),
+                'slug' => str()->slug($row['nombre_de_producto']),
                 'stock' =>  isset($row['stock']) && $row['stock'] > 0 ? $row['stock'] : 10,
-               // 'color' => $row['color'],
+                // 'color' => $row['color'],
 
             ]);
 
@@ -100,6 +100,7 @@ class ItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsOnFailur
                 // 5️⃣ Guardar las especificaciones
                 $this->saveSpecifications($item, $row['especificaciones_principales_separadas_por_comas'], 'principal');
                 $this->saveSpecifications($item, $row['especificaciones_generales_separado_por_comas_y_dos_puntos'], 'general');
+                $this->saveSpecificationsTecnicas($item, $row['especificaciones_tecnicas_separado_por_slash_para_filas_y_dos_puntos_para_columnas'], 'general');
 
                 // 6️⃣ Guardar imágenes en la galería
                 $this->saveGalleryImages($item, $row['sku']);
@@ -107,7 +108,7 @@ class ItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsOnFailur
                 throw new Exception("No se pudo obtener el ID del producto con SKU: " . $row['sku']);
             }
         } catch (\Exception $e) {
-           dump("Error al procesar fila: " . $e->getMessage());
+            dump("Error al procesar fila: " . $e->getMessage());
             $this->addError($e->getMessage());
             return null; // Continuar con la siguiente fila
         }
@@ -161,6 +162,43 @@ class ItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsOnFailur
         }
     }
 
+    private function saveSpecificationsTecnicas($item, $specs, $type)
+    {
+        // especificaciones_tecnicas_separado_por_slash_para_filas_y_dos_puntos_para_columnas
+        // Ejemplo: "Escobilla de carbón, UDOE1B106C / Entrada de clasificación continua, 1.150 W / Capacidad, Acero: 50 mm (2") / Capacidad del mandril, 16 mm (5/8") / Velocidad sin carga, 350 / 650 min⁻¹ / Fuerza de sujeción magnética, 9.300 N (950 kg) / Dimensiones (largo x ancho x alto), 290 x 218 x 450 mm (11-3/8 x 8-5/8 x 17-3/4") / Peso neto, 18,5 kg (40,8 libras)"
+        // Estructura: "titulo1,descripcion1/titulo2,descripcion2/titulo3,descripcion3"
+        if (empty($specs)) {
+            return;
+        }
+        $rows = explode('/', $specs);
+        foreach ($rows as $row) {
+            $parts = explode(':', $row, 2);
+            if (count($parts) == 2) {
+                $title = trim($parts[0]);
+                $description = trim($parts[1]);
+            } else {
+                // Si no hay ":", intentar con ","
+                $parts = explode(',', $row, 2);
+                if (count($parts) == 2) {
+                    $title = trim($parts[0]);
+                    $description = trim($parts[1]);
+                } else {
+                    // Si tampoco hay ",", usar todo como título
+                    $title = trim($row);
+                    $description = '';
+                }
+            }
+            if ($title !== '') {
+                ItemSpecification::create([
+                    'item_id' => $item->id,
+                    'type' => $type,
+                    'title' => $title,
+                    'description' => $description,
+                ]);
+            }
+        }
+    }
+
     private function saveGalleryImages($item, $sku)
     {
         $extensions = ['png', 'jpg', 'jpeg', 'webp'];
@@ -169,25 +207,25 @@ class ItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsOnFailur
 
         while (true) {
             $found = false;
-             foreach ($extensions as $ext) {
-           $filename = "{$sku}_" . str_pad($index, 2, '0', STR_PAD_LEFT) . ".{$ext}";
-            $filename = "{$sku}_{$index}.{$ext}";
-            $filename = "{$sku}_" . ($index < 10 ? $index : str_pad($index, 2, '0', STR_PAD_LEFT)) . ".{$ext}";
+            foreach ($extensions as $ext) {
+                $filename = "{$sku}_" . str_pad($index, 2, '0', STR_PAD_LEFT) . ".{$ext}";
+                $filename = "{$sku}_{$index}.{$ext}";
+                $filename = "{$sku}_" . ($index < 10 ? $index : str_pad($index, 2, '0', STR_PAD_LEFT)) . ".{$ext}";
 
-               $path = "images/item/{$filename}";
-            if (Storage::exists($path)) {
-               ItemImage::create([
-                   'item_id' => $item->id,
-                'url' => $filename,
-            ]);
-             $found = true;
-              break;
-             }
-      }
+                $path = "images/item/{$filename}";
+                if (Storage::exists($path)) {
+                    ItemImage::create([
+                        'item_id' => $item->id,
+                        'url' => $filename,
+                    ]);
+                    $found = true;
+                    break;
+                }
+            }
             foreach ($extensions as $ext) {
                 $filename = "{$sku}_{$index}.{$ext}";
                 $path = "images/item/{$filename}";
-                
+
                 if (Storage::exists($path)) {
                     ItemImage::create([
                         'item_id' => $item->id,

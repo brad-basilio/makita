@@ -1,5 +1,6 @@
 import { Tag } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import Global from "../../../Utils/Global";
 
 const BannerPublicitario = ({ data }) => {
     return (
@@ -38,6 +39,7 @@ const BannerPublicitario = ({ data }) => {
                                 transition={{ duration: 1, type: "spring" }}
                                 src={`/storage/images/system/${data?.image}`}
                                 className="w-full h-auto object-cover"
+                                alt={data?.name}
                             />
                         </motion.div>
 
@@ -74,7 +76,7 @@ const BannerPublicitario = ({ data }) => {
                                         boxShadow: "0 10px 20px rgba(0,0,0,0.2)"
                                     }}
                                     whileTap={{ scale: 0.9 }}
-                                    href={data?.button_link}
+                                    href={data?.button_link || Global.APP_DOMAIN}
                                     className="bg-white cursor-pointer text-sm w-max font-bold customtext-neutral-dark px-10 py-4 rounded-xl hover:opacity-90 transition-all duration-300 flex items-center gap-2"
                                 >
                                     {data?.button_text}

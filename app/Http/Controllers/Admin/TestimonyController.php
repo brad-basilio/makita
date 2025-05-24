@@ -27,19 +27,5 @@ class TestimonyController extends BasicController
         ];
     }
 
-    public function media(Request $request, string $uuid)
-    {
-        try {
-            $content = Storage::get('images/' . $uuid . '.img');
-            if (!$content) throw new Exception('Imagen no encontrado');
-            return response($content, 200, [
-                'Content-Type' => 'application/octet-stream'
-            ]);
-        } catch (\Throwable $th) {
-            $content = Storage::get('utils/user-404.svg');
-            return response($content, 200, [
-                'Content-Type' => 'image/svg+xml'
-            ]);
-        }
-    }
+
 }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 
 // Asume que tienes un servicio para guardar los datos
@@ -7,10 +7,11 @@ import GeneralsRest from "../Actions/Admin/GeneralsRest";
 import CreateReactScript from "../Utils/CreateReactScript";
 import { createRoot } from "react-dom/client";
 import QuillFormGroup from "../Components/Adminto/form/QuillFormGroup";
-import TextareaFormGroup from "../Components/Adminto/form/TextareaFormGroup";
+import TinyMCEFormGroup from "../Components/Adminto/form/TinyMCEFormGroup";
 import Global from "../Utils/Global";
 import GalleryRest from "../Actions/Admin/GalleryRest";
 import Tippy from "@tippyjs/react";
+import TextareaFormGroup from "../Components/Adminto/form/TextareaFormGroup";
 
 const generalsRest = new GeneralsRest();
 const galleryRest = new GalleryRest();
@@ -20,7 +21,49 @@ const Generals = ({ generals }) => {
     generals.find((x) => x.correlative == "location")?.description ?? "0,0";
 
   // First add these to your formData state
+  // Filtrar solo los generales que son plantillas de email (excluyendo correo de soporte)
+  const emailTemplates = generals.filter(g => g.correlative.endsWith('_email') && g.correlative !== 'support_email');
+  const [showPreview, setShowPreview] = useState(false);
+  const [selectedEmailCorrelative, setSelectedEmailCorrelative] = useState(emailTemplates[0]?.correlative || "");
+  const [templateVariables, setTemplateVariables] = useState({});
+  const [loadingVars, setLoadingVars] = useState(false);
+  const [varsError, setVarsError] = useState(null);
+  // Fetch variables for selected template
+  useEffect(() => {
+    if (!selectedEmailCorrelative) return;
+    // Map correlatives to API types
+    const correlativeToType = {
+      purchase_summary_email: "purchase_summary",
+      order_status_changed_email: "order_status_changed",
+      blog_published_email: "blog_published",
+      claim_email: "claim",
+      password_changed_email: "password_changed",
+      reset_password_email: "password_reset",
+      subscription_email: "subscription",
+      verify_account_email: "verify_account",
+    };
+    const type = correlativeToType[selectedEmailCorrelative];
+    if (!type) {
+      setTemplateVariables({});
+      return;
+    }
+    setLoadingVars(true);
+    setVarsError(null);
+    fetch(`/api/notification-variables/${type}`)
+      .then(res => res.json())
+      .then(data => {
+        setTemplateVariables(data.variables || {});
+        setLoadingVars(false);
+      })
+      .catch(err => {
+        setVarsError("No se pudieron cargar las variables.");
+        setLoadingVars(false);
+      });
+  }, [selectedEmailCorrelative]);
   const [formData, setFormData] = useState({
+    email_templates: Object.fromEntries(
+      emailTemplates.map(t => [t.correlative, t.description ?? ""])
+    ),
     phones: generals
       .find((x) => x.correlative == "phone_contact")
       ?.description?.split(",")
@@ -126,7 +169,14 @@ const Generals = ({ generals }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // Guardar solo el template seleccionado
       await generalsRest.save([
+        // Guardar solo el template seleccionado
+        ...Object.keys(formData.email_templates).map(correlative => ({
+          correlative,
+          name: emailTemplates.find(t => t.correlative === correlative)?.name || correlative,
+          description: formData.email_templates[correlative],
+        })),
         {
           correlative: "phone_contact",
           name: "Teléfono de contacto",
@@ -334,9 +384,73 @@ const Generals = ({ generals }) => {
               Ubicación
             </button>
           </li>
+
+        <li className="nav-item" role="presentation">
+          <button
+            className={`nav-link ${activeTab === "email" ? "active" : ""}`}
+            onClick={() => setActiveTab("email")}
+            type="button"
+            role="tab"
+          >
+            Email
+          </button>
+        </li>
         </ul>
 
         <div className="tab-content" id="generalTabsContent">
+          <div
+            className={`tab-pane fade ${activeTab === "email" ? "show active" : ""}`}
+            role="tabpanel"
+          >
+            <div className="mb-2">
+              <label htmlFor="email_correlative" className="form-label">
+                Tipo de Email
+              </label>
+              <select
+                id="email_correlative"
+                className="form-select mb-3"
+                value={selectedEmailCorrelative}
+                onChange={e => setSelectedEmailCorrelative(e.target.value)}
+              >
+                {emailTemplates.map(t => (
+                  <option key={t.correlative} value={t.correlative}>{t.name || t.correlative}</option>
+                ))}
+              </select>
+              <TinyMCEFormGroup
+                label={
+                  <>
+                    Plantilla de Email (HTML seguro, variables: <code>{`{{variable}}`}</code>)
+                    <small className="d-block text-muted">
+                      No se permite código PHP ni Blade. Solo variables seguras.<br />
+                      {loadingVars && <span>Cargando variables...</span>}
+                      {varsError && <span className="text-danger">{varsError}</span>}
+                      {!loadingVars && !varsError && (
+                        <>
+                          <b>Variables disponibles:</b>{" "}
+                          {Object.keys(templateVariables).length === 0
+                            ? <span>No hay variables para esta notificación.</span>
+                            : Object.entries(templateVariables).map(([key, desc]) => (
+                                <span key={key} style={{display:'inline-block', marginRight:8}}>
+                                  <code>{`{{${key}}}`}</code> <span className="text-muted">({desc})</span>{" "}
+                                </span>
+                              ))
+                          }
+                        </>
+                      )}
+                    </small>
+                  </>
+                }
+                value={formData.email_templates[selectedEmailCorrelative] || ""}
+                onChange={content => setFormData({
+                  ...formData,
+                  email_templates: {
+                    ...formData.email_templates,
+                    [selectedEmailCorrelative]: content
+                  }
+                })}
+              />
+            </div>
+          </div>
           <div
             className={`tab-pane fade ${activeTab === "general" ? "show active" : ""
               }`}

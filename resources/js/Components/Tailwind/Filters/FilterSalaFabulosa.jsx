@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-
 import CardHoverBtn from "../Products/Components/CardHoverBtn";
 import {
     ChevronDown,
@@ -33,11 +32,11 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
     const [categories, setCategories] = useState([]);
     const [priceRanges, setPriceRanges] = useState([]);
     const [sections, setSections] = useState({
-        collection: false,
-        marca: false,
+        collection: data?.collection ? false : true,
+        marca: data?.brand ? true : false,
         precio: false,
-        categoria: false,
-        colores: false,
+        categoria: data?.category ? true : false,
+        colores: data?.color ? true : false,
     });
     // Nuevo estado para controlar si estamos en móvil
     const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
@@ -73,13 +72,33 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
             }));
         }
     };
+
+    const clearAllFilters = () => {
+        setSelectedFilters({
+            collection_id: [],
+            category_id: [],
+            brand_id: [],
+            subcategory_id: [],
+            price: null,
+            name: null,
+            sort_by: "created_at",
+            order: "desc",
+        });
+    };
+
+    
     
     const [selectedFilters, setSelectedFilters] = useState({
         collection_id: GET.collection ? GET.collection.split(',') : [],
         category_id: GET.category ? GET.category.split(',') : [],
         brand_id: GET.brand ? GET.brand.split(',') : [],
         subcategory_id: GET.subcategory ? GET.subcategory.split(',') : [],
+        collection_id: GET.collection ? GET.collection.split(',') : [],
+        category_id: GET.category ? GET.category.split(',') : [],
+        brand_id: GET.brand ? GET.brand.split(',') : [],
+        subcategory_id: GET.subcategory ? GET.subcategory.split(',') : [],
         price: null,
+        name: GET.search || null,
         name: GET.search || null,
         sort_by: "created_at",
         order: "desc",
@@ -94,6 +113,14 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
         from: 0,
         to: 0,
     });
+
+    const hasActiveFilters = 
+      selectedFilters.collection_id.length > 0 ||
+      selectedFilters.category_id.length > 0 ||
+      selectedFilters.brand_id.length > 0 ||
+      selectedFilters.subcategory_id.length > 0 ||
+      selectedFilters.price !== null ||
+      selectedFilters.name !== null;
 
     const transformFilters = (filters) => {
         const transformedFilters = [];
@@ -137,6 +164,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
 
         // Precio
 
+
         if (filters.price) {
             transformedFilters.push([
                 "or",
@@ -161,7 +189,6 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
         try {
             // Transformar los filtros al formato esperado por el backend
             const filters = transformFilters(selectedFilters);
-            console.log(filters);
             const params = {
                 filter: filters, // Envía los filtros transformados
                 sort: selectedFilters.sort, // Enviar el parámetro de ordenación
@@ -244,10 +271,10 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                     ...prev,
                     price:
                         prev.price &&
-                            prev.price.min === value.min &&
-                            prev.price.max === value.max
-                            ? null
-                            : value,
+                        prev.price.min === value.min &&
+                        prev.price.max === value.max
+                        ? null
+                        : value,
                 };
             }
 
@@ -340,6 +367,25 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
             <p className="customtext-primary text-2xl font-bold pb-4 mb-4 border-b lg:block hidden">
                 Combina como desees tu sala
             </p>
+
+            {/* <div className="mb-4">
+                <button
+                    onClick={clearAllFilters}
+                    className="w-full bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-2 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"
+                >
+                    <X size={16} />
+                    <span>Limpiar todos los filtros</span>
+                </button>
+            </div> */}
+
+            {hasActiveFilters && (
+                <div className="mb-4">
+                    <button onClick={clearAllFilters} className="w-full bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-2 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
+                    <X size={16} />
+                    <span>Limpiar todos los filtros</span>
+                    </button>
+                </div>
+            )}
 
             {/* Colecciones */}
             <div className="mt-2 mb-4">
@@ -616,6 +662,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                                                         ) : (
                                                             <button
                                                                 className={`w-10 h-10 p-2 inline-flex items-center justify-center rounded-full transition-all duration-300 
+                                           
                                             ${page === pagination.currentPage
                                                                         ? "bg-primary text-white"
                                                                         : "bg-transparent hover:text-white hover:bg-primary"

@@ -21,6 +21,7 @@
         "@inertiajs/react": "^1.1.0",
         "@react-google-maps/api": "^2.19.3",
         "@tailwindcss/typography": "^0.5.16",
+        "@tinymce/tinymce-react": "^6.1.0",
         "@tippyjs/react": "^4.2.6",
         "aos": "^2.3.4",
         "apexcharts": "^4.7.0",

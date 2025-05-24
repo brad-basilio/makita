@@ -30,7 +30,7 @@ export default function ConfirmationStep({ cart, code, delivery }) {
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
                         transition={{ type: "spring", delay: 0.5 }}
-                        className="w-20 h-20 bg-green-100 rounded-full mx-auto flex items-center justify-center"
+                        className="w-20 h-20 bg-secondary rounded-full mx-auto flex items-center justify-center"
                     >
                         <span className="text-4xl">✓</span>
                     </motion.div>
@@ -44,7 +44,7 @@ export default function ConfirmationStep({ cart, code, delivery }) {
 
                     <motion.div 
                         whileHover={{ scale: 1.05 }}
-                        className="py-6 px-4 bg-green-50 rounded-xl inline-block"
+                        className="py-6 px-4 bg-secondary rounded-xl inline-block"
                     >
                         <div className="customtext-neutral-light">Código de pedido</div>
                         <div className="customtext-neutral-dark text-xl font-bold">{`#${code}`}</div>

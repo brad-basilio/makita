@@ -7,6 +7,7 @@ use App\Models\Sale;
 use App\Models\SaleDetail;
 use App\Models\SaleStatus;
 use App\Models\User;
+use App\Notifications\PurchaseSummaryNotification;
 use Culqi\Culqi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -109,6 +110,10 @@ class PaymentController extends Controller
             
                 $userJpa->save();
             }
+
+            // Enviar correo de resumen de compra
+            $details = $sale->details ?? $sale->saleDetails ?? $sale->sale_details ?? SaleDetail::where('sale_id', $sale->id)->get();
+            $sale->notify(new PurchaseSummaryNotification($sale, $details));
 
             return response()->json([
                 'message' => 'Pago exitoso',

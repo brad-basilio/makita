@@ -11,7 +11,10 @@ use App\Models\Person;
 use App\Models\PreUser;
 use App\Models\SpecialtiesByUser;
 use App\Models\Specialty;
+use App\Notifications\PasswordChangedNotification;
+use App\Notifications\VerifyAccountNotification;
 use App\Providers\RouteServiceProvider;
+use App\Services\EmailNotificationService;
 use Exception;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\RedirectResponse;
@@ -66,87 +69,6 @@ class AuthClientController extends BasicController
         return response($response->toArray(), $response->status);
     }
 
-
-
-
-    /* public function signup(Request $request): HttpResponse | ResponseFactory | RedirectResponse
-    {
-        $response = new Response();
-        //dump($request->all(), Controller::decode($request->email));
-        try {
-            // Validar los datos de entrada
-            $request->validate([
-                'name' => 'required|string',
-                'lastname' => 'required|string',
-                'email' => 'required|string',
-                'password' => 'required|string',
-                'confirmation' => 'required|string',
-            ]);
-
-            // Verificar que las contraseñas coincidan
-            if (Controller::decode($request->password) !== Controller::decode($request->confirmation)) {
-                $response->status = 400;
-                $response->message = 'Operación Incorrecta. Por favor, las contraseñas deben ser iguales';
-            }
-
-            if (!$this->validarEmail(Controller::decode($request->email))) {
-                $response->status = 400;
-                $response->message = 'Operación Incorrecta. Por favor, ingresa un correo electrónico válido.';
-            }
-
-            $user = User::where('email', Controller::decode($request->email))->first();
-            if ($user) {
-                $response->status = 400;
-                $response->message = 'Operación Incorrecta. Por favor, ingresa otro correo electrónico.';
-            }
-
-
-
-            // Generar un token único para la confirmación de correo
-            $confirmation_token = Crypto::randomUUID();
-
-            // Crear un registro en la tabla users (o pre_users si prefieres confirmación)
-            $user = User::updateOrCreate([
-                'name' => Controller::decode($request->name),
-                'lastname' => Controller::decode($request->lastname),
-                'email' => Controller::decode($request->email),
-                'password' => Controller::decode($request->password), // Encriptar la contraseña
-                'email_verified_at' => null, // Marcar como no verificado
-                'remember_token' => $confirmation_token, // Token para confirmación
-            ]);
-
-
-            $role = Role::firstOrCreate(['name' => 'Customer']);
-            $user->assignRole($role);
-
-             // Enviar correo de confirmación
-            $content = Constant::value('confirm-email'); // Plantilla de correo
-            $content = str_replace('{URL_CONFIRM}', env('APP_URL') . '/confirmation/' . $confirmation_token, $content);
-
-            $mailer = EmailConfig::config();
-            $mailer->Subject = 'Confirmación - ' . env('APP_NAME');
-            $mailer->Body = $content;
-            $mailer->addAddress($user->email);
-            $mailer->isHTML(true);
-            $mailer->send();
-
-            // Respuesta exitosa
-            $response->status = 200;
-            $response->message = 'Operación correcta. Por favor, confirma tu correo electrónico.';
-            Auth::login($user);
-            return redirect('/');
-        } catch (\Throwable $th) {
-            // Manejar errores
-            $response->status = 400;
-            $response->message = $th->getMessage();
-        } finally {
-            return response(
-                $response->toArray(),
-                $response->status
-            );
-        }
-    }*/
-
     public function signup(Request $request): HttpResponse | ResponseFactory
     {
         $response = new Response();
@@ -186,6 +108,10 @@ class AuthClientController extends BasicController
                 'password' => bcrypt($password),
                 'email_verified_at' => now(), // O null si requiere confirmación
             ]);
+
+            // Enviar correo de bienvenida
+            $notificationService = new EmailNotificationService();
+            $notificationService->sendToUser($user, new VerifyAccountNotification(url('/')));
 
             // Asignar rol
             $role = Role::firstOrCreate(['name' => 'Customer']);
@@ -260,13 +186,9 @@ class AuthClientController extends BasicController
             // Renderizar la plantilla Blade
             $content = View::make('emails.reset_password', ['RESET_URL' => $resetUrl])->render();
 
-            $mailer = EmailConfig::config();
-
-            $mailer->Subject = 'Restablecer contraseña - ' . env('APP_NAME');
-            $mailer->Body = $content;
-            $mailer->addAddress($user->email);
-            $mailer->isHTML(true);
-            $mailer->send();
+            // Enviar notificación con el link de restablecimiento de contraseña
+            $notificationService = new EmailNotificationService();
+            $notificationService->sendToUser($user, new \App\Notifications\PasswordResetLinkNotification($resetUrl));
             //dump($mailer);
             // Respuesta exitosa
             $response->status = 200;
@@ -318,6 +240,12 @@ class AuthClientController extends BasicController
             //dump($status);
 
             if ($status === Password::PASSWORD_RESET) {
+                // Enviar notificación de contraseña restablecida
+                $user = User::where('email', Controller::decode($request->email))->first();
+                if ($user) {
+                    $notificationService = new EmailNotificationService();
+                    $notificationService->sendToUser($user, new PasswordChangedNotification());
+                }
                 $response->status = 200;
                 $response->message = 'Contraseña restablecida correctamente.';
             } else {

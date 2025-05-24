@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ShoppingCart } from "lucide-react"; // Icono para la cesta
+import { LucideEye, ShoppingCart } from "lucide-react"; // Icono para la cesta
 import Swal from "sweetalert2";
 import axios from "axios";
 import ItemsRest from "../../../../Actions/ItemsRest";
@@ -114,11 +114,13 @@ const CardHoverBtn = ({
                     <div className="overflow-hidden max-h-20  lg:max-h-0 pb-4 lg:opacity-0 group-hover:max-h-20 group-hover:opacity-100 transition-[max-height,opacity] duration-1000 ease-in-out flex gap-2 my-2 transform ">
                         <a
                             href={`/product/${product.slug}`}
-                            className="flex-1 inline-flex items-center justify-center font-bold  text-sm bg-primary text-white  py-3 rounded-xl shadow-lg transition-all duration-300 hover:opacity-90"
+                            className="flex-1 inline-flex items-center justify-center font-bold  text-sm bg-primary text-white py-2 md:py-3 rounded-xl shadow-lg transition-all duration-300 hover:opacity-90"
                         >
-                            Ver detalle
+                            <span className="hidden md:block">Ver detalle</span>
+                            <span className="md:hidden flex gap-2 text-sm items-center" > Ver <LucideEye width="1.1rem" /></span>
                         </a>
                         <button
+                        aria-label="Agregar al carrito"
                             className="py-2 px-2.5 border border-primary rounded-lg customtext-primary transition-all duration-300  hover:opacity-90"
                             onClick={() => onAddClicked(product)}
                         >

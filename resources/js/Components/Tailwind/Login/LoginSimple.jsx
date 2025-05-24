@@ -6,12 +6,13 @@ import Swal from "sweetalert2";
 import { GET } from "sode-extend-react";
 import AuthClientRest from "../../../Actions/AuthClientRest";
 import InputForm from "../Checkouts/Components/InputForm";
+import { toast } from "sonner";
 
 export default function LoginSimple() {
     const jsEncrypt = new JSEncrypt();
     jsEncrypt.setPublicKey(Global.PUBLIC_RSA_KEY);
 
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const emailRef = useRef();
     const passwordRef = useRef();
     const rememberRef = useRef();
@@ -53,12 +54,8 @@ export default function LoginSimple() {
         setLoading(false);
 
         if (!result || result.status !== 200) {
-            Notify.add({
-                icon: "/assets/img/icon.svg",
-                title: "Error",
-                body: result?.message || "Credenciales incorrectas",
-                type: "danger",
-            });
+          
+         
             return;
         }
 

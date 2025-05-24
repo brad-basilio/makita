@@ -6,7 +6,8 @@ import Swal from "sweetalert2";
 import SubscriptionsRest from "../../../Actions/SubscriptionsRest";
 import Global from "../../../Utils/Global";
 import HtmlContent from "../../../Utils/HtmlContent";
-import { X } from "lucide-react";
+import { CircleCheckBig, X } from "lucide-react";
+import { toast } from "sonner";
 
 const FooterB = ({ pages, generals }) => {
     const subscriptionsRest = new SubscriptionsRest();
@@ -31,17 +32,24 @@ const FooterB = ({ pages, generals }) => {
 
         const request = {
             email: emailRef.current.value,
+            status: 1,
         };
         const result = await subscriptionsRest.save(request);
         setSaving(false);
 
         if (!result) return;
 
-        Swal.fire({
-            title: "¡Éxito!",
-            text: `Te has suscrito correctamente al blog de ${Global.APP_NAME}.`,
-            icon: "success",
-            confirmButtonText: "Ok",
+        /* Swal.fire({
+             title: "¡Éxito!",
+             text: `Te has suscrito correctamente al blog de ${Global.APP_NAME}.`,
+             icon: "success",
+             confirmButtonText: "Ok",
+         });*/
+        toast.success("¡Suscrito!", {
+            description: `Te has suscrito correctamente al blog de ${Global.APP_NAME}.`,
+            icon: <CircleCheckBig className="h-5 w-5 text-green-500" />,
+            duration: 3000,
+            position: "top-center",
         });
 
         emailRef.current.value = null;
@@ -71,19 +79,22 @@ const FooterB = ({ pages, generals }) => {
                         <h3 className="customtext-primary font-bold mb-6 text-base">
                             Menú
                         </h3>
-                        <ul className="space-y-3 text-white">
-                            {pages.map(
-                                (page, index) =>
-                                    page.menuable && ( // Simplified conditional rendering
-                                        <li key={index}>
-                                            <a
-                                                href={page.path}
-                                                className="hover:customtext-primary hover:font-semibold text-sm cursor-pointer transition-all duration-300  "
-                                            >
-                                                {page.name}
-                                            </a>
-                                        </li>
-                                    )
+                        <ul className="text-white flex lg:flex-col gap-2 items-center lg:items-start">
+                            {pages.map((page, index) =>
+                                page.menuable && (
+                                    <li key={index}>
+                                        <a
+                                            href={page.path}
+                                            className="hover:customtext-primary hover:font-semibold text-sm cursor-pointer transition-all duration-300"
+                                        >
+                                            {page.name}
+                                        </a>
+
+                                        {index !== pages.filter(p => p.menuable).length + 2 && (
+                                            <span className="text-white ml-2 lg:hidden">|</span>
+                                        )}
+                                    </li>
+                                )
                             )}
                         </ul>
                     </div>
@@ -104,6 +115,8 @@ const FooterB = ({ pages, generals }) => {
                             </li>
                             <li>
                                 <a
+                                    type="button"
+                                    href="#"
                                     onClick={() => openModal(1)}
                                     className="cursor-pointer hover:customtext-primary hover:font-bold transition-all duration-300"
                                 >
@@ -112,6 +125,8 @@ const FooterB = ({ pages, generals }) => {
                             </li>
                             <li>
                                 <a
+                                 type="button"
+                                    href="#"
                                     onClick={() => openModal(2)}
                                     className="cursor-pointer hover:customtext-primary hover:font-bold transition-all duration-300"
                                 >
@@ -120,6 +135,8 @@ const FooterB = ({ pages, generals }) => {
                             </li>
                             <li>
                                 <a
+                        
+                                 
                                     href="/libro-reclamaciones"
                                     className="cursor-pointer flex flex-col gap-2 items-start  "
                                 >
@@ -166,18 +183,42 @@ const FooterB = ({ pages, generals }) => {
                                 type="email"
                                 placeholder="Ingresa tu e-mail"
                                 className="w-full customtext-neutral-dark font-semibold  shadow-xl  py-5 pl-5 border  rounded-[20px] md:rounded-full focus:ring-0 focus:outline-none"
+                                disabled={saving}
                             />
                             <button
-                                className="absolute right-3 top-1/2 transform -translate-y-1/2 py-3 font-bold shadow-xl px-4 bg-primary text-white rounded-xl"
+                                disabled={saving}
+                                className="absolute right-3 top-1/2 transform -translate-y-1/2 py-3 font-bold shadow-xl px-4 bg-primary text-white rounded-xl flex items-center justify-center min-w-[120px]"
                                 aria-label="Suscribite"
                             >
-                                Suscribirme
+                                {saving ? (
+                                    <span className="flex items-center gap-2">
+                                        <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
+                                            <circle
+                                                className="opacity-25"
+                                                cx="12"
+                                                cy="12"
+                                                r="10"
+                                                stroke="currentColor"
+                                                strokeWidth="4"
+                                                fill="none"
+                                            />
+                                            <path
+                                                className="opacity-75"
+                                                fill="currentColor"
+                                                d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                                            />
+                                        </svg>
+                                        Enviando...
+                                    </span>
+                                ) : (
+                                    "Suscribirme"
+                                )}
                             </button>
                         </div>
                     </form>
                 </div>
-            </div>
-            {Object.keys(policyItems).map((key, index) => {
+                </div>
+                {Object.keys(policyItems).map((key, index) => {
                 const title = policyItems[key];
                 const content =
                     generals.find((x) => x.correlative == key)?.description ??

@@ -21,4 +21,13 @@ class SaleDetail extends Model
         'image',
         'colors',
     ];
+
+    public function sale()
+    {
+        return $this->belongsTo(Sale::class);
+    }
+    public function item()
+    {
+        return $this->belongsTo(Item::class);
+    }
 }

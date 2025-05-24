@@ -310,12 +310,13 @@ export default function ShippingStepSF({
         }
 
         if (!user) {
-            Notify.add({
-                icon: "/assets/img/icon.svg",
-                title: "Iniciar Sesión",
-                body: "Se requiere que incie sesión para realizar la compra",
-                type: "danger",
+            toast.error("Acceso requerido", {
+                description: `Debe iniciar sesión para continuar.`,
+                icon: <UserRoundX className="h-5 w-5 text-red-500" />,
+                duration: 3000,
+                position: "bottom-center",
             });
+
 
             return;
         }

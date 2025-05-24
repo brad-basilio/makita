@@ -14,6 +14,7 @@
     <title>{{ $data['name'] ?? 'Página' }} | {{ env('APP_NAME', 'Stech Perú') }}</title>
 
     <link rel="shortcut icon" href="/assets/resources/icon.png?v={{ uniqid() }}" type="image/png">
+    <meta name="description" content="Stech Perú">
     @isset($data['description'])
         <meta name="description" content="{{ $data['description'] }}">
     @endisset
@@ -23,11 +24,24 @@
 
     <meta name="author" content="Powered by Manuel Gamboa">
 
-    <link href="/lte/assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
-    <link href="/lte/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
-    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Carga diferida de select2 CSS -->
+    <link rel="preload" href="/lte/assets/libs/select2/css/select2.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lte/assets/libs/select2/css/select2.min.css"></noscript>
+    
+    <!-- Carga diferida de icons CSS -->
+    <link rel="preload" href="/lte/assets/css/icons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lte/assets/css/icons.min.css"></noscript>
+    
+
+    <link rel="preload" href='https://fonts.googleapis.com/css?family=Poppins' as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href='https://fonts.googleapis.com/css?family=Poppins'></noscript>
+    
+    
+    <!-- Carga diferida de Tailwind CSS -->
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"></noscript>
+    
+    <script src="https://cdn.tailwindcss.com" defer></script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -182,15 +196,15 @@
     @inertia
 
     <!-- Vendor js -->
-    <script src="/lte/assets/js/vendor.min.js"></script>
+    <script src="/lte/assets/js/vendor.min.js" defer></script>
 
-    <script src="/lte/assets/libs/select2/js/select2.full.min.js"></script>
+    <script src="/lte/assets/libs/select2/js/select2.full.min.js" defer></script>
     <!-- App js -->
-    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.js"></script>
-    <script src="/lte/assets/libs/moment/min/moment.min.js"></script>
-    <script src="/lte/assets/libs/moment/moment-timezone.js"></script>
-    <script src="/lte/assets/libs/moment/locale/es.js"></script>
-    <script src="/lte/assets/libs/quill/quill.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.js" defer></script>
+    <script src="/lte/assets/libs/moment/min/moment.min.js" defer></script>
+    <script src="/lte/assets/libs/moment/moment-timezone.js" defer></script>
+    <script src="/lte/assets/libs/moment/locale/es.js" defer></script>
+    <script src="/lte/assets/libs/quill/quill.min.js" defer></script>
     <script>
         document.addEventListener('click', function(event) {
             const target = event.target;
@@ -203,6 +217,28 @@
                 } else {
                     location.href = href;
                 }
+            }
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var lazyImages = [].slice.call(document.querySelectorAll('img.lazy'));
+            
+            if ('IntersectionObserver' in window) {
+                let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+                    entries.forEach(function(entry) {
+                        if (entry.isIntersecting) {
+                            let lazyImage = entry.target;
+                            lazyImage.src = lazyImage.dataset.src;
+                            lazyImage.classList.remove('lazy');
+                            lazyImageObserver.unobserve(lazyImage);
+                        }
+                    });
+                });
+                
+                lazyImages.forEach(function(lazyImage) {
+                    lazyImageObserver.observe(lazyImage);
+                });
             }
         });
     </script>

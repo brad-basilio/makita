@@ -174,6 +174,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
 
         fetchProducts(pagination.currentPage);
     }, [selectedFilters]);
+    
     const handlePageChange = (page) => {
         if (page >= 1 && page <= pagination.totalPages) {
             fetchProducts(page);
