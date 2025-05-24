@@ -54,29 +54,6 @@ class OrderStatusChangedNotification extends Notification implements ShouldQueue
         Log::info('Detalles recibidos:', (array) $this->details);
         Log::info('Entrando al foreach de detalles...');
         foreach ($this->details as $detail) {
-            // Inicializar variables
-            $imgPath = '';
-            $imgUrl = '';
-            // Obtener la ruta de la imagen (puede estar en detail->image o en detail->item->image)
-            if (isset($detail->image) && $detail->image) {
-                $imgPath = $detail->image;
-            } elseif (isset($detail->item) && isset($detail->item->image) && $detail->item->image) {
-                $imgPath = $detail->item->image;
-            }
-            if ($imgPath) {
-                // Si ya es una URL absoluta, úsala tal cual
-                if (preg_match('/^https?:\/\//i', $imgPath)) {
-                    $imgUrl = $imgPath;
-                } else {
-                    // Si la ruta ya contiene 'storage/', úsala con url()
-                    if (strpos($imgPath, 'storage/') === 0) {
-                        $imgUrl = url($imgPath);
-                    } else {
-                        // Asume que es una imagen de item en storage
-                        $imgUrl = url('storage/images/item/' . ltrim($imgPath, '/'));
-                    }
-                }
-            }
             Log::info('Producto: ' . ($detail->name ?? '[sin nombre]') . ' | imgPath: ' . $imgPath . ' | imgUrl: ' . $imgUrl);
             Log::info('Productos array generado:', $productos);
             $productos[] = [
@@ -84,7 +61,7 @@ class OrderStatusChangedNotification extends Notification implements ShouldQueue
                 'cantidad'  => $detail->quantity ?? '',
                 'precio'    => isset($detail->price) ? number_format($detail->price, 2) : '',
                 'categoria' => isset($detail->item) && isset($detail->item->category) && isset($detail->item->category->name) ? $detail->item->category->name : '',
-                'imagen'    => $imgUrl, // SOLO "imagen"
+                'imagen'    => url(Storage::url($detail->item->image)), // SOLO "imagen"
             ];
         }
 
@@ -98,28 +75,7 @@ class OrderStatusChangedNotification extends Notification implements ShouldQueue
                 'productos'    => $productos,
             ])
             : 'Plantilla no encontrada';
-        \Log::info($imgUrl);
-
-        // Limpia cualquier prefijo antes de una URL absoluta o variable en src="..."
-        // 1. Quita cualquier cosa antes de https:// o http:// en src="..."
-        $body = preg_replace_callback(
-            '/(<img[^>]+src=[\'\"])([^\'\"]+)([\'\"])/i',
-            function ($matches) {
-                $src = $matches[2];
-                // Si hay un # (gmail proxy), toma solo lo que sigue al último #
-                if (strpos($src, '#') !== false) {
-                    $src = substr($src, strrpos($src, '#') + 1);
-                }
-                // Busca todas las variables {{...}} o URLs absolutas
-                preg_match_all('/({{[^}]+}}|https?:\/\/[^"\'\']+)/i', $src, $allMatches);
-                if (!empty($allMatches[1])) {
-                    // Toma la última ocurrencia válida
-                    $src = end($allMatches[1]);
-                }
-                return $matches[1] . $src . $matches[3];
-            },
-            $body
-        );
+        
         \Log::info('Cuerpo: ' . $body);
         return (new RawHtmlMail(
             $body,
