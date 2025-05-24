@@ -25,6 +25,12 @@ class VerifyAccountNotification extends Notification implements ShouldQueue
     {
         return [
             'verificationUrl' => 'Enlace para verificar la cuenta',
+            'nombre' => 'Nombre del usuario',
+            'apellido' => 'Apellido del usuario',
+            'email' => 'Correo electrónico',
+            'year' => 'Año actual',
+            'fecha_registro' => 'Fecha de registro',
+           
         ];
     }
 
@@ -37,9 +43,14 @@ class VerifyAccountNotification extends Notification implements ShouldQueue
         $template = \App\Models\General::where('correlative', 'verify_account_email')->first();
         $body = $template
             ? \App\Helpers\Text::replaceData($template->description, [
-                'verificationUrl' => $this->verificationUrl
+                'verificationUrl' => $this->verificationUrl,
+                'nombre' => $notifiable->name ?? '',
+                'apellido' => $notifiable->lastname ?? '',
+                'email' => $notifiable->email ?? '',
+                'year' => date('Y'),
+                'fecha_registro' => $notifiable->created_at->translatedFormat('d \d\e F \d\e\l Y'),
             ])
             : 'Plantilla no encontrada';
-        return (new RawHtmlMail($body, 'Verifica tu cuenta'));
+        return (new RawHtmlMail($body, 'Verifica tu cuenta',$notifiable->email));
     }
 }

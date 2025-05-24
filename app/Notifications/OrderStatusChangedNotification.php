@@ -7,6 +7,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use App\Mail\RawHtmlMail;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class OrderStatusChangedNotification extends Notification implements ShouldQueue
@@ -28,6 +29,7 @@ class OrderStatusChangedNotification extends Notification implements ShouldQueue
     {
         return [
             'orderId'      => 'Código del pedido',
+            'fecha_pedido' => 'Fecha del pedido',
             'status'       => 'Estado actual',
             'status_color' => 'Color para mostrar el estado',
             'name'         => 'Nombre del cliente',
@@ -50,30 +52,18 @@ class OrderStatusChangedNotification extends Notification implements ShouldQueue
 
         // Construir array de productos para el bloque repetible
         $productos = [];
+        Log::info('Detalles recibidos:', (array) $this->details);
+        Log::info('Entrando al foreach de detalles...');
         foreach ($this->details as $detail) {
-            // Obtener la ruta de la imagen (puede estar en detail->image o en detail->item->image)
-            $imgPath = $detail->image ?? ($detail->item->image ?? '');
-            $imgUrl = '';
-            if ($imgPath) {
-                // Si ya es una URL absoluta, úsala tal cual
-                if (preg_match('/^https?:\/\//i', $imgPath)) {
-                    $imgUrl = $imgPath;
-                } else {
-                    // Si la ruta ya contiene 'storage/', úsala con url()
-                    if (strpos($imgPath, 'storage/') === 0) {
-                        $imgUrl = url($imgPath);
-                    } else {
-                        // Asume que es una imagen de item en storage
-                        $imgUrl = url('storage/images/item/' . ltrim($imgPath, '/'));
-                    }
-                }
-            }
+           
+           
+            Log::info('Productos array generado:', $productos);
             $productos[] = [
-                'nombre'    => $detail->name,
-                'cantidad'  => $detail->quantity,
-                'precio'    => number_format($detail->price, 2),
-                'categoria' => $detail->item->category->name ?? '',
-                'imagen'    => $imgUrl, // SOLO "imagen"
+                'nombre'    => $detail->name ?? '',
+                'cantidad'  => $detail->quantity ?? '',
+                'precio'    => isset($detail->price) ? number_format($detail->price, 2) : '',
+                'categoria' => isset($detail->item) && isset($detail->item->category) && isset($detail->item->category->name) ? $detail->item->category->name : '',
+                'imagen'    => url(Storage::url("images/item/".$detail->item->image ?? '')), // SOLO "imagen"
             ];
         }
 
@@ -82,26 +72,21 @@ class OrderStatusChangedNotification extends Notification implements ShouldQueue
                 'orderId'      => $this->sale->code,
                 'status'       => $this->sale->status->name,
                 'status_color' => optional(\App\Models\SaleStatus::where('name', $this->sale->status->name)->first())->color ?? '#6c757d',
-                'name'         => $this->sale->user->name,
+                'name'         => $this->sale->user->name ?? $this->sale->name ?? '',
                 'year'         => date('Y'),
+                'fecha_pedido' => $this->sale->created_at 
+                    ? $this->sale->created_at->translatedFormat('d \d\e F \d\e\l Y') 
+                    : '',
                 'productos'    => $productos,
             ])
             : 'Plantilla no encontrada';
-        $body = preg_replace_callback(
-            '/<img([^>]+)src=[\"\\\']([^\"\\\']*\\{\\{imagen\\}\\}[^\"\\\']*)[\"\\\']/i',
-            function ($matches) {
-                // Deja solo src="{{imagen}}"
-                $nuevoSrc = 'src="{{imagen}}"';
-                // Mantiene los otros atributos
-                return '<img' . $matches[1] . $nuevoSrc;
-            },
-            $body
-        );
+        
         \Log::info('Cuerpo: ' . $body);
+        $toEmail = $this->sale->user->email ?? $this->sale->email ?? $notifiable->email;
         return (new RawHtmlMail(
             $body,
             'Estado de tu pedido actualizado',
-            $notifiable->email
+            $toEmail
         ));
     }
 }

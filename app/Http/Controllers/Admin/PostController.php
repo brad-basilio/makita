@@ -62,9 +62,9 @@ class PostController extends BasicController
         // Notificar a los suscriptores si es nuevo blog (usando colas)
         if ($isNew) {
             $subscribers = Subscription::all();
-            $blogUrl = url('/post/' . $jpa->slug); // Ajusta la URL según tu ruta
+           
             foreach ($subscribers as $subscriber) {
-                $subscriber->notify(new BlogPublishedNotification($jpa->title, $blogUrl));
+                $subscriber->notify(new BlogPublishedNotification($jpa));
             }
         }
     }

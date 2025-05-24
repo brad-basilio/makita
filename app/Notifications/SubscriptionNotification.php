@@ -26,6 +26,9 @@ class SubscriptionNotification extends Notification implements ShouldQueue
     {
         return [
             // No hay variables dinámicas para este email
+            'fecha_suscripcion' => 'Fecha de suscripción',
+            'email' => 'Correo electrónico',
+            'year' => 'Año actual',
         ];
     }
 
@@ -33,8 +36,12 @@ class SubscriptionNotification extends Notification implements ShouldQueue
     {
         $template = \App\Models\General::where('correlative', 'subscription_email')->first();
         $body = $template
-            ? \App\Helpers\Text::replaceData($template->description, [])
+            ? \App\Helpers\Text::replaceData($template->description, [
+                'fecha_suscripcion' => date('d \d\e F \d\e\l Y'),
+                'email' => $notifiable->description ?? '',
+                'year' => date('Y'),
+            ])
             : 'Plantilla no encontrada';
-        return (new RawHtmlMail($body, '¡Gracias por suscribirte!'));
+        return (new RawHtmlMail($body, '¡Gracias por suscribirte!', $notifiable->description));
     }
 }
