@@ -105,6 +105,8 @@ class OrderStatusChangedNotification extends Notification implements ShouldQueue
         $body = preg_replace('/(<img[^>]+src=[\'"])[^\'"]*(\{\{imagen\}\})[\'"]/i', '$1$2"', $body);
         // 2. Para URLs absolutas duplicadas (ej: /admin/https://...)
         $body = preg_replace('/(<img[^>]+src=[\'"])[^\'"]*(https?:\\/\\/[^\'"}]+)[\'"]/i', '$1$2"', $body);
+        // 3. Gmail proxy: elimina cualquier base antes de #https://
+        $body = preg_replace('/(<img[^>]+src=[\'\"][^#]+#)(https?:\\/\\/[^\'\"}]+)[\'\"]/i', '$1$2"', $body);
         \Log::info('Cuerpo: ' . $body);
         return (new RawHtmlMail(
             $body,
