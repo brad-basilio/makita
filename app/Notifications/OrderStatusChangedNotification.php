@@ -55,6 +55,7 @@ class OrderStatusChangedNotification extends Notification implements ShouldQueue
         Log::info('Entrando al foreach de detalles...');
         foreach ($this->details as $detail) {
             $imgPath = $detail->item->image ?? '';
+            //dump($imgPath);
             $imgUrl = '';
             if (preg_match('/^https?:\/\//i', $imgPath)) {
                 // Si ya es URL absoluta, úsala tal cual
@@ -65,6 +66,7 @@ class OrderStatusChangedNotification extends Notification implements ShouldQueue
             } elseif ($imgPath) {
                 // Si es relativa, usa Storage::url y url()
                 $imgUrl = url(Storage::url($imgPath));
+                //dump($imgUrl);
             } else {
                 $imgUrl = '';
             }
