@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { adjustTextColor } from "../../../Functions/adjustTextColor";
 import "swiper/css";
@@ -12,7 +12,7 @@ const CarruselBenefitsPaani = ({ items }) => {
     adjustTextColor(benefitsRef.current);
   }, []);
 
-   const highlightText = (desc) => {
+  const highlightText = (desc) => {
     const parts = desc.split(/(\*[^*]+\*)/g);
     return parts.map((part, i) =>
       part.startsWith("*") && part.endsWith("*") ? (
@@ -25,19 +25,30 @@ const CarruselBenefitsPaani = ({ items }) => {
     );
   };
 
+
+  const [imageExists, setImageExists] = useState(false);
+  const imageUrl = `/assets/${Global.APP_CORRELATIVE}/overlay.png`;
+
+  useEffect(() => {
+    const img = new Image();
+    img.src = imageUrl;
+    img.onload = () => setImageExists(true);
+    img.onerror = () => setImageExists(false);
+  }, [imageUrl]);
   return (
     <div ref={benefitsRef} className="bg-primary py-10 overflow-hidden relative">
-         <img
-                src={`/assets/${Global.APP_CORRELATIVE}/overlay.png`}
-                alt={`${Global.APP_NAME} - ${Global.APP_CORRELATIVE}`}
-                className="pointer-events-none select-none absolute inset-0 w-full h-full object-cover opacity-50 z-0"
-                style={{
-                    objectPosition: "center",
-                    mixBlendMode: "overlay",
-                }}
-                aria-hidden="true"
-                loading="lazy"
-            />
+      {imageExists && (<img
+        src={`/assets/${Global.APP_CORRELATIVE}/overlay.png`}
+        alt={`${Global.APP_NAME} - ${Global.APP_CORRELATIVE}`}
+        className="pointer-events-none select-none absolute inset-0 w-full h-full object-cover opacity-50 z-0"
+        style={{
+          objectPosition: "center",
+          mixBlendMode: "overlay",
+        }}
+        aria-hidden="true"
+        loading="lazy"
+      />)}
+
       <div className="px-primary 2xl:px-0 2xl:max-w-7xl mx-auto relative">
         <Swiper
           slidesPerView={1}

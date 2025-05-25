@@ -17,6 +17,7 @@ use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Validators\Failure;
 use Illuminate\Support\Str;
+use SoDe\Extend\Crypto;
 use Throwable;
 
 class ItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsOnFailure
@@ -27,6 +28,10 @@ class ItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsOnFailur
     {
         \DB::statement('SET FOREIGN_KEY_CHECKS=0;'); // ⚠️ Desactiva las claves foráneas
         Item::truncate();
+        Category::truncate();
+        SubCategory::truncate();
+        Collection::truncate();
+        Brand::truncate();
         ItemSpecification::truncate();
         ItemImage::truncate();
         \DB::statement('SET FOREIGN_KEY_CHECKS=1;'); // ✅ Reactiva las claves foráneas
@@ -42,28 +47,56 @@ class ItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsOnFailur
                 return null; // 🚫 Ignorar la fila y no procesarla
             }
 
+            $categoria = trim($row['categoria']);
+            $subcategoria = trim($row['subcategoria']);
+            $marca = trim($row['marca']);
+
             // 1️⃣ Obtener o crear la categoría
             $category = Category::firstOrCreate(
-                ['name' => $row['categoria']],
-                ['slug' => str()->slug($row['categoria'])]
+                ['name' => $categoria],
+                ['slug' => str()->slug($categoria)]
             );
 
-            $collection = Collection::firstOrCreate(
-                ['name' => $row['colleccion']],
-                ['slug' => str()->slug($row['colleccion'])]
-            );
+            $collection = null;
+
+            if ($row['colleccion']) {
+                $colleccion = trim($row['colleccion']);
+                $collection = Collection::firstOrCreate(
+                    ['name' => $colleccion],
+                    ['slug' => str()->slug($colleccion)]
+                );
+            }
+
 
             // 2️⃣ Obtener o crear la subcategoría
+         
+            $subCategorySlug = "";
+            if ($subcategoria) {
+                $subCategorySlug = Str::slug($subcategoria);
+                $slugExists = SubCategory::where('slug', $subCategorySlug)->exists();
+                if ($slugExists) {
+                    $subCategorySlug = $subCategorySlug . '-' . Crypto::short();
+                }
+            }
+
             $subCategory = SubCategory::firstOrCreate(
-                ['name' => $row['subcategoria'], 'category_id' => $category->id],
-                ['slug' => str()->slug($row['subcategoria'])]
+                [
+                    'slug' => $subCategorySlug,
+                    'category_id' => $category->id
+                ],
+                [
+                    'name' => $subcategoria
+                ]
             );
+
+
 
             //    3️⃣ Obtener o crear la marca
             $brand = Brand::firstOrCreate(
-                ['name' => $row['marca']],
-                ['slug' => str()->slug($row['marca'])]
+                ['name' => $marca],
+                ['slug' => str()->slug($marca)]
             );
+
             $slug = "";
             if ($row['nombre_de_producto']) {
                 $slug = Str::slug($row['nombre_de_producto']);
@@ -79,17 +112,17 @@ class ItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsOnFailur
                 'name' => $row['nombre_de_producto'],
                 //'summary' => $row['resumen'],
                 'description' => $row['descripcion'],
-                'price' => $row['precio'],
-                'discount' => $row['descuento'],
+                'price' => $row['precio'] || null,
+                'discount' => $row['descuento'] || null,
                 //final price = price > discount ? discount : discount ===NULL?price:discount;
-                'final_price' => isset($row['descuento']) && $row['descuento'] > 0 ? $row['descuento'] : $row['precio'],
-                'discount_percent' => isset($row['descuento']) && $row['descuento'] > 0 ? round((100 - ($row['descuento'] / $row['precio']) * 100)) : NULL,
+                'final_price' => isset($row['descuento']) && $row['descuento'] > 0 ? $row['descuento'] : $row['precio'] || 0,
+                'discount_percent' => isset($row['descuento']) && $row['descuento'] > 0 ? round((100 - ($row['descuento'] / $row['precio']) * 100)) : 0,
                 'category_id' => $category->id,
                 'subcategory_id' => $subCategory->id,
-                // 'collection_id' => $collection->id ?? NULL,
+                'collection_id' => $collection->id ?? NULL,
                 'brand_id' => $brand->id,
                 'image' => $this->getMainImage($row['sku']),
-                // 'slug' => str()->slug($row['nombre_de_producto'] .'-'. $row['color']),
+                //'slug' => str()->slug($row['nombre_de_producto'] .'-'. $row['color']),
                 'slug' => str()->slug($row['nombre_de_producto']),
                 'stock' =>  isset($row['stock']) && $row['stock'] > 0 ? $row['stock'] : 10,
                 // 'color' => $row['color'],
@@ -98,8 +131,8 @@ class ItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsOnFailur
 
             if ($item) {
                 // 5️⃣ Guardar las especificaciones
-                $this->saveSpecifications($item, $row['especificaciones_principales_separadas_por_comas'], 'principal');
-                $this->saveSpecifications($item, $row['especificaciones_generales_separado_por_comas_y_dos_puntos'], 'general');
+                // $this->saveSpecifications($item, $row['especificaciones_principales_separadas_por_comas'], 'principal');
+                //$this->saveSpecifications($item, $row['especificaciones_generales_separado_por_comas_y_dos_puntos'], 'general');
                 $this->saveSpecificationsTecnicas($item, $row['especificaciones_tecnicas_separado_por_slash_para_filas_y_dos_puntos_para_columnas'], 'general');
 
                 // 6️⃣ Guardar imágenes en la galería

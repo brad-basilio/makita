@@ -140,7 +140,7 @@ const System = ({
             case "top_bar":
                 return (
 
-                    <TopBar {...componentProps} />
+                    <TopBar {...componentProps} data={data}/>
 
                 );
             case "header":

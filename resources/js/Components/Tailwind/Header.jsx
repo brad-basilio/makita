@@ -15,6 +15,7 @@ const HeaderSearchMenuSF = React.lazy(() =>
 const HeaderScraping = React.lazy(() =>
     import("./Scraping/Components/HeaderScraping")
 );
+const HeaderMakita = React.lazy(() => import("./Headers/HeaderMakita"));
 
 const Header = ({
     data,
@@ -63,6 +64,18 @@ const Header = ({
             case "HeaderSearchB":
                 return (
                     <HeaderSearchB
+                        data={data}
+                        items={items}
+                        cart={cart}
+                        setCart={setCart}
+                        pages={pages}
+                        isUser={isUser}
+                        generals={generals}
+                    />
+                );
+             case "HeaderMakita":
+                return (
+                    <HeaderMakita
                         data={data}
                         items={items}
                         cart={cart}
