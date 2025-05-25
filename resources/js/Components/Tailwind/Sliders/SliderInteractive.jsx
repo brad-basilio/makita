@@ -305,21 +305,21 @@ const SliderInteractive = ({ items, data }) => {
             {showNavigation && (
                 <>
                     <div
-                        className={`absolute top-1/2 left-4 transform -translate-y-1/2 `}
+                        className={`absolute top-1/2 left-0 transform -translate-y-1/2 `}
                     >
                         <button
                             onClick={prevSlide}
-                            className="bg-accent rounded-lg customtext-neutral-light w-8 h-8 flex items-center justify-center transition-colors duration-300"
+                            className="bg-secondary rounded-r-lg text-white w-12 h-12 flex items-center justify-center transition-colors duration-300"
                         >
                             <ChevronLeft width={"1rem"} />
                         </button>
                     </div>
                     <div
-                        className={`absolute top-1/2 right-4 transform -translate-y-1/2 `}
+                        className={`absolute top-1/2 right-0 transform -translate-y-1/2 `}
                     >
                         <button
                             onClick={nextSlide}
-                            className="bg-accent rounded-lg customtext-neutral-light w-8 h-8 flex items-center justify-center transition-colors duration-300"
+                            className="bg-secondary rounded-l-lg text-white w-12 h-12 flex items-center justify-center transition-colors duration-300"
                         >
                             <ChevronRight width={"1rem"} />
                         </button>
