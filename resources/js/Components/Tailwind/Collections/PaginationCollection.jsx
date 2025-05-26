@@ -52,13 +52,13 @@ const PaginationCollection = ({
   }
 
   return (
-    <section className="px-[3%] font-font-general ">
+    <section className="px-[3%] font-font-general pt-12 lg:pt-16">
       <div className="w-full px-primary">
         <h2 className="text-3xl sm:text-4xl lg:text-[42px] 2xl:text-5xl font-semibold tracking-normal customtext-neutral-dark max-w-5xl 2xl:max-w-6xl">
           {data?.title}
         </h2>
 
-        <div className="relative pt-12 lg:pt-16">
+        <div className="relative pt-12">
           <Swiper
             modules={[Navigation, Pagination]}
             navigation={{

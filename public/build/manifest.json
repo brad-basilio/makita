@@ -4538,7 +4538,7 @@
     "src": "resources/js/Components/Tailwind/Checkouts/Images/PaymentMethods.svg"
   },
   "resources/js/Components/Tailwind/Collection.jsx": {
-    "file": "assets/Collection-6rI4Qdtw.js",
+    "file": "assets/Collection-B7_-G880.js",
     "name": "Collection",
     "src": "resources/js/Components/Tailwind/Collection.jsx",
     "isDynamicEntry": true,
@@ -7521,7 +7521,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-C2QUXoL2.js",
+    "file": "assets/System-D88JRGRV.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,
