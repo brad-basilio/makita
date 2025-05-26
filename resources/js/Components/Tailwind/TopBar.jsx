@@ -12,9 +12,9 @@ const TopBar = ({ data, which, items, setCart, cart, isUser }) => {
     const getTopBar = () => {
         switch (which) {
             case "TopBarSimple":
-                return <TopBarSimple key="TopBarSimple" />;
+                return <TopBarSimple key="TopBarSimple" data={data}/>;
             case "TopBarSocials":
-                return <TopBarSocials key="TopBarSocials" items={items} />;
+                return <TopBarSocials key="TopBarSocials" items={items} data={data}/>;
             case "TopBarCart":
                 return (
                     <TopBarCart

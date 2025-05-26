@@ -16,6 +16,10 @@
                 "id": "TopBarSocials",
                 "name": "Con redes sociales",
                 "image": "top-bar-socials.png",
+                "data": [
+                    "background_color",
+                    "color"
+                ],
                 "using": {
                     "model": "Social"
                 },
@@ -108,6 +112,29 @@
                     "model": "Category",
                     "with": [
                         "subcategories"
+                    ]
+                },
+                "generals": [
+                    "phone_whatsapp",
+                    "message_whatsapp"
+                ]
+            },
+             {
+                "id": "HeaderMakita",
+                "name": "HeaderMakita",
+                "image": "header-with-search.png",
+                "data": [
+                    "class",
+                    "link_cart",
+                    "showLoginCart"
+                ],
+                "using": {
+                    "model": "Item",
+                    "with": [
+                        "category",
+                        "subcategory",
+                        "brand",
+                        "collection"
                     ]
                 },
                 "generals": [
