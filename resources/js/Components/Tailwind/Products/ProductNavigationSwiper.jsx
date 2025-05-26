@@ -25,7 +25,7 @@ const ProductNavigationSwiper = ({ items, data, setCart, cart }) => {
     }, []);
     
     return (
-        <section className="pt-10 lg:pt-16">
+        <section className="pt-12 lg:pt-20">
             <div className="px-primary w-full font-font-general">
                 {/* Header */}
                 {data?.title && (

@@ -15,25 +15,24 @@ class AboutusSeeder extends Seeder
     {
         $aboutuses = [
             [
-                'correlative' => 'about-kaori',
-                'name' => 'Sobre la fundadora',
-                'description' => '✨ Ayudo a mis alumnos a aumentar su *confianza* y *seguridad personal*, hablar en público con soltura y autenticidad, y desarrollar habilidades sociales efectivas.',
+                'correlative' => 'sala-falabella',
+                'name' => 'Logo 1',
+                'description' => 'Sala Falabella',
+                'title' => '',
             ],
             [
-                'correlative' => 'about-trasciende-title',
-                'name' => 'Título "sobre trasciende"',
-                'description' => 'El Viaje de Trasciende: *Transformando Vidas* y *Desarrollando Potencial*',
+                'correlative' => 'mercado-libre',
+                'name' => 'Logo 2',
+                'description' => 'Mercado Libre',
+                'title' => '',
+
             ],
             [
-                'correlative' => 'about-trasciende-description',
-                'name' => 'Descripción "sobre trasciende"',
-                'description' => 'Trasciende nació hace diez años con la misión de ayudar a las personas a descubrir su máximo potencial. Un pequeño grupo de profesionales creó programas de coaching enfocados en el desarrollo personal y profesional, integrando habilidades técnicas y autoconocimiento para transformar vidas.
-                Hoy, Trasciende es un referente en crecimiento integral, habiendo impactado a miles de personas a través de sus cursos y talleres. Su enfoque sigue siendo ayudar a cada individuo a alcanzar su mejor versión, expandiéndose a plataformas digitales para llegar a un público global.',
-            ],
-            [
-                'correlative' => 'summary-footer',
-                'name' => 'Resúmen footer',
-                'description' => '✨ Ayudamos a nuestros alumnos a aumentar su confianza y seguridad personal, hablar en público con soltura y autenticidad, y desarrollar habilidades sociales efectivas.',
+                'correlative' => 'ripley',
+                'name' => 'Logo 3',
+                'description' => 'Ripley',
+                'title' => '',
+
             ],
         ];
         Aboutus::whereNotNull('id')->delete();

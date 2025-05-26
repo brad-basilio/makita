@@ -33,9 +33,9 @@ const CarruselBenefitsSimple = ({ items, data }) => {
         <div
             className={`${
                 data.background ? data.background : "bg-secondary"
-            } py-6 overflow-hidden customtext-primary font-paragraph mt-5 lg:mt-10 `}
+            } py-6 overflow-hidden customtext-primary font-paragraph mt-12 lg:mt-16`}
         >
-            <div className="px-primary 2xl:px-0  2xl:max-w-7xl mx-auto relative">
+            <div className="px-primary 2xl:px-0 2xl:max-w-7xl mx-auto relative">
                 <div className="flex flex-col md:flex-row w-full gap-8 whitespace-nowrap transition-none">
                     {items.map((benefit, index) => (
                         <div

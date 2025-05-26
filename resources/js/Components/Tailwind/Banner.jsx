@@ -25,7 +25,7 @@ const Banner = ({ which, data, items }) => {
             case "BannerFlex":
                 return <BannerFlex data={data} />;
             case "BannerStatic":
-                return <BannerStatic data={data} />;
+                return <BannerStatic data={data} items={items} />;
             case "BannerSimpleSF":
                 return <BannerSimpleSF data={data} />;
             case "BannerBananaLab":
