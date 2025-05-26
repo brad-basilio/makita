@@ -145,15 +145,16 @@ class SystemController extends BasicController
 
                 // MODIFICACIÓN PARA MANEJAR VARIANTES DE COLOR:
                 // Si es el modelo Item, agrupar por nombre y tomar solo un representante
-                if ($component['using']['model'] === 'Item') {
-                    $query->selectRaw('items.*')
-                        ->join(
-                            DB::raw('(SELECT MIN(id) as min_id FROM items GROUP BY name) as grouped'),
-                            function ($join) {
-                                $join->on('items.id', '=', 'grouped.min_id');
-                            }
-                        );
-                }
+                
+                // if ($component['using']['model'] === 'Item') {
+                //     $query->selectRaw('items.*')
+                //         ->join(
+                //             DB::raw('(SELECT MIN(id) as min_id FROM items GROUP BY name) as grouped'),
+                //             function ($join) {
+                //                 $join->on('items.id', '=', 'grouped.min_id');
+                //             }
+                //         );
+                // }
 
 
                 $shortID = Crypto::short();

@@ -550,7 +550,6 @@ export default function ShippingStepSF({
                     document: formData.document || "",
                     businessName: formData.businessName || "",
                     payment_method: paymentMethod || null,
-                    payment_proof: voucher || null,
                 };
                 
                 try {
@@ -828,7 +827,7 @@ export default function ShippingStepSF({
                                 <label
                                     className={`block text-sm 2xl:text-base mb-1 customtext-neutral-dark `}
                                 >
-                                    Ubicación de entrega (Distrito | Provincia | Departamento)
+                                    Ubicación de entrega (Distrito)
                                 </label>
                                 <AsyncSelect
                                     name="ubigeo"
@@ -839,7 +838,7 @@ export default function ShippingStepSF({
                                         setSelectedUbigeo(selected);
                                         handleUbigeoChange(selected);
                                     }}
-                                    placeholder="Buscar por departamento | provincia | distrito ..."
+                                    placeholder="Buscar por distrito | provincia | departamento ..."
                                     loadingMessage={() => "Buscando ubicaciones..."}
                                     noOptionsMessage={({ inputValue }) =>
                                         inputValue.length < 3

@@ -833,7 +833,7 @@
                 ],
                 "using": {
                     "model": "Collection",
-                    "limit": 10
+                    "limit": 20
                 }
             }
         ]
@@ -1155,7 +1155,10 @@
             },
             {
                 "id": "BannerStatic",
-                "name": "Estatico"
+                "name": "Estatico",
+                "using": {
+                    "model": "Aboutus"
+                }
             },
             {
                 "id": "BannerSimpleSF",
