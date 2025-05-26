@@ -335,6 +335,29 @@
                     "showNavigation",
                     "imageBgPosition",
                     "overlayMobile"
+                
+                ],
+                "using": {
+                    "model": "Slider",
+                    "fields": [
+                        "name",
+                        "description",
+                        "bg_image",
+                        "button_text",
+                        "button_link"
+                    ]
+                }
+            },
+            {
+                "id": "SliderFeaturedMakita",
+                "name": "SliderFeaturedMakita",
+                "image": "slider-simple.png",
+                "data": [
+                    "infiniteLoop",
+                    "paginationAlignment",
+                    "showNavigation",
+                    "imageBgPosition",
+                    "overlayMobile"
                 ],
                 "using": {
                     "model": "Slider",
@@ -937,6 +960,34 @@
                     "limit": 10
                 }
             },
+              {
+                "id": "ProductMakita",
+                "name": "ProductMakita",
+                "image": "products-list.png",
+                "data": [
+                    "title",
+                    "path",
+                    "description",
+                    "link_catalog",
+                    "link_cart"
+                ],
+                "using": {
+                    "model": "Item",
+                    "filters": [
+                        "featured",
+                        "recommended",
+                        "offering",
+                        "is_new",
+                        "views"
+                    ],
+                    "with": [
+                        "category",
+                        "subcategory",
+                        "brand"
+                    ],
+                    "limit": 10
+                }
+            },
             {
                 "id": "ProductNavigation",
                 "name": "Navegacion",
@@ -1060,6 +1111,22 @@
             {
                 "id": "BannerPublicitario",
                 "name": "BannerPublicitario",
+                "data": [
+                    "title",
+                    "image_position"
+                ]
+            },
+             {
+                "id": "BannerCTAMakita",
+                "name": "BannerCTAMakita",
+                "data": [
+                    "title",
+                    "image_position"
+                ]
+            },
+             {
+                "id": "BannerContactMakita",
+                "name": "BannerContactMakita",
                 "data": [
                     "title",
                     "image_position"
@@ -1454,6 +1521,23 @@
                         "category"
                     ]
                 }
+            },
+             {
+                "id": "BlogSectionMakita",
+                "name": "BlogSectionMakita",
+                "data": [
+                    "title",
+                    "description",
+                    "button_text",
+                    "link_blog"
+                ],
+                "using": {
+                    "model": "Post",
+                    "limit": 4,
+                    "with": [
+                        "category"
+                    ]
+                }
             }
         ]
     },
@@ -1604,6 +1688,24 @@
             {
                 "id": "FooterB",
                 "name": "FooterB",
+                "image": "footer-simple.png",
+                "using": {
+                    "model": "Social",
+                    "limit": 10
+                },
+                "generals": [
+                    "terms_conditions",
+                    "privacy_policy",
+                    "delivery_policy",
+                    "saleback_policy",
+                    "address",
+                    "support_phone",
+                    "support_email"
+                ]
+            }, 
+             {
+                "id": "FooterMakita",
+                "name": "FooterMakita",
                 "image": "footer-simple.png",
                 "using": {
                     "model": "Social",
@@ -1803,6 +1905,16 @@
             {
                 "id": "agradecimientoSF",
                 "name": "AgradecimientoSF"
+            }
+        ]
+    },
+     {
+        "id": "brands",
+        "name": "Brands",
+        "options": [
+            {
+                "id": "BrandMakita",
+                "name": "BrandMakita"
             }
         ]
     }
