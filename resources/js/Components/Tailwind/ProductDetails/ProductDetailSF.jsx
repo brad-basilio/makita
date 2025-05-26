@@ -20,7 +20,7 @@ import ProductInfinite from "../Products/ProductInfinite";
 import CartModal from "../Components/CartModal";
 import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
-import ProductNavigation from "../Products/ProductNavigation";
+import ProductNavigationSwiper from "../Products/ProductNavigationSwiper";
 import em from "../../../Utils/em";
 
 export default function ProductDetailSF({ item, data, setCart, cart, textstatic}) {
@@ -584,7 +584,7 @@ export default function ProductDetailSF({ item, data, setCart, cart, textstatic}
             {/* Productos relacionados */}
             {relationsItems.length > 0 && (
                 <div className="-mt-10 mb-10 p-4">
-                    <ProductNavigation
+                    <ProductNavigationSwiper
                         data={{ title: em(textProductRelation), link_catalog: "/catalogo" }}
                         items={relationsItems}
                         cart={cart}
