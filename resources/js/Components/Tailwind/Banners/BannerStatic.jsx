@@ -1,5 +1,9 @@
 export default function BannerStatic( {data, items} ) {
 
+    // const aboutTrasciendeTitle = aboutus.find(x => x.correlative == 'sala-falabella')?.description ?? '';
+    // const aboutTrasciendeDescription = aboutus.find(x => x.correlative == 'mercado-libre')?.description ?? '';
+    // const aboutKaori = aboutus.find(x => x.correlative == 'ripley')?.description ?? '';
+
     const cleanDescription = (html) => {
         const doc = new DOMParser().parseFromString(html, 'text/html');
         return doc.body.textContent || "";
@@ -37,7 +41,7 @@ export default function BannerStatic( {data, items} ) {
 
                                 {/* Store Buttons */}
                                 <div className="space-y-4">
-                                    {items.map((logo, index) => (
+                                {items.slice(0, 3).map((logo, index) => (
                                     <a
                                         key={logo?.id}
                                         href={logo?.title}
