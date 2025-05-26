@@ -553,13 +553,13 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
     return (
         <>
         {/* Botón flotante fijo */}
-        <button
+        {/* <button
                 onClick={openModal}
                 className="fixed flex xl:hidden left-1 top-2/3 transform -translate-y-1/2 bg-primary text-white rounded-full p-3 shadow-lg z-40 items-center justify-center"
                 aria-label="Abrir filtros"
         >
             <Filter className="w-6 h-6" />
-        </button>
+        </button> */}
 
         <Modal
             isOpen={isOpen}
