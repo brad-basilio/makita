@@ -353,21 +353,19 @@
                 "name": "SliderFeaturedMakita",
                 "image": "slider-simple.png",
                 "data": [
-                    "infiniteLoop",
-                    "paginationAlignment",
-                    "showNavigation",
-                    "imageBgPosition",
-                    "overlayMobile"
+                    "title",
+                    "description"
+                 
                 ],
                 "using": {
-                    "model": "Slider",
-                    "fields": [
-                        "name",
-                        "description",
-                        "bg_image",
-                        "button_text",
-                        "button_link"
-                    ]
+                    "model": "Item",
+                    "filters": [
+                        "featured"
+                    ],
+                    "with": [
+                        "brand"
+                    ],
+                    "limit": 10
                 }
             },
             {
@@ -1119,10 +1117,10 @@
              {
                 "id": "BannerCTAMakita",
                 "name": "BannerCTAMakita",
-                "data": [
-                    "title",
-                    "image_position"
-                ]
+                "using": {
+                    "model": "Strength"
+                }
+               
             },
              {
                 "id": "BannerContactMakita",

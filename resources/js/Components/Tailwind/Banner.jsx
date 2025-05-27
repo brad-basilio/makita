@@ -33,7 +33,7 @@ const Banner = ({ which, data, items }) => {
             case "BannerBananaLab":
                 return <BannerBananaLab data={data} />;
             case "BannerCTAMakita":
-                return <BannerCTAMakita data={data} />;
+                return <BannerCTAMakita data={data} items={items} />;
             case "BannerContactMakita":
                 return <BannerContactMakita data={data} />;
 

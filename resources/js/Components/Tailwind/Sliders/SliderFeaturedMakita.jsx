@@ -1,46 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 
 
-export const featuredPlatforms = [
-  {
-    voltage: "18V | 36V",
-    logoUrl: "/assets/images/lxt-logo.png",
-    imageUrl: "/assets/images/makita-battery.png",
-    productCount: "295+",
-    productCountText: "Productos disponibles en nuestra plataforma LXT",
-    buttonText: "Más información",
-    buttonLink: "/platforms/lxt"
-  },
-  {
-    voltage: "40V max XGT",
-    logoUrl: "/assets/images/xgt-logo.png",
-    imageUrl: "/assets/images/makita-xgt-battery.png",
-    productCount: "150+",
-    productCountText: "Herramientas de alta potencia XGT disponibles",
-    buttonText: "Explorar XGT",
-    buttonLink: "/platforms/xgt"
-  },
-  {
-    voltage: "12V max CXT",
-    logoUrl: "/assets/images/cxt-logo.png",
-    imageUrl: "/assets/images/makita-cxt-battery.png",
-    productCount: "100+",
-    productCountText: "Herramientas compactas para mayor versatilidad",
-    buttonText: "Ver serie CXT",
-    buttonLink: "/platforms/cxt"
-  }
-];
-const SliderFeaturedMakita = ({ 
-  items = featuredPlatforms,
-  title = "Plataformas de carga",
-  description = "Duis dapibus congue velit, lobortis mollis nisi volutpat quis. Nulla facilisi. Sed efficitur, eros ut tincidunt sagittis, magna sem mollis elit, ac dapibus diam ipsum scelerisque enim."
+
+const SliderFeaturedMakita = ({
+  items,
+  data
 }) => {
+  const [currentIndex, setCurrentIndex] = useState(1);
+  const swiperRef = useRef(null);
   return (
-    <div className="relative bg-[#1a6483] overflow-hidden">
+    <div className="relative bg-primary overflow-hidden py-8 lg:py-12">
       {/* Fondo patrón */}
       <div className="absolute inset-0 opacity-30 z-0"
         style={{
@@ -49,14 +22,14 @@ const SliderFeaturedMakita = ({
           backgroundPosition: 'center'
         }}
       />
-      <div className="relative z-10 w-full md:max-w-7xl mx-auto flex flex-col md:flex-row items-center min-h-[480px] md:min-h-[400px] p-8 md:p-12">
+      <div className="relative z-10 w-full px-primary 2xl:px-0 2xl:max-w-7xl mx-auto flex flex-col md:flex-row items-center min-h-[480px] md:min-h-[400px] py-8 md:py-12">
         {/* Izquierda: estático */}
         <div className="w-full md:w-5/12 flex flex-col justify-center text-white pr-0 md:pr-8 mb-8 md:mb-0">
           <h2 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-            {title}
+            {data?.title}
           </h2>
           <p className="text-lg md:text-xl opacity-80 mb-8">
-            {description}
+            {data?.description}
           </p>
         </div>
         {/* Derecha: slider */}
@@ -78,49 +51,73 @@ const SliderFeaturedMakita = ({
             observer={true}
             observeParents={true}
             className="relative"
+            onSlideChange={(swiper) => setCurrentIndex(swiper.realIndex + 1)}
+            onSwiper={(swiper) => { swiperRef.current = swiper; }}
           >
-            {featuredPlatforms.map((platform, i) => (
-              <SwiperSlide key={`featured-platform-${i}`}>
-                <div className="relative flex flex-col md:flex-row items-center bg-white/10 rounded-xl p-8 min-h-[340px]">
+            {items.map((item, i) => (
+              <SwiperSlide key={`featured-platform-${i} relative flex flex-col `}>
+                <div className="h-[550px] lg:h-auto  flex flex-col w-full lg:w-11/12 md:flex-row items-center bg-secondary lg:bg-black/10 rounded-xl p-8 min-h-[340px] hover:bg-primary brightness-100 hover:brightness-125 transition-colors duration-300">
                   {/* Logo y voltaje */}
-                  <div className="flex flex-col items-start md:w-1/3 w-full mb-4 md:mb-0">
-                    <div className="text-white text-xl md:text-2xl font-semibold mb-2">
-                      {platform.voltage || "18V | 36V"}
-                    </div>
-                    <img 
-                      src={platform.logoUrl || "/assets/images/lxt-logo.png"} 
-                      alt="Logo" 
+                  <div className="flex flex-col items-start w-full  md:w-6/12  md:mb-0 gap-4">
+
+                    <img
+                      src={`/storage/images/brand/${item?.brand.image}`}
+                      alt="Logo"
                       className="h-12 md:h-16"
                     />
+
+                    <div className="text-white text-base md:text-lg opacity-80 mt-2 mb-4 prose line-clamp-4" dangerouslySetInnerHTML={{ __html: item?.description }}>
+
+                    </div>
+                    <a
+                       href={`/product/${item.slug}`}
+                      className="inline-block bg-primary hover:brightness-125 text-white font-medium py-3 px-6 rounded-md transition-colors duration-300"
+                    >
+                       Más información
+                    </a>
                   </div>
                   {/* Imagen */}
-                  <div className="flex-1 flex justify-center items-center">
-                    <img 
-                      src={platform.imageUrl || "/assets/images/makita-battery.png"} 
-                      alt={platform.title || "Makita Battery"} 
-                      className="w-48 md:w-72 object-contain"
-                    />
-                  </div>
+
                   {/* Stats y botón */}
-                  <div className="flex flex-col items-start md:w-1/3 w-full mt-4 md:mt-0">
-                    <div className="text-white text-4xl md:text-6xl font-bold">
-                      {platform.productCount || "295+"}
+                  <div className="flex flex-col items-start w-full  md:w-5/12 mt-4 md:mt-0 ">
+                    <div className="flex-1 flex justify-center items-center absolute lg:top-0 bottom-0 right-5 lg:-right-20  ">
+                      <img
+                        src={`/storage/images/item/${item?.banner}`}
+                        alt={item?.name}
+                        className=" min-w-[350px] lg:w-[500px] object-cover"
+                      />
                     </div>
-                    <div className="text-white text-base md:text-lg opacity-80 mt-2 mb-4">
-                      {platform.productCountText || "Productos... aenean mollis lorem lacus, quis accumsan elit."}
-                    </div>
-                    <a 
-                      href={platform.buttonLink || "#"} 
-                      className="inline-block bg-[#42B0CC] hover:bg-[#51c1de] text-white font-medium py-2 px-6 rounded-md transition duration-300"
-                    >
-                      {platform.buttonText || "Más información"}
-                    </a>
                   </div>
                 </div>
               </SwiperSlide>
             ))}
-            <div className="swiper-pagination !bottom-0 !relative mt-4"></div>
-           
+                {/* Paginación mejorada y centrada */}
+                <div className="w-full flex justify-center mt-6 mb-2 absolute bottom-4 left-0 right-0 z-20">
+                  <div className="flex gap-3">
+                    {items.map((_, index) => (
+                      <button
+                        key={`dot-${index}`}
+                        aria-label={`Ir al slide ${index + 1}`}
+                        onClick={() => {
+                          setCurrentIndex(index + 1);
+                          if (swiperRef.current) {
+                            swiperRef.current.slideToLoop(index);
+                          }
+                        }}
+                        className={`transition-all duration-300 rounded-full flex items-center justify-center
+                          ${currentIndex === index + 1
+                            ? 'w-3 h-3 bg-primary brightness-125 shadow-lg'
+                            : 'w-3 h-3  bg-gray-100 hover:bg-primary/30'}
+                        `}
+                        style={{ outline: 'none' }}
+                      >
+                      
+                      </button>
+                    ))}
+                  </div>
+                </div>
+          
+
           </Swiper>
         </div>
       </div>
@@ -129,3 +126,4 @@ const SliderFeaturedMakita = ({
 };
 
 export default SliderFeaturedMakita;
+
