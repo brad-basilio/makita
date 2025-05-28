@@ -12,6 +12,7 @@ import { Notify } from "sode-extend-react";
 import { Local } from "sode-extend-react";
 import { toast } from "sonner";
 import { CircleX } from "lucide-react";
+
 const salesRest = new SalesRest()
 
 export default function UploadVoucherModalYape({ 
@@ -211,7 +212,7 @@ export default function UploadVoucherModalYape({
                                 saving ? "opacity-70 cursor-not-allowed" : ""
                             }`}
                         >
-                            {saving ? "Enviando..." : "Confirmar pago"}
+                            {saving ? "Enviando..." : "Subir comprobante"}
                         </button>
                         
                         <button

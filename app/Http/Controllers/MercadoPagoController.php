@@ -55,6 +55,7 @@ class MercadoPagoController extends Controller
                 'documentType' => $request->documentType,
                 'document' => $request->document,
                 'businessName' => $request->businessName,
+                'payment_method' => $request->payment_method,
             ]);
            
              // Registrar detalles de la venta (sin afectar stock aún)
@@ -153,7 +154,7 @@ class MercadoPagoController extends Controller
              if (Auth::check()) {
                 $userJpa = User::find(Auth::user()->id);
                 $userJpa->phone = $request->phone;
-                $userJpa->dni = $request->dni;
+                $userJpa->dni = $request->document;
                 $userJpa->country = $request->country;
                 $userJpa->department = $request->department;
                 $userJpa->province = $request->province;

@@ -209,7 +209,7 @@ export default function UploadVoucherModalBancs({
                                 saving ? "opacity-70 cursor-not-allowed" : ""
                             }`}
                         >
-                            {saving ? "Enviando..." : "Confirmar pago"}
+                            {saving ? "Enviando..." : "Subir comprobante"}
                         </button>
                         
                         <button

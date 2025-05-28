@@ -497,7 +497,8 @@ export default function ShippingStepSF({
 
     const validateForm = () => {
         const newErrors = {};
-    
+        
+        // Validación de campos
         if (!formData.name) newErrors.name = "Nombre es requerido";
         if (!formData.lastname) newErrors.lastname = "Apellido es requerido";
         if (!formData.email) newErrors.email = "Email es requerido";
@@ -508,6 +509,78 @@ export default function ShippingStepSF({
         if (!formData.number) newErrors.number = "Numero es requerido";
     
         setErrors(newErrors);
+    
+        // Función de smooth scroll personalizada
+        const smoothScroll = (targetElement, duration = 800) => {
+            const targetPosition =
+                targetElement.getBoundingClientRect().top +
+                window.pageYOffset -
+                window.innerHeight / 2 +
+                targetElement.offsetHeight / 2;
+        
+            const startPosition = window.pageYOffset;
+            let startTime = null;
+        
+            const animation = (currentTime) => {
+                if (startTime === null) startTime = currentTime;
+                const timeElapsed = currentTime - startTime;
+        
+                const easeInOutQuad = (t, b, c, d) => {
+                    t /= d / 2;
+                    if (t < 1) return (c / 2) * t * t + b;
+                    t--;
+                    return (-c / 2) * (t * (t - 2) - 1) + b;
+                };
+        
+                const run = easeInOutQuad(
+                    timeElapsed,
+                    startPosition,
+                    targetPosition - startPosition,
+                    duration
+                );
+                window.scrollTo(0, run);
+        
+                if (timeElapsed < duration) {
+                    requestAnimationFrame(animation);
+                } else {
+                    if (
+                        ["INPUT", "SELECT", "TEXTAREA"].includes(
+                            targetElement.tagName
+                        )
+                    ) {
+                        targetElement.focus();
+                    }
+                }
+            };
+        
+            requestAnimationFrame(animation);
+        };
+    
+        // Si hay errores, hacer scroll al primero
+        if (Object.keys(newErrors).length > 0) {
+            const firstErrorKey = Object.keys(newErrors)[0];
+            
+            setTimeout(() => {
+                let targetElement = null;
+                
+                if (firstErrorKey === 'ubigeo') {
+                    targetElement = document.getElementById('ubigeo-select-container');
+                } else if (firstErrorKey === 'phone_prefix') {
+                    targetElement = document.querySelector('.select2-prefix-selector')?.parentElement;
+                } else {
+                    targetElement = document.querySelector(`[name="${firstErrorKey}"]`);
+                }
+    
+                if (targetElement) {
+                    // Aplicar clase de error temporal
+                    targetElement.classList.add('highlight-error');
+                    setTimeout(() => targetElement.classList.remove('highlight-error'), 2000);
+                    
+                    // Scroll personalizado
+                    smoothScroll(targetElement, 600);
+                }
+            }, 100);
+        }
     
         return Object.keys(newErrors).length === 0;
     };
@@ -823,7 +896,7 @@ export default function ShippingStepSF({
                                 Dirección de envío
                             </h3>
 
-                            <div className="form-group">
+                            <div id="ubigeo-select-container" className="form-group">
                                 <label
                                     className={`block text-sm 2xl:text-base mb-1 customtext-neutral-dark `}
                                 >
