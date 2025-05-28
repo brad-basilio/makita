@@ -134,7 +134,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                 "=",
                 id,
             ]);
-            transformedFilters.push([...collectionConditions]);
+            transformedFilters.push(ArrayJoin(collectionConditions, 'or'));
         }
         // Categorías
 
@@ -144,7 +144,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                 "=",
                 id,
             ]);
-            transformedFilters.push([...categoryConditions]);
+            transformedFilters.push(ArrayJoin(categoryConditions, 'or'));
         }
         //subcategorias
         if (filters.subcategory_id.length > 0) {
@@ -153,7 +153,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                 "=",
                 id,
             ]);
-            transformedFilters.push([...subcategoryConditions]);
+            transformedFilters.push(ArrayJoin(subcategoryConditions, 'or'));
         }
         // Marcas
         if (filters.brand_id.length > 0) {
@@ -162,7 +162,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                 "=",
                 id,
             ]);
-            transformedFilters.push([...brandConditions]);
+            transformedFilters.push(ArrayJoin(brandConditions, 'or'));
         }
 
         // Precio
