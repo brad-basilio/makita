@@ -78,6 +78,7 @@ class SaleController extends BasicController
                 $userJpa->address = $sale['address'];
                 $userJpa->address_number = $sale['number'];
                 $userJpa->address_reference = $sale['reference'];
+                $userJpa->dni = $sale['document'];
                 $userJpa->save();
             }
 
@@ -180,7 +181,7 @@ class SaleController extends BasicController
         $body['ubigeo'] = $delivery?->ubigeo ?? null;
 
         $body['code'] = Trace::getId();
-        $body['status_id'] = 'e13a417d-a2f0-4f5f-93d8-462d57f13d3c';
+        $body['status_id'] = 'f13fa605-72dd-4729-beaa-ee14c9bbc47b';
         $body['user_id'] = Auth::id();
         return $body;
     }

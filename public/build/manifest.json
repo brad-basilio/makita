@@ -296,8 +296,8 @@
     "file": "assets/Number2Currency-e57Tgsuk.js",
     "name": "Number2Currency"
   },
-  "_OptionCard-COZDqmuC.js": {
-    "file": "assets/OptionCard-COZDqmuC.js",
+  "_OptionCard-BDGI5_vR.js": {
+    "file": "assets/OptionCard-BDGI5_vR.js",
     "name": "OptionCard",
     "imports": [
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
@@ -305,9 +305,7 @@
       "_useStateManager-7e1e8489.esm-oj4m82YY.js",
       "_index-rimy3MAc.js",
       "_main-BSEyQEJW.js",
-      "_index-CMHsc23u.js",
-      "_circle-check-big-D6DM3vPb.js",
-      "_circle-x-p-TkKhsF.js"
+      "_index-CMHsc23u.js"
     ]
   },
   "_PostCard-6am_5jYW.js": {
@@ -620,13 +618,6 @@
   "_circle-check-big-D6DM3vPb.js": {
     "file": "assets/circle-check-big-D6DM3vPb.js",
     "name": "circle-check-big",
-    "imports": [
-      "_createLucideIcon-Cy5Ya80P.js"
-    ]
-  },
-  "_circle-x-p-TkKhsF.js": {
-    "file": "assets/circle-x-p-TkKhsF.js",
-    "name": "circle-x",
     "imports": [
       "_createLucideIcon-Cy5Ya80P.js"
     ]
@@ -4158,7 +4149,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Checkout.jsx": {
-    "file": "assets/Checkout-DCGb1Fxs.js",
+    "file": "assets/Checkout-EGUNehs3.js",
     "name": "Checkout",
     "src": "resources/js/Components/Tailwind/Checkout.jsx",
     "isDynamicEntry": true,
@@ -4231,7 +4222,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Checkouts/CheckoutStepsSF.jsx": {
-    "file": "assets/CheckoutStepsSF-B7NGuMzL.js",
+    "file": "assets/CheckoutStepsSF-BXgV11hl.js",
     "name": "CheckoutStepsSF",
     "src": "resources/js/Components/Tailwind/Checkouts/CheckoutStepsSF.jsx",
     "isEntry": true,
@@ -4249,7 +4240,7 @@
       "_VoucherUpload-PpTZJMw6.js",
       "_General-BmbBKdsB.js",
       "_SalesRest-DghNnnQN.js",
-      "_circle-x-p-TkKhsF.js",
+      "_createLucideIcon-Cy5Ya80P.js",
       "_chevron-up-D78jyEhP.js",
       "_chevron-down-DS-mdh9v.js",
       "_index-yBjzXJbu.js",
@@ -4260,8 +4251,7 @@
       "_filepond-plugin-image-preview-iK-nC-YG.js",
       "_index-t--hEgTQ.js",
       "resources/js/Components/Tailwind/Components/ProductCard.jsx",
-      "_BasicRest-CtWwZ3Gl.js",
-      "_createLucideIcon-Cy5Ya80P.js"
+      "_BasicRest-CtWwZ3Gl.js"
     ]
   },
   "resources/js/Components/Tailwind/Checkouts/Components/BancDropDown.jsx": {
@@ -4438,7 +4428,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Checkouts/Components/ShippingStepSF.jsx": {
-    "file": "assets/ShippingStepSF-Dbl2L99_.js",
+    "file": "assets/ShippingStepSF-Ca2kIym0.js",
     "name": "ShippingStepSF",
     "src": "resources/js/Components/Tailwind/Checkouts/Components/ShippingStepSF.jsx",
     "isEntry": true,
@@ -4466,7 +4456,6 @@
       "_General-BmbBKdsB.js",
       "_SalesRest-DghNnnQN.js",
       "_BasicRest-CtWwZ3Gl.js",
-      "_circle-x-p-TkKhsF.js",
       "_createLucideIcon-Cy5Ya80P.js",
       "_chevron-up-D78jyEhP.js",
       "_chevron-down-DS-mdh9v.js"
@@ -7464,7 +7453,7 @@
     ]
   },
   "resources/js/Reutilizables/Businesses/BusinessIWorkCard.jsx": {
-    "file": "assets/BusinessIWorkCard-DFxOgdnb.js",
+    "file": "assets/BusinessIWorkCard-BXt_cQEq.js",
     "name": "BusinessIWorkCard",
     "src": "resources/js/Reutilizables/Businesses/BusinessIWorkCard.jsx",
     "isEntry": true,
@@ -7472,10 +7461,9 @@
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
       "_index-BH53Isel.js",
       "_main-BSEyQEJW.js",
-      "_BasicRest-CtWwZ3Gl.js",
+      "_index-CMHsc23u.js",
       "_index-yBjzXJbu.js",
       "____vite-browser-external_commonjs-proxy-0zb4Agf2.js",
-      "_index-CMHsc23u.js",
       "_index-rimy3MAc.js",
       "_index-fNjTmf9T.js"
     ]
@@ -7522,7 +7510,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-I9RGw187.js",
+    "file": "assets/System-B76PsVy0.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,

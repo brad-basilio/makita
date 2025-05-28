@@ -57,7 +57,7 @@ export default function ShippingStepSF({
         ubigeo: user?.ubigeo || null,
         invoiceType: user?.invoiceType || "boleta", // Nuevo campo para tipo de comprobante
         documentType: user?.documentType || "dni", 
-        document: user?.document || "", 
+        document: user?.dni || "", 
         businessName: user?.businessName || "", // Nuevo campo para Razón Social
     });
     
