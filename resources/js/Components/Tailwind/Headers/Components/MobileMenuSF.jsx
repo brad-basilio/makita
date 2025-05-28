@@ -33,7 +33,7 @@ export default function MobileMenuSF({ search, setSearch, pages, items, headerPo
         if (menuLevel === "main") {
             return (
                 <>
-                    <div className=" customtext-neutral-dark">
+                    <div className="customtext-neutral-dark">
                         <button
                             className="py-4 border-b border-gray-100 w-full flex justify-between items-center"
                             onClick={() =>
@@ -91,7 +91,7 @@ export default function MobileMenuSF({ search, setSearch, pages, items, headerPo
     };
 
     return (
-        <div className="w-full fixed h-screen customtext-neutral-dark mx-auto bg-white">
+        <div className="w-full fixed top-[120px] h-screen customtext-neutral-dark mx-auto bg-white">
             <div className="bg-white z-50 w-full">
                 
                 <div className="p-5 w-full flex flex-col gap-3 font-font-general">
