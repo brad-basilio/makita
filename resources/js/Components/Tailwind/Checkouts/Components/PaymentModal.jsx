@@ -221,7 +221,7 @@ export default function PaymentModal({ isOpen, onClose, onPaymentComplete, selec
                             onClick={handlePayment}
                             disabled={saving}
                         >
-                            {saving ? "Procesando..." : "Pagar ahora"}
+                            {saving ? "Procesando..." : "Confirmar pago"}
                         </button>
                         )
                     }
