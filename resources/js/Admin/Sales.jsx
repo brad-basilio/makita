@@ -28,6 +28,7 @@ const Sales = ({ statuses = [] }) => {
             id: saleLoaded.id,
             status_id: e.target.value,
         });
+        console.log("onStatusChange", result);
         if (!result) return;
         setSaleLoaded(result);
         $(gridRef.current).dxDataGrid("instance").refresh();
