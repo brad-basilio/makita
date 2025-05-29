@@ -25,7 +25,8 @@ export default function UploadVoucherModalBancs({
     igv,
     envio,
     totalFinal,
-    request
+    request,
+    contacts
 }) {
     const [file, setFile] = useState(null);
     const [saving, setSaving] = useState(false);
@@ -124,7 +125,7 @@ export default function UploadVoucherModalBancs({
                     </div> 
                     
                     <div className="flex flex-col gap-3 w-full">
-                        <BancDropdown />
+                        <BancDropdown contacts={contacts} />
                     </div>
                   
                 </div>       

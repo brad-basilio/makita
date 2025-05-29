@@ -37,6 +37,7 @@ export default function ShippingStepSF({
     envio,
     prefixes,
     ubigeos = [],
+    contacts,
 }) {
     const [selectedUbigeo, setSelectedUbigeo] = useState(null);
     const [defaultUbigeoOption, setDefaultUbigeoOption] = useState(null);
@@ -1291,6 +1292,7 @@ export default function ShippingStepSF({
 
             <PaymentModal
                 isOpen={showPaymentModal}
+                contacts={contacts}
                 onClose={() => setShowPaymentModal(false)}
                 onPaymentComplete={handlePaymentComplete}
                 
@@ -1315,6 +1317,7 @@ export default function ShippingStepSF({
                 igv={igv}
                 totalFinal={totalFinal}
                 envio={envio}
+                contacts={contacts}
                 request={paymentRequest}
                 onClose={() => setShowVoucherModalBancs(false)}
                 paymentMethod={currentPaymentMethod}

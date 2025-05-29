@@ -14,6 +14,7 @@ const Checkout = ({
     isUser,
     prefixes = [],
     ubigeos = [],
+    contacts,
 }) => {
     const getCheckout = () => {
         switch (which) {
@@ -51,6 +52,7 @@ const Checkout = ({
                         user={isUser}
                         ubigeos={ubigeos}
                         prefixes={prefixes}
+                        contacts={contacts}
                         items={items}
                     />
                 );
