@@ -123,8 +123,17 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
         return ArrayJoin(transformedFilters, 'and');
     };
     // Obtener productos filtrados desde el backend
-    const fetchProducts = async (page = 1) => {
+    const fetchProducts = async (page = 1, shouldScroll = false) => {
         setLoading(true);
+        
+        // Si estamos cambiando los filtros (no solo la página), desplazar hacia arriba
+        if (shouldScroll) {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+        
         try {
             const filters = transformFilters(selectedFilters);
             const params = {
@@ -171,12 +180,19 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
 
 
     useEffect(() => {
-
-        fetchProducts(pagination.currentPage);
+        // Cuando cambian los filtros, volvemos a la primera página y desplazamos hacia arriba
+        fetchProducts(1, true);
     }, [selectedFilters]);
     
     const handlePageChange = (page) => {
         if (page >= 1 && page <= pagination.totalPages) {
+            // Primero, desplazar hacia arriba suavemente
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+            
+            // Luego, obtener productos de la nueva página
             fetchProducts(page);
         }
     };
@@ -544,7 +560,14 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                         <div className="fixed bottom-0 left-0 right-0 bg-white border-t p-4 h-20 flex items-center lg:hidden">
                             <button
                                 className="w-full bg-primary text-white py-3 rounded-xl font-bold hover:bg-primary-dark transition-colors"
-                                onClick={() => setFiltersOpen(false)}
+                                onClick={() => {
+                                    // Cerrar filtros y desplazar hacia arriba
+                                    setFiltersOpen(false);
+                                    window.scrollTo({
+                                        top: 0,
+                                        behavior: 'smooth'
+                                    });
+                                }}
                             >
                                 Ver resultados
                             </button>
