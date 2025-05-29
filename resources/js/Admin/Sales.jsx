@@ -71,7 +71,8 @@ const Sales = ({ statuses = [] }) => {
         Number(saleLoaded?.coupon_discount || 0);
 
     return (
-        <>
+        <>  
+           
             <Table
                 gridRef={gridRef}
                 title="Pedidos"

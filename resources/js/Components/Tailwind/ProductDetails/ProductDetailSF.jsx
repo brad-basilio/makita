@@ -11,6 +11,7 @@ import {
     ChevronUp,
     CircleCheckIcon,
     DotIcon,
+    
 } from "lucide-react";
 
 import ItemsRest from "../../../Actions/ItemsRest";
@@ -23,8 +24,8 @@ import "tippy.js/dist/tippy.css";
 import ProductNavigationSwiper from "../Products/ProductNavigationSwiper";
 import em from "../../../Utils/em";
 
-export default function ProductDetailSF({ item, data, setCart, cart, textstatic}) {
-   
+export default function ProductDetailSF({ item, data, setCart, cart, textstatic, generals}) {
+
     const itemsRest = new ItemsRest();
     const [modalOpen, setModalOpen] = useState(false);
     const [selectedImage, setSelectedImage] = useState({
@@ -40,6 +41,12 @@ export default function ProductDetailSF({ item, data, setCart, cart, textstatic}
         setQuantity(value);
     };
 
+    const getContact = (correlative) => {
+        return (
+            generals.find((generals) => generals.correlative === correlative)
+                ?.description || ""
+        );
+      };
     
     /*TEXTOS */
     const textProductRelation = textstatic.find(x => x.correlative == 'detailproduct-relation-title')?.title ?? '';
@@ -487,9 +494,9 @@ export default function ProductDetailSF({ item, data, setCart, cart, textstatic}
                                         <p>
                                             ¿Tienes dudas sobre este producto?
                                             Haz{" "}
-                                            <span className="underline">
+                                            <a href={`https://wa.me/${getContact("phone_whatsapp")}`} target="_blank"><span className="underline"></span>{" "}
                                                 clic aquí
-                                            </span>{" "}
+                                            </a>
                                             y chatea con nosotros por WhatsApp
                                         </p>
                                     </div>
