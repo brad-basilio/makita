@@ -339,7 +339,7 @@ export default function UploadVoucherModalBancs({
                             {saving 
                                 ? "Procesando..." 
                                 : voucher 
-                                    ? "Realizar pedido" 
+                                    ? "Confirmar pago" 
                                     : "Subir comprobante"}
                         </button>
                         

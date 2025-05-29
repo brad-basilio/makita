@@ -340,7 +340,7 @@ export default function UploadVoucherModalYape({
                             {saving 
                                 ? "Procesando..." 
                                 : voucher 
-                                    ? "Realizar pedido" 
+                                    ? "Confirmar pago" 
                                     : "Subir comprobante"}
                         </button>
                         
