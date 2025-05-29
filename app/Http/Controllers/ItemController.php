@@ -36,36 +36,33 @@ class ItemController extends BasicController
         try {
 
             $limite = $request->limit ?? 0;
-            
+
             // Obtener el producto principal por slug
             $product = Item::with(['category', 'brand', 'images', 'specifications'])
                 ->where('slug', $request->slug)
                 ->firstOrFail();
-            
+
             if ($limite > 0) {
                 $product->load(['variants' => function ($query) use ($limite) {
                     $query->limit($limite);
                 }]);
-            }else{
+            } else {
                 $product->load(['variants']);
             }
-            
+
             // Obtener las variantes (productos con el mismo nombre pero diferente ID)
-                // $variants = Item::where('name', $product->name)
-                //     ->where('id', '!=', $product->id)
-                //     ->get(['id', 'slug', 'color', 'texture', 'image', 'final_price']);
-              
-           
+            // $variants = Item::where('name', $product->name)
+            //     ->where('id', '!=', $product->id)
+            //     ->get(['id', 'slug', 'color', 'texture', 'image', 'final_price']);
+
+
             // Agregar las variantes al producto principal
             // $product->variants = $variants;
-             
+
             $response->status = 200;
             $response->message = 'Producto obtenido correctamente';
-            
+
             $response->data = $product;
-            
-           
-            
         } catch (\Throwable $th) {
             dd($th->getMessage());
             $response->status = 404;
@@ -154,7 +151,7 @@ class ItemController extends BasicController
         return $query;
     }
 
-    public function setPaginationSummary(Request $request, Builder $builder)
+    public function setPaginationSummary(Request $request, Builder $builder, Builder $originalBuilder)
     {
         /* $minPrice = Item::min('price');
         $maxPrice = Item::max('price');
@@ -171,14 +168,15 @@ class ItemController extends BasicController
 
         try {
             //code...
-          
+
             $i4price = clone $builder;
             $minPrice = $i4price->min('final_price');
             $maxPrice = $i4price->max('final_price') ?? 0;
             $rangeSize = round($maxPrice / 6); // Define el tamaño del rango
 
             // Calcular rangos de precio
-            $countQuery = clone $builder;
+            // $countQuery = clone $builder;
+            $countQuery = clone $originalBuilder;
             $countQuery->getQuery()->limit = null;
             $countQuery->getQuery()->offset = null;
             $totalItems = $countQuery->count();
@@ -192,15 +190,17 @@ class ItemController extends BasicController
                 }
             }
 
+            $mainFilter = $request->filterSequence[0] ?? null;
+
             $i4collection = clone $builder;
             $i4category = clone $builder;
             $i4subcategory = clone $builder;
             $i4brand = clone $builder;
             $i4tag = clone $builder;
-            $collections = Item::getForeign($i4collection, Collection::class, 'collection_id');
-            $categories = Item::getForeign($i4category, Category::class, 'category_id');
-            $subcategories = Item::getForeign($i4subcategory, SubCategory::class, 'subcategory_id');
-            $brands = Item::getForeign($i4brand, Brand::class, 'brand_id');
+            $collections = Item::getForeign($mainFilter == 'collection_id' ? $originalBuilder : $i4collection, Collection::class, 'collection_id');
+            $categories = Item::getForeign($mainFilter == 'category_id' ? $originalBuilder : $i4category, Category::class, 'category_id');
+            $subcategories = Item::getForeign($mainFilter == 'subcategory_id' ? $originalBuilder : $i4subcategory, SubCategory::class, 'subcategory_id');
+            $brands = Item::getForeign($mainFilter == 'brand_id' ? $originalBuilder : $i4brand, Brand::class, 'brand_id');
             $tags = Item::getForeignMany($i4tag, ItemTag::class, Tag::class);
             return [
                 'priceRanges' => $ranges,

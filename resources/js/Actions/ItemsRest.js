@@ -77,8 +77,6 @@ class ItemsRest extends BasicRest {
                     result?.message ??
                         "Ocurrió un error al consultar los productos"
                 );
-            console.log(result.data);
-
             return result.data ?? [];
         } catch (error) {
             return [];
@@ -98,8 +96,6 @@ class ItemsRest extends BasicRest {
                     result?.message ??
                         "Ocurrió un error al consultar los productos"
                 );
-            console.log(result.data);
-
             return result.data ?? [];
         } catch (error) {
             return [];
