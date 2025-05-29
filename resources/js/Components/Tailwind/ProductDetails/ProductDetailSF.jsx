@@ -24,7 +24,7 @@ import "tippy.js/dist/tippy.css";
 import ProductNavigationSwiper from "../Products/ProductNavigationSwiper";
 import em from "../../../Utils/em";
 
-export default function ProductDetailSF({ item, data, setCart, cart, textstatic, generals}) {
+export default function ProductDetailSF({ item, data, setCart, cart, textstatic, contacts}) {
 
     const itemsRest = new ItemsRest();
     const [modalOpen, setModalOpen] = useState(false);
@@ -43,7 +43,7 @@ export default function ProductDetailSF({ item, data, setCart, cart, textstatic,
 
     const getContact = (correlative) => {
         return (
-            generals.find((generals) => generals.correlative === correlative)
+            contacts.find((contacts) => contacts.correlative === correlative)
                 ?.description || ""
         );
       };
@@ -145,7 +145,7 @@ export default function ProductDetailSF({ item, data, setCart, cart, textstatic,
             const relations = response;
 
             setRelationsItems(Object.values(relations));
-            console.log(relations);
+            
         } catch (error) {
             return;
             // Mostrar un mensaje de error al usuario si es necesario

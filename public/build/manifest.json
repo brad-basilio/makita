@@ -4741,7 +4741,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Contact.jsx": {
-    "file": "assets/Contact-CbWBQEmX.js",
+    "file": "assets/Contact-DAenPhnQ.js",
     "name": "Contact",
     "src": "resources/js/Components/Tailwind/Contact.jsx",
     "isDynamicEntry": true,
@@ -4781,7 +4781,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Contact/ContactSimple.jsx": {
-    "file": "assets/ContactSimple-DIBqqY-J.js",
+    "file": "assets/ContactSimple-CNdkCJoR.js",
     "name": "ContactSimple",
     "src": "resources/js/Components/Tailwind/Contact/ContactSimple.jsx",
     "isDynamicEntry": true,
@@ -6022,7 +6022,7 @@
     ]
   },
   "resources/js/Components/Tailwind/ProductDetail.jsx": {
-    "file": "assets/ProductDetail-B8Hem9N_.js",
+    "file": "assets/ProductDetail-dLvkHfjy.js",
     "name": "ProductDetail",
     "src": "resources/js/Components/Tailwind/ProductDetail.jsx",
     "isDynamicEntry": true,
@@ -6206,7 +6206,7 @@
     ]
   },
   "resources/js/Components/Tailwind/ProductDetails/ProductDetailSF.jsx": {
-    "file": "assets/ProductDetailSF-acN6N1K-.js",
+    "file": "assets/ProductDetailSF-CNSVjYZU.js",
     "name": "ProductDetailSF",
     "src": "resources/js/Components/Tailwind/ProductDetails/ProductDetailSF.jsx",
     "isDynamicEntry": true,
@@ -7615,7 +7615,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-C38WsWff.js",
+    "file": "assets/System-y3pW9eQz.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,
