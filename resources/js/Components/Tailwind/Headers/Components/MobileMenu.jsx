@@ -5,19 +5,31 @@ export default function MobileMenu({ search, setSearch, pages, items }) {
     const [menuLevel, setMenuLevel] = useState("main"); // main, categories, subcategories
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [selectedSubcategory, setSelectedSubcategory] = useState(null);
+    const [previousMenus, setPreviousMenus] = useState([]); // Para mejor seguimiento de la navegación
 
-    const handleCategoryClick = (categoryName) => {
-        setSelectedSubcategory(categoryName);
-        console.log(selectedSubcategory);
-        setSelectedCategory(categoryName);
+    const handleCategoryClick = (category) => {
+        // Guardar el nombre y el objeto completo de la categoría
+        setSelectedSubcategory(category.name);
+        setSelectedCategory(category.name);
+        // Guardar el nivel anterior para la navegación
+        setPreviousMenus([...previousMenus, { level: menuLevel, name: "Categorías" }]);
         setMenuLevel("subcategories");
     };
 
     const handleBackClick = () => {
-        if (menuLevel === "subcategories") {
-            setMenuLevel("categories");
-        } else if (menuLevel === "categories") {
-            setMenuLevel("main");
+        if (previousMenus.length > 0) {
+            // Obtener el último menú visitado
+            const lastMenu = previousMenus[previousMenus.length - 1];
+            setMenuLevel(lastMenu.level);
+            // Eliminar el último elemento del historial
+            setPreviousMenus(previousMenus.slice(0, -1));
+        } else {
+            // Comportamiento predeterminado si no hay historial
+            if (menuLevel === "subcategories") {
+                setMenuLevel("categories");
+            } else if (menuLevel === "categories") {
+                setMenuLevel("main");
+            }
         }
     };
 
@@ -47,13 +59,13 @@ export default function MobileMenu({ search, setSearch, pages, items }) {
                     {pages.map(
                         (page, index) =>
                             page.menuable && (
-                                <button
+                                <a
                                     key={index}
-                                    className="customtext-neutral-dark py-4 border-b border-gray-100 flex justify-between items-center"
                                     href={page.path}
+                                    className="customtext-neutral-dark py-4 border-b border-gray-100 flex justify-between items-center w-full"
                                 >
                                     <span>{page.name}</span>
-                                </button>
+                                </a>
                             )
                     )}
                 </>
@@ -62,13 +74,10 @@ export default function MobileMenu({ search, setSearch, pages, items }) {
             return items.map((category) => (
                 <div
                     key={category.id}
-                    className=" py-4 border-b customtext-neutral-dark border-gray-100 flex justify-between items-center"
-                    onClick={() => handleCategoryClick(category.name)}
+                    className="py-5 border-b customtext-neutral-dark border-gray-100 flex justify-between items-center cursor-pointer active:bg-gray-50"
+                    onClick={() => handleCategoryClick(category)}
                 >
-                    <a href={`/catalogo?category=${category.slug}`}>
-                        {category.name}
-                    </a>
-
+                    <span className="text-base">{category.name}</span>
                     <ChevronRight className="h-5 w-5 customtext-neutral-dark" />
                 </div>
             ));
@@ -82,9 +91,10 @@ export default function MobileMenu({ search, setSearch, pages, items }) {
                 <a
                     href={`/catalogo?subcategory=${subcat.slug}`}
                     key={index}
-                    className="block py-4 customtext-neutral-dark border-b border-gray-100"
+                    className="flex w-full py-5 customtext-neutral-dark border-b border-gray-100 justify-between items-center active:bg-gray-50"
                 >
-                    <span>{subcat.name}</span>
+                    <span className="text-base">{subcat.name}</span>
+                    <ChevronRight className="h-5 w-5 customtext-neutral-dark" />
                 </a>
             ));
         }
@@ -95,7 +105,8 @@ export default function MobileMenu({ search, setSearch, pages, items }) {
             <div className="bg-white shadow-lg rounded-lg z-[999]">
                 <div className="p-4 bg-white flex justify-between items-center border-b border-gray-200">
                     <h1 className="text-xl font-medium customtext-neutral-dark">
-                        Menú principal
+                       Menú principal
+                      
                     </h1>
                 </div>
 
@@ -131,7 +142,9 @@ export default function MobileMenu({ search, setSearch, pages, items }) {
                             className="flex items-center customtext-primary mb-4 font-semibold"
                         >
                             <ChevronLeft className="h-5 w-5 mr-1" />
-                            <span>Atrás</span>
+                         { 
+                         menuLevel === "categories" ? "Categorías" : 
+                         selectedCategory}
                         </button>
                     )}
 
