@@ -210,7 +210,7 @@ const HeaderSearchB = ({
                                 aria-label="Menú"
                                 onClick={() => setOpenMenu(!openMenu)}
 
-                                className="flex md:hidden items-center justify-center bg-primary rounded-lg w-auto h-auto p-2 text-white fill-white transition-all duration-300 z-[51]"
+                                className="flex md:hidden items-center justify-center bg-primary rounded-lg w-auto h-auto p-2 text-white fill-white transition-all duration-300 "
                             >
                                 {!openMenu ? (
                                     <svg
@@ -535,6 +535,7 @@ const HeaderSearchB = ({
                             setSearch={setSearch}
                             pages={pages}
                             items={items}
+                            onClose={() => setOpenMenu(!openMenu)}
                         />
                     </motion.div>
                 )}
