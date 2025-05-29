@@ -492,10 +492,10 @@ export default function ProductDetailSF({ item, data, setCart, cart, textstatic,
                                     />
                                     <div className="customtext-neutral-dark font-font-general text-base  2xl:text-xl font-semibold">
                                         <p>
-                                            ¿Tienes dudas sobre este producto?
+                                            ¿Tienes dudas sobre este producto? 
                                             Haz{" "}
                                             <a href={`https://wa.me/${getContact("phone_whatsapp")}`} target="_blank"><span className="underline"></span>{" "}
-                                                clic aquí
+                                                 clic aquí
                                             </a>
                                             y chatea con nosotros por WhatsApp
                                         </p>
