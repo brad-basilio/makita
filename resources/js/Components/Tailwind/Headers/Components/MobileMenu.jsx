@@ -143,9 +143,9 @@ export default function MobileMenu({ search, setSearch, pages, items, onClose })
             <div className="absolute inset-0 bg-black/50" onClick={onClose}></div>
             
             {/* Contenedor del menú */}
-            <div className="relative w-full md:w-[400px] md:mx-auto flex flex-col h-full ">
+            <div className="relative w-full md:w-[400px] md:mx-auto flex flex-col h-[100dvh]  ">
                 {/* Panel del menú - fijo en la parte inferior */}
-                <div className="mt-auto bg-white  shadow-xl flex flex-col max-h-[85vh] rounded-t-2xl overflow-hidden">
+                <div className="mt-auto bg-white  shadow-xl flex flex-col max-h-[80vh] rounded-t-2xl overflow-hidden">
                     {/* Header del menú */}
                     <div className="p-4 bg-white flex justify-between items-center border-b border-gray-200 sticky top-0 z-10">
                         <h1 className="text-lg font-bold">{getMenuTitle()}</h1>
