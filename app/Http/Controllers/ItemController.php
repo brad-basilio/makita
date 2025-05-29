@@ -175,7 +175,8 @@ class ItemController extends BasicController
             $rangeSize = round($maxPrice / 6); // Define el tamaño del rango
 
             // Calcular rangos de precio
-            $countQuery = clone $builder;
+            // $countQuery = clone $builder;
+            $countQuery = clone $originalBuilder;
             $countQuery->getQuery()->limit = null;
             $countQuery->getQuery()->offset = null;
             $totalItems = $countQuery->count();

@@ -168,7 +168,7 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
         // Precio
 
 
-        if (filters.price) {
+        if (filters.price?.min && filters.price?.max) {
             transformedFilters.push([
                 ["final_price", ">=", filters.price.min],
                 "or",
@@ -192,8 +192,6 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
 
             // Crear un objeto con los filtros principales según su orden de aplicación
             const orderedFilters = {};
-
-            console.log(filterSequence)
 
             // Añadir los filtros en el orden registrado
             // filterSequence.forEach(filterType => {
@@ -282,38 +280,58 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
 
     // Manejar cambios en los filtros
     const handleFilterChange = (type, value) => {
-
         setFilterSequence(prev => {
-            // Si ya existe este tipo en la secuencia, lo removemos para ponerlo al final
-            const newSequence = prev.filter(item => item !== type);
-
             // Verificamos si el filtro se está activando o desactivando
             let isActivating = false;
 
             if (type === "price") {
                 // Para price, verificamos si se está activando o desactivando
-                const currentPrice = selectedFilters.price;
-                isActivating = !(currentPrice &&
-                    currentPrice.min === value.min &&
-                    currentPrice.max === value.max);
+                isActivating = !!value;
             } else {
                 // Para los demás filtros (arrays), verificamos si se está añadiendo o quitando
                 const currentValues = Array.isArray(selectedFilters[type]) ? selectedFilters[type] : [];
                 isActivating = !currentValues.includes(value);
             }
 
-            // Solo añadimos a la secuencia si se está activando el filtro
-            return isActivating ? [...newSequence, type] : newSequence;
+            // Si el tipo ya existe en la secuencia y se está activando, mantenemos la secuencia como está
+            if (prev.includes(type) && isActivating) {
+                return prev;
+            }
+            
+            // Si el tipo no existe y se está activando, lo añadimos al final
+            if (!prev.includes(type) && isActivating) {
+                return [...prev, type];
+            }
+            
+            // Si se está desactivando y es el último filtro de ese tipo, lo removemos
+            if (!isActivating) {
+                // Verificamos si después de esta acción no quedarán más filtros de este tipo
+                let willHaveNoFiltersOfThisType = false;
+                
+                if (type === "price") {
+                    // Para price, si value es null, no quedarán filtros
+                    willHaveNoFiltersOfThisType = !value;
+                } else {
+                    // Para arrays, verificamos si después de quitar este valor no quedarán más
+                    const currentValues = Array.isArray(selectedFilters[type]) ? [...selectedFilters[type]] : [];
+                    const newValues = currentValues.filter(item => item !== value);
+                    willHaveNoFiltersOfThisType = newValues.length === 0;
+                }
+                
+                // Solo removemos de la secuencia si no quedarán más filtros de este tipo
+                return willHaveNoFiltersOfThisType ? prev.filter(item => item !== type) : prev;
+            }
+            
+            return prev;
         });
-
         setSelectedFilters((prev) => {
             if (type === "price") {
                 return {
                     ...prev,
                     price:
                         prev.price &&
-                            prev.price.min === value.min &&
-                            prev.price.max === value.max
+                            prev.price.min === value?.min &&
+                            prev.price.max === value?.max
                             ? null
                             : value,
                 };
@@ -554,23 +572,28 @@ const FilterSalaFabulosa = ({ items, data, filteredData, cart, setCart }) => {
                 </button>
                 {sections.precio && (
                     <div className="max-h-[200px] xl:max-h-none overflow-y-auto space-y-1 md:space-y-2">
-                        {priceRanges.map((range) => (
-                            <label
+                        {priceRanges.map((range) => {
+                            const isSelected = selectedFilters.price?.min === range.min &&
+                                selectedFilters.price?.max === range.max
+                            return <label
                                 key={`${range.min}-${range.max}`}
-                                className=" flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50"
-                            >
-                                <input
-                                    type="checkbox"
-                                    className="h-5 w-5 rounded border-gray-300 accent-primary"
-                                    onChange={() => handleFilterChange("price", range)}
-                                    checked={
-                                        selectedFilters.price?.min === range.min &&
-                                        selectedFilters.price?.max === range.max
+                                className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 cursor-pointer"
+                                onClick={() => {
+                                    if (isSelected) {
+                                        handleFilterChange("price", null)
+                                    } else {
+                                        handleFilterChange("price", range)
                                     }
-                                />
+                                }}
+                            >
+                                <div className={`w-[18px] h-[18px] rounded-full border ${isSelected ? 'border-primary' : 'border-gray-300'} flex items-center justify-center`}>
+                                    {isSelected && (
+                                        <div className="w-3 h-3 rounded-full bg-primary"></div>
+                                    )}
+                                </div>
                                 <span className="text-sm lg:text-base">{`S/ ${range.min} - S/ ${range.max}`}</span>
                             </label>
-                        ))}
+                        })}
                     </div>
                 )}
             </div>
