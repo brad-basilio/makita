@@ -30,9 +30,12 @@ const SkeletonCard = () => {
 };
 
 const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
+    // Estado para el filtro padre (independiente)
+    const [independentFilter, setIndependentFilter] = useState(null);
     const [brands, setBrands] = useState([]);
     const [subcategories, setSubcategories] = useState([]);
     const [categories, setCategories] = useState([]);
+    const [collections, setCollections] = useState([]);
     const [priceRanges, setPriceRanges] = useState([]);
     const [activeSection, setActiveSection] = useState(null);
 
@@ -42,6 +45,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
         categoria: true,
         subcategoria: true,
         colores: false,
+        coleccion: true,
     });
 
     const [selectedFilters, setSelectedFilters] = useState({
@@ -54,6 +58,9 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
         sort_by: "created_at",
         order: "desc",
     });
+
+    // Track the order in which filters are activated
+    const [filterSequence, setFilterSequence] = useState([]);
 
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -75,7 +82,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                 "=",
                 id,
             ]);
-            transformedFilters.push(["or", ...collectionConditions]);
+            transformedFilters.push(ArrayJoin(collectionConditions, 'or'));
         }
 
         if (filters.category_id.length > 0) {
@@ -84,7 +91,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                 "=",
                 id,
             ]);
-            transformedFilters.push([...categoryConditions]);
+            transformedFilters.push(ArrayJoin(categoryConditions, 'or'));
         }
 
         if (filters.subcategory_id.length > 0) {
@@ -93,7 +100,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                 "=",
                 id,
             ]);
-            transformedFilters.push([...subcategoryConditions]);
+            transformedFilters.push(ArrayJoin(subcategoryConditions, 'or'));
         }
 
         if (filters.brand_id.length > 0) {
@@ -125,7 +132,6 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
     // Obtener productos filtrados desde el backend
     const fetchProducts = async (page = 1, shouldScroll = false) => {
         setLoading(true);
-        
         // Si estamos cambiando los filtros (no solo la página), desplazar hacia arriba
         if (shouldScroll) {
             window.scrollTo({
@@ -133,21 +139,28 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                 behavior: 'smooth'
             });
         }
-        
         try {
             const filters = transformFilters(selectedFilters);
+            // Extraer los IDs de los filtros seleccionados (no slugs)
             const params = {
                 filter: filters,
                 sort: selectedFilters.sort,
                 skip: (page - 1) * pagination.itemsPerPage,
                 take: pagination.itemsPerPage,
                 requireTotalCount: true,
+                filterSequence: filterSequence,
+                // Enviar los IDs de marcas/categorías/colecciones seleccionadas
+                brand_id: brands
+                    .filter(b => selectedFilters.brand_id.includes(b.slug))
+                    .map(b => b.id),
+                category_id: categories
+                    .filter(c => selectedFilters.category_id.includes(c.slug))
+                    .map(c => c.id),
+                collection_id: collections
+                    ? collections.filter(col => selectedFilters.collection_id.includes(col.slug)).map(col => col.id)
+                    : [],
             };
-            console.log(params);
-
             const response = await itemsRest.paginate(params);
-            console.log(response)
-
             setProducts(response.data);
             setPagination({
                 currentPage: page,
@@ -162,11 +175,12 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                     response.totalCount
                 ),
             });
-            // console.log(response);
-            setBrands(response?.summary.brands);
-            setCategories(response?.summary.categories);
-            setSubcategories(response?.summary.subcategories);
-            setPriceRanges(response?.summary.priceRanges);
+            // Update all filter options from backend summary
+            setBrands(response?.summary.brands || []);
+            setCategories(response?.summary.categories || []);
+            setSubcategories(response?.summary.subcategories || []);
+            setCollections(response?.summary.collections || []);
+            setPriceRanges(response?.summary.priceRanges || []);
         } catch (error) {
             console.log("Error fetching products:", error);
         } finally {
@@ -183,7 +197,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
         // Cuando cambian los filtros, volvemos a la primera página y desplazamos hacia arriba
         fetchProducts(1, true);
     }, [selectedFilters]);
-    
+
     const handlePageChange = (page) => {
         if (page >= 1 && page <= pagination.totalPages) {
             // Primero, desplazar hacia arriba suavemente
@@ -191,7 +205,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                 top: 0,
                 behavior: 'smooth'
             });
-            
+
             // Luego, obtener productos de la nueva página
             fetchProducts(page);
         }
@@ -232,7 +246,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
 
 
     //}, [items]);
-    // Manejar cambios en los filtros
+    // Manejar cambios en los filtros y mantener filterSequence
     const handleFilterChange = (type, value) => {
         setSelectedFilters((prev) => {
             if (type === "price") {
@@ -241,8 +255,8 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                     ...prev,
                     price:
                         prev.price &&
-                            prev.price.min === value.min &&
-                            prev.price.max === value.max
+                                prev.price.min === value.min &&
+                                prev.price.max === value.max
                             ? null
                             : value,
                 };
@@ -250,13 +264,40 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
 
             // Asegúrate de que prev[type] sea un array antes de usar .includes()
             const currentValues = Array.isArray(prev[type]) ? prev[type] : [];
-
-            // Manejar múltiples valores para categorías y marcas
-            const newValues = currentValues.includes(value)
-                ? currentValues.filter((item) => item !== value) // Eliminar si ya está seleccionado
-                : [...currentValues, value]; // Agregar si no está seleccionado
+            let newValues;
+            if (currentValues.includes(value)) {
+                // Deseleccionar
+                newValues = currentValues.filter((item) => item !== value);
+            } else {
+                // Seleccionar
+                newValues = [...currentValues, value];
+            }
 
             return { ...prev, [type]: newValues };
+        });
+
+        // Update filterSequence
+        setFilterSequence((prevSeq) => {
+            // Only track these filter types in the sequence
+            const trackedTypes = ["brand_id", "category_id", "collection_id"];
+            if (!trackedTypes.includes(type)) return prevSeq;
+
+            // If selecting (not removing)
+            if (!selectedFilters[type]?.includes(value)) {
+                // If not already in sequence, add to end
+                if (!prevSeq.includes(type)) {
+                    return [...prevSeq, type];
+                }
+                return prevSeq;
+            } else {
+                // If removing, check if any values left for this type
+                const remaining = selectedFilters[type]?.filter((item) => item !== value) || [];
+                if (remaining.length === 0) {
+                    // Remove from sequence
+                    return prevSeq.filter((t) => t !== type);
+                }
+                return prevSeq;
+            }
         });
     };
 
@@ -490,30 +531,21 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                                                 />
                                             </div>
 
-                                            <div className="max-h-[200px] overflow-y-auto p-1">
-                                                {filteredSubcategories.map((subcategory) => {
-                                                    const isChecked = selectedFilters.subcategory_id?.includes(subcategory.slug);
-                                                    return (
-                                                        <motion.div
-                                                            key={subcategory.id}
-                                                            className={`group py-2 rounded-md ${isChecked ? "bg-primary" : "bg-transparent"
-                                                                }`}
-                                                        >
-                                                            <label className="flex items-center gap-2 px-2 cursor-pointer">
-                                                                <input
-                                                                    type="checkbox"
-                                                                    className="hidden"
-                                                                    onChange={() => handleFilterChange("subcategory_id", subcategory.slug)}
-                                                                    checked={isChecked}
-                                                                />
-                                                                <span className={`text-sm lg:text-base ${isChecked ? "text-white" : "text-gray-700"
-                                                                    }`}>
-                                                                    {subcategory.name}
-                                                                </span>
-                                                            </label>
-                                                        </motion.div>
-                                                    );
-                                                })}
+                                            <div className="space-y-3 max-h-[200px] overflow-y-auto p-1">
+                                                {filteredSubcategories.map((subcategory) => (
+                                                    <label
+                                                        key={subcategory.id}
+                                                        className="flex items-center gap-2 py-1.5"
+                                                    >
+                                                        <input
+                                                            type="checkbox"
+                                                            className="h-5 w-5 rounded border-gray-300 accent-primary"
+                                                            onChange={() => handleFilterChange("subcategory_id", subcategory.slug)}
+                                                            checked={selectedFilters.subcategory_id?.includes(subcategory.slug)}
+                                                        />
+                                                        <span className="text-sm lg:text-base">{subcategory.name}</span>
+                                                    </label>
+                                                ))}
                                             </div>
                                         </motion.div>
                                     )}
