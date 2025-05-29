@@ -480,27 +480,32 @@ export default function ProductDetailSF({ item, data, setCart, cart, textstatic,
 
                             {/* Whatsapp */}
                             <div className="w-full mt-5">
-                                <div className="bg-[#F7F9FB] flex flex-row rounded-xl p-5 gap-3">
-                                    <img
-                                        src="/assets/img/salafabulosa/whatsapp.png"
-                                        onError={(e) =>
-                                            (e.target.src =
-                                                "assets/img/noimage/no_imagen_circular.png")
-                                        }
-                                        className="w-12 h-12 object-contain"
-                                        loading="lazy"
-                                    />
-                                    <div className="customtext-neutral-dark font-font-general text-base  2xl:text-xl font-semibold">
-                                        <p>
-                                            ¿Tienes dudas sobre este producto? 
-                                            Haz{" "}
-                                            <a href={`https://wa.me/${getContact("phone_whatsapp")}`} target="_blank"><span className="underline"></span>{" "}
-                                                 clic aquí
-                                            </a>
-                                            y chatea con nosotros por WhatsApp
-                                        </p>
+                                <a  href={`https://api.whatsapp.com/send?phone=${getContact("phone_whatsapp")}&text=${encodeURIComponent(
+                                        `Hola, deseo mayor información acerca del producto: ${item?.name}`
+                                    )}`}
+                                 target="_blank">
+                                    <div className="bg-[#F7F9FB] flex flex-row rounded-xl p-5 gap-3">
+                                        <img
+                                            src="/assets/img/salafabulosa/whatsapp.png"
+                                            onError={(e) =>
+                                                (e.target.src =
+                                                    "assets/img/noimage/no_imagen_circular.png")
+                                            }
+                                            className="w-12 h-12 object-contain"
+                                            loading="lazy"
+                                        />
+                                        <div className="customtext-neutral-dark font-font-general text-base  2xl:text-xl font-semibold">
+                                            <p>
+                                                ¿Tienes dudas sobre este producto? 
+                                                Haz 
+                                                <span className="underline"></span>
+                                                    clic aquí
+                                                
+                                                y chatea con nosotros por WhatsApp
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
+                                </a>
                             </div>
                         </div>
                     </div>
