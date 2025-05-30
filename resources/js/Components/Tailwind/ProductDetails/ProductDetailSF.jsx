@@ -26,12 +26,14 @@ import em from "../../../Utils/em";
 
 export default function ProductDetailSF({ item, data, setCart, cart, textstatic, contacts}) {
 
+    
     const itemsRest = new ItemsRest();
     const [modalOpen, setModalOpen] = useState(false);
     const [selectedImage, setSelectedImage] = useState({
         url: item?.image,
         type: "main",
     });
+
 
     const [quantity, setQuantity] = useState(1);
     const handleChange = (e) => {
@@ -93,10 +95,13 @@ export default function ProductDetailSF({ item, data, setCart, cart, textstatic,
             timer: 5000,
         }).then((result) => {
             if (result.isConfirmed) {
-                setModalOpen(true); // Cambiado de setCartOpen a setModalOpen
+                setModalOpen(!modalOpen);
+                
             }
         });
     };
+
+    
 
     const [associatedItems, setAssociatedItems] = useState([]);
     const [relationsItems, setRelationsItems] = useState([]);
@@ -633,6 +638,7 @@ export default function ProductDetailSF({ item, data, setCart, cart, textstatic,
             
             <CartModal
                 cart={cart}
+                data={data}
                 setCart={setCart}
                 modalOpen={modalOpen}
                 setModalOpen={setModalOpen}
