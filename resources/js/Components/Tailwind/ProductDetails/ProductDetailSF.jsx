@@ -54,21 +54,47 @@ export default function ProductDetailSF({ item, data, setCart, cart, textstatic,
     /*ESPECIFICACIONES */
     const [isExpanded, setIsExpanded] = useState(false);
 
+    // const onAddClicked = (product) => {
+    //     const newCart = structuredClone(cart);
+    //     const index = newCart.findIndex((x) => x.id == product.id);
+    //     if (index == -1) {
+    //         newCart.push({ ...product, quantity: quantity });
+    //     } else {
+    //         newCart[index].quantity++;
+    //     }
+    //     setCart(newCart);
+
+    //     Swal.fire({
+    //         title: "Producto agregado",
+    //         text: `Se agregó ${product.name} al carrito`,
+    //         icon: "success",
+    //         timer: 1500,
+    //     });
+    // };
     const onAddClicked = (product) => {
         const newCart = structuredClone(cart);
         const index = newCart.findIndex((x) => x.id == product.id);
+        
         if (index == -1) {
             newCart.push({ ...product, quantity: quantity });
         } else {
             newCart[index].quantity++;
         }
         setCart(newCart);
-
+    
         Swal.fire({
             title: "Producto agregado",
             text: `Se agregó ${product.name} al carrito`,
             icon: "success",
-            timer: 1500,
+            showCancelButton: true,
+            confirmButtonText: "Abrir mini carrito",
+            cancelButtonText: "Seguir comprando",
+            reverseButtons: true,
+            timer: 5000,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                setModalOpen(true); // Cambiado de setCartOpen a setModalOpen
+            }
         });
     };
 
