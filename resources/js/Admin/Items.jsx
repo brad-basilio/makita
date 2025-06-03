@@ -204,7 +204,7 @@ const Items = ({ categories, brands, collections }) => {
             discount: discountRef.current.value,
             tags: $(tagsRef.current).val(),
             description: descriptionRef.current.value,
-            sotck: stockRef.current.value,
+            stock: stockRef.current.value,
             specifications: JSON.stringify(specifications),
         };
 
