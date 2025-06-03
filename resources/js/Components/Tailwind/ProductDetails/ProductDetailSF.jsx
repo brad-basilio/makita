@@ -372,6 +372,12 @@ export default function ProductDetailSF({ item, data, setCart, cart, textstatic,
                                     </span>
                                 </div>
                             </div>
+                            
+                            {item?.summary && (
+                                <div className="flex flex-col customtext-neutral-dark font-font-general text-base 2xl:text-lg my-3">
+                                    <p>{item?.summary}</p>       
+                                </div>
+                            )}
 
                             {/* Selector de variantes */}
                             <div className="variants-selector flex flex-col gap-3">
