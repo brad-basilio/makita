@@ -693,7 +693,6 @@ const Items = ({ categories, brands, collections }) => {
                             eRef={summaryRef}
                             label="Resumen"
                             rows={3}
-                            required
                         />
                         {/* Sección de Características */}
                         {/* Características (Lista de textos) */}
