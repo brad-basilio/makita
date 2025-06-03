@@ -468,15 +468,16 @@ const Items = ({ categories, brands, collections }) => {
                         dataType: "boolean",
                         width: "80px",
                         cellTemplate: (container, { data }) => {
+                            const is_newValue = data.is_new === 1 || data.is_new === '1' || data.is_new === true;
                             ReactAppend(
                                 container,
                                 <SwitchFormGroup
-                                    checked={data.is_new}
+                                    checked={is_newValue}
                                     onChange={(e) =>
                                         onBooleanChange({
                                             id: data.id,
                                             field: "is_new",
-                                            value: e.target.checked,
+                                            value: e.target.checked ? 1 : 0,
                                         })
                                     }
                                 />
@@ -489,15 +490,16 @@ const Items = ({ categories, brands, collections }) => {
                         dataType: "boolean",
                         width: "80px",
                         cellTemplate: (container, { data }) => {
+                            const offeringValue = data.offering === 1 || data.offering === '1' || data.offering === true;
                             ReactAppend(
                                 container,
                                 <SwitchFormGroup
-                                    checked={data.offering}
+                                    checked={offeringValue}
                                     onChange={(e) =>
                                         onBooleanChange({
                                             id: data.id,
                                             field: "offering",
-                                            value: e.target.checked,
+                                            value: e.target.checked ? 1 : 0,
                                         })
                                     }
                                 />
@@ -510,15 +512,16 @@ const Items = ({ categories, brands, collections }) => {
                         dataType: "boolean",
                         width: "80px",
                         cellTemplate: (container, { data }) => {
+                            const recommendedValue = data.recommended === 1 || data.recommended === '1' || data.recommended === true;
                             ReactAppend(
                                 container,
                                 <SwitchFormGroup
-                                    checked={data.recommended}
+                                    checked={recommendedValue}
                                     onChange={(e) =>
                                         onBooleanChange({
                                             id: data.id,
                                             field: "recommended",
-                                            value: e.target.checked,
+                                            value: e.target.checked ? 1 : 0,
                                         })
                                     }
                                 />
