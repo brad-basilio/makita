@@ -26,7 +26,7 @@ const itemsRest = new ItemsRest();
 
 const Items = ({ categories, brands, collections }) => {
     //!FALTA EDIT AND DELETEDE GALERIA
-
+    
     const [itemData, setItemData] = useState([]);
 
     const gridRef = useRef();
@@ -117,7 +117,7 @@ const Items = ({ categories, brands, collections }) => {
     }, [itemData]);
 
     const onModalOpen = (data) => {
-        console.log(data);
+        console.log('data total',data);
         setItemData(data || null); // Guardamos los datos en el estado
         if (data?.id) setIsEditing(true);
         else setIsEditing(false);
@@ -172,6 +172,15 @@ const Items = ({ categories, brands, collections }) => {
             setGallery([]); // Limpiar la galería si no hay imágenes
         }
 
+        if (data?.specifications) {
+            setSpecifications(data.specifications.map(spec => ({
+                type: spec.type,
+                title: spec.title,
+                description: spec.description
+            })));
+        } else {
+            setSpecifications([]);
+        }
         // Nuevos campos
 
         stockRef.current.value = data?.stock;
@@ -196,6 +205,7 @@ const Items = ({ categories, brands, collections }) => {
             tags: $(tagsRef.current).val(),
             description: descriptionRef.current.value,
             sotck: stockRef.current.value,
+            specifications: JSON.stringify(specifications),
         };
 
         const formData = new FormData();
@@ -278,7 +288,7 @@ const Items = ({ categories, brands, collections }) => {
     const [specifications, setSpecifications] = useState([]); // Especificaciones
 
     // Opciones del campo "type"
-    const typeOptions = ["General", "Principal", "Otro"];
+    const typeOptions = ["General", "Principal"];
     const [showImportModal, setShowImportModal] = useState(false);
     const modalImportRef = useRef();
     const onModalImportOpen = () => {
@@ -621,7 +631,6 @@ const Items = ({ categories, brands, collections }) => {
                         <SelectFormGroup
                             eRef={brandRef}
                             label="Marca"
-                            required
                             dropdownParent="#principal-container"
                         >
                             {brands.map((item, index) => (
@@ -700,6 +709,7 @@ const Items = ({ categories, brands, collections }) => {
                             ref={specificationsRef}
                             label="Especificaciones"
                             structure={{ type: "", title: "", description: "" }}
+                            value={specifications}
                             onChange={setSpecifications}
                             typeOptions={typeOptions}
                         />

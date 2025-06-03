@@ -230,6 +230,18 @@ const Sales = ({ statuses = [] }) => {
                             <div className="card-body p-2">
                                 <table className="table table-borderless table-sm mb-0">
                                     <tbody>
+                                        {saleLoaded?.payment_method && (
+                                            <tr>
+                                                <th>Método de pago:</th>
+                                                <td>{saleLoaded?.payment_method}</td>
+                                            </tr>
+                                        )}
+                                        {saleLoaded?.culqi_charge_id && (
+                                            <tr>
+                                                <th>ID de transacción:</th>
+                                                <td>{saleLoaded?.culqi_charge_id}</td>
+                                            </tr>
+                                        )}
                                         <tr>
                                             <th>Nombres:</th>
                                             <td>{saleLoaded?.fullname}</td>
@@ -242,8 +254,9 @@ const Sales = ({ statuses = [] }) => {
                                             <th>Teléfono:</th>
                                             <td>{saleLoaded?.phone}</td>
                                         </tr>
-                                        {saleLoaded?.delivery_type ==
-                                            "express" && (
+                                        
+                                        {saleLoaded?.delivery_type &&
+                                        //== "express"  (
                                             <tr>
                                                 <th>Dirección:</th>
                                                 <td>
@@ -266,19 +279,30 @@ const Sales = ({ statuses = [] }) => {
                                                     </small>
                                                 </td>
                                             </tr>
-                                        )}
+                                        // )
+                                        }
+
                                         {saleLoaded?.reference && (
                                             <tr>
                                                 <th>Referencia:</th>
                                                 <td>{saleLoaded?.reference}</td>
                                             </tr>
                                         )}
+
                                         {saleLoaded?.comment && (
                                             <tr>
                                                 <th>Comentario:</th>
                                                 <td>{saleLoaded?.comment}</td>
                                             </tr>
                                         )}
+
+                                        {saleLoaded?.invoiceType && (
+                                            <tr>
+                                                <th>{saleLoaded?.invoiceType}:</th>
+                                                <td>{saleLoaded?.documentType} - {saleLoaded?.document} <br></br> {saleLoaded?.document && ( saleLoaded?.businessName )}</td>
+                                            </tr>
+                                        )}
+
                                         {saleLoaded?.payment_proof && (
                                             <tr>
                                                 <th>Comprobante de pago:</th>

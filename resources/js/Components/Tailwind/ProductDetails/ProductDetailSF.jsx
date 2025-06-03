@@ -481,7 +481,7 @@ export default function ProductDetailSF({ item, data, setCart, cart, textstatic,
                                                         <li
                                                             key={index}
                                                             className="gap-2 customtext-primary opacity-85 flex flex-row items-center"
-                                                        >
+                                                        >   
                                                             <CircleCheckIcon className="customtext-primary w-4 h-4" />
                                                             {spec.description}
                                                         </li>

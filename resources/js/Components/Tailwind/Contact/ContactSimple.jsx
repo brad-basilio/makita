@@ -9,7 +9,7 @@ const ContactSimple = ({ data, contacts }) => {
   // const navigate = useNavigate()
   const getContact = (correlative) => {
     return (
-        contacts.find((contact) => contacts.correlative === correlative)
+        contacts.find((contact) => contact.correlative === correlative)
             ?.description || ""
     );
   };

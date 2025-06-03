@@ -253,6 +253,7 @@ class BasicController extends Controller
       $jpa = $this->model::find(isset($body['id']) ? $body['id'] : null);
 
       if (!$jpa) {
+        
         $body['slug'] = Crypto::randomUUID();
         $jpa = $this->model::create($body);
         $isNew = true;
