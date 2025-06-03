@@ -531,15 +531,17 @@ const Items = ({ categories, brands, collections }) => {
                         dataType: "boolean",
                         width: "80px",
                         cellTemplate: (container, { data }) => {
+                            const featuredValue = data.featured === 1 || data.featured === '1' || data.featured === true;
+                            
                             ReactAppend(
                                 container,
                                 <SwitchFormGroup
-                                    checked={data.featured}
+                                    checked={featuredValue}
                                     onChange={(e) =>
                                         onBooleanChange({
                                             id: data.id,
                                             field: "featured",
-                                            value: e.target.checked,
+                                            value: e.target.checked ? 1 : 0,
                                         })
                                     }
                                 />
