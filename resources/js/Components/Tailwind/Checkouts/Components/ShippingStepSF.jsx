@@ -39,6 +39,7 @@ export default function ShippingStepSF({
     ubigeos = [],
     contacts,
 }) {
+    
     const [selectedUbigeo, setSelectedUbigeo] = useState(null);
     const [defaultUbigeoOption, setDefaultUbigeoOption] = useState(null);
     const [formData, setFormData] = useState({
@@ -79,6 +80,13 @@ export default function ShippingStepSF({
           handleUbigeoChange(defaultOption);
         }
       }, [user]);
+
+    const getContact = (correlative) => {
+    return (
+            contacts.find((contact) => contact.correlative === correlative)
+                ?.description || ""
+        );
+    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -124,7 +132,10 @@ export default function ShippingStepSF({
     // }, []);
     const numericSubTotal = typeof subTotal === 'number' ? subTotal : parseFloat(subTotal) || 0;
     const numericIgv = typeof igv === 'number' ? igv : parseFloat(igv) || 0;
-    const subFinal = numericSubTotal + numericIgv || 0;
+    const hasShippingFree = parseFloat(getContact("shipping_free"));
+   
+
+    const subFinal = numericSubTotal + numericIgv;
     
     const handleUbigeoChange = async (selected) => {
         if (!selected) return;
@@ -147,13 +158,14 @@ export default function ShippingStepSF({
             });
 
             const options = [];
-            const isFreeShipping = subFinal >= 300;
+            
+            const isFreeShipping = subFinal >= hasShippingFree;
             
             if (isFreeShipping) {
                 options.push({
                     type: "free",
                     price: 0,
-                    description: "Compra mayor a S/300",
+                    description: `Compra mayor a S/ ${hasShippingFree}`,
                     deliveryType: "Envío gratuito",
                 });
             } else if (response.data.is_free) { // Si no aplica envío gratuito por monto, verifica otras opciones
@@ -815,6 +827,8 @@ export default function ShippingStepSF({
         }),
       };
 
+    
+
     return (
         <>
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-y-8 lg:gap-8 ">
@@ -1269,8 +1283,8 @@ export default function ShippingStepSF({
                             <span className="customtext-neutral-dark">Envío</span>
                             <span className="font-semibold">
                                 {/* S/ {Number2Currency(envio)} */}
-                                {subFinal >= 300 ? (
-                                    <span className="text-green-500">Gratis (Compra +S/300)</span>
+                                {hasShippingFree != null && subFinal >= hasShippingFree ? (
+                                    <span className="customtext-neutral-dark">Gratis (Compra mayor a S/{hasShippingFree})</span>
                                 ) : (
                                     `S/ ${Number2Currency(envio)}`
                                 )}

@@ -11,6 +11,7 @@ use App\Models\Item;
 use App\Models\Renewal;
 use App\Models\SaleDetail;
 use App\Models\User;
+use App\Models\General;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -173,6 +174,7 @@ class SaleController extends BasicController
         // Primero calculamos el total temporal para verificar el envío gratuito
         $tempTotal = 0;
         $details = json_decode($request->details, true);
+        
         foreach ($details as $item) {
             $itemJpa = Item::find($item['id']);
             if ($itemJpa) {
@@ -180,19 +182,12 @@ class SaleController extends BasicController
             }
         }
     
-        // $freeShippingThreshold = Setting::where('key', 'free_shipping_threshold')->first();
-        $freeShippingThreshold = 300;
-        $minFreeShipping = $freeShippingThreshold ? (float)$freeShippingThreshold : 0;    
-        $deliveryPrice = 0;
+        $freeShippingThreshold = General::where('correlative', 'shipping_free')->first();
+        $minFreeShipping = $freeShippingThreshold ? (float)$freeShippingThreshold->description : 0;
+        $deliveryPrice = $request->delivery;
             
-        if ($minFreeShipping > 0) {
-           if ($tempTotal < $minFreeShipping) {
-                $deliveryPrice = $request->delivery;         
-           }else{
-                $deliveryPrice = 0; // Envío gratuito si el total es mayor o igual al umbral
-           }
-        }else{
-            $deliveryPrice = $request->delivery;
+        if ($minFreeShipping > 0 && $tempTotal >= $minFreeShipping) {
+            $deliveryPrice = 0;
         }
         
         $delivery = DeliveryPrice::query()

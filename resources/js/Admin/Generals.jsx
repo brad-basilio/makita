@@ -110,6 +110,9 @@ const Generals = ({ generals }) => {
     igvCheckout:
       generals.find((x) => x.correlative == "igv_checkout")
         ?.description ?? "",
+    shippingFree:
+      generals.find((x) => x.correlative == "shipping_free")
+        ?.description ?? "",
     location: {
       lat: Number(location.split(",").map((x) => x.trim())[0]),
       lng: Number(location.split(",").map((x) => x.trim())[1]),
@@ -357,6 +360,11 @@ const Generals = ({ generals }) => {
           name: "Ubicación",
           description: `${formData.location.lat},${formData.location.lng}`,
         },
+        {
+          correlative: 'shipping_free',
+          name: 'Envio gratis a partir de',
+          description: formData.shippingFree,
+        },
       ]);
       // alert('Datos guardados exitosamente');
     } catch (error) {
@@ -433,6 +441,16 @@ const Generals = ({ generals }) => {
             role="tab"
           >
             Email
+          </button>
+        </li>
+        <li className="nav-item" role="presentation">
+          <button
+            className={`nav-link ${activeTab === "shippingfree" ? "active" : ""}`}
+            onClick={() => setActiveTab("shippingfree")}
+            type="button"
+            role="tab"
+          >
+            Envio Gratis
           </button>
         </li>
         </ul>
@@ -1296,6 +1314,26 @@ const Generals = ({ generals }) => {
             <small className="form-text text-muted">
               Haz clic en el mapa para seleccionar la ubicación.
             </small>
+          </div>
+
+          <div
+            className={`tab-pane fade ${activeTab === "shippingfree" ? "show active" : ""
+              }`}
+            role="tabpanel"
+          >
+            <div className="mb-2">
+                <label className="form-label">Envio gratis a partir de:</label>
+                <input
+                  type="text"
+                  placeholder="Ingrese el monto para envio gratis"
+                  className="form-control"
+                  value={formData.shippingFree}
+                  onChange={(e) => setFormData({
+                    ...formData,
+                    shippingFree: e.target.value
+                  })}
+                />
+              </div>
           </div>
         </div>
 
