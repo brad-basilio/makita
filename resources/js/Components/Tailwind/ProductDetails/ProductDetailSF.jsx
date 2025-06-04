@@ -634,7 +634,7 @@ export default function ProductDetailSF({ item, data, setCart, cart, textstatic,
             {relationsItems.length > 0 && (
                 <div className="-mt-10 mb-10 p-4">
                     <ProductNavigationSwiper
-                        data={{ title: em(textProductRelation), link_catalog: "/catalogo" }}
+                        data={{ title: "Productos relacionados", link_catalog: "/catalogo" }}
                         items={relationsItems}
                         cart={cart}
                         setCart={setCart}
