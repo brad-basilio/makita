@@ -122,7 +122,10 @@ export default function ShippingStepSF({
     //     ];
     //     setDepartamentos(uniqueDepartamentos);
     // }, []);
-
+    const numericSubTotal = typeof subTotal === 'number' ? subTotal : parseFloat(subTotal) || 0;
+    const numericIgv = typeof igv === 'number' ? igv : parseFloat(igv) || 0;
+    const subFinal = numericSubTotal + numericIgv || 0;
+    
     const handleUbigeoChange = async (selected) => {
         if (!selected) return;
         
@@ -144,7 +147,16 @@ export default function ShippingStepSF({
             });
 
             const options = [];
-            if (response.data.is_free) {
+            const isFreeShipping = subFinal >= 300;
+            
+            if (isFreeShipping) {
+                options.push({
+                    type: "free",
+                    price: 0,
+                    description: "Compra mayor a S/300",
+                    deliveryType: "Envío gratuito",
+                });
+            } else if (response.data.is_free) { // Si no aplica envío gratuito por monto, verifica otras opciones
                 options.push({
                     type: "free",
                     price: 0,
@@ -152,16 +164,6 @@ export default function ShippingStepSF({
                     deliveryType: response.data.standard.type,
                     characteristics: response.data.standard.characteristics,
                 });
-
-                if (response.data.express.price > 0) {
-                    options.push({
-                        type: "express",
-                        price: response.data.express.price,
-                        description: response.data.express.description,
-                        deliveryType: response.data.express.type,
-                        characteristics: response.data.express.characteristics,
-                    });
-                }
             } else if (response.data.is_agency) {
                 options.push({
                     type: "agency",
@@ -180,9 +182,25 @@ export default function ShippingStepSF({
                 });
             }
 
+            // Solo muestra opción express si no es envío gratuito por monto
+            if (response.data.express?.price > 0 && response.data.is_free && !isFreeShipping) {
+                options.push({
+                    type: "express",
+                    price: response.data.express.price,
+                    description: response.data.express.description,
+                    deliveryType: response.data.express.type,
+                    characteristics: response.data.express.characteristics,
+                });
+            }
+
+            if (options.length === 0) {
+                throw new Error("No hay opciones de envío disponibles");
+            }
+
             setShippingOptions(options);
             setSelectedOption(options[0].type);
             setEnvio(options[0].price);
+           
         } catch (error) {
             console.error("Error al obtener precios de envío:", error);
             toast.success('Sin cobertura', {
@@ -198,6 +216,12 @@ export default function ShippingStepSF({
         }
         setLoading(false);
     };
+
+    useEffect(() => {
+        if (selectedUbigeo) {
+            handleUbigeoChange(selectedUbigeo);
+        }
+    }, [cart, subTotal]);
 
     const loadOptions = useCallback(
         debounce((inputValue, callback) => {
@@ -1244,7 +1268,12 @@ export default function ShippingStepSF({
                         <div className="flex justify-between">
                             <span className="customtext-neutral-dark">Envío</span>
                             <span className="font-semibold">
-                                S/ {Number2Currency(envio)}
+                                {/* S/ {Number2Currency(envio)} */}
+                                {subFinal >= 300 ? (
+                                    <span className="text-green-500">Gratis (Compra +S/300)</span>
+                                ) : (
+                                    `S/ ${Number2Currency(envio)}`
+                                )}
                             </span>
                         </div>
                         <div className="py-3 border-y-2 mt-6">

@@ -169,19 +169,45 @@ class SaleController extends BasicController
     public function beforeSave(Request $request)
     {
         $body = $request->all();
-
+       
+        // Primero calculamos el total temporal para verificar el envío gratuito
+        $tempTotal = 0;
+        $details = json_decode($request->details, true);
+        foreach ($details as $item) {
+            $itemJpa = Item::find($item['id']);
+            if ($itemJpa) {
+                $tempTotal += $itemJpa->final_price * $item['quantity'];
+            }
+        }
+    
+        // $freeShippingThreshold = Setting::where('key', 'free_shipping_threshold')->first();
+        $freeShippingThreshold = 300;
+        $minFreeShipping = $freeShippingThreshold ? (float)$freeShippingThreshold : 0;    
+        $deliveryPrice = 0;
+            
+        if ($minFreeShipping > 0) {
+           if ($tempTotal < $minFreeShipping) {
+                $deliveryPrice = $request->delivery;         
+           }else{
+                $deliveryPrice = 0; // Envío gratuito si el total es mayor o igual al umbral
+           }
+        }else{
+            $deliveryPrice = $request->delivery;
+        }
+        
         $delivery = DeliveryPrice::query()
-            ->where('ubigeo', $body['ubigeo'])
-            ->first();
-
-        $body['delivery'] = $delivery?->price ?? 0;
+                ->where('ubigeo', $body['ubigeo'])
+                ->first();
+        
+        //$body['delivery'] = $delivery?->price ?? 0;
+        $body['delivery'] = $deliveryPrice ?? $delivery?->price;
         $body['department'] = $delivery?->data['departamento'] ?? null;
         $body['province'] = $delivery?->data['provincia'] ?? null;
         $body['district'] = $delivery?->data['distrito'] ?? null;
         $body['ubigeo'] = $delivery?->ubigeo ?? null;
         $body['code'] = Trace::getId();
-        $body['status_id'] = 'f13fa605-72dd-4729-beaa-ee14c9bbc47b';
-        //$body['status_id'] = 'e13a417d-a2f0-4f5f-93d8-462d57f13d3c';
+        //$body['status_id'] = 'f13fa605-72dd-4729-beaa-ee14c9bbc47b';
+        $body['status_id'] = 'e13a417d-a2f0-4f5f-93d8-462d57f13d3c';
         $body['user_id'] = Auth::id();
 
         if (Auth::check()) {
@@ -218,7 +244,11 @@ class SaleController extends BasicController
             ]);
             $totalPrice += $itemJpa->final_price * $item['quantity'];
         }
-     
+        
+        if ($totalPrice >= 300) {
+            $jpa->delivery = 0;
+        }
+
         $jpa->amount = $totalPrice;
         $jpa->save();
         return $jpa;
