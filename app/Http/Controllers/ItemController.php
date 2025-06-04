@@ -384,4 +384,32 @@ class ItemController extends BasicController
             return response($response->toArray(), $response->status);
         }
     }
+
+    /**
+     * API: Obtener detalles de producto con categoría y especificaciones técnicas
+     */
+    public function apiShow($id)
+    {
+        $item = Item::with(['category', 'specifications'])->findOrFail($id);
+        // Formatear especificaciones como key-value
+        $specs = $item->specifications->map(function($spec) {
+            return [
+                'key' => $spec->title ?? $spec->key,
+                'value' => $spec->description
+            ];
+        })->toArray();
+        return response()->json([
+            'id' => $item->id,
+            'slug' => $item->slug,
+            'name' => $item->name,
+            'code' => $item->sku,
+            'image' => $item->image,
+            'description' => $item->description,
+            'category' => $item->category ? [
+                'id' => $item->category->id,
+                'name' => $item->category->name
+            ] : null,
+            'specifications' => $specs,
+        ]);
+    }
 }

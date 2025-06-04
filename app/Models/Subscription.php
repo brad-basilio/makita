@@ -25,6 +25,7 @@ class Subscription extends Model
 
     protected $fillable = [
         'name',
+        'subscriptor',
         'description',
         'status'
     ];

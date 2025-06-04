@@ -7,7 +7,7 @@ export default function BlogList({ data, posts, postsLatest, loading, isFilter }
     <section
       className={`font-paragraph ${isFilter ? "pb-16" : "pt-8 pb-16"}`}
     >
-      <div className="px-[5%]  mx-auto">
+      <div className="px-primary   mx-auto 2xl:px-0 2xl:max-w-7xl">
         {!isFilter ? (
           <div>
             <h2 className="text-3xl font-bold mb-4 font-title customtext-primary">

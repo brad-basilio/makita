@@ -7,44 +7,11 @@ import "swiper/css/grid";
 import { useEffect, useRef, useState } from "react";
 import { adjustTextColor } from "../../../Functions/adjustTextColor";
 
-// Nuevo Card para replicar la UI de la imagen
-const MakitaProductCard = ({ product }) => {
-    return (
-        <div className="bg-white rounded-xl shadow-sm flex flex-col h-full transition-all duration-200 hover:shadow-2xl overflow-hidden">
-          
-            {/* Imagen */}
-            <div className="relative flex justify-center items-center h-52 p-4">
-                 {product.is_new===1  && (
-                        <span className="absolute top-8 right-0 bg-primary text-white text-sm font-bold px-2 py-1 rounded-sm">
-                            NUEVO
-                        </span>
-                    )}
-                <img
-                    src={`/storage/images/item/${product.image}`}
-                    onError={e => e.target.src = '/assets/img/noimage/no_img.jpg'}
-                    alt={product.name}
-                    className="object-contain max-h-48 max-w-full"
-                    loading='lazy'
-                />
-            </div>
-            {/* Contenido de texto */}
-            <div className="p-5 flex flex-col flex-grow">
-                {/* Código del producto */}
-                <div className="text-primary text-sm font-medium mb-1">
-                    {product.code || "DMR200"}
-                </div>
-                {/* Título */}
-                <h3 className="customtext-neutral-dark font-bold text-lg mb-2 leading-tight line-clamp-2">
-                    {product.name || product.title}
-                </h3>
-                {/* Descripción */}
-                <p className="customtext-neutral-light text-sm mb-3 line-clamp-2" dangerouslySetInnerHTML={{ __html: product.description }}>
+import CardProductMakita from "./Components/CardProductMakita";
+import CompareBarModal from "./Modals/CompareBarModal";
+import CompareDetailsModal from "./Modals/CompareDetailsModal";
 
-                </p>
-            </div>
-        </div>
-    );
-};
+
 
 const ProductMakita = ({ items, data, setCart, cart }) => {
     const [swiperInstance, setSwiperInstance] = useState(null);
@@ -85,6 +52,51 @@ const ProductMakita = ({ items, data, setCart, cart }) => {
         return () => window.removeEventListener('resize', handleResize);
     }, [swiperInstance]);
 
+    // Estado para barra de comparación
+    const [compareBarOpen, setCompareBarOpen] = useState(false);
+    const [compareBarMinimized, setCompareBarMinimized] = useState(false);
+    const [compareProducts, setCompareProducts] = useState([]);
+    const [showCompareDetails, setShowCompareDetails] = useState(false);
+
+    // Agregar producto a la barra
+    const handleCompareClick = (product) => {
+        console.log('Click en comparar', product);
+        setCompareBarOpen(true);
+        setCompareBarMinimized(false);
+        setCompareProducts((prev) => {
+            const exists = prev.find((p) => p.id === product.id);
+            console.log('Productos actuales en barra:', prev, '¿Ya existe?', exists);
+            if (exists || prev.length >= 4) return prev;
+            const nuevos = [...prev, product];
+            console.log('Nuevos productos en barra:', nuevos);
+            return nuevos;
+        });
+    };
+
+    // Quitar producto de la barra
+    const handleRemoveCompare = (id) => {
+        setCompareProducts((prev) => prev.filter((p) => p.id !== id));
+    };
+
+    // Minimizar barra
+    const handleMinimizeBar = () => setCompareBarMinimized(true);
+    // Restaurar barra
+    const handleRestoreBar = () => setCompareBarMinimized(false);
+
+    // Comparar (abrir modal detalles)
+    const handleCompare = () => {
+        if (compareProducts.length === 4) {
+            setShowCompareDetails(true);
+        }
+    };
+
+    // Cerrar modal detalles
+    const handleCloseDetails = () => {
+        setShowCompareDetails(false);
+        setCompareProducts([]);
+        setCompareBarOpen(false);
+    };
+
     return (
         <section className="relative bg-white py-8">
             <div className="relative mx-auto px-primary py-10 2xl:px-0 2xl:max-w-7xl">
@@ -102,7 +114,7 @@ const ProductMakita = ({ items, data, setCart, cart }) => {
                 </div>
 
                 {/* Swiper Carousel */}
-                <div className="relative">
+                <div className="relative w-full">
                     <Swiper
                         modules={[Navigation, Grid]}
                         navigation={{
@@ -110,23 +122,28 @@ const ProductMakita = ({ items, data, setCart, cart }) => {
                             nextEl: navigationDesktopNextRef.current,
                             enabled: true,
                         }}
-                        slidesPerView={1}
-                        spaceBetween={20}
+                        slidesPerView={2}
+                        spaceBetween={0}
                         loop={true}
+                        grid={{
+                            fill: 'row',
+                            rows: 2,
+                        }}
                         onSwiper={setSwiperInstance}
                         breakpoints={{
                             640: { slidesPerView: 2 },
-                            768: { slidesPerView: 3 },
-                            1024: { slidesPerView: 4 },
+                            768: { slidesPerView: 3, grid: { rows: 1 } },
+                            1024: { slidesPerView: 4, grid: { rows: 1 } },
+                            1280: { slidesPerView: 4, grid: { rows: 1 } },
                         }}
-                        className="px-10"
+                        className="lg:px-10"
                     >
-                        {items.map((product, index) => (
+                        {items?.map((product, index) => (
                             <SwiperSlide
                                 key={index}
                                 className="py-2"
                             >
-                                <MakitaProductCard product={product} />
+                                <CardProductMakita product={product} onCompareClick={() => handleCompareClick(product)} />
                             </SwiperSlide>
                         ))}
                     </Swiper>
@@ -134,20 +151,36 @@ const ProductMakita = ({ items, data, setCart, cart }) => {
                     {/* Navigation Buttons */}
                     <button
                         ref={navigationDesktopPrevRef}
-                        className="absolute -left-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center rounded-lg bg-secondary bg-opacity-70 text-white hover:brightness-125"
+                        className="hidden lg:flex absolute -left-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10  items-center justify-center rounded-lg bg-secondary bg-opacity-70 text-white hover:brightness-125"
                         aria-label="Productos anteriores"
                     >
                         <ChevronLeft width="1.2rem" />
                     </button>
                     <button
                         ref={navigationDesktopNextRef}
-                        className="absolute -right-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center rounded-lg bg-secondary bg-opacity-70 text-white hover:brightness-125"
+                        className="hidden lg:flex absolute -right-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10  items-center justify-center rounded-lg bg-secondary bg-opacity-70 text-white hover:brightness-125"
                         aria-label="Siguientes productos"
                     >
                         <ChevronRight width="1.2rem" />
                     </button>
                 </div>
             </div>
+            {/* Barra inferior de comparación */}
+            <CompareBarModal
+                open={true} // Forzar visible para depuración
+                minimized={compareBarMinimized}
+                products={compareProducts}
+                onRemove={handleRemoveCompare}
+                onCompare={handleCompare}
+                onMinimize={handleMinimizeBar}
+                onRestore={handleRestoreBar}
+            />
+            {/* Modal de detalles de comparación */}
+            <CompareDetailsModal
+                isOpen={showCompareDetails}
+                onClose={handleCloseDetails}
+                products={compareProducts}
+            />
         </section>
     );
 };

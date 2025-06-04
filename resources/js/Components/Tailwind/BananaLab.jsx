@@ -8,6 +8,8 @@ const Canva2 = React.lazy(() => import('./BananaLab/Canva2'))
 const Canva3 = React.lazy(() => import('./BananaLab/Canva3'))
 const EditorLayout = React.lazy(() => import('./BananaLab/components/Editor/EditorLayout'))
 const Editor = React.lazy(() => import('./BananaLab/Editor'))
+const Nosotros = React.lazy(() => import('./Makita/Nosotros'))
+const Zonas = React.lazy(() => import('./Makita/Zonas'))
 const BananaLab = ({ data, which, filteredData }) => {
     const getBananaLab = () => {
         switch (which) {
@@ -21,7 +23,11 @@ const BananaLab = ({ data, which, filteredData }) => {
                 case 'Editor':
                     return <Editor data={data} filteredData={filteredData} />
 
+            case "Nosotros":
+                return <Nosotros data={data} filteredData={filteredData} />
 
+            case "Zonas":
+                return <Zonas data={data} filteredData={filteredData} />
 
             default:
                 return <div className="w-full px-[5%] replace-max-w-here p-4 mx-auto">- No Hay componente <b>{which}</b> -</div>

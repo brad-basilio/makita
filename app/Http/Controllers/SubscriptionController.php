@@ -19,6 +19,7 @@ class SubscriptionController extends BasicController
         return [
             'id' => $subscription->id ?? null,
             'name' => $provider,
+            'subscriptor' => $request->subscriptor,
             'description' => $request->email
         ];
     }

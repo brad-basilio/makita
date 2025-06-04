@@ -47,6 +47,7 @@ use App\Http\Controllers\AuthClientController;
 // Public
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\CoverController;
 use App\Http\Controllers\DeliveryPriceController;
@@ -90,23 +91,11 @@ Route::post('/reset-password-client', [AuthClientController::class, 'resetPasswo
 Route::post('/delivery-prices', [DeliveryPriceController::class, 'getDeliveryPrice']);
 Route::post('/prices-type', [DeliveryPriceController::class, 'getPrices']);
 
-Route::get('/banners/media/{uuid}', [AdminBannerController::class, 'media']);
-Route::get('/sliders/media/{uuid}', [AdminSliderController::class, 'media']);
-Route::get('/categories/media/{uuid}', [AdminCategoryController::class, 'media']);
-Route::get('/collections/media/{uuid}', [AdminCollectionController::class, 'media']);
-Route::get('/subcategories/media/{uuid}', [AdminSubCategoryController::class, 'media']);
-Route::get('/brands/media/{uuid}', [AdminBrandController::class, 'media']);
-Route::get('/testimonies/media/{uuid}', [AdminTestimonyController::class, 'media']);
-Route::get('/posts/media/{uuid}', [AdminPostController::class, 'media']);
-Route::get('/items/media/{uuid}', [AdminItemController::class, 'media']);
 
-Route::get('/item_images/media/{uuid}', [AdminItemImageController::class, 'media']);
 
-Route::get('/indicators/media/{uuid}', [AdminIndicatorController::class, 'media']);
+Route::get('brands/{brand}/featured-item', [BrandController::class, 'featuredItemByCategory']);
 
-Route::get('/aboutuses/media/{uuid}', [AdminAboutusController::class, 'media']);
-Route::get('/strengths/media/{uuid}', [AdminStrengthController::class, 'media']);
-Route::get('/ads/media/{uuid}', [AdminAdController::class, 'media'])->withoutMiddleware('throttle');
+Route::get('/items/{id}', [ItemController::class, 'apiShow']);
 
 Route::post('/posts/paginate', [PostController::class, 'paginate']);
 Route::post('/items/paginate', [ItemController::class, 'paginate']);

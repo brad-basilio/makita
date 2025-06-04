@@ -226,6 +226,8 @@ const System = ({
                 return <Testimonials which={value} data={data} items={getItems(itemsId)} />
             case "brands":
                 return <Brands which={value} data={data} items={getItems(itemsId)} />
+                case "bananalab":
+                return <BananaLab which={value} data={data} items={getItems(itemsId)} />
 
             default:
                 return (

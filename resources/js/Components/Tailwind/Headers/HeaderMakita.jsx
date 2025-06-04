@@ -407,7 +407,7 @@ const HeaderMakita = ({
               <img
                 src="/assets/img/whatsapp.svg"
                 alt="whatsapp"
-                className="mr-3 w-16 h-16 md:w-[100px] md:h-[100px] animate-bounce duration-300"
+                className="mr-3 w-16 h-16 animate-bounce duration-300"
               />
             </a>
           </div>
@@ -575,7 +575,7 @@ const HeaderMakita = ({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.2 }}
-            className="md:hidden bg-primary fixed left-0 w-full h-[calc(100vh-56px)] z-40 overflow-hidden"
+            className="md:hidden bg-primary fixed left-0 w-full h-[calc(100vh-56px)] z-[9999] overflow-hidden"
            style={{
               top: isFixed ? 50 : 110, // 64px when fixed, 120px otherwise
             }}

@@ -1,50 +1,81 @@
 import React from "react";
 
-const benefits = [
-  "Lubricación automática de la cadena.",
-  "La ventana de visualización del aceite de la cadena permite al operario comprobar fácilmente el nivel de aceite.",
-  "Tecnología de protección extrema (XPT) diseñada para ofrecer una mayor resistencia al polvo y al agua en las duras condiciones del lugar de trabajo.",
-  "Palanca de bloqueo accesible desde ambos lados.",
-  "Freno eléctrico para máxima productividad y mayor seguridad del operador"
-];
+
 
 const BannerContactMakita = ({ data }) => {
   return (
-    <section className="relative w-full bg-[#0e6984] text-white overflow-hidden">
-      <div className="container mx-auto px-[5%] py-16 md:py-24 flex flex-col md:flex-row md:items-center">
-        {/* Left side with product image */}
-        <div className="w-full md:w-1/3 mb-8 md:mb-0 relative z-10 flex items-center justify-center">
-          <img 
-            src={data?.image || "/assets/img/productos/taladro-makita.png"} 
-            alt="Herramienta Makita"
-            className="max-w-full h-auto"
-          />
-        </div>
+    <section className="relative w-full bg-primary text-white overflow-visible">
+      <div className="mx-auto px-primary 2xl:px-0 2xl:max-w-7xl min-h-[240px]">
         
-        {/* Right side with text content */}
-        <div className="w-full md:w-2/3 md:pl-10 relative z-10 ">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            {data?.title || "Venta y asistencia técnica"}
+        {/* Versión Mobile */}
+        <div className="flex flex-col items-center justify-center text-center md:hidden py-8">
+          {/* Nombre */}
+          <h2 className="text-3xl font-bold mb-4 leading-tight">
+            {data?.name}
           </h2>
           
-          <p className="text-lg mb-8 max-w-2xl">
-            {data?.description || "Duis dapibus congue velit, lobortis mollis nisi volutpat quis. Nulla facilisi. Sed efficitur, eros ut tincidunt sagittis, magna sem mollis elit."}
+          {/* Descripción */}
+          <p className="text-base max-w-xl mx-auto opacity-90 mb-6">
+            {data?.description}
           </p>
           
-        
-        </div>
-        <div>
-            <a 
-            href={data?.button_link || "#contacto"}
-            className="inline-block bg-[#2dccd3] hover:bg-[#25b5bb] text-white font-medium py-3 px-8 rounded-lg transition-all duration-300"
+          {/* Imagen */}
+          <div className="mb-6">
+            <img
+              src={`/storage/images/system/${data?.image}`}
+              alt="Herramienta Makita"
+              className="h-[200px] object-contain drop-shadow-2xl"
+              onError={(e) => {
+                e.target.src = "/api/cover/thumbnail/null";
+              }}
+            />
+          </div>
+          
+          {/* Botón */}
+          <a
+            href={data?.button_link}
+            className="inline-block bg-white/10 hover:bg-primary hover:brightness-125 text-white font-semibold py-3 px-8 rounded-lg shadow-lg transition-all duration-300"
           >
-            {data?.button_text || "Ponerme en contacto"}
+            {data?.button_text}
           </a>
         </div>
+
+        {/* Versión Desktop */}
+        <div className="hidden md:flex flex-row items-center justify-between min-h-[240px]">
+          {/* Imagen sobrepasando la sección */}
+          <div className="flex justify-center items-center lg:w-2/12 h-[100px]">
+            <img
+              src={`/storage/images/system/${data?.image}`}
+              alt="Herramienta Makita"
+              className="absolute left-0 translate-x-1/4 translate-y-1/3 bottom-0 h-[350px] object-contain drop-shadow-2xl"
+              style={{ zIndex: 2 }}
+              onError={(e) => {
+                e.target.src = "/api/cover/thumbnail/null";
+              }}
+            />
+          </div>
+          
+          {/* Datos centrados */}
+          <div className="relative flex flex-col items-center justify-center text-center z-10">
+            <h2 className="text-5xl font-bold mb-6 leading-tight">
+              {data?.name}
+            </h2>
+            <p className="text-lg max-w-xl mx-auto opacity-90">
+              {data?.description}
+            </p>
+          </div>
+          
+          {/* Botón */}
+          <div>
+            <a
+              href={data?.button_link}
+              className="inline-block bg-white/10 hover:bg-primary hover:brightness-125 text-white font-semibold py-3 px-8 rounded-lg shadow-lg transition-all duration-300 mt-2"
+            >
+              {data?.button_text}
+            </a>
+          </div>
+        </div>
       </div>
-      
-      {/* Optional overlay texture/gradient */}
-      <div className="absolute inset-0 bg-gradient-to-r from-[#095973] to-transparent opacity-50"></div>
     </section>
   );
 };

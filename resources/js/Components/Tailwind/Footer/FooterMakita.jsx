@@ -9,7 +9,7 @@ import HtmlContent from "../../../Utils/HtmlContent";
 const FooterMakita = ({ pages, generals }) => {
     const subscriptionsRest = new SubscriptionsRest();
     const emailRef = useRef();
-
+const subscriptorRef = useRef();
     const [modalOpen, setModalOpen] = useState(null);
     const [saving, setSaving] = useState(false);
 
@@ -28,6 +28,7 @@ const FooterMakita = ({ pages, generals }) => {
 
         const request = {
             email: emailRef.current.value,
+            subscriptor: subscriptorRef.current.value,
             status: 1,
         };
         const result = await subscriptionsRest.save(request);
@@ -46,21 +47,15 @@ const FooterMakita = ({ pages, generals }) => {
     };
 
     return (
-        <footer className="bg-[#0e6984] text-white py-16">
-            <div className="container mx-auto px-4 md:px-[5%]">
+        <footer className="bg-primary text-white py-16">
+            <div className="px-primary mx-auto  2xl:px-0 2xl:max-w-7xl">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                     {/* Column 1: Logo and company info */}
                     <div>
-                        <img
-                            src="/assets/img/logo-makita-white.png"
-                            alt="Makita"
-                            className="h-10 mb-4"
-                            onError={(e) => {
-                                e.target.onerror = null;
-                                e.target.src =
-                                    "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 50'%3E%3Ctext x='10' y='30' font-family='Arial' font-size='24' fill='white'%3EMakita%3C/text%3E%3C/svg%3E";
-                            }}
-                        />
+                        <img src={`/assets/resources/logo-footer.png?v=${crypto.randomUUID()}`} alt={Global.APP_NAME} className="h-12 lg:h-12 object-contain mb-4" onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = '/assets/img/logo-bk.svg';
+                        }} />
                         <p className="mb-4 text-sm">
                             La línea más completa de herramientas y accesorios.
                         </p>
@@ -72,7 +67,8 @@ const FooterMakita = ({ pages, generals }) => {
                             <p className="text-sm font-medium mb-1">Correo electrónico</p>
                             <p className="text-sm">soporte@makita.com.pe</p>
                         </div>
-                        <p className="text-sm mb-2">Siga a Makita:</p>
+                    <div className="flex gap-2">
+                            <p className="text-sm mb-2">Siga a Makita:</p>
                         <div className="flex space-x-4">
                             <a
                                 href="#"
@@ -114,6 +110,7 @@ const FooterMakita = ({ pages, generals }) => {
                                 </svg>
                             </a>
                         </div>
+                    </div>
                     </div>
 
                     {/* Column 2: Products */}
@@ -246,6 +243,7 @@ const FooterMakita = ({ pages, generals }) => {
                         <form onSubmit={onEmailSubmit}>
                             <div className="space-y-4">
                                 <input
+                                    ref={subscriptorRef}
                                     type="text"
                                     placeholder="Nombre completo"
                                     className="w-full p-3 rounded border border-gray-300 bg-white text-gray-800"

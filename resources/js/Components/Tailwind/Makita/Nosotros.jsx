@@ -1,0 +1,169 @@
+import React from 'react';
+
+const Nosotros = () => {
+  return (
+    <div className="font-paragraph">
+      {/* Hero Section */}
+      <div className="bg-gray-50 py-16">
+        <div className="container mx-auto px-4 md:px-6 2xl:max-w-7xl">
+          <div className="text-center max-w-4xl mx-auto mb-12">
+            <h1 className="text-3xl md:text-4xl font-bold mb-6">
+              Fusce augue odio, semper volutpat ante faucibus, euismod elementum lectus
+            </h1>
+            
+            <div className="grid md:grid-cols-2 gap-8 text-left">
+              <div className="text-gray-700">
+                <p className="mb-4">
+                  Quisque sit amet eros eu, mi porttitor varius. Aliquam ornare gravida lorem, id fermentum mi et convallis sem. In vulputu amet a mattis, sed consectetur sem efficitur ut. Nam id nunc tincidunt, hendrerit mauris nec, congue odio. Duis ame risque, pretium eget dum eget, consectetur faucibus. Donec sed faucibus mi sed mattis arcu.
+                </p>
+                <p className="mb-4">
+                  Hendrerit mauris nec, congue odio. Duis ante risque, pretium eget dum eget, consectetur consectetur sem. Donec sed faucibus mi sed mattis arcu, inovare sed nunc. In varius a metus marius.
+                </p>
+              </div>
+              
+              <div className="text-gray-700">
+                <p className="mb-4">
+                  Quisque sit amet eros eu, mi porttitor varius. Aliquam ornare gravida lorem, id fermentum mi et convallis sem. In vulputu amet a mattis, sed consectetur sem efficitur ut. Nam id nunc tincidunt, hendrerit mauris nec, congue odio. Duis ame risque, pretium eget dum eget, consectetur faucibus. Donec sed faucibus mi sed mattis arcu.
+                </p>
+                <p className="mb-4">
+                  Hendrerit mauris nunc, in varius metus mattis, sed consectetur sem efficitur ut. Nunc id pretium eget dum eget, consectetur consectetur lacus. Inovare sed faucibus mi sed mattis arcu.
+                </p>
+              </div>
+            </div>
+            
+            <div className="mt-8">
+              <a href="#contacto" className="bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-primary/90 transition-all">
+                Contáctame
+              </a>
+            </div>
+          </div>
+          
+          <div className="rounded-xl overflow-hidden shadow-md mt-10">
+            <img 
+              src="/assets/img/makita-hero.jpg" 
+              alt="Herramienta Makita en uso" 
+              className="w-full h-auto object-cover"
+              onError={(e) => {
+                e.target.src = "https://via.placeholder.com/800x400?text=Makita+Tools";
+              }}
+            />
+          </div>
+        </div>
+      </div>
+      
+      {/* Sobre nosotros section */}
+      <div className="py-16">
+        <div className="container mx-auto px-4 md:px-6 2xl:max-w-7xl">
+          <div className="grid md:grid-cols-12 gap-8 items-center">
+            <div className="md:col-span-5">
+              <img 
+                src="/assets/img/makita-worker.jpg" 
+                alt="Trabajador con herramienta Makita" 
+                className="w-full h-auto rounded-xl shadow-md object-cover"
+                onError={(e) => {
+                  e.target.src = "https://via.placeholder.com/500x600?text=Makita+Worker";
+                }}
+              />
+            </div>
+            
+            <div className="md:col-span-7">
+              <h2 className="text-3xl font-bold mb-6">
+                Sobre nosotros: Makita Corporation
+              </h2>
+              
+              <p className="text-gray-700 mb-4">
+                Ofrecemos productos y servicios de alta calidad que le ayudan a alcanzar sus objetivos haciendo que el trabajo sea cómodo y fácil. Makita suministra herramientas eléctricas, sus accesorios y servicios relacionados a numerosos clientes, principalmente en los sectores de la construcción, la industria y el consumo.
+              </p>
+              
+              <p className="text-gray-700 mb-4">
+                Makita es un líder de mercado consolidado en su sector. Diseñados para superar todas las expectativas, los productos de la empresa se complementan con una red de servicio de alta calidad.
+              </p>
+              
+              <p className="text-gray-700 font-semibold mb-4">
+                ¡Las herramientas Makita son la elección del profesional!
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      {/* Timeline section */}
+      <div className="bg-gray-900 text-white py-20">
+        <div className="container mx-auto px-4 md:px-6 2xl:max-w-7xl">
+          <div className="relative">
+            {/* Timeline line */}
+            <div className="absolute left-0 right-0 h-1 bg-gray-700 top-1/2 transform -translate-y-1/2"></div>
+            
+            {/* Timeline points */}
+            <div className="flex justify-between relative">
+              {/* 1915 */}
+              <div className="flex flex-col items-center">
+                <div className="w-4 h-4 rounded-full bg-primary z-10"></div>
+                <div className="mt-8 max-w-xs">
+                  <h3 className="text-xl font-bold mb-3">1915 - Fundación de Makita</h3>
+                  <p className="text-gray-400 text-sm">
+                    Makita Corporation se estableció en Nagoya, Japón, en 1915, cuando se centró en la venta y reparación de aparatos de iluminación, motores eléctricos y transformadores bajo el nombre de "Makita Denki Seisakusho". Tras varios años de trabajo de desarrollo y pruebas, Makita se centró en los motores eléctricos y empezó a exportarlos en 1935. En 1958, la empresa se convirtió en una sociedad de responsabilidad limitada y continuó su operación bajo el nombre de "Makita Electric Works, Ltd".
+                  </p>
+                </div>
+              </div>
+              
+              {/* 1958 */}
+              <div className="flex flex-col items-center">
+                <div className="w-4 h-4 rounded-full bg-primary z-10"></div>
+                <div className="mt-8 max-w-xs">
+                  <h3 className="text-xl font-bold mb-3">1958 - la primera herramienta eléctrica</h3>
+                  <p className="text-gray-400 text-sm">
+                    En 1958, Makita lanzó al mercado su primera herramienta eléctrica: un cepillo eléctrico portátil. Este fue un momento decisivo que definió la dirección actual de Makita, que la empresa sigue siguiendo sistemáticamente. Ese mismo año, Makita consolidó su posición como fabricante especializado en herramientas eléctricas con la introducción de su primer cortasetos manual. Tras años de dedicado trabajo de desarrollo, Makita amplió su gama de herramientas eléctricas iniciando la producción de sierras circulares y máquinas ranuradoras en 1962, año en el que también empezó a cotizar en la Bolsa de Nagoya.
+                  </p>
+                </div>
+              </div>
+              
+              {/* 1970 */}
+              <div className="flex flex-col items-center">
+                <div className="w-4 h-4 rounded-full bg-primary z-10"></div>
+                <div className="mt-8 max-w-xs">
+                  <h3 className="text-xl font-bold mb-3">1970 - Inicio de la expansión global</h3>
+                  <p className="text-gray-400 text-sm">
+                    Makita comenzó su expansión internacional estableciendo filiales y operaciones de ventas en varias regiones del mundo para satisfacer las necesidades crecientes de herramientas eléctricas de calidad. Para 1970, había comenzado a desarrollar una red global de distribución, servicio eficiente y una fuerte presencia en mercados internacionales.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      {/* Garantía de calidad */}
+      <div className="py-16">
+        <div className="container mx-auto px-4 md:px-6 2xl:max-w-7xl">
+          <div className="grid md:grid-cols-2 gap-10 items-center">
+            <div>
+              <h2 className="text-3xl font-bold mb-6">Garantía de calidad</h2>
+              
+              <p className="text-gray-700 mb-4">
+                El sistema de control de calidad de Makita garantiza que sus productos cumplen los requisitos de calidad más estrictos. Sus máquinas se someten a rigurosas pruebas en la fase de desarrollo para garantizar que solo se fabrique un producto de primera calidad. Para respaldar su control de calidad, la empresa ha desarrollado sus propios y estrictos normas. Makita también recoge regularmente las opiniones de sus usuarios y supervisa la forma en que sus máquinas se utilizan en la vida real para poder realizar pruebas en circunstancias lo más realistas posible.
+              </p>
+              
+              <p className="text-gray-700 mb-4">
+                Makita se enorgullece de su control de calidad orientado al cliente y realiza continuas pruebas en todos sus productos para garantizar su seguridad, funcionalidad y calidad. Por ejemplo, los motores se someten a 19 pruebas distintas. Además de las pruebas realizadas en la fase de desarrollo del producto, el departamento de servicio de calidad de Makita prueba cada máquina antes de que salga de la fábrica.
+              </p>
+            </div>
+            
+            <div>
+              <img 
+                src="/assets/img/makita-quality.jpg" 
+                alt="Control de calidad Makita" 
+                className="w-full h-auto rounded-xl shadow-md object-cover"
+                onError={(e) => {
+                  e.target.src = "https://via.placeholder.com/600x500?text=Makita+Quality";
+                }}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Nosotros;

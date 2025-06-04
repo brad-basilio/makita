@@ -11,15 +11,13 @@ use App\Mail\RawHtmlMail;
 class SubscriptionNotification extends Notification implements ShouldQueue
 {
     use Queueable;
-    public function __construct()
-    {
-    }
+    public function __construct() {}
     public function via($notifiable)
     {
         return ['mail'];
     }
 
-        /**
+    /**
      * Variables disponibles para la plantilla de email.
      */
     public static function availableVariables()
@@ -27,7 +25,7 @@ class SubscriptionNotification extends Notification implements ShouldQueue
         return [
             // No hay variables dinámicas para este email
             'fecha_suscripcion' => 'Fecha de suscripción',
-            'email' => 'Correo electrónico',
+            'email' => 'Nombre o Correo electrónico',
             'year' => 'Año actual',
         ];
     }
@@ -38,7 +36,7 @@ class SubscriptionNotification extends Notification implements ShouldQueue
         $body = $template
             ? \App\Helpers\Text::replaceData($template->description, [
                 'fecha_suscripcion' => date('d \d\e F \d\e\l Y'),
-                'email' => $notifiable->description ?? '',
+                'email' => $notifiable->subscriptor ?? $notifiable->description ?? '',
                 'year' => date('Y'),
             ])
             : 'Plantilla no encontrada';
