@@ -384,4 +384,37 @@ class ItemController extends BasicController
             return response($response->toArray(), $response->status);
         }
     }
+
+    public function searchProduct(Request $request)
+    {
+        try {
+        
+            $query = $request->input('query');
+
+            $resultados = Item::select('items.*')
+              ->where('items.status', 1)
+              ->where('items.visible', 1)
+              ->where('items.name', 'like', "%$query%")
+              ->whereIn('items.id', function ($subquery) {
+                $subquery->select(DB::raw('MIN(id)'))
+                  ->from('items')
+                  ->where('items.visible', 1)
+                  ->groupBy('name');
+              })
+              ->join('categories', 'categories.id', 'items.category_id')
+              ->where('categories.status', 1)
+              ->where('categories.visible', 1)
+              ->get();
+        
+            return response()->json([
+                'status' => true,
+                'data' => $resultados,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
 }
