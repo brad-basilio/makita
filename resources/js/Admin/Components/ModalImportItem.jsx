@@ -59,6 +59,7 @@ const ModalImportItem = ({ gridRef, modalRef }) => {
     return (
         <div className="bg-white">
             <div className="modal-content">
+                <div className="mb-1"><a href="/assets/img/salafabulosa/formato_import_products.xlsx" download>Descargar formato .xlsx</a></div>
                 <div>
                     <input
                         className="form-control"
