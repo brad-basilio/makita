@@ -104,7 +104,8 @@
                 "data": [
                     "class",
                     "link_cart",
-                    "showLoginCart"
+                    "showLoginCart",
+                    "mobileSearch"
                    
                     
                 ],
