@@ -82,7 +82,6 @@ class BasicController extends Controller
   }
 
   public function setPaginationSummary(Request $request, Builder $builder, Builder $originalInstance)
-  public function setPaginationSummary(Request $request, Builder $builder, Builder $originalInstance)
   {
     return [];
   }
