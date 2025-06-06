@@ -6,7 +6,7 @@ import React from "react";
 class SearchProductPreview {
     static getProducts = async (request) => {
         try {
-            const { status, result } = await Fetch("./api/items/searchProducts", {
+            const { status, result } = await Fetch("/api/items/searchProducts", {
                 method: "POST",
                 body: JSON.stringify(request),
             });
