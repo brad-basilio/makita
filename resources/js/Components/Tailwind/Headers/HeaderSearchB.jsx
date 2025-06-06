@@ -124,6 +124,8 @@ const HeaderSearchB = ({
     // Función para manejar la búsqueda con Enter
     const handleKeyDown = (event) => {
         if (event.key === 'Enter' && search.trim()) {
+            event.preventDefault(); // Prevenir comportamiento por defecto
+            event.stopPropagation(); // Evitar propagación del evento
             window.location.href = `/catalogo?search=${encodeURIComponent(search)}`;
         }
     };
