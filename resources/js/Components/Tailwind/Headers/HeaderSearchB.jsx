@@ -121,44 +121,12 @@ const HeaderSearchB = ({
         }
     ];
 
-    // Función para manejar la búsqueda con Enter - simplificada para mobile
-    const handleKeyDown = (event) => {
-        // Verificar múltiples formas de detectar Enter en mobile
-        if (event.key === 'Enter' || event.keyCode === 13 || event.which === 13) {
-            event.preventDefault();
-            event.stopPropagation();
-            performSearch();
-        }
-    };
-
-    // Función para manejar eventos de input en mobile (cuando se presiona search en teclado)
-    const handleInputKeyPress = (event) => {
-        // En algunos dispositivos móviles, el botón de búsqueda activa este evento
-        if (event.inputType === 'insertCompositionText' || event.type === 'input') {
-            // Pequeño delay para permitir que el valor se actualice
-            setTimeout(() => {
-                if (event.target.value && event.target.value.trim()) {
-                    // Verificar si el usuario presionó búsqueda
-                    const activeElement = document.activeElement;
-                    if (activeElement && activeElement.tagName === 'INPUT') {
-                        // No hacer nada aquí, solo en keydown
-                    }
-                }
-            }, 100);
-        }
-    };
-
-    // Función de búsqueda centralizada
-    const performSearch = () => {
+    // Solo una función para manejar el submit del form
+    const handleFormSubmit = (event) => {
+        event.preventDefault();
         if (search.trim()) {
             window.location.href = `/catalogo?search=${encodeURIComponent(search)}`;
         }
-    };
-
-    // Función para manejar submit del form
-    const handleFormSubmit = (event) => {
-        event.preventDefault();
-        performSearch();
     };
 
     return (
@@ -297,17 +265,18 @@ const HeaderSearchB = ({
                                 placeholder="Buscar productos"
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
-                                onKeyDown={handleKeyDown}
                                 className="w-full pr-14 py-4 pl-4 border rounded-full focus:ring-0 focus:outline-none"
+                                enterKeyHint="search"
+                                inputMode="search"
                             />
+                            <button
+                                type="submit"
+                                className="absolute right-3 top-1/2 transform -translate-y-1/2 p-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
+                                aria-label="Buscar"
+                            >
+                                <Search />
+                            </button>
                         </form>
-                        <a
-                            href={search.trim() ? `/catalogo?search=${encodeURIComponent(search)}` : "#"}
-                            className="absolute right-3 top-1/2 transform -translate-y-1/2 p-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
-                            aria-label="Buscar"
-                        >
-                            <Search />
-                        </a>
                     </div>
 
                     {/* Account and Cart */}
@@ -417,8 +386,6 @@ const HeaderSearchB = ({
                                             placeholder="Buscar productos"
                                             value={search}
                                             onChange={(e) => setSearch(e.target.value)}
-                                            onKeyDown={handleKeyDown}
-                                            onInput={handleInputKeyPress}
                                             className="w-full pr-14 py-4 pl-4 border rounded-full focus:ring-0 focus:outline-none"
                                             autoFocus
                                             enterKeyHint="search"
@@ -543,8 +510,6 @@ const HeaderSearchB = ({
                                             placeholder="Buscar productos"
                                             value={search}
                                             onChange={(e) => setSearch(e.target.value)}
-                                            onKeyDown={handleKeyDown}
-                                            onInput={handleInputKeyPress}
                                             className="w-full pr-14 py-4 pl-4 border rounded-full focus:ring-0 focus:outline-none"
                                         />
                                         <div className="absolute right-3 top-1/2 -translate-y-1/2 flex gap-2">
@@ -617,5 +582,6 @@ const HeaderSearchB = ({
         </header>
     );
 };
+
 
 export default HeaderSearchB;
