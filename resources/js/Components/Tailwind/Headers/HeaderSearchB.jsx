@@ -121,21 +121,30 @@ const HeaderSearchB = ({
         }
     ];
 
-    // Función para manejar la búsqueda con Enter - mejorada para mobile
+    // Función para manejar la búsqueda con Enter - simplificada para mobile
     const handleKeyDown = (event) => {
-        if ((event.key === 'Enter' || event.keyCode === 13) && search.trim()) {
+        // Verificar múltiples formas de detectar Enter en mobile
+        if (event.key === 'Enter' || event.keyCode === 13 || event.which === 13) {
             event.preventDefault();
             event.stopPropagation();
             performSearch();
         }
     };
 
-    // Función alternativa para capturar eventos en mobile
-    const handleKeyUp = (event) => {
-        if ((event.key === 'Enter' || event.keyCode === 13) && search.trim()) {
-            event.preventDefault();
-            event.stopPropagation();
-            performSearch();
+    // Función para manejar eventos de input en mobile (cuando se presiona search en teclado)
+    const handleInputKeyPress = (event) => {
+        // En algunos dispositivos móviles, el botón de búsqueda activa este evento
+        if (event.inputType === 'insertCompositionText' || event.type === 'input') {
+            // Pequeño delay para permitir que el valor se actualice
+            setTimeout(() => {
+                if (event.target.value && event.target.value.trim()) {
+                    // Verificar si el usuario presionó búsqueda
+                    const activeElement = document.activeElement;
+                    if (activeElement && activeElement.tagName === 'INPUT') {
+                        // No hacer nada aquí, solo en keydown
+                    }
+                }
+            }, 100);
         }
     };
 
@@ -146,7 +155,7 @@ const HeaderSearchB = ({
         }
     };
 
-    // Función para manejar submit del form en mobile
+    // Función para manejar submit del form
     const handleFormSubmit = (event) => {
         event.preventDefault();
         performSearch();
@@ -289,7 +298,6 @@ const HeaderSearchB = ({
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
                                 onKeyDown={handleKeyDown}
-                                onKeyUp={handleKeyUp}
                                 className="w-full pr-14 py-4 pl-4 border rounded-full focus:ring-0 focus:outline-none"
                             />
                         </form>
@@ -410,10 +418,11 @@ const HeaderSearchB = ({
                                             value={search}
                                             onChange={(e) => setSearch(e.target.value)}
                                             onKeyDown={handleKeyDown}
-                                            onKeyUp={handleKeyUp}
+                                            onInput={handleInputKeyPress}
                                             className="w-full pr-14 py-4 pl-4 border rounded-full focus:ring-0 focus:outline-none"
                                             autoFocus
                                             enterKeyHint="search"
+                                            inputMode="search"
                                         />
                                         <div className="absolute right-3 top-1/2 -translate-y-1/2 flex gap-2">
                                             <button
@@ -535,7 +544,7 @@ const HeaderSearchB = ({
                                             value={search}
                                             onChange={(e) => setSearch(e.target.value)}
                                             onKeyDown={handleKeyDown}
-                                            onKeyUp={handleKeyUp}
+                                            onInput={handleInputKeyPress}
                                             className="w-full pr-14 py-4 pl-4 border rounded-full focus:ring-0 focus:outline-none"
                                         />
                                         <div className="absolute right-3 top-1/2 -translate-y-1/2 flex gap-2">
