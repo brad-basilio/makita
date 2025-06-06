@@ -121,13 +121,35 @@ const HeaderSearchB = ({
         }
     ];
 
-    // Función para manejar la búsqueda con Enter
+    // Función para manejar la búsqueda con Enter - mejorada para mobile
     const handleKeyDown = (event) => {
-        if (event.key === 'Enter' && search.trim()) {
-            event.preventDefault(); // Prevenir comportamiento por defecto
-            event.stopPropagation(); // Evitar propagación del evento
+        if ((event.key === 'Enter' || event.keyCode === 13) && search.trim()) {
+            event.preventDefault();
+            event.stopPropagation();
+            performSearch();
+        }
+    };
+
+    // Función alternativa para capturar eventos en mobile
+    const handleKeyUp = (event) => {
+        if ((event.key === 'Enter' || event.keyCode === 13) && search.trim()) {
+            event.preventDefault();
+            event.stopPropagation();
+            performSearch();
+        }
+    };
+
+    // Función de búsqueda centralizada
+    const performSearch = () => {
+        if (search.trim()) {
             window.location.href = `/catalogo?search=${encodeURIComponent(search)}`;
         }
+    };
+
+    // Función para manejar submit del form en mobile
+    const handleFormSubmit = (event) => {
+        event.preventDefault();
+        performSearch();
     };
 
     return (
@@ -260,14 +282,17 @@ const HeaderSearchB = ({
 
                     {/* Search Bar */}
                     <div className="hidden md:block relative w-full max-w-xl mx-auto">
-                        <input
-                            type="search"
-                            placeholder="Buscar productos"
-                            value={search}
-                            onChange={(e) => setSearch(e.target.value)}
-                            onKeyDown={handleKeyDown}
-                            className="w-full pr-14 py-4 pl-4 border rounded-full focus:ring-0 focus:outline-none"
-                        />
+                        <form onSubmit={handleFormSubmit}>
+                            <input
+                                type="search"
+                                placeholder="Buscar productos"
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                                onKeyDown={handleKeyDown}
+                                onKeyUp={handleKeyUp}
+                                className="w-full pr-14 py-4 pl-4 border rounded-full focus:ring-0 focus:outline-none"
+                            />
+                        </form>
                         <a
                             href={search.trim() ? `/catalogo?search=${encodeURIComponent(search)}` : "#"}
                             className="absolute right-3 top-1/2 transform -translate-y-1/2 p-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
@@ -378,33 +403,36 @@ const HeaderSearchB = ({
                                         <Search className="customtext-primary" size={28} />
                                     </button>
                                 ) : (
-                                    <div className="relative w-full">
+                                    <form onSubmit={handleFormSubmit} className="relative w-full">
                                         <input
                                             type="search"
                                             placeholder="Buscar productos"
                                             value={search}
                                             onChange={(e) => setSearch(e.target.value)}
                                             onKeyDown={handleKeyDown}
+                                            onKeyUp={handleKeyUp}
                                             className="w-full pr-14 py-4 pl-4 border rounded-full focus:ring-0 focus:outline-none"
                                             autoFocus
+                                            enterKeyHint="search"
                                         />
                                         <div className="absolute right-3 top-1/2 -translate-y-1/2 flex gap-2">
                                             <button
+                                                type="button"
                                                 aria-label="Cerrar"
                                                 onClick={() => setSearchMobile(false)}
                                                 className="p-2 bg-gray-200 text-gray-600 rounded-lg"
                                             >
                                                 <XIcon size={20} />
                                             </button>
-                                            <a
-                                                href={search.trim() ? `/catalogo?search=${encodeURIComponent(search)}` : "#"}
+                                            <button
+                                                type="submit"
                                                 className="p-2 bg-primary text-white rounded-lg"
                                                 aria-label="Buscar"
                                             >
                                                 <Search />
-                                            </a>
+                                            </button>
                                         </div>
-                                    </div>
+                                    </form>
                                 )}
                             </div>
                         </>
@@ -507,6 +535,7 @@ const HeaderSearchB = ({
                                             value={search}
                                             onChange={(e) => setSearch(e.target.value)}
                                             onKeyDown={handleKeyDown}
+                                            onKeyUp={handleKeyUp}
                                             className="w-full pr-14 py-4 pl-4 border rounded-full focus:ring-0 focus:outline-none"
                                         />
                                         <div className="absolute right-3 top-1/2 -translate-y-1/2 flex gap-2">
