@@ -189,11 +189,11 @@ const System = ({
             case 'delivery-zones':
                 return <DeliveryZone which={value} data={data} items={getItems(itemsId)} />
             case "product-detail":
-                return <ProductDetail which={value} item={filteredData.Item} cart={cart} setCart={setCart} data={data} generals={generals} favorites={favorites} setFavorites={setFavorites} textstatic={textstatic} />
+                return <ProductDetail which={value} item={filteredData.Item} cart={cart} setCart={setCart} data={data} generals={generals} favorites={favorites} setFavorites={setFavorites} textstatic={textstatic} contacts={contacts} />
             case "cart":
                 return <Cart which={value} data={data} cart={cart} setCart={setCart} />
             case "checkout":
-                return <Checkout which={value} data={data} items={getItems(itemsId)} cart={cart} setCart={setCart} isUser={session} prefixes={jsons?.prefixes ?? []} ubigeos={jsons?.ubigeos ?? []} />
+                return <Checkout which={value} data={data} items={getItems(itemsId)} cart={cart} setCart={setCart} isUser={session} prefixes={jsons?.prefixes ?? []} ubigeos={jsons?.ubigeos ?? []} contacts={contacts} />
             case "contact":
                 return <Contact which={value} data={data} contacts={contacts} />
             case "faq":

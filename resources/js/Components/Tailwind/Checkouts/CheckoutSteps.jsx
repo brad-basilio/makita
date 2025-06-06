@@ -3,6 +3,7 @@ import CartStep from "./Components/CartStep";
 import ShippingStep from "./Components/ShippingStep";
 import ConfirmationStep from "./Components/ConfirmationStep";
 import Global from "../../../Utils/Global";
+import ProductNavigationSwiper from "../Products/ProductNavigationSwiper";
 
 export default function CheckoutSteps({ cart, setCart, user, ubigeos = [], items }) {
     const [currentStep, setCurrentStep] = useState(1);

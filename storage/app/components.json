@@ -1277,6 +1277,9 @@
             {
                 "id": "ProductDetailSF",
                 "name": "ProductDetailSF",
+                "data": [
+                    "link_cart"
+                ],
                 "using": {
                     "model": "Item",
                     "field": "slug",

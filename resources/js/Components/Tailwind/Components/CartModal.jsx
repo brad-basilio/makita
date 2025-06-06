@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 ReactModal.setAppElement("#app");
 
 const CartModal = ({ data, cart, setCart, modalOpen, setModalOpen }) => {
+    
     useEffect(() => {
         if (modalOpen) {
             document.body.classList.add("overflow-hidden");
@@ -93,17 +94,17 @@ const CartModal = ({ data, cart, setCart, modalOpen, setModalOpen }) => {
                             S/. {Number2Currency(totalPrice)}
                         </span>
                     </div>
-                    <button
-                        onClick={() => (window.location.href = data?.link_cart)}
+                    <a
+                        href={data?.link_cart || '/cart'}
                         disabled={isEmpty}
-                        className={`w-full py-4 rounded-xl font-semibold transition-all duration-300 ${
+                        className={`w-full  flex items-center justify-center text-center py-4 rounded-xl font-semibold transition-all duration-300 ${
                             isEmpty 
                             ? 'bg-gray-200 text-gray-400 cursor-not-allowed' 
                             : 'bg-primary  text-white hover:shadow-lg hover:scale-[1.02] active:scale-100'
                         }`}
                     >
                         Ir al carrito
-                    </button>
+                    </a>
                 </div>
             </div>
         </ReactModal>
