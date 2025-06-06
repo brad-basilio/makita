@@ -388,18 +388,10 @@ const HeaderSearchB = ({
                                             onChange={(e) => setSearch(e.target.value)}
                                             className="w-full pr-14 py-4 pl-4 border rounded-full focus:ring-0 focus:outline-none"
                                             autoFocus
-                                            enterKeyHint="search"
-                                            inputMode="search"
+                                           
                                         />
                                         <div className="absolute right-3 top-1/2 -translate-y-1/2 flex gap-2">
-                                            <button
-                                                type="button"
-                                                aria-label="Cerrar"
-                                                onClick={() => setSearchMobile(false)}
-                                                className="p-2 bg-gray-200 text-gray-600 rounded-lg"
-                                            >
-                                                <XIcon size={20} />
-                                            </button>
+                                           
                                             <button
                                                 type="submit"
                                                 className="p-2 bg-primary text-white rounded-lg"
