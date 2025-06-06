@@ -121,6 +121,13 @@ const HeaderSearchB = ({
         }
     ];
 
+    // Función para manejar la búsqueda con Enter
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter' && search.trim()) {
+            window.location.href = `/catalogo?search=${encodeURIComponent(search)}`;
+        }
+    };
+
     return (
         <header className={`w-full top-0 left-0 z-50 transition-all duration-300 ${isFixed ? "fixed bg-white shadow-lg" : "relative bg-white"}`}>
             <div className="px-primary  bg-white 2xl:px-0 2xl:max-w-7xl mx-auto py-4 font-font-secondary text-base font-semibold">
@@ -256,6 +263,7 @@ const HeaderSearchB = ({
                             placeholder="Buscar productos"
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
+                            onKeyDown={handleKeyDown}
                             className="w-full pr-14 py-4 pl-4 border rounded-full focus:ring-0 focus:outline-none"
                         />
                         <a
@@ -374,6 +382,7 @@ const HeaderSearchB = ({
                                             placeholder="Buscar productos"
                                             value={search}
                                             onChange={(e) => setSearch(e.target.value)}
+                                            onKeyDown={handleKeyDown}
                                             className="w-full pr-14 py-4 pl-4 border rounded-full focus:ring-0 focus:outline-none"
                                             autoFocus
                                         />
@@ -495,6 +504,7 @@ const HeaderSearchB = ({
                                             placeholder="Buscar productos"
                                             value={search}
                                             onChange={(e) => setSearch(e.target.value)}
+                                            onKeyDown={handleKeyDown}
                                             className="w-full pr-14 py-4 pl-4 border rounded-full focus:ring-0 focus:outline-none"
                                         />
                                         <div className="absolute right-3 top-1/2 -translate-y-1/2 flex gap-2">
