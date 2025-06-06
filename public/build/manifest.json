@@ -23,8 +23,8 @@
       "_main-BSEyQEJW.js"
     ]
   },
-  "_Base-DG42LyTA.js": {
-    "file": "assets/Base-DG42LyTA.js",
+  "_Base-CR1W_OOT.js": {
+    "file": "assets/Base-CR1W_OOT.js",
     "name": "Base",
     "imports": [
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
@@ -1004,7 +1004,7 @@
     "isEntry": true
   },
   "resources/js/About.jsx": {
-    "file": "assets/About-D9sjzYP2.js",
+    "file": "assets/About-C98gDaQ7.js",
     "name": "About",
     "src": "resources/js/About.jsx",
     "isEntry": true,
@@ -1013,7 +1013,7 @@
       "_index-BH53Isel.js",
       "_CreateReactScript-B3e40jAW.js",
       "resources/js/Utils/ReactAppend.jsx",
-      "_Base-DG42LyTA.js",
+      "_Base-CR1W_OOT.js",
       "_YouTube.esm-DfKjJDaL.js",
       "_em-DRiSFGEW.js",
       "_Weare-DzhH2Vjy.js",
@@ -2281,7 +2281,7 @@
     ]
   },
   "resources/js/Blog.jsx": {
-    "file": "assets/Blog-DZ3BoROs.js",
+    "file": "assets/Blog-BO2yS-9z.js",
     "name": "Blog",
     "src": "resources/js/Blog.jsx",
     "isEntry": true,
@@ -2290,7 +2290,7 @@
       "_index-BH53Isel.js",
       "_CreateReactScript-B3e40jAW.js",
       "resources/js/Utils/ReactAppend.jsx",
-      "_Base-DG42LyTA.js",
+      "_Base-CR1W_OOT.js",
       "resources/js/Components/Tailwind/Components/ProductCard.jsx",
       "_SubscriptionsRest-BmDvrBDq.js",
       "_Global-ErywZRdd.js",
@@ -2322,7 +2322,7 @@
     ]
   },
   "resources/js/BlogArticle.jsx": {
-    "file": "assets/BlogArticle-BidNBFlH.js",
+    "file": "assets/BlogArticle-BSJVU8WP.js",
     "name": "BlogArticle",
     "src": "resources/js/BlogArticle.jsx",
     "isEntry": true,
@@ -2331,7 +2331,7 @@
       "_index-BH53Isel.js",
       "_CreateReactScript-B3e40jAW.js",
       "resources/js/Utils/ReactAppend.jsx",
-      "_Base-DG42LyTA.js",
+      "_Base-CR1W_OOT.js",
       "_HtmlContent-FTivcJrM.js",
       "_tippy-react.esm-BWiGTO87.js",
       "_proxy-BTYtmp9V.js",
@@ -3694,7 +3694,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Base.jsx": {
-    "file": "assets/Base-D0mTUZiv.js",
+    "file": "assets/Base-BZjYouOa.js",
     "name": "Base",
     "src": "resources/js/Components/Tailwind/Base.jsx",
     "isEntry": true,
@@ -4884,7 +4884,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Filter.jsx": {
-    "file": "assets/Filter-BLKEZWKU.js",
+    "file": "assets/Filter-DQ-dxAmh.js",
     "name": "Filter",
     "src": "resources/js/Components/Tailwind/Filter.jsx",
     "isDynamicEntry": true,
@@ -4904,7 +4904,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Filters/CatalagoFiltros.jsx": {
-    "file": "assets/CatalagoFiltros-DDuMOS0_.js",
+    "file": "assets/CatalagoFiltros-JkxaDoIK.js",
     "name": "CatalagoFiltros",
     "src": "resources/js/Components/Tailwind/Filters/CatalagoFiltros.jsx",
     "isDynamicEntry": true,
@@ -5576,7 +5576,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Header.jsx": {
-    "file": "assets/Header-CBSrr4UL.js",
+    "file": "assets/Header-CR_4T8wJ.js",
     "name": "Header",
     "src": "resources/js/Components/Tailwind/Header.jsx",
     "isEntry": true,
@@ -5745,7 +5745,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Headers/HeaderSearchB.jsx": {
-    "file": "assets/HeaderSearchB-DZYU8WQ4.js",
+    "file": "assets/HeaderSearchB-S4ssbmO0.js",
     "name": "HeaderSearchB",
     "src": "resources/js/Components/Tailwind/Headers/HeaderSearchB.jsx",
     "isDynamicEntry": true,
@@ -5755,6 +5755,7 @@
       "_Global-ErywZRdd.js",
       "resources/js/Components/Tailwind/Headers/HeaderSearch.jsx",
       "_Logout-jUU_tfUq.js",
+      "_x-DBMwyD6F.js",
       "_search-TwiiKGP5.js",
       "_chevron-left-B2s3ZsB7.js",
       "_chevron-right-Ckt5D2ka.js",
@@ -5762,7 +5763,6 @@
       "_index-CFtDjG4d.js",
       "_proxy-BTYtmp9V.js",
       "_shopping-cart-CZEUxbmv.js",
-      "_x-DBMwyD6F.js",
       "_user-BvYmyGTY.js",
       "_settings-BSPs3Zt8.js",
       "_index-yBjzXJbu.js",
@@ -7317,7 +7317,7 @@
     ]
   },
   "resources/js/Contact.jsx": {
-    "file": "assets/Contact-BxnAEoAy.js",
+    "file": "assets/Contact-BdRxF0W6.js",
     "name": "Contact",
     "src": "resources/js/Contact.jsx",
     "isEntry": true,
@@ -7326,7 +7326,7 @@
       "_index-BH53Isel.js",
       "_CreateReactScript-B3e40jAW.js",
       "resources/js/Utils/ReactAppend.jsx",
-      "_Base-DG42LyTA.js",
+      "_Base-CR1W_OOT.js",
       "_Global-ErywZRdd.js",
       "_createLucideIcon-Cy5Ya80P.js",
       "_phone-BZ94M50k.js",
@@ -7355,7 +7355,7 @@
     ]
   },
   "resources/js/CourseDetails.jsx": {
-    "file": "assets/CourseDetails-CZjkHfyL.js",
+    "file": "assets/CourseDetails-3dbHyhQt.js",
     "name": "CourseDetails",
     "src": "resources/js/CourseDetails.jsx",
     "isEntry": true,
@@ -7364,7 +7364,7 @@
       "_index-BH53Isel.js",
       "resources/js/Utils/ReactAppend.jsx",
       "_main-BSEyQEJW.js",
-      "_Base-DG42LyTA.js",
+      "_Base-CR1W_OOT.js",
       "_CreateReactScript-B3e40jAW.js",
       "_HtmlContent-FTivcJrM.js",
       "_Number2Currency-e57Tgsuk.js",
@@ -7387,7 +7387,7 @@
     ]
   },
   "resources/js/Courses.jsx": {
-    "file": "assets/Courses-uwrOdB4t.js",
+    "file": "assets/Courses-s_xnzzbJ.js",
     "name": "Courses",
     "src": "resources/js/Courses.jsx",
     "isEntry": true,
@@ -7396,7 +7396,7 @@
       "_index-BH53Isel.js",
       "resources/js/Utils/ReactAppend.jsx",
       "_CreateReactScript-B3e40jAW.js",
-      "_Base-DG42LyTA.js",
+      "_Base-CR1W_OOT.js",
       "_em-DRiSFGEW.js",
       "_FilterPagination-DCLrjB48.js",
       "_CourseCard-CbDLljRi.js",
@@ -7474,7 +7474,7 @@
     "isEntry": true
   },
   "resources/js/Home.jsx": {
-    "file": "assets/Home-DfCPn0Bh.js",
+    "file": "assets/Home-9tzIctPc.js",
     "name": "Home",
     "src": "resources/js/Home.jsx",
     "isEntry": true,
@@ -7482,7 +7482,7 @@
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
       "_index-BH53Isel.js",
       "resources/js/Utils/ReactAppend.jsx",
-      "_Base-DG42LyTA.js",
+      "_Base-CR1W_OOT.js",
       "_CreateReactScript-B3e40jAW.js",
       "_Weare-DzhH2Vjy.js",
       "resources/js/Components/Tailwind/Blogs/BlogCarousel.jsx",
@@ -7648,7 +7648,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-CzKmlQsx.js",
+    "file": "assets/System-RjzUjGC3.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,

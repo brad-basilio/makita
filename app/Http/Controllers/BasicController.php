@@ -82,6 +82,7 @@ class BasicController extends Controller
   }
 
   public function setPaginationSummary(Request $request, Builder $builder, Builder $originalInstance)
+  public function setPaginationSummary(Request $request, Builder $builder, Builder $originalInstance)
   {
     return [];
   }
@@ -141,6 +142,8 @@ class BasicController extends Controller
       // Aplicar with dinámicamente
       $instance = $this->setPaginationInstance($request, $this->model)->with($withRelations);
 
+      $originalInstance = clone $instance;
+      
       $originalInstance = clone $instance;
 
       if ($request->group != null) {
@@ -210,7 +213,7 @@ class BasicController extends Controller
       $response->status = 200;
       $response->message = 'Operación correcta';
       $response->data = $jpas;
-      $response->summary = $this->setPaginationSummary($request, $instance, $originalInstance);
+      $response->summary = $this->setPaginationSummary($request, $instance, $originalInstance, $originalInstance);
       $response->totalCount = $totalCount;
     } catch (\Throwable $th) {
      // dump($th);
