@@ -536,6 +536,25 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
 
     const [filtersOpen, setFiltersOpen] = useState(false);
 
+    // Efecto para manejar el scroll del body cuando el modal está abierto
+    useEffect(() => {
+        if (filtersOpen) {
+            // Prevenir scroll del body cuando el modal esté abierto en mobile
+            document.body.classList.add('filter-modal-open');
+            document.body.style.overflow = 'hidden';
+        } else {
+            // Restaurar scroll del body cuando el modal se cierre
+            document.body.classList.remove('filter-modal-open');
+            document.body.style.overflow = 'unset';
+        }
+        
+        // Cleanup cuando el componente se desmonta
+        return () => {
+            document.body.classList.remove('filter-modal-open');
+            document.body.style.overflow = 'unset';
+        };
+    }, [filtersOpen]);
+
     return (
         <section className="py-12 bg-gradient-to-br from-gray-50/50 via-white to-blue-50/30">
             <div className="mx-auto px-primary 2xl:px-0 2xl:max-w-7xl">
@@ -634,16 +653,31 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                     {/* Panel de filtros mejorado */}
                     <motion.div 
                         className={`${filtersOpen
-                            ? "fixed inset-0 backdrop-blur-md flex flex-col h-screen z-[999]"
+                            ? "fixed inset-0 backdrop-blur-md z-[999] flex flex-col mobile-filter-modal"
                             : "hidden"
-                        } lg:block lg:w-3/12 lg:bg-transparent lg:h-max`}
+                        } lg:block lg:w-3/12 lg:bg-transparent lg:h-max lg:relative lg:z-auto`}
                         {...(filtersOpen ? filterAnimations.container : {})}
+                        initial={filtersOpen ? { opacity: 0 } : false}
+                        animate={filtersOpen ? { opacity: 1 } : false}
+                        exit={filtersOpen ? { opacity: 0 } : false}
+                        transition={{ duration: 0.3 }}
+                        onClick={filtersOpen ? (e) => {
+                            if (e.target === e.currentTarget) {
+                                setFiltersOpen(false);
+                            }
+                        } : undefined}
                     >
-                        {/* Contenedor principal de filtros */}
+                        {/* Contenedor principal de filtros - Estructura mejorada para mobile */}
                         <div className={`${filtersOpen 
-                            ? "m-4 bg-white rounded-3xl shadow-2xl flex flex-col h-[calc(100vh-2rem)] overflow-hidden" 
+                            ? "flex flex-col h-full bg-transparent" 
                             : modernFilterStyles.filterContainer
-                        }  lg:backdrop-blur-xl lg:border lg:border-gray-200/60 lg:rounded-2xl lg:shadow-2xl lg:shadow-gray-900/10`}>
+                        } lg:backdrop-blur-xl lg:border lg:border-gray-200/60 lg:rounded-2xl lg:shadow-2xl lg:shadow-gray-900/10`}>
+                            
+                            {/* Contenido principal del modal mobile - ocupando todo excepto el footer */}
+                            <div className={`${filtersOpen 
+                                ? "mx-4 mt-4 mb-2 bg-white rounded-t-3xl shadow-2xl flex flex-col flex-1 overflow-hidden safe-area-top mobile-filter-content"
+                                : ""
+                            }`}>
                             
                             {/* Header mejorado */}
                             <motion.div 
@@ -673,8 +707,12 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                               
                             </motion.div>
 
-                            {/* Contenido principal con scroll mejorado */}
-                            <div className="flex-1 overflow-y-auto h-[calc(100dvh-20dvh)] lg:h-full p-3 space-y-6 custom-scrollbar">
+                            {/* Contenido principal con scroll mejorado - ajustado para footer móvil */}
+                            <div className="flex-1 overflow-y-auto p-3 space-y-6 custom-scrollbar" 
+                                 style={{ 
+                                     height: filtersOpen ? 'calc(100vh - 200px)' : 'auto',
+                                     paddingBottom: filtersOpen ? '1rem' : '1.5rem'
+                                 }}>
                                 {/* Sección Marcas Mejorada */}
                                 <motion.div 
                                     className={modernFilterStyles.filterSection}
@@ -1240,7 +1278,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                                 </motion.div>
                             </div>
                         </div>
-
+</div>
                         {/* Footer móvil mejorado */}
                         <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-r from-white via-white to-gray-50 border-t border-gray-200 p-4 shadow-2xl backdrop-blur-xl lg:hidden z-50">
                             <div className="flex items-center gap-3">
