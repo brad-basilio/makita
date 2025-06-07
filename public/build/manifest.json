@@ -258,8 +258,8 @@
       "_index.esm-CveLAcri.js"
     ]
   },
-  "_MessagesRest-Bw3f-l3c.js": {
-    "file": "assets/MessagesRest-Bw3f-l3c.js",
+  "_MessagesRest-CFTDG4sK.js": {
+    "file": "assets/MessagesRest-CFTDG4sK.js",
     "name": "MessagesRest",
     "imports": [
       "_BasicRest-B3rfI5GY.js"
@@ -2892,14 +2892,14 @@
     ]
   },
   "resources/js/Components/Contact/ContactForm.jsx": {
-    "file": "assets/ContactForm-eJEjIJuk.js",
+    "file": "assets/ContactForm-CuNXAUR7.js",
     "name": "ContactForm",
     "src": "resources/js/Components/Contact/ContactForm.jsx",
     "isEntry": true,
     "imports": [
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
       "_index-BH53Isel.js",
-      "_MessagesRest-Bw3f-l3c.js",
+      "_MessagesRest-CFTDG4sK.js",
       "resources/js/Components/Tailwind/Components/ProductCard.jsx",
       "_index-yBjzXJbu.js",
       "_BasicRest-B3rfI5GY.js",
@@ -4769,7 +4769,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Contact.jsx": {
-    "file": "assets/Contact-B9M7lVhB.js",
+    "file": "assets/Contact-BPKPS3Qn.js",
     "name": "Contact",
     "src": "resources/js/Components/Tailwind/Contact.jsx",
     "isDynamicEntry": true,
@@ -4785,16 +4785,17 @@
     ]
   },
   "resources/js/Components/Tailwind/Contact/ContactGrid.jsx": {
-    "file": "assets/ContactGrid-54T2_QIp.js",
+    "file": "assets/ContactGrid-DV075gsw.js",
     "name": "ContactGrid",
     "src": "resources/js/Components/Tailwind/Contact/ContactGrid.jsx",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
       "_index-BH53Isel.js",
-      "_MessagesRest-Bw3f-l3c.js",
+      "_MessagesRest-CFTDG4sK.js",
       "_esm-hESa1MbP.js",
       "_Global-ErywZRdd.js",
+      "_index-CMHsc23u.js",
       "_mail-g7FoGJuB.js",
       "_phone-BZ94M50k.js",
       "_createLucideIcon-Cy5Ya80P.js",
@@ -4803,20 +4804,19 @@
       "_BasicRest-B3rfI5GY.js",
       "_main-BvVILmTO.js",
       "____vite-browser-external_commonjs-proxy-0zb4Agf2.js",
-      "_index-CMHsc23u.js",
       "_index-rimy3MAc.js",
       "_index-fNjTmf9T.js"
     ]
   },
   "resources/js/Components/Tailwind/Contact/ContactSimple.jsx": {
-    "file": "assets/ContactSimple-CdfcwaBD.js",
+    "file": "assets/ContactSimple-pSkLeBFt.js",
     "name": "ContactSimple",
     "src": "resources/js/Components/Tailwind/Contact/ContactSimple.jsx",
     "isDynamicEntry": true,
     "imports": [
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
       "_index-BH53Isel.js",
-      "_MessagesRest-Bw3f-l3c.js",
+      "_MessagesRest-CFTDG4sK.js",
       "resources/js/Components/Tailwind/Components/ProductCard.jsx",
       "_index-yBjzXJbu.js",
       "_BasicRest-B3rfI5GY.js",
@@ -7317,7 +7317,7 @@
     ]
   },
   "resources/js/Contact.jsx": {
-    "file": "assets/Contact-CTtKft00.js",
+    "file": "assets/Contact-BM3IPg0D.js",
     "name": "Contact",
     "src": "resources/js/Contact.jsx",
     "isEntry": true,
@@ -7330,7 +7330,7 @@
       "_Global-ErywZRdd.js",
       "_createLucideIcon-Cy5Ya80P.js",
       "_phone-BZ94M50k.js",
-      "_MessagesRest-Bw3f-l3c.js",
+      "_MessagesRest-CFTDG4sK.js",
       "resources/js/Components/Tailwind/Components/ProductCard.jsx",
       "_user-BvYmyGTY.js",
       "_mail-g7FoGJuB.js",
@@ -7649,7 +7649,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-Cy0pM69Y.js",
+    "file": "assets/System-BboGjvN8.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,
