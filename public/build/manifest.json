@@ -211,8 +211,8 @@
       "_index-BH53Isel.js"
     ]
   },
-  "_ItemsRest-12cuU9dR.js": {
-    "file": "assets/ItemsRest-12cuU9dR.js",
+  "_ItemsRest-BBkeaO-v.js": {
+    "file": "assets/ItemsRest-BBkeaO-v.js",
     "name": "ItemsRest",
     "imports": [
       "_main-BvVILmTO.js",
@@ -1402,14 +1402,14 @@
     ]
   },
   "resources/js/Admin/Components/ModalImportItem.jsx": {
-    "file": "assets/ModalImportItem-CZbDMSx8.js",
+    "file": "assets/ModalImportItem-C9a-RMBM.js",
     "name": "ModalImportItem",
     "src": "resources/js/Admin/Components/ModalImportItem.jsx",
     "isEntry": true,
     "imports": [
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
       "_index-BH53Isel.js",
-      "_ItemsRest-12cuU9dR.js",
+      "_ItemsRest-BBkeaO-v.js",
       "_index-yBjzXJbu.js",
       "_main-BvVILmTO.js",
       "____vite-browser-external_commonjs-proxy-0zb4Agf2.js",
@@ -1754,7 +1754,7 @@
     ]
   },
   "resources/js/Admin/Items.jsx": {
-    "file": "assets/Items-B5QmHjrM.js",
+    "file": "assets/Items-BHi52K8w.js",
     "name": "Items",
     "src": "resources/js/Admin/Items.jsx",
     "isEntry": true,
@@ -1767,7 +1767,7 @@
       "resources/js/Utils/ReactAppend.jsx",
       "_server.browser-Bf4gQIc7.js",
       "resources/js/Components/Tailwind/Components/ProductCard.jsx",
-      "_ItemsRest-12cuU9dR.js",
+      "_ItemsRest-BBkeaO-v.js",
       "_Modal-CIqmjseY.js",
       "_Table-DitbKwtZ.js",
       "_ImageFormGroup-BPR9pDAU.js",
