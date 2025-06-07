@@ -409,8 +409,8 @@
       "_main-BvVILmTO.js"
     ]
   },
-  "_SelectForm-xZoLG_Ff.js": {
-    "file": "assets/SelectForm-xZoLG_Ff.js",
+  "_SelectForm-G0J6yhhv.js": {
+    "file": "assets/SelectForm-G0J6yhhv.js",
     "name": "SelectForm",
     "imports": [
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
@@ -4921,7 +4921,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Filter.jsx": {
-    "file": "assets/Filter-DPxJX4bU.js",
+    "file": "assets/Filter-szYagkbj.js",
     "name": "Filter",
     "src": "resources/js/Components/Tailwind/Filter.jsx",
     "isDynamicEntry": true,
@@ -4941,7 +4941,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Filters/CatalagoFiltros.jsx": {
-    "file": "assets/CatalagoFiltros-D6cSr6ex.js",
+    "file": "assets/CatalagoFiltros-BKa2zrd_.js",
     "name": "CatalagoFiltros",
     "src": "resources/js/Components/Tailwind/Filters/CatalagoFiltros.jsx",
     "isDynamicEntry": true,
@@ -4951,13 +4951,10 @@
       "resources/js/Components/Tailwind/Products/ProductNavigation.jsx",
       "_ItemsRest-DGjwRLrz.js",
       "_ArrayJoin-2k6ba35P.js",
-      "_NoResult-C9qZVva5.js",
-      "_SelectForm-xZoLG_Ff.js",
+      "_SelectForm-G0J6yhhv.js",
       "_main-BvVILmTO.js",
       "_proxy-BTYtmp9V.js",
       "_sliders-vertical-C5ts4taK.js",
-      "_sparkles-DeLUn6av.js",
-      "_chevron-right-Ckt5D2ka.js",
       "_filter-Ci9tsc_e.js",
       "_tag-BY9rARtP.js",
       "_chevron-down-DS-mdh9v.js",
@@ -4969,7 +4966,9 @@
       "_star-wPQTHY_n.js",
       "_x-DBMwyD6F.js",
       "_shopping-bag-CoWGrL8C.js",
+      "_sparkles-DeLUn6av.js",
       "_chevron-left-B2s3ZsB7.js",
+      "_chevron-right-Ckt5D2ka.js",
       "_index-yBjzXJbu.js",
       "resources/js/Components/Tailwind/Components/ProductCard.jsx",
       "resources/js/Components/Tailwind/Headers/HeaderSearch.jsx",
@@ -5087,7 +5086,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Filters/FilterBananaLab.jsx": {
-    "file": "assets/FilterBananaLab-koJbfTkL.js",
+    "file": "assets/FilterBananaLab-D4CpxNGw.js",
     "name": "FilterBananaLab",
     "src": "resources/js/Components/Tailwind/Filters/FilterBananaLab.jsx",
     "isDynamicEntry": true,
@@ -5097,7 +5096,7 @@
       "_ItemsRest-DGjwRLrz.js",
       "_Loading-B-FwDSWi.js",
       "_NoResult-C9qZVva5.js",
-      "_SelectForm-xZoLG_Ff.js",
+      "_SelectForm-G0J6yhhv.js",
       "_CardProductBananaLab-iWbkN2Kx.js",
       "_proxy-BTYtmp9V.js",
       "_chevron-down-DS-mdh9v.js",
@@ -5136,7 +5135,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Filters/FilterCategoryImage.jsx": {
-    "file": "assets/FilterCategoryImage-Dyp_d39c.js",
+    "file": "assets/FilterCategoryImage-BCB_m6AG.js",
     "name": "FilterCategoryImage",
     "src": "resources/js/Components/Tailwind/Filters/FilterCategoryImage.jsx",
     "isDynamicEntry": true,
@@ -5147,7 +5146,7 @@
       "_ItemsRest-DGjwRLrz.js",
       "_Loading-B-FwDSWi.js",
       "_NoResult-C9qZVva5.js",
-      "_SelectForm-xZoLG_Ff.js",
+      "_SelectForm-G0J6yhhv.js",
       "resources/js/Components/Tailwind/Components/ProductCard.jsx",
       "_ProductCardSimple-B2h4S-uC.js",
       "_CardProductBananaLab-iWbkN2Kx.js",
@@ -5189,7 +5188,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Filters/FilterSalaFabulosa.jsx": {
-    "file": "assets/FilterSalaFabulosa-iT_9RUNS.js",
+    "file": "assets/FilterSalaFabulosa-C-C3ui1a.js",
     "name": "FilterSalaFabulosa",
     "src": "resources/js/Components/Tailwind/Filters/FilterSalaFabulosa.jsx",
     "isDynamicEntry": true,
@@ -5201,7 +5200,7 @@
       "_ArrayJoin-2k6ba35P.js",
       "_Loading-B-FwDSWi.js",
       "_NoResult-C9qZVva5.js",
-      "_SelectForm-xZoLG_Ff.js",
+      "_SelectForm-G0J6yhhv.js",
       "resources/js/Components/Tailwind/Components/ProductCard.jsx",
       "_ProductCardColors-BNCA_mqI.js",
       "_main-BvVILmTO.js",
@@ -7700,7 +7699,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-Bz9VOaaL.js",
+    "file": "assets/System-oVjGcwrq.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,

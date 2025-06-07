@@ -81,7 +81,7 @@ const modernFilterStyles = {
     filterButton: "w-full flex items-center justify-between p-4 rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 group",
     filterContent: "bg-gradient-to-b from-white/90 to-gray-50/50 rounded-xl border border-gray-200/40 backdrop-blur-sm",
     searchInput: "w-full pl-12 pr-4 py-3 bg-white/90 backdrop-blur-sm border border-gray-200/60 rounded-xl focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 transition-all duration-300 placeholder:customtext-neutral-dark",
-    checkbox: "h-5 w-5 rounded-lg border-2 border-gray-300 text-blue-600 focus:ring-blue-500/30 focus:ring-2 transition-all duration-200 hover:border-blue-400",
+    checkbox: "min-h-5 min-w-5 rounded-lg border-2 border-gray-300 text-blue-600 focus:ring-blue-500/30 focus:ring-2 transition-all duration-200 hover:border-blue-400",
     label: "flex items-center gap-3 py-2.5 px-3 rounded-lg transition-all duration-200 hover:bg-gradient-to-r hover:from-blue-50/60 hover:to-indigo-50/40 cursor-pointer group",
     activeFilter: "bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg shadow-blue-500/25",
     badge: "inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-blue-100 to-indigo-100 border border-blue-200 rounded-full text-sm font-medium text-blue-700",
@@ -527,10 +527,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
         subcategory.name.toLowerCase().includes(searchSubcategory.toLowerCase())
     );
     
-    // Debug filtered subcategories
-    console.log('🎯 DEBUG - Subcategories:', subcategories);
-    console.log('🎯 DEBUG - Search term:', searchSubcategory);
-    console.log('🎯 DEBUG - Filtered subcategories:', filteredSubcategories);
+ 
 
     // Filtrar marcas según el input
     const filteredBrands = brands.filter((brand) =>
@@ -565,8 +562,8 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                         
                         {/* Selector de ordenación mejorado */}
                         <motion.div 
-                            className="w-full md:w-6/12 z-[999] relative"
-                            whileHover={{ scale: 1.02 }}
+                            className="w-full md:w-6/12  relative"
+                         
                         >
                             <SelectForm
                                 options={sortOptions}
@@ -596,7 +593,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                     <motion.div className="w-full lg:hidden mb-6">
                         <Tooltip text="Abrir panel de filtros avanzados" position="bottom">
                             <motion.button
-                                className="w-full flex items-center justify-between p-5 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white rounded-2xl shadow-xl shadow-blue-500/25 hover:shadow-2xl hover:shadow-blue-500/40 transition-all duration-300 overflow-hidden relative"
+                                className="w-full flex items-center z-0 gap-2 py-2 px-4 bg-primary text-white rounded-2xl shadow-xl shadow-blue-500/25 hover:shadow-2xl hover:shadow-blue-500/40 transition-all duration-300 overflow-hidden relative"
                                 onClick={() => setFiltersOpen(true)}
                                 whileHover={{ scale: 1.02, y: -3 }}
                                 whileTap={{ scale: 0.98 }}
@@ -618,37 +615,18 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                                         }}
                                         transition={{ duration: 2, repeat: Infinity }}
                                     >
-                                        <Sliders className="h-6 w-6" />
+                                        <Sliders className="h-4 w-4" />
                                     </motion.div>
                                     <div className="text-left">
                                         <h2 className="text-xl font-bold flex items-center gap-2">
                                             Filtros
-                                            <motion.div
-                                                animate={{ rotate: 360 }}
-                                                transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                                            >
-                                                <Sparkles className="h-5 w-5" />
-                                            </motion.div>
+                                           
                                         </h2>
-                                        <p className="text-sm text-white/90">
-                                            {Object.values(selectedFilters).flat().filter(Boolean).length > 0 
-                                                ? `${Object.values(selectedFilters).flat().filter(Boolean).length} filtros activos`
-                                                : "Encuentra exactamente lo que buscas"
-                                            }
-                                        </p>
+                                       
                                     </div>
                                 </div>
                                 
-                                <motion.div
-                                    className="relative z-10"
-                                    animate={{ x: [0, 8, 0] }}
-                                    transition={{ duration: 1.5, repeat: Infinity }}
-                                >
-                                    <div className="flex items-center gap-1">
-                                        <ChevronRight className="h-5 w-5" />
-                                        <ChevronRight className="h-4 w-4 -ml-2 opacity-60" />
-                                    </div>
-                                </motion.div>
+                               
                             </motion.button>
                         </Tooltip>
                     </motion.div>
@@ -771,7 +749,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                                                                     onChange={() => handleFilterChange("brand_id", brand.slug)}
                                                                     checked={selectedFilters.brand_id?.includes(brand.slug)}
                                                                 />
-                                                                <span className="text-sm font-medium customtext-neutral-dark  transition-colors duration-200">
+                                                                <span className="text-sm font-medium line-clamp-1 customtext-neutral-dark  transition-colors duration-200">
                                                                     {brand.name}
                                                                 </span>
                                                                 {selectedFilters.brand_id?.includes(brand.slug) && (
@@ -856,13 +834,13 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                                                         {filteredCategories.map((category, index) => (
                                                             <motion.div 
                                                                 key={category.id}
-                                                                className="border border-gray-100 rounded-xl overflow-hidden"
+                                                                className=" rounded-xl overflow-hidden"
                                                                 {...filterAnimations.item}
                                                                 transition={{ delay: index * 0.05 }}
                                                             >
                                                                 <motion.label 
-                                                                    className={`${modernFilterStyles.label} border-b border-gray-100 bg-gradient-to-r from-gray-50 to-purple-50/30`}
-                                                                    whileHover={{ backgroundColor: "rgba(139, 92, 246, 0.1)" }}
+                                                                    className={`${modernFilterStyles.label} `}
+                                                                  
                                                                 >
                                                                     <input
                                                                         type="checkbox"
@@ -870,7 +848,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                                                                         onChange={() => handleFilterChange("category_id", category.slug)}
                                                                         checked={selectedFilters.category_id?.includes(category.slug)}
                                                                     />
-                                                                    <span className="text-sm font-semibold customtext-neutral-dark  transition-colors duration-200">
+                                                                    <span className="text-sm line-clamp-1 customtext-neutral-dark  transition-colors duration-200">
                                                                         {category.name}
                                                                     </span>
                                                                     {selectedFilters.category_id?.includes(category.slug) && (
@@ -908,7 +886,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                                                                                             onChange={() => handleFilterChange("subcategory_id", sub.slug)}
                                                                                             checked={selectedFilters.subcategory_id?.includes(sub.slug)}
                                                                                         />
-                                                                                        <span className="text-sm customtext-neutral-dark group-hover:text-purple-600 transition-colors duration-200">
+                                                                                        <span className="text-sm line-clamp-1 customtext-neutral-dark group-hover:text-purple-600 transition-colors duration-200">
                                                                                             {sub.name}
                                                                                         </span>
                                                                                     </motion.label>
@@ -996,12 +974,13 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                                                                     transition={{ delay: index * 0.05 }}
                                                                 >
                                                                     <input
+                                                                   
                                                                         type="checkbox"
                                                                         className={modernFilterStyles.checkbox}
                                                                         onChange={() => handleFilterChange("subcategory_id", subcategory.slug)}
                                                                         checked={selectedFilters.subcategory_id?.includes(subcategory.slug)}
                                                                     />
-                                                                    <span className="text-sm font-medium customtext-neutral-dark transition-colors duration-200">
+                                                                    <span className="text-sm line-clamp-1 font-medium customtext-neutral-dark transition-colors duration-200">
                                                                         {subcategory.name}
                                                                     </span>
                                                                     {selectedFilters.subcategory_id?.includes(subcategory.slug) && (
@@ -1090,7 +1069,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                                                                         selectedFilters.price?.max === range.max
                                                                     }
                                                                 />
-                                                                <span className="text-sm font-medium customtext-neutral-dark  transition-colors duration-200">
+                                                                <span className="text-sm line-clamp-1 font-medium customtext-neutral-dark  transition-colors duration-200">
                                                                     S/ {range.min} - S/ {range.max}
                                                                 </span>
                                                                 {(selectedFilters.price?.min === range.min && selectedFilters.price?.max === range.max) && (
@@ -1266,7 +1245,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                         <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-r from-white via-white to-gray-50 border-t border-gray-200 p-4 shadow-2xl backdrop-blur-xl lg:hidden z-50">
                             <div className="flex items-center gap-3">
                                 <motion.button
-                                    className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 px-6 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all duration-300"
+                                    className="flex-1 bg-primary text-white py-3 px-6 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all duration-300"
                                     onClick={() => {
                                         setFiltersOpen(false);
                                         window.scrollTo({
@@ -1391,19 +1370,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                                             transition={{ duration: 0.6, type: "spring", stiffness: 100 }}
                                         >
                                             <div className="text-center space-y-6">
-                                                <motion.div
-                                                    animate={{ 
-                                                        y: [0, -10, 0],
-                                                        rotate: [0, 5, -5, 0]
-                                                    }}
-                                                    transition={{ 
-                                                        duration: 3,
-                                                        repeat: Infinity,
-                                                        ease: "easeInOut"
-                                                    }}
-                                                >
-                                                    <NoResults />
-                                                </motion.div>
+                                               
                                                 <motion.div 
                                                     className="space-y-3"
                                                     initial={{ opacity: 0 }}
@@ -1413,7 +1380,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                                                     <h3 className="text-xl font-bold customtext-neutral-dark">¡Ups! No encontramos productos</h3>
                                                     <p className="customtext-neutral-dark max-w-md">Intenta ajustar tus filtros o buscar términos diferentes.</p>
                                                     <motion.button
-                                                        className="mt-4 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                                                        className="mt-4 px-6 py-3 bg-primary text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
                                                         onClick={() => {
                                                             setSelectedFilters({
                                                                 collection_id: [],

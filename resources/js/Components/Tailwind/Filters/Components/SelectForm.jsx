@@ -79,7 +79,7 @@ const SelectForm = ({
             </button>
 
             {isOpen && (
-                <div className="absolute z-[99999] w-full mt-1 bg-white rounded-lg shadow-lg max-h-60 overflow-auto">
+                <div className="absolute z-10 w-full mt-1 bg-white rounded-lg shadow-lg max-h-60 overflow-auto">
                     <div className="sticky top-0 bg-white p-2">
                         <div className="relative">
                             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
