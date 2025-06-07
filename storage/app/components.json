@@ -18,7 +18,9 @@
                 "image": "top-bar-socials.png",
                 "data": [
                     "background_color",
-                    "color"
+                    "color",
+                    "isCopyright"
+                    
                 ],
                 "using": {
                     "model": "Social"
