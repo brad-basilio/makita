@@ -674,7 +674,7 @@ const CatalagoFiltros = ({ items, data, filteredData, cart, setCart }) => {
                             </motion.div>
 
                             {/* Contenido principal con scroll mejorado */}
-                            <div className="flex-1 overflow-y-auto p-3 space-y-6 custom-scrollbar">
+                            <div className="flex-1 overflow-y-auto h-[calc(100dvh-20dvh)] lg:h-full p-3 space-y-6 custom-scrollbar">
                                 {/* Sección Marcas Mejorada */}
                                 <motion.div 
                                     className={modernFilterStyles.filterSection}
