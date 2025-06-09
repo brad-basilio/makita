@@ -35,6 +35,7 @@ export default function ShippingStep({
         name: user?.name || "",
         lastname: user?.lastname || "",
         email: user?.email || "",
+        phone: user?.phone || "",
         department: user?.department || "",
         province: user?.province || "",
         district: user?.district || "",
@@ -74,6 +75,7 @@ export default function ShippingStep({
     const validateForm = () => {
         const newErrors = {};
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const phoneRegex = /^[0-9]{9}$/; // Validar que sea exactamente 9 dígitos
 
         if (!formData.name.trim()) newErrors.name = "Nombre es requerido";
         if (!formData.lastname.trim()) newErrors.lastname = "Apellido es requerido";
@@ -81,6 +83,11 @@ export default function ShippingStep({
             newErrors.email = "Email es requerido";
         } else if (!emailRegex.test(formData.email)) {
             newErrors.email = "Email inválido";
+        }
+        if (!formData.phone.trim()) {
+            newErrors.phone = "Teléfono es requerido";
+        } else if (!phoneRegex.test(formData.phone.trim())) {
+            newErrors.phone = "Teléfono debe tener exactamente 9 dígitos";
         }
         if (!formData.ubigeo) newErrors.ubigeo = "Ubicación es requerida";
         if (!formData.address) newErrors.address = "Dirección es requerida";
@@ -333,6 +340,23 @@ export default function ShippingStep({
                         value={formData.email}
                         error={errors.email}
                         onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                        required
+                        className="border-gray-200"
+                    />
+
+                    <InputForm
+                        name="phone"
+                        label="Teléfono"
+                        type="tel"
+                        value={formData.phone}
+                        error={errors.phone}
+                        onChange={(e) => {
+                            // Solo permitir números
+                            const value = e.target.value.replace(/\D/g, '');
+                            setFormData(prev => ({ ...prev, phone: value }));
+                        }}
+                        maxLength="9"
+                        placeholder="Ej: 987654321"
                         required
                         className="border-gray-200"
                     />
