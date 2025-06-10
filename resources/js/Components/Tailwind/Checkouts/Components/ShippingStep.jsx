@@ -153,45 +153,115 @@ export default function ShippingStep({
         return Object.keys(newErrors).length === 0;
     };
 
-    // Función para enfocar el primer campo con error
+    // Función para enfocar el primer campo con error y hacer scroll suave
     const focusFirstError = (errors) => {
         const errorOrder = ['name', 'lastname', 'email', 'phone', 'ubigeo', 'address', 'shipping'];
         
         for (const fieldName of errorOrder) {
             if (errors[fieldName]) {
+                let targetElement = null;
+                let shouldFocus = false;
+
                 if (fieldName === 'ubigeo') {
-                    // Para el select de ubicación, hacer scroll hasta el elemento
-                    const ubigeoElement = document.querySelector('[name="ubigeo"]')?.parentElement;
-                    if (ubigeoElement) {
-                        ubigeoElement.scrollIntoView({
-                            behavior: "smooth",
-                            block: "center"
-                        });
-                    }
+                    // Para el select de ubicación, buscar el contenedor del react-select
+                    targetElement = document.querySelector('[name="ubigeo"]')?.parentElement?.parentElement || 
+                                   document.querySelector('.css-1s2u09g-control') || 
+                                   document.querySelector('[class*="react-select"]');
                 } else if (fieldName === 'shipping') {
-                    // Para la sección de métodos de envío
-                    const shippingElement = document.querySelector('.space-y-4 h3');
-                    if (shippingElement) {
-                        shippingElement.scrollIntoView({
-                            behavior: "smooth",
-                            block: "center"
-                        });
-                    }
+                    // Para la sección de métodos de envío, buscar el contenedor de radio buttons
+                    targetElement = document.querySelector('input[name="shipping"]')?.closest('.space-y-4') ||
+                                   document.querySelector('.space-y-4 h3') ||
+                                   document.querySelector('h3');
                 } else {
-                    // Para campos normales
-                    const element = document.querySelector(`[name="${fieldName}"]`);
-                    if (element) {
-                        element.scrollIntoView({
-                            behavior: "smooth",
-                            block: "center"
-                        });
-                        // Enfocar el campo después del scroll
-                        setTimeout(() => element.focus(), 500);
-                    }
+                    // Para campos normales (input, textarea)
+                    targetElement = document.querySelector(`[name="${fieldName}"]`);
+                    shouldFocus = true;
                 }
-                break; // Solo enfocar el primer error
+
+                if (targetElement) {
+                    // Hacer scroll suave al elemento
+                    targetElement.scrollIntoView({
+                        behavior: "smooth",
+                        block: "center",
+                        inline: "nearest"
+                    });
+
+                    // Si es un campo que se puede enfocar, hacerlo después del scroll
+                    if (shouldFocus) {
+                        setTimeout(() => {
+                            try {
+                                targetElement.focus();
+                                // Opcional: seleccionar el texto si es un input
+                                if (targetElement.tagName === 'INPUT' && targetElement.type === 'text') {
+                                    targetElement.select();
+                                }
+                            } catch (error) {
+                                console.warn('No se pudo enfocar el elemento:', error);
+                            }
+                        }, 600); // Tiempo suficiente para completar el scroll
+                    }
+
+                    // Agregar efecto visual de resaltado
+                    highlightElement(targetElement);
+
+                    break; // Solo enfocar el primer error
+                }
             }
         }
+    };
+
+    // Función auxiliar para agregar efecto visual temporal a un elemento
+    const highlightElement = (element) => {
+        if (!element) return;
+        
+        // Crear un div de overlay temporal para el efecto de resaltado
+        const overlay = document.createElement('div');
+        overlay.style.cssText = `
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border: 2px solid #ef4444;
+            border-radius: 8px;
+            pointer-events: none;
+            z-index: 1000;
+            animation: pulse 0.6s ease-in-out;
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.2);
+        `;
+        
+        // Agregar keyframes para la animación si no existen
+        if (!document.querySelector('#error-highlight-styles')) {
+            const style = document.createElement('style');
+            style.id = 'error-highlight-styles';
+            style.textContent = `
+                @keyframes pulse {
+                    0% { transform: scale(1); opacity: 1; }
+                    50% { transform: scale(1.02); opacity: 0.8; }
+                    100% { transform: scale(1); opacity: 1; }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        // Posicionar el elemento padre como relative si no lo está
+        const originalPosition = element.style.position;
+        if (!originalPosition || originalPosition === 'static') {
+            element.style.position = 'relative';
+        }
+        
+        element.appendChild(overlay);
+        
+        // Remover el overlay después de la animación
+        setTimeout(() => {
+            if (overlay.parentNode) {
+                overlay.parentNode.removeChild(overlay);
+                // Restaurar posición original si fue cambiada
+                if (!originalPosition || originalPosition === 'static') {
+                    element.style.position = originalPosition;
+                }
+            }
+        }, 1200);
     };
 
     const handleUbigeoChange = async (selected) => {
@@ -315,20 +385,20 @@ export default function ShippingStep({
             const errorMessages = {
                 name: "Por favor ingrese su nombre",
                 lastname: "Por favor ingrese su apellido", 
-                email: currentErrors.email.includes("inválido") ? "Por favor ingrese un correo electrónico válido" : "Por favor ingrese su correo electrónico",
-                phone: currentErrors.phone.includes("9 dígitos") ? "El teléfono debe tener exactamente 9 dígitos" : "Por favor ingrese su número de teléfono",
+                email: currentErrors.email?.includes("inválido") ? "Por favor ingrese un correo electrónico válido" : "Por favor ingrese su correo electrónico",
+                phone: currentErrors.phone?.includes("9 dígitos") ? "El teléfono debe tener exactamente 9 dígitos" : "Por favor ingrese su número de teléfono",
                 ubigeo: "Por favor seleccione su ubicación de entrega",
                 address: "Por favor ingrese su dirección de entrega",
                 shipping: "Por favor seleccione un método de envío"
             };
 
-            toast.error("Faltan datos requeridos", {
+            toast.error("Complete el campo requerido", {
                 description: errorMessages[firstErrorKey],
                 duration: 4000,
                 position: "top-center",
             });
 
-            // Enfocar el primer campo con error
+            // Enfocar el primer campo con error y hacer scroll suave
             focusFirstError(currentErrors);
             return;
         }
