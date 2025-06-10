@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { useLocation } from "react-router-dom";
 import Global from "../../../Utils/Global";
 import {
     CircleUser,
@@ -25,7 +24,6 @@ const HeaderSearchB = ({
     pages,
     generals = [],
 }) => {
-    const location = useLocation();
     const phoneWhatsappObj = generals.find(
         (item) => item.correlative === "phone_whatsapp"
     );
@@ -51,9 +49,17 @@ const HeaderSearchB = ({
     const totalCount = cart.reduce((acc, item) => Number(acc) + Number(item.quantity), 0);
     
     // Función para verificar si estamos en rutas donde no queremos mostrar la búsqueda móvil
+    // Usando window.location directamente para máxima compatibilidad
     const shouldHideMobileSearch = () => {
-        const hiddenRoutes = ['/cart', '/checkout'];
-        return hiddenRoutes.some(route => location.pathname.includes(route));
+        try {
+            const currentPath = window.location.pathname || '';
+            const hiddenRoutes = ['/cart', '/checkout'];
+            return hiddenRoutes.some(route => currentPath.includes(route));
+        } catch (error) {
+            // En caso de error, mostrar la búsqueda móvil por defecto
+            console.warn('Error checking path:', error);
+            return false;
+        }
     };
 
     useEffect(() => {
