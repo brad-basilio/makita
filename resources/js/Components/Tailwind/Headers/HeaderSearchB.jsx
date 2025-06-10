@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
 import Global from "../../../Utils/Global";
 import {
     CircleUser,
@@ -24,6 +25,7 @@ const HeaderSearchB = ({
     pages,
     generals = [],
 }) => {
+    const location = useLocation();
     const phoneWhatsappObj = generals.find(
         (item) => item.correlative === "phone_whatsapp"
     );
@@ -47,6 +49,12 @@ const HeaderSearchB = ({
     const desktopSearchInputRef = useRef(null);
 
     const totalCount = cart.reduce((acc, item) => Number(acc) + Number(item.quantity), 0);
+    
+    // Función para verificar si estamos en rutas donde no queremos mostrar la búsqueda móvil
+    const shouldHideMobileSearch = () => {
+        const hiddenRoutes = ['/cart', '/checkout'];
+        return hiddenRoutes.some(route => location.pathname.includes(route));
+    };
 
     useEffect(() => {
         function handleClickOutside(event) {
@@ -502,10 +510,10 @@ const HeaderSearchB = ({
                 </div>
 
                 {/* NUEVA SECCIÓN MÓVIL*/}
-                   {data?.mobileSearch && (
+                {data?.mobileSearch && !shouldHideMobileSearch() && (
                 <div className="block md:hidden mt-6 space-y-4">
                   
-                    {/* Tercera fila móvil: Barra de búsqueda completa */}
+                   
                  
                         <div className="w-full ">
                             <form onSubmit={handleMobileSearch} role="search" className="relative w-full">

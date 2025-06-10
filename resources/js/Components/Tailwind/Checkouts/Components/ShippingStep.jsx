@@ -65,36 +65,133 @@ export default function ShippingStep({
       }, [user]);
 
     const [loading, setLoading] = useState(false);
+    const [paymentLoading, setPaymentLoading] = useState(false);
     const [shippingOptions, setShippingOptions] = useState([]);
     const [selectedOption, setSelectedOption] = useState(null);
     const [costsGet, setCostsGet] = useState(null);
     const [errors, setErrors] = useState({});
     const [searchInput, setSearchInput] = useState("");
 
-    // Función de validación mejorada
+    // Función de validación mejorada con alertas específicas
     const validateForm = () => {
         const newErrors = {};
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const phoneRegex = /^[0-9]{9}$/; // Validar que sea exactamente 9 dígitos
 
-        if (!formData.name.trim()) newErrors.name = "Nombre es requerido";
-        if (!formData.lastname.trim()) newErrors.lastname = "Apellido es requerido";
+        if (!formData.name.trim()) {
+            newErrors.name = "Nombre es requerido";
+            toast.error("Campo requerido", {
+                description: "Por favor ingrese su nombre",
+                duration: 3000,
+                position: "top-center",
+            });
+        }
+        if (!formData.lastname.trim()) {
+            newErrors.lastname = "Apellido es requerido";
+            toast.error("Campo requerido", {
+                description: "Por favor ingrese su apellido",
+                duration: 3000,
+                position: "top-center",
+            });
+        }
         if (!formData.email.trim()) {
             newErrors.email = "Email es requerido";
+            toast.error("Campo requerido", {
+                description: "Por favor ingrese su correo electrónico",
+                duration: 3000,
+                position: "top-center",
+            });
         } else if (!emailRegex.test(formData.email)) {
             newErrors.email = "Email inválido";
+            toast.error("Email inválido", {
+                description: "Por favor ingrese un correo electrónico válido",
+                duration: 3000,
+                position: "top-center",
+            });
         }
         if (!formData.phone.trim()) {
             newErrors.phone = "Teléfono es requerido";
+            toast.error("Campo requerido", {
+                description: "Por favor ingrese su número de teléfono",
+                duration: 3000,
+                position: "top-center",
+            });
         } else if (!phoneRegex.test(formData.phone.trim())) {
             newErrors.phone = "Teléfono debe tener exactamente 9 dígitos";
+            toast.error("Teléfono inválido", {
+                description: "El teléfono debe tener exactamente 9 dígitos",
+                duration: 3000,
+                position: "top-center",
+            });
         }
-        if (!formData.ubigeo) newErrors.ubigeo = "Ubicación es requerida";
-        if (!formData.address) newErrors.address = "Dirección es requerida";
-        if (!selectedOption) newErrors.shipping = "Seleccione un método de envío";
+        if (!formData.ubigeo) {
+            newErrors.ubigeo = "Ubicación es requerida";
+            toast.error("Campo requerido", {
+                description: "Por favor seleccione su ubicación de entrega",
+                duration: 3000,
+                position: "top-center",
+            });
+        }
+        if (!formData.address) {
+            newErrors.address = "Dirección es requerida";
+            toast.error("Campo requerido", {
+                description: "Por favor ingrese su dirección de entrega",
+                duration: 3000,
+                position: "top-center",
+            });
+        }
+        if (!selectedOption) {
+            newErrors.shipping = "Seleccione un método de envío";
+            toast.error("Método de envío requerido", {
+                description: "Por favor seleccione un método de envío",
+                duration: 3000,
+                position: "top-center",
+            });
+        }
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
+    };
+
+    // Función para enfocar el primer campo con error
+    const focusFirstError = (errors) => {
+        const errorOrder = ['name', 'lastname', 'email', 'phone', 'ubigeo', 'address', 'shipping'];
+        
+        for (const fieldName of errorOrder) {
+            if (errors[fieldName]) {
+                if (fieldName === 'ubigeo') {
+                    // Para el select de ubicación, hacer scroll hasta el elemento
+                    const ubigeoElement = document.querySelector('[name="ubigeo"]')?.parentElement;
+                    if (ubigeoElement) {
+                        ubigeoElement.scrollIntoView({
+                            behavior: "smooth",
+                            block: "center"
+                        });
+                    }
+                } else if (fieldName === 'shipping') {
+                    // Para la sección de métodos de envío
+                    const shippingElement = document.querySelector('.space-y-4 h3');
+                    if (shippingElement) {
+                        shippingElement.scrollIntoView({
+                            behavior: "smooth",
+                            block: "center"
+                        });
+                    }
+                } else {
+                    // Para campos normales
+                    const element = document.querySelector(`[name="${fieldName}"]`);
+                    if (element) {
+                        element.scrollIntoView({
+                            behavior: "smooth",
+                            block: "center"
+                        });
+                        // Enfocar el campo después del scroll
+                        setTimeout(() => element.focus(), 500);
+                    }
+                }
+                break; // Solo enfocar el primer error
+            }
+        }
     };
 
     const handleUbigeoChange = async (selected) => {
@@ -176,6 +273,9 @@ export default function ShippingStep({
     const handlePayment = async (e) => {
         e.preventDefault();
 
+        // Prevenir múltiples clicks
+        if (paymentLoading) return;
+
         if (!user) {
             toast.error("Acceso requerido", {
                 description: `Debe iniciar sesión para continuar.`,
@@ -183,20 +283,57 @@ export default function ShippingStep({
                 duration: 3000,
                 position: "bottom-center",
             });
-          
             return;
         }
 
-        if (!validateForm()) {
-            const firstErrorKey = Object.keys(errors)[0];
-            if (firstErrorKey) {
-                document.querySelector(`[name="${firstErrorKey}"]`)?.scrollIntoView({
-                    behavior: "smooth",
-                    block: "center"
-                });
-            }
+        const currentErrors = {};
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const phoneRegex = /^[0-9]{9}$/;
+
+        // Validación sin mostrar toast aún
+        if (!formData.name.trim()) currentErrors.name = "Nombre es requerido";
+        if (!formData.lastname.trim()) currentErrors.lastname = "Apellido es requerido";
+        if (!formData.email.trim()) {
+            currentErrors.email = "Email es requerido";
+        } else if (!emailRegex.test(formData.email)) {
+            currentErrors.email = "Email inválido";
+        }
+        if (!formData.phone.trim()) {
+            currentErrors.phone = "Teléfono es requerido";
+        } else if (!phoneRegex.test(formData.phone.trim())) {
+            currentErrors.phone = "Teléfono debe tener exactamente 9 dígitos";
+        }
+        if (!formData.ubigeo) currentErrors.ubigeo = "Ubicación es requerida";
+        if (!formData.address) currentErrors.address = "Dirección es requerida";
+        if (!selectedOption) currentErrors.shipping = "Seleccione un método de envío";
+
+        if (Object.keys(currentErrors).length > 0) {
+            setErrors(currentErrors);
+            
+            // Mostrar toast específico para el primer error
+            const firstErrorKey = Object.keys(currentErrors)[0];
+            const errorMessages = {
+                name: "Por favor ingrese su nombre",
+                lastname: "Por favor ingrese su apellido", 
+                email: currentErrors.email.includes("inválido") ? "Por favor ingrese un correo electrónico válido" : "Por favor ingrese su correo electrónico",
+                phone: currentErrors.phone.includes("9 dígitos") ? "El teléfono debe tener exactamente 9 dígitos" : "Por favor ingrese su número de teléfono",
+                ubigeo: "Por favor seleccione su ubicación de entrega",
+                address: "Por favor ingrese su dirección de entrega",
+                shipping: "Por favor seleccione un método de envío"
+            };
+
+            toast.error("Faltan datos requeridos", {
+                description: errorMessages[firstErrorKey],
+                duration: 4000,
+                position: "top-center",
+            });
+
+            // Enfocar el primer campo con error
+            focusFirstError(currentErrors);
             return;
         }
+
+        setPaymentLoading(true);
 
         try {
             const request = {
@@ -218,14 +355,12 @@ export default function ShippingStep({
                 setCart([]);
                 onContinue();
             } else {
-             
-            
                 toast.error("Error en el pago", {
                     description: response.message || "Pago rechazado",
-                    icon: <ShoppingCart className="h-5 w-5 text-red-500" />,
+                    icon: <XOctagonIcon className="h-5 w-5 text-red-500" />,
                     duration: 3000,
                     position: "bottom-center",
-                })
+                });
             }
         } catch (error) {
             toast.error("Lo sentimos, no puede continuar con la compra", {
@@ -234,7 +369,8 @@ export default function ShippingStep({
                 duration: 3000,
                 position: "bottom-center",
             });
-           
+        } finally {
+            setPaymentLoading(false);
         }
     };
 
@@ -273,15 +409,28 @@ export default function ShippingStep({
     );
 
     useEffect(() => {
-        // Limpiar errores cuando los campos son modificados
+        // Limpiar errores cuando los campos son modificados y validar en tiempo real
         setErrors(prev => {
             const newErrors = { ...prev };
-            Object.keys(formData).forEach(key => {
-                if (formData[key]) delete newErrors[key];
-            });
+            
+            // Limpiar errores de campos que ahora tienen valores válidos
+            if (formData.name.trim()) delete newErrors.name;
+            if (formData.lastname.trim()) delete newErrors.lastname;
+            if (formData.email.trim()) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (emailRegex.test(formData.email)) delete newErrors.email;
+            }
+            if (formData.phone.trim()) {
+                const phoneRegex = /^[0-9]{9}$/;
+                if (phoneRegex.test(formData.phone.trim())) delete newErrors.phone;
+            }
+            if (formData.address.trim()) delete newErrors.address;
+            if (formData.ubigeo) delete newErrors.ubigeo;
+            if (selectedOption) delete newErrors.shipping;
+            
             return newErrors;
         });
-    }, [formData]);
+    }, [formData, selectedOption]);
 
     const selectStyles = (hasError) => ({
         control: (base) => ({
@@ -318,18 +467,29 @@ export default function ShippingStep({
                             label="Nombres"
                             value={formData.name}
                             error={errors.name}
-                            onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                            onChange={(e) => {
+                                setFormData(prev => ({ ...prev, name: e.target.value }));
+                                // Limpiar error inmediatamente si el campo ya no está vacío
+                                if (e.target.value.trim() && errors.name) {
+                                    setErrors(prev => ({ ...prev, name: '' }));
+                                }
+                            }}
                             required
-                            className="border-gray-200"
+                            className={`border-gray-200 ${errors.name ? 'border-red-500 bg-red-50' : ''}`}
                         />
                         <InputForm
                             name="lastname"
                             label="Apellidos"
                             value={formData.lastname}
                             error={errors.lastname}
-                            onChange={(e) => setFormData(prev => ({ ...prev, lastname: e.target.value }))}
+                            onChange={(e) => {
+                                setFormData(prev => ({ ...prev, lastname: e.target.value }));
+                                if (e.target.value.trim() && errors.lastname) {
+                                    setErrors(prev => ({ ...prev, lastname: '' }));
+                                }
+                            }}
                             required
-                            className="border-gray-200"
+                            className={`border-gray-200 ${errors.lastname ? 'border-red-500 bg-red-50' : ''}`}
                         />
                     </div>
 
@@ -339,9 +499,17 @@ export default function ShippingStep({
                         type="email"
                         value={formData.email}
                         error={errors.email}
-                        onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                        onChange={(e) => {
+                            setFormData(prev => ({ ...prev, email: e.target.value }));
+                            if (e.target.value.trim() && errors.email) {
+                                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                                if (emailRegex.test(e.target.value)) {
+                                    setErrors(prev => ({ ...prev, email: '' }));
+                                }
+                            }
+                        }}
                         required
-                        className="border-gray-200"
+                        className={`border-gray-200 ${errors.email ? 'border-red-500 bg-red-50' : ''}`}
                     />
 
                     <InputForm
@@ -354,16 +522,20 @@ export default function ShippingStep({
                             // Solo permitir números
                             const value = e.target.value.replace(/\D/g, '');
                             setFormData(prev => ({ ...prev, phone: value }));
+                            // Validar inmediatamente
+                            if (value.length === 9 && errors.phone) {
+                                setErrors(prev => ({ ...prev, phone: '' }));
+                            }
                         }}
                         maxLength="9"
                         placeholder="Ej: 987654321"
                         required
-                        className="border-gray-200"
+                        className={`border-gray-200 ${errors.phone ? 'border-red-500 bg-red-50' : ''}`}
                     />
 
                     <div className="form-group">
                         <label className="block text-sm 2xl:text-base mb-2 font-medium customtext-neutral-dark">
-                            Ubicación de entrega (Distrito)*
+                            Ubicación de entrega (Distrito)<span className="text-red-500 ml-1">*</span>
                         </label>
                         <AsyncSelect
                             name="ubigeo"
@@ -415,12 +587,17 @@ export default function ShippingStep({
 
                     <InputForm
                         name="address"
-                        label="Dirección *"
+                        label="Dirección "
                         value={formData.address}
                         error={errors.address}
-                        onChange={(e) => setFormData(prev => ({ ...prev, address: e.target.value }))}
+                        onChange={(e) => {
+                            setFormData(prev => ({ ...prev, address: e.target.value }));
+                            if (e.target.value.trim() && errors.address) {
+                                setErrors(prev => ({ ...prev, address: '' }));
+                            }
+                        }}
                         required
-                        className="border-gray-200"
+                        className={`border-gray-200 ${errors.address ? 'border-red-500 bg-red-50' : ''}`}
                     />
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -504,7 +681,7 @@ export default function ShippingStep({
                             <div>
                                 <h4 className="font-medium">{item.name}</h4>
                                 <p className="text-sm text-gray-600">Cantidad: {item.quantity}</p>
-                                <p className="text-sm text-gray-600">S/ {Number2Currency(item.price)}</p>
+                                <p className="text-sm text-gray-600">S/ {Number2Currency(item.final_price)}</p>
                             </div>
                         </div>
                     ))}
@@ -531,8 +708,13 @@ export default function ShippingStep({
                         </div>
                     </div>
 
-                    <ButtonPrimary onClick={handlePayment} className="w-full mt-6">
-                        Ir a Pagar
+                    <ButtonPrimary 
+                        onClick={handlePayment} 
+                        className="w-full mt-6"
+                        disabled={paymentLoading}
+                        loading={paymentLoading}
+                    >
+                        {paymentLoading ? "Procesando..." : "Ir a Pagar"}
                     </ButtonPrimary>
 
                     <p className="text-xs md:text-sm customtext-neutral-dark">
