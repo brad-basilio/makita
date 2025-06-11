@@ -403,6 +403,7 @@ export default function ShippingStep({
 
             toast.error("Complete el campo requerido", {
                 description: errorMessages[firstErrorKey],
+                icon: <XCircle className="h-5 w-5 text-red-500" />,
                 duration: 4000,
                 position: "top-center",
             });
