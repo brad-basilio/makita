@@ -7,7 +7,7 @@ import ButtonPrimary from "./ButtonPrimary";
 import ButtonSecondary from "./ButtonSecondary";
 import InputForm from "./InputForm";
 import OptionCard from "./OptionCard";
-import { InfoIcon, UserRoundX, XOctagonIcon } from "lucide-react";
+import { InfoIcon, UserRoundX, XCircle, XOctagonIcon } from "lucide-react";
 import { Notify } from "sode-extend-react";
 import { debounce } from "lodash";
 import { toast } from "sonner";
@@ -82,6 +82,7 @@ export default function ShippingStep({
             newErrors.name = "Nombre es requerido";
             toast.error("Campo requerido", {
                 description: "Por favor ingrese su nombre",
+                 icon: <XCircle className="h-5 w-5 text-red-500" />,
                 duration: 3000,
                 position: "top-center",
             });
@@ -90,6 +91,7 @@ export default function ShippingStep({
             newErrors.lastname = "Apellido es requerido";
             toast.error("Campo requerido", {
                 description: "Por favor ingrese su apellido",
+                icon: <XCircle className="h-5 w-5 text-red-500" />,
                 duration: 3000,
                 position: "top-center",
             });
@@ -98,6 +100,7 @@ export default function ShippingStep({
             newErrors.email = "Email es requerido";
             toast.error("Campo requerido", {
                 description: "Por favor ingrese su correo electrónico",
+                icon: <XCircle className="h-5 w-5 text-red-500" />,
                 duration: 3000,
                 position: "top-center",
             });
@@ -105,6 +108,7 @@ export default function ShippingStep({
             newErrors.email = "Email inválido";
             toast.error("Email inválido", {
                 description: "Por favor ingrese un correo electrónico válido",
+                icon: <XCircle className="h-5 w-5 text-red-500" />,
                 duration: 3000,
                 position: "top-center",
             });
@@ -113,6 +117,7 @@ export default function ShippingStep({
             newErrors.phone = "Teléfono es requerido";
             toast.error("Campo requerido", {
                 description: "Por favor ingrese su número de teléfono",
+                icon: <XCircle className="h-5 w-5 text-red-500" />,
                 duration: 3000,
                 position: "top-center",
             });
@@ -120,6 +125,7 @@ export default function ShippingStep({
             newErrors.phone = "Teléfono debe tener exactamente 9 dígitos";
             toast.error("Teléfono inválido", {
                 description: "El teléfono debe tener exactamente 9 dígitos",
+                icon: <XCircle className="h-5 w-5 text-red-500" />,
                 duration: 3000,
                 position: "top-center",
             });
@@ -128,6 +134,7 @@ export default function ShippingStep({
             newErrors.ubigeo = "Ubicación es requerida";
             toast.error("Campo requerido", {
                 description: "Por favor seleccione su ubicación de entrega",
+                icon: <XCircle className="h-5 w-5 text-red-500" />,
                 duration: 3000,
                 position: "top-center",
             });
@@ -136,6 +143,7 @@ export default function ShippingStep({
             newErrors.address = "Dirección es requerida";
             toast.error("Campo requerido", {
                 description: "Por favor ingrese su dirección de entrega",
+                icon: <XCircle className="h-5 w-5 text-red-500" />,
                 duration: 3000,
                 position: "top-center",
             });
@@ -144,6 +152,7 @@ export default function ShippingStep({
             newErrors.shipping = "Seleccione un método de envío";
             toast.error("Método de envío requerido", {
                 description: "Por favor seleccione un método de envío",
+                icon: <XCircle className="h-5 w-5 text-red-500" />,
                 duration: 3000,
                 position: "top-center",
             });
@@ -325,7 +334,7 @@ export default function ShippingStep({
             setSelectedOption(options[0].type);
             setEnvio(options[0].price);
         } catch (error) {
-            console.error("Error al obtener precios de envío:", error);
+            //console.error("Error al obtener precios de envío:", error);
             toast.error("Sin cobertura", {
                 description: `No realizamos envíos a esta ubicación.`,
                 icon: <XOctagonIcon className="h-5 w-5 text-red-500" />,
@@ -471,7 +480,7 @@ export default function ShippingStep({
                     callback(options);
                 })
                 .catch((error) => {
-                    console.error("Error:", error);
+                   // console.error("Error:", error);
                     callback([]);
                 });
         }, 300),
