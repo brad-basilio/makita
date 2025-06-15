@@ -11,7 +11,12 @@ use App\Mail\RawHtmlMail;
 class SubscriptionNotification extends Notification implements ShouldQueue
 {
     use Queueable;
-    public function __construct() {}
+    protected $subscriptor;
+    public function __construct(
+        $subscriptor
+    ) {
+        $this->subscriptor = $subscriptor;
+    }
     public function via($notifiable)
     {
         return ['mail'];
@@ -36,7 +41,7 @@ class SubscriptionNotification extends Notification implements ShouldQueue
         $body = $template
             ? \App\Helpers\Text::replaceData($template->description, [
                 'fecha_suscripcion' => date('d \d\e F \d\e\l Y'),
-                'email' => $notifiable->subscriptor ?? $notifiable->description ?? '',
+                'email' => $this->subscriptor->subscriptor ?? $notifiable->description ?? '',
                 'year' => date('Y'),
             ])
             : 'Plantilla no encontrada';

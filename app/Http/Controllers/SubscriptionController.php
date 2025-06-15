@@ -30,7 +30,7 @@ class SubscriptionController extends BasicController
         if ($isNew && $jpa && $jpa->description) {
             // $jpa ya es una instancia de Subscription y ahora es Notifiable
             $notificationService = new EmailNotificationService();
-            $notificationService->sendToUser($jpa, new SubscriptionNotification());
+            $notificationService->sendToUser($jpa, new SubscriptionNotification($jpa));
         }
         return null;
     }
