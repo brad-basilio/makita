@@ -7,6 +7,7 @@ use App\Models\Sale;
 use App\Models\SaleDetail;
 use App\Models\SaleStatus;
 use App\Models\User;
+use App\Models\General;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use MercadoPago\MercadoPagoConfig;
@@ -20,9 +21,11 @@ class MercadoPagoController extends Controller
     public function createPreference(Request $request)
     {
         try {
-           
+            $access_token = General::where('correlative', 'checkout_mercadopago_private_key')->first();
+            $public_key = General::where('correlative', 'checkout_mercadopago_public_key')->first();
             // Configurar SDK de MercadoPago
-            MercadoPagoConfig::setAccessToken(config('services.mercadopago.access_token'));
+            // MercadoPagoConfig::setAccessToken(config('services.mercadopago.access_token'));
+            MercadoPagoConfig::setAccessToken($access_token->description);
             
             // Generar número de orden
             $orderNumber = $this->generateOrderNumber();
@@ -55,6 +58,7 @@ class MercadoPagoController extends Controller
                 'documentType' => $request->documentType,
                 'document' => $request->document,
                 'businessName' => $request->businessName,
+                'payment_method' => $request->payment_method,
             ]);
            
              // Registrar detalles de la venta (sin afectar stock aún)
@@ -153,7 +157,7 @@ class MercadoPagoController extends Controller
              if (Auth::check()) {
                 $userJpa = User::find(Auth::user()->id);
                 $userJpa->phone = $request->phone;
-                $userJpa->dni = $request->dni;
+                $userJpa->dni = $request->document;
                 $userJpa->country = $request->country;
                 $userJpa->department = $request->department;
                 $userJpa->province = $request->province;
@@ -169,7 +173,8 @@ class MercadoPagoController extends Controller
             return response()->json([
                 'status' => true,
                 'preference_id' => $preference->id,
-                'public_key' => config('services.mercadopago.public_key'),
+                // 'public_key' => config('services.mercadopago.public_key'),
+                'public_key' => $public_key->description,
                 'redirect_url' => $preference->init_point,
                 'orderNumber' => $orderNumber,
                 'cart' => $request->cart,
@@ -204,9 +209,11 @@ class MercadoPagoController extends Controller
     public function handleSuccess(Request $request)
     {
         try {
-
+            
+            $access_token = General::where('correlative', 'checkout_mercadopago_private_key')->first();
             // Verificar el pago con MercadoPago
-            MercadoPagoConfig::setAccessToken(config('services.mercadopago.access_token'));
+            // MercadoPagoConfig::setAccessToken(config('services.mercadopago.access_token'));
+            MercadoPagoConfig::setAccessToken($access_token->description);
 
             $paymentClient = new PaymentClient();
 

@@ -36,12 +36,11 @@ class ItemController extends BasicController
         try {
 
             $limite = $request->limit ?? 0;
-            
             // Obtener el producto principal por slug
             $product = Item::with(['category', 'brand', 'images', 'specifications'])
                 ->where('slug', $request->slug)
                 ->firstOrFail();
-            
+
             if ($limite > 0) {
                 $product->load(['variants' => function ($query) use ($limite) {
                     $query->limit($limite);
@@ -49,23 +48,16 @@ class ItemController extends BasicController
             }else{
                 $product->load(['variants']);
             }
-            
             // Obtener las variantes (productos con el mismo nombre pero diferente ID)
-                // $variants = Item::where('name', $product->name)
-                //     ->where('id', '!=', $product->id)
-                //     ->get(['id', 'slug', 'color', 'texture', 'image', 'final_price']);
-              
-           
+            // $variants = Item::where('name', $product->name)
+            //     ->where('id', '!=', $product->id)
+            //     ->get(['id', 'slug', 'color', 'texture', 'image', 'final_price']);
+
             // Agregar las variantes al producto principal
             // $product->variants = $variants;
-             
             $response->status = 200;
             $response->message = 'Producto obtenido correctamente';
-            
             $response->data = $product;
-            
-           
-            
         } catch (\Throwable $th) {
             dd($th->getMessage());
             $response->status = 404;
@@ -154,7 +146,7 @@ class ItemController extends BasicController
         return $query;
     }
 
-    public function setPaginationSummary(Request $request, Builder $builder)
+    public function setPaginationSummary(Request $request, Builder $builder, Builder $originalBuilder)
     {
         /* $minPrice = Item::min('price');
         $maxPrice = Item::max('price');
@@ -171,14 +163,15 @@ class ItemController extends BasicController
 
         try {
             //code...
-          
-            $i4price = clone $builder;
+            // IMPORTANTE: Usar originalBuilder para rangos de precio, no builder con paginación
+            $i4price = clone $originalBuilder;
             $minPrice = $i4price->min('final_price');
             $maxPrice = $i4price->max('final_price') ?? 0;
             $rangeSize = round($maxPrice / 6); // Define el tamaño del rango
 
             // Calcular rangos de precio
-            $countQuery = clone $builder;
+            // $countQuery = clone $builder;
+            $countQuery = clone $originalBuilder;
             $countQuery->getQuery()->limit = null;
             $countQuery->getQuery()->offset = null;
             $totalItems = $countQuery->count();
@@ -191,16 +184,58 @@ class ItemController extends BasicController
                     ];
                 }
             }
+            $filterSequence = $request->input('filterSequence', []);
+            $selectedBrands = $request->input('brand_id', []);
+            $selectedCategories = $request->input('category_id', []);
+            $selectedCollections = $request->input('collection_id', []);
+            // $mainFilter = $request->filterSequence[0] ?? null;
 
-            $i4collection = clone $builder;
-            $i4category = clone $builder;
-            $i4subcategory = clone $builder;
-            $i4brand = clone $builder;
-            $i4tag = clone $builder;
-            $collections = Item::getForeign($i4collection, Collection::class, 'collection_id');
-            $categories = Item::getForeign($i4category, Category::class, 'category_id');
-            $subcategories = Item::getForeign($i4subcategory, SubCategory::class, 'subcategory_id');
-            $brands = Item::getForeign($i4brand, Brand::class, 'brand_id');
+            // IMPORTANTE: Usar siempre originalBuilder para los filtros, nunca builder con paginación
+            $i4collection = clone $originalBuilder;
+            $i4category = clone $originalBuilder;
+            $i4subcategory = clone $originalBuilder;
+            $i4brand = clone $originalBuilder;
+            $i4tag = clone $originalBuilder;
+            
+            // PADRES: nunca se filtran entre sí, siempre usan el builder original
+            $collections = in_array('collection_id', $filterSequence)
+                ? Item::getForeign($originalBuilder, Collection::class, 'collection_id')
+                : Item::getForeign($i4collection, Collection::class, 'collection_id');
+
+            $brands = in_array('brand_id', $filterSequence)
+                ? Item::getForeign($originalBuilder, Brand::class, 'brand_id')
+                : Item::getForeign($i4brand, Brand::class, 'brand_id');
+
+            // CATEGORIAS: si hay marcas seleccionadas, filtrar categorías por esas marcas, SIEMPRE, aunque category_id esté en filterSequence
+            if (!empty($selectedBrands)) {
+                // Si hay marcas seleccionadas, solo mostrar categorías que tengan productos de esas marcas
+                $catBuilder = clone $originalBuilder;
+                $catBuilder->whereIn('brand_id', $selectedBrands);
+                $categories = Item::getForeign($catBuilder, Category::class, 'category_id');
+            } else {
+                // Si NO hay marcas seleccionadas, usar la lógica del filterSequence
+                $categories = in_array('category_id', $filterSequence)
+                    ? Item::getForeign($originalBuilder, Category::class, 'category_id')
+                    : Item::getForeign($i4category, Category::class, 'category_id');
+            }
+
+            // HIJO: subcategoría sí se filtra por los padres activos
+            if (in_array('subcategory_id', $filterSequence)) {
+                $subcatBuilder = clone $originalBuilder;
+                if (!empty($selectedBrands)) {
+                    $subcatBuilder->whereIn('brand_id', $selectedBrands);
+                }
+                if (!empty($selectedCategories)) {
+                    $subcatBuilder->whereIn('category_id', $selectedCategories);
+                }
+                if (!empty($selectedCollections)) {
+                    $subcatBuilder->whereIn('collection_id', $selectedCollections);
+                }
+                $subcategories = Item::getForeign($subcatBuilder, SubCategory::class, 'subcategory_id');
+            } else {
+                $subcategories = Item::getForeign($i4subcategory, SubCategory::class, 'subcategory_id');
+            }
+           
             $tags = Item::getForeignMany($i4tag, ItemTag::class, Tag::class);
             return [
                 'priceRanges' => $ranges,

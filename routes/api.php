@@ -61,7 +61,8 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\ScrapController;
-use App\Http\Controllers\TemporalyImageController;  
+use App\Http\Controllers\TemporalyImageController;
+use App\Http\Controllers\UnifiedImportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -79,6 +80,12 @@ Route::post('/scrap', [ScrapController::class, 'scrap']);
 Route::post('/scrap-shopsimon', [ScrapController::class, 'scrapShopSimon']);
 
 Route::post('/import-items', [ItemImportController::class, 'import']);
+
+// Unified Import API
+Route::post('/unified-import', [UnifiedImportController::class, 'import']);
+Route::post('/unified-import/preview', [UnifiedImportController::class, 'preview']);
+Route::get('/unified-import/field-mappings', [UnifiedImportController::class, 'getFieldMappings']);
+
 Route::post('/complaints', [ComplaintController::class, 'saveComplaint']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/signup', [AuthController::class, 'signup']);
@@ -113,6 +120,7 @@ Route::post('/items/combo-items', [ItemController::class, 'verifyCombo']);
 Route::post('/items/update-items', [ItemController::class, 'updateViews']);
 Route::post('/items/relations-items', [ItemController::class, 'relationsItems']);
 Route::post('/items/variations-items', [ItemController::class, 'variationsItems']);
+Route::post('/items/searchProducts', [ItemController::class, 'searchProduct']);
 
 Route::post('/pago', [PaymentController::class, 'charge']);
 Route::get('/pago/{sale_id}', [PaymentController::class, 'getPaymentStatus']);

@@ -37,7 +37,9 @@ export default function ShippingStepSF({
     envio,
     prefixes,
     ubigeos = [],
+    contacts,
 }) {
+    
     const [selectedUbigeo, setSelectedUbigeo] = useState(null);
     const [defaultUbigeoOption, setDefaultUbigeoOption] = useState(null);
     const [formData, setFormData] = useState({
@@ -57,7 +59,7 @@ export default function ShippingStepSF({
         ubigeo: user?.ubigeo || null,
         invoiceType: user?.invoiceType || "boleta", // Nuevo campo para tipo de comprobante
         documentType: user?.documentType || "dni", 
-        document: user?.document || "", 
+        document: user?.dni || "", 
         businessName: user?.businessName || "", // Nuevo campo para Razón Social
     });
     
@@ -78,6 +80,13 @@ export default function ShippingStepSF({
           handleUbigeoChange(defaultOption);
         }
       }, [user]);
+
+    const getContact = (correlative) => {
+    return (
+            contacts.find((contact) => contact.correlative === correlative)
+                ?.description || ""
+        );
+    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -121,7 +130,13 @@ export default function ShippingStepSF({
     //     ];
     //     setDepartamentos(uniqueDepartamentos);
     // }, []);
+    const numericSubTotal = typeof subTotal === 'number' ? subTotal : parseFloat(subTotal) || 0;
+    const numericIgv = typeof igv === 'number' ? igv : parseFloat(igv) || 0;
+    const hasShippingFree = parseFloat(getContact("shipping_free"));
+   
 
+    const subFinal = numericSubTotal + numericIgv;
+    
     const handleUbigeoChange = async (selected) => {
         if (!selected) return;
         
@@ -143,7 +158,17 @@ export default function ShippingStepSF({
             });
 
             const options = [];
-            if (response.data.is_free) {
+            
+            const isFreeShipping = subFinal >= hasShippingFree;
+            
+            if (isFreeShipping) {
+                options.push({
+                    type: "free",
+                    price: 0,
+                    description: `Compra mayor a S/ ${hasShippingFree}`,
+                    deliveryType: "Envío gratuito",
+                });
+            } else if (response.data.is_free) { // Si no aplica envío gratuito por monto, verifica otras opciones
                 options.push({
                     type: "free",
                     price: 0,
@@ -151,16 +176,6 @@ export default function ShippingStepSF({
                     deliveryType: response.data.standard.type,
                     characteristics: response.data.standard.characteristics,
                 });
-
-                if (response.data.express.price > 0) {
-                    options.push({
-                        type: "express",
-                        price: response.data.express.price,
-                        description: response.data.express.description,
-                        deliveryType: response.data.express.type,
-                        characteristics: response.data.express.characteristics,
-                    });
-                }
             } else if (response.data.is_agency) {
                 options.push({
                     type: "agency",
@@ -179,9 +194,25 @@ export default function ShippingStepSF({
                 });
             }
 
+            // Solo muestra opción express si no es envío gratuito por monto
+            if (response.data.express?.price > 0 && response.data.is_free && !isFreeShipping) {
+                options.push({
+                    type: "express",
+                    price: response.data.express.price,
+                    description: response.data.express.description,
+                    deliveryType: response.data.express.type,
+                    characteristics: response.data.express.characteristics,
+                });
+            }
+
+            if (options.length === 0) {
+                throw new Error("No hay opciones de envío disponibles");
+            }
+
             setShippingOptions(options);
             setSelectedOption(options[0].type);
             setEnvio(options[0].price);
+           
         } catch (error) {
             console.error("Error al obtener precios de envío:", error);
             toast.success('Sin cobertura', {
@@ -197,6 +228,12 @@ export default function ShippingStepSF({
         }
         setLoading(false);
     };
+
+    useEffect(() => {
+        if (selectedUbigeo) {
+            handleUbigeoChange(selectedUbigeo);
+        }
+    }, [cart, subTotal]);
 
     const loadOptions = useCallback(
         debounce((inputValue, callback) => {
@@ -497,7 +534,8 @@ export default function ShippingStepSF({
 
     const validateForm = () => {
         const newErrors = {};
-    
+        
+        // Validación de campos
         if (!formData.name) newErrors.name = "Nombre es requerido";
         if (!formData.lastname) newErrors.lastname = "Apellido es requerido";
         if (!formData.email) newErrors.email = "Email es requerido";
@@ -508,6 +546,78 @@ export default function ShippingStepSF({
         if (!formData.number) newErrors.number = "Numero es requerido";
     
         setErrors(newErrors);
+    
+        // Función de smooth scroll personalizada
+        const smoothScroll = (targetElement, duration = 800) => {
+            const targetPosition =
+                targetElement.getBoundingClientRect().top +
+                window.pageYOffset -
+                window.innerHeight / 2 +
+                targetElement.offsetHeight / 2;
+        
+            const startPosition = window.pageYOffset;
+            let startTime = null;
+        
+            const animation = (currentTime) => {
+                if (startTime === null) startTime = currentTime;
+                const timeElapsed = currentTime - startTime;
+        
+                const easeInOutQuad = (t, b, c, d) => {
+                    t /= d / 2;
+                    if (t < 1) return (c / 2) * t * t + b;
+                    t--;
+                    return (-c / 2) * (t * (t - 2) - 1) + b;
+                };
+        
+                const run = easeInOutQuad(
+                    timeElapsed,
+                    startPosition,
+                    targetPosition - startPosition,
+                    duration
+                );
+                window.scrollTo(0, run);
+        
+                if (timeElapsed < duration) {
+                    requestAnimationFrame(animation);
+                } else {
+                    if (
+                        ["INPUT", "SELECT", "TEXTAREA"].includes(
+                            targetElement.tagName
+                        )
+                    ) {
+                        targetElement.focus();
+                    }
+                }
+            };
+        
+            requestAnimationFrame(animation);
+        };
+    
+        // Si hay errores, hacer scroll al primero
+        if (Object.keys(newErrors).length > 0) {
+            const firstErrorKey = Object.keys(newErrors)[0];
+            
+            setTimeout(() => {
+                let targetElement = null;
+                
+                if (firstErrorKey === 'ubigeo') {
+                    targetElement = document.getElementById('ubigeo-select-container');
+                } else if (firstErrorKey === 'phone_prefix') {
+                    targetElement = document.querySelector('.select2-prefix-selector')?.parentElement;
+                } else {
+                    targetElement = document.querySelector(`[name="${firstErrorKey}"]`);
+                }
+    
+                if (targetElement) {
+                    // Aplicar clase de error temporal
+                    targetElement.classList.add('highlight-error');
+                    setTimeout(() => targetElement.classList.remove('highlight-error'), 2000);
+                    
+                    // Scroll personalizado
+                    smoothScroll(targetElement, 600);
+                }
+            }, 100);
+        }
     
         return Object.keys(newErrors).length === 0;
     };
@@ -717,6 +827,8 @@ export default function ShippingStepSF({
         }),
       };
 
+    
+
     return (
         <>
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-y-8 lg:gap-8 ">
@@ -823,7 +935,7 @@ export default function ShippingStepSF({
                                 Dirección de envío
                             </h3>
 
-                            <div className="form-group">
+                            <div id="ubigeo-select-container" className="form-group">
                                 <label
                                     className={`block text-sm 2xl:text-base mb-1 customtext-neutral-dark `}
                                 >
@@ -1170,7 +1282,12 @@ export default function ShippingStepSF({
                         <div className="flex justify-between">
                             <span className="customtext-neutral-dark">Envío</span>
                             <span className="font-semibold">
-                                S/ {Number2Currency(envio)}
+                                {/* S/ {Number2Currency(envio)} */}
+                                {hasShippingFree != null && subFinal >= hasShippingFree ? (
+                                    <span className="customtext-neutral-dark">Gratis (Compra mayor a S/{hasShippingFree})</span>
+                                ) : (
+                                    `S/ ${Number2Currency(envio)}`
+                                )}
                             </span>
                         </div>
                         <div className="py-3 border-y-2 mt-6">
@@ -1218,6 +1335,7 @@ export default function ShippingStepSF({
 
             <PaymentModal
                 isOpen={showPaymentModal}
+                contacts={contacts}
                 onClose={() => setShowPaymentModal(false)}
                 onPaymentComplete={handlePaymentComplete}
                 
@@ -1242,6 +1360,7 @@ export default function ShippingStepSF({
                 igv={igv}
                 totalFinal={totalFinal}
                 envio={envio}
+                contacts={contacts}
                 request={paymentRequest}
                 onClose={() => setShowVoucherModalBancs(false)}
                 paymentMethod={currentPaymentMethod}
