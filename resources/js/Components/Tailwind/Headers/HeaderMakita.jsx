@@ -58,6 +58,36 @@ const HeaderMakita = ({
   // Obtener todas las marcas únicas
   const brands = Array.from(new Set(items.map((item) => JSON.stringify(item.brand)))).map((item) => JSON.parse(item))
 
+  // Extraer y procesar colecciones
+  const getUniqueCollections = () => {
+    const collections = items
+      .filter(item => item.collection && item.collection.name)
+      .map(item => item.collection)
+    
+    // Crear un objeto para agrupar colecciones similares
+    const groupedCollections = {}
+    
+    collections.forEach(collection => {
+      if (!collection.name) return
+      
+      const name = collection.slug.trim().toUpperCase()
+      const baseKey = name.split('-')[0] // Tomar la primera parte antes del guión
+      
+      // Si no existe el grupo base, crearlo
+      if (!groupedCollections[baseKey]) {
+        groupedCollections[baseKey] = {
+          ...collection,
+          name: baseKey,
+          slug: baseKey.toLowerCase().replace(/\s+/g, '-')
+        }
+      }
+    })
+    
+    return Object.values(groupedCollections)
+  }
+
+  const uniqueCollections = getUniqueCollections()
+
   // Función para obtener marcas por categoría
   const getBrandsByCategory = (categoryId) => {
     return brands.filter(brand =>
@@ -86,6 +116,7 @@ const HeaderMakita = ({
     return subcategories;
   }
 
+  console.log("Items:", items);
   // Función para obtener subcategorías por categoría (cuando no hay marcas)
   const getSubcategoriesByCategory = (categoryId) => {
     const subcategories = [];
@@ -506,13 +537,13 @@ const HeaderMakita = ({
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                   <h4 className="text-2xl font-bold text-white">Nuestro Blog</h4>
                   <div className="flex flex-wrap items-center gap-4 md:gap-6">
-                    {["CONSTRUCCIÓN", "CARPINTERÍA", "MAESTRANZA", "MINERÍA"].map((category, index, array) => (
-                      <React.Fragment key={category}>
+                    {uniqueCollections.map((collection, index, array) => (
+                      <React.Fragment key={collection.id || collection.name}>
                         <a
-                          href={`/categoria/${category.toLowerCase()}`}
+                          href={`/coleccion/${collection.slug}`}
                           className="text-sm font-medium text-white hover:customtext-primary transition-colors uppercase tracking-wide"
                         >
-                          {category}
+                          {collection.name}
                         </a>
                         {index < array.length - 1 && <span className="text-white hidden md:inline">|</span>}
                       </React.Fragment>

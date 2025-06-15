@@ -72,7 +72,7 @@ const SliderInteractive = ({ items, data }) => {
         const threshold = 20;
         const deltaX = Math.abs(
             (currentTranslate.current + currentIndex * 100) *
-                (window.innerWidth / 100)
+            (window.innerWidth / 100)
         );
 
         if (deltaX > threshold) {
@@ -113,7 +113,7 @@ const SliderInteractive = ({ items, data }) => {
         const threshold = 20;
         const deltaX = Math.abs(
             (currentTranslate.current + currentIndex * 100) *
-                (window.innerWidth / 100)
+            (window.innerWidth / 100)
         );
 
         if (deltaX > threshold) {
@@ -153,9 +153,8 @@ const SliderInteractive = ({ items, data }) => {
                 sliderRef.current.style.transition = "none";
                 setCurrentIndex(duplicatedItems.length - 2);
                 requestAnimationFrame(() => {
-                    sliderRef.current.style.transform = `translateX(-${
-                        (duplicatedItems.length - 2) * 100
-                    }%)`;
+                    sliderRef.current.style.transform = `translateX(-${(duplicatedItems.length - 2) * 100
+                        }%)`;
                     setTimeout(() => {
                         sliderRef.current.style.transition =
                             "transform 0.5s ease-in-out";
@@ -167,9 +166,8 @@ const SliderInteractive = ({ items, data }) => {
                 sliderRef.current.style.transition = "none";
                 setCurrentIndex(1);
                 requestAnimationFrame(() => {
-                    sliderRef.current.style.transform = `translateX(-${
-                        1 * 100
-                    }%)`;
+                    sliderRef.current.style.transform = `translateX(-${1 * 100
+                        }%)`;
                     setTimeout(() => {
                         sliderRef.current.style.transition =
                             "transform 0.5s ease-in-out";
@@ -249,22 +247,21 @@ const SliderInteractive = ({ items, data }) => {
                             className="w-full h-[589px] lg:h-auto  flex-shrink-0 relative"
                         >
                             <img
-                                src={`/storage/images/slider/${
-                                    item.bg_image || "undefined"
-                                }`}
+                                src={`/storage/images/slider/${item.bg_image || "undefined"
+                                    }`}
                                 alt={item.name}
                                 loading="lazy"
                                 className={`absolute top-0  left-0 h-full md:h-full  w-screen md:w-full object-cover ${data?.imageBgPosition || "object-right-25 "} md:object-center  z-0  md:mr-20 lg:mr-0`}
                             />
 
-                          {data?.overlayMobile && (
-                              <div className="md:hidden absolute inset-0 bg-gradient-to-b from-transparent to-white"></div>
-                          )}
+                            {data?.overlayMobile && (
+                                <div className="md:hidden absolute inset-0 bg-gradient-to-b from-transparent to-white"></div>
+                            )}
 
                             <div className={`relative w-full px-primary 2xl:px-0 2xl:max-w-7xl  mx-auto  h-[530px] md:h-[600px] flex flex-col items-start justify-end md:justify-center ${isDarkBg ? "text-white" : "customtext-neutral-dark"}`}>
                                 <div className="flex flex-col gap-5 lg:gap-10 items-start">
                                     <h2
-                                        className={`${Global.APP_CORRELATIVE==="stechperu" ?"w-9/12  md:w-full md:max-w-md " :"w-full  md:w-full md:max-w-lg "} font-title text-[40px] leading-tight sm:text-5xl md:text-6xl tracking-normal font-bold ${isDarkBg ? "text-white" : "customtext-neutral-dark"}`}
+                                        className={`${Global.APP_CORRELATIVE === "stechperu" ? "w-9/12  md:w-full md:max-w-md " : "w-full  md:w-full md:max-w-lg "} font-title text-[40px] leading-tight sm:text-5xl md:text-6xl tracking-normal font-bold ${isDarkBg ? "text-white" : "customtext-neutral-dark"}`}
                                         style={{
                                             textShadow: "0 0 20px rgba(0, 0, 0, .25)",
                                         }}
@@ -272,14 +269,14 @@ const SliderInteractive = ({ items, data }) => {
                                         {item.name}
                                     </h2>
                                     <p
-                                        className={`${Global.APP_CORRELATIVE==="stechperu" ?"w-8/12" :"w-full"} md:w-full md:max-w-md text-lg leading-tight font-paragraph ${isDarkBg ? "text-white" : "customtext-neutral-dark"}`}
+                                        className={`${Global.APP_CORRELATIVE === "stechperu" ? "w-8/12" : "w-full"} md:w-full md:max-w-md text-lg leading-tight font-paragraph ${isDarkBg ? "text-white" : "customtext-neutral-dark"}`}
                                         style={{
                                             textShadow: "0 0 20px rgba(0, 0, 0, .25)",
                                         }}
                                     >
                                         {item.description}
                                     </p>
-                                    {item.button_text && item.button_link && (  <div className="flex flex-row gap-5 md:gap-10 justify-center items-start">
+                                    {item.button_text && item.button_link && (<div className="flex flex-row gap-5 md:gap-10 justify-center items-start">
                                         <a
                                             href={item.button_link}
                                             ref={(el) =>
@@ -288,13 +285,15 @@ const SliderInteractive = ({ items, data }) => {
                                             className="bg-primary border-none flex flex-row items-center gap-3 px-10 py-4 text-base rounded-xl tracking-wide font-bold hover:opacity-90 transition-all duration-300"
                                         >
                                             {item.button_text}
-                                            <Tag
-                                                width={"1.25rem"}
-                                                className="transform rotate-90"
-                                            />
+                                            {data?.icon_button && (
+                                                <Tag
+                                                    width={"1.25rem"}
+                                                    className="transform rotate-90"
+                                                />
+                                            )}
                                         </a>
                                     </div>)}
-                                  
+
                                 </div>
                             </div>
                         </div>
@@ -331,22 +330,20 @@ const SliderInteractive = ({ items, data }) => {
                 <div className="px-primary 2xl:px-0 2xl:max-w-7xl mx-auto ">
                     <div className="relative">
                         <div
-                            className={`absolute bottom-4 ${
-                                alignmentClassPagination === "left"
+                            className={`absolute bottom-4 ${alignmentClassPagination === "left"
                                     ? "inset-x-0 left-0"
                                     : alignmentClassPagination === "right"
-                                    ? "right-0"
-                                    : "left-1/2 transform -translate-x-1/2"
-                            }`}
+                                        ? "right-0"
+                                        : "left-1/2 transform -translate-x-1/2"
+                                }`}
                         >
                             {items.map((_, index) => (
                                 <div
                                     key={`dot-${index}`}
-                                    className={`inline-flex mx-1 w-3 h-3 rounded-full ${
-                                        currentIndex === index + 1
+                                    className={`inline-flex mx-1 w-3 h-3 rounded-full ${currentIndex === index + 1
                                             ? "bg-white h-5 w-5 lg:w-6 lg:h-6 items-center justify-center border-2 border-primary"
                                             : "bg-secondary"
-                                    }`}
+                                        }`}
                                     onClick={() => setCurrentIndex(index + 1)}
                                 >
                                     {currentIndex === index + 1 && (

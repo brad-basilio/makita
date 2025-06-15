@@ -334,7 +334,8 @@
                     "paginationAlignment",
                     "showNavigation",
                     "imageBgPosition",
-                    "overlayMobile"
+                    "overlayMobile",
+                    "icon_button"
                 ],
                 "using": {
                     "model": "Slider",
