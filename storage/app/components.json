@@ -1674,6 +1674,17 @@
                 "using": {
                     "model": "DeliveryZone"
                 }
+            },
+               {
+                "id": "ZonesMakita",
+                "name": "ZonesMakita",
+                "image": "delivery-zones-kuchara.png",
+                "data": [
+                    "image"
+                ],
+                "using": {
+                    "model": "ServicePoint"
+                }
             }
         ]
     },

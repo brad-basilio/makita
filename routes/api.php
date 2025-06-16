@@ -64,6 +64,10 @@ use App\Http\Controllers\ScrapController;
 use App\Http\Controllers\TemporalyImageController;
 use App\Http\Controllers\UnifiedImportController;
 
+use App\Http\Controllers\Admin\ServicePointController as AdminServicePointController;
+
+use App\Http\Controllers\ServicePointController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -97,8 +101,6 @@ Route::post('/reset-password-client', [AuthClientController::class, 'resetPasswo
 
 Route::post('/delivery-prices', [DeliveryPriceController::class, 'getDeliveryPrice']);
 Route::post('/prices-type', [DeliveryPriceController::class, 'getPrices']);
-
-
 
 Route::get('brands/{brand}/featured-item', [BrandController::class, 'featuredItemByCategory']);
 
@@ -145,6 +147,8 @@ Route::post('/sales', [SaleController::class, 'save']);
 
 Route::get('/person/{dni}', [PersonController::class, 'find']);
 
+Route::get('/service-points', [AdminServicePointController::class, 'publicIndex']);
+
 Route::middleware('auth')->group(function () {
   Route::get('/notification-variables/{type}', [NotificationVariableController::class, 'variables']);
   Route::post('/upload-image', [ImageUploadController::class, 'store']);
@@ -180,7 +184,13 @@ Route::middleware('auth')->group(function () {
     Route::patch('/ads/status', [AdminAdController::class, 'status']);
     Route::patch('/ads/{field}', [AdminAdController::class, 'boolean']);
     Route::delete('/ads/{id}', [AdminAdController::class, 'delete']);
+    Route::get('/ads/media/{uuid}', [AdminAdController::class, 'media']);
 
+    Route::post('/service-points', [AdminServicePointController::class, 'save']);
+    Route::post('/service-points/paginate', [AdminServicePointController::class, 'paginate']);
+    Route::patch('/service-points/status', [AdminServicePointController::class, 'status']);
+    Route::patch('/service-points/{field}', [AdminServicePointController::class, 'boolean']);
+    Route::delete('/service-points/{id}', [AdminServicePointController::class, 'delete']);
 
     //Route::get('/items/filters', [AdminItemController::class, 'getFilters']);
 
