@@ -31,8 +31,10 @@ const About = ({ details: detailsDB }) => {
     const descriptionRef = useRef();
     const titleRef = useRef();
     const imageRef = useRef();
+    const timelineRef = useRef();
 
     const [isEditing, setIsEditing] = useState(false);
+    const [timelineData, setTimelineData] = useState([]);
 
     const onModalOpen = (data) => {
         if (data?.id) setIsEditing(true);
@@ -46,6 +48,15 @@ const About = ({ details: detailsDB }) => {
         imageRef.image.src = `/storage/images/aboutus/${
             data?.image ?? "undefined"
         }`;
+        
+        // Cargar datos del timeline
+        try {
+            const timeline = data?.timeline ? JSON.parse(data.timeline) : [];
+            setTimelineData(timeline);
+        } catch (e) {
+            setTimelineData([]);
+        }
+        
         $(modalRef.current).modal("show");
     };
 
@@ -57,6 +68,7 @@ const About = ({ details: detailsDB }) => {
             name: nameRef.current.value,
             description: descriptionRef.current.value,
             title: titleRef.current.value,
+            timeline: JSON.stringify(timelineData),
         };
 
         const formData = new FormData();
@@ -121,6 +133,22 @@ const About = ({ details: detailsDB }) => {
         setVideoEditing(false);
     };
 
+    // Funciones para manejar el timeline
+    const addTimelineItem = () => {
+        setTimelineData([...timelineData, { year: '', name: '', description: '' }]);
+    };
+
+    const removeTimelineItem = (index) => {
+        const newData = timelineData.filter((_, i) => i !== index);
+        setTimelineData(newData);
+    };
+
+    const updateTimelineItem = (index, field, value) => {
+        const newData = [...timelineData];
+        newData[index][field] = value;
+        setTimelineData(newData);
+    };
+
     return (
         <>
             <Table
@@ -159,15 +187,15 @@ const About = ({ details: detailsDB }) => {
                                     .refresh(),
                         },
                     });
-                    // container.unshift({
-                    //   widget: 'dxButton', location: 'after',
-                    //   options: {
-                    //     icon: 'plus',
-                    //     text: 'Nuevo about',
-                    //     hint: 'Nuevo about',
-                    //     onClick: () => onModalOpen()
-                    //   }
-                    // });
+                    container.unshift({
+                      widget: 'dxButton', location: 'after',
+                      options: {
+                      icon: 'plus',
+                         text: 'Nuevo about',
+                        hint: 'Nuevo about',
+                        onClick: () => onModalOpen()
+                   }
+                     });
                 }}
                 columns={[
                     {
@@ -204,6 +232,26 @@ const About = ({ details: detailsDB }) => {
                                     }
                                 />
                             );
+                        },
+                    },
+                    {
+                        dataField: "timeline",
+                        caption: "Timeline",
+                        cellTemplate: (container, { data }) => {
+                            try {
+                                const timeline = data?.timeline ? JSON.parse(data.timeline) : [];
+                                ReactAppend(
+                                    container,
+                                    <span className="badge badge-info">
+                                        {timeline.length} eventos
+                                    </span>
+                                );
+                            } catch (e) {
+                                ReactAppend(
+                                    container,
+                                    <span className="badge badge-secondary">Sin timeline</span>
+                                );
+                            }
                         },
                     },
                     {
@@ -258,7 +306,7 @@ const About = ({ details: detailsDB }) => {
                         col="col-12"
                         rows={2}
                         required
-                        disabled
+                        disabled={isEditing}
                     />
                     <InputFormGroup
                         eRef={titleRef}
@@ -273,6 +321,75 @@ const About = ({ details: detailsDB }) => {
                         col="col-12"
                         rows={3}
                     />
+                    
+                    {/* Timeline Section */}
+                    <div className="col-12">
+                        <label className="form-label">Timeline</label>
+                        <div className="border rounded p-3 mb-3">
+                            {timelineData.length > 0 ? (
+                                timelineData.map((item, index) => (
+                                    <div key={index} className="timeline-item " style={{marginBottom: '2rem'
+                                    }}>
+                                        <div className="row mb-4">
+                                            <div className="col-md-3">
+                                                <label className="form-label">Año</label>
+                                                <input
+                                                    type="number"
+                                                    className="form-control"
+                                                    value={item.year}
+                                                    onChange={(e) => updateTimelineItem(index, 'year', e.target.value)}
+                                                    placeholder="2024"
+                                                />
+                                            </div>
+                                            <div className="col-md-9">
+                                                <label className="form-label">Evento</label>
+                                              <div className="d-flex gap-2">
+                                                  <input
+                                                    type="text"
+                                                    className="form-control"
+                                                    value={item.name}
+                                                    onChange={(e) => updateTimelineItem(index, 'name', e.target.value)}
+                                                    placeholder="Nombre del evento"
+                                                />
+                                                  <button
+                                                    type="button"
+                                                    className="btn btn-sm btn-outline-danger"
+                                                    onClick={() => removeTimelineItem(index)}
+                                                    title="Eliminar"
+                                                >
+                                                    <i className="fa fa-trash"></i>
+                                                </button>
+                                                </div>
+                                            </div>
+                                           
+                                            <div className="col-md-12 mt-2">
+                                                <label className="form-label">Descripción</label>
+                                                <textarea
+                                                    className="form-control"
+                                                    rows="4"
+                                                    value={item.description}
+                                                    onChange={(e) => updateTimelineItem(index, 'description', e.target.value)}
+                                                    placeholder="Descripción del evento"
+                                                />
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <p className="text-muted text-center py-3">No hay eventos en el timeline</p>
+                            )}
+                            
+                            <button
+                                type="button"
+                                className="btn btn-sm btn-outline-primary"
+                                onClick={addTimelineItem}
+                            >
+                                <i className="fa fa-plus me-1"></i>
+                                Agregar evento al timeline
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </Modal>
         </>

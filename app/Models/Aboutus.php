@@ -10,6 +10,7 @@ class Aboutus extends Model
 {
     use HasFactory, HasUuids;
 
+    protected $table = 'aboutuses';
     public $incrementing = false;
     protected $keyType = 'string';
 
@@ -19,7 +20,14 @@ class Aboutus extends Model
         'title',
         'description',
         'image',
+        'timeline',
         'visible',
         'status'
+    ];
+
+    protected $casts = [
+        'timeline' => 'array',
+        'visible' => 'boolean',
+        'status' => 'boolean'
     ];
 }
