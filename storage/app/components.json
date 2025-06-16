@@ -1741,6 +1741,17 @@
                     "about_url"
                 ]
             }
+            ,
+            {
+                "id": "AboutMakita",
+                "name": "Con Timeline",
+                "data": [
+                    "url_imagen",
+                    "title",
+                    "description",
+                    "about_url"
+                ]
+            }
         ]
     },
     {

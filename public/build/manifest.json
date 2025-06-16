@@ -3267,7 +3267,7 @@
     ]
   },
   "resources/js/Components/Tailwind/AboutUs.jsx": {
-    "file": "assets/AboutUs-CWsABHTM.js",
+    "file": "assets/AboutUs-DzwlHPdw.js",
     "name": "AboutUs",
     "src": "resources/js/Components/Tailwind/AboutUs.jsx",
     "isDynamicEntry": true,
@@ -3279,13 +3279,25 @@
     ],
     "dynamicImports": [
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
-      "resources/js/Components/Tailwind/AboutUs/AboutImage.jsx"
+      "resources/js/Components/Tailwind/AboutUs/AboutImage.jsx",
+      "resources/js/Components/Tailwind/AboutUs/AboutMakita.jsx"
     ]
   },
   "resources/js/Components/Tailwind/AboutUs/AboutImage.jsx": {
     "file": "assets/AboutImage-Co_3lRRe.js",
     "name": "AboutImage",
     "src": "resources/js/Components/Tailwind/AboutUs/AboutImage.jsx",
+    "isEntry": true,
+    "imports": [
+      "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
+      "_index-BH53Isel.js",
+      "_index-yBjzXJbu.js"
+    ]
+  },
+  "resources/js/Components/Tailwind/AboutUs/AboutMakita.jsx": {
+    "file": "assets/AboutMakita-Co_3lRRe.js",
+    "name": "AboutMakita",
+    "src": "resources/js/Components/Tailwind/AboutUs/AboutMakita.jsx",
     "isEntry": true,
     "imports": [
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
@@ -8098,7 +8110,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-CMHD5rR7.js",
+    "file": "assets/System-BPPrOhpW.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,
