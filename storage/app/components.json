@@ -49,7 +49,9 @@
                 "image": "top-bar-copyright.png",
                 "data": [
                     "background_color",
-                    "color"
+                    "color",
+                    "policyTerms"
+                    
                 ],
                 "generals": [
                     "copyright"
