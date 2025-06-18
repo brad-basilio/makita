@@ -1,19 +1,16 @@
 import General from "../../../Utils/General"
 
-const TopBarCopyright = ({ }) => {
-  const copyright = General.get('copyright') ?? ''
-  const content = copyright.replace(/\{\{([^}]+)\}\}/g, (match, code) => {
-    try {
-      return eval(code);
-    } catch (error) {
-      console.error('Error evaluating code:', error);
-      return match;
-    }
-  });
+const TopBarCopyright = ({ data, generals = [] }) => {
+    console.log(generals);
+  const copyright = generals?.find(
+    (item) => item.correlative === "copyright"
+  );
 
-  return <div className="bg-white text-sm font-bold py-3 customtext-neutral-dark text-center px-primary flex justify-center items-center font-font-general">
-    <p>{content}</p>
-  </div>
+  return (
+    <div className={`${data?.background_color ? `${data.background_color}` : 'bg-white'} ${data?.color ? `${data.color}` : 'customtext-neutral-dark'} text-sm font-bold py-3 customtext-neutral-dark text-center px-primary flex justify-center items-center font-paragraph`}>
+      <p>{copyright?.description || "© 2025 Todos los derechos reservados"}</p>
+    </div>
+  );
 }
 
-export default TopBarCopyright
+export default TopBarCopyright;

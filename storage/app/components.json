@@ -47,6 +47,10 @@
                 "id": "TopBarCopyright",
                 "name": "Copyright",
                 "image": "top-bar-copyright.png",
+                "data": [
+                    "background_color",
+                    "color"
+                ],
                 "generals": [
                     "copyright"
                 ]

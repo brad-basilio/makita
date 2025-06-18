@@ -273,7 +273,7 @@ export default function AboutMakita({ data, filteredData }) {
                                         
                                         {/* Active timeline progress bar */}
                                         <div 
-                                            className="absolute left-0 top-1/2 h-[3px] bg-primary z-1 transition-all duration-500"
+                                            className="absolute left-0 top-1/2 h-[3px] bg-white z-1 transition-all duration-500"
                                             style={{
                                                 width: `${(activeTimelineIndex / (timelineData.length - 1)) * 100}%`,
                                                 transform: 'translateY(-50%)'
@@ -289,7 +289,7 @@ export default function AboutMakita({ data, filteredData }) {
                                                 return (
                                                     <div 
                                                         key={index} 
-                                                        className="flex flex-col items-center px-4 relative"
+                                                        className="flex flex-col  relative"
                                                         style={{
                                                             minWidth: '220px',
                                                             width: `${100 / timelineData.length}%`
@@ -312,17 +312,23 @@ export default function AboutMakita({ data, filteredData }) {
                                                         
                                                         {/* Point */}
                                                         <div 
-                                                            className={`timeline-point top-1/2 -translate-y-1/2 w-6 h-6 rounded-full border-4 transition-all duration-300 z-20 absolute ${
-                                                                isActive 
-                                                                    ? 'border-white bg-primary scale-100' 
-                                                                    : 'border-gray-400 bg-gray-700 scale-75'
-                                                            }`}
+                                                            className={` flex items-center justify-center top-1/2 -translate-y-1/2 w-6 h-6 p-2 rounded-full border-2 transition-all duration-300 z-20 absolute 
+                                                                ${isActive 
+                                                                    ? ' border-white scale-100' 
+                                                                    : ' border-transparent scale-75'
+                                                            } `}
                                                             style={{
                                                                 position: 'absolute',
                                                                
                                                                 zIndex: 30
                                                             }}
-                                                        ></div>
+                                                        >
+                                                            <div className={`min-w-3 min-h-3 max-w-3 max-h-3 rounded-full  
+                                                            ${isActive 
+                                                                    ? ' bg-white ' 
+                                                                    : ' bg-white '
+                                                            }`}></div>
+                                                        </div>
                                                         
                                                        
                                                         

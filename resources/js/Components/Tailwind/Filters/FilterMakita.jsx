@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-import { ChevronDown, ChevronLeft, ChevronRight, Filter, LayoutGrid, LucideListTodo, Search, Tag, X } from "lucide-react";
+import { ChevronDown, Filter, LayoutGrid, LucideListTodo, Search, Tag, X } from "lucide-react";
 import ItemsRest from "../../../Actions/ItemsRest";
-import ArrayJoin from "../../../Utils/ArrayJoin";
 import { Loading } from "../Components/Resources/Loading";
 import { NoResults } from "../Components/Resources/NoResult";
-import SelectForm from "./Components/SelectForm";
 import { GET } from "sode-extend-react";
 import CardProductMakita from "../Products/Components/CardProductMakita";
 
@@ -31,137 +29,253 @@ const SkeletonCard = () => {
 };
 
 const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
-    const [brands, setBrands] = useState([]);
-    const [subcategories, setSubcategories] = useState([]);
-    const [categories, setCategories] = useState([]);
-    const [priceRanges, setPriceRanges] = useState([]);
+    const [allProducts, setAllProducts] = useState([]); // Todos los productos
+    const [filteredProducts, setFilteredProducts] = useState([]); // Productos filtrados
+    const [specifications, setSpecifications] = useState({});
     const [activeSection, setActiveSection] = useState(null);
     const [viewType, setViewType] = useState('grid'); // 'grid' o 'list'
 
     const [sections, setSections] = useState({
-        marca: true,
-        precio: true,
-        categoria: true,
-        subcategoria: true,
-        colores: false,
+        especificaciones: true,
     });
 
     const [selectedFilters, setSelectedFilters] = useState({
-        collection_id: GET.collection ? GET.collection.split(',') : [],
-        category_id: GET.category ? GET.category.split(',') : [],
-        brand_id: GET.brand ? GET.brand.split(',') : [],
-        subcategory_id: GET.subcategory ? GET.subcategory.split(',') : [],
-        price: null,
+        specifications: {},
         name: GET.search || null,
-        sort_by: "created_at",
-        order: "desc",
     });
 
-    const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [pagination, setPagination] = useState({
-        currentPage: 1,
-        totalPages: 1,
-        totalItems: 0,
-        itemsPerPage: 24,
-        from: 0,
-        to: 0,
-    });
 
-    const transformFilters = (filters) => {
-        const transformedFilters = [];
-
-        if (filters.collection_id.length > 0) {
-            const collectionConditions = filters.collection_id.map((id) => [
-                "collection.slug",
-                "=",
-                id,
-            ]);
-            transformedFilters.push(["or", ...collectionConditions]);
+    // Función para filtrar productos del lado del cliente
+    const filterProducts = (products, filters) => {
+        // Validar que products sea un array
+        if (!Array.isArray(products)) {
+            console.log('filterProducts: products no es un array:', products);
+            return [];
         }
-
-        if (filters.category_id.length > 0) {
-            const categoryConditions = filters.category_id.map((id) => [
-                "category.slug",
-                "=",
-                id,
-            ]);
-            transformedFilters.push([...categoryConditions]);
-        }
-
-        if (filters.subcategory_id.length > 0) {
-            const subcategoryConditions = filters.subcategory_id.map((id) => [
-                "subcategory.slug",
-                "=",
-                id,
-            ]);
-            transformedFilters.push([...subcategoryConditions]);
-        }
-
-        if (filters.brand_id.length > 0) {
-            const brandConditions = filters.brand_id.map((id) => [
-                "brand.slug",
-                "=",
-                id,
-            ]);
-            transformedFilters.push([...brandConditions]);
-        }
-
-        if (filters.price) {
-            transformedFilters.push([
-                "or",
-                [
-                    ["final_price", ">=", filters.price.min],
-                    "and",
-                    ["final_price", "<=", filters.price.max],
-                ],
-            ]);
-        }
-
-        if (filters.name) {
-            transformedFilters.push(["name", "contains", filters.name]);
-        }
-
-        return ArrayJoin(transformedFilters, 'and');
+        
+        return products.filter(product => {
+            // Validar que el producto existe
+            if (!product) return false;
+            
+            // Filtro por nombre/búsqueda
+            if (filters.name && filters.name.trim() !== '') {
+                const searchTerm = filters.name.toLowerCase();
+                const productName = (product.name || '').toLowerCase();
+                const productDescription = (product.description || '').toLowerCase();
+                const productSummary = (product.summary || '').toLowerCase();
+                
+                if (!productName.includes(searchTerm) && 
+                    !productDescription.includes(searchTerm) && 
+                    !productSummary.includes(searchTerm)) {
+                    return false;
+                }
+            }
+            
+            // Filtros por especificaciones
+            if (filters.specifications && Object.keys(filters.specifications).length > 0) {
+                for (const [specName, selectedValues] of Object.entries(filters.specifications)) {
+                    if (selectedValues.length > 0) {
+                        let hasMatch = false;
+                        
+                        // Verificar según el tipo de especificación
+                        switch(specName) {
+                            case 'Color':
+                                hasMatch = selectedValues.includes(product.color);
+                                break;
+                            case 'Textura':
+                                hasMatch = selectedValues.includes(product.texture);
+                                break;
+                            case 'SKU':
+                                hasMatch = selectedValues.includes(product.sku);
+                                break;
+                            case 'Marca':
+                                hasMatch = selectedValues.includes(product.brand?.name);
+                                break;
+                            case 'Categoría':
+                                hasMatch = selectedValues.includes(product.category?.name);
+                                break;
+                            case 'Subcategoría':
+                                hasMatch = selectedValues.includes(product.subcategory?.name);
+                                break;
+                            case 'Colección':
+                                hasMatch = selectedValues.includes(product.collection?.name);
+                                break;
+                            default:
+                                // Para especificaciones extraídas del nombre
+                                hasMatch = selectedValues.some(value => 
+                                    product.name.toLowerCase().includes(value.toLowerCase())
+                                );
+                                break;
+                        }
+                        
+                        if (!hasMatch) {
+                            return false;
+                        }
+                    }
+                }
+            }
+            
+            return true;
+        });
     };
-    // Obtener productos filtrados desde el backend
-    const fetchProducts = async (page = 1) => {
+
+    // Función para procesar especificaciones desde los productos
+    const processSpecificationsFromProducts = (products) => {
+        const specsMap = {};
+        
+        // Validar que products sea un array
+        if (!Array.isArray(products) || products.length === 0) {
+            console.log('No hay productos para procesar o products no es un array:', products);
+            return {};
+        }
+        
+        products.forEach(product => {
+            // Validar que product existe
+            if (!product) return;
+            
+            // Procesar campos directos del producto que pueden ser filtros
+            const directFields = {
+                'Color': product.color,
+                'Textura': product.texture,
+                'SKU': product.sku,
+                'Marca': product.brand?.name,
+                'Categoría': product.category?.name,
+                'Subcategoría': product.subcategory?.name,
+                'Colección': product.collection?.name,
+            };
+            
+            // Agregar campos directos
+            Object.entries(directFields).forEach(([fieldName, fieldValue]) => {
+                if (fieldValue && fieldValue.toString().trim() !== '' && fieldValue.toString().trim() !== 'null') {
+                    if (!specsMap[fieldName]) {
+                        specsMap[fieldName] = new Set();
+                    }
+                    specsMap[fieldName].add(fieldValue.toString().trim());
+                }
+            });
+            
+            // Si el producto tiene un campo specifications, también procesarlo
+            if (product.specifications && typeof product.specifications === 'object') {
+                Object.entries(product.specifications).forEach(([specName, specValue]) => {
+                    if (specValue && specValue.toString().trim() !== '' && specValue.toString().trim() !== 'null') {
+                        if (!specsMap[specName]) {
+                            specsMap[specName] = new Set();
+                        }
+                        specsMap[specName].add(specValue.toString().trim());
+                    }
+                });
+            }
+            
+            // Extraer especificaciones del nombre del producto (común en productos técnicos)
+            if (product.name) {
+                const nameSpecs = extractSpecsFromName(product.name);
+                Object.entries(nameSpecs).forEach(([specName, specValue]) => {
+                    if (!specsMap[specName]) {
+                        specsMap[specName] = new Set();
+                    }
+                    specsMap[specName].add(specValue);
+                });
+            }
+        });
+        
+        // Convertir Sets a arrays y ordenar
+        const processedSpecs = {};
+        Object.entries(specsMap).forEach(([specName, valuesSet]) => {
+            if (valuesSet.size > 1) { // Solo incluir si hay más de un valor
+                processedSpecs[specName] = Array.from(valuesSet).sort();
+            }
+        });
+        
+        return processedSpecs;
+    };
+    
+    // Función para extraer especificaciones del nombre del producto
+    const extractSpecsFromName = (name) => {
+        const specs = {};
+        
+        // Patrones comunes en nombres de productos técnicos
+        const patterns = [
+            { regex: /(\d+)w/gi, key: 'Potencia' },
+            { regex: /(\d+)v/gi, key: 'Voltaje' },
+            { regex: /(\d+)-(\d+)\s*rpm/gi, key: 'RPM' },
+            { regex: /(\d+\.?\d*)\s*kg/gi, key: 'Peso' },
+            { regex: /(\d+\.?\d*)\s*mm/gi, key: 'Medida' },
+            { regex: /(\d+\.?\d*)\s*nm/gi, key: 'Torque' },
+            { regex: /(\d+\.?\d*)""/gi, key: 'Pulgadas' },
+        ];
+        
+        patterns.forEach(pattern => {
+            const matches = [...name.matchAll(pattern.regex)];
+            if (matches.length > 0) {
+                const values = matches.map(match => match[1] || match[0]).filter(Boolean);
+                if (values.length > 0) {
+                    specs[pattern.key] = values[0];
+                }
+            }
+        });
+        
+        return specs;
+    };
+    // Obtener todos los productos una sola vez
+    const fetchAllProducts = async () => {
         setLoading(true);
         try {
-            const filters = transformFilters(selectedFilters);
             const params = {
-                filter: filters,
-                sort: selectedFilters.sort,
-                skip: (page - 1) * pagination.itemsPerPage,
-                take: pagination.itemsPerPage,
-                requireTotalCount: true,
+                take: 10000, // Número grande para obtener todos los productos
+                skip: 0,
+                requireTotalCount: false,
             };
-            console.log(params);
+            
+            console.log('Obteniendo todos los productos...');
+            console.log('Parámetros enviados:', params);
+            console.log('ItemsRest instance:', itemsRest);
 
             const response = await itemsRest.paginate(params);
-            console.log(response)
+            console.log('Respuesta completa de la API:', response);
 
-            setProducts(response.data);
-            setPagination({
-                currentPage: page,
-                totalPages: Math.ceil(
-                    response.totalCount / pagination.itemsPerPage
-                ),
-                totalItems: response.totalCount,
-                itemsPerPage: pagination.itemsPerPage,
-                from: (page - 1) * pagination.itemsPerPage + 1,
-                to: Math.min(
-                    page * pagination.itemsPerPage,
-                    response.totalCount
-                ),
-            });
-            // console.log(response);
-            setBrands(response?.summary.brands);
-            setCategories(response?.summary.categories);
-            setSubcategories(response?.summary.subcategories);
-            setPriceRanges(response?.summary.priceRanges);
+            // Validar la respuesta
+            if (!response || !response.data) {
+                console.error('La respuesta de la API no tiene la estructura esperada:', response);
+                setAllProducts([]);
+                setFilteredProducts([]);
+                setSpecifications({});
+                return;
+            }
+
+            // Validar la respuesta y extraer productos
+            let products = [];
+            if (response && response.data) {
+                if (Array.isArray(response.data)) {
+                    products = response.data;
+                } else if (response.data.data && Array.isArray(response.data.data)) {
+                    // Algunas APIs devuelven los datos en response.data.data
+                    products = response.data.data;
+                } else if (response.data.items && Array.isArray(response.data.items)) {
+                    // Otras APIs usan response.data.items
+                    products = response.data.items;
+                }
+            }
+            
+            console.log('Productos extraídos:', products);
+
+            setAllProducts(products);
+            
+            // Procesar especificaciones dinámicas con TODOS los productos
+            const processedSpecs = processSpecificationsFromProducts(products);
+            console.log('Especificaciones procesadas:', processedSpecs);
+            setSpecifications(processedSpecs);
+            
+            // Aplicar filtros iniciales
+            const filtered = filterProducts(products, selectedFilters);
+            setFilteredProducts(filtered);
+            
         } catch (error) {
-            console.log("Error fetching products:", error);
+            console.error("Error fetching products:", error);
+            // En caso de error, establecer valores por defecto
+            setAllProducts([]);
+            setFilteredProducts([]);
+            setSpecifications({});
         } finally {
             setLoading(false);
         }
@@ -173,39 +287,19 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
 
 
     useEffect(() => {
+        // Solo intentar cargar productos si hay datos o si no es la carga inicial
+        fetchAllProducts();
+    }, []);
 
-        fetchProducts(pagination.currentPage);
-    }, [selectedFilters]);
-
-    const handlePageChange = (page) => {
-        if (page >= 1 && page <= pagination.totalPages) {
-            fetchProducts(page);
+    // Aplicar filtros cuando cambien
+    useEffect(() => {
+        if (Array.isArray(allProducts) && allProducts.length > 0) {
+            const filtered = filterProducts(allProducts, selectedFilters);
+            setFilteredProducts(filtered);
+        } else {
+            setFilteredProducts([]);
         }
-    };
-
-    // Generar números de página para la paginación
-    const getPageNumbers = () => {
-        const pages = [];
-        const total = pagination.totalPages;
-        const current = pagination.currentPage;
-        const delta = 2;
-
-        for (let i = 1; i <= total; i++) {
-            if (
-                i === 1 ||
-                i === total ||
-                (i >= current - delta && i <= current + delta)
-            ) {
-                pages.push(i);
-            } else if (i === current - delta - 1 || i === current + delta + 1) {
-                pages.push("...");
-            }
-        }
-
-        return pages.filter((page, index, array) => {
-            return page !== "..." || array[index - 1] !== "...";
-        });
-    };
+    }, [selectedFilters, allProducts]);
     // Opciones de ordenación
     const sortOptions = [
         { value: "created_at:desc", label: "Más reciente" },
@@ -219,30 +313,33 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
 
     //}, [items]);
     // Manejar cambios en los filtros
-    const handleFilterChange = (type, value) => {
+    const handleFilterChange = (type, value, specName = null) => {
         setSelectedFilters((prev) => {
-            if (type === "price") {
-                // Si el mismo rango ya está seleccionado, lo deseleccionamos; de lo contrario, lo asignamos
+            if (type === "specifications") {
+                const newSpecifications = { ...prev.specifications };
+                
+                if (!newSpecifications[specName]) {
+                    newSpecifications[specName] = [];
+                }
+                
+                const currentValues = newSpecifications[specName];
+                const newValues = currentValues.includes(value)
+                    ? currentValues.filter((item) => item !== value)
+                    : [...currentValues, value];
+                
+                if (newValues.length === 0) {
+                    delete newSpecifications[specName];
+                } else {
+                    newSpecifications[specName] = newValues;
+                }
+                
                 return {
                     ...prev,
-                    price:
-                        prev.price &&
-                            prev.price.min === value.min &&
-                            prev.price.max === value.max
-                            ? null
-                            : value,
+                    specifications: newSpecifications,
                 };
             }
 
-            // Asegúrate de que prev[type] sea un array antes de usar .includes()
-            const currentValues = Array.isArray(prev[type]) ? prev[type] : [];
-
-            // Manejar múltiples valores para categorías y marcas
-            const newValues = currentValues.includes(value)
-                ? currentValues.filter((item) => item !== value) // Eliminar si ya está seleccionado
-                : [...currentValues, value]; // Agregar si no está seleccionado
-
-            return { ...prev, [type]: newValues };
+            return { ...prev, [type]: value };
         });
     };
 
@@ -254,22 +351,15 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
         }));
     };
 
-    const [searchCategory, setSearchCategory] = useState("");
-    const [searchSubcategory, setSearchSubcategory] = useState("");
-    const [searchBrand, setSearchBrand] = useState("");
+    // Limpiar todos los filtros
+    const clearAllFilters = () => {
+        setSelectedFilters({
+            specifications: {},
+            name: GET.search || null,
+        });
+    };
 
-    // Filtrar categorías según el input
-    const filteredCategories = categories.filter((category) =>
-        category.name.toLowerCase().includes(searchCategory.toLowerCase())
-    );
-    const filteredSubcategories = subcategories.filter((subcategory) =>
-        subcategory.name.toLowerCase().includes(searchSubcategory.toLowerCase())
-    );
-
-    // Filtrar marcas según el input
-    const filteredBrands = brands.filter((brand) =>
-        brand.name.toLowerCase().includes(searchBrand.toLowerCase())
-    );
+    const [searchSpecifications, setSearchSpecifications] = useState({});
 
     const [filtersOpen, setFiltersOpen] = useState(false);
 
@@ -282,9 +372,34 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
                     </h2>
                     <div className="flex flex-col w-full items-center justify-end gap-4 md:flex-row md:w-5/12">
                         <span className="block md:w-6/12 order-1 md:order-none">
-                            Productos seleccionados:{" "}
-                            <strong>{products?.length}</strong>
+                            Productos encontrados:{" "}
+                            <strong>{Array.isArray(filteredProducts) ? filteredProducts.length : 0}</strong>
+                            {Array.isArray(allProducts) && allProducts.length > 0 && (
+                                <span className="text-gray-500 text-sm"> de {allProducts.length}</span>
+                            )}
                         </span>
+                        
+                        {/* Mostrar filtros activos */}
+                        {Object.keys(selectedFilters.specifications).length > 0 && (
+                            <div className="flex flex-wrap gap-2 text-xs">
+                                {Object.entries(selectedFilters.specifications).map(([specName, values]) =>
+                                    values.map(value => (
+                                        <span
+                                            key={`${specName}-${value}`}
+                                            className="bg-primary/10 text-primary px-2 py-1 rounded-full flex items-center gap-1"
+                                        >
+                                            {specName}: {value}
+                                            <button
+                                                onClick={() => handleFilterChange("specifications", value, specName)}
+                                                className="hover:bg-primary/20 rounded-full p-0.5"
+                                            >
+                                                <X className="h-3 w-3" />
+                                            </button>
+                                        </span>
+                                    ))
+                                )}
+                            </div>
+                        )}
                         {/* Controles de vista */}
                         <div className="flex items-center gap-2 mr-2">
                             <button
@@ -348,211 +463,136 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
                         {/* Header fijo para mobile */}
                         <div className="fixed top-0 left-0 right-0 bg-white p-4 border-b z-10 h-16 flex items-center justify-between lg:relative lg:p-0 lg:border-none lg:h-auto">
                             <h2 className="text-xl font-bold">Filtros</h2>
-                            <button
-                                className="lg:hidden"
-                                onClick={() => setFiltersOpen(false)}
-                            >
-                                <X className="h-5 w-5" />
-                            </button>
-                            <Filter className="hidden lg:block h-5 w-5" />
+                            <div className="flex items-center gap-2">
+                                {/* Botón limpiar filtros */}
+                                {Object.keys(selectedFilters.specifications).length > 0 && (
+                                    <button
+                                        onClick={clearAllFilters}
+                                        className="text-sm text-primary hover:text-primary-dark underline"
+                                    >
+                                        Limpiar
+                                    </button>
+                                )}
+                                <button
+                                    className="lg:hidden"
+                                    onClick={() => setFiltersOpen(false)}
+                                >
+                                    <X className="h-5 w-5" />
+                                </button>
+                                <Filter className="hidden lg:block h-5 w-5" />
+                            </div>
                         </div>
 
                         {/* Contenido principal con scroll */}
                         <div className="flex-1 overflow-y-auto px-4 mt-16 pb-20 lg:mt-0 lg:pb-0 lg:px-0">
-                            {/* Sección Marcas */}
+                            {/* Campo de búsqueda general */}
                             <div className="mb-6">
-                                <button
-                                    onClick={() => toggleSection("marca")}
-                                    className="flex items-center justify-between w-full mb-4 p-2 lg:p-0"
-                                >
-                                    <span className="font-medium">Marca</span>
-                                    <ChevronDown
-                                        className={`h-5 w-5 transform transition-transform ${sections.marca ? "" : "-rotate-180"
-                                            }`}
+                                <div className="relative">
+                                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                                    <input
+                                        type="text"
+                                        placeholder="Buscar productos..."
+                                        className="w-full pl-10 pr-4 py-3 border rounded-xl focus:ring-1 focus:ring-primary/50 focus:outline-0"
+                                        value={selectedFilters.name || ''}
+                                        onChange={(e) => handleFilterChange('name', e.target.value)}
                                     />
-                                </button>
-                                {sections.marca && (
-                                    <div className="space-y-4">
-                                        <div className="relative">
-                                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                                            <input
-                                                type="text"
-                                                placeholder="Buscar"
-                                                className="w-full pl-10 pr-4 py-3 border rounded-xl focus:ring-0 focus:outline-0"
-                                                value={searchBrand}
-                                                onChange={(e) => setSearchBrand(e.target.value)}
-                                            />
-                                        </div>
-                                        <div className="space-y-3 max-h-[200px] overflow-y-auto p-1">
-                                            {filteredBrands.map((brand) => (
-                                                <label
-                                                    key={brand.id}
-                                                    className="flex items-center gap-2 py-1.5"
-                                                >
-                                                    <input
-                                                        type="checkbox"
-                                                        className="h-5 w-5 rounded border-gray-300 accent-primary"
-                                                        onChange={() => handleFilterChange("brand_id", brand.slug)}
-                                                    />
-                                                    <span className="text-sm lg:text-base">{brand.name}</span>
-                                                </label>
-                                            ))}
-                                        </div>
-                                    </div>
-                                )}
+                                </div>
                             </div>
 
-                            {/* Sección Categorías */}
-                            <div className="mb-6">
-                                <button
-                                    onClick={() => toggleSection("categoria")}
-                                    className="flex items-center justify-between w-full mb-4 p-2 lg:p-0"
-                                >
-                                    <span className="font-medium">Categoría</span>
-                                    <ChevronDown
-                                        className={`h-5 w-5 transform transition-transform ${sections.categoria ? "" : "-rotate-180"
-                                            }`}
-                                    />
-                                </button>
-                                {sections.categoria && (
-                                    <div className="space-y-4">
-                                        <div className="relative">
-                                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                                            <input
-                                                type="text"
-                                                placeholder="Buscar"
-                                                className="w-full pl-10 pr-4 py-3 border rounded-xl focus:ring-0 focus:outline-0"
-                                                value={searchCategory}
-                                                onChange={(e) => setSearchCategory(e.target.value)}
-                                            />
+                            {/* Sección Características/Especificaciones Dinámicas */}
+                            {Object.keys(specifications || {}).length > 0 ? (
+                                <div className="mb-6">
+                                    <button
+                                        onClick={() => toggleSection("especificaciones")}
+                                        className="flex items-center justify-between w-full mb-4 p-2 lg:p-0"
+                                    >
+                                        <span className="font-medium">Características</span>
+                                        <ChevronDown
+                                            className={`h-5 w-5 transform transition-transform ${sections.especificaciones ? "" : "-rotate-180"
+                                                }`}
+                                        />
+                                    </button>
+                                    {sections.especificaciones && (
+                                        <div className="space-y-4">
+                                            {Object.entries(specifications).map(([specName, specValues]) => {
+                                                // Filtrar valores de especificación según búsqueda
+                                                const searchTerm = searchSpecifications[specName] || "";
+                                                const filteredSpecValues = specValues.filter(value =>
+                                                    value.toLowerCase().includes(searchTerm.toLowerCase())
+                                                );
+                                                
+                                                return (
+                                                    <div key={specName} className="border-b border-gray-100 pb-4 last:border-b-0">
+                                                        <h4 className="font-medium text-sm text-gray-700 mb-3 flex items-center gap-2">
+                                                            <Tag className="h-4 w-4" />
+                                                            {specName}
+                                                            <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+                                                                {specValues.length}
+                                                            </span>
+                                                            {selectedFilters.specifications[specName]?.length > 0 && (
+                                                                <span className="text-xs text-primary bg-primary/10 px-2 py-1 rounded-full">
+                                                                    {selectedFilters.specifications[specName].length} seleccionados
+                                                                </span>
+                                                            )}
+                                                        </h4>
+                                                        
+                                                        {/* Campo de búsqueda si hay más de 5 opciones */}
+                                                        {specValues.length > 5 && (
+                                                            <div className="relative mb-3">
+                                                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3 w-3 text-gray-400" />
+                                                                <input
+                                                                    type="text"
+                                                                    placeholder={`Buscar en ${specName.toLowerCase()}`}
+                                                                    className="w-full pl-8 pr-4 py-2 text-sm border rounded-lg focus:ring-1 focus:ring-primary/50 focus:outline-0"
+                                                                    value={searchSpecifications[specName] || ""}
+                                                                    onChange={(e) => setSearchSpecifications(prev => ({
+                                                                        ...prev,
+                                                                        [specName]: e.target.value
+                                                                    }))}
+                                                                />
+                                                            </div>
+                                                        )}
+                                                        
+                                                        <div className="space-y-2 max-h-[120px] overflow-y-auto">
+                                                            {filteredSpecValues.map((value) => {
+                                                                const isSelected = selectedFilters.specifications[specName]?.includes(value) || false;
+                                                                return (
+                                                                    <label
+                                                                        key={`${specName}-${value}`}
+                                                                        className={`flex items-center gap-2 py-1.5 px-2 rounded-md hover:bg-gray-50 cursor-pointer transition-colors ${
+                                                                            isSelected ? 'bg-primary/5 border border-primary/20' : ''
+                                                                        }`}
+                                                                    >
+                                                                        <input
+                                                                            type="checkbox"
+                                                                            className="h-4 w-4 rounded border-gray-300 accent-primary"
+                                                                            onChange={() => handleFilterChange("specifications", value, specName)}
+                                                                            checked={isSelected}
+                                                                        />
+                                                                        <span className={`text-sm ${isSelected ? 'text-primary font-medium' : 'text-gray-700'}`}>
+                                                                            {value}
+                                                                        </span>
+                                                                    </label>
+                                                                );
+                                                            })}
+                                                            {filteredSpecValues.length === 0 && searchTerm && (
+                                                                <p className="text-sm text-gray-500 italic py-2 text-center">
+                                                                    No se encontraron coincidencias
+                                                                </p>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                );
+                                            })}
                                         </div>
-                                        <div className="space-y-3 max-h-[200px] overflow-y-auto p-1">
-                                            {filteredCategories.map((category) => (
-                                                <div key={category.id}>
-                                                    <label className="flex items-center gap-2 py-1.5">
-                                                        <input
-                                                            type="checkbox"
-                                                            className="h-5 w-5 rounded border-gray-300 accent-primary"
-                                                            onChange={() => handleFilterChange("category_id", category.slug)}
-                                                            checked={selectedFilters.category_id?.includes(category.slug)}
-                                                        />
-                                                        <span className="text-sm lg:text-base">{category.name}</span>
-                                                    </label>
-
-                                                    {selectedFilters.category_id?.includes(category.slug) && (
-                                                        <ul className="ml-4 pl-3 mt-1 space-y-2 border-l-2 border-gray-200">
-                                                            {category.subcategories?.map((sub) => (
-                                                                <label key={sub.id} className="flex items-center gap-2 py-1.5">
-                                                                    <input
-                                                                        type="checkbox"
-                                                                        className="h-4 w-4 rounded border-gray-300 accent-primary"
-                                                                        onChange={() => handleFilterChange("subcategory_id", sub.slug)}
-                                                                        checked={selectedFilters.subcategory_id?.includes(sub.slug)}
-                                                                    />
-                                                                    <span className="text-sm lg:text-base">{sub.name}</span>
-                                                                </label>
-                                                            ))}
-                                                        </ul>
-                                                    )}
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-
-                            {/* Sección Subcategorías */}
-                            <motion.div className="mb-6">
-                                <motion.button
-                                    onClick={() => toggleSection("subcategoria")}
-                                    className="flex items-center justify-between w-full mb-4 p-2 lg:p-0"
-                                    whileHover={{ x: 3 }}
-                                >
-                                    <span className="font-medium">Sub Categorías</span>
-                                    <ChevronDown
-                                        className={`h-5 w-5 transform transition-transform ${sections.subcategoria ? "" : "-rotate-180"
-                                            }`}
-                                    />
-                                </motion.button>
-
-                                <AnimatePresence>
-                                    {sections.subcategoria && (
-                                        <motion.div
-                                            className="space-y-4"
-                                            initial="hidden"
-                                            animate="visible"
-                                            exit="hidden"
-                                            variants={{
-                                                hidden: { opacity: 0, height: 0 },
-                                                visible: { opacity: 1, height: "auto" }
-                                            }}
-                                        >
-                                            <div className="relative">
-                                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                                                <input
-                                                    type="text"
-                                                    placeholder="Buscar"
-                                                    className="w-full pl-10 pr-4 py-3 border rounded-xl focus:ring-0 focus:outline-0"
-                                                    value={searchSubcategory}
-                                                    onChange={(e) => setSearchSubcategory(e.target.value)}
-                                                />
-                                            </div>
-
-                                            <div className="space-y-3 max-h-[200px] overflow-y-auto p-1">
-                                                {filteredSubcategories.map((subcategory) => (
-                                                    <label
-                                                        key={subcategory.id}
-                                                        className="flex items-center gap-2 py-1.5"
-                                                    >
-                                                        <input
-                                                            type="checkbox"
-                                                            className="h-5 w-5 rounded border-gray-300 accent-primary"
-                                                            onChange={() => handleFilterChange("subcategory_id", subcategory.slug)}
-                                                            checked={selectedFilters.subcategory_id?.includes(subcategory.slug)}
-                                                        />
-                                                        <span className="text-sm lg:text-base">{subcategory.name}</span>
-                                                    </label>
-                                                ))}
-                                            </div>
-                                        </motion.div>
                                     )}
-                                </AnimatePresence>
-                            </motion.div>
-
-                            {/* Sección Precio */}
-                            <div className="mb-6">
-                                <button
-                                    onClick={() => toggleSection("precio")}
-                                    className="flex items-center justify-between w-full mb-4 p-2 lg:p-0"
-                                >
-                                    <span className="font-medium">Precio</span>
-                                    <ChevronDown
-                                        className={`h-5 w-5 transform transition-transform ${sections.precio ? "" : "-rotate-180"
-                                            }`}
-                                    />
-                                </button>
-                                {sections.precio && (
-                                    <div className="space-y-3 p-1">
-                                        {priceRanges.map((range) => (
-                                            <label
-                                                key={`${range.min}-${range.max}`}
-                                                className="flex items-center gap-2 py-1.5"
-                                            >
-                                                <input
-                                                    type="checkbox"
-                                                    className="h-5 w-5 rounded border-gray-300 accent-primary"
-                                                    onChange={() => handleFilterChange("price", range)}
-                                                    checked={
-                                                        selectedFilters.price?.min === range.min &&
-                                                        selectedFilters.price?.max === range.max
-                                                    }
-                                                />
-                                                <span className="text-sm lg:text-base">{`S/ ${range.min} - S/ ${range.max}`}</span>
-                                            </label>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
+                                </div>
+                            ) : (
+                                <div className="text-center py-8 text-gray-500">
+                                    <p>No hay características disponibles para filtrar</p>
+                                    <p className="text-sm">Los filtros se generarán cuando se carguen los productos</p>
+                                </div>
+                            )}
                         </div>
 
                         {/* Footer móvil */}
@@ -578,9 +618,9 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
                             </div>
                         ) : (
                             <div className={`flex ${viewType === 'grid' ? 'items-center flex-wrap' : 'flex-col gap-6'} transition-all duration-300 ease-in-out`}>
-                                {Array.isArray(products) &&
-                                    products.length > 0 ? (
-                                    products.map((product) => (
+                                {Array.isArray(filteredProducts) &&
+                                    filteredProducts.length > 0 ? (
+                                    filteredProducts.map((product) => (
                                         <div
                                             key={product.id}
                                             className={viewType === 'grid'
@@ -599,90 +639,17 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
                                         </div>
                                     ))
                                 ) : (
-                                    <NoResults />
+                                    <div className="w-full text-center py-12">
+                                        <NoResults />
+                                        {allProducts.length > 0 && (
+                                            <p className="text-gray-500 mt-4">
+                                                Intenta ajustar los filtros para ver más productos
+                                            </p>
+                                        )}
+                                    </div>
                                 )}
                             </div>
                         )}
-                        {/* Paginación inferior */}
-                        <motion.div
-                            className="flex flex-col md:flex-row justify-between items-center mb-4 w-full mt-8 gap-4"
-                        >
-                            <div className="customtext-primary font-semibold w-full md:w-auto">
-                                <div className="overflow-x-auto pb-2">
-                                    <nav className="flex items-center gap-x-2 min-w-max">
-                                        <motion.button
-                                            className={`p-4 inline-flex items-center ${pagination.currentPage === 1
-                                                ? "opacity-50 cursor-not-allowed"
-                                                : ""
-                                                }`}
-                                            onClick={() =>
-                                                handlePageChange(
-                                                    pagination.currentPage - 1
-                                                )
-                                            }
-                                            disabled={pagination.currentPage === 1}
-                                            whileHover={{ scale: 1.1 }}
-                                            whileTap={{ scale: 0.9 }}
-                                        >
-                                            <ChevronLeft />
-                                        </motion.button>
-
-                                        {getPageNumbers().map((page, index) => (
-                                            <React.Fragment key={index}>
-                                                {page === "..." ? (
-                                                    <span className="w-10 h-10 bg-transparent p-2 inline-flex items-center justify-center rounded-full">
-                                                        ...
-                                                    </span>
-                                                ) : (
-                                                    <motion.button
-                                                        className={`w-10 h-10 p-2 inline-flex items-center justify-center rounded-full transition-all duration-300 
-                                                        ${page ===
-                                                                pagination.currentPage
-                                                                ? "bg-primary text-white"
-                                                                : "bg-transparent hover:text-white hover:bg-primary"
-                                                            }`}
-                                                        onClick={() =>
-                                                            handlePageChange(page)
-                                                        }
-                                                        whileHover={{ scale: 1.05 }}
-                                                        whileTap={{ scale: 0.95 }}
-                                                    >
-                                                        {page}
-                                                    </motion.button>
-                                                )}
-                                            </React.Fragment>
-                                        ))}
-
-                                        <motion.button
-                                            className={`p-4 inline-flex items-center ${pagination.currentPage ===
-                                                pagination.totalPages
-                                                ? "opacity-50 cursor-not-allowed"
-                                                : ""
-                                                }`}
-                                            onClick={() =>
-                                                handlePageChange(
-                                                    pagination.currentPage + 1
-                                                )
-                                            }
-                                            disabled={
-                                                pagination.currentPage ===
-                                                pagination.totalPages
-                                            }
-                                            whileHover={{ scale: 1.1 }}
-                                            whileTap={{ scale: 0.9 }}
-                                        >
-                                            <ChevronRight />
-                                        </motion.button>
-                                    </nav>
-                                </div>
-                            </div>
-                            <div className="w-full md:w-auto text-center md:text-right">
-                                <p className="font-semibold">
-                                    {pagination.from} - {pagination.to} de{" "}
-                                    {pagination.totalItems} Resultados
-                                </p>
-                            </div>
-                        </motion.div>
                     </div>
                 </div>
             </div>

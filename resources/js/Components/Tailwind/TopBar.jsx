@@ -8,13 +8,13 @@ const TopBarCopyrightSocials = React.lazy(() =>
     import("./TopBars/TopBarCopyrightSocials")
 );
 
-const TopBar = ({ data, which, items, setCart, cart, isUser }) => {
+const TopBar = ({ data, which, items, setCart, cart, isUser,generals }) => {
     const getTopBar = () => {
         switch (which) {
             case "TopBarSimple":
-                return <TopBarSimple key="TopBarSimple" data={data}/>;
+                return <TopBarSimple key="TopBarSimple" data={data} generals={generals}/>;
             case "TopBarSocials":
-                return <TopBarSocials key="TopBarSocials" items={items} data={data}/>;
+                return <TopBarSocials key="TopBarSocials" items={items} data={data} generals={generals}/>;
             case "TopBarCart":
                 return (
                     <TopBarCart
@@ -32,6 +32,8 @@ const TopBar = ({ data, which, items, setCart, cart, isUser }) => {
                         cart={cart}
                         setCart={setCart}
                         isUser={isUser}
+                        data={data}
+                        generals={generals}
                     />
                 );
             case "TopBarCopyrightSocials":
