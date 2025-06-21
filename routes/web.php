@@ -34,6 +34,7 @@ use App\Http\Controllers\Admin\SubCategoryController as AdminSubCategoryControll
 use App\Http\Controllers\Admin\FaqController as AdminFaqController;
 use App\Http\Controllers\Admin\RepositoryController as AdminRepositoryController;
 use App\Http\Controllers\Admin\ServicePointController as AdminServicePointController;
+use App\Http\Controllers\Admin\JobApplicationController as AdminJobApplicationController;
 // Public 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RepositoryController;
@@ -82,6 +83,7 @@ Route::middleware(['can:Admin', 'auth'])->prefix('admin')->group(function () {
     Route::get('/sales', [AdminSaleController::class, 'reactView'])->name('Admin/Sales.jsx');
     Route::get('/items', [AdminItemController::class, 'reactView'])->name('Admin/Items.jsx');
     Route::get('/ads', [AdminAdController::class, 'reactView'])->name('Admin/Ads.jsx');
+    Route::get('/job-applications', [AdminJobApplicationController::class, 'reactView'])->name('Admin/JobApplications.jsx');
 
     Route::get('/combos', [AdminComboController::class, 'reactView'])->name('Admin/Combos.jsx');
 

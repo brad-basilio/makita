@@ -20,6 +20,7 @@ use App\Http\Controllers\Admin\AccountController as AdminAccountController;
 use App\Http\Controllers\Admin\AdController as AdminAdController;
 use App\Http\Controllers\Admin\BannerController as AdminBannerController;
 use App\Http\Controllers\Admin\BrandController as AdminBrandController;
+use App\Http\Controllers\Admin\JobApplicationController as AdminJobApplicationController;
 
 use App\Http\Controllers\Admin\DeliveryPriceController as AdminDeliveryPriceController;
 use App\Http\Controllers\Admin\TypesDeliveryController as AdminTypesDeliveryController;
@@ -49,6 +50,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ComplaintController;
+use App\Http\Controllers\JobApplicationController;
 use App\Http\Controllers\CoverController;
 use App\Http\Controllers\DeliveryPriceController;
 use App\Http\Controllers\ItemController;
@@ -91,6 +93,8 @@ Route::post('/unified-import/preview', [UnifiedImportController::class, 'preview
 Route::get('/unified-import/field-mappings', [UnifiedImportController::class, 'getFieldMappings']);
 
 Route::post('/complaints', [ComplaintController::class, 'saveComplaint']);
+Route::post('/job-applications', [JobApplicationController::class, 'save']);
+
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/signup', [AuthController::class, 'signup']);
 
@@ -185,6 +189,14 @@ Route::middleware('auth')->group(function () {
     Route::patch('/ads/{field}', [AdminAdController::class, 'boolean']);
     Route::delete('/ads/{id}', [AdminAdController::class, 'delete']);
     Route::get('/ads/media/{uuid}', [AdminAdController::class, 'media']);
+
+    // Job Applications
+    Route::post('/job-applications', [AdminJobApplicationController::class, 'save']);
+    Route::post('/job-applications/paginate', [AdminJobApplicationController::class, 'paginate']);
+    Route::patch('/job-applications/status', [AdminJobApplicationController::class, 'status']);
+    Route::patch('/job-applications/{field}', [AdminJobApplicationController::class, 'boolean']);
+    Route::delete('/job-applications/{id}', [AdminJobApplicationController::class, 'delete']);
+    Route::get('/job-applications/media/{uuid}', [AdminJobApplicationController::class, 'media']);
 
     Route::post('/service-points', [AdminServicePointController::class, 'save']);
     Route::post('/service-points/paginate', [AdminServicePointController::class, 'paginate']);

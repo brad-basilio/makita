@@ -113,6 +113,7 @@ const Menu = ({ session, hasRole }) => {
                   </MenuItemContainer>
                   <MenuItem href="/admin/prices" icon="mdi mdi-moped">Costos de envío</MenuItem>
                   <MenuItem href="/admin/messages" icon="mdi mdi-message-text">Mensajes</MenuItem>
+                  <MenuItem href="/admin/job-applications" icon="mdi mdi-account-plus">Solicitudes de Empleo</MenuItem>
                   <MenuItem href="/admin/subscriptions" icon="mdi mdi-email-multiple">Suscripciones</MenuItem>
 
                   {/* Landing Page */}
