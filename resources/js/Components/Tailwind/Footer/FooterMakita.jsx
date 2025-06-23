@@ -1,15 +1,16 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import ReactModal from "react-modal";
 import { CircleCheckBig, X } from "lucide-react";
 import { toast } from "sonner";
 import SubscriptionsRest from "../../../Actions/SubscriptionsRest";
 import Global from "../../../Utils/Global";
 import HtmlContent from "../../../Utils/HtmlContent";
+import Tippy from "@tippyjs/react";
 
-const FooterMakita = ({ pages, generals }) => {
+const FooterMakita = ({ pages, generals, items }) => {
     const subscriptionsRest = new SubscriptionsRest();
     const emailRef = useRef();
-const subscriptorRef = useRef();
+    const subscriptorRef = useRef();
     const [modalOpen, setModalOpen] = useState(null);
     const [saving, setSaving] = useState(false);
 
@@ -21,6 +22,12 @@ const subscriptorRef = useRef();
 
     const openModal = (index) => setModalOpen(index);
     const closeModal = () => setModalOpen(null);
+
+    // Función para capitalizar solo la primera letra
+    const capitalizeFirst = (str) => {
+        if (!str) return '';
+        return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+    };
 
     const onEmailSubmit = async (e) => {
         e.preventDefault();
@@ -45,7 +52,32 @@ const subscriptorRef = useRef();
 
         emailRef.current.value = null;
     };
+ const [categories, setCategories] = useState([]);
+    const [loadingCategories, setLoadingCategories] = useState(false);
 
+// useEffect para traer las categorías
+    useEffect(() => {
+        const fetchCategories = async () => {
+            setLoadingCategories(true);
+            try {
+                const response = await fetch('/api/categories');
+                const result = await response.json();
+                
+                if (result.success) {
+                    setCategories(result.data);
+                   // console.log('Categorías obtenidas:', result.data);
+                } else {
+                   // console.error('Error al obtener categorías:', result.message);
+                }
+            } catch (error) {
+                //console.error('Error en la petición de categorías:', error);
+            } finally {
+                setLoadingCategories(false);
+            }
+        };
+
+        fetchCategories();
+    }, []);
     return (
         <footer className="bg-primary text-white py-16">
             <div className="px-primary mx-auto  2xl:px-0 2xl:max-w-7xl">
@@ -61,121 +93,66 @@ const subscriptorRef = useRef();
                         </p>
                         <div className="mb-2">
                             <p className="text-sm font-medium mb-1">Teléfono</p>
-                            <p className="text-sm">+51 993 763 928</p>
+                            <p className="text-sm">{generals?.find(item => item.correlative === 'support_phone')?.description}</p>
                         </div>
                         <div className="mb-6">
                             <p className="text-sm font-medium mb-1">Correo electrónico</p>
-                            <p className="text-sm">soporte@makita.com.pe</p>
+                            <p className="text-sm">{generals?.find(item => item.correlative === 'support_email')?.description}</p>
                         </div>
-                    <div className="flex gap-2">
-                            <p className="text-sm mb-2">Siga a Makita:</p>
-                        <div className="flex space-x-4">
-                            <a
-                                href="#"
-                                className="text-white hover:text-[#27b6cc]"
-                                aria-label="Facebook"
-                            >
-                                <svg
-                                    className="h-5 w-5"
-                                    fill="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path d="M18.77 7.46H14.5v-1.9c0-.9.6-1.1 1-1.1h3V.5h-4.33C10.24.5 9.5 3.44 9.5 5.32v2.15h-3v4h3v12h5v-12h3.85l.42-4z" />
-                                </svg>
-                            </a>
-                            <a
-                                href="#"
-                                className="text-white hover:text-[#27b6cc]"
-                                aria-label="Instagram"
-                            >
-                                <svg
-                                    className="h-5 w-5"
-                                    fill="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
-                                </svg>
-                            </a>
-                            <a
-                                href="#"
-                                className="text-white hover:text-[#27b6cc]"
-                                aria-label="YouTube"
-                            >
-                                <svg
-                                    className="h-5 w-5"
-                                    fill="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z" />
-                                </svg>
-                            </a>
+                        <div className="flex gap-2 items-center">
+                            <p className="text-sm ">Siga a Makita:</p>
+                            <div className="flex space-x-4">
+                                {
+                                    items && items.length > 0 ? items.filter(g => g.description !== 'WhatsApp').map((social, index) => (
+                                        <Tippy
+                                            key={index}
+                                            content={`Ver ${social.name || social.description || 'Red social'}`}>
+                                            <a
+                                                className={`text-xl w-8 h-8 flex items-center justify-center text-white rounded-full p-2 hover:scale-110 transition-transform duration-200 cursor-pointer`}
+                                                href={social.url || social.link || '#'}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                onClick={(e) => {
+                                                    if (!social.url && !social.link) {
+                                                        e.preventDefault();
+                                                       // console.warn('URL no configurada para:', social);
+                                                    }
+                                                }}
+                                            >
+                                                <i className={social.icon || 'fab fa-globe'} />
+                                            </a>
+                                        </Tippy>
+                                    )) : (
+                                        <span className="text-sm opacity-75">No hay redes sociales configuradas</span>
+                                    )
+                                }
+                            </div>
                         </div>
-                    </div>
                     </div>
 
                     {/* Column 2: Products */}
                     <div>
                         <h3 className="text-xl font-medium mb-6">Productos</h3>
                         <ul className="space-y-3">
-                            <li>
-                                <a
-                                    href="#"
-                                    className="hover:text-[#27b6cc] transition-colors"
-                                >
-                                    A batería
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="#"
-                                    className="hover:text-[#27b6cc] transition-colors"
-                                >
-                                    A cable
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="#"
-                                    className="hover:text-[#27b6cc] transition-colors"
-                                >
-                                    Jardín / Forestal
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="#"
-                                    className="hover:text-[#27b6cc] transition-colors"
-                                >
-                                    Limpieza Profesional
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="#"
-                                    className="hover:text-[#27b6cc] transition-colors"
-                                >
-                                    Trabajos en metal
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="#"
-                                    className="flex items-center hover:text-[#27b6cc] transition-colors"
-                                >
-                                    Ver más
-                                    <svg
-                                        className="h-4 w-4 ml-1"
-                                        viewBox="0 0 20 20"
-                                        fill="currentColor"
-                                    >
-                                        <path
-                                            fillRule="evenodd"
-                                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                            clipRule="evenodd"
-                                        />
-                                    </svg>
-                                </a>
-                            </li>
+                            {loadingCategories ? (
+                                <li className="text-sm opacity-75">Cargando categorías...</li>
+                            ) : categories.length > 0 ? (
+                                <>
+                                    {categories.map((category) => (
+                                        <li key={category.id}>
+                                            <a
+                                                href={`#${category.slug || category.id}`}
+                                                className="hover:text-[#27b6cc] transition-colors"
+                                            >
+                                                {capitalizeFirst(category.name)}
+                                            </a>
+                                        </li>
+                                    ))}
+                                   
+                                </>
+                            ) : (
+                                <li className="text-sm opacity-75">No hay categorías disponibles</li>
+                            )}
                         </ul>
                     </div>
 
@@ -185,7 +162,7 @@ const subscriptorRef = useRef();
                         <ul className="space-y-3">
                             <li>
                                 <a
-                                    href="#"
+                                    href="/distribuidores-y-red-de-servicios"
                                     className="hover:text-[#27b6cc] transition-colors"
                                 >
                                     Distribuidores
@@ -193,7 +170,7 @@ const subscriptorRef = useRef();
                             </li>
                             <li>
                                 <a
-                                    href="#"
+                                    href="/distribuidores-y-red-de-servicios"
                                     className="hover:text-[#27b6cc] transition-colors"
                                 >
                                     Servicios Técnicos
@@ -201,7 +178,7 @@ const subscriptorRef = useRef();
                             </li>
                             <li>
                                 <a
-                                    href="#"
+                                    href="/blogs"
                                     className="hover:text-[#27b6cc] transition-colors"
                                 >
                                     Blog
@@ -209,31 +186,13 @@ const subscriptorRef = useRef();
                             </li>
                             <li>
                                 <a
-                                    href="#"
+                                    href="/catalogo"
                                     className="hover:text-[#27b6cc] transition-colors"
                                 >
                                     Cotizar productos
                                 </a>
                             </li>
-                            <li>
-                                <a
-                                    href="#"
-                                    className="flex items-center hover:text-[#27b6cc] transition-colors"
-                                >
-                                    Ver más
-                                    <svg
-                                        className="h-4 w-4 ml-1"
-                                        viewBox="0 0 20 20"
-                                        fill="currentColor"
-                                    >
-                                        <path
-                                            fillRule="evenodd"
-                                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                            clipRule="evenodd"
-                                        />
-                                    </svg>
-                                </a>
-                            </li>
+                          
                         </ul>
                     </div>
 
@@ -260,7 +219,7 @@ const subscriptorRef = useRef();
                                 <button
                                     type="submit"
                                     disabled={saving}
-                                    className="w-full bg-[#27b6cc] hover:bg-[#1d9baf] text-white font-medium py-3 px-4 rounded transition-colors"
+                                    className="w-full bg-custom hover:bg-[#1d9baf] text-white font-medium py-3 px-4 rounded transition-colors"
                                 >
                                     {saving ? "Enviando..." : "Registrarme"}
                                 </button>
@@ -308,7 +267,7 @@ const subscriptorRef = useRef();
                         isOpen={modalOpen === index}
                         onRequestClose={closeModal}
                         contentLabel={title}
-                        className="absolute left-1/2 -translate-x-1/2 bg-white p-6 rounded-xl shadow-lg w-[95%] max-w-4xl my-8"
+                        className="absolute left-1/2 -translate-x-1/2 bg-white p-6 !rounded-none shadow-lg w-[95%] max-w-4xl my-8"
                         overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-50"
                     >
                         <button

@@ -116,7 +116,7 @@ const HeaderMakita = ({
     return subcategories;
   }
 
-  console.log("Items:", items);
+  
   // Función para obtener subcategorías por categoría (cuando no hay marcas)
   const getSubcategoriesByCategory = (categoryId) => {
     const subcategories = [];

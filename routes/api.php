@@ -67,7 +67,7 @@ use App\Http\Controllers\TemporalyImageController;
 use App\Http\Controllers\UnifiedImportController;
 
 use App\Http\Controllers\Admin\ServicePointController as AdminServicePointController;
-
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ServicePointController;
 
 /*
@@ -152,6 +152,9 @@ Route::post('/sales', [SaleController::class, 'save']);
 Route::get('/person/{dni}', [PersonController::class, 'find']);
 
 Route::get('/service-points', [AdminServicePointController::class, 'publicIndex']);
+
+
+Route::get('/categories', [CategoryController::class, 'getCategories']);
 
 Route::middleware('auth')->group(function () {
   Route::get('/notification-variables/{type}', [NotificationVariableController::class, 'variables']);

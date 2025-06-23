@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import General from "../../../Utils/General"
 import ReactModal from "react-modal";
 import { X, Upload, CheckCircle, User, Mail, Phone, FileText } from "lucide-react";
@@ -11,6 +11,7 @@ const TopBarCopyright = ({ data, generals = [] }) => {
     const [modalOpen, setModalOpen] = useState(null);
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
     const [uploadProgress, setUploadProgress] = useState(0);
+   
     const [formData, setFormData] = useState({
         nombre: '',
         telefono: '',
@@ -50,6 +51,8 @@ const TopBarCopyright = ({ data, generals = [] }) => {
             cv: null
         });
     };
+
+    
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -127,6 +130,8 @@ const TopBarCopyright = ({ data, generals = [] }) => {
         (item) => item.correlative === "copyright"
     );
 
+
+
     return (
         <>
             <style>{scrollbarStyles}</style>
@@ -140,7 +145,7 @@ const TopBarCopyright = ({ data, generals = [] }) => {
                                 type="button"
                                 href="#"
                                 onClick={() => openModal(1)}
-                                className="cursor-pointer !text-xs lg:text-base  hover:customtext-primary underline hover:font-bold transition-all duration-300"
+                                className="cursor-pointer text-xs lg:text-sm  hover:customtext-primary underline hover:font-bold transition-all duration-300"
                             >
                                 Términos y Condiciones de uso del sitio web
                             </a>
@@ -149,7 +154,7 @@ const TopBarCopyright = ({ data, generals = [] }) => {
                         <li>
                             <a
                                 onClick={() => openModal(0)}
-                                className="cursor-pointer !text-xs lg:text-base  hover:customtext-primary underline hover:font-bold transition-all duration-300"
+                                className="cursor-pointer text-xs lg:text-sm  hover:customtext-primary underline hover:font-bold transition-all duration-300"
                             >
                                 Políticas de privacidad
                             </a>
@@ -160,7 +165,7 @@ const TopBarCopyright = ({ data, generals = [] }) => {
                                 type="button"
                                 href="#"
                                 onClick={() => openModal(2)}
-                                className="cursor-pointer !text-xs lg:text-base  underline hover:customtext-primary hover:font-bold transition-all duration-300"
+                                className="cursor-pointer text-xs lg:text-sm  underline hover:customtext-primary hover:font-bold transition-all duration-300"
                             >
                                 Trabaja con nosotros
                             </a>
@@ -187,15 +192,19 @@ const TopBarCopyright = ({ data, generals = [] }) => {
                         isOpen={modalOpen === index}
                         onRequestClose={closeModal}
                         contentLabel={title}
-                        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-xl shadow-lg w-[95%] max-w-4xl max-h-[90vh] overflow-y-auto"
-                        overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-50"
+                         className="absolute p-8 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white  shadow-2xl w-[95%] max-w-4xl  "
+                overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-50"
                     >
-                        <button
-                            onClick={closeModal}
-                            className="float-right text-red-500 hover:text-red-700 transition-all duration-300 "
-                        >
-                            <X width="2rem" strokeWidth="4px" />
-                        </button>
+                       
+                   <div className="w-full flex justify-end">
+                  <button
+                    onClick={closeModal}
+                    className=" top-4 right-4 bg-primary shadow-lg hover:shadow-xl rounded-md p-2 text-white hover:text-white transition-all duration-300 z-50 border border-gray-200"
+                  
+                >
+                    <X className="w-5 h-5" />
+                </button>
+              </div>
                         <h2 className="text-2xl font-bold mb-4">{title}</h2>
                         <HtmlContent className="prose" html={content} />
                     </ReactModal>

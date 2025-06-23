@@ -28,8 +28,7 @@ const BrandMakita = ({ data, items }) => {
     }
     if (items && items.length > 0) fetchRelated();
   }, [items]);
-  console.log("items", items);
-  console.log("relatedProducts", relatedProducts);
+
   const [currentIndex, setCurrentIndex] = useState(1);
   const swiperRef = useRef(null);
   return (

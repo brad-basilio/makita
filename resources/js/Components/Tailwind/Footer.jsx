@@ -97,7 +97,7 @@ const Footer = ({ data, which, items, pages, generals, contacts }) => {
             case "FooterMakita":
                 return (
                     <FooterMakita
-                        socials={items}
+                        items={items}
                         pages={pages}
                         generals={generals}
                     />
