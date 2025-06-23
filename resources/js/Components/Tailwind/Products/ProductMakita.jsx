@@ -98,7 +98,7 @@ const ProductMakita = ({ items, data, setCart, cart }) => {
     };
 
     return (
-        <section className="relative bg-white py-8">
+        <section className="relative bg-[#F6F6F6] py-8">
             <div className="relative mx-auto px-primary py-10 2xl:px-0 2xl:max-w-7xl">
                 {/* Header */}
                 <div className="flex justify-between items-center mb-8">
@@ -134,14 +134,14 @@ const ProductMakita = ({ items, data, setCart, cart }) => {
                             640: { slidesPerView: 2, spaceBetween: 16 },
                             768: { slidesPerView: 3, spaceBetween: 16, grid: { rows: 1 } },
                             1024: { slidesPerView: 4, spaceBetween: 20, grid: { rows: 1 } },
-                            1280: { slidesPerView: 4, spaceBetween: 24, grid: { rows: 1 } },
+                            1280: { slidesPerView: 4, spaceBetween: 0, grid: { rows: 1 } },
                         }}
-                        className="lg:px-10"
+                       
                     >
                         {items?.map((product, index) => (
                             <SwiperSlide
                                 key={index}
-                                className="py-2"
+                                className="py-2 lg:px-4"
                             >
                                 <CardProductMakita product={product} onCompareClick={() => handleCompareClick(product)} />
                             </SwiperSlide>
@@ -151,14 +151,14 @@ const ProductMakita = ({ items, data, setCart, cart }) => {
                     {/* Navigation Buttons */}
                     <button
                         ref={navigationDesktopPrevRef}
-                        className="hidden lg:flex absolute -left-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10  items-center justify-center rounded-lg bg-secondary bg-opacity-70 text-white hover:brightness-125"
+                        className="hidden lg:flex absolute -left-12 top-1/2 -translate-y-1/2 z-10 w-10 h-10  items-center justify-center rounded-lg bg-secondary bg-opacity-70 text-white hover:brightness-125"
                         aria-label="Productos anteriores"
                     >
                         <ChevronLeft width="1.2rem" />
                     </button>
                     <button
                         ref={navigationDesktopNextRef}
-                        className="hidden lg:flex absolute -right-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10  items-center justify-center rounded-lg bg-secondary bg-opacity-70 text-white hover:brightness-125"
+                        className="hidden lg:flex absolute -right-12 top-1/2 -translate-y-1/2 z-10 w-10 h-10  items-center justify-center rounded-lg bg-secondary bg-opacity-70 text-white hover:brightness-125"
                         aria-label="Siguientes productos"
                     >
                         <ChevronRight width="1.2rem" />

@@ -33,7 +33,16 @@ const BrandMakita = ({ data, items }) => {
   const [currentIndex, setCurrentIndex] = useState(1);
   const swiperRef = useRef(null);
   return (
-    <section className="w-full bg-secondary text-white py-16 md:py-24">
+    <section className="relative  w-full bg-secondary text-white py-16 md:py-24">
+      {/* Círculo blanco transparente en top left */}
+      <div 
+        className="absolute -top-56 left-1/2 -translate-x-1/2 w-[500px] h-[500px] rounded-full z-[2]"
+        style={{
+          background: 'linear-gradient(126deg, #888 20.76%, #D1D1D1 61.55%)',
+          mixBlendMode: 'overlay',
+          filter: 'blur(70px)'
+        }}
+      />
       <div className="container mx-auto px-4 md:px-[5%]">
         {/* Main Title */}
         <div className="text-center mb-12">
@@ -43,7 +52,7 @@ const BrandMakita = ({ data, items }) => {
           {/* View More Button */}
           <a
             href={data?.link_catalog}
-            className="inline-block bg-primary hover:brightness-125 text-white text-base font-medium py-3 px-6 rounded-md transition-all duration-300"
+            className="inline-block bg-custom bg-opacity-40  text-white text-base font-medium py-4 px-6 rounded-md transition-all duration-300"
           >
             {data?.button_text}
           </a>
@@ -103,7 +112,7 @@ const BrandMakita = ({ data, items }) => {
                     {/* View More Link */}
                     <a
                       href={`#${tech.id}`}
-                      className="inline-block bg-primary hover:brightness-125 text-white text-sm font-medium py-3 px-4 rounded-md transition-all duration-300 mt-auto"
+                      className="inline-block bg-custom text-white text-sm font-medium py-3 px-4 rounded-md transition-all duration-300 mt-auto"
                     >
                       Ver más
                     </a>
@@ -172,7 +181,7 @@ const BrandMakita = ({ data, items }) => {
                 {/* View More Link */}
                 <a
                   href={`#${tech.id}`}
-                  className="inline-block bg-primary hover:brightness-125 text-white text-sm font-medium py-3 px-4 rounded-md transition-all duration-300 mt-auto"
+                  className="inline-block bg-custom text-white text-sm font-medium py-3 px-4 rounded-md transition-all duration-300 mt-auto"
                 >
                   Ver más
                 </a>

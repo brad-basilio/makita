@@ -24,7 +24,7 @@ const BlogSectionMakita = ({ data, items }) => {
     };
 
     return (
-        <section className="bg-white py-16 md:py-20">
+        <section className="bg-[#F6F6F6] py-16 md:py-20">
             <div className="px-primary mx-auto  2xl:px-0 2xl:max-w-7xl">
                 {/* Center aligned header */}
                 <div className="text-center mb-10 md:mb-16 max-w-2xl mx-auto">
@@ -36,7 +36,7 @@ const BlogSectionMakita = ({ data, items }) => {
                     </p>
                     <a 
                         href={data?.link_blog || "#blog"} 
-                        className="inline-block bg-primary hover:brightness-125 text-white font-medium py-3 px-8 rounded-md transition-all duration-300"
+                        className="inline-block bg-custom text-white font-medium py-3 px-8 rounded-md transition-all duration-300"
                     >
                         {data?.button_text || "Ver blog"}
                     </a>

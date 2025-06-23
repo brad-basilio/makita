@@ -13,12 +13,12 @@ const CardProductMakita = ({ product, data, widthClass, cart, setCart, viewType 
     // Si es vista de lista, usamos una estructura horizontal
     if (viewType === 'list') {
         return (<div
-            className="bg-white w-full rounded-xl shadow-sm flex flex-row h-auto transition-all duration-200 hover:shadow-2xl overflow-hidden"
+            className="bg-transparent w-full rounded-xl shadow-sm flex flex-row h-auto transition-all duration-200 hover:shadow-2xl overflow-hidden"
             onMouseEnter={() => setIsHovering(true)}
             onMouseLeave={() => setIsHovering(false)}
         >
             {/* Imagen - Para vista lista */}
-            <div className="relative flex justify-center items-center  w-1/4 min-w-[120px] max-w-[180px] p-2">                   
+            <div className="relative bg-white flex justify-center items-center  w-1/4 min-w-[120px] max-w-[180px] p-2">                   
              {product.is_new === 1 && (
                 <span className="absolute top-2 right-2 md:top-2 md:right-2 bg-primary max-w-max text-white text-xs font-bold px-2 py-1 rounded-sm z-10">
                     NUEVO
@@ -71,12 +71,12 @@ const CardProductMakita = ({ product, data, widthClass, cart, setCart, viewType 
     // Vista de grilla (grid)
     return (
         <div
-            className="bg-white w-full rounded-xl shadow-sm flex flex-col h-full transition-all duration-200 hover:shadow-2xl overflow-hidden"
+            className="bg-transparent w-full rounded-xl shadow-sm flex flex-col h-full transition-all duration-200 hover:shadow-lg overflow-hidden"
             onMouseEnter={() => setIsHovering(true)}
             onMouseLeave={() => setIsHovering(false)}
         >
             {/* Imagen - Para vista grid */}
-            <div className="relative flex justify-center items-center lg:h-52 p-2 lg:p-4">
+            <div className="relative bg-white flex justify-center items-center lg:h-52 p-2 lg:p-4">
                 {product && product.is_new === 1 && (
                     <span className="absolute top-8 right-0 bg-primary text-white text-sm font-bold px-2 py-1 rounded-sm">
                         NUEVO
@@ -116,7 +116,7 @@ const CardProductMakita = ({ product, data, widthClass, cart, setCart, viewType 
                         </button>
                         <a
                             href={`/producto/${product.slug}`}
-                            className="flex-1 bg-primary text-white border border-primary py-2 px-3 rounded-sm flex items-center justify-center gap-1 hover:bg-gray-100 transition-colors"
+                            className="flex-1 bg-primary text-white border border-primary py-2 px-3 rounded-sm flex items-center justify-center gap-1 hover:bg-primary transition-colors"
                         >
                             <span className="font-medium text-sm">Ver</span>
                         </a>
