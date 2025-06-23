@@ -18,6 +18,26 @@ const TopBarCopyright = ({ data, generals = [] }) => {
         cv: null
     });
 
+    // Estilos del scrollbar personalizado (igual que HeaderMakita)
+    const scrollbarStyles = `
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            border: 2px solid transparent;
+            background-clip: padding-box;
+        }
+    `;
+
     const openModal = (index) => setModalOpen(index);
     const closeModal = () => {
         setModalOpen(null);
@@ -108,17 +128,19 @@ const TopBarCopyright = ({ data, generals = [] }) => {
     );
 
     return (
-        <div className={`${data?.background_color ? `${data.background_color}` : 'bg-white mx-auto'}`}>
+        <>
+            <style>{scrollbarStyles}</style>
+            <div className={`${data?.background_color ? `${data.background_color}` : 'bg-white mx-auto'}`}>
             {data?.policyTerms ? (
-                <div className={`${data?.background_color ? `${data.background_color}` : 'bg-white'} ${data?.color ? `${data.color}` : 'customtext-neutral-dark'} text-sm mx-auto font-medium py-3 customtext-neutral-dark text-center px-primary 2xl:px-0  2xl:max-w-7xl flex justify-between items-center font-paragraph`}>
-                    <p>{copyright?.description || "© 2025 Todos los derechos reservados"}</p>
-                    <ul className="gap-3 flex text-white">
+                <div className={`${data?.background_color ? `${data.background_color}` : 'bg-white'} ${data?.color ? `${data.color}` : 'customtext-neutral-dark'} text-sm mx-auto font-medium py-3 customtext-neutral-dark text-center px-primary 2xl:px-0  2xl:max-w-7xl flex flex-col lg:flex-row justify-between items-center font-paragraph`}>
+                    <p className="!text-sm lg:text-base">{copyright?.description || "© 2025 Todos los derechos reservados"}</p>
+                    <ul className="gap-3 mt-2 lg:mt-0 flex flex-col lg:flex-row  text-white">
                         <li>
                             <a
                                 type="button"
                                 href="#"
                                 onClick={() => openModal(1)}
-                                className="cursor-pointer hover:customtext-primary underline hover:font-bold transition-all duration-300"
+                                className="cursor-pointer !text-xs lg:text-base  hover:customtext-primary underline hover:font-bold transition-all duration-300"
                             >
                                 Términos y Condiciones de uso del sitio web
                             </a>
@@ -127,7 +149,7 @@ const TopBarCopyright = ({ data, generals = [] }) => {
                         <li>
                             <a
                                 onClick={() => openModal(0)}
-                                className="cursor-pointer hover:customtext-primary underline hover:font-bold transition-all duration-300"
+                                className="cursor-pointer !text-xs lg:text-base  hover:customtext-primary underline hover:font-bold transition-all duration-300"
                             >
                                 Políticas de privacidad
                             </a>
@@ -138,7 +160,7 @@ const TopBarCopyright = ({ data, generals = [] }) => {
                                 type="button"
                                 href="#"
                                 onClick={() => openModal(2)}
-                                className="cursor-pointer underline hover:customtext-primary hover:font-bold transition-all duration-300"
+                                className="cursor-pointer !text-xs lg:text-base  underline hover:customtext-primary hover:font-bold transition-all duration-300"
                             >
                                 Trabaja con nosotros
                             </a>
@@ -199,15 +221,15 @@ const TopBarCopyright = ({ data, generals = [] }) => {
                 </button>
               </div>
 
-                <div className="flex gap-8 h-full max-h-[80vh] overflow-y-hidden">
+                <div className="flex gap-8 h-full min-h-[80vh] max-h-[80vh] overflow-y-hidden">
                     {/* Imagen lateral */}
-                    <div className="hidden rounded-xl md:block w-1/2 bg-primary relative overflow-hidden">
+                    <div className="hidden rounded-xl md:block w-1/2  relative overflow-hidden">
                         <div className="absolute inset-0 bg-black bg-opacity-20"></div>
-                        <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="absolute   inset-0 flex items-center justify-center">
                             <img
                                 src="/assets/img/makita/form-cv.webp"
                                 alt="Trabajador Makita"
-                                className="w-full h-full object-cover"
+                                className="w-full min-h-[80vh] max-h-[80vh] object-cover"
                                 onError={(e) => {
                                     e.target.style.display = 'none';
                                     e.target.parentElement.innerHTML = `
@@ -223,7 +245,7 @@ const TopBarCopyright = ({ data, generals = [] }) => {
                     </div>
 
                     {/* Formulario */}
-                    <div className="w-full md:w-1/2  overflow-y-auto">
+                    <div className="w-full md:w-1/2 overflow-y-auto custom-scrollbar">
 
                         {!showSuccessMessage ? (
                             <div>
@@ -364,24 +386,24 @@ const TopBarCopyright = ({ data, generals = [] }) => {
                         ) : (
                             // Mensaje de éxito
                             <div className="flex flex-col items-center justify-center h-full text-center py-12">
-                                <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mb-6">
-                                    <CheckCircle className="w-12 h-12 cusomtext-primary" />
+                                <div className="mb-4  rounded-full flex items-center justify-center ">
+                                    <CheckCircle className="w-6 h-6 customtext-primary" />
                                 </div>
-                                <h2 className="text-3xl font-bold customtext-neutral-dark mb-4">
+                                <h2 className="text-2xl font-bold customtext-neutral-dark mb-4  lg:max-w-xs">
                                     ¡Tu solicitud ha sido enviada con éxito!
                                 </h2>
-                                <p className="customtext-neutral-light leading-relaxed mb-6 max-w-md">
+                                <p className="customtext-neutral-light text-sm leading-relaxed mb-6 lg:max-w-xs">
                                     Gracias por postular a Makita Perú. Hemos recibido tu información
                                     y nuestro equipo de selección la revisará pronto.
                                 </p>
-                                <div className="bg-gray-50 rounded-xl p-6 mb-8 max-w-md">
-                                    <p className="text-sm customtext-neutral-dark font-medium">
+                                <div className="bg-gray-100  p-6 mb-8 lg:max-w-xs">
+                                    <p className="text-sm customtext-neutral-dark font-semibold">
                                         Si tu perfil es seleccionado, nos pondremos en contacto contigo.
                                     </p>
                                 </div>
                                 <button
                                     onClick={closeModal}
-                                    className="bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-8 rounded-xl transition-all duration-300"
+                                      className="w-full font-medium bg-primary brightness-125 lg:max-w-xs text-white  py-3 px-6 rounded-md transition-all duration-300 transform  hover:shadow-xl shadow-lg flex items-center justify-center group"
                                 >
                                     Seguir navegando
                                 </button>
@@ -391,7 +413,8 @@ const TopBarCopyright = ({ data, generals = [] }) => {
                 </div>
             </ReactModal>
 
-        </div>
+            </div>
+        </>
     );
 }
 

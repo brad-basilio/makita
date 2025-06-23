@@ -97,12 +97,12 @@ const Menu = ({ session, hasRole }) => {
                 <>
                   {/* Administración */}
                   <MenuItem href="/admin/home" icon="mdi mdi-home">Dashboard</MenuItem>
-                  <MenuItem href="/admin/sales" icon="mdi mdi-cart-outline">Pedidos</MenuItem>
+                 {/* <MenuItem href="/admin/sales" icon="mdi mdi-cart-outline">Pedidos</MenuItem> */}
                   <MenuItem href="/admin/items" icon="mdi mdi-bookshelf">Items</MenuItem>
 
-                  <MenuItem href="/admin/combos" icon="mdi mdi-bookshelf">
+                {/*   <MenuItem href="/admin/combos" icon="mdi mdi-bookshelf">
                       Combos
-                  </MenuItem>
+                  </MenuItem>*/}
 
                   <MenuItemContainer title="Características" icon="mdi mdi-view-dashboard">
                     <MenuItem href="/admin/collections" icon="mdi mdi-view-carousel-outline">Colecciones</MenuItem>
@@ -111,18 +111,18 @@ const Menu = ({ session, hasRole }) => {
                     <MenuItem href="/admin/brands" icon="mdi mdi-label">Marcas</MenuItem>
                     <MenuItem href="/admin/tags" icon="mdi mdi-label-multiple">Etiquetas</MenuItem>
                   </MenuItemContainer>
-                  <MenuItem href="/admin/prices" icon="mdi mdi-moped">Costos de envío</MenuItem>
-                  <MenuItem href="/admin/messages" icon="mdi mdi-message-text">Mensajes</MenuItem>
+                 {/* <MenuItem href="/admin/prices" icon="mdi mdi-moped">Costos de envío</MenuItem> */}
+               {/*   <MenuItem href="/admin/messages" icon="mdi mdi-message-text">Mensajes</MenuItem> */}
                   <MenuItem href="/admin/job-applications" icon="mdi mdi-account-plus">Solicitudes de Empleo</MenuItem>
                   <MenuItem href="/admin/subscriptions" icon="mdi mdi-email-multiple">Suscripciones</MenuItem>
 
                   {/* Landing Page */}
                   <li className="menu-title">Landing Page</li>
-                  <MenuItem href="/admin/ads" icon='mdi mdi-google-ads'>Pop-ups</MenuItem>
+                {/*  <MenuItem href="/admin/ads" icon='mdi mdi-google-ads'>Pop-ups</MenuItem> */}
                   <MenuItem href="/admin/posts" icon="mdi mdi-post">Posts</MenuItem>
                   <MenuItem href="/admin/service-points" icon="mdi mdi-briefcase"> Distribuidores y Red de Servicios</MenuItem>
                   <MenuItem href="/admin/about" icon="mdi mdi-briefcase">Nosotros</MenuItem>
-                  <MenuItem href="/admin/delivery-zones" icon="mdi mdi-map-marker-radius">Zonas de Cobertura</MenuItem>
+                 {/* <MenuItem href="/admin/delivery-zones" icon="mdi mdi-map-marker-radius">Zonas de Cobertura</MenuItem> */}
                   <MenuItem href="/admin/indicators" icon="mdi mdi-dots-grid">Indicadores</MenuItem>
                   <MenuItem href="/admin/strengths" icon="mdi mdi-arm-flex">Fortalezas</MenuItem>
                   <MenuItem href="/admin/banners" icon="mdi mdi-post-outline">Banners</MenuItem>
