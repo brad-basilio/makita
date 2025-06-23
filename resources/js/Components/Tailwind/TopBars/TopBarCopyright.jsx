@@ -185,27 +185,34 @@ const TopBarCopyright = ({ data, generals = [] }) => {
                 isOpen={modalOpen === 2}
                 onRequestClose={closeModal}
                 contentLabel="Trabaja con nosotros"
-                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-2xl w-[95%] max-w-4xl max-h-[90vh] overflow-hidden"
+                className="absolute p-8 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white  shadow-2xl w-[95%] max-w-4xl  "
                 overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-50"
             >
-                <div className="flex h-full max-h-[90vh]">
+                {/* Botón cerrar fijo - no se mueve con el scroll */}
+              <div className="w-full flex justify-end">
+                  <button
+                    onClick={closeModal}
+                    className=" top-4 right-4 bg-primary shadow-lg hover:shadow-xl rounded-md p-2 text-white hover:text-white transition-all duration-300 z-50 border border-gray-200"
+                  
+                >
+                    <X className="w-5 h-5" />
+                </button>
+              </div>
+
+                <div className="flex gap-8 h-full max-h-[80vh] overflow-y-hidden">
                     {/* Imagen lateral */}
-                    <div className="hidden md:block w-1/2 bg-gradient-to-br from-blue-600 to-teal-500 relative overflow-hidden">
+                    <div className="hidden rounded-xl md:block w-1/2 bg-primary relative overflow-hidden">
                         <div className="absolute inset-0 bg-black bg-opacity-20"></div>
                         <div className="absolute inset-0 flex items-center justify-center">
                             <img
-                                src="/images/makita-worker.jpg"
+                                src="/assets/img/makita/form-cv.webp"
                                 alt="Trabajador Makita"
                                 className="w-full h-full object-cover"
                                 onError={(e) => {
                                     e.target.style.display = 'none';
                                     e.target.parentElement.innerHTML = `
                                         <div class="flex flex-col items-center justify-center h-full text-white p-8">
-                                            <div class="w-32 h-32 bg-white bg-opacity-20 rounded-full flex items-center justify-center mb-6">
-                                                <svg class="w-16 h-16" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                                </svg>
-                                            </div>
+                                           
                                             <h3 class="text-2xl font-bold text-center mb-4">¡Únete a Makita Perú!</h3>
                                             <p class="text-center text-lg opacity-90">Forma parte de nuestro equipo de excelencia</p>
                                         </div>
@@ -213,31 +220,18 @@ const TopBarCopyright = ({ data, generals = [] }) => {
                                 }}
                             />
                         </div>
-                        <button
-                            onClick={closeModal}
-                            className="absolute top-4 right-4 text-white hover:text-gray-300 transition-all duration-300 z-10"
-                        >
-                            <X className="w-8 h-8" />
-                        </button>
                     </div>
 
                     {/* Formulario */}
-                    <div className="w-full md:w-1/2 p-8 overflow-y-auto">
-                        {/* Botón cerrar para móvil */}
-                        <button
-                            onClick={closeModal}
-                            className="md:hidden absolute top-4 right-4 text-gray-600 hover:text-gray-800 transition-all duration-300"
-                        >
-                            <X className="w-6 h-6" />
-                        </button>
+                    <div className="w-full md:w-1/2  overflow-y-auto">
 
                         {!showSuccessMessage ? (
                             <div>
-                                <div className="mb-8">
-                                    <h2 className="text-3xl font-bold text-gray-800 mb-2">
+                                <div className="mb-4">
+                                    <h2 className="text-2xl font-bold customtext-neutral-dark mb-2">
                                         ¡Únete a Makita Perú y crece con nosotros!
                                     </h2>
-                                    <p className="text-gray-600 leading-relaxed">
+                                    <p className="customtext-neutral-light leading-relaxed">
                                         En Makita Perú, creemos en el talento y la pasión por la excelencia.
                                         Si buscas formar parte de un equipo innovador y comprometido,
                                         esta es tu oportunidad. Déjanos tus datos y adjunta tu CV.
@@ -245,130 +239,143 @@ const TopBarCopyright = ({ data, generals = [] }) => {
                                     </p>
                                 </div>
 
-                                <form onSubmit={handleSubmit} className="space-y-6">
+                                <form onSubmit={handleSubmit} className="space-y-2">
                                     {/* Nombre completo */}
                                     <div className="relative">
-                                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                            <User className="h-5 w-5 text-gray-400" />
-                                        </div>
                                         <input
                                             type="text"
                                             name="nombre"
                                             value={formData.nombre}
                                             onChange={handleInputChange}
                                             placeholder="Nombre completo"
-                                            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-300"
+                                            className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 bg-gray-50 focus:bg-white"
                                             required
                                         />
                                     </div>
 
                                     {/* Teléfono */}
                                     <div className="relative">
-                                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                            <Phone className="h-5 w-5 text-gray-400" />
-                                        </div>
                                         <input
                                             type="tel"
                                             name="telefono"
                                             value={formData.telefono}
                                             onChange={handleInputChange}
                                             placeholder="Teléfono"
-                                            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-300"
+                                            className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 bg-gray-50 focus:bg-white"
                                             required
                                         />
                                     </div>
 
                                     {/* Email */}
                                     <div className="relative">
-                                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                            <Mail className="h-5 w-5 text-gray-400" />
-                                        </div>
                                         <input
                                             type="email"
                                             name="email"
                                             value={formData.email}
                                             onChange={handleInputChange}
                                             placeholder="Correo electrónico"
-                                            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-300"
+                                            className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 bg-gray-50 focus:bg-white"
                                             required
                                         />
                                     </div>
 
                                     {/* Upload CV */}
-                                    <div className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-teal-500 transition-all duration-300">
-                                        <input
-                                            type="file"
-                                            id="cv-upload"
-                                            onChange={handleFileChange}
-                                            accept=".pdf,.doc,.docx"
-                                            className="hidden"
-                                        />
-                                        <label htmlFor="cv-upload" className="cursor-pointer">
-                                            <div className="flex flex-col items-center">
-                                                <div className="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mb-4">
-                                                    <Upload className="w-8 h-8 text-teal-600" />
-                                                </div>
-                                                <p className="text-lg font-medium text-gray-700 mb-2">
-                                                    Adjuntar CV
-                                                </p>
-                                                <p className="text-sm text-gray-500">
-                                                    (Formatos aceptados: .pdf, .doc, .docx)
-                                                </p>
-                                            </div>
-                                        </label>
+                                    <div className="relative">
+                                        <div 
+                                            className="rounded-xl p-8 text-center hover:bg-gray-50 transition-all duration-300 border-dashed border-2 border-primary cursor-pointer bg-white shadow-sm hover:shadow-md"
+                                           
+                                        >
+                                            <input
+                                                type="file"
+                                                id="cv-upload"
+                                                onChange={handleFileChange}
+                                                accept=".pdf,.doc,.docx"
+                                                className="hidden"
+                                            />
+                                            <label htmlFor="cv-upload" className="cursor-pointer block">
+                                                <div className="flex flex-col items-center">
+                                                    <div className="">
+                                                       <svg width="49" height="48" viewBox="0 0 49 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="24.4805" cy="24" r="24" fill="#F6F6F6"/>
+<path d="M25.8555 15.0023C25.3854 15 24.8862 15 24.3555 15C19.8771 15 17.638 15 16.2467 16.3912C14.8555 17.7825 14.8555 20.0217 14.8555 24.5C14.8555 28.9783 14.8555 31.2175 16.2467 32.6088C17.638 34 19.8771 34 24.3555 34C28.8338 34 31.073 34 32.4643 32.6088C33.8027 31.2703 33.8535 29.147 33.8554 25" stroke="#219FB9" stroke-width="1.5" stroke-linecap="round"/>
+<path d="M14.8555 26.1354C15.4745 26.0455 16.1003 26.0011 16.7272 26.0027C19.3791 25.9466 21.9661 26.7729 24.0266 28.3342C25.9375 29.7821 27.2802 31.7749 27.8555 34" stroke="#219FB9" stroke-width="1.5" stroke-linejoin="round"/>
+<path d="M33.8555 28.8962C32.6801 28.3009 31.4643 27.9988 30.2417 28.0001C28.39 27.9928 26.557 28.6733 24.8555 30" stroke="#219FB9" stroke-width="1.5" stroke-linejoin="round"/>
+<path d="M29.8555 16.5C30.347 15.9943 31.6553 14 32.3555 14M32.3555 14C33.0557 14 34.364 15.9943 34.8555 16.5M32.3555 14V22" stroke="#219FB9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
 
-                                        {formData.cv && (
-                                            <div className="mt-4 p-3 bg-teal-50 rounded-lg">
-                                                <div className="flex items-center justify-between">
-                                                    <div className="flex items-center">
-                                                        <FileText className="w-5 h-5 text-teal-600 mr-2" />
-                                                        <span className="text-sm font-medium text-teal-800">
-                                                            {formData.cv.name}
-                                                        </span>
                                                     </div>
-                                                    <span className="text-xs text-teal-600">
-                                                        {(formData.cv.size / 1024 / 1024).toFixed(2)} MB
-                                                    </span>
+                                                    <p className="text-sm font-semibold customtext-neutral-dark ">
+                                                        Adjuntar tu CV
+                                                    </p>
+                                                   
+                                                 
+                                                    <p className="text-xs customtext-neutral-light mt-3 ">
+                                                        (Formatos aceptados: .pdf, .doc, .docx)
+                                                    </p>
                                                 </div>
-                                                {uploadProgress > 0 && uploadProgress < 100 && (
-                                                    <div className="mt-2">
-                                                        <div className="bg-gray-200 rounded-full h-2">
-                                                            <div
-                                                                className="bg-teal-600 h-2 rounded-full transition-all duration-300"
-                                                                style={{ width: `${uploadProgress}%` }}
-                                                            ></div>
-                                                        </div>
-                                                        <p className="text-xs text-teal-600 mt-1">{uploadProgress}%</p>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        )}
+                                            </label>
+
+                                        
+                                        </div>
                                     </div>
 
                                     {/* Botón enviar */}
                                     <button
                                         type="submit"
-                                        className="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg"
+                                        className="w-full font-medium bg-primary brightness-125 text-white  py-3 px-6 rounded-md transition-all duration-300 transform  hover:shadow-xl shadow-lg flex items-center justify-center group"
                                     >
-                                        Enviar solicitud
+                                     Enviar solicitud
+                                      
                                     </button>
+
+                                        {formData.cv && (
+                                                <div className="mt-6 p-4 bg-gradient-to-r from-teal-50 to-green-50 rounded-xl border border-teal-200">
+                                                    <div className="flex items-center justify-between">
+                                                        <div className="flex items-center">
+                                                            <div className="w-10 h-10  rounded-lg flex items-center justify-center mr-3">
+                                                                <FileText className="w-5 h-5 customtext-primary" />
+                                                            </div>
+                                                            <div>
+                                                                <span className="text-sm font-semibold text-teal-800 block">
+                                                                    {formData.cv.name}
+                                                                </span>
+                                                                <span className="text-xs Customtext-neutral-dark">
+                                                                    {(formData.cv.size / 1024 / 1024).toFixed(2)} MB
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <CheckCircle className="w-6 h-6 customtext-primary" />
+                                                    </div>
+                                                    {uploadProgress > 0 && uploadProgress < 100 && (
+                                                        <div className="mt-3">
+                                                            <div className="bg-white rounded-full h-2 shadow-inner">
+                                                                <div
+                                                                    className="bg-primary h-2 rounded-full transition-all duration-300 shadow-sm"
+                                                                    style={{ width: `${uploadProgress}%` }}
+                                                                ></div>
+                                                            </div>
+                                                            <p className="text-xs customtext-neutral-dark mt-1 font-medium">{uploadProgress}% completado</p>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            )}
                                 </form>
                             </div>
                         ) : (
                             // Mensaje de éxito
                             <div className="flex flex-col items-center justify-center h-full text-center py-12">
                                 <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mb-6">
-                                    <CheckCircle className="w-12 h-12 text-green-600" />
+                                    <CheckCircle className="w-12 h-12 cusomtext-primary" />
                                 </div>
-                                <h2 className="text-3xl font-bold text-gray-800 mb-4">
+                                <h2 className="text-3xl font-bold customtext-neutral-dark mb-4">
                                     ¡Tu solicitud ha sido enviada con éxito!
                                 </h2>
-                                <p className="text-gray-600 leading-relaxed mb-6 max-w-md">
+                                <p className="customtext-neutral-light leading-relaxed mb-6 max-w-md">
                                     Gracias por postular a Makita Perú. Hemos recibido tu información
                                     y nuestro equipo de selección la revisará pronto.
                                 </p>
                                 <div className="bg-gray-50 rounded-xl p-6 mb-8 max-w-md">
-                                    <p className="text-sm text-gray-700 font-medium">
+                                    <p className="text-sm customtext-neutral-dark font-medium">
                                         Si tu perfil es seleccionado, nos pondremos en contacto contigo.
                                     </p>
                                 </div>
