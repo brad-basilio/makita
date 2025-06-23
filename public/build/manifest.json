@@ -3786,7 +3786,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Banner.jsx": {
-    "file": "assets/Banner-DMDg9zqX.js",
+    "file": "assets/Banner-CnyfH6ML.js",
     "name": "Banner",
     "src": "resources/js/Components/Tailwind/Banner.jsx",
     "isDynamicEntry": true,
@@ -6412,7 +6412,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Product.jsx": {
-    "file": "assets/Product-CTSbikql.js",
+    "file": "assets/Product-BWLQg_H4.js",
     "name": "Product",
     "src": "resources/js/Components/Tailwind/Product.jsx",
     "isDynamicEntry": true,
@@ -6435,7 +6435,7 @@
     ]
   },
   "resources/js/Components/Tailwind/ProductDetail.jsx": {
-    "file": "assets/ProductDetail-CbYDb0gS.js",
+    "file": "assets/ProductDetail-CvmQ-12C.js",
     "name": "ProductDetail",
     "src": "resources/js/Components/Tailwind/ProductDetail.jsx",
     "isDynamicEntry": true,
@@ -6575,7 +6575,7 @@
     ]
   },
   "resources/js/Components/Tailwind/ProductDetails/ProductDetailMakita.jsx": {
-    "file": "assets/ProductDetailMakita-COoHNNjL.js",
+    "file": "assets/ProductDetailMakita-xo7Noeuh.js",
     "name": "ProductDetailMakita",
     "src": "resources/js/Components/Tailwind/ProductDetails/ProductDetailMakita.jsx",
     "isDynamicEntry": true,
@@ -7039,7 +7039,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Products/ProductMakita.jsx": {
-    "file": "assets/ProductMakita-8-8fQyac.js",
+    "file": "assets/ProductMakita-BCPofHs0.js",
     "name": "ProductMakita",
     "src": "resources/js/Components/Tailwind/Products/ProductMakita.jsx",
     "isDynamicEntry": true,
@@ -7429,7 +7429,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Slider.jsx": {
-    "file": "assets/Slider-Bvtb3nxW.js",
+    "file": "assets/Slider-DXGe5-rb.js",
     "name": "Slider",
     "src": "resources/js/Components/Tailwind/Slider.jsx",
     "isDynamicEntry": true,
@@ -8217,7 +8217,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-DFvBOUCv.js",
+    "file": "assets/System-CfSaED9M.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,

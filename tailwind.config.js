@@ -23,6 +23,10 @@ export default {
                 "right-25": "75% center", // Esto desplaza la imagen 75% a la derecha y la centra verticalmente
                 "right-10": "90% center", // Esto desplaza la imagen 90% a la derecha y la centra verticalmente
             },
+            colors: {
+              
+                "custom": "#219FB9",
+            },
             // Puedes agregar personalizaciones aquí si es necesario
         },
     },

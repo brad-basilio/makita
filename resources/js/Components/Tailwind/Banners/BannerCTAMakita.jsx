@@ -67,7 +67,7 @@ const BannerCTAMakita = ({data,items,generals}) => {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Contactar por WhatsApp"
-            className="bg-primary brightness-125 hover:brightness-100 text-white font-medium px-8 py-4 rounded-md transition w-max shadow-md"
+            className="bg-custom hover:bg-opacity-85 text-white font-medium px-8 py-4 rounded-md transition w-max shadow-md"
           >
            {data?.button_text || "Contactar"}
           </a>

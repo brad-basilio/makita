@@ -93,7 +93,7 @@ const SliderFeaturedMakita = ({
             {items.map((item, i) => (
               <SwiperSlide key={`featured-platform-${i} relative flex flex-col !cursor-grab`}>
                 <div 
-                  className="h-[550px] lg:h-auto flex flex-col w-full !cursor-grab lg:w-11/12 md:flex-row items-center bg-secondary lg:bg-black/10 rounded-xl p-8 min-h-[340px] hover:bg-primary brightness-100 hover:brightness-125 transition-colors duration-300"
+                  className="h-[550px] lg:h-auto group flex flex-col w-full !cursor-grab lg:w-11/12 md:flex-row items-center bg-secondary lg:bg-black/10 rounded-xl p-8 min-h-[340px] hover:bg-primary brightness-100 hover:brightness-125 transition-colors duration-300"
                   onMouseEnter={() => setIsHovered(true)}
                   onMouseLeave={() => setIsHovered(false)}
                 >
@@ -111,7 +111,7 @@ const SliderFeaturedMakita = ({
                     </div>
                     <a
                        href={`/product/${item.slug}`}
-                      className="inline-block bg-primary font-medium brightness-125 text-white  py-4 px-6 rounded-md transition-colors duration-300"
+                      className="inline-block bg-custom group-hover:bg-black/20 font-medium  text-white  py-4 px-6 rounded-md transition-colors duration-300"
                     >
                        Más información
                     </a>

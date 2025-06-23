@@ -282,7 +282,7 @@ const SliderInteractive = ({ items, data }) => {
                                             ref={(el) =>
                                                 (buttonsRef.current[index] = el)
                                             }
-                                            className="bg-primary brightness-125 border-none flex flex-row items-center gap-3 px-10 py-4 text-base rounded-md tracking-wide font-medium hover:opacity-90 transition-all duration-300"
+                                            className="bg-custom border-none flex flex-row items-center gap-3 px-10 py-4 text-base rounded-md tracking-wide font-medium hover:opacity-90 transition-all duration-300"
                                         >
                                             {item.button_text}
                                             {data?.icon_button && (

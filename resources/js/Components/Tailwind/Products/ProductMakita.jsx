@@ -107,7 +107,7 @@ const ProductMakita = ({ items, data, setCart, cart }) => {
                     </h2>
                     <a
                         href={data?.link_catalog}
-                        className="hidden md:flex bg-primary transition-all duration-300 text-white border-none justify-center flex-row items-center gap-2 px-6 py-3 text-sm rounded-lg font-medium cursor-pointer hover:brightness-125"
+                        className="hidden md:flex bg-custom transition-all duration-300 text-white border-none justify-center flex-row items-center gap-2 px-8 py-3  rounded-md font-medium cursor-pointer hover:brightness-125"
                     >
                         Ver todo
                     </a>
@@ -123,7 +123,7 @@ const ProductMakita = ({ items, data, setCart, cart }) => {
                             enabled: true,
                         }}
                         slidesPerView={2}
-                        spaceBetween={0}
+                        spaceBetween={16}
                         loop={true}
                         grid={{
                             fill: 'row',
@@ -131,10 +131,10 @@ const ProductMakita = ({ items, data, setCart, cart }) => {
                         }}
                         onSwiper={setSwiperInstance}
                         breakpoints={{
-                            640: { slidesPerView: 2 },
-                            768: { slidesPerView: 3, grid: { rows: 1 } },
-                            1024: { slidesPerView: 4, grid: { rows: 1 } },
-                            1280: { slidesPerView: 4, grid: { rows: 1 } },
+                            640: { slidesPerView: 2, spaceBetween: 16 },
+                            768: { slidesPerView: 3, spaceBetween: 16, grid: { rows: 1 } },
+                            1024: { slidesPerView: 4, spaceBetween: 20, grid: { rows: 1 } },
+                            1280: { slidesPerView: 4, spaceBetween: 24, grid: { rows: 1 } },
                         }}
                         className="lg:px-10"
                     >
