@@ -1219,7 +1219,11 @@
                 "name": "BannerCTAMakita",
                 "using": {
                     "model": "Strength"
-                }
+                },
+                 "generals": [
+                    "phone_whatsapp",
+                    "message_whatsapp"
+                ]
             },
             {
                 "id": "BannerContactMakita",

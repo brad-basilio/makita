@@ -179,7 +179,7 @@ const System = ({
             case "indicator":
                 return <Indicator which={value} data={data} items={getItems(itemsId)} />
             case "banner":
-                return <Banner which={value} data={data} items={getItems(itemsId)} />
+                return <Banner which={value} data={data} items={getItems(itemsId)} generals={generals} />
             case "ads":
                 return <Ad which={value} data={data} items={getItems(itemsId)} />
             case "image":

@@ -1,13 +1,17 @@
 
-const benefits = [
-  "Lubricación automática de la cadena.",
-  "La ventana de visualización del aceite de la cadena permite al operario comprobar fácilmente el nivel de aceite.",
-  "Tecnología de protección extrema (XPT) diseñada para ofrecer una mayor resistencia al polvo y al agua en las duras condiciones del lugar de trabajo.",
-  "Palanca de bloqueo accesible desde ambos lados.",
-  "Freno eléctrico para máxima productividad y mayor seguridad del operador"
-];
+const BannerCTAMakita = ({data,items,generals}) => {
 
-const BannerCTAMakita = ({data,items}) => {
+   const phone_whatsapp = generals?.find(
+        (general) => general.correlative === "phone_whatsapp"
+    );
+
+      const message_whatsapp = generals?.find(
+        (general) => general.correlative === "message_whatsapp"
+    );
+
+    const numeroWhatsApp = phone_whatsapp?.description; // Reemplaza con tu número
+    const mensajeWhatsApp = message_whatsapp?.description; // Reemplaza con tu mensaje
+    const linkWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${mensajeWhatsApp}`;
   return (
     <div className="bg-secondary w-full min-h-screen flex items-center justify-center ">
       <div className="px-primary 2xl:max-w-7xl 2xl:px-0 w-full flex flex-col md:flex-row gap-12 md:gap-16 items-center justify-center py-16">
@@ -59,8 +63,11 @@ const BannerCTAMakita = ({data,items}) => {
             ))}
           </ul>
           <a
-            href="#"
-            className="bg-primary hover:brightness-125 text-white font-bold px-8 py-3 rounded-lg transition w-max shadow-md"
+            href={linkWhatsApp}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Contactar por WhatsApp"
+            className="bg-primary brightness-125 hover:brightness-100 text-white font-medium px-8 py-4 rounded-md transition w-max shadow-md"
           >
            {data?.button_text || "Contactar"}
           </a>

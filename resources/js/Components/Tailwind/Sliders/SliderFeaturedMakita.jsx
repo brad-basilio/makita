@@ -11,16 +11,52 @@ const SliderFeaturedMakita = ({
   data
 }) => {
   const [currentIndex, setCurrentIndex] = useState(1);
+  const [isHovered, setIsHovered] = useState(false);
   const swiperRef = useRef(null);
   return (
-    <div className="relative bg-primary overflow-hidden py-8 lg:py-12">
-      {/* Fondo patrón */}
-      <div className="absolute inset-0 opacity-30 z-0"
+    <div 
+      className="relative bg-primary overflow-hidden py-8 lg:py-12"
+      style={{
+        backgroundImage: 'url(/assets/img/makita/bg-SliderFeaturedMakita.png)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}
+    >
+      {/* Degradado para que la imagen se vea más en el bottom */}
+      <div 
+        className="absolute inset-0 z-[1]"
         style={{
-          backgroundImage: 'url("/assets/images/pattern-grid.svg")',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center'
+          background: 'linear-gradient(to bottom, #1F687F 40%,  transparent 100%)'
         }}
+      />
+
+      <div 
+        className="absolute inset-0 z-[1]"
+        style={{
+          background: 'linear-gradient(to left, #1F687F 10%,  transparent 100%)'
+        }}
+      />
+       <div 
+        className="absolute inset-0 z-[1]"
+        style={{
+          background: 'linear-gradient(to right, #1F687F 10%,  transparent 100%)'
+        }}
+      />
+      
+      {/* Círculo blanco transparente en top left */}
+      <div 
+        className="absolute -top-40 -left-40 w-96 h-96 rounded-full z-[2]"
+        style={{
+          background: 'linear-gradient(126deg, #888 20.76%, #D1D1D1 61.55%)',
+          mixBlendMode: 'overlay',
+          filter: 'blur(70px)'
+        }}
+      />
+      
+      {/* Fondo patrón */}
+      <div className="absolute inset-0 opacity-30 z-[3]"
+        
       />
       <div className="relative z-10 w-full px-primary 2xl:px-0 2xl:max-w-7xl mx-auto flex flex-col md:flex-row items-center min-h-[480px] md:min-h-[400px] py-8 md:py-12">
         {/* Izquierda: estático */}
@@ -55,8 +91,12 @@ const SliderFeaturedMakita = ({
             onSwiper={(swiper) => { swiperRef.current = swiper; }}
           >
             {items.map((item, i) => (
-              <SwiperSlide key={`featured-platform-${i} relative flex flex-col `}>
-                <div className="h-[550px] lg:h-auto  flex flex-col w-full lg:w-11/12 md:flex-row items-center bg-secondary lg:bg-black/10 rounded-xl p-8 min-h-[340px] hover:bg-primary brightness-100 hover:brightness-125 transition-colors duration-300">
+              <SwiperSlide key={`featured-platform-${i} relative flex flex-col !cursor-grab`}>
+                <div 
+                  className="h-[550px] lg:h-auto flex flex-col w-full !cursor-grab lg:w-11/12 md:flex-row items-center bg-secondary lg:bg-black/10 rounded-xl p-8 min-h-[340px] hover:bg-primary brightness-100 hover:brightness-125 transition-colors duration-300"
+                  onMouseEnter={() => setIsHovered(true)}
+                  onMouseLeave={() => setIsHovered(false)}
+                >
                   {/* Logo y voltaje */}
                   <div className="flex flex-col items-start w-full  md:w-6/12  md:mb-0 gap-4">
 
@@ -71,7 +111,7 @@ const SliderFeaturedMakita = ({
                     </div>
                     <a
                        href={`/product/${item.slug}`}
-                      className="inline-block bg-primary hover:brightness-125 text-white font-medium py-3 px-6 rounded-md transition-colors duration-300"
+                      className="inline-block bg-primary font-medium brightness-125 text-white  py-4 px-6 rounded-md transition-colors duration-300"
                     >
                        Más información
                     </a>
@@ -80,12 +120,14 @@ const SliderFeaturedMakita = ({
 
                   {/* Stats y botón */}
                   <div className="flex flex-col items-start w-full  md:w-5/12 mt-4 md:mt-0 ">
-                    <div className="flex-1 flex justify-center items-center absolute lg:top-0 bottom-0 right-5 lg:-right-20  ">
-                      <img
-                        src={`/storage/images/item/${item?.banner}`}
-                        alt={item?.name}
-                        className=" min-w-[350px] lg:w-[500px] object-cover"
-                      />
+                    <div className="flex-1 flex justify-center items-center absolute lg:top-0 bottom-0 right-5 lg:-right-20">
+                      <div className="w-[350px] h-[300px] lg:w-[500px] lg:h-[400px] overflow-hidden">
+                        <img
+                          src={`/storage/images/item/${item?.banner}`}
+                          alt={item?.name}
+                          className="w-full h-full object-contain object-center"
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -104,10 +146,16 @@ const SliderFeaturedMakita = ({
                             swiperRef.current.slideToLoop(index);
                           }
                         }}
-                        className={`transition-all duration-300 rounded-full flex items-center justify-center
+                        onMouseEnter={() => {
+                          setCurrentIndex(index + 1);
+                          if (swiperRef.current) {
+                            swiperRef.current.slideToLoop(index);
+                          }
+                        }}
+                        className={`transition-all duration-300 rounded-full flex items-center justify-center hover:scale-110
                           ${currentIndex === index + 1
-                            ? 'w-3 h-3 bg-primary brightness-125 shadow-lg'
-                            : 'w-3 h-3  bg-gray-100 hover:bg-primary/30'}
+                            ? `w-3 h-3 ${isHovered ? 'bg-primary' : 'bg-primary brightness-125'} shadow-lg`
+                            : `w-3 h-3 ${isHovered ? 'bg-white/70' : 'bg-gray-100'} hover:bg-primary/70`}
                         `}
                         style={{ outline: 'none' }}
                       >
