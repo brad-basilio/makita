@@ -46,6 +46,13 @@ return new class extends Migration
             $table->boolean('converted')->default(false);
             $table->timestamps();
 
+            // Add all necessary indexes
+            $table->index('session_id', 'idx_user_sessions_session_id');
+            $table->index(['session_id', 'user_id'], 'idx_user_sessions_session_user');
+            $table->index('user_id', 'idx_user_sessions_user_id');
+            $table->index('created_at', 'idx_user_sessions_created_at');
+            $table->index('updated_at', 'idx_user_sessions_updated_at');
+            $table->index(['session_id', 'created_at'], 'idx_user_sessions_session_created');
             $table->index(['created_at', 'converted']);
         });
 
