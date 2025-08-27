@@ -104,19 +104,19 @@ const HeaderMakita = ({
 
   // Función para obtener plataformas por categoría (con filtro de aplicación)
   const getPlatformsByCategory = (categoryId) => {
-    let filteredItems = items;
+    let filteredItems = items || [];
     
     // Si hay una aplicación seleccionada, filtrar items por esa aplicación
     if (selectedApplication) {
-      filteredItems = items.filter(item => 
-        item.applications && 
-        item.applications.some(app => app.id === selectedApplication.id)
-      );
+      filteredItems = items?.filter(item => 
+        item?.applications && 
+        item.applications.some(app => app?.id === selectedApplication?.id)
+      ) || [];
     }
     
-    return platforms.filter(platform =>
-      filteredItems.some(item => item.category?.id === categoryId && item.platform?.id === platform?.id)
-    )
+    return platforms?.filter(platform =>
+      filteredItems.some(item => item?.category?.id === categoryId && item?.platform?.id === platform?.id)
+    ) || []
   }
 
   // Función para obtener familias por categoría y plataforma (con filtro de aplicación)
@@ -124,24 +124,24 @@ const HeaderMakita = ({
     const categoryFamilies = [];
     const familyNames = new Set();
     
-    let filteredItems = items;
+    let filteredItems = items || [];
     
     // Si hay una aplicación seleccionada, filtrar items por esa aplicación
     if (selectedApplication) {
-      filteredItems = items.filter(item => 
-        item.applications && 
-        item.applications.some(app => app.id === selectedApplication.id)
-      );
+      filteredItems = items?.filter(item => 
+        item?.applications && 
+        item.applications.some(app => app?.id === selectedApplication?.id)
+      ) || [];
     }
     
     filteredItems.forEach(item => {
       if (
-        item.category?.id === categoryId &&
-        item.platform?.id === platformId &&
-        item.family
+        item?.category?.id === categoryId &&
+        item?.platform?.id === platformId &&
+        item?.family
       ) {
-        const familyName = item.family.name.trim().toUpperCase();
-        if (!familyNames.has(familyName)) {
+        const familyName = item.family?.name?.trim()?.toUpperCase();
+        if (familyName && !familyNames.has(familyName)) {
           categoryFamilies.push(item.family);
           familyNames.add(familyName);
         }
@@ -155,20 +155,20 @@ const HeaderMakita = ({
     const categoryFamilies = [];
     const familyNames = new Set();
     
-    let filteredItems = items;
+    let filteredItems = items || [];
     
     // Si hay una aplicación seleccionada, filtrar items por esa aplicación
     if (selectedApplication) {
-      filteredItems = items.filter(item => 
-        item.applications && 
-        item.applications.some(app => app.id === selectedApplication.id)
-      );
+      filteredItems = items?.filter(item => 
+        item?.applications && 
+        item.applications.some(app => app?.id === selectedApplication?.id)
+      ) || [];
     }
     
     filteredItems.forEach(item => {
-      if (item.category?.id === categoryId && item.family) {
-        const familyName = item.family.name.trim().toUpperCase();
-        if (!familyNames.has(familyName)) {
+      if (item?.category?.id === categoryId && item?.family) {
+        const familyName = item.family?.name?.trim()?.toUpperCase();
+        if (familyName && !familyNames.has(familyName)) {
           categoryFamilies.push(item.family);
           familyNames.add(familyName);
         }
@@ -315,19 +315,13 @@ const HeaderMakita = ({
               <div key={cat.id} className="relative">
                 <button
                   className={`font-medium px-4 py-2 text-sm uppercase tracking-wide hover:bg-white/10 transition-colors duration-200 ${activeCategory?.id === cat.id && showMegaMenu ? "bg-white/20" : ""}`}
-                  onMouseEnter={() => {
-                    setShowSearch(false)
-                    setShowMegaMenu(true)
-                    setActiveCategory(cat)
-                    setActivePlatform(null)
-                  }}
                   onClick={() => {
+                    setShowSearch(false)
                     if (activeCategory?.id === cat.id && showMegaMenu) {
                       setShowMegaMenu(false)
                       setActiveCategory(null)
                     } else {
-                      setShowMegaMenu(true
-                      )
+                      setShowMegaMenu(true)
                       setActiveCategory(cat)
                       setActivePlatform(null)
                     }
@@ -501,15 +495,26 @@ const HeaderMakita = ({
             style={{
               top: isFixed ? 64 : 120, // 64px when fixed, 120px otherwise
             }}
-            onMouseLeave={() => {
-              setShowMegaMenu(false)
-              setActiveCategory(null)
-            }}
           >
+            {/* Botón cerrar */}
+            <div className="relative max-w-7xl mx-auto pt-4 ">
+              <button
+                onClick={() => {
+                  setShowMegaMenu(false)
+                  setActiveCategory(null)
+                  setSelectedApplication(null)
+                }}
+                className="text-white absolute right-0 hover:text-[#00B5CE] transition-colors p-2 rounded-full hover:bg-white/10"
+                aria-label="Cerrar menú"
+              >
+                <XIcon size={24} />
+              </button>
+            </div>
+            
             {/* Contenido principal del mega menú */}
-            <div className="max-w-7xl mx-auto px-6 py-8 max-h-[calc(80vh-100px)] overflow-hidden">
+            <div className="max-w-7xl mx-auto px-6 pb-8 max-h-[calc(80vh-100px)] overflow-hidden">
               {/* Si hay plataformas para esta categoría, mostrarlas en scroll horizontal */}
-              {getPlatformsByCategory(activeCategory.id).length > 0 ? (
+              {getPlatformsByCategory(activeCategory?.id).length > 0 ? (
                 <div
                   className="flex gap-8 overflow-x-auto pb-2 custom-scrollbar"
                   style={{
@@ -518,7 +523,7 @@ const HeaderMakita = ({
                     overflowX: 'auto',
                   }}
                 >
-                  {getPlatformsByCategory(activeCategory.id).map((platform) => {
+                  {getPlatformsByCategory(activeCategory?.id).map((platform) => {
                     // Cada card ocupa 1/3 del contenedor (por ejemplo, 33vw menos el gap)
                     const cardWidth = 'min(400px, 33vw)';
                     return (
@@ -533,27 +538,37 @@ const HeaderMakita = ({
                         }}
                       >
                         {/* Encabezado de la plataforma */}
-                        <div className="pb-2">
-                          <img src={`/storage/images/platform/${platform.image}`} alt={platform.name} className="h-10 object-contain" onError={(e) =>
+                        <div className="pb-2 flex gap-4">
+                          <img src={`/storage/images/platform/${platform?.image}`} alt={platform?.name || 'Plataforma'} className="h-10 object-contain" onError={(e) =>
                           (e.target.src =
                             "/api/cover/thumbnail/null")
                           } />
-                          <h3 className="text-white font-bold text-lg mt-2">{platform.name}</h3>
+                          <h3 className="text-white font-bold text-lg mt-2">{platform?.description || platform?.name || 'Sin nombre'}</h3>
                         </div>
                         {/* Lista de familias */}
                         <ul className="space-y-2 max-h-[320px] overflow-y-auto pr-2 custom-scrollbar">
                           {/* Scrollbar mejorado con estilo más redondeado */}
-                          {getFamiliesByCategoryAndPlatform(activeCategory.id, platform.id).map((family) => (
-                            <li key={family.id}>
-                              <a
-                                href={`/catalogo?category=${activeCategory.slug}&platform=${platform.slug}&family=${family.slug}`}
-                                className="text-white hover:text-[#00B5CE] border-b pb-2 border-white/40 transition-colors text-sm flex items-center gap-2"
-                              >
-                                <span className="text-[#00B5CE]">•</span>
-                                <span>{family.name}</span>
-                              </a>
+                          {getFamiliesByCategoryAndPlatform(activeCategory?.id, platform?.id).length > 0 ? (
+                            getFamiliesByCategoryAndPlatform(activeCategory?.id, platform?.id).map((family) => (
+                              <li key={family?.id}>
+                                <a
+                                  href={`/catalogo?category=${activeCategory?.slug}&platform=${platform?.slug}&family=${family?.slug}`}
+                                  className="text-white hover:text-[#00B5CE] border-b pb-2 border-white/40 transition-colors text-sm flex items-center gap-2"
+                                >
+                                  <span className="text-[#00B5CE]">•</span>
+                                  <span>{family?.name || 'Sin nombre'}</span>
+                                </a>
+                              </li>
+                            ))
+                          ) : (
+                            <li className="flex flex-col items-center justify-center py-6 text-white/70">
+                              <svg className="w-10 h-10 text-white/40 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                              </svg>
+                              <p className="text-xs font-medium text-center">Sin familias disponibles</p>
+                              <p className="text-xs text-white/50 text-center">No hay familias para esta plataforma</p>
                             </li>
-                          ))}
+                          )}
                         </ul>
                       </div>
                     );
@@ -562,15 +577,45 @@ const HeaderMakita = ({
               ) : (
                 /* Si no hay plataformas, mostrar familias directamente en grid */
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
-                  {getFamiliesByCategory(activeCategory.id).map((family) => (
-                    <a
-                      key={family.id}
-                      href={`/categoria/${activeCategory.slug}/${family.slug}`}
-                      className="bg-secondary hover:bg-white/10 rounded-lg p-4 transition-colors"
-                    >
-                      <h3 className="text-white font-medium text-sm">{family.name}</h3>
-                    </a>
-                  ))}
+                  {getFamiliesByCategory(activeCategory?.id).length > 0 ? (
+                    getFamiliesByCategory(activeCategory?.id).map((family) => (
+                      <a
+                        key={family?.id}
+                        href={`/categoria/${activeCategory?.slug}/${family?.slug}`}
+                        className="bg-secondary hover:bg-white/10 rounded-lg p-4 transition-colors"
+                      >
+                        <h3 className="text-white font-medium text-sm">{family?.name || 'Sin nombre'}</h3>
+                      </a>
+                    ))
+                  ) : (
+                    <div className="col-span-full text-center py-12">
+                      <div className="flex flex-col items-center">
+                        <svg className="w-16 h-16 text-white/40 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                        </svg>
+                        <div className="text-white/70 text-lg mb-2 font-medium">
+                          No hay productos disponibles
+                        </div>
+                        <p className="text-white/50 text-sm max-w-md">
+                          {selectedApplication ? 
+                            `No se encontraron productos para la aplicación "${selectedApplication?.name}" en esta categoría.` :
+                            'No hay familias de productos disponibles en esta categoría en este momento.'
+                          }
+                        </p>
+                        {selectedApplication && (
+                          <button
+                            onClick={() => setSelectedApplication(null)}
+                            className="mt-4 px-4 py-2 bg-[#00B5CE] text-white hover:bg-[#00A0B8] transition-colors text-sm inline-flex items-center gap-2"
+                          >
+                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                            </svg>
+                            Ver todos los productos
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -597,7 +642,7 @@ const HeaderMakita = ({
                           onClick={() => {
                             setSelectedApplication(selectedApplication?.id === application.id ? null : application);
                           }}
-                          className={`transition-colors text-sm font-medium uppercase tracking-wide px-3 py-1 rounded-full ${
+                          className={`transition-colors  text-sm font-medium uppercase tracking-wide px-3 py-2  ${
                             selectedApplication?.id === application.id 
                               ? 'bg-[#00B5CE] text-white' 
                               : 'text-white hover:text-[#00B5CE] hover:bg-white/10'
