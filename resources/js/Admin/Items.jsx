@@ -186,6 +186,10 @@ const Items = ({ categories, brands, collections }) => {
     const onModalSubmit = async (e) => {
         e.preventDefault();
 
+        const tagsValue = $(tagsRef.current).val();
+        const applicationsValue = $(applicationsRef.current).val();
+        const symbologiesValue = $(symbologiesRef.current).val();
+
         const request = {
             id: idRef.current.value || undefined,
             category_id: categoryRef.current.value,
@@ -195,9 +199,9 @@ const Items = ({ categories, brands, collections }) => {
             summary: summaryRef.current.value,
             price: priceRef.current.value,
             discount: discountRef.current.value,
-            tags: $(tagsRef.current).val(),
-            applications: $(applicationsRef.current).val(),
-            symbologies: $(symbologiesRef.current).val(),
+            tags: tagsValue,
+            applications: applicationsValue,
+            symbologies: symbologiesValue,
             description: descriptionRef.current.value,
             stock: stockRef.current.value,
             specifications: JSON.stringify(specifications),
@@ -222,50 +226,30 @@ const Items = ({ categories, brands, collections }) => {
         let galleryIndex = 0;
         const galleryIds = [];
         
-        console.log('DEBUG - Estado de gallery antes de procesar:', gallery);
-        
         gallery.forEach((img, index) => {
-            console.log(`DEBUG - Procesando imagen ${index}:`, img);
             if (!img.toDelete) {
                 if (img.file) {
-                    formData.append(`gallery[${galleryIndex}]`, img.file); // Imágenes nuevas
-                    console.log(`DEBUG - Agregando imagen nueva en índice ${galleryIndex}`);
+                    formData.append(`gallery[${galleryIndex}]`, img.file);
                     galleryIndex++;
                 } else {
-                    galleryIds.push(img.id); // IDs de imágenes existentes
-                    console.log(`DEBUG - Agregando ID existente: ${img.id}`);
+                    galleryIds.push(img.id);
                 }
-            } else {
-                console.log(`DEBUG - Imagen marcada para eliminar: ${img.id}`);
             }
         });
-        
-        console.log('DEBUG - galleryIds finales:', galleryIds);
         
         // Enviar los IDs de imágenes existentes como array
         if (galleryIds.length > 0) {
             galleryIds.forEach((id, index) => {
                 formData.append(`gallery_ids[${index}]`, id);
-                console.log(`DEBUG - Agregando gallery_ids[${index}] = ${id}`);
             });
         }
 
         const deletedImages = gallery
             .filter((img) => img.toDelete)
-            .map((img) => img.id); // Mantener el UUID completo
+            .map((img) => img.id);
             
-        console.log('DEBUG - deletedImages:', deletedImages);
-        
         if (deletedImages.length > 0) {
-            formData.append("deleted_images", JSON.stringify(deletedImages)); // Imágenes eliminadas
-            console.log('DEBUG - deleted_images JSON:', JSON.stringify(deletedImages));
-        }
-
-        console.log('DEBUG - FormData completo:', formData);
-        
-        // Debug: Mostrar todos los valores del FormData
-        for (let [key, value] of formData.entries()) {
-            console.log(`DEBUG - FormData[${key}]:`, value);
+            formData.append("deleted_images", JSON.stringify(deletedImages));
         }
 
         const result = await itemsRest.save(formData);

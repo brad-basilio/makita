@@ -191,8 +191,8 @@ class ItemController extends BasicController
     public function afterSave(Request $request, object $jpa, ?bool $isNew)
     {
         $tags = explode(',', $request->tags ?? '');
-        $applications = $request->applications ?? [];
-        $symbologies = $request->symbologies ?? [];
+        $applications = !empty($request->applications) ? explode(',', $request->applications) : [];
+        $symbologies = !empty($request->symbologies) ? explode(',', $request->symbologies) : [];
 
         DB::transaction(function () use ($jpa, $tags, $applications, $symbologies, $request) {
             // Manejo de Tags
@@ -268,23 +268,13 @@ class ItemController extends BasicController
             }
         }
 
-        // DEBUG: Log de todos los datos recibidos
-        \Log::info('DEBUG - Datos recibidos en afterSave:', [
-            'item_id' => $jpa->id,
-            'gallery_ids' => $request->input('gallery_ids'),
-            'deleted_images' => $request->input('deleted_images'),
-            'all_request_data' => $request->all()
-        ]);
-
         // Procesar gallery_ids para preservar imágenes existentes
         if ($request->has('gallery_ids')) {
             $galleryIds = $request->input('gallery_ids');
-            \Log::info('DEBUG - Procesando gallery_ids:', ['gallery_ids' => $galleryIds]);
             
             if (is_array($galleryIds)) {
                 foreach ($galleryIds as $imageId) {
                     if (!empty($imageId)) {
-                        \Log::info('DEBUG - Actualizando imagen existente:', ['image_id' => $imageId, 'item_id' => $jpa->id]);
                         // Verificar que la imagen existe y pertenece al item
                         $jpa->images()->where('id', $imageId)->update(['item_id' => $jpa->id]);
                     }
