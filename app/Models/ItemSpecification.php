@@ -12,7 +12,7 @@ class ItemSpecification extends Model
     public $incrementing = false;
     protected $keyType = 'string';
 
-    protected $fillable = ['item_id', 'type', 'title', 'description'];
+    protected $fillable = ['item_id', 'type', 'title', 'description', 'tooltip'];
 
     public function item()
     {

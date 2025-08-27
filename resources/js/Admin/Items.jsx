@@ -109,7 +109,7 @@ const Items = ({ categories, brands, collections }) => {
         if (itemData && itemData.images) {
             const existingImages = itemData.images.map((img) => ({
                 id: img.id, // ID de la imagen en la BD
-                url: `/storage/images/item_image/${img.url}`, // Ruta de la imagen almacenada
+                url: `/storage/images/item/${img.url}`, // Ruta de la imagen almacenada
             }));
             setGallery(existingImages);
         }
@@ -168,7 +168,8 @@ const Items = ({ categories, brands, collections }) => {
             setSpecifications(data.specifications.map(spec => ({
                 type: spec.type,
                 title: spec.title,
-                description: spec.description
+                description: spec.description,
+                tooltip: spec.tooltip
             })));
         } else {
             setSpecifications([]);
@@ -595,8 +596,14 @@ const Items = ({ categories, brands, collections }) => {
                     <div className="row mb-4">
                         <div className="col-12">
                             <div className="card border-0 shadow-sm">
-                                <div className="card-header bg-white border-bottom">
-                                    <h6 className="mb-0 text-dark"><i className="mdi mdi-information-outline me-2 text-muted"></i>Información Principal</h6>
+                                <div className="card-header bg-primary border-bottom-0" style={{ padding: '15px 20px' }}>
+                                    <div className="d-flex align-items-center">
+                                        <i className="mdi mdi-information-outline text-white fs-5 me-3"></i>
+                                        <div>
+                                            <h6 className="mb-0 text-white fw-semibold">Información Principal</h6>
+                                            <small className="text-white">Datos básicos del producto</small>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div className="card-body">
                                     <div className="row">
@@ -629,8 +636,14 @@ const Items = ({ categories, brands, collections }) => {
                     <div className="row mb-4">
                         <div className="col-12">
                             <div className="card border-0 shadow-sm">
-                                <div className="card-header bg-white border-bottom">
-                                    <h6 className="mb-0 text-dark"><i className="mdi mdi-tag-multiple me-2 text-muted"></i>Clasificación y Organización</h6>
+                                <div className="card-header bg-primary border-bottom-0" style={{ padding: '15px 20px' }}>
+                                    <div className="d-flex align-items-center">
+                                        <i className="mdi mdi-tag-multiple text-white fs-5 me-3"></i>
+                                        <div>
+                                            <h6 className="mb-0 text-white fw-semibold">Clasificación y Organización</h6>
+                                            <small className="text-white">Categorías, familias y etiquetas</small>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div className="card-body">
                                     <div className="row">
@@ -712,8 +725,14 @@ const Items = ({ categories, brands, collections }) => {
                     <div className="row mb-4">
                         <div className="col-md-12">
                             <div className="card border-0 shadow-sm h-100">
-                                <div className="card-header bg-white border-bottom">
-                                    <h6 className="mb-0 text-dark"><i className="mdi mdi-currency-usd me-2 text-muted"></i>Información de Precios</h6>
+                                <div className="card-header bg-primary border-bottom-0" style={{ padding: '15px 20px' }}>
+                                    <div className="d-flex align-items-center">
+                                        <i className="mdi mdi-currency-usd text-white fs-5 me-3"></i>
+                                        <div>
+                                            <h6 className="mb-0 text-white fw-semibold">Información de Precios</h6>
+                                            <small className="text-white">Precios y stock disponible</small>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div className="card-body">
                                     <div className="row">
@@ -764,7 +783,7 @@ const Items = ({ categories, brands, collections }) => {
                                         <i className="mdi mdi-format-list-bulleted text-white fs-5 me-3"></i>
                                         <div>
                                             <h6 className="mb-0 text-white fw-semibold">Especificaciones Generales</h6>
-                                            <small className="text-white-75">Características principales del producto</small>
+                                            <small className="text-white">Características principales del producto</small>
                                         </div>
                                     </div>
                                 </div>
@@ -791,7 +810,7 @@ const Items = ({ categories, brands, collections }) => {
                                         <i className="mdi mdi-cog text-white fs-5 me-3"></i>
                                         <div>
                                             <h6 className="mb-0 text-white fw-semibold">Especificaciones Técnicas</h6>
-                                            <small className="text-white-75">Detalles técnicos y funcionales</small>
+                                            <small className="text-white">Detalles técnicos y funcionales</small>
                                         </div>
                                     </div>
                                 </div>
@@ -816,8 +835,14 @@ const Items = ({ categories, brands, collections }) => {
                     <div className="row mb-4">
                         <div className="col-12">
                             <div className="card border-0 shadow-sm">
-                                <div className="card-header bg-white border-bottom">
-                                    <h6 className="mb-0 text-dark"><i className="mdi mdi-image-multiple me-2 text-muted"></i>Imágenes y Multimedia</h6>
+                                <div className="card-header bg-primary border-bottom-0" style={{ padding: '15px 20px' }}>
+                                    <div className="d-flex align-items-center">
+                                        <i className="mdi mdi-image-multiple text-white fs-5 me-3"></i>
+                                        <div>
+                                            <h6 className="mb-0 text-white fw-semibold">Imágenes y Multimedia</h6>
+                                            <small className="text-white">Galería de imágenes del producto</small>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div className="card-body">
                                     <div className="row">

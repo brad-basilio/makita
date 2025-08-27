@@ -18,6 +18,7 @@ use Ramsey\Uuid\Uuid;
 use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Routing\ResponseFactory;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 use SoDe\Extend\Crypto;
 use SoDe\Extend\Text;
 use Exception;
@@ -245,20 +246,25 @@ class ItemController extends BasicController
         }
 
         // Decodificar features y specifications
-        $features = json_decode($request->input('features'), true);
-        $specifications = json_decode($request->input('specifications'), true);
+        try {
+            $features = json_decode($request->input('features'), true);
+            $specifications = json_decode($request->input('specifications'), true);
 
-        // Procesar features
-        if ($features && is_array($features)) {
+            // Procesar features
+            if ($features && is_array($features)) {
+                (new ItemFeatureController())->saveFeatures($jpa, $features);
+            }
 
-            (new ItemFeatureController())->saveFeatures($jpa, $features);
-        }
-
-        // Procesar specifications
-        if ($specifications && is_array($specifications)) {
-
-            // Guardar cada specification asociada al item
-            (new ItemSpecificationController())->saveSpecifications($jpa, $specifications);
+            // Procesar specifications
+            if ($specifications && is_array($specifications)) {
+                // Guardar cada specification asociada al item
+                (new ItemSpecificationController())->saveSpecifications($jpa, $specifications);
+            }
+        } catch (\Exception $e) {
+            Log::error('Error processing features/specifications: ' . $e->getMessage());
+            Log::error('Features data: ' . $request->input('features'));
+            Log::error('Specifications data: ' . $request->input('specifications'));
+            throw $e;
         }
 
         // if ($specifications && is_array($specifications)) {
