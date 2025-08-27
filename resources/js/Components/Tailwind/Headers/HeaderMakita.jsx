@@ -43,94 +43,138 @@ const HeaderMakita = ({
   // Mega menu state
   const [showMegaMenu, setShowMegaMenu] = useState(false);
   const [activeCategory, setActiveCategory] = useState(null);
-  const [activeBrand, setActiveBrand] = useState(null);
+  const [activePlatform, setActivePlatform] = useState(null);
 
   // Additional states for mobile menu
   const [mobileActiveCat, setMobileActiveCat] = useState(null);
   const [mobileSearchValue, setMobileSearchValue] = useState("");
   const [showMobileSubmenu, setShowMobileSubmenu] = useState(false);
+  
+  // Filter state for applications
+  const [selectedApplication, setSelectedApplication] = useState(null);
 
-  // Categories, Brands, Subcategories
-  const categories = Array.from(new Set(items.map((item) => JSON.stringify(item.category)))).map((item) =>
-    JSON.parse(item),
-  );
+  // Categories, Platforms, Families, Applications
+  const categories = Array.from(new Set(items.map((item) => JSON.stringify(item.category)))).map((item) => {
+    try {
+      return JSON.parse(item);
+    } catch (e) {
+      return null;
+    }
+  }).filter(category => category && category.name);
 
-  // Obtener todas las marcas únicas
-  const brands = Array.from(new Set(items.map((item) => JSON.stringify(item.brand)))).map((item) => JSON.parse(item))
+  // Debug logs
+  // Obtener todas las plataformas únicas
+  const platforms = Array.from(new Set(items.map((item) => JSON.stringify(item.platform)))).map((item) => {
+    try {
+      return JSON.parse(item);
+    } catch (e) {
+      return null;
+    }
+  }).filter(platform => platform && platform.name)
 
-  // Extraer y procesar colecciones
-  const getUniqueCollections = () => {
-    const collections = items
-      .filter(item => item.collection && item.collection.name)
-      .map(item => item.collection)
+  // Obtener todas las familias únicas
+  const families = Array.from(new Set(items.map((item) => JSON.stringify(item.family)))).map((item) => {
+    try {
+      return JSON.parse(item);
+    } catch (e) {
+      return null;
+    }
+  }).filter(family => family && family.name)
+
+  // Obtener todas las aplicaciones únicas
+  const applications = Array.from(new Set(items.map((item) => {
+    if (item.applications && Array.isArray(item.applications)) {
+      return item.applications.map(app => JSON.stringify(app))
+    }
+    return []
+  }).flat())).map((item) => {
+    try {
+      return JSON.parse(item)
+    } catch (e) {
+      return null
+    }
+  }).filter(app => app && app.name)
+  
+  // Filtrar aplicaciones únicas por nombre para evitar duplicados
+  const uniqueApplications = applications.filter((app, index, self) => 
+    index === self.findIndex(a => a.name.trim().toUpperCase() === app.name.trim().toUpperCase())
+  )
+
+
+
+  // Función para obtener plataformas por categoría (con filtro de aplicación)
+  const getPlatformsByCategory = (categoryId) => {
+    let filteredItems = items;
     
-    // Crear un objeto para agrupar colecciones similares
-    const groupedCollections = {}
+    // Si hay una aplicación seleccionada, filtrar items por esa aplicación
+    if (selectedApplication) {
+      filteredItems = items.filter(item => 
+        item.applications && 
+        item.applications.some(app => app.id === selectedApplication.id)
+      );
+    }
     
-    collections.forEach(collection => {
-      if (!collection.name) return
-      
-      const name = collection.slug.trim().toUpperCase()
-      const baseKey = name.split('-')[0] // Tomar la primera parte antes del guión
-      
-      // Si no existe el grupo base, crearlo
-      if (!groupedCollections[baseKey]) {
-        groupedCollections[baseKey] = {
-          ...collection,
-          name: baseKey,
-          slug: baseKey.toLowerCase().replace(/\s+/g, '-')
-        }
-      }
-    })
-    
-    return Object.values(groupedCollections)
-  }
-
-  const uniqueCollections = getUniqueCollections()
-
-  // Función para obtener marcas por categoría
-  const getBrandsByCategory = (categoryId) => {
-    return brands.filter(brand =>
-      items.some(item => item.category?.id === categoryId && item.brand && item?.brand?.id === brand?.id)
+    return platforms.filter(platform =>
+      filteredItems.some(item => item.category?.id === categoryId && item.platform?.id === platform?.id)
     )
   }
 
-  // Función para obtener subcategorías por categoría y marca (sin repetidos, ids como string)
-  // Función para obtener subcategorías por categoría y marca (sin repetidos por nombre)
-  const getSubcategoriesByCategoryAndBrand = (categoryId, brandId) => {
-    const subcategories = [];
-    const subcategoryNames = new Set();
-    items.forEach(item => {
+  // Función para obtener familias por categoría y plataforma (con filtro de aplicación)
+  const getFamiliesByCategoryAndPlatform = (categoryId, platformId) => {
+    const categoryFamilies = [];
+    const familyNames = new Set();
+    
+    let filteredItems = items;
+    
+    // Si hay una aplicación seleccionada, filtrar items por esa aplicación
+    if (selectedApplication) {
+      filteredItems = items.filter(item => 
+        item.applications && 
+        item.applications.some(app => app.id === selectedApplication.id)
+      );
+    }
+    
+    filteredItems.forEach(item => {
       if (
         item.category?.id === categoryId &&
-        item.brand?.id === brandId &&
-        item.subcategory
+        item.platform?.id === platformId &&
+        item.family
       ) {
-        const subName = item.subcategory.name.trim().toUpperCase();
-        if (!subcategoryNames.has(subName)) {
-          subcategories.push(item.subcategory);
-          subcategoryNames.add(subName);
+        const familyName = item.family.name.trim().toUpperCase();
+        if (!familyNames.has(familyName)) {
+          categoryFamilies.push(item.family);
+          familyNames.add(familyName);
         }
       }
     });
-    return subcategories;
+    return categoryFamilies;
   }
 
-  
-  // Función para obtener subcategorías por categoría (cuando no hay marcas)
-  const getSubcategoriesByCategory = (categoryId) => {
-    const subcategories = [];
-    const subcategoryNames = new Set();
-    items.forEach(item => {
-      if (item.category?.id === categoryId && item.subcategory) {
-        const subName = item.subcategory.name.trim().toUpperCase();
-        if (!subcategoryNames.has(subName)) {
-          subcategories.push(item.subcategory);
-          subcategoryNames.add(subName);
+  // Función para obtener familias por categoría (cuando no hay plataformas, con filtro de aplicación)
+  const getFamiliesByCategory = (categoryId) => {
+    const categoryFamilies = [];
+    const familyNames = new Set();
+    
+    let filteredItems = items;
+    
+    // Si hay una aplicación seleccionada, filtrar items por esa aplicación
+    if (selectedApplication) {
+      filteredItems = items.filter(item => 
+        item.applications && 
+        item.applications.some(app => app.id === selectedApplication.id)
+      );
+    }
+    
+    filteredItems.forEach(item => {
+      if (item.category?.id === categoryId && item.family) {
+        const familyName = item.family.name.trim().toUpperCase();
+        if (!familyNames.has(familyName)) {
+          categoryFamilies.push(item.family);
+          familyNames.add(familyName);
         }
       }
     });
-    return subcategories;
+    return categoryFamilies;
   }
 
   const menuRef = useRef(null);
@@ -275,7 +319,7 @@ const HeaderMakita = ({
                     setShowSearch(false)
                     setShowMegaMenu(true)
                     setActiveCategory(cat)
-                    setActiveBrand(null)
+                    setActivePlatform(null)
                   }}
                   onClick={() => {
                     if (activeCategory?.id === cat.id && showMegaMenu) {
@@ -285,7 +329,7 @@ const HeaderMakita = ({
                       setShowMegaMenu(true
                       )
                       setActiveCategory(cat)
-                      setActiveBrand(null)
+                      setActivePlatform(null)
                     }
                   }}
                 >
@@ -464,8 +508,8 @@ const HeaderMakita = ({
           >
             {/* Contenido principal del mega menú */}
             <div className="max-w-7xl mx-auto px-6 py-8 max-h-[calc(80vh-100px)] overflow-hidden">
-              {/* Si hay marcas para esta categoría, mostrarlas en scroll horizontal */}
-              {getBrandsByCategory(activeCategory.id).length > 0 ? (
+              {/* Si hay plataformas para esta categoría, mostrarlas en scroll horizontal */}
+              {getPlatformsByCategory(activeCategory.id).length > 0 ? (
                 <div
                   className="flex gap-8 overflow-x-auto pb-2 custom-scrollbar"
                   style={{
@@ -474,12 +518,12 @@ const HeaderMakita = ({
                     overflowX: 'auto',
                   }}
                 >
-                  {getBrandsByCategory(activeCategory.id).map((brand) => {
+                  {getPlatformsByCategory(activeCategory.id).map((platform) => {
                     // Cada card ocupa 1/3 del contenedor (por ejemplo, 33vw menos el gap)
                     const cardWidth = 'min(400px, 33vw)';
                     return (
                       <div
-                        key={brand.id}
+                        key={platform.id}
                         className="flex-shrink-0 space-y-4 bg-secondary rounded-lg p-4"
                         style={{
                           minWidth: cardWidth,
@@ -488,25 +532,25 @@ const HeaderMakita = ({
                           boxSizing: 'border-box',
                         }}
                       >
-                        {/* Encabezado de la marca */}
+                        {/* Encabezado de la plataforma */}
                         <div className="pb-2">
-                          <img src={`/storage/images/brand/${brand.image}`} alt={brand.name} className="h-10 object-contain" onError={(e) =>
+                          <img src={`/storage/images/platform/${platform.image}`} alt={platform.name} className="h-10 object-contain" onError={(e) =>
                           (e.target.src =
                             "/api/cover/thumbnail/null")
                           } />
-
+                          <h3 className="text-white font-bold text-lg mt-2">{platform.name}</h3>
                         </div>
-                        {/* Lista de subcategorías */}
+                        {/* Lista de familias */}
                         <ul className="space-y-2 max-h-[320px] overflow-y-auto pr-2 custom-scrollbar">
                           {/* Scrollbar mejorado con estilo más redondeado */}
-                          {getSubcategoriesByCategoryAndBrand(activeCategory.id, brand.id).map((subcategory) => (
-                            <li key={subcategory.id}>
+                          {getFamiliesByCategoryAndPlatform(activeCategory.id, platform.id).map((family) => (
+                            <li key={family.id}>
                               <a
-                                href={`/catalogo?category=${activeCategory.slug}&subcategory=${subcategory.slug}`}
-                                className="text-white hover:customtext-primary border-b pb-2 border-white/40 transition-colors text-sm flex items-center gap-2"
+                                href={`/catalogo?category=${activeCategory.slug}&platform=${platform.slug}&family=${family.slug}`}
+                                className="text-white hover:text-[#00B5CE] border-b pb-2 border-white/40 transition-colors text-sm flex items-center gap-2"
                               >
                                 <span className="text-[#00B5CE]">•</span>
-                                <span>{subcategory.name}</span>
+                                <span>{family.name}</span>
                               </a>
                             </li>
                           ))}
@@ -516,35 +560,51 @@ const HeaderMakita = ({
                   })}
                 </div>
               ) : (
-                /* Si no hay marcas, mostrar subcategorías directamente en grid */
+                /* Si no hay plataformas, mostrar familias directamente en grid */
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
-                  {getSubcategoriesByCategory(activeCategory.id).map((subcategory) => (
+                  {getFamiliesByCategory(activeCategory.id).map((family) => (
                     <a
-                      key={subcategory.id}
-                      href={`/categoria/${activeCategory.slug}/${subcategory.slug}`}
+                      key={family.id}
+                      href={`/categoria/${activeCategory.slug}/${family.slug}`}
                       className="bg-secondary hover:bg-white/10 rounded-lg p-4 transition-colors"
                     >
-                      <h3 className="text-white font-medium text-sm">{subcategory.name}</h3>
+                      <h3 className="text-white font-medium text-sm">{family.name}</h3>
                     </a>
                   ))}
                 </div>
               )}
             </div>
 
-            {/* Sección inferior - Por aplicación */}
+            {/* Sección inferior - Aplicaciones */}
             <div className="bg-secondary border-t border-gray-600">
               <div className="max-w-7xl mx-auto px-6 py-6">
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                  <h4 className="text-2xl font-bold text-white">Nuestro Blog</h4>
+                  <div className="flex items-center gap-4">
+                    <h4 className="text-2xl font-bold text-white">Filtrar por Aplicación:</h4>
+                    {selectedApplication && (
+                      <button
+                        onClick={() => setSelectedApplication(null)}
+                        className="text-[#00B5CE] hover:text-white transition-colors text-sm font-medium px-3 py-1 border border-[#00B5CE] rounded-full"
+                      >
+                        Limpiar filtro
+                      </button>
+                    )}
+                  </div>
                   <div className="flex flex-wrap items-center gap-4 md:gap-6">
-                    {uniqueCollections.map((collection, index, array) => (
-                      <React.Fragment key={collection.id || collection.name}>
-                        <a
-                          href={`/coleccion/${collection.slug}`}
-                          className="text-sm font-medium text-white hover:customtext-primary transition-colors uppercase tracking-wide"
+                    {uniqueApplications.map((application, index, array) => (
+                      <React.Fragment key={application.id || application.name}>
+                        <button
+                          onClick={() => {
+                            setSelectedApplication(selectedApplication?.id === application.id ? null : application);
+                          }}
+                          className={`transition-colors text-sm font-medium uppercase tracking-wide px-3 py-1 rounded-full ${
+                            selectedApplication?.id === application.id 
+                              ? 'bg-[#00B5CE] text-white' 
+                              : 'text-white hover:text-[#00B5CE] hover:bg-white/10'
+                          }`}
                         >
-                          {collection.name}
-                        </a>
+                          {application.name}
+                        </button>
                         {index < array.length - 1 && <span className="text-white hidden md:inline">|</span>}
                       </React.Fragment>
                     ))}

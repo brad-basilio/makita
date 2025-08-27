@@ -141,7 +141,10 @@
                         "category",
                         "subcategory",
                         "brand",
-                        "collection"
+                        "collection",
+                        "platform",
+                        "family",
+                        "applications"
                     ]
                 },
                 "generals": [
