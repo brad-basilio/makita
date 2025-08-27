@@ -75,59 +75,174 @@ const DynamicField = ({ label, structure, value = [], onChange, typeOptions = []
 
             {fields.map((field, index) => {
                 const isLastOdd = fields.length % 2 !== 0 && index === fields.length - 1;
+                const isGeneralSpec = structure.hasOwnProperty('description') && Object.keys(structure).length === 1;
+                const isTechnicalSpec = structure.hasOwnProperty('title') && structure.hasOwnProperty('description') && structure.hasOwnProperty('tooltip');
+                
                 return (
-                    <div key={index} className="row g-2 mb-2">
-                        {typeof field === "object" ? (
-                            Object.keys(structure).map((key) => (
-                                <div key={key} className={isLastOdd ? "col-9" : "col-6"}>
-                                    {key === "type" ? (
-                                        <select
-                                            className="form-select"
-                                            value={field[key] || ""}
-                                            onChange={(e) => handleFieldChange(index, key, e.target.value)}
-                                        >
-                                            <option value="">Seleccionar...</option>
-                                            {typeOptions.map((option) => (
-                                                <option key={option} value={option}>{option}</option>
-                                            ))}
-                                        </select>
-                                    ) : (
-                                        <input
-                                            type="text"
-                                            className="form-control"
-                                            value={field[key] || ""}
-                                            onChange={(e) => handleFieldChange(index, key, e.target.value)}
-                                            placeholder={key}
-                                        />
-                                    )}
-                                </div>
-                            ))
-                        ) : (
-                            <div className={isLastOdd ? "col-9" : "col-6"}>
+                    <div key={index} className="mb-3 p-3 border rounded position-relative" style={{ backgroundColor: '#ffffff', border: '1px solid #dee2e6' }}>
+                        <div className="row">
+                            {typeof field === "object" ? (
+                                <div className="col-12">
+                                    {isGeneralSpec ? (
+                                        // Especificaciones Generales: solo descripción
+                                        <div className="mb-2">
+                                            <label className="form-label text-muted mb-1" style={{ fontSize: '0.85rem', fontWeight: '500' }}>
+                                                Descripción
+                                            </label>
+                                            <textarea
+                                                className="form-control"
+                                                value={field.description || ""}
+                                                onChange={(e) => handleFieldChange(index, 'description', e.target.value)}
+                                                placeholder="Ingrese la descripción general"
+                                                rows={4}
+                                                style={{ 
+                                                    minHeight: '120px', 
+                                                    maxHeight: '200px', 
+                                                    resize: 'vertical'
+                                                }}
+                                            />
+                                        </div>
+                                    ) : isTechnicalSpec ? (
+                        // Especificaciones Técnicas: título, descripción y tooltip
+                        <div className="row">
+                            <div className="col-md-6 mb-2">
+                                <label className="form-label text-muted mb-1" style={{ fontSize: '0.85rem', fontWeight: '500' }}>
+                                    Título
+                                </label>
+                                <textarea
+                                    className="form-control"
+                                    value={field.title || ""}
+                                    onChange={(e) => handleFieldChange(index, 'title', e.target.value)}
+                                    placeholder="Título de la especificación"
+                                    rows={2}
+                                    style={{ 
+                                        minHeight: '60px', 
+                                        maxHeight: '100px', 
+                                        resize: 'vertical'
+                                    }}
+                                />
+                            </div>
+                            <div className="col-md-6 mb-2">
+                                <label className="form-label text-muted mb-1" style={{ fontSize: '0.85rem', fontWeight: '500' }}>
+                                    Descripción
+                                </label>
+                                <textarea
+                                    className="form-control"
+                                    value={field.description || ""}
+                                    onChange={(e) => handleFieldChange(index, 'description', e.target.value)}
+                                    placeholder="Descripción técnica detallada"
+                                    rows={3}
+                                    style={{ 
+                                        minHeight: '80px', 
+                                        maxHeight: '150px', 
+                                        resize: 'vertical'
+                                    }}
+                                />
+                            </div>
+                            <div className="col-12 mb-2">
+                                <label className="form-label text-muted mb-1" style={{ fontSize: '0.85rem', fontWeight: '500' }}>
+                                    Tooltip (información adicional)
+                                </label>
                                 <input
                                     type="text"
                                     className="form-control"
-                                    value={field}
-                                    onChange={(e) => handleFieldChange(index, null, e.target.value)}
-                                    placeholder="Característica"
+                                    value={field.tooltip || ""}
+                                    onChange={(e) => handleFieldChange(index, 'tooltip', e.target.value)}
+                                    placeholder="Información adicional que aparecerá en tooltip"
                                 />
                             </div>
-                        )}
-                        <div className="col-3">
-                            <button type="button" 
-                                    className="btn btn-danger w-100" 
-                                    onClick={() => handleRemove(index)}
-                                    >
-                                X
+                        </div>
+                                    ) : (
+                                        // Estructura genérica para otros casos
+                                        <div className="row">
+                                            {Object.keys(structure).map((key) => (
+                                                <div key={key} className="col-md-6 mb-2">
+                                                    <label className="form-label text-muted mb-1" style={{ fontSize: '0.85rem', fontWeight: '500' }}>
+                                                        {key === 'type' ? 'Tipo' : key.charAt(0).toUpperCase() + key.slice(1)}
+                                                    </label>
+                                                    {key === "type" ? (
+                                                        <select
+                                                            className="form-select"
+                                                            value={field[key] || ""}
+                                                            onChange={(e) => handleFieldChange(index, key, e.target.value)}
+                                                        >
+                                                            <option value="">Seleccionar tipo</option>
+                                                            {typeOptions.map((option) => (
+                                                                <option key={option} value={option}>{option}</option>
+                                                            ))}
+                                                        </select>
+                                                    ) : (
+                                                        <textarea
+                                                            className="form-control"
+                                                            value={field[key] || ""}
+                                                            onChange={(e) => handleFieldChange(index, key, e.target.value)}
+                                                            placeholder={`Ingrese ${key.charAt(0).toUpperCase() + key.slice(1)}`}
+                                                            rows={4}
+                                                            style={{ 
+                                                                minHeight: '120px', 
+                                                                maxHeight: '200px', 
+                                                                resize: 'vertical'
+                                                            }}
+                                                        />
+                                                    )}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            ) : (
+                                <div className="col-12 mb-2">
+                                    <label className="form-label text-muted mb-1" style={{ fontSize: '0.85rem', fontWeight: '500' }}>
+                                        Característica
+                                    </label>
+                                    <textarea
+                                        className="form-control"
+                                        value={field}
+                                        onChange={(e) => handleFieldChange(index, null, e.target.value)}
+                                        placeholder="Describe la característica del producto"
+                                        rows={4}
+                                        style={{ 
+                                            minHeight: '120px', 
+                                            maxHeight: '200px', 
+                                            resize: 'vertical'
+                                        }}
+                                    />
+                                </div>
+                            )}
+                            
+                            {/* Botón eliminar flotante */}
+                            <button
+                                type="button"
+                                className="btn btn-danger btn-sm rounded-circle position-absolute"
+                                style={{
+                                    top: '8px',
+                                    right: '8px',
+                                    width: '28px',
+                                    height: '28px',
+                                    padding: '0',
+                                    zIndex: 10,
+                                    boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+                                }}
+                                onClick={() => handleRemove(index)}
+                                title="Eliminar campo"
+                            >
+                                <i className="mdi mdi-close" style={{ fontSize: '14px', color: 'white' }}></i>
                             </button>
                         </div>
                     </div>
                 );
             })}
 
-            <button type="button" className="btn btn-primary" onClick={handleAdd}>
-                + Agregar
-            </button>
+            <div className="text-center mt-3">
+                <button 
+                    type="button" 
+                    className="btn btn-primary px-4 py-2" 
+                    onClick={handleAdd}
+                >
+                    <i className="mdi mdi-plus me-2"></i>
+                    Agregar
+                </button>
+            </div>
         </div>
     );
 };

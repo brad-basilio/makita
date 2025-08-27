@@ -26,7 +26,7 @@ const itemsRest = new ItemsRest();
 
 const Items = ({ categories, brands, collections }) => {
     //!FALTA EDIT AND DELETEDE GALERIA
-    
+
     const [itemData, setItemData] = useState([]);
 
     const gridRef = useRef();
@@ -44,7 +44,7 @@ const Items = ({ categories, brands, collections }) => {
     const priceRef = useRef();
     const discountRef = useRef();
     const tagsRef = useRef();
-    const bannerRef = useRef();
+
     const imageRef = useRef();
     const textureRef = useRef();
     const descriptionRef = useRef();
@@ -116,7 +116,7 @@ const Items = ({ categories, brands, collections }) => {
     }, [itemData]);
 
     const onModalOpen = (data) => {
-        console.log('data total',data);
+        console.log('data total', data);
         setItemData(data || null); // Guardamos los datos en el estado
         if (data?.id) setIsEditing(true);
         else setIsEditing(false);
@@ -143,14 +143,11 @@ const Items = ({ categories, brands, collections }) => {
 
         SetSelectValue(tagsRef.current, data?.tags ?? [], "id", "name");
 
-        bannerRef.current.value = null;
+    
         imageRef.current.value = null;
-        bannerRef.image.src = `/storage/images/item/${
-            data?.banner ?? "undefined"
-        }`;
-        imageRef.image.src = `/storage/images/item/${
-            data?.image ?? "undefined"
-        }`;
+      
+        imageRef.image.src = `/storage/images/item/${data?.image ?? "undefined"
+            }`;
 
         descriptionRef.editor.root.innerHTML = data?.description ?? "";
 
@@ -213,10 +210,7 @@ const Items = ({ categories, brands, collections }) => {
         if (image) {
             formData.append("image", image);
         }
-        const banner = bannerRef.current.files[0];
-        if (banner) {
-            formData.append("banner", banner);
-        }
+       
 
         //TODO: Preparar los datos de la galería
 
@@ -378,7 +372,7 @@ const Items = ({ categories, brands, collections }) => {
                                 }
                                 return text;
                             };
-                    
+
                             const truncatedSummary = truncateWords(data.summary, 12);
 
                             container.html(
@@ -445,8 +439,8 @@ const Items = ({ categories, brands, collections }) => {
                                         borderRadius: "4px",
                                     }}
                                     onError={(e) =>
-                                        (e.target.src =
-                                            "/api/cover/thumbnail/null")
+                                    (e.target.src =
+                                        "/api/cover/thumbnail/null")
                                     }
                                 />
                             );
@@ -525,7 +519,7 @@ const Items = ({ categories, brands, collections }) => {
                         width: "80px",
                         cellTemplate: (container, { data }) => {
                             const featuredValue = data.featured === 1 || data.featured === '1' || data.featured === true;
-                            
+
                             ReactAppend(
                                 container,
                                 <SwitchFormGroup
@@ -601,12 +595,12 @@ const Items = ({ categories, brands, collections }) => {
                     <div className="row mb-4">
                         <div className="col-12">
                             <div className="card border-0 shadow-sm">
-                                <div className="card-header bg-primary text-white">
-                                    <h6 className="mb-0"><i className="mdi mdi-information-outline me-2"></i>Información Principal</h6>
+                                <div className="card-header bg-white border-bottom">
+                                    <h6 className="mb-0 text-dark"><i className="mdi mdi-information-outline me-2 text-muted"></i>Información Principal</h6>
                                 </div>
                                 <div className="card-body">
                                     <div className="row">
-                                        <div className="col-md-6">
+                                        <div className="col-md-12">
                                             <InputFormGroup
                                                 eRef={nameRef}
                                                 label="Nombre del Producto"
@@ -614,24 +608,7 @@ const Items = ({ categories, brands, collections }) => {
                                                 placeholder="Ingrese el nombre del producto"
                                             />
                                         </div>
-                                        <div className="col-md-6">
-                                            <SelectFormGroup
-                                                eRef={categoryRef}
-                                                label="Categoría"
-                                                required
-                                                dropdownParent="#principal-container"
-                                                onChange={(e) =>
-                                                    setSelectedCategory(e.target.value)
-                                                }
-                                            >
-                                                <option value="">Seleccione una categoría</option>
-                                                {categories.map((item, index) => (
-                                                    <option key={index} value={item.id}>
-                                                        {item.name}
-                                                    </option>
-                                                ))}
-                                            </SelectFormGroup>
-                                        </div>
+
                                     </div>
                                     <div className="row">
                                         <div className="col-md-12">
@@ -652,12 +629,30 @@ const Items = ({ categories, brands, collections }) => {
                     <div className="row mb-4">
                         <div className="col-12">
                             <div className="card border-0 shadow-sm">
-                                <div className="card-header bg-info text-white">
-                                    <h6 className="mb-0"><i className="mdi mdi-tag-multiple me-2"></i>Clasificación y Organización</h6>
+                                <div className="card-header bg-white border-bottom">
+                                    <h6 className="mb-0 text-dark"><i className="mdi mdi-tag-multiple me-2 text-muted"></i>Clasificación y Organización</h6>
                                 </div>
                                 <div className="card-body">
                                     <div className="row">
-                                        <div className="col-md-4">
+                                        <div className="col-md-6">
+                                            <SelectFormGroup
+                                                eRef={categoryRef}
+                                                label="Categoría"
+                                                required
+                                                dropdownParent="#principal-container"
+                                                onChange={(e) =>
+                                                    setSelectedCategory(e.target.value)
+                                                }
+                                            >
+                                                <option value="">Seleccione una categoría</option>
+                                                {categories.map((item, index) => (
+                                                    <option key={index} value={item.id}>
+                                                        {item.name}
+                                                    </option>
+                                                ))}
+                                            </SelectFormGroup>
+                                        </div>
+                                        <div className="col-md-6">
                                             <SelectAPIFormGroup
                                                 eRef={familyRef}
                                                 label="Familia"
@@ -670,7 +665,7 @@ const Items = ({ categories, brands, collections }) => {
                                                 }
                                             />
                                         </div>
-                                        <div className="col-md-4">
+                                        <div className="col-md-6">
                                             <SelectAPIFormGroup
                                                 eRef={platformRef}
                                                 label="Plataforma"
@@ -679,6 +674,70 @@ const Items = ({ categories, brands, collections }) => {
                                                 filter={["family_id", "=", selectedFamily]}
                                                 dropdownParent="#principal-container"
                                             />
+                                        </div>
+
+                                  
+
+                                    <div className="col-md-6">
+                                        <SelectAPIFormGroup
+                                            id="applications"
+                                            eRef={applicationsRef}
+                                            searchAPI="/api/admin/applications/paginate"
+                                            searchBy="name"
+                                            label="Aplicaciones"
+                                            dropdownParent="#principal-container"
+                                            tags
+                                            multiple
+                                        />
+                                    </div>
+                                    <div className="col-md-6">
+                                        <SelectAPIFormGroup
+                                            id="tags"
+                                            eRef={tagsRef}
+                                            searchAPI={"/api/admin/tags/paginate"}
+                                            searchBy="name"
+                                            label="Etiquetas"
+                                            dropdownParent="#principal-container"
+                                            tags
+                                            multiple
+                                        />
+                                    </div>
+  </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Precios y Características */}
+                    <div className="row mb-4">
+                        <div className="col-md-12">
+                            <div className="card border-0 shadow-sm h-100">
+                                <div className="card-header bg-white border-bottom">
+                                    <h6 className="mb-0 text-dark"><i className="mdi mdi-currency-usd me-2 text-muted"></i>Información de Precios</h6>
+                                </div>
+                                <div className="card-body">
+                                    <div className="row">
+                                        <div className="col-md-4">
+                                            <InputFormGroup
+                                                eRef={priceRef}
+                                                label="Precio Regular (S/.)"
+                                                type="number"
+                                                step="0.01"
+                                                min="0"
+                                                required
+                                                placeholder="0.00"
+                                            />
+                                        </div>
+                                        <div className="col-md-4">
+                                            <InputFormGroup
+                                                eRef={discountRef}
+                                                label="Precio con Descuento (S/.)"
+                                                type="number"
+                                                step="0.01"
+                                                min="0"
+                                                placeholder="0.00"
+                                            />
+                                            <small className="text-muted">Dejar vacío si no hay descuento</small>
                                         </div>
                                         <div className="col-md-4">
                                             <InputFormGroup
@@ -690,260 +749,184 @@ const Items = ({ categories, brands, collections }) => {
                                             />
                                         </div>
                                     </div>
-                                    <div className="row">
-                                        <div className="col-md-6">
-                                            <SelectAPIFormGroup
-                                                id="applications"
-                                                eRef={applicationsRef}
-                                                searchAPI="/api/admin/applications/paginate"
-                                                searchBy="name"
-                                                label="Aplicaciones"
-                                                dropdownParent="#principal-container"
-                                                tags
-                                                multiple
-                                            />
-                                        </div>
-                                        <div className="col-md-6">
-                                            <SelectAPIFormGroup
-                                                id="tags"
-                                                eRef={tagsRef}
-                                                searchAPI={"/api/admin/tags/paginate"}
-                                                searchBy="name"
-                                                label="Etiquetas"
-                                                dropdownParent="#principal-container"
-                                                tags
-                                                multiple
-                                            />
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    {/* Especificaciones */}
+                    <div className="row mb-4">
+                        <div className="col-md-6">
+                            <div className="card border-0 shadow-sm h-100" style={{ borderRadius: '8px' }}>
+                                <div className="card-header bg-primary border-bottom-0" style={{ padding: '15px 20px' }}>
+                                    <div className="d-flex align-items-center">
+                                        <i className="mdi mdi-format-list-bulleted text-white fs-5 me-3"></i>
+                                        <div>
+                                            <h6 className="mb-0 text-white fw-semibold">Especificaciones Generales</h6>
+                                            <small className="text-white-75">Características principales del producto</small>
                                         </div>
                                     </div>
+                                </div>
+                                <div className="card-body" style={{ padding: '20px' }}>
+                                    <DynamicField
+                                        ref={specificationsRef}
+                                        label=""
+                                        structure={{ description: "" }}
+                                        value={specifications.filter(spec => spec.type === 'general')}
+                                        onChange={(generalSpecs) => {
+                                            const technicalSpecs = specifications.filter(spec => spec.type === 'technical');
+                                            const updatedSpecs = [...generalSpecs.map(spec => ({ ...spec, type: 'general' })), ...technicalSpecs];
+                                            setSpecifications(updatedSpecs);
+                                        }}
+                                        placeholder="Descripción general del producto"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-md-6">
+                            <div className="card border-0 shadow-sm h-100" style={{ borderRadius: '8px' }}>
+                                <div className="card-header bg-primary border-bottom-0" style={{ padding: '15px 20px' }}>
+                                    <div className="d-flex align-items-center">
+                                        <i className="mdi mdi-cog text-white fs-5 me-3"></i>
+                                        <div>
+                                            <h6 className="mb-0 text-white fw-semibold">Especificaciones Técnicas</h6>
+                                            <small className="text-white-75">Detalles técnicos y funcionales</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="card-body" style={{ padding: '20px' }}>
+                                    <DynamicField
+                                        label=""
+                                        structure={{ title: "", description: "", tooltip: "" }}
+                                        value={specifications.filter(spec => spec.type === 'technical')}
+                                        onChange={(technicalSpecs) => {
+                                            const generalSpecs = specifications.filter(spec => spec.type === 'general');
+                                            const updatedSpecs = [...generalSpecs, ...technicalSpecs.map(spec => ({ ...spec, type: 'technical' }))];
+                                            setSpecifications(updatedSpecs);
+                                        }}
+                                        placeholder="Especificaciones técnicas del producto"
+                                    />
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    {/* Precios y Características */}
-                    <div className="row mb-4">
-                        <div className="col-md-6">
-                            <div className="card border-0 shadow-sm h-100">
-                                <div className="card-header bg-success text-white">
-                                    <h6 className="mb-0"><i className="mdi mdi-currency-usd me-2"></i>Información de Precios</h6>
-                                </div>
-                                <div className="card-body">
-                                    <div className="row">
-                                        <div className="col-md-6">
-                                            <InputFormGroup
-                                                eRef={priceRef}
-                                                label="Precio Regular (S/.)"
-                                                type="number"
-                                                step="0.01"
-                                                min="0"
-                                                required
-                                                placeholder="0.00"
-                                            />
-                                        </div>
-                                        <div className="col-md-6">
-                                            <InputFormGroup
-                                                eRef={discountRef}
-                                                label="Precio con Descuento (S/.)"
-                                                type="number"
-                                                step="0.01"
-                                                min="0"
-                                                placeholder="0.00"
-                                            />
-                                            <small className="text-muted">Dejar vacío si no hay descuento</small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-md-6">
-                            <div className="card border-0 shadow-sm h-100">
-                                <div className="card-header bg-warning text-dark">
-                                    <h6 className="mb-0"><i className="mdi mdi-star me-2"></i>Características Principales</h6>
-                                </div>
-                                <div className="card-body">
-                                    <DynamicField
-                                        ref={featuresRef}
-                                        label=""
-                                        structure=""
-                                        onChange={setFeatures}
-                                        placeholder="Agregue las características del producto"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                
-                    {/* Especificaciones */}
-                    <div className="row mb-4">
-                        <div className="col-md-6">
-                            <div className="card border-0 shadow-sm h-100">
-                                <div className="card-header bg-secondary text-white">
-                                    <h6 className="mb-0"><i className="mdi mdi-format-list-bulleted me-2"></i>Especificaciones Generales</h6>
-                                </div>
-                                <div className="card-body">
-                                    <DynamicField
-                                        ref={specificationsRef}
-                                        label=""
-                                        structure={{ title: "", description: "" }}
-                                        value={specifications.filter(spec => spec.type === 'general')}
-                                        onChange={(generalSpecs) => {
-                                            const technicalSpecs = specifications.filter(spec => spec.type === 'technical');
-                                            const updatedSpecs = [...generalSpecs.map(spec => ({...spec, type: 'general'})), ...technicalSpecs];
-                                            setSpecifications(updatedSpecs);
-                                        }}
-                                        placeholder="Agregue especificaciones generales del producto"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-md-6">
-                            <div className="card border-0 shadow-sm h-100">
-                                <div className="card-header bg-dark text-white">
-                                    <h6 className="mb-0"><i className="mdi mdi-cog me-2"></i>Especificaciones Técnicas</h6>
-                                </div>
-                                <div className="card-body">
-                                    <DynamicField
-                                        label=""
-                                        structure={{ title: "", description: "" }}
-                                        value={specifications.filter(spec => spec.type === 'technical')}
-                                        onChange={(technicalSpecs) => {
-                                            const generalSpecs = specifications.filter(spec => spec.type === 'general');
-                                            const updatedSpecs = [...generalSpecs, ...technicalSpecs.map(spec => ({...spec, type: 'technical'}))];
-                                            setSpecifications(updatedSpecs);
-                                        }}
-                                        placeholder="Agregue especificaciones técnicas del producto"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                
                     {/* Imágenes y Multimedia */}
                     <div className="row mb-4">
                         <div className="col-12">
                             <div className="card border-0 shadow-sm">
-                                <div className="card-header bg-info text-white">
-                                    <h6 className="mb-0"><i className="mdi mdi-image-multiple me-2"></i>Imágenes y Multimedia</h6>
+                                <div className="card-header bg-white border-bottom">
+                                    <h6 className="mb-0 text-dark"><i className="mdi mdi-image-multiple me-2 text-muted"></i>Imágenes y Multimedia</h6>
                                 </div>
                                 <div className="card-body">
                                     <div className="row">
                                         <div className="col-md-4">
                                             <div className="row">
-                                                <ImageFormGroup
-                                                    eRef={bannerRef}
-                                                    label="Banner Principal"
-                                                    aspect={2 / 1}
-                                                    col="col-12"
-                                                />
+                                              
                                                 <ImageFormGroup
                                                     eRef={imageRef}
                                                     label="Imagen Principal"
                                                     aspect={1}
-                                                    col="col-lg-6 col-md-12 col-sm-6"
+                                                    
                                                 />
-                                                <ImageFormGroup
-                                                    eRef={textureRef}
-                                                    label="Textura/Material"
-                                                    aspect={1}
-                                                    col="col-lg-6 col-md-12 col-sm-6"
-                                                />
+
                                             </div>
                                         </div>
                                         <div className="col-md-8">
                                             <div className="col-12">
-                                <h6 className="mb-2">Galería de Imágenes</h6>
+                                                <h6 className="mb-2">Galería de Imágenes</h6>
 
-                                <input
-                                    id="input-item-gallery"
-                                    ref={galleryRef}
-                                    type="file"
-                                    multiple
-                                    accept="image/*"
-                                    hidden
-                                    onChange={handleGalleryChange}
-                                />
-                                <div
-                                    className="border border-2 border-dashed rounded p-4 text-center"
-                                    style={{
-                                        cursor: "pointer",
-                                        backgroundColor: "#f8f9fa",
-                                        minHeight: "120px",
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        transition: "all 0.3s ease",
-                                    }}
-                                    onClick={() => galleryRef.current.click()}
-                                    onDrop={handleDrop}
-                                    onDragOver={handleDragOver}
-                                    onMouseEnter={(e) => {
-                                        e.target.style.backgroundColor = "#e9ecef";
-                                        e.target.style.borderColor = "#6c757d";
-                                    }}
-                                    onMouseLeave={(e) => {
-                                        e.target.style.backgroundColor = "#f8f9fa";
-                                        e.target.style.borderColor = "#dee2e6";
-                                    }}
-                                >
-                                    <div>
-                                        <i className="mdi mdi-cloud-upload fs-3 text-muted mb-2 d-block"></i>
-                                        <span className="text-muted">
-                                            Arrastra y suelta imágenes aquí o haz clic para seleccionar
-                                        </span>
-                                        <small className="d-block text-muted mt-1">
-                                            Formatos soportados: JPG, PNG, GIF
-                                        </small>
-                                    </div>
-                                </div>
-                                
-                                {/* Vista previa de imágenes */}
-                                {gallery.length > 0 && (
-                                    <div className="mt-3">
-                                        <small className="text-muted mb-2 d-block">
-                                            {gallery.length} imagen{gallery.length !== 1 ? 'es' : ''} seleccionada{gallery.length !== 1 ? 's' : ''}
-                                        </small>
-                                        <div className="d-flex flex-wrap gap-2">
-                                            {gallery.map((image, index) => (
+                                                <input
+                                                    id="input-item-gallery"
+                                                    ref={galleryRef}
+                                                    type="file"
+                                                    multiple
+                                                    accept="image/*"
+                                                    hidden
+                                                    onChange={handleGalleryChange}
+                                                />
                                                 <div
-                                                    key={index}
-                                                    className="position-relative border rounded"
+                                                    className="border border-2 border-dashed rounded p-4 text-center"
                                                     style={{
-                                                        width: "100px",
-                                                        height: "100px",
-                                                        overflow: "hidden",
+                                                        cursor: "pointer",
+                                                        backgroundColor: "#f8f9fa",
+                                                        minHeight: "120px",
+                                                        display: "flex",
+                                                        alignItems: "center",
+                                                        justifyContent: "center",
+                                                        transition: "all 0.3s ease",
+                                                    }}
+                                                    onClick={() => galleryRef.current.click()}
+                                                    onDrop={handleDrop}
+                                                    onDragOver={handleDragOver}
+                                                    onMouseEnter={(e) => {
+                                                        e.target.style.backgroundColor = "#e9ecef";
+                                                        e.target.style.borderColor = "#6c757d";
+                                                    }}
+                                                    onMouseLeave={(e) => {
+                                                        e.target.style.backgroundColor = "#f8f9fa";
+                                                        e.target.style.borderColor = "#dee2e6";
                                                     }}
                                                 >
-                                                    <img
-                                                        src={`${image.url}`}
-                                                        alt={`preview-${index}`}
-                                                        className="w-100 h-100"
-                                                        style={{
-                                                            objectFit: "cover",
-                                                        }}
-                                                    />
-                                                    <button
-                                                        type="button"
-                                                        className="btn btn-danger btn-sm position-absolute"
-                                                        style={{ 
-                                                            top: "5px", 
-                                                            right: "5px",
-                                                            width: "24px",
-                                                            height: "24px",
-                                                            padding: "0",
-                                                            fontSize: "12px",
-                                                            lineHeight: "1"
-                                                        }}
-                                                        onClick={(e) => removeGalleryImage(e, index)}
-                                                        title="Eliminar imagen"
-                                                    >
-                                                        ×
-                                                    </button>
+                                                    <div>
+                                                        <i className="mdi mdi-cloud-upload fs-3 text-muted mb-2 d-block"></i>
+                                                        <span className="text-muted">
+                                                            Arrastra y suelta imágenes aquí o haz clic para seleccionar
+                                                        </span>
+                                                        <small className="d-block text-muted mt-1">
+                                                            Formatos soportados: JPG, PNG, GIF
+                                                        </small>
+                                                    </div>
                                                 </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                )}
+
+                                                {/* Vista previa de imágenes */}
+                                                {gallery.length > 0 && (
+                                                    <div className="mt-3">
+                                                        <small className="text-muted mb-2 d-block">
+                                                            {gallery.length} imagen{gallery.length !== 1 ? 'es' : ''} seleccionada{gallery.length !== 1 ? 's' : ''}
+                                                        </small>
+                                                        <div className="d-flex flex-wrap gap-2">
+                                                            {gallery.map((image, index) => (
+                                                                <div
+                                                                    key={index}
+                                                                    className="position-relative border rounded"
+                                                                    style={{
+                                                                        width: "100px",
+                                                                        height: "100px",
+                                                                        overflow: "hidden",
+                                                                    }}
+                                                                >
+                                                                    <img
+                                                                        src={`${image.url}`}
+                                                                        alt={`preview-${index}`}
+                                                                        className="w-100 h-100"
+                                                                        style={{
+                                                                            objectFit: "cover",
+                                                                        }}
+                                                                    />
+                                                                    <button
+                                                                        type="button"
+                                                                        className="btn btn-danger btn-sm position-absolute"
+                                                                        style={{
+                                                                            top: "5px",
+                                                                            right: "5px",
+                                                                            width: "24px",
+                                                                            height: "24px",
+                                                                            padding: "0",
+                                                                            fontSize: "12px",
+                                                                            lineHeight: "1"
+                                                                        }}
+                                                                        onClick={(e) => removeGalleryImage(e, index)}
+                                                                        title="Eliminar imagen"
+                                                                    >
+                                                                        ×
+                                                                    </button>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                )}
                                             </div>
                                         </div>
                                     </div>
@@ -956,8 +939,8 @@ const Items = ({ categories, brands, collections }) => {
                     <div className="row mb-4">
                         <div className="col-12">
                             <div className="card border-0 shadow-sm">
-                                <div className="card-header bg-purple text-white">
-                                    <h6 className="mb-0"><i className="mdi mdi-text-box me-2"></i>Descripción del Producto</h6>
+                                <div className="card-header bg-white border-bottom">
+                                    <h6 className="mb-0 text-dark"><i className="mdi mdi-text-box me-2 text-muted"></i>Descripción del Producto</h6>
                                 </div>
                                 <div className="card-body">
                                     <QuillFormGroup eRef={descriptionRef} label="" placeholder="Escriba una descripción detallada del producto..." />
