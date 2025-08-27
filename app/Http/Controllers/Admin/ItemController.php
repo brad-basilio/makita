@@ -245,6 +245,61 @@ class ItemController extends BasicController
             }
         }
 
+        // DEBUG: Log de todos los datos recibidos
+        \Log::info('DEBUG - Datos recibidos en afterSave:', [
+            'item_id' => $jpa->id,
+            'gallery_ids' => $request->input('gallery_ids'),
+            'deleted_images' => $request->input('deleted_images'),
+            'all_request_data' => $request->all()
+        ]);
+
+        // Procesar gallery_ids para preservar imágenes existentes
+        if ($request->has('gallery_ids')) {
+            $galleryIds = $request->input('gallery_ids');
+            \Log::info('DEBUG - Procesando gallery_ids:', ['gallery_ids' => $galleryIds]);
+            
+            if (is_array($galleryIds)) {
+                foreach ($galleryIds as $imageId) {
+                    if (!empty($imageId)) {
+                        \Log::info('DEBUG - Actualizando imagen existente:', ['image_id' => $imageId, 'item_id' => $jpa->id]);
+                        // Verificar que la imagen existe y pertenece al item
+                        $jpa->images()->where('id', $imageId)->update(['item_id' => $jpa->id]);
+                    }
+                }
+            }
+        }
+
+        // Eliminar las imágenes marcadas para eliminación
+        if ($request->has('deleted_images')) {
+            $deletedImagesJson = $request->input('deleted_images');
+            $deletedImageIds = json_decode($deletedImagesJson, true);
+            
+            \Log::info('DEBUG - Procesando deleted_images:', [
+                'deleted_images_json' => $deletedImagesJson,
+                'deleted_image_ids' => $deletedImageIds
+            ]);
+            
+            if (is_array($deletedImageIds) && !empty($deletedImageIds)) {
+                // Obtener las imágenes antes de eliminarlas para borrar los archivos físicos
+                $imagesToDelete = $jpa->images()->whereIn('id', $deletedImageIds)->get();
+                
+                \Log::info('DEBUG - Imágenes a eliminar:', ['images_to_delete' => $imagesToDelete->toArray()]);
+                
+                foreach ($imagesToDelete as $image) {
+                    // Eliminar el archivo físico
+                    $imagePath = "images/item/gallery/{$image->url}";
+                    if (Storage::exists($imagePath)) {
+                        Storage::delete($imagePath);
+                        \Log::info('DEBUG - Archivo físico eliminado:', ['path' => $imagePath]);
+                    }
+                }
+                
+                // Eliminar los registros de la base de datos
+                $deletedCount = $jpa->images()->whereIn('id', $deletedImageIds)->delete();
+                \Log::info('DEBUG - Registros eliminados de BD:', ['count' => $deletedCount]);
+            }
+        }
+
         // Decodificar features y specifications
         try {
             $features = json_decode($request->input('features'), true);
