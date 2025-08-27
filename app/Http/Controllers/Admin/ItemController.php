@@ -23,6 +23,7 @@ use SoDe\Extend\Crypto;
 use SoDe\Extend\Text;
 use Exception;
 use App\Models\ItemSpecification;
+use App\Models\Symbology;
 
 class ItemController extends BasicController
 {
@@ -168,6 +169,7 @@ class ItemController extends BasicController
         $platforms = Platform::where('status', 1)->get();
         $families = Family::where('status', 1)->get();
         $applications = Application::where('status', 1)->get();
+        $symbologies = Symbology::where('status',1)->get();
 
         return [
             'categories' => $categories,
@@ -175,14 +177,15 @@ class ItemController extends BasicController
             'collections' => $collections,
             'platforms' => $platforms,
             'families' => $families,
-            'applications' => $applications
+            'applications' => $applications,
+            'symbologies'=>$symbologies
         ];
     }
 
     public function setPaginationInstance(Request $request, string $model)
     {
         return $model::select(['items.*'])
-            ->with(['category', 'subcategory', 'brand', 'images', 'collection', 'specifications', 'applications', 'platform', 'family'])
+            ->with(['category', 'subcategory', 'brand', 'images', 'collection', 'specifications', 'applications', 'platform', 'family','symbologies'])
             ->leftJoin('categories AS category', 'category.id', 'items.category_id');
     }
 
