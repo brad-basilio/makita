@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\BasicController;
+use App\Models\Application;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Collection;
+use App\Models\Family;
 use App\Models\Item;
 use App\Models\ItemTag;
+use App\Models\Platform;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -26,6 +29,7 @@ class ItemController extends BasicController
     public $reactView = 'Admin/Items';
     public $imageFields = ['image', 'banner', 'texture'];
     public $prefix4filter = 'items';
+    public $with4get = ['platform', 'family', 'applications'];
 
     public function mediaGallery(Request $request, string $uuid)
     {
@@ -160,18 +164,24 @@ class ItemController extends BasicController
         $categories = Category::where('status', 1)->get();
         $brands = Brand::where('status', 1)->get();
         $collections = Collection::where('status', 1)->get();
+        $platforms = Platform::where('status', 1)->get();
+        $families = Family::where('status', 1)->get();
+        $applications = Application::where('status', 1)->get();
 
         return [
             'categories' => $categories,
             'brands' => $brands,
-            'collections' => $collections
+            'collections' => $collections,
+            'platforms' => $platforms,
+            'families' => $families,
+            'applications' => $applications
         ];
     }
 
     public function setPaginationInstance(Request $request, string $model)
     {
         return $model::select(['items.*'])
-            ->with(['category', 'subcategory', 'brand', 'images', 'collection', 'specifications'])
+            ->with(['category', 'subcategory', 'brand', 'images', 'collection', 'specifications', 'applications', 'platform', 'family'])
             ->leftJoin('categories AS category', 'category.id', 'items.category_id');
     }
 
@@ -180,8 +190,9 @@ class ItemController extends BasicController
     public function afterSave(Request $request, object $jpa, ?bool $isNew)
     {
         $tags = explode(',', $request->tags ?? '');
+        $applications = $request->applications ?? [];
 
-        DB::transaction(function () use ($jpa, $tags, $request) {
+        DB::transaction(function () use ($jpa, $tags, $applications, $request) {
             // Manejo de Tags
             ItemTag::where('item_id', $jpa->id)->whereNotIn('tag_id', $tags)->delete();
 
@@ -197,6 +208,28 @@ class ItemController extends BasicController
                     'item_id' => $jpa->id,
                     'tag_id' => $tagId
                 ]);
+            }
+
+            // Manejo de Applications
+            if (is_array($applications) && !empty($applications)) {
+                // Eliminar aplicaciones que ya no están seleccionadas
+                DB::table('item_application')
+                    ->where('item_id', $jpa->id)
+                    ->whereNotIn('application_id', $applications)
+                    ->delete();
+
+                // Agregar o mantener las aplicaciones seleccionadas
+                foreach ($applications as $applicationId) {
+                    if (!empty($applicationId)) {
+                        DB::table('item_application')->updateOrInsert([
+                            'item_id' => $jpa->id,
+                            'application_id' => $applicationId
+                        ]);
+                    }
+                }
+            } else {
+                // Si no hay aplicaciones seleccionadas, eliminar todas las existentes
+                DB::table('item_application')->where('item_id', $jpa->id)->delete();
             }
         });
         if ($request->hasFile('gallery')) {

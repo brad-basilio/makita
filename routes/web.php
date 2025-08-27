@@ -35,6 +35,8 @@ use App\Http\Controllers\Admin\FaqController as AdminFaqController;
 use App\Http\Controllers\Admin\RepositoryController as AdminRepositoryController;
 use App\Http\Controllers\Admin\ServicePointController as AdminServicePointController;
 use App\Http\Controllers\Admin\JobApplicationController as AdminJobApplicationController;
+use App\Http\Controllers\Admin\ApplicationController as AdminApplicationController;
+use App\Http\Controllers\Admin\PlatformController as AdminPlatformController;
 // Public 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RepositoryController;
@@ -92,6 +94,8 @@ Route::middleware(['can:Admin', 'auth'])->prefix('admin')->group(function () {
     Route::get('/subcategories', [AdminSubCategoryController::class, 'reactView'])->name('Admin/SubCategories.jsx');
     Route::get('/brands', [AdminBrandController::class, 'reactView'])->name('Admin/Brands.jsx');
     Route::get('/tags', [AdminTagController::class, 'reactView'])->name('Admin/Tags.jsx');
+    Route::get('/applications', [AdminApplicationController::class, 'reactView'])->name('Admin/Applications.jsx');
+    Route::get('/platforms', [AdminPlatformController::class, 'reactView'])->name('Admin/Platforms.jsx');
     Route::get('/prices', [AdminDeliveryPriceController::class, 'reactView'])->name('Admin/DeliveryPricesType.jsx');
     Route::get('/messages', [AdminSubscriptionController::class, 'reactView'])->name('Admin/Messages.jsx');
     Route::get('/subscriptions', [AdminSubscriptionController::class, 'reactView'])->name('Admin/Subscriptions.jsx');

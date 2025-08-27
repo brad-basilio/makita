@@ -31,6 +31,8 @@ class Item extends Model
         'collection_id',
         'subcategory_id',
         'brand_id',
+        'platform_id',
+        'family_id',
         'is_new',
         'offering',
         'recommended',
@@ -96,6 +98,21 @@ class Item extends Model
     public function brand()
     {
         return $this->hasOne(Brand::class, 'id', 'brand_id');
+    }
+
+    public function platform()
+    {
+        return $this->hasOne(Platform::class, 'id', 'platform_id');
+    }
+
+    public function family()
+    {
+        return $this->hasOne(Family::class, 'id', 'family_id');
+    }
+
+    public function applications()
+    {
+        return $this->belongsToMany(Application::class, 'item_application');
     }
 
     public function tags()

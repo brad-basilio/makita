@@ -502,7 +502,7 @@ const HeaderMakita = ({
                           {getSubcategoriesByCategoryAndBrand(activeCategory.id, brand.id).map((subcategory) => (
                             <li key={subcategory.id}>
                               <a
-                                href={`/categoria/${activeCategory.slug}/${subcategory.slug}`}
+                                href={`/catalogo?category=${activeCategory.slug}&subcategory=${subcategory.slug}`}
                                 className="text-white hover:customtext-primary border-b pb-2 border-white/40 transition-colors text-sm flex items-center gap-2"
                               >
                                 <span className="text-[#00B5CE]">•</span>

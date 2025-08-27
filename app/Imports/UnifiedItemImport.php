@@ -7,17 +7,20 @@ use App\Models\Category;
 use App\Models\SubCategory;
 use App\Models\Collection;
 use App\Models\Brand;
+use App\Models\Platform;
+use App\Models\Family;
+use App\Models\Application;
 use App\Models\ItemSpecification;
 use App\Models\ItemImage;
 use Exception;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\SkipsOnError;
 use Maatwebsite\Excel\Concerns\SkipsOnFailure;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Validators\Failure;
-use Illuminate\Support\Str;
 use SoDe\Extend\Crypto;
 use Throwable;
 use Illuminate\Support\Facades\Log;
@@ -59,7 +62,7 @@ class UnifiedItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsO
             'subcategoria' => ['subcategoria', 'subcategory', 'sub_categoria'],
             'marca' => ['marca', 'brand'],
             'sku' => ['sku', 'codigo', 'code'],
-            'nombre_producto' => ['nombre_de_producto', 'nombre_producto', 'name', 'producto'],
+            'nombre_producto' => ['nombre_de_producto', 'nombre_producto', 'nombre', 'name', 'producto','Nombre del producto', 'nombre_del_producto'],
             'descripcion' => ['descripcion', 'description'],
             'precio' => ['precio', 'price'],
             'descuento' => ['descuento', 'discount', 'precio_descuento'],
@@ -79,7 +82,10 @@ class UnifiedItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsO
                 'especificaciones_tecnicas_separado_por_slash_para_filas_y_dos_puntos_para_columnas',
                 'especificaciones_tecnicas',
                 'specs_tecnicas'
-            ]
+            ],
+            'plataforma' => ['plataforma', 'platform','Plataforma'],
+            'familia' => ['familia', 'family','Familia'],
+            'aplicaciones' => ['aplicaciones', 'applications', 'aplicacion','Aplicacion', 'aplicacion']
         ];
     }
 
@@ -91,6 +97,7 @@ class UnifiedItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsO
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         
         // Orden de truncate respetando dependencias
+        DB::table('item_application')->truncate();
         ItemImage::truncate();
         ItemSpecification::truncate();
         Item::truncate();
@@ -98,6 +105,9 @@ class UnifiedItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsO
         Collection::truncate();
         Category::truncate();
         Brand::truncate();
+        Platform::truncate();
+        Family::truncate();
+        Application::truncate();
         
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
@@ -203,16 +213,40 @@ class UnifiedItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsO
                 }
             }
 
-            // 5️⃣ Generar slug único para el producto
+            // 5️⃣ Crear/obtener plataforma (opcional)
+            $platform = null;
+            if ($this->hasField($row, 'plataforma')) {
+                $plataforma = $this->getFieldValue($row, 'plataforma');
+                if ($plataforma) {
+                    $platform = Platform::firstOrCreate(
+                        ['name' => $plataforma],
+                        ['slug' => Str::slug($plataforma)]
+                    );
+                }
+            }
+
+            // 6️⃣ Crear/obtener familia (opcional)
+            $family = null;
+            if ($this->hasField($row, 'familia')) {
+                $familia = $this->getFieldValue($row, 'familia');
+                if ($familia) {
+                    $family = Family::firstOrCreate(
+                        ['name' => $familia],
+                        ['slug' => Str::slug($familia)]
+                    );
+                }
+            }
+
+            // 7️⃣ Generar slug único para el producto
             $slug = $this->generateUniqueSlug($nombreProducto, $this->getFieldValue($row, 'color'));
 
-            // 6️⃣ Preparar datos del precio
-            $precio = $this->getNumericValue($row, 'precio');
-            $descuento = $this->getNumericValue($row, 'descuento');
+            // 8️⃣ Preparar datos del precio
+            $precio = $this->getNumericValue($row, 'precio', 0); // Valor por defecto 0 si no hay precio
+            $descuento = $this->getNumericValue($row, 'descuento', 0);
             $finalPrice = $this->calculateFinalPrice($precio, $descuento);
             $discountPercent = $this->calculateDiscountPercent($precio, $descuento);
 
-            // 7️⃣ Crear el producto
+            // 9️⃣ Crear el producto
             $itemData = [
                 'sku' => $sku,
                 'name' => $nombreProducto,
@@ -225,6 +259,8 @@ class UnifiedItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsO
                 'subcategory_id' => $subCategory ? $subCategory->id : null,
                 'collection_id' => $collection ? $collection->id : null,
                 'brand_id' => $brand ? $brand->id : null,
+                'platform_id' => $platform ? $platform->id : null,
+                'family_id' => $family ? $family->id : null,
                 'image' => $this->getMainImage($sku),
                 'slug' => $slug,
                 'stock' => $this->getNumericValue($row, 'stock', 10),
@@ -238,11 +274,14 @@ class UnifiedItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsO
             $item = Item::create($itemData);
 
             if ($item) {
-                // 8️⃣ Guardar especificaciones si existen
+                // 🔟 Guardar especificaciones si existen
                 $this->saveSpecificationsIfExists($item, $row);
                 
-                // 9️⃣ Guardar imágenes de galería
+                // 1️⃣1️⃣ Guardar imágenes de galería
                 $this->saveGalleryImages($item, $sku);
+                
+                // 1️⃣2️⃣ Guardar aplicaciones
+                $this->saveApplications($item, $row);
             } else {
                 throw new Exception("No se pudo crear el producto con SKU: {$sku}");
             }
@@ -266,6 +305,7 @@ class UnifiedItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsO
                 'trace' => $e->getTraceAsString()
             ]);
             
+
             return null;
         }
     }
@@ -292,10 +332,12 @@ class UnifiedItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsO
      */
     private function calculateFinalPrice($precio, $descuento): float
     {
-        if ($descuento && $descuento > 0 && $descuento < $precio) {
+        // Si hay descuento válido y es menor que el precio, usar el descuento
+        if ($descuento && $descuento > 0 && $precio && $precio > 0 && $descuento < $precio) {
             return $descuento;
         }
         
+        // Retornar el precio original o 0 si no hay precio
         return $precio ?? 0;
     }
 
@@ -552,5 +594,51 @@ class UnifiedItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsO
     public function getFieldMappings(): array
     {
         return $this->fieldMappings;
+    }
+
+    /**
+     * Guardar aplicaciones del producto
+     */
+    private function saveApplications(Item $item, array $row): void
+    {
+        if (!$this->hasField($row, 'aplicaciones')) {
+            return;
+        }
+
+        $aplicaciones = $this->getFieldValue($row, 'aplicaciones');
+        
+        if (empty($aplicaciones)) {
+            return;
+        }
+
+        $aplicacionesArray = explode(',', $aplicaciones);
+        
+        foreach ($aplicacionesArray as $aplicacionName) {
+            $aplicacionName = trim($aplicacionName);
+            if (empty($aplicacionName)) {
+                continue;
+            }
+
+            Log::info('Creating application: ' . $aplicacionName);
+            
+            $application = Application::firstOrCreate(
+                ['name' => $aplicacionName],
+                [
+                    'slug' => Str::slug($aplicacionName),
+                    'status' => true,
+                    'visible' => true
+                ]
+            );
+
+            Log::info('Application created/found: ' . $application->id . ' - ' . $application->name);
+
+            // Crear la relación en la tabla pivot
+            DB::table('item_application')->updateOrInsert([
+                'item_id' => $item->id,
+                'application_id' => $application->id
+            ]);
+            
+            Log::info('Pivot relation created for item ' . $item->id . ' and application ' . $application->id);
+        }
     }
 }

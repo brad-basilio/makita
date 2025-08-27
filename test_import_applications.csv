@@ -1,0 +1,4 @@
+sku,nombre,descripcion,precio,categoria,subcategoria,marca,aplicaciones,plataforma,familia
+MAK001,Taladro Percutor,Taladro de alta potencia,299.99,Herramientas,Taladros,Makita,"Construccion,Albañileria,Carpinteria",18V,LXT
+MAK002,Sierra Circular,Sierra para cortes precisos,459.99,Herramientas,Sierras,Makita,"Construccion,Carpinteria",18V,LXT
+MAK003,Amoladora Angular,Amoladora de 125mm,189.99,Herramientas,Amoladoras,Makita,"Construccion,Metalurgia,Soldadura",18V,XGT

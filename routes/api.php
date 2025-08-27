@@ -21,6 +21,8 @@ use App\Http\Controllers\Admin\AdController as AdminAdController;
 use App\Http\Controllers\Admin\BannerController as AdminBannerController;
 use App\Http\Controllers\Admin\BrandController as AdminBrandController;
 use App\Http\Controllers\Admin\JobApplicationController as AdminJobApplicationController;
+use App\Http\Controllers\Admin\ApplicationController as AdminApplicationController;
+use App\Http\Controllers\Admin\PlatformController as AdminPlatformController;
 
 use App\Http\Controllers\Admin\DeliveryPriceController as AdminDeliveryPriceController;
 use App\Http\Controllers\Admin\TypesDeliveryController as AdminTypesDeliveryController;
@@ -294,6 +296,18 @@ Route::middleware('auth')->group(function () {
     Route::patch('/brands/status', [AdminBrandController::class, 'status']);
     Route::patch('/brands/{field}', [AdminBrandController::class, 'boolean']);
     Route::delete('/brands/{id}', [AdminBrandController::class, 'delete']);
+
+    Route::post('/applications', [AdminApplicationController::class, 'save']);
+    Route::post('/applications/paginate', [AdminApplicationController::class, 'paginate']);
+    Route::patch('/applications/status', [AdminApplicationController::class, 'status']);
+    Route::patch('/applications/{field}', [AdminApplicationController::class, 'boolean']);
+    Route::delete('/applications/{id}', [AdminApplicationController::class, 'delete']);
+
+    Route::post('/platforms', [AdminPlatformController::class, 'save']);
+    Route::post('/platforms/paginate', [AdminPlatformController::class, 'paginate']);
+    Route::patch('/platforms/status', [AdminPlatformController::class, 'status']);
+    Route::patch('/platforms/{field}', [AdminPlatformController::class, 'boolean']);
+    Route::delete('/platforms/{id}', [AdminPlatformController::class, 'delete']);
 
     Route::post('/prices', [AdminDeliveryPriceController::class, 'save']);
     Route::post('/prices/paginate', [AdminDeliveryPriceController::class, 'paginate']);
