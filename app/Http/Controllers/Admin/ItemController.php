@@ -30,7 +30,7 @@ class ItemController extends BasicController
     public $reactView = 'Admin/Items';
     public $imageFields = ['image', 'banner', 'texture'];
     public $prefix4filter = 'items';
-    public $with4get = ['platform', 'family', 'applications'];
+    public $with4get = ['platform', 'family', 'applications', 'symbologies'];
 
     public function mediaGallery(Request $request, string $uuid)
     {
@@ -192,8 +192,9 @@ class ItemController extends BasicController
     {
         $tags = explode(',', $request->tags ?? '');
         $applications = $request->applications ?? [];
+        $symbologies = $request->symbologies ?? [];
 
-        DB::transaction(function () use ($jpa, $tags, $applications, $request) {
+        DB::transaction(function () use ($jpa, $tags, $applications, $symbologies, $request) {
             // Manejo de Tags
             ItemTag::where('item_id', $jpa->id)->whereNotIn('tag_id', $tags)->delete();
 
@@ -231,6 +232,28 @@ class ItemController extends BasicController
             } else {
                 // Si no hay aplicaciones seleccionadas, eliminar todas las existentes
                 DB::table('item_application')->where('item_id', $jpa->id)->delete();
+            }
+
+            // Manejo de Symbologies
+            if (is_array($symbologies) && !empty($symbologies)) {
+                // Eliminar simbologías que ya no están seleccionadas
+                DB::table('item_symbology')
+                    ->where('item_id', $jpa->id)
+                    ->whereNotIn('symbology_id', $symbologies)
+                    ->delete();
+
+                // Agregar o mantener las simbologías seleccionadas
+                foreach ($symbologies as $symbologyId) {
+                    if (!empty($symbologyId)) {
+                        DB::table('item_symbology')->updateOrInsert([
+                            'item_id' => $jpa->id,
+                            'symbology_id' => $symbologyId
+                        ]);
+                    }
+                }
+            } else {
+                // Si no hay simbologías seleccionadas, eliminar todas las existentes
+                DB::table('item_symbology')->where('item_id', $jpa->id)->delete();
             }
         });
         if ($request->hasFile('gallery')) {

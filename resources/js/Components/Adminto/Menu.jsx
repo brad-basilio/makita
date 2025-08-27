@@ -111,6 +111,7 @@ const Menu = ({ session, hasRole }) => {
                     <MenuItem href="/admin/platforms" icon="mdi mdi-monitor">Plataformas</MenuItem>
                     <MenuItem href="/admin/families" icon="mdi mdi-family-tree">Familias</MenuItem>
                     <MenuItem href="/admin/applications" icon="mdi mdi-application">Aplicaciones</MenuItem>
+                      <MenuItem href="/admin/symbologies" icon="mdi mdi-application">Simbologia</MenuItem>
                     <MenuItem href="/admin/brands" icon="mdi mdi-label">Marcas</MenuItem>
                     <MenuItem href="/admin/tags" icon="mdi mdi-label-multiple">Etiquetas</MenuItem>
                   </MenuItemContainer>

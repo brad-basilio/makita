@@ -115,6 +115,11 @@ class Item extends Model
         return $this->belongsToMany(Application::class, 'item_application');
     }
 
+    public function symbologies()
+    {
+        return $this->belongsToMany(Symbology::class, 'item_symbology');
+    }
+
     public function tags()
     {
         return $this->belongsToMany(Tag::class, 'item_tags', 'item_id', 'tag_id');

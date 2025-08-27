@@ -39,6 +39,7 @@ const Items = ({ categories, brands, collections }) => {
     const familyRef = useRef();
     const platformRef = useRef();
     const applicationsRef = useRef();
+    const symbologiesRef = useRef();
     const nameRef = useRef();
     const summaryRef = useRef();
     const priceRef = useRef();
@@ -136,6 +137,7 @@ const Items = ({ categories, brands, collections }) => {
             data?.platform?.name
         );
         SetSelectValue(applicationsRef.current, data?.applications ?? [], "id", "name");
+        SetSelectValue(symbologiesRef.current, data?.symbologies ?? [], "id", "name");
         nameRef.current.value = data?.name || "";
         summaryRef.current.value = data?.summary || "";
         priceRef.current.value = data?.price || 0;
@@ -195,6 +197,7 @@ const Items = ({ categories, brands, collections }) => {
             discount: discountRef.current.value,
             tags: $(tagsRef.current).val(),
             applications: $(applicationsRef.current).val(),
+            symbologies: $(symbologiesRef.current).val(),
             description: descriptionRef.current.value,
             stock: stockRef.current.value,
             specifications: JSON.stringify(specifications),
@@ -728,6 +731,18 @@ const Items = ({ categories, brands, collections }) => {
                                             searchAPI="/api/admin/applications/paginate"
                                             searchBy="name"
                                             label="Aplicaciones"
+                                            dropdownParent="#principal-container"
+                                            tags
+                                            multiple
+                                        />
+                                    </div>
+                                    <div className="col-md-6">
+                                        <SelectAPIFormGroup
+                                            id="symbologies"
+                                            eRef={symbologiesRef}
+                                            searchAPI="/api/admin/symbologies/paginate"
+                                            searchBy="name"
+                                            label="Simbologías"
                                             dropdownParent="#principal-container"
                                             tags
                                             multiple
