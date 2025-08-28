@@ -2062,7 +2062,7 @@
     ]
   },
   "resources/js/Admin/Platforms.jsx": {
-    "file": "assets/Platforms-BXd105LB.js",
+    "file": "assets/Platforms-CIxD7LWq.js",
     "name": "Platforms",
     "src": "resources/js/Admin/Platforms.jsx",
     "isEntry": true,
@@ -2076,6 +2076,7 @@
       "resources/js/Components/Tailwind/Components/ProductCard.jsx",
       "_BasicRest-B3rfI5GY.js",
       "_ImageFormGroup-BPR9pDAU.js",
+      "_InputFormGroup-D5I6zpZc.js",
       "_Modal-CIqmjseY.js",
       "_Table-DitbKwtZ.js",
       "_DxButton-DV0H-ZcL.js",
@@ -3946,7 +3947,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Banner.jsx": {
-    "file": "assets/Banner-4FcTwBYe.js",
+    "file": "assets/Banner-4qagWkU2.js",
     "name": "Banner",
     "src": "resources/js/Components/Tailwind/Banner.jsx",
     "isDynamicEntry": true,
@@ -7592,7 +7593,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Slider.jsx": {
-    "file": "assets/Slider-CQStV5-X.js",
+    "file": "assets/Slider-BOmwHHwq.js",
     "name": "Slider",
     "src": "resources/js/Components/Tailwind/Slider.jsx",
     "isDynamicEntry": true,
@@ -8379,7 +8380,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-ba-NnALF.js",
+    "file": "assets/System-BROJKr7E.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,

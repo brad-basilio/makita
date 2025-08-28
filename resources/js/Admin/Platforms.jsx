@@ -23,6 +23,7 @@ const Platforms = () => {
     const idRef = useRef();
     const nameRef = useRef();
     const descriptionRef = useRef();
+    const contentRef = useRef();
     const bannerRef = useRef();
     const imageRef = useRef();
 
@@ -35,6 +36,7 @@ const Platforms = () => {
         idRef.current.value = data?.id ?? "";
         nameRef.current.value = data?.name ?? "";
         descriptionRef.current.value = data?.description ?? "";
+        contentRef.current.value =data?.content ?? "";
         bannerRef.image.src = `/storage/images/platform/${data?.banner}`;
         bannerRef.current.value = null;
         imageRef.image.src = `/storage/images/platform/${data?.image}`;
@@ -50,6 +52,7 @@ const Platforms = () => {
             id: idRef.current.value || undefined,
             name: nameRef.current.value,
             description: descriptionRef.current.value,
+            content: contentRef.current.value,
         };
 
         const formData = new FormData();
@@ -150,6 +153,11 @@ const Platforms = () => {
                     },
                     {
                         dataField: "description",
+                        caption: "Subtitulo",
+                        width: "50%",
+                    },
+                     {
+                        dataField: "content",
                         caption: "Descripción",
                         width: "50%",
                     },
@@ -248,35 +256,43 @@ const Platforms = () => {
                 modalRef={modalRef}
                 title={isEditing ? "Editar plataforma" : "Agregar plataforma"}
                 onSubmit={onModalSubmit}
+                size="md"
             >
                 <input ref={idRef} type="hidden" />
                 <div className="row" id="platforms-container">
                     <div className="col-md-6">
-                        <ImageFormGroup
-                            eRef={bannerRef}
-                            label="Banner"
-                            col="col-12"
-                            aspect={3 / 1}
-                        />
+                       
                         <ImageFormGroup
                             eRef={imageRef}
-                            label="Imagen"
+                            label="Imagen de marca"
                             col="col-12"
                             aspect={16 / 9}
                         />
 
+                         <ImageFormGroup
+                            eRef={bannerRef}
+                            label="Imagen de producto"
+                            col="col-12"
+                            aspect={16/9}
+                        />
+
                     </div>
                     <div className="col-md-6">
-                        <TextareaFormGroup
+                        <InputFormGroup
                             eRef={nameRef}
                             label="Plataforma"
                             rows={2}
                             required
                         />
-                        <TextareaFormGroup
+                        <InputFormGroup
                             eRef={descriptionRef}
-                            label="Descripción"
+                            label="Subtitulo"
                             rows={3}
+                        />
+                          <TextareaFormGroup
+                            eRef={contentRef}
+                            label="Descripción"
+                            rows={4}
                         />
                     </div>
                 </div>

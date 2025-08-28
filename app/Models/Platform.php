@@ -17,6 +17,7 @@ class Platform extends Model
         'slug',
         'name',
         'description',
+        'content',
         'banner',
         'image',
         'featured',

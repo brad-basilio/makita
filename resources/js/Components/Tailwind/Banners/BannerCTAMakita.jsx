@@ -13,7 +13,7 @@ const BannerCTAMakita = ({data,items,generals}) => {
     const mensajeWhatsApp = message_whatsapp?.description; // Reemplaza con tu mensaje
     const linkWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${mensajeWhatsApp}`;
   return (
-    <div className="bg-secondary w-full min-h-screen flex items-center justify-center ">
+    <div className="bg-secondary relative w-full min-h-screen flex items-center justify-center ">
       <div className="px-primary 2xl:max-w-7xl 2xl:px-0 w-full flex flex-col md:flex-row gap-12 md:gap-20 items-center justify-center py-20">
         {/* Left: Video/Image with Play Button */}
         <div className="w-full md:w-1/2 flex items-center justify-center">
@@ -73,6 +73,15 @@ const BannerCTAMakita = ({data,items,generals}) => {
           </a>
         </div>
       </div>
+        {/* Círculo blanco transparente en top left */}
+      <div 
+        className="absolute -bottom-40 -left-40 w-[600px] h-[600px] rounded-full z-[2]"
+        style={{
+          background: 'linear-gradient(126deg, #888 20.76%, #D1D1D1 61.55%)',
+          mixBlendMode: 'overlay',
+          filter: 'blur(70px)'
+        }}
+      />
     </div>
   );
 };

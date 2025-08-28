@@ -160,6 +160,7 @@ Route::get('/service-points', [AdminServicePointController::class, 'publicIndex'
 
 Route::get('/categories', [CategoryController::class, 'getCategories']);
 Route::get('/socials', [SocialController::class, 'index']);
+Route::get('/platforms/with-product-count', [AdminPlatformController::class, 'getPlatformsWithProductCount']);
 
 Route::middleware('auth')->group(function () {
   Route::get('/notification-variables/{type}', [NotificationVariableController::class, 'variables']);
@@ -317,6 +318,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/platforms/status', [AdminPlatformController::class, 'status']);
     Route::patch('/platforms/{field}', [AdminPlatformController::class, 'boolean']);
     Route::delete('/platforms/{id}', [AdminPlatformController::class, 'delete']);
+    Route::get('/platforms/with-product-count', [AdminPlatformController::class, 'getPlatformsWithProductCount']);
 
     Route::post('/prices', [AdminDeliveryPriceController::class, 'save']);
     Route::post('/prices/paginate', [AdminDeliveryPriceController::class, 'paginate']);

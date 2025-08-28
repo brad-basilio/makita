@@ -367,12 +367,8 @@
                 ],
                 "using": {
                     "model": "Item",
-                    "filters": [
-                        "featured"
-                    ],
-                    "with": [
-                        "brand"
-                    ],
+                    "filters": ["featured"],
+                    "relations": ["brand"],
                     "limit": 10
                 }
             },

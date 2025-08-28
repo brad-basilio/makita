@@ -12,4 +12,24 @@ class PlatformController extends BasicController
     public $model = Platform::class;
     public $reactView = 'Admin/Platforms';
     public $imageFields = ['banner', 'image'];
+    
+    /**
+     * Get platforms with product count for SliderFeaturedMakita
+     */
+    public function getPlatformsWithProductCount(Request $request)
+    {
+        $platforms = Platform::where('visible', true)
+            ->where('status', true)
+            ->where('featured',true)
+            ->withCount('items')
+            ->orderBy('featured', 'desc')
+            ->orderBy('name', 'asc')
+            ->limit(10)
+            ->get();
+            
+        return response()->json([
+            'success' => true,
+            'data' => $platforms
+        ]);
+    }
 }
