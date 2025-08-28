@@ -14,10 +14,10 @@ const BannerCTAMakita = ({data,items,generals}) => {
     const linkWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${mensajeWhatsApp}`;
   return (
     <div className="bg-secondary w-full min-h-screen flex items-center justify-center ">
-      <div className="px-primary 2xl:max-w-7xl 2xl:px-0 w-full flex flex-col md:flex-row gap-12 md:gap-16 items-center justify-center py-16">
+      <div className="px-primary 2xl:max-w-7xl 2xl:px-0 w-full flex flex-col md:flex-row gap-12 md:gap-20 items-center justify-center py-20">
         {/* Left: Video/Image with Play Button */}
         <div className="w-full md:w-1/2 flex items-center justify-center">
-          <div className="relative w-full max-w-md aspect-square rounded-xl overflow-hidden shadow-lg">
+          <div className="relative w-full aspect-[1] rounded-lg overflow-hidden shadow-lg">
             <img
               src={`/storage/images/system/${data?.image}`}
               alt="Makita tool"
@@ -44,19 +44,19 @@ const BannerCTAMakita = ({data,items,generals}) => {
         </div>
 
         {/* Right: Content */}
-        <div className="w-full md:w-1/2 text-white flex flex-col justify-center">
-          <h1 className="text-3xl md:text-5xl font-bold mb-4 leading-tight">
+        <div className="w-full md:w-1/2 text-[#F6F6F6] flex flex-col justify-center">
+          <h1 className="text-3xl md:text-[40px] font-semibold  tracking-wide mb-4 leading-[120%]">
             {data?.name}
           </h1>
-          <p className="text-base md:text-lg mb-6">
+          <p className="text-base md:text-lg mb-6 text-[#F6F6F6]">
             {data?.description}
           </p>
-          <h2 className="text-xl font-bold mb-2">Beneficios</h2>
-          <ul className="mb-8 space-y-3">
+          <h2 className="text-2xl font-medium mb-4">Beneficios</h2>
+          <ul className="mb-8 space-y-3 text-[#F6F6F6]">
             {items.map((b, i) => (
-              <li key={i} className="flex items-start gap-2">
+              <li key={i} className="flex text-lg items-start gap-4">
                 <span className="mt-1 customtext-primary">
-                  <svg width="22" height="22" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#06b6d4"/><path d="M8 12.5l2.5 2.5 5-5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  <svg width="22" height="22" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#06b6d4"/><path d="M8 12.5l2.5 2.5 5-5" stroke="#262626" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 </span>
                 <span>{b?.description}</span>
               </li>
