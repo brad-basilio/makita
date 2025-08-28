@@ -71,14 +71,14 @@ const CardProductMakita = ({ product, data, widthClass, cart, setCart, viewType 
     // Vista de grilla (grid)
     return (
         <div
-            className="bg-transparent w-full rounded-xl shadow-sm flex flex-col h-full transition-all duration-200 hover:shadow-lg overflow-hidden"
+            className="bg-transparent w-full   flex flex-col h-full transition-all duration-200  overflow-hidden"
             onMouseEnter={() => setIsHovering(true)}
             onMouseLeave={() => setIsHovering(false)}
         >
             {/* Imagen - Para vista grid */}
-            <div className="relative bg-white flex justify-center items-center lg:h-52 p-2 lg:p-4">
+            <div className="relative bg-white rounded-lg aspect-square flex justify-center items-center  p-2 lg:p-4">
                 {product && product.is_new === 1 && (
-                    <span className="absolute top-8 right-0 bg-primary text-white text-sm font-bold px-2 py-1 rounded-sm">
+                    <span className="absolute top-8 right-0 bg-primary tracking-widest text-white text-sm font-normal px-2 py-2 rounded-l-md">
                         NUEVO
                     </span>
                 )}
@@ -86,7 +86,7 @@ const CardProductMakita = ({ product, data, widthClass, cart, setCart, viewType 
                     src={product && product.image ? `/storage/images/item/${product.image}` : '/assets/img/noimage/no_img.jpg'}
                     onError={e => e.target.src = '/assets/img/noimage/no_img.jpg'}
                     alt={product && product.name ? product.name : ''}
-                    className="object-contain max-h-48 max-w-full"
+                    className="object-contain aspect-square"
                     loading='lazy'
                 />
             </div>
@@ -94,11 +94,11 @@ const CardProductMakita = ({ product, data, widthClass, cart, setCart, viewType 
             {/* Contenido de texto - Para vista grid */}
             <div className="p-2 lg:p-5 flex flex-col flex-grow">
                 {/* Código del producto */}
-                <div className="text-primary text-sm font-medium mb-1">
-                    {product.code || "DMR200"}
+                <div className="text-[#219FB9] text-sm font-medium mb-1">
+                    {product.sku || "DMR200"}
                 </div>
                 {/* Título */}
-                <h3 className="customtext-neutral-dark font-bold text-lg mb-2 leading-tight line-clamp-2">
+                <h3 className="customtext-neutral-dark font-bold text-2xl mb-2 leading-tight line-clamp-2">
                     {product.name || product.title}
                 </h3>
                 {/* Descripción */}

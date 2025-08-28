@@ -87,8 +87,8 @@
       "_circle-check-big-D6DM3vPb.js"
     ]
   },
-  "_CardProductMakita-DNtvB7n1.js": {
-    "file": "assets/CardProductMakita-DNtvB7n1.js",
+  "_CardProductMakita-D9GuUtEe.js": {
+    "file": "assets/CardProductMakita-D9GuUtEe.js",
     "name": "CardProductMakita",
     "imports": [
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
@@ -5350,7 +5350,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Filter.jsx": {
-    "file": "assets/Filter-B6PE58Bw.js",
+    "file": "assets/Filter-Mg3Rl-uQ.js",
     "name": "Filter",
     "src": "resources/js/Components/Tailwind/Filter.jsx",
     "isDynamicEntry": true,
@@ -5620,7 +5620,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Filters/FilterMakita.jsx": {
-    "file": "assets/FilterMakita-Duvp8DHR.js",
+    "file": "assets/FilterMakita-ABaUl3-V.js",
     "name": "FilterMakita",
     "src": "resources/js/Components/Tailwind/Filters/FilterMakita.jsx",
     "isDynamicEntry": true,
@@ -5630,7 +5630,7 @@
       "_ItemsRest-DGjwRLrz.js",
       "_NoResult-C9qZVva5.js",
       "_main-BvVILmTO.js",
-      "_CardProductMakita-DNtvB7n1.js",
+      "_CardProductMakita-D9GuUtEe.js",
       "_x-DBMwyD6F.js",
       "_createLucideIcon-Cy5Ya80P.js",
       "_filter-Ci9tsc_e.js",
@@ -6576,7 +6576,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Product.jsx": {
-    "file": "assets/Product-Bor-92YY.js",
+    "file": "assets/Product-aGdTH7_c.js",
     "name": "Product",
     "src": "resources/js/Components/Tailwind/Product.jsx",
     "isDynamicEntry": true,
@@ -6599,7 +6599,7 @@
     ]
   },
   "resources/js/Components/Tailwind/ProductDetail.jsx": {
-    "file": "assets/ProductDetail-6r2pr5n6.js",
+    "file": "assets/ProductDetail-B9VMYvhZ.js",
     "name": "ProductDetail",
     "src": "resources/js/Components/Tailwind/ProductDetail.jsx",
     "isDynamicEntry": true,
@@ -6739,7 +6739,7 @@
     ]
   },
   "resources/js/Components/Tailwind/ProductDetails/ProductDetailMakita.jsx": {
-    "file": "assets/ProductDetailMakita-BlGAlwxc.js",
+    "file": "assets/ProductDetailMakita-BGhRoPsK.js",
     "name": "ProductDetailMakita",
     "src": "resources/js/Components/Tailwind/ProductDetails/ProductDetailMakita.jsx",
     "isDynamicEntry": true,
@@ -6786,7 +6786,7 @@
       "_arrow-right-DR00rP9v.js",
       "_grid-BZ4EKnFQ.js",
       "_adjustTextColor-FzLvY4Q1.js",
-      "_CardProductMakita-DNtvB7n1.js",
+      "_CardProductMakita-D9GuUtEe.js",
       "_index-xsH4HHeE.js",
       "resources/js/Components/Tailwind/Products/Modals/CompareDetailsModal.jsx",
       "_preload-helper-BfFHrpNk.js",
@@ -7203,7 +7203,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Products/ProductMakita.jsx": {
-    "file": "assets/ProductMakita-D3l_rd_5.js",
+    "file": "assets/ProductMakita-Bwk7Gefs.js",
     "name": "ProductMakita",
     "src": "resources/js/Components/Tailwind/Products/ProductMakita.jsx",
     "isDynamicEntry": true,
@@ -7215,7 +7215,7 @@
       "resources/js/Components/Tailwind/Categories/InfiniteCategory.jsx",
       "_index-BH53Isel.js",
       "_adjustTextColor-FzLvY4Q1.js",
-      "_CardProductMakita-DNtvB7n1.js",
+      "_CardProductMakita-D9GuUtEe.js",
       "_chevron-up-D78jyEhP.js",
       "_chevron-down-DS-mdh9v.js",
       "_x-DBMwyD6F.js",
@@ -7593,7 +7593,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Slider.jsx": {
-    "file": "assets/Slider-BOmwHHwq.js",
+    "file": "assets/Slider-DFSTlfCQ.js",
     "name": "Slider",
     "src": "resources/js/Components/Tailwind/Slider.jsx",
     "isDynamicEntry": true,
@@ -8380,7 +8380,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-BROJKr7E.js",
+    "file": "assets/System-CIriAgSw.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,

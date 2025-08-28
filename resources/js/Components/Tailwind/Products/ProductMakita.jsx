@@ -151,17 +151,17 @@ const ProductMakita = ({ items, data, setCart, cart }) => {
                     {/* Navigation Buttons */}
                     <button
                         ref={navigationDesktopPrevRef}
-                        className="hidden lg:flex absolute -left-12 top-1/2 -translate-y-1/2 z-10 w-10 h-10  items-center justify-center rounded-lg bg-secondary bg-opacity-70 text-white hover:brightness-125"
+                        className="hidden lg:flex absolute -left-12 top-1/2 -translate-y-1/2 z-10 w-12 h-12  items-center justify-center rounded-md bg-secondary bg-opacity-70 text-white hover:brightness-125"
                         aria-label="Productos anteriores"
                     >
-                        <ChevronLeft width="1.2rem" />
+                        <ChevronLeft width="1.3rem" />
                     </button>
                     <button
                         ref={navigationDesktopNextRef}
-                        className="hidden lg:flex absolute -right-12 top-1/2 -translate-y-1/2 z-10 w-10 h-10  items-center justify-center rounded-lg bg-secondary bg-opacity-70 text-white hover:brightness-125"
+                        className="hidden lg:flex absolute -right-12 top-1/2 -translate-y-1/2 z-10 w-12 h-12  items-center justify-center rounded-md bg-secondary bg-opacity-70 text-white hover:brightness-125"
                         aria-label="Siguientes productos"
                     >
-                        <ChevronRight width="1.2rem" />
+                        <ChevronRight width="1.3rem" />
                     </button>
                 </div>
             </div>

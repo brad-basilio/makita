@@ -66,11 +66,11 @@ const SliderFeaturedMakita = () => {
       
       {/* Círculo blanco transparente en top left */}
       <div 
-        className="absolute -top-40 -left-40 w-[500px] h-[500px] rounded-full z-[2]"
+        className="absolute -top-40 -left-40 w-[400px] h-[400px] rounded-full z-[2]"
         style={{
-          background: 'linear-gradient(126deg, #888 20.76%, #D1D1D1 61.55%)',
+          background: 'linear-gradient(126deg, #D1D1D1 30%, #888888 60%)',
           mixBlendMode: 'overlay',
-          filter: 'blur(70px)'
+          filter: 'blur(140px)'
         }}
       />
       
