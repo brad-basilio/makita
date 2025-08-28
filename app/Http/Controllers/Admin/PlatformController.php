@@ -20,7 +20,7 @@ class PlatformController extends BasicController
     {
         $platforms = Platform::where('visible', true)
             ->where('status', true)
-            ->where('featured',true)
+          
             ->withCount('items')
             ->orderBy('featured', 'desc')
             ->orderBy('name', 'asc')

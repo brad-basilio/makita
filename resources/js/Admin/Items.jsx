@@ -40,11 +40,12 @@ const Items = ({ categories, brands, collections }) => {
     const platformRef = useRef();
     const applicationsRef = useRef();
     const symbologiesRef = useRef();
+    const technologiesRef = useRef();
     const nameRef = useRef();
     const summaryRef = useRef();
     const priceRef = useRef();
     const discountRef = useRef();
-    const tagsRef = useRef();
+    //const tagsRef = useRef();
 
     const imageRef = useRef();
     const textureRef = useRef();
@@ -138,16 +139,17 @@ const Items = ({ categories, brands, collections }) => {
         );
         SetSelectValue(applicationsRef.current, data?.applications ?? [], "id", "name");
         SetSelectValue(symbologiesRef.current, data?.symbologies ?? [], "id", "name");
+        SetSelectValue(technologiesRef.current, data?.technologies ?? [], "id", "name");
         nameRef.current.value = data?.name || "";
         summaryRef.current.value = data?.summary || "";
         priceRef.current.value = data?.price || 0;
         discountRef.current.value = data?.discount || 0;
 
-        SetSelectValue(tagsRef.current, data?.tags ?? [], "id", "name");
+       // SetSelectValue(tagsRef.current, data?.tags ?? [], "id", "name");
 
-    
+
         imageRef.current.value = null;
-      
+
         imageRef.image.src = `/storage/images/item/${data?.image ?? "undefined"
             }`;
 
@@ -186,10 +188,10 @@ const Items = ({ categories, brands, collections }) => {
     const onModalSubmit = async (e) => {
         e.preventDefault();
 
-        const tagsValue = $(tagsRef.current).val();
+       // const tagsValue = $(tagsRef.current).val();
         const applicationsValue = $(applicationsRef.current).val();
         const symbologiesValue = $(symbologiesRef.current).val();
-
+        const technologiesValue = $(technologiesRef.current).val();
         const request = {
             id: idRef.current.value || undefined,
             category_id: categoryRef.current.value,
@@ -199,9 +201,10 @@ const Items = ({ categories, brands, collections }) => {
             summary: summaryRef.current.value,
             price: priceRef.current.value,
             discount: discountRef.current.value,
-            tags: tagsValue,
+          //  tags: tagsValue,
             applications: applicationsValue,
             symbologies: symbologiesValue,
+            technologies:technologiesValue,
             description: descriptionRef.current.value,
             stock: stockRef.current.value,
             specifications: JSON.stringify(specifications),
@@ -218,14 +221,14 @@ const Items = ({ categories, brands, collections }) => {
         if (image) {
             formData.append("image", image);
         }
-       
+
 
         //TODO: Preparar los datos de la galería
 
         // Galería
         let galleryIndex = 0;
         const galleryIds = [];
-        
+
         gallery.forEach((img, index) => {
             if (!img.toDelete) {
                 if (img.file) {
@@ -236,7 +239,7 @@ const Items = ({ categories, brands, collections }) => {
                 }
             }
         });
-        
+
         // Enviar los IDs de imágenes existentes como array
         if (galleryIds.length > 0) {
             galleryIds.forEach((id, index) => {
@@ -247,7 +250,7 @@ const Items = ({ categories, brands, collections }) => {
         const deletedImages = gallery
             .filter((img) => img.toDelete)
             .map((img) => img.id);
-            
+
         if (deletedImages.length > 0) {
             formData.append("deleted_images", JSON.stringify(deletedImages));
         }
@@ -706,45 +709,57 @@ const Items = ({ categories, brands, collections }) => {
                                             />
                                         </div>
 
-                                  
 
-                                    <div className="col-md-6">
-                                        <SelectAPIFormGroup
-                                            id="applications"
-                                            eRef={applicationsRef}
-                                            searchAPI="/api/admin/applications/paginate"
-                                            searchBy="name"
-                                            label="Aplicaciones"
-                                            dropdownParent="#principal-container"
-                                            tags
-                                            multiple
-                                        />
+
+                                        <div className="col-md-6">
+                                            <SelectAPIFormGroup
+                                                id="applications"
+                                                eRef={applicationsRef}
+                                                searchAPI="/api/admin/applications/paginate"
+                                                searchBy="name"
+                                                label="Aplicaciones"
+                                                dropdownParent="#principal-container"
+                                                tags
+                                                multiple
+                                            />
+                                        </div>
+                                        <div className="col-md-6">
+                                            <SelectAPIFormGroup
+                                                id="symbologies"
+                                                eRef={symbologiesRef}
+                                                searchAPI="/api/admin/symbologies/paginate"
+                                                searchBy="name"
+                                                label="Simbologías"
+                                                dropdownParent="#principal-container"
+                                                tags
+                                                multiple
+                                            />
+                                        </div>
+                                        <div className="col-md-6">
+                                            <SelectAPIFormGroup
+                                                id="technologies"
+                                                eRef={technologiesRef}
+                                                searchAPI="/api/admin/technologies/paginate"
+                                                searchBy="name"
+                                                label="Tecnologías"
+                                                dropdownParent="#principal-container"
+                                                tags
+                                                multiple
+                                            />
+                                        </div>
+                                       {/* <div className="col-md-6">
+                                            <SelectAPIFormGroup
+                                                id="tags"
+                                                eRef={tagsRef}
+                                                searchAPI={"/api/admin/tags/paginate"}
+                                                searchBy="name"
+                                                label="Etiquetas"
+                                                dropdownParent="#principal-container"
+                                                tags
+                                                multiple
+                                            />
+                                        </div> */}
                                     </div>
-                                    <div className="col-md-6">
-                                        <SelectAPIFormGroup
-                                            id="symbologies"
-                                            eRef={symbologiesRef}
-                                            searchAPI="/api/admin/symbologies/paginate"
-                                            searchBy="name"
-                                            label="Simbologías"
-                                            dropdownParent="#principal-container"
-                                            tags
-                                            multiple
-                                        />
-                                    </div>
-                                    <div className="col-md-6">
-                                        <SelectAPIFormGroup
-                                            id="tags"
-                                            eRef={tagsRef}
-                                            searchAPI={"/api/admin/tags/paginate"}
-                                            searchBy="name"
-                                            label="Etiquetas"
-                                            dropdownParent="#principal-container"
-                                            tags
-                                            multiple
-                                        />
-                                    </div>
-  </div>
                                 </div>
                             </div>
                         </div>
@@ -877,12 +892,12 @@ const Items = ({ categories, brands, collections }) => {
                                     <div className="row">
                                         <div className="col-md-4">
                                             <div className="row">
-                                              
+
                                                 <ImageFormGroup
                                                     eRef={imageRef}
                                                     label="Imagen Principal"
                                                     aspect={1}
-                                                    
+
                                                 />
 
                                             </div>

@@ -120,6 +120,11 @@ class Item extends Model
         return $this->belongsToMany(Symbology::class, 'item_symbology');
     }
 
+      public function technologies()
+    {
+        return $this->belongsToMany(Technology::class, 'item_technology');
+    }
+
     public function tags()
     {
         return $this->belongsToMany(Tag::class, 'item_tags', 'item_id', 'tag_id');

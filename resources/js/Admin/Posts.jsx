@@ -28,7 +28,7 @@ const Posts = ({ details }) => {
   const nameRef = useRef()
   const categoryRef = useRef()
   const descriptionRef = useRef()
-  const tagsRef = useRef()
+ // const tagsRef = useRef()
   const imageRef = useRef()
   const postDateRef = useRef()
 
@@ -44,7 +44,7 @@ const Posts = ({ details }) => {
     descriptionRef.editor.root.innerHTML = data?.description ?? ''
     imageRef.image.src = `/storage/images/post/${data?.image}`
     imageRef.current.value = null
-    SetSelectValue(tagsRef.current, data?.tags ?? [], 'id', 'name')
+    //SetSelectValue(tagsRef.current, data?.tags ?? [], 'id', 'name')
     postDateRef.current.value = data?.post_date ?? moment().format('YYYY-MM-DD')
 
     $(modalRef.current).modal('show')
@@ -59,7 +59,7 @@ const Posts = ({ details }) => {
       category_id: categoryRef.current.value,
       summary: html2string(descriptionRef.current.value),
       description: descriptionRef.current.value,
-      tags: $(tagsRef.current).val(),
+      //tags: $(tagsRef.current).val(),
       post_date: postDateRef.current.value
     }
 
@@ -178,7 +178,7 @@ const Posts = ({ details }) => {
         <InputFormGroup eRef={nameRef} label='Título' rows={2} required />
         <QuillFormGroup eRef={descriptionRef} label='Contenido' />
         {/* <TextareaFormGroup eRef={tagsRef} label='Tags (Separado por comas)' rows={1} /> */}
-        <SelectAPIFormGroup id='tags' eRef={tagsRef} searchAPI={'/api/admin/tags/paginate'} searchBy='name' label='Tags' dropdownParent='#posts-container' tags multiple />
+   {/*     <SelectAPIFormGroup id='tags' eRef={tagsRef} searchAPI={'/api/admin/tags/paginate'} searchBy='name' label='Tags' dropdownParent='#posts-container' tags multiple /> */}
         <InputFormGroup eRef={postDateRef} label='Fecha de publicación' type='date' required />
       </div>
     </Modal>

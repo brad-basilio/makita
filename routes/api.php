@@ -23,6 +23,8 @@ use App\Http\Controllers\Admin\BrandController as AdminBrandController;
 use App\Http\Controllers\Admin\JobApplicationController as AdminJobApplicationController;
 use App\Http\Controllers\Admin\ApplicationController as AdminApplicationController;
 use App\Http\Controllers\Admin\SymbologyController as AdminSymbologyController;
+use App\Http\Controllers\Admin\TechnologyController as AdminTechnologyController;
+
 use App\Http\Controllers\Admin\PlatformController as AdminPlatformController;
 
 use App\Http\Controllers\Admin\DeliveryPriceController as AdminDeliveryPriceController;
@@ -312,6 +314,13 @@ Route::middleware('auth')->group(function () {
     Route::patch('/symbologies/status', [AdminSymbologyController::class, 'status']);
     Route::patch('/symbologies/{field}', [AdminSymbologyController::class, 'boolean']);
     Route::delete('/symbologies/{id}', [AdminSymbologyController::class, 'delete']);
+
+    Route::post('/technologies', [AdminTechnologyController::class, 'save']);
+    Route::post('/technologies/paginate', [AdminTechnologyController::class, 'paginate']);
+    Route::patch('/technologies/status', [AdminTechnologyController::class, 'status']);
+    Route::patch('/technologies/{field}', [AdminTechnologyController::class, 'boolean']);
+    Route::delete('/technologies/{id}', [AdminTechnologyController::class, 'delete']);
+
 
     Route::post('/platforms', [AdminPlatformController::class, 'save']);
     Route::post('/platforms/paginate', [AdminPlatformController::class, 'paginate']);

@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('platforms', function (Blueprint $table) {
-            $table->string('content')->nullable();
+            $table->longText('content')->nullable();
         });
     }
 

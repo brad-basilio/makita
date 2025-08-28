@@ -24,6 +24,7 @@ use SoDe\Extend\Text;
 use Exception;
 use App\Models\ItemSpecification;
 use App\Models\Symbology;
+use App\Models\Technology;
 
 class ItemController extends BasicController
 {
@@ -31,7 +32,7 @@ class ItemController extends BasicController
     public $reactView = 'Admin/Items';
     public $imageFields = ['image', 'banner', 'texture'];
     public $prefix4filter = 'items';
-    public $with4get = ['platform', 'family', 'applications', 'symbologies'];
+    public $with4get = ['platform', 'family', 'applications', 'symbologies', 'technologies'];
 
     public function mediaGallery(Request $request, string $uuid)
     {
@@ -169,7 +170,8 @@ class ItemController extends BasicController
         $platforms = Platform::where('status', 1)->get();
         $families = Family::where('status', 1)->get();
         $applications = Application::where('status', 1)->get();
-        $symbologies = Symbology::where('status',1)->get();
+        $symbologies = Symbology::where('status', 1)->get();
+        $technologies = Technology::where('status', 1)->get();
 
         return [
             'categories' => $categories,
@@ -178,14 +180,15 @@ class ItemController extends BasicController
             'platforms' => $platforms,
             'families' => $families,
             'applications' => $applications,
-            'symbologies'=>$symbologies
+            'symbologies' => $symbologies,
+            'technologies' => $technologies
         ];
     }
 
     public function setPaginationInstance(Request $request, string $model)
     {
         return $model::select(['items.*'])
-            ->with(['category', 'subcategory', 'brand', 'images', 'collection', 'specifications', 'applications', 'platform', 'family','symbologies'])
+            ->with(['category', 'subcategory', 'brand', 'images', 'collection', 'specifications', 'applications', 'platform', 'family', 'symbologies', 'technologies'])
             ->leftJoin('categories AS category', 'category.id', 'items.category_id');
     }
 
@@ -196,8 +199,8 @@ class ItemController extends BasicController
         $tags = explode(',', $request->tags ?? '');
         $applications = !empty($request->applications) ? explode(',', $request->applications) : [];
         $symbologies = !empty($request->symbologies) ? explode(',', $request->symbologies) : [];
-
-        DB::transaction(function () use ($jpa, $tags, $applications, $symbologies, $request) {
+        $technologies = !empty($request->technologies) ? explode(',', $request->technologies) : [];
+        DB::transaction(function () use ($jpa, $tags, $applications, $symbologies,$technologies, $request) {
             // Manejo de Tags
             ItemTag::where('item_id', $jpa->id)->whereNotIn('tag_id', $tags)->delete();
 
@@ -258,6 +261,28 @@ class ItemController extends BasicController
                 // Si no hay simbologías seleccionadas, eliminar todas las existentes
                 DB::table('item_symbology')->where('item_id', $jpa->id)->delete();
             }
+
+                 // Manejo de Symbologies
+            if (is_array($technologies) && !empty($technologies)) {
+                // Eliminar simbologías que ya no están seleccionadas
+                DB::table('item_technology')
+                    ->where('item_id', $jpa->id)
+                    ->whereNotIn('technology_id', $technologies)
+                    ->delete();
+
+                // Agregar o mantener las simbologías seleccionadas
+                foreach ($technologies as $technologyId) {
+                    if (!empty($technologyId)) {
+                        DB::table('item_technology')->updateOrInsert([
+                            'item_id' => $jpa->id,
+                            'technology_id' => $technologyId
+                        ]);
+                    }
+                }
+            } else {
+                // Si no hay simbologías seleccionadas, eliminar todas las existentes
+                DB::table('item_technology')->where('item_id', $jpa->id)->delete();
+            }
         });
         if ($request->hasFile('gallery')) {
             foreach ($request->file('gallery') as $file) {
@@ -274,7 +299,7 @@ class ItemController extends BasicController
         // Procesar gallery_ids para preservar imágenes existentes
         if ($request->has('gallery_ids')) {
             $galleryIds = $request->input('gallery_ids');
-            
+
             if (is_array($galleryIds)) {
                 foreach ($galleryIds as $imageId) {
                     if (!empty($imageId)) {
@@ -289,18 +314,18 @@ class ItemController extends BasicController
         if ($request->has('deleted_images')) {
             $deletedImagesJson = $request->input('deleted_images');
             $deletedImageIds = json_decode($deletedImagesJson, true);
-            
+
             \Log::info('DEBUG - Procesando deleted_images:', [
                 'deleted_images_json' => $deletedImagesJson,
                 'deleted_image_ids' => $deletedImageIds
             ]);
-            
+
             if (is_array($deletedImageIds) && !empty($deletedImageIds)) {
                 // Obtener las imágenes antes de eliminarlas para borrar los archivos físicos
                 $imagesToDelete = $jpa->images()->whereIn('id', $deletedImageIds)->get();
-                
+
                 \Log::info('DEBUG - Imágenes a eliminar:', ['images_to_delete' => $imagesToDelete->toArray()]);
-                
+
                 foreach ($imagesToDelete as $image) {
                     // Eliminar el archivo físico
                     $imagePath = "images/item/gallery/{$image->url}";
@@ -309,7 +334,7 @@ class ItemController extends BasicController
                         \Log::info('DEBUG - Archivo físico eliminado:', ['path' => $imagePath]);
                     }
                 }
-                
+
                 // Eliminar los registros de la base de datos
                 $deletedCount = $jpa->images()->whereIn('id', $deletedImageIds)->delete();
                 \Log::info('DEBUG - Registros eliminados de BD:', ['count' => $deletedCount]);
@@ -344,7 +369,7 @@ class ItemController extends BasicController
         //     ItemSpecification::where('item_id', $jpa->id)
         //         ->whereNotIn('id', $existingIds)
         //         ->delete();
-            
+
         //     // Luego crear/actualizar las restantes
         //     foreach ($specifications as $spec) {
         //         ItemSpecification::updateOrCreate(
