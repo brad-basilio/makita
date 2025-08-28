@@ -72,6 +72,7 @@ use App\Http\Controllers\UnifiedImportController;
 use App\Http\Controllers\Admin\ServicePointController as AdminServicePointController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ServicePointController;
+use App\Http\Controllers\SocialController;
 
 /*
 |--------------------------------------------------------------------------
@@ -158,6 +159,7 @@ Route::get('/service-points', [AdminServicePointController::class, 'publicIndex'
 
 
 Route::get('/categories', [CategoryController::class, 'getCategories']);
+Route::get('/socials', [SocialController::class, 'index']);
 
 Route::middleware('auth')->group(function () {
   Route::get('/notification-variables/{type}', [NotificationVariableController::class, 'variables']);

@@ -16,6 +16,7 @@ import Logout from "../../../Actions/Logout";
 import MobileMenu from "./Components/MobileMenu";
 import { motion, AnimatePresence } from "framer-motion";
 import { set } from "lodash";
+import TopBarSocials from "../TopBars/TopBarSocials";
 
 const HeaderMakita = ({
   items,
@@ -52,6 +53,8 @@ const HeaderMakita = ({
   
   // Filter state for applications
   const [selectedApplication, setSelectedApplication] = useState(null);
+  const [socials, setSocials] = useState([]);
+  const [showTopBar, setShowTopBar] = useState(false);
 
   // Categories, Platforms, Families, Applications
   const categories = Array.from(new Set(items.map((item) => JSON.stringify(item.category)))).map((item) => {
@@ -200,13 +203,46 @@ const HeaderMakita = ({
     const handleScroll = () => {
       if (window.scrollY > 0) {
         setIsFixed(true)
+        setShowTopBar(true)
       } else {
         setIsFixed(false)
+        setShowTopBar(false)
       }
     }
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
+
+  // Prevent body scroll when mega menu is open
+  useEffect(() => {
+    if (showMegaMenu) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'unset'
+    }
+    
+    // Cleanup on unmount
+    return () => {
+      document.body.style.overflow = 'unset'
+    }
+  }, [showMegaMenu])
+
+  // Fetch social media data
+  useEffect(() => {
+    const fetchSocials = async () => {
+      try {
+        const response = await fetch('/api/socials');
+        if (response.ok) {
+          const data = await response.json();
+          setSocials(data);
+        }
+      } catch (error) {
+        console.error('Error fetching socials:', error);
+      }
+    };
+
+    fetchSocials();
+  }, []);
 
   const menuVariants = {
     hidden: {
@@ -287,6 +323,8 @@ const HeaderMakita = ({
     setMobileActiveCat(null);
   };
 
+  
+
   return (
     <>
       <style>{scrollbarStyles}</style>
@@ -294,14 +332,18 @@ const HeaderMakita = ({
         className={`w-full top-0 left-0 z-50 transition-all duration-300 ${isFixed ? "fixed" : "relative"} bg-primary`}
         style={{ boxShadow: isFixed ? "0 2px 8px rgba(0,0,0,0.08)" : "none" }}
       >
+    {showTopBar && (
+      <TopBarSocials items={socials} data={{ background_color: "bg-secondary", color: "customtext-secondary" }} />
+    )}
+
         {/* Desktop Header */}
         <div className="hidden md:flex px-4 2xl:px-0 2xl:max-w-7xl items-center justify-between mx-auto py-3 font-paragraph text-base font-semibold text-white">
           {/* Logo */}
-          <a href="/" className="flex items-center gap-2 z-[51] py-2 rounded">
+          <a href="/" className="flex items-center gap-2 z-[51] py-1 rounded">
             <img
               src={`/assets/resources/logo.png?v=${crypto.randomUUID()}`}
               alt={Global.APP_NAME}
-              className="h-8 object-contain object-center"
+              className="h-12 object-contain object-center"
               onError={(e) => {
                 e.target.onerror = null
                 e.target.src = "/assets/img/logo-bk.svg"
@@ -314,7 +356,7 @@ const HeaderMakita = ({
             {categories.map((cat) => (
               <div key={cat.id} className="relative">
                 <button
-                  className={`font-medium px-4 py-2 text-sm uppercase tracking-wide hover:bg-white/10 transition-colors duration-200 ${activeCategory?.id === cat.id && showMegaMenu ? "bg-white/20" : ""}`}
+                  className={`font-medium px-4 py-2 text-base uppercase tracking-wide hover:text-[#262626] transition-colors duration-500 ${activeCategory?.id === cat.id && showMegaMenu ? "text-[#262626]" : ""}`}
                   onClick={() => {
                     setShowSearch(false)
                     if (activeCategory?.id === cat.id && showMegaMenu) {
@@ -497,14 +539,14 @@ const HeaderMakita = ({
             }}
           >
             {/* Botón cerrar */}
-            <div className="relative max-w-7xl mx-auto pt-4 ">
+            <div className="relative max-w-7xl mx-auto  ">
               <button
                 onClick={() => {
                   setShowMegaMenu(false)
                   setActiveCategory(null)
                   setSelectedApplication(null)
                 }}
-                className="text-white absolute right-0 hover:text-[#00B5CE] transition-colors p-2 rounded-full hover:bg-white/10"
+                className="text-white absolute top-8 right-0 hover:text-[#00B5CE] transition-colors p-2 rounded-full hover:bg-white/10"
                 aria-label="Cerrar menú"
               >
                 <XIcon size={24} />
@@ -512,7 +554,7 @@ const HeaderMakita = ({
             </div>
             
             {/* Contenido principal del mega menú */}
-            <div className="max-w-7xl mx-auto px-6 pb-8 max-h-[calc(80vh-100px)] overflow-hidden">
+            <div className="max-w-7xl mx-auto py-10  pb-8 max-h-[calc(80vh-100px)] overflow-hidden">
               {/* Si hay plataformas para esta categoría, mostrarlas en scroll horizontal */}
               {getPlatformsByCategory(activeCategory?.id).length > 0 ? (
                 <div
@@ -529,7 +571,7 @@ const HeaderMakita = ({
                     return (
                       <div
                         key={platform.id}
-                        className="flex-shrink-0 space-y-4 bg-secondary rounded-lg p-4"
+                        className="flex-shrink-0 space-y-4 bg-secondary rounded-lg py-4"
                         style={{
                           minWidth: cardWidth,
                           maxWidth: cardWidth,
@@ -538,12 +580,12 @@ const HeaderMakita = ({
                         }}
                       >
                         {/* Encabezado de la plataforma */}
-                        <div className="pb-2 flex gap-4">
-                          <img src={`/storage/images/platform/${platform?.image}`} alt={platform?.name || 'Plataforma'} className="h-10 object-contain" onError={(e) =>
+                        <div className="pb-2 flex items-center gap-4">
+                          <img src={`/storage/images/platform/${platform?.image}`} alt={platform?.name || 'Plataforma'} className="h-6 object-contain" onError={(e) =>
                           (e.target.src =
                             "/api/cover/thumbnail/null")
                           } />
-                          <h3 className="text-white font-bold text-lg mt-2">{platform?.description || platform?.name || 'Sin nombre'}</h3>
+                          <h3 className="text-white font-medium text-lg tracking-wider ">{platform?.description || platform?.name || 'Sin nombre'}</h3>
                         </div>
                         {/* Lista de familias */}
                         <ul className="space-y-2 max-h-[320px] overflow-y-auto pr-2 custom-scrollbar">
@@ -553,10 +595,10 @@ const HeaderMakita = ({
                               <li key={family?.id}>
                                 <a
                                   href={`/catalogo?category=${activeCategory?.slug}&platform=${platform?.slug}&family=${family?.slug}`}
-                                  className="text-white hover:text-[#00B5CE] border-b pb-2 border-white/40 transition-colors text-sm flex items-center gap-2"
+                                  className="text-white !lowercase group hover:text-[#00B5CE] border-b pt-2 pb-4 border-white/40 transition-colors text-sm flex items-center gap-2"
                                 >
-                                  <span className="text-[#00B5CE]">•</span>
-                                  <span>{family?.name || 'Sin nombre'}</span>
+                                  <span className="text-white group-hover:text-[#00B5CE]">•</span>
+                                  <span className="!capitalize">{family?.name || 'Sin nombre'}</span>
                                 </a>
                               </li>
                             ))

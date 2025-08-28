@@ -13,7 +13,10 @@ class SocialController extends Controller
      */
     public function index()
     {
-        //
+        return Social::where('status', true)
+                    ->where('visible', true)
+                    ->orderBy('created_at', 'desc')
+                    ->get();
     }
 
     /**
