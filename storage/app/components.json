@@ -1657,14 +1657,7 @@
                     "description",
                     "button_text",
                     "link_blog"
-                ],
-                "using": {
-                    "model": "Post",
-                    "limit": 4,
-                    "with": [
-                        "category"
-                    ]
-                }
+                ]
             }
         ]
     },

@@ -1,11 +1,47 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
+import axios from "axios";
 import 'swiper/css';
 import 'swiper/css/pagination';
 
-const BlogSectionMakita = ({ data, items }) => {
+const BlogSectionMakita = ({ data, items: initialItems }) => {
+    const [items, setItems] = useState(initialItems || []);
+    const [loading, setLoading] = useState(false);
+
+    // Fetch posts excluding technology category
+    useEffect(() => {
+        async function fetchRecentPosts() {
+            try {
+                setLoading(true);
+                console.log('Fetching posts from API...');
+                const response = await axios.get('/api/posts/recent-excluding-technology');
+                console.log('API Response:', response);
+                console.log('API Response Data:', response.data);
+                
+                // Check if response has success and data properties
+                if (response.data && response.data.success && response.data.data) {
+                    console.log('Setting items with:', response.data.data);
+                    setItems(response.data.data);
+                } else {
+                    console.log('Using direct response.data:', response.data);
+                    setItems(response.data || []);
+                }
+            } catch (error) {
+                console.error('Error fetching recent posts:', error);
+                setItems(initialItems || []);
+            } finally {
+                setLoading(false);
+            }
+        }
+        
+        fetchRecentPosts();
+    }, []);
+
+
+    
+
     const [currentIndex, setCurrentIndex] = useState(1);
     const swiperRef = useRef(null);
     // Función para truncar texto
@@ -36,14 +72,21 @@ const BlogSectionMakita = ({ data, items }) => {
                     </p>
                     <a 
                         href={data?.link_blog || "#blog"} 
-                        className="inline-block bg-custom text-white font-medium py-3 px-8 rounded-md transition-all duration-300"
+                        className="inline-block bg-custom hover:bg-secondary text-white font-medium py-3 px-6 text-lg rounded-md transition-all duration-500"
                     >
                         {data?.button_text || "Ver blog"}
                     </a>
                 </div>
 
+                {/* Loading indicator */}
+                {loading && (
+                    <div className="flex justify-center items-center py-12">
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-custom"></div>
+                    </div>
+                )}
+
                 {/* Mobile Swiper - 2 posts per slide */}
-                <div className="block md:hidden mt-12">
+                <div className={`block md:hidden mt-12 ${loading ? 'opacity-50' : ''}`}>
                     <Swiper
                         modules={[Autoplay, Pagination]}
                         spaceBetween={16}
@@ -63,7 +106,7 @@ const BlogSectionMakita = ({ data, items }) => {
                         className="relative pb-12"
                     >
                         {/* Crear slides con 2 artículos cada uno */}
-                        {items && Array.from({ length: Math.ceil(items.length / 2) }, (_, slideIndex) => (
+                        {Array.isArray(items) && items.length > 0 && Array.from({ length: Math.ceil(items.length / 2) }, (_, slideIndex) => (
                             <SwiperSlide key={slideIndex}>
                                 <div className="grid grid-cols-1 gap-4">
                                     {items.slice(slideIndex * 2, slideIndex * 2 + 2).map((post, itemIndex) => (
@@ -100,7 +143,7 @@ const BlogSectionMakita = ({ data, items }) => {
                             {/* Paginación mejorada y centrada - movida fuera del Swiper */}
           <div className="w-full flex justify-center mt-5">
             <div className="flex gap-3">
-              {items.map((_, index) => (
+              {Array.isArray(items) && items.map((_, index) => (
                 <button
                   key={`dot-${index}`}
                   aria-label={`Ir al slide ${index + 1}`}
@@ -126,8 +169,8 @@ const BlogSectionMakita = ({ data, items }) => {
                 </div>
 
                 {/* Desktop Grid - 2x2 on desktop */}
-                <div className="hidden md:grid grid-cols-2 gap-8 mt-12">
-                    {items && items.slice(0, 4).map((post, index) => (
+                <div className={`hidden md:grid grid-cols-2 gap-8 mt-12 ${loading ? 'opacity-50' : ''}`}>
+                    {Array.isArray(items) && items.length > 0 && items.slice(0, 4).map((post, index) => (
                         <article 
                             key={index}
                             className="flex flex-col items-center md:flex-row gap-6 bg-white rounded-xl overflow-hidden"
@@ -144,7 +187,7 @@ const BlogSectionMakita = ({ data, items }) => {
                             
                             {/* Content */}
                             <div className="w-full md:w-2/3">
-                                <h3 className="text-xl font-bold mb-2 customtext-neutral-dark line-clamp-2">
+                                <h3 className="text-2xl font-bold mb-2 customtext-neutral-dark line-clamp-2">
                                     {post?.name || "Todo lo que puedes hacxer con tu Rotomartillo Inalámbrico"}
                                 </h3>
                                 

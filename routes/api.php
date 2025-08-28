@@ -117,6 +117,7 @@ Route::get('brands/{brand}/featured-item', [BrandController::class, 'featuredIte
 Route::get('/items/{id}', [ItemController::class, 'apiShow']);
 
 Route::post('/posts/paginate', [PostController::class, 'paginate']);
+Route::get('/posts/recent-excluding-technology', [PostController::class, 'getRecentPostsExcludingTechnology']);
 Route::post('/items/paginate', [ItemController::class, 'paginate']);
 
 Route::post('/messages', [MessageController::class, 'save']);
