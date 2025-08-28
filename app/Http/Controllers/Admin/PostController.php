@@ -29,6 +29,18 @@ class PostController extends BasicController
         ];
     }
 
+    public function beforeSave(Request $request)
+    {
+        $body = $request->all();
+        
+        // Convertir 'null' string a null real para technology_id
+        if (isset($body['technology_id']) && $body['technology_id'] === 'null') {
+            $body['technology_id'] = null;
+        }
+        
+        return $body;
+    }
+
     public function setPaginationInstance(Request $request, string $model)
     {
         return $model::with(['postCategory','technology', 'tags']);

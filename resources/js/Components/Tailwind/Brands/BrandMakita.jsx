@@ -8,26 +8,20 @@ import 'swiper/css/pagination';
 
 
 const BrandMakita = ({ data, items }) => {
-  const [relatedProducts, setRelatedProducts] = useState({});
+  const [technologiesWithPosts, setTechnologiesWithPosts] = useState([]);
 
   useEffect(() => {
-    async function fetchRelated() {
-      const productsMap = {};
-      await Promise.all(
-        items.map(async (item) => {
-          try {
-            // Llama a la API para traer el producto destacado/reciente de la marca (item.id es el id de la marca)
-            const res = await axios.get(`/api/brands/${item.id}/featured-item`);
-            productsMap[item.id] = res.data.item;
-          } catch {
-            productsMap[item.id] = null;
-          }
-        })
-      );
-      setRelatedProducts(productsMap);
+    async function fetchTechnologies() {
+      try {
+        const res = await axios.get('/api/technologies/with-recent-posts');
+        setTechnologiesWithPosts(res.data);
+      } catch (error) {
+        console.error('Error fetching technologies with posts:', error);
+        setTechnologiesWithPosts([]);
+      }
     }
-    if (items && items.length > 0) fetchRelated();
-  }, [items]);
+    fetchTechnologies();
+  }, []);
 
   const [currentIndex, setCurrentIndex] = useState(1);
   const swiperRef = useRef(null);
@@ -42,7 +36,7 @@ const BrandMakita = ({ data, items }) => {
           filter: 'blur(70px)'
         }}
       />
-      <div className="container mx-auto px-4 md:px-[5%]">
+      <div className="container mx-auto px-4 md:px-[5%] relative z-10">
         {/* Main Title */}
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-bold mb-8">
@@ -51,7 +45,7 @@ const BrandMakita = ({ data, items }) => {
           {/* View More Button */}
           <a
             href={data?.link_catalog}
-            className="inline-block bg-custom bg-opacity-40  text-white text-base font-medium py-4 px-6 rounded-md transition-all duration-300"
+            className="inline-block text-lg relative z-20 bg-[#225568] hover:bg-custom  text-white  font-medium py-4 px-6 tracking-wider rounded-md transition-all duration-300"
           >
             {data?.button_text}
           </a>
@@ -79,41 +73,56 @@ const BrandMakita = ({ data, items }) => {
             onSlideChange={(swiper) => setCurrentIndex(swiper.realIndex + 1)}
             onSwiper={(swiper) => { swiperRef.current = swiper; }}
           >
-            {items.map((tech) => {
-              const related = relatedProducts[tech.id];
+            {technologiesWithPosts.map((tech) => {
+              const recentPost = tech.recent_post;
               return (
                 <SwiperSlide key={tech.id}>
                   <div className="flex flex-col items-center">
                     {/* Technology Logo */}
                     <div className="mb-6 h-16 flex items-center">
                       <img
-                        src={`/storage/images/brand/${tech.image}`}
+                        src={`/storage/images/technology/${tech.image}`}
                         alt={`${tech.name} logo`}
                         className="h-auto max-h-full"
                         onError={e => e.target.src = '/api/cover/thumbnail/null'}
                       />
                     </div>
-                    {related && (
+                    {/* Contenido del post o tecnología */}
+                    {recentPost ? (
                       <>
-                        {/* Imagen del producto */}
+                        {/* Imagen del post */}
                         <div className="mb-6 h-48 flex items-center">
                           <img
-                            src={`/storage/images/item/${related.image}`}
-                            alt={`${related.name} herramienta`}
-                            className="h-auto max-h-full"
+                            src={`/storage/images/post/${recentPost.image}`}
+                            alt={`${recentPost.title}`}
+                            className="h-auto max-h-full object-cover rounded-lg"
                             onError={e => e.target.src = '/api/cover/thumbnail/null'}
                           />
                         </div>
-                        {/* Descripción del producto */}
-                        <p className="text-base text-center mb-6 prose line-clamp-4 text-white" dangerouslySetInnerHTML={{ __html: related.description }} />
+                        {/* Título del post */}
+                        <h3 className="text-lg font-semibold text-center mb-4 text-white line-clamp-2">{recentPost.title}</h3>
+                      </>
+                    ) : (
+                      <>
+                        {/* Banner de la tecnología cuando no hay post */}
+                        <div className="mb-6 h-48 flex items-center">
+                          <img
+                            src={`/storage/images/technology/${tech.banner}`}
+                            alt={`${tech.name} banner`}
+                            className="h-auto max-h-full object-cover rounded-lg"
+                            onError={e => e.target.src = '/api/cover/thumbnail/null'}
+                          />
+                        </div>
+                        {/* Nombre de la tecnología */}
+                        <h3 className="text-lg font-semibold text-center mb-4 text-white line-clamp-2">{tech.name}</h3>
                       </>
                     )}
                     {/* View More Link */}
                     <a
-                      href={`#${tech.id}`}
+                      href={recentPost ? `/posts/${recentPost.slug}` : `#${tech.id}`}
                       className="inline-block bg-custom text-white text-sm font-medium py-3 px-4 rounded-md transition-all duration-300 mt-auto"
                     >
-                      Ver más
+                      {recentPost ? 'Leer más' : 'Ver más'}
                     </a>
                   </div>
                 </SwiperSlide>
@@ -123,7 +132,7 @@ const BrandMakita = ({ data, items }) => {
           {/* Paginación mejorada y centrada - movida fuera del Swiper */}
           <div className="w-full flex justify-center mt-5">
             <div className="flex gap-3">
-              {items.map((_, index) => (
+              {technologiesWithPosts.map((_, index) => (
                 <button
                   key={`dot-${index}`}
                   aria-label={`Ir al slide ${index + 1}`}
@@ -147,46 +156,105 @@ const BrandMakita = ({ data, items }) => {
           </div>
         </div>
 
-        {/* Desktop Grid */}
-        <div className="hidden lg:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-16">
-          {items.map((tech) => {
-            const related = relatedProducts[tech.id];
-            return (
-              <div key={tech.id} className="flex flex-col items-center">
-                {/* Technology Logo */}
-                <div className="mb-6 h-16 flex items-center">
-                  <img
-                    src={`/storage/images/brand/${tech.image}`}
-                    alt={`${tech.name} logo`}
-                    className="h-auto max-h-full"
-                    onError={e => e.target.src = '/api/cover/thumbnail/null'}
-                  />
-                </div>
-                {related && (
-                  <>
-                    {/* Imagen del producto */}
-                    <div className="mb-6 h-48 flex items-center">
+        {/* Desktop Swiper */}
+        <div className="hidden lg:block mt-16">
+          <Swiper
+            slidesPerView={4}
+            spaceBetween={30}
+            modules={[Autoplay, Pagination]}
+            autoplay={{
+              delay: 5000,
+              disableOnInteraction: false,
+            }}
+            loop={technologiesWithPosts.length > 4}
+            centeredSlides={technologiesWithPosts.length < 4}
+            pagination={{
+              clickable: true,
+              el: '.desktop-swiper-pagination',
+            }}
+            breakpoints={{
+              1024: {
+                slidesPerView: 4,
+                centeredSlides: technologiesWithPosts.length < 4,
+                spaceBetween: 30,
+              },
+              768: {
+                slidesPerView: 3,
+                centeredSlides: technologiesWithPosts.length < 3,
+                spaceBetween: 20,
+              },
+              640: {
+                slidesPerView: 2,
+                centeredSlides: technologiesWithPosts.length < 2,
+                spaceBetween: 15,
+              }
+            }}
+            className="relative"
+          >
+            {technologiesWithPosts.map((tech) => {
+              const recentPost = tech.recent_post;
+              return (
+                <SwiperSlide key={tech.id}>
+                  <div className="flex flex-col items-center h-full">
+                    {/* Technology Logo */}
+                    <h3 className="text-xl max-w-[200px] text-center leading-6 mb-4">{tech?.description}</h3>
+                    <div className="mb-6 h-12 flex items-center">
                       <img
-                        src={`/storage/images/item/${related.image}`}
-                        alt={`${related.name} herramienta`}
-                        className="h-auto max-h-full"
+                        src={`/storage/images/technology/${tech.image}`}
+                        alt={`${tech.name} logo`}
+                        className="h-full w-auto object-contain"
                         onError={e => e.target.src = '/api/cover/thumbnail/null'}
                       />
                     </div>
-                    {/* Descripción del producto */}
-                    <p className="text-base text-center mb-6 prose line-clamp-4 text-white" dangerouslySetInnerHTML={{ __html: related.description }} />
-                  </>
-                )}
-                {/* View More Link */}
-                <a
-                  href={`#${tech.id}`}
-                  className="inline-block bg-custom text-white text-sm font-medium py-3 px-4 rounded-md transition-all duration-300 mt-auto"
-                >
-                  Ver más
-                </a>
-              </div>
-            );
-          })}
+                    {/* Contenido del post o tecnología */}
+                    {recentPost ? (
+                      <>
+                        {/* Imagen del post */}
+                        <div className="mb-6 h-48 flex items-center">
+                          <img
+                            src={`/storage/images/post/${recentPost.image}`}
+                            alt={`${recentPost.title}`}
+                            className="h-auto max-h-full object-cover rounded-lg"
+                            onError={e => e.target.src = '/api/cover/thumbnail/null'}
+                          />
+                        </div>
+                        {/* Título del post */}
+                        <p className="text-base font-paragraph tracking-wider text-center mb-4 text-[#F6F6F6] line-clamp-4">{recentPost?.summary}</p>
+                      </>
+                    ) : (
+                      <>
+                        {/* Banner de la tecnología cuando no hay post */}
+                        <div className="mb-6 h-48 flex items-center">
+                          <img
+                            src={`/storage/images/technology/${tech.banner}`}
+                            alt={`${tech.name} banner`}
+                            className="h-auto max-h-full object-cover rounded-lg"
+                            onError={e => e.target.src = '/api/cover/thumbnail/null'}
+                          />
+                        </div>
+                        {/* Nombre de la tecnología */}
+                        <h3 className="text-lg font-semibold text-center mb-4 text-white line-clamp-2">{tech.name}</h3>
+                      </>
+                    )}
+                    {/* View More Link */}
+                    <a
+                      href={recentPost ? `/posts/${recentPost.slug}` : `#${tech.id}`}
+                      className="inline-block tracking-wider text-lg bg-custom hover:bg-[#225568] text-white font-medium py-3 px-4 rounded-md transition-all duration-300 mt-auto"
+                    >
+                      {recentPost ? 'Leer más' : 'Ver más'}
+                    </a>
+                  </div>
+                </SwiperSlide>
+              );
+            })}
+          </Swiper>
+          
+          {/* Desktop Pagination */}
+          {technologiesWithPosts.length > 4 && (
+            <div className="w-full flex justify-center mt-8">
+              <div className="desktop-swiper-pagination flex gap-3"></div>
+            </div>
+          )}
         </div>
       </div>
     </section>

@@ -163,6 +163,7 @@ Route::get('/service-points', [AdminServicePointController::class, 'publicIndex'
 Route::get('/categories', [CategoryController::class, 'getCategories']);
 Route::get('/socials', [SocialController::class, 'index']);
 Route::get('/platforms/with-product-count', [AdminPlatformController::class, 'getPlatformsWithProductCount']);
+Route::get('/technologies/with-recent-posts', [AdminTechnologyController::class, 'getTechnologiesWithRecentPosts']);
 
 Route::middleware('auth')->group(function () {
   Route::get('/notification-variables/{type}', [NotificationVariableController::class, 'variables']);
