@@ -27,12 +27,27 @@ const Posts = ({ details }) => {
   const idRef = useRef()
   const nameRef = useRef()
   const categoryRef = useRef()
+  const technologyRef = useRef()
   const descriptionRef = useRef()
  // const tagsRef = useRef()
   const imageRef = useRef()
   const postDateRef = useRef()
 
   const [isEditing, setIsEditing] = useState(false)
+  const [showTechnologySelect, setShowTechnologySelect] = useState(false)
+
+  const onCategoryChange = (e) => {
+    const selectedIndex = e.target.selectedIndex;
+    const selectedOption = e.target.options[selectedIndex];
+    console.log('Selected option:', selectedOption);
+    
+    const isTechnologyCategory = selectedOption?.text?.toLowerCase() === 'tecnología' || selectedOption?.text?.toLowerCase() === 'tecnologia' || selectedOption?.text?.toLowerCase() === 'technology';
+    setShowTechnologySelect(isTechnologyCategory);
+    
+    if (!isTechnologyCategory && technologyRef.current) {
+      $(technologyRef.current).val(null).trigger('change');
+    }
+  }
 
   const onModalOpen = (data) => {
     if (data?.id) setIsEditing(true)
@@ -40,7 +55,25 @@ const Posts = ({ details }) => {
 
     idRef.current.value = data?.id ?? ''
     nameRef.current.value = data?.name ?? ''
-    SetSelectValue(categoryRef.current, data?.category?.id, data?.category?.name);
+    SetSelectValue(categoryRef.current, data?.post_category?.id, data?.post_category?.name);
+    
+    // Verificar si la categoría es 'tecnología' para mostrar el selector
+    const isTechnologyCategory = data?.post_category?.name?.toLowerCase() === 'tecnología' || data?.post_category?.name?.toLowerCase() === 'technology' || data?.post_category?.name?.toLowerCase() === 'tecnologia'
+    setShowTechnologySelect(isTechnologyCategory)
+    
+    // Limpiar el selector de tecnología primero
+    if (technologyRef.current) {
+      $(technologyRef.current).val(null).trigger('change');
+    }
+    
+    // Si es categoría tecnología y hay datos de tecnología, establecer el valor
+    if (isTechnologyCategory && data?.technology) {
+      // Usar setTimeout para asegurar que el selector esté visible antes de establecer el valor
+      setTimeout(() => {
+        SetSelectValue(technologyRef.current, data?.technology?.id, data?.technology?.name);
+      }, 100);
+    }
+    
     descriptionRef.editor.root.innerHTML = data?.description ?? ''
     imageRef.image.src = `/storage/images/post/${data?.image}`
     imageRef.current.value = null
@@ -56,7 +89,8 @@ const Posts = ({ details }) => {
     const request = {
       id: idRef.current.value || undefined,
       name: nameRef.current.value,
-      category_id: categoryRef.current.value,
+      post_category_id: categoryRef.current.value,
+      technology_id: showTechnologySelect ? technologyRef.current.value : null,
       summary: html2string(descriptionRef.current.value),
       description: descriptionRef.current.value,
       //tags: $(tagsRef.current).val(),
@@ -128,7 +162,7 @@ const Posts = ({ details }) => {
           visible: false
         },
         {
-          dataField: 'category.name',
+          dataField: 'post_category.name',
           caption: 'Categoría',
         },
         {
@@ -174,7 +208,10 @@ const Posts = ({ details }) => {
         <input ref={idRef} type='hidden' />
 
         <ImageFormGroup eRef={imageRef} label='Imagen' />
-        <SelectAPIFormGroup eRef={categoryRef} searchAPI='/api/admin/categories/paginate' searchBy='name' label='Categoría' required dropdownParent='#posts-container' />
+        <SelectAPIFormGroup eRef={categoryRef} searchAPI='/api/admin/post-categories/paginate' searchBy='name' label='Categoría' required dropdownParent='#posts-container' onChange={onCategoryChange} />
+        {showTechnologySelect && (
+          <SelectAPIFormGroup eRef={technologyRef} searchAPI='/api/admin/technologies/paginate' searchBy='name' label='Tecnología' dropdownParent='#posts-container' />
+        )}
         <InputFormGroup eRef={nameRef} label='Título' rows={2} required />
         <QuillFormGroup eRef={descriptionRef} label='Contenido' />
         {/* <TextareaFormGroup eRef={tagsRef} label='Tags (Separado por comas)' rows={1} /> */}

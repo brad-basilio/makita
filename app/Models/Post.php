@@ -17,6 +17,8 @@ class Post extends Model
         'name',
         'summary',
         'category_id',
+        'post_category_id',
+        'technology_id',
         'description',
         'image',
         'post_date',
@@ -27,6 +29,16 @@ class Post extends Model
     public function category()
     {
         return $this->hasOne(Category::class, 'id', 'category_id');
+    }
+
+    public function postCategory()
+    {
+        return $this->belongsTo(PostCategory::class, 'post_category_id');
+    }
+
+    public function technology()
+    {
+        return $this->belongsTo(Technology::class, 'technology_id');
     }
 
     public function tags() {

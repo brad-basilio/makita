@@ -93,6 +93,7 @@ Route::middleware(['can:Admin', 'auth'])->prefix('admin')->group(function () {
     Route::get('/combos', [AdminComboController::class, 'reactView'])->name('Admin/Combos.jsx');
 
     Route::get('/categories', [AdminCategoryController::class, 'reactView'])->name('Admin/Categories.jsx');
+    Route::get('/post-categories', [\App\Http\Controllers\Admin\PostCategoryController::class, 'reactView'])->name('Admin/PostCategories.jsx');
     Route::get('/collections', [AdminCollectionController::class, 'reactView'])->name('Admin/Collections.jsx');
     Route::get('/subcategories', [AdminSubCategoryController::class, 'reactView'])->name('Admin/SubCategories.jsx');
     Route::get('/brands', [AdminBrandController::class, 'reactView'])->name('Admin/Brands.jsx');

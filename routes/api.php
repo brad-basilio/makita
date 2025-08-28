@@ -242,6 +242,12 @@ Route::middleware('auth')->group(function () {
     Route::patch('/posts/{field}', [AdminPostController::class, 'boolean']);
     Route::delete('/posts/{id}', [AdminPostController::class, 'delete']);
 
+    Route::post('/post-categories', [\App\Http\Controllers\Admin\PostCategoryController::class, 'save']);
+    Route::post('/post-categories/paginate', [\App\Http\Controllers\Admin\PostCategoryController::class, 'paginate']);
+    Route::patch('/post-categories/status', [\App\Http\Controllers\Admin\PostCategoryController::class, 'status']);
+    Route::patch('/post-categories/{field}', [\App\Http\Controllers\Admin\PostCategoryController::class, 'boolean']);
+    Route::delete('/post-categories/{id}', [\App\Http\Controllers\Admin\PostCategoryController::class, 'delete']);
+
     Route::post('/aboutus', [AdminAboutusController::class, 'save']);
     Route::post('/aboutus/paginate', [AdminAboutusController::class, 'paginate']);
     Route::patch('/aboutus/status', [AdminAboutusController::class, 'status']);

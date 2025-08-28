@@ -127,7 +127,7 @@ const Menu = ({ session, hasRole }) => {
                   {/*  <MenuItem href="/admin/ads" icon='mdi mdi-google-ads'>Pop-ups</MenuItem> */}
                     <MenuItemContainer title="Blogs" icon="mdi mdi-view-dashboard">
                       <MenuItem href="/admin/posts" icon="mdi mdi-post">Posts</MenuItem>
-                  
+                      <MenuItem href="/admin/post-categories" icon="mdi mdi-shape-outline">Categorías de Posts</MenuItem>
                     </MenuItemContainer>
                 
                   <MenuItem href="/admin/service-points" icon="mdi mdi-briefcase"> Distribuidores y Red de Servicios</MenuItem>
