@@ -107,7 +107,7 @@ const ProductMakita = ({ items, data, setCart, cart }) => {
                     </h2>
                     <a
                         href={data?.link_catalog}
-                        className="hidden md:flex bg-custom transition-all duration-300 text-white border-none justify-center flex-row items-center gap-2 px-8 py-3  rounded-md font-medium cursor-pointer hover:brightness-125"
+                        className="hidden md:flex text-lg bg-custom transition-all duration-300 text-white border-none justify-center flex-row items-center gap-2 px-6 py-4  rounded-md font-medium cursor-pointer hover:brightness-125"
                     >
                         Ver todo
                     </a>

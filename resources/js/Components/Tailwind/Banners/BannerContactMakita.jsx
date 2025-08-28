@@ -69,7 +69,7 @@ const BannerContactMakita = ({ data }) => {
           <div>
             <a
               href={data?.button_link}
-              className="inline-block bg-custom hover:bg-primary  text-white font-medium py-3 px-8 rounded-md shadow-lg transition-all duration-300 mt-2"
+              className="inline-block bg-custom hover:bg-secondary  text-white font-medium py-4 px-8 rounded-md shadow-md text-lg transition-all duration-500 "
             >
               {data?.button_text}
             </a>
