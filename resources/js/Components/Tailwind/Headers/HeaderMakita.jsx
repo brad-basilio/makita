@@ -332,9 +332,24 @@ const HeaderMakita = ({
         className={`w-full top-0 left-0 z-50 transition-all duration-300 ${isFixed ? "fixed" : "relative"} bg-primary`}
         style={{ boxShadow: isFixed ? "0 2px 8px rgba(0,0,0,0.08)" : "none" }}
       >
-    {showTopBar && (
-      <TopBarSocials items={socials} data={{ background_color: "bg-secondary", color: "customtext-secondary" }} />
-    )}
+    <AnimatePresence>
+      {showTopBar && (
+        <motion.div
+          initial={{ opacity: 0, y: -20, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: -20, scale: 0.95 }}
+          transition={{ 
+            duration: 0.3, 
+            ease: [0.25, 0.46, 0.45, 0.94],
+            type: "spring",
+            stiffness: 400,
+            damping: 25
+          }}
+        >
+          <TopBarSocials items={socials} data={{ background_color: "bg-secondary", color: "customtext-secondary" }} />
+        </motion.div>
+      )}
+    </AnimatePresence>
 
         {/* Desktop Header */}
         <div className="hidden md:flex px-4 2xl:px-0 2xl:max-w-7xl items-center justify-between mx-auto py-3 font-paragraph text-base font-semibold text-white">
@@ -529,13 +544,20 @@ const HeaderMakita = ({
       <AnimatePresence>
         {showMegaMenu && activeCategory && (
           <motion.div
-            initial={{ opacity: 0, y: -20, scale: 0.98 }}
+            initial={{ opacity: 0, y: -30, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -20, scale: 0.98 }}
-            transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
-            className={`fixed left-0 right-0 z-40 w-full bg-secondary text-white shadow-2xl hidden md:block`}
+            exit={{ opacity: 0, y: -30, scale: 0.95 }}
+            transition={{ 
+              duration: 0.4, 
+              ease: [0.25, 0.46, 0.45, 0.94],
+              type: "spring",
+              stiffness: 300,
+              damping: 30
+            }}
+            className={`fixed left-0 right-0 z-40 w-full bg-secondary text-white shadow-2xl hidden md:block backdrop-blur-sm`}
             style={{
               top: isFixed ? 64 : 120, // 64px when fixed, 120px otherwise
+              boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.05)"
             }}
           >
             {/* Botón cerrar */}
@@ -569,50 +591,68 @@ const HeaderMakita = ({
                     // Cada card ocupa 1/3 del contenedor (por ejemplo, 33vw menos el gap)
                     const cardWidth = 'min(400px, 33vw)';
                     return (
-                      <div
-                        key={platform.id}
-                        className="flex-shrink-0 space-y-4 bg-secondary rounded-lg py-4"
-                        style={{
-                          minWidth: cardWidth,
-                          maxWidth: cardWidth,
-                          width: cardWidth,
-                          boxSizing: 'border-box',
-                        }}
-                      >
-                        {/* Encabezado de la plataforma */}
-                        <div className="pb-2 flex items-center gap-4">
-                          <img src={`/storage/images/platform/${platform?.image}`} alt={platform?.name || 'Plataforma'} className="h-6 object-contain" onError={(e) =>
-                          (e.target.src =
-                            "/api/cover/thumbnail/null")
-                          } />
-                          <h3 className="text-white font-medium text-lg tracking-wider ">{platform?.description || platform?.name || 'Sin nombre'}</h3>
-                        </div>
-                        {/* Lista de familias */}
-                        <ul className="space-y-2 max-h-[320px] overflow-y-auto pr-2 custom-scrollbar">
-                          {/* Scrollbar mejorado con estilo más redondeado */}
-                          {getFamiliesByCategoryAndPlatform(activeCategory?.id, platform?.id).length > 0 ? (
-                            getFamiliesByCategoryAndPlatform(activeCategory?.id, platform?.id).map((family) => (
-                              <li key={family?.id}>
-                                <a
-                                  href={`/catalogo?category=${activeCategory?.slug}&platform=${platform?.slug}&family=${family?.slug}`}
-                                  className="text-white !lowercase group hover:text-[#00B5CE] border-b pt-2 pb-4 border-white/40 transition-colors text-sm flex items-center gap-2"
+                      <motion.div
+                          key={platform.id}
+                          className="flex-shrink-0 space-y-4 bg-secondary rounded-lg py-4"
+                          style={{
+                            minWidth: cardWidth,
+                            maxWidth: cardWidth,
+                            width: cardWidth,
+                            boxSizing: 'border-box',
+                          }}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.1 + (getPlatformsByCategory(activeCategory?.id).indexOf(platform) * 0.1), duration: 0.4 }}
+                        >
+                          {/* Encabezado de la plataforma */}
+                          <motion.div 
+                            className="pb-2 flex items-center gap-4"
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.2 + (getPlatformsByCategory(activeCategory?.id).indexOf(platform) * 0.1), duration: 0.3 }}
+                          >
+                            <img src={`/storage/images/platform/${platform?.image}`} alt={platform?.name || 'Plataforma'} className="h-6 object-contain" onError={(e) =>
+                            (e.target.src =
+                              "/api/cover/thumbnail/null")
+                            } />
+                            <h3 className="text-white font-medium text-lg tracking-wider ">{platform?.description || platform?.name || 'Sin nombre'}</h3>
+                          </motion.div>
+                          {/* Lista de familias */}
+                          <ul className="space-y-2 max-h-[320px] overflow-y-auto pr-2 custom-scrollbar">
+                            {/* Scrollbar mejorado con estilo más redondeado */}
+                            {getFamiliesByCategoryAndPlatform(activeCategory?.id, platform?.id).length > 0 ? (
+                              getFamiliesByCategoryAndPlatform(activeCategory?.id, platform?.id).map((family, familyIndex) => (
+                                <motion.li 
+                                  key={family?.id}
+                                  initial={{ opacity: 0, x: -10 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  transition={{ delay: 0.3 + (getPlatformsByCategory(activeCategory?.id).indexOf(platform) * 0.1) + (familyIndex * 0.05), duration: 0.25 }}
                                 >
-                                  <span className="text-white group-hover:text-[#00B5CE]">•</span>
-                                  <span className="!capitalize">{family?.name || 'Sin nombre'}</span>
-                                </a>
-                              </li>
-                            ))
-                          ) : (
-                            <li className="flex flex-col items-center justify-center py-6 text-white/70">
-                              <svg className="w-10 h-10 text-white/40 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                              </svg>
-                              <p className="text-xs font-medium text-center">Sin familias disponibles</p>
-                              <p className="text-xs text-white/50 text-center">No hay familias para esta plataforma</p>
-                            </li>
-                          )}
-                        </ul>
-                      </div>
+                                  <a
+                                    href={`/catalogo?category=${activeCategory?.slug}&platform=${platform?.slug}&family=${family?.slug}`}
+                                    className="text-white !lowercase group hover:text-[#00B5CE] border-b pt-2 pb-4 border-white/40 transition-all duration-300 text-sm flex items-center gap-2 hover:translate-x-1"
+                                  >
+                                    <span className="text-white group-hover:text-[#00B5CE] transition-colors duration-300">•</span>
+                                    <span className="!capitalize">{family?.name || 'Sin nombre'}</span>
+                                  </a>
+                                </motion.li>
+                              ))
+                            ) : (
+                              <motion.li 
+                                className="flex flex-col items-center justify-center py-6 text-white/70"
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ delay: 0.4, duration: 0.3 }}
+                              >
+                                <svg className="w-10 h-10 text-white/40 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                                </svg>
+                                <p className="text-xs font-medium text-center">Sin familias disponibles</p>
+                                <p className="text-xs text-white/50 text-center">No hay familias para esta plataforma</p>
+                              </motion.li>
+                            )}
+                          </ul>
+                        </motion.div>
                     );
                   })}
                 </div>
@@ -620,43 +660,75 @@ const HeaderMakita = ({
                 /* Si no hay plataformas, mostrar familias directamente en grid */
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
                   {getFamiliesByCategory(activeCategory?.id).length > 0 ? (
-                    getFamiliesByCategory(activeCategory?.id).map((family) => (
-                      <a
+                    getFamiliesByCategory(activeCategory?.id).map((family, index) => (
+                      <motion.a
                         key={family?.id}
                         href={`/categoria/${activeCategory?.slug}/${family?.slug}`}
-                        className="bg-secondary hover:bg-white/10 rounded-lg p-4 transition-colors"
+                        className="bg-secondary hover:bg-white/10 rounded-lg p-4 transition-all duration-300 hover:scale-105 hover:shadow-lg"
+                        initial={{ opacity: 0, y: 20, scale: 0.9 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        transition={{ delay: 0.1 + (index * 0.05), duration: 0.3 }}
+                        whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}
                       >
                         <h3 className="text-white font-medium text-sm">{family?.name || 'Sin nombre'}</h3>
-                      </a>
+                      </motion.a>
                     ))
                   ) : (
-                    <div className="col-span-full text-center py-12">
+                    <motion.div 
+                      className="col-span-full text-center py-12"
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 0.2, duration: 0.4 }}
+                    >
                       <div className="flex flex-col items-center">
-                        <svg className="w-16 h-16 text-white/40 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <motion.svg 
+                          className="w-16 h-16 text-white/40 mb-4" 
+                          fill="none" 
+                          viewBox="0 0 24 24" 
+                          stroke="currentColor"
+                          initial={{ rotate: -10, scale: 0.8 }}
+                          animate={{ rotate: 0, scale: 1 }}
+                          transition={{ delay: 0.3, duration: 0.5 }}
+                        >
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                        </svg>
-                        <div className="text-white/70 text-lg mb-2 font-medium">
+                        </motion.svg>
+                        <motion.div 
+                          className="text-white/70 text-lg mb-2 font-medium"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.4, duration: 0.3 }}
+                        >
                           No hay productos disponibles
-                        </div>
-                        <p className="text-white/50 text-sm max-w-md">
+                        </motion.div>
+                        <motion.p 
+                          className="text-white/50 text-sm max-w-md"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.5, duration: 0.3 }}
+                        >
                           {selectedApplication ? 
                             `No se encontraron productos para la aplicación "${selectedApplication?.name}" en esta categoría.` :
                             'No hay familias de productos disponibles en esta categoría en este momento.'
                           }
-                        </p>
+                        </motion.p>
                         {selectedApplication && (
-                          <button
+                          <motion.button
                             onClick={() => setSelectedApplication(null)}
                             className="mt-4 px-4 py-2 bg-[#00B5CE] text-white hover:bg-[#00A0B8] transition-colors text-sm inline-flex items-center gap-2"
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: 0.6, duration: 0.3 }}
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
                           >
                             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                             </svg>
                             Ver todos los productos
-                          </button>
+                          </motion.button>
                         )}
                       </div>
-                    </div>
+                    </motion.div>
                   )}
                 </div>
               )}
@@ -680,19 +752,33 @@ const HeaderMakita = ({
                   <div className="flex flex-wrap items-center gap-4 md:gap-6">
                     {uniqueApplications.map((application, index, array) => (
                       <React.Fragment key={application.id || application.name}>
-                        <button
+                        <motion.button
                           onClick={() => {
                             setSelectedApplication(selectedApplication?.id === application.id ? null : application);
                           }}
-                          className={`transition-colors  text-sm font-medium uppercase tracking-wide px-3 py-2  ${
+                          className={`transition-all duration-300 text-sm font-medium uppercase tracking-wide px-3 py-2 hover:scale-105 ${
                             selectedApplication?.id === application.id 
-                              ? 'bg-[#00B5CE] text-white' 
+                              ? 'bg-[#00B5CE] text-white shadow-lg' 
                               : 'text-white hover:text-[#00B5CE] hover:bg-white/10'
                           }`}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.1 + (index * 0.05), duration: 0.3 }}
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
                         >
                           {application.name}
-                        </button>
-                        {index < array.length - 1 && <span className="text-white hidden md:inline">|</span>}
+                        </motion.button>
+                        {index < array.length - 1 && (
+                          <motion.span 
+                            className="text-white hidden md:inline"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.2 + (index * 0.05), duration: 0.2 }}
+                          >
+                            |
+                          </motion.span>
+                        )}
                       </React.Fragment>
                     ))}
                   </div>
@@ -749,13 +835,20 @@ const HeaderMakita = ({
       <AnimatePresence>
         {openMenu && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.2 }}
-            className="md:hidden bg-primary fixed left-0 w-full h-[calc(100vh-56px)] z-[9999] overflow-hidden"
+            initial={{ opacity: 0, y: -20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -20, scale: 0.95 }}
+            transition={{ 
+              duration: 0.4, 
+              ease: [0.25, 0.46, 0.45, 0.94],
+              type: "spring",
+              stiffness: 300,
+              damping: 30
+            }}
+            className="md:hidden bg-primary fixed left-0 w-full h-[calc(100vh-56px)] z-[9999] overflow-hidden backdrop-blur-sm"
            style={{
               top: isFixed ? 50 : 110, // 64px when fixed, 120px otherwise
+              boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
             }}
          
          >
@@ -781,28 +874,53 @@ const HeaderMakita = ({
                 {/* Categories list */}
                 <div className="flex-1 overflow-y-auto custom-scrollbar">
                   <ul className="divide-y divide-white/10">
-                    {categories.map((category) => (
-                      <li key={category.id} className="border-b border-white/10 text-white">
-                        <button
+                    {categories.map((category, index) => (
+                      <motion.li 
+                        key={category.id} 
+                        className="border-b border-white/10 text-white"
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.1 + (index * 0.05), duration: 0.3 }}
+                      >
+                        <motion.button
                           onClick={() => handleMobileMenuItemClick(category)}
-                          className="flex items-center justify-between w-full p-4 text-left hover:bg-white/5"
+                          className="flex items-center justify-between w-full p-4 text-left hover:bg-white/5 transition-all duration-300"
+                          whileHover={{ scale: 1.02, x: 5 }}
+                          whileTap={{ scale: 0.98 }}
                         >
                           <span className="text-base font-medium uppercase">{category.name}</span>
-                          <ChevronRight size={20} />
-                        </button>
-                      </li>
+                          <motion.div
+                            whileHover={{ x: 3 }}
+                            transition={{ duration: 0.2 }}
+                          >
+                            <ChevronRight size={20} />
+                          </motion.div>
+                        </motion.button>
+                      </motion.li>
                     ))}
 
                     {/* Additional static menu items */}
-                    <li className="border-b border-white/10 text-white">
-                      <a
+                    <motion.li 
+                      className="border-b border-white/10 text-white"
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.1 + (categories.length * 0.05), duration: 0.3 }}
+                    >
+                      <motion.a
                         href="/blog"
-                        className="flex items-center justify-between w-full p-4 text-left hover:bg-white/5"
+                        className="flex items-center justify-between w-full p-4 text-left hover:bg-white/5 transition-all duration-300"
+                        whileHover={{ scale: 1.02, x: 5 }}
+                        whileTap={{ scale: 0.98 }}
                       >
                         <span className="text-base font-medium uppercase">NUESTRO BLOG</span>
-                        <ChevronRight size={20} />
-                      </a>
-                    </li>
+                        <motion.div
+                          whileHover={{ x: 3 }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          <ChevronRight size={20} />
+                        </motion.div>
+                      </motion.a>
+                    </motion.li>
                     
             
 
@@ -811,26 +929,59 @@ const HeaderMakita = ({
               </div>
             ) : (
               // Submenu showing brands and subcategories
-              <div className="h-full flex flex-col bg-secondary">
+              <motion.div 
+                className="h-full flex flex-col bg-secondary"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+              >
                 {/* Header with back button */}
-                <div className="sticky top-0 bg-secondary border-b border-white/10">
-                  <button
+                <motion.div 
+                  className="sticky top-0 bg-secondary border-b border-white/10"
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1, duration: 0.3 }}
+                >
+                  <motion.button
                     onClick={handleBackToMainMenu}
-                    className="flex items-center gap-2 p-4 text-white"
+                    className="flex items-center gap-2 p-4 text-white transition-all duration-300"
+                    whileHover={{ x: -3 }}
+                    whileTap={{ scale: 0.95 }}
                   >
-                    <ChevronLeft size={20} />
+                    <motion.div
+                      whileHover={{ x: -2 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <ChevronLeft size={20} />
+                    </motion.div>
                     <span className="text-sm font-medium uppercase">{mobileActiveCat?.name}</span>
-                  </button>
-                </div>
+                  </motion.button>
+                </motion.div>
 
                 {/* Brands and subcategories */}
-                <div className="flex-1 overflow-y-auto custom-scrollbar pt-4 pb-14">
+                <motion.div 
+                  className="flex-1 overflow-y-auto custom-scrollbar pt-4 pb-14"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2, duration: 0.4 }}
+                >
                   {getBrandsByCategory(mobileActiveCat?.id).length > 0 ? (
                     <div className="p-4 space-y-6">
-                      {getBrandsByCategory(mobileActiveCat?.id).map((brand) => (
-                        <div key={brand.id} className="space-y-3">
+                      {getBrandsByCategory(mobileActiveCat?.id).map((brand, brandIndex) => (
+                        <motion.div 
+                          key={brand.id} 
+                          className="space-y-3"
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.3 + (brandIndex * 0.1), duration: 0.3 }}
+                        >
                           {/* Brand header */}
-                          <div className="flex items-center gap-2">
+                          <motion.div 
+                            className="flex items-center gap-2"
+                            whileHover={{ scale: 1.02 }}
+                            transition={{ duration: 0.2 }}
+                          >
                             <img
                               src={`/storage/images/brand/${brand.image}`}
                               alt={brand.name}
@@ -838,43 +989,57 @@ const HeaderMakita = ({
                               onError={(e) => e.target.src = "/api/cover/thumbnail/null"}
                             />
                         
-                          </div>
+                          </motion.div>
 
                           {/* Subcategories */}
                           <ul className="pl-4 space-y-2">
-                            {getSubcategoriesByCategoryAndBrand(mobileActiveCat?.id, brand.id).map((subcategory) => (
-                              <li key={subcategory.id}>
-                                 <a
-                                href={`/categoria/${subcategory.slug}/${subcategory.slug}`}
-                                className="text-white hover:customtext-primary border-b pb-2 border-white/40 transition-colors text-sm flex items-center gap-2"
+                            {getSubcategoriesByCategoryAndBrand(mobileActiveCat?.id, brand.id).map((subcategory, subIndex) => (
+                              <motion.li 
+                                key={subcategory.id}
+                                initial={{ opacity: 0, x: -10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: 0.4 + (brandIndex * 0.1) + (subIndex * 0.05), duration: 0.25 }}
                               >
-                                <span className="text-[#00B5CE]">•</span>
-                                <span>{subcategory.name}</span>
-                              </a>
-                              </li>
+                                 <motion.a
+                                  href={`/categoria/${subcategory.slug}/${subcategory.slug}`}
+                                  className="text-white hover:customtext-primary border-b pb-2 border-white/40 transition-all duration-300 text-sm flex items-center gap-2"
+                                  whileHover={{ x: 5, scale: 1.02 }}
+                                  whileTap={{ scale: 0.98 }}
+                                >
+                                  <span className="text-[#00B5CE]">•</span>
+                                  <span>{subcategory.name}</span>
+                                </motion.a>
+                              </motion.li>
                             ))}
                           </ul>
-                        </div>
+                        </motion.div>
                       ))}
                     </div>
                   ) : (
                     // Display subcategories directly if no brands
                     <ul className="p-4 space-y-2">
-                      {getSubcategoriesByCategory(mobileActiveCat?.id).map((subcategory) => (
-                        <li key={subcategory.id}>
-                            <a
+                      {getSubcategoriesByCategory(mobileActiveCat?.id).map((subcategory, index) => (
+                        <motion.li 
+                          key={subcategory.id}
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.3 + (index * 0.05), duration: 0.3 }}
+                        >
+                            <motion.a
                                 href={`/categoria/${subcategory.slug}/${subcategory.slug}`}
-                                className="text-white hover:customtext-primary border-b pb-2 border-white/40 transition-colors text-sm flex items-center gap-2"
+                                className="text-white hover:customtext-primary border-b pb-2 border-white/40 transition-all duration-300 text-sm flex items-center gap-2"
+                                whileHover={{ x: 5, scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
                               >
                                 <span className="text-[#00B5CE]">•</span>
                                 <span>{subcategory.name}</span>
-                              </a>
-                        </li>
+                              </motion.a>
+                        </motion.li>
                       ))}
                     </ul>
                   )}
-                </div>
-              </div>
+                </motion.div>
+              </motion.div>
             )}
           </motion.div>
         )}

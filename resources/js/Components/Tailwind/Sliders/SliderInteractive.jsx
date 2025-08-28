@@ -254,9 +254,9 @@ const SliderInteractive = ({ items, data }) => {
                                 className={`absolute top-0  left-0 h-full md:h-full  w-screen md:w-full object-cover ${data?.imageBgPosition || "object-right-25 "} md:object-center  z-0  md:mr-20 lg:mr-0`}
                             />
 
-                            {data?.overlayMobile && (
-                                <div className="md:hidden absolute inset-0 bg-gradient-to-b from-transparent to-white"></div>
-                            )}
+                          
+                                <div className=" absolute inset-0 bg-gradient-to-b from-transparent to-[#00000033]"></div>
+                        
 
                             <div className={`relative w-full px-primary 2xl:px-0 2xl:max-w-7xl  mx-auto  h-[530px] md:h-[600px] flex flex-col items-start justify-end md:justify-center ${isDarkBg ? "text-white" : "customtext-neutral-dark"}`}>
                                 <div className="flex flex-col gap-5 lg:gap-10 items-start">
@@ -269,7 +269,7 @@ const SliderInteractive = ({ items, data }) => {
                                         {item.name}
                                     </h2>
                                     <p
-                                        className={`${Global.APP_CORRELATIVE === "stechperu" ? "w-8/12" : "w-full"} md:w-full md:max-w-md text-lg leading-tight font-paragraph ${isDarkBg ? "text-white" : "customtext-neutral-dark"}`}
+                                        className={`${Global.APP_CORRELATIVE === "stechperu" ? "w-8/12" : "w-full"} md:w-full md:max-w-md text-2xl font-medium leading-tight font-paragraph ${isDarkBg ? "text-white" : "customtext-neutral-dark"}`}
                                         style={{
                                             textShadow: "0 0 20px rgba(0, 0, 0, .25)",
                                         }}
@@ -282,7 +282,7 @@ const SliderInteractive = ({ items, data }) => {
                                             ref={(el) =>
                                                 (buttonsRef.current[index] = el)
                                             }
-                                            className="bg-custom border-none flex flex-row items-center gap-3 px-10 py-4 text-base rounded-md tracking-wide font-medium hover:opacity-90 transition-all duration-300"
+                                            className="bg-custom hover:bg-primary  border-none flex flex-row items-center gap-3 px-6 py-4 text-lg rounded-md tracking-wide font-medium hover:opacity-90 transition-all duration-500"
                                         >
                                             {item.button_text}
                                             {data?.icon_button && (
@@ -308,9 +308,9 @@ const SliderInteractive = ({ items, data }) => {
                     >
                         <button
                             onClick={prevSlide}
-                            className="bg-secondary rounded-r-lg text-white w-12 h-12 flex items-center justify-center transition-colors duration-300"
+                            className="bg-secondary rounded-r-md text-white w-14 h-16 flex items-center justify-center transition-colors duration-300"
                         >
-                            <ChevronLeft width={"1rem"} />
+                            <ChevronLeft width={"3rem"} />
                         </button>
                     </div>
                     <div
@@ -318,9 +318,9 @@ const SliderInteractive = ({ items, data }) => {
                     >
                         <button
                             onClick={nextSlide}
-                            className="bg-secondary rounded-l-lg text-white w-12 h-12 flex items-center justify-center transition-colors duration-300"
+                            className="bg-secondary rounded-l-md text-white w-14 h-16 flex items-center justify-center transition-colors duration-300"
                         >
-                            <ChevronRight width={"1rem"} />
+                            <ChevronRight width={"3rem"} />
                         </button>
                     </div>
                 </>
@@ -340,15 +340,13 @@ const SliderInteractive = ({ items, data }) => {
                             {items.map((_, index) => (
                                 <div
                                     key={`dot-${index}`}
-                                    className={`inline-flex mx-1 w-3 h-3 rounded-full ${currentIndex === index + 1
-                                            ? "bg-white h-5 w-5 lg:w-6 lg:h-6 items-center justify-center border-2 border-primary"
-                                            : "bg-secondary"
+                                    className={`inline-flex mx-1  rounded-full ${currentIndex === index + 1
+                                            ? "bg-[#219FB9] h-4 w-4 lg:w-4 lg:h-4 "
+                                            : "bg-[#F6F6F6] h-4 w-4 lg:w-4 lg:h-4"
                                         }`}
                                     onClick={() => setCurrentIndex(index + 1)}
                                 >
-                                    {currentIndex === index + 1 && (
-                                        <div className="w-3 h-3 bg-primary rounded-full items-center justify-center"></div>
-                                    )}
+                                  
                                 </div>
                             ))}
                         </div>
