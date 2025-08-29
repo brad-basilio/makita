@@ -101,8 +101,8 @@
       "_plus-Bot15Khs.js"
     ]
   },
-  "_CompareDetailsModal-BL_8N4Lg.js": {
-    "file": "assets/CompareDetailsModal-BL_8N4Lg.js",
+  "_CompareDetailsModal-CUZa0fKN.js": {
+    "file": "assets/CompareDetailsModal-CUZa0fKN.js",
     "name": "CompareDetailsModal",
     "imports": [
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
@@ -5439,7 +5439,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Filter.jsx": {
-    "file": "assets/Filter-DsROU5qJ.js",
+    "file": "assets/Filter-Bc2Q9Zh3.js",
     "name": "Filter",
     "src": "resources/js/Components/Tailwind/Filter.jsx",
     "isDynamicEntry": true,
@@ -5709,7 +5709,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Filters/FilterMakita.jsx": {
-    "file": "assets/FilterMakita-LsHrqyaq.js",
+    "file": "assets/FilterMakita-BA2XqLiD.js",
     "name": "FilterMakita",
     "src": "resources/js/Components/Tailwind/Filters/FilterMakita.jsx",
     "isDynamicEntry": true,
@@ -5719,7 +5719,7 @@
       "_ItemsRest-DGjwRLrz.js",
       "_NoResult-C9qZVva5.js",
       "_main-BvVILmTO.js",
-      "_CompareDetailsModal-BL_8N4Lg.js",
+      "_CompareDetailsModal-CUZa0fKN.js",
       "_filter-Ci9tsc_e.js",
       "_x-DBMwyD6F.js",
       "_chevron-down-DS-mdh9v.js",
@@ -6670,7 +6670,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Product.jsx": {
-    "file": "assets/Product-Bovd1uRD.js",
+    "file": "assets/Product-Bp3x64BT.js",
     "name": "Product",
     "src": "resources/js/Components/Tailwind/Product.jsx",
     "isDynamicEntry": true,
@@ -6693,7 +6693,7 @@
     ]
   },
   "resources/js/Components/Tailwind/ProductDetail.jsx": {
-    "file": "assets/ProductDetail-D3n3vMDz.js",
+    "file": "assets/ProductDetail-bx63USOU.js",
     "name": "ProductDetail",
     "src": "resources/js/Components/Tailwind/ProductDetail.jsx",
     "isDynamicEntry": true,
@@ -6833,7 +6833,7 @@
     ]
   },
   "resources/js/Components/Tailwind/ProductDetails/ProductDetailMakita.jsx": {
-    "file": "assets/ProductDetailMakita-BsSiexq-.js",
+    "file": "assets/ProductDetailMakita-CoN78Z4L.js",
     "name": "ProductDetailMakita",
     "src": "resources/js/Components/Tailwind/ProductDetails/ProductDetailMakita.jsx",
     "isDynamicEntry": true,
@@ -6880,7 +6880,7 @@
       "_arrow-right-DR00rP9v.js",
       "_grid-BZ4EKnFQ.js",
       "_adjustTextColor-FzLvY4Q1.js",
-      "_CompareDetailsModal-BL_8N4Lg.js",
+      "_CompareDetailsModal-CUZa0fKN.js",
       "_index-xsH4HHeE.js",
       "resources/js/Components/Tailwind/Products/Modals/CompareDetailsModal.jsx",
       "_preload-helper-BfFHrpNk.js",
@@ -7297,7 +7297,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Products/ProductMakita.jsx": {
-    "file": "assets/ProductMakita-eiVmIEn-.js",
+    "file": "assets/ProductMakita-JadC96KM.js",
     "name": "ProductMakita",
     "src": "resources/js/Components/Tailwind/Products/ProductMakita.jsx",
     "isDynamicEntry": true,
@@ -7309,7 +7309,7 @@
       "resources/js/Components/Tailwind/Categories/InfiniteCategory.jsx",
       "_index-BH53Isel.js",
       "_adjustTextColor-FzLvY4Q1.js",
-      "_CompareDetailsModal-BL_8N4Lg.js",
+      "_CompareDetailsModal-CUZa0fKN.js",
       "_chevron-left-B2s3ZsB7.js",
       "_chevron-right-Ckt5D2ka.js",
       "_index-yBjzXJbu.js",
@@ -8475,7 +8475,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-Nt8zVW4M.js",
+    "file": "assets/System-Bs8Entw0.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,
