@@ -200,17 +200,32 @@ const HeaderMakita = ({
   }, [])
 
   useEffect(() => {
+    const lastScroll = { current: 0 };
+    
     const handleScroll = () => {
-      if (window.scrollY > 0) {
-        setIsFixed(true)
-        setShowTopBar(true)
+      const current = window.scrollY;
+      
+      if (current > 60) {
+        // Mostrar TopBar cuando hay scroll significativo
+        setIsFixed(true);
+        setShowTopBar(true);
+      } else if (current === 0) {
+        // Ocultar completamente cuando está en la parte superior
+        setIsFixed(false);
+        setShowTopBar(false);
       } else {
-        setIsFixed(false)
-        setShowTopBar(false)
+        // Mantener estado fijo pero sin TopBar en scroll intermedio
+        setIsFixed(true);
+        setShowTopBar(false);
       }
+      
+      lastScroll.current = current;
     }
+    
     window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+    }
   }, [])
 
   // Prevent body scroll when mega menu is open
@@ -329,27 +344,13 @@ const HeaderMakita = ({
     <>
       <style>{scrollbarStyles}</style>
       <header
-        className={`w-full top-0 left-0 z-50 transition-all duration-300 ${isFixed ? "fixed" : "relative"} bg-primary`}
-        style={{ boxShadow: isFixed ? "0 2px 8px rgba(0,0,0,0.08)" : "none" }}
+        className={`w-full top-0 left-0 z-50 ${isFixed ? "fixed" : "relative"} bg-primary`}
+        style={{ 
+          boxShadow: isFixed ? "0 2px 8px rgba(0,0,0,0.08)" : "none",
+          minHeight: 'auto'
+        }}
       >
-    <AnimatePresence>
-      {showTopBar && (
-        <motion.div
-          initial={{ opacity: 0, y: -20, scale: 0.95 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: -20, scale: 0.95 }}
-          transition={{ 
-            duration: 0.3, 
-            ease: [0.25, 0.46, 0.45, 0.94],
-            type: "spring",
-            stiffness: 400,
-            damping: 25
-          }}
-        >
-          <TopBarSocials items={socials} data={{ background_color: "bg-secondary", color: "customtext-secondary" }} />
-        </motion.div>
-      )}
-    </AnimatePresence>
+  
 
         {/* Desktop Header */}
         <div className="hidden md:flex px-4 2xl:px-0 2xl:max-w-7xl items-center justify-between mx-auto py-3 font-paragraph text-base font-semibold text-white">
@@ -556,7 +557,7 @@ const HeaderMakita = ({
             }}
             className={`fixed left-0 right-0 z-40 w-full bg-secondary text-white shadow-2xl hidden md:block backdrop-blur-sm`}
             style={{
-              top: isFixed ? 64 : 120, // 64px when fixed, 120px otherwise
+              top: isFixed ? (showTopBar ? 64 : 64) : (showTopBar ? 160 : 120), // Adjust based on TopBar visibility
               boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.05)"
             }}
           >
