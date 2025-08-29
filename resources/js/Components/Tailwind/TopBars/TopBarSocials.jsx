@@ -32,7 +32,7 @@ const TopBarSocials = ({ items, data }) => {
       ref={sectionRef}
       className={`${data?.background_color ? data?.background_color : "bg-primary"} text-white font-paragraph font-medium transition-all duration-300 w-full z-50`}
     >
-      <div className="px-primary  mx-auto py-3 flex flex-wrap justify-center md:justify-between items-center gap-2 2xl:max-w-7xl 2xl:px-0">
+      <div className="px-primary  mx-auto py-2 flex flex-wrap justify-center md:justify-between items-center gap-2 2xl:max-w-7xl 2xl:px-0">
        
       
         <div className="flex items-center gap-2">
@@ -62,7 +62,7 @@ const TopBarSocials = ({ items, data }) => {
             )
           }
         </div>
-        <div className="hidden gap-2 lg:gap-4 lg:flex">
+        <div className="hidden !uppercase tracking-wider gap-2 lg:gap-4 lg:flex">
        
                                 <a
                                     href="/distribuidores-y-red-de-servicios"

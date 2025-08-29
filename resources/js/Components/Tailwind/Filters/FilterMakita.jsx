@@ -46,6 +46,29 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
 
     const [loading, setLoading] = useState(true);
 
+    // Obtener el nombre de la categoría desde la URL
+    const getCategoryName = () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const categoryParam = urlParams.get('category');
+
+        if (categoryParam) {
+            // Capitalizar la primera letra y reemplazar guiones con espacios
+            return categoryParam
+                .split('-')
+                .map(word => word.charAt(0).toLowerCase() + word.slice(1))
+                .join(' ');
+        }
+
+        return 'Catalogo';
+    };
+
+    const [categoryName, setCategoryName] = useState(getCategoryName());
+
+    // Actualizar el nombre de la categoría cuando cambie la URL
+    useEffect(() => {
+        setCategoryName(getCategoryName());
+    }, [window.location.search]);
+
     // Función para filtrar productos del lado del cliente
     const filterProducts = (products, filters) => {
         // Validar que products sea un array
@@ -557,100 +580,9 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
     return (
         <section className="py-12 bg-sections-color customtext-neutral-dark">
             <div className="mx-auto px-primary 2xl:px-0 2xl:max-w-7xl">
-                <div className="flex flex-col md:flex-row md:justify-between items-center mb-8 pb-4 border-b-2">
-                    <h2 className="text-[32px] md:text-4xl font-bold md:w-6/12">
-                        {data?.title}
-                    </h2>
-                    <div className="flex flex-col w-full items-center justify-end gap-4 md:flex-row md:w-5/12">
-                        <span className="block md:w-6/12 order-1 md:order-none">
-                            Productos encontrados:{" "}
-                            <strong>{Array.isArray(filteredProducts) ? filteredProducts.length : 0}</strong>
-                            {Array.isArray(allProducts) && allProducts.length > 0 && (
-                                <span className="text-gray-500 text-sm"> de {allProducts.length}</span>
-                            )}
-                        </span>
 
-                        {/* Mostrar filtros activos */}
-                        {(Object.keys(selectedFilters.specifications).length > 0 || Object.keys(getURLParams()).length > 0) && (
-                            <div className="flex flex-wrap gap-2 text-xs">
-                                {/* Filtros URL */}
-                                {Object.entries(getURLParams()).map(([paramName, paramValue]) => (
-                                    <span
-                                        key={`url-${paramName}-${paramValue}`}
-                                        className="bg-blue-100 text-blue-700 px-2 py-1 rounded-full flex items-center gap-1"
-                                    >
-                                        {paramName}: {paramValue}
-                                        <span className="text-xs opacity-70">(URL)</span>
-                                    </span>
-                                ))}
 
-                                {/* Filtros de especificaciones */}
-                                {Object.entries(selectedFilters.specifications).map(([specName, values]) =>
-                                    values.map(value => (
-                                        <span
-                                            key={`${specName}-${value}`}
-                                            className="bg-primary/10 text-primary px-2 py-1 rounded-full flex items-center gap-1"
-                                        >
-                                            {specName}: {value}
-                                            <button
-                                                onClick={() => handleFilterChange("specifications", value, specName)}
-                                                className="hover:bg-primary/20 rounded-full p-0.5"
-                                            >
-                                                <X className="h-3 w-3" />
-                                            </button>
-                                        </span>
-                                    ))
-                                )}
-                            </div>
-                        )}
-                        {/* Controles de vista */}
-                        <div className="flex items-center gap-2 mr-2">
-                            <button
-                                onClick={() => setViewType('grid')}
-                                className={`p-2 rounded-md ${viewType === 'grid'
-                                    ? 'bg-primary text-white'
-                                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
-                                title="Vista grilla"
-                            >
-                                <LayoutGrid className="h-5 w-5" />
-                            </button>
-                            <button
-                                onClick={() => setViewType('list')}
-                                className={`p-2 rounded-md ${viewType === 'list'
-                                    ? 'bg-primary text-white'
-                                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
-                                title="Vista lista"
-                            >
-                                <LucideListTodo className="h-5 w-5" />
-
-                            </button>
-                        </div>
-                        {/* Ordenación */}
-                        {/*<div className="w-full md:w-6/12">
-                            <SelectForm
-                                options={sortOptions}
-                                placeholder="Ordenar por"
-                                onChange={(value) => {
-                                    const [selector, order] = value.split(":");
-                                    const sort = [
-                                        {
-                                            selector: selector,
-                                            desc: order === "desc",
-                                        },
-                                    ];
-                                    setSelectedFilters((prev) => ({
-                                        ...prev,
-                                        sort,
-                                    }));
-                                }}
-                                labelKey="label"
-                                valueKey="value"
-                            />
-                        </div> */}
-                    </div>
-                </div>
-
-                <div className="relative flex flex-col lg:flex-row gap-4">
+                <div className="relative flex flex-col lg:flex-row gap-10">
                     <button
                         className="w-full flex lg:hidden gap-2 items-center"
                         onClick={() => setFiltersOpen(true)}
@@ -736,20 +668,20 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
                                                                 const isSelected = selectedFilters.specifications[specName]?.includes(value) || false;
                                                                 return (
                                                                     <label
-                                                        key={`${specName}-${value}`}
-                                                        className={`flex items-center gap-2 py-1.5 px-2  hover:bg-gray-50 cursor-pointer transition-colors ${isSelected ? '' : ''
-                                                            }`}
-                                                        onClick={() => handleFilterChange("specifications", value, specName)}
-                                                    >
-                                                        <div className="relative h-4 w-4">
-                                                            {isSelected ? (
-                                                                <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                    <path d="M6.83333 11L12.7083 5.125L11.5417 3.95833L6.83333 8.66667L4.45833 6.29167L3.29167 7.45833L6.83333 11ZM2.16667 15C1.70833 15 1.31597 14.8368 0.989583 14.5104C0.663194 14.184 0.5 13.7917 0.5 13.3333V1.66667C0.5 1.20833 0.663194 0.815972 0.989583 0.489583C1.31597 0.163194 1.70833 0 2.16667 0H13.8333C14.2917 0 14.684 0.163194 15.0104 0.489583C15.3368 0.815972 15.5 1.20833 15.5 1.66667V13.3333C15.5 13.7917 15.3368 14.184 15.0104 14.5104C14.684 14.8368 14.2917 15 13.8333 15H2.16667ZM2.16667 13.3333H13.8333V1.66667H2.16667V13.3333Z" fill="#219FB9"/>
-                                                                </svg>
-                                                            ) : (
-                                                                <div className="h-4 w-4 border-2 border-neutral-dark bg-white rounded"></div>
-                                                            )}
-                                                        </div>
+                                                                        key={`${specName}-${value}`}
+                                                                        className={`flex items-center gap-2 py-1.5 px-2  hover:bg-gray-50 cursor-pointer transition-colors ${isSelected ? '' : ''
+                                                                            }`}
+                                                                        onClick={() => handleFilterChange("specifications", value, specName)}
+                                                                    >
+                                                                        <div className="relative h-4 w-4">
+                                                                            {isSelected ? (
+                                                                                <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                    <path d="M6.83333 11L12.7083 5.125L11.5417 3.95833L6.83333 8.66667L4.45833 6.29167L3.29167 7.45833L6.83333 11ZM2.16667 15C1.70833 15 1.31597 14.8368 0.989583 14.5104C0.663194 14.184 0.5 13.7917 0.5 13.3333V1.66667C0.5 1.20833 0.663194 0.815972 0.989583 0.489583C1.31597 0.163194 1.70833 0 2.16667 0H13.8333C14.2917 0 14.684 0.163194 15.0104 0.489583C15.3368 0.815972 15.5 1.20833 15.5 1.66667V13.3333C15.5 13.7917 15.3368 14.184 15.0104 14.5104C14.684 14.8368 14.2917 15 13.8333 15H2.16667ZM2.16667 13.3333H13.8333V1.66667H2.16667V13.3333Z" fill="#219FB9" />
+                                                                                </svg>
+                                                                            ) : (
+                                                                                <div className="h-4 w-4 border-2 border-neutral-dark bg-white rounded"></div>
+                                                                            )}
+                                                                        </div>
                                                                         <span className={`text-sm font-medium ${isSelected ? 'text-[#262626] font-bold' : 'text-[#262626]'}`}>
                                                                             {value}
                                                                         </span>
@@ -788,6 +720,46 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
                     </div>
 
                     <div className="w-full lg:w-9/12 py-4">
+                        <div className="flex flex-col md:flex-row md:justify-between items-center mb-8 pb-4 border-b-2">
+                            <h2 className="text-[32px] md:text-4xl font-bold md:w-6/12">
+                                Categoria {categoryName}
+                            </h2>
+                            <div className="flex flex-col w-full items-center justify-end gap-4 md:flex-row md:w-5/12">
+
+
+
+                                {/* Controles de vista */}
+                                <div className="flex items-center gap-2 mr-2">
+                                    <button
+                                        onClick={() => setViewType('grid')}
+                                        className={`p-2 rounded-md ${viewType === 'grid'
+                                            ? 'bg-white fill-[#219FB9]'
+                                            : 'bg-white fill-[#262626] '}`}
+                                        title="Vista grilla"
+                                    >
+                                        <svg width="18" height="19" viewBox="0 0 18 19" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M0 8.5V0.5H8V8.5H0ZM0 18.5V10.5H8V18.5H0ZM10 8.5V0.5H18V8.5H10ZM10 18.5V10.5H18V18.5H10ZM2 6.5H6V2.5H2V6.5ZM12 6.5H16V2.5H12V6.5ZM12 16.5H16V12.5H12V16.5ZM2 16.5H6V12.5H2V16.5Z" />
+                                        </svg>
+
+
+                                    </button>
+                                    <button
+                                        onClick={() => setViewType('list')}
+                                        className={`p-2 rounded-md ${viewType === 'list'
+                                            ? 'bg-white fill-[#219FB9]'
+                                            : 'bg-white fill-[#262626] '}`}
+                                        title="Vista lista"
+                                    >
+                                        <svg width="18" height="19" viewBox="0 0 18 19" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M2 14.5C1.45 14.5 0.979167 14.3042 0.5875 13.9125C0.195833 13.5208 0 13.05 0 12.5V6.5C0 5.95 0.195833 5.47917 0.5875 5.0875C0.979167 4.69583 1.45 4.5 2 4.5H16C16.55 4.5 17.0208 4.69583 17.4125 5.0875C17.8042 5.47917 18 5.95 18 6.5V12.5C18 13.05 17.8042 13.5208 17.4125 13.9125C17.0208 14.3042 16.55 14.5 16 14.5H2ZM2 12.5H16V6.5H2V12.5ZM0 2.5V0.5H18V2.5H0ZM0 18.5V16.5H18V18.5H0Z" />
+                                        </svg>
+
+
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
                         {/* Productos */}
                         {loading ? (
                             <div className="flex items-center flex-wrap gap-y-8 transition-all duration-300 ease-in-out">

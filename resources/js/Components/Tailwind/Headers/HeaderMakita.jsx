@@ -372,7 +372,7 @@ const HeaderMakita = ({
             {categories.map((cat) => (
               <div key={cat.id} className="relative">
                 <button
-                  className={`font-medium px-4 py-2 text-base uppercase tracking-wide hover:text-[#262626] transition-colors duration-500 ${activeCategory?.id === cat.id && showMegaMenu ? "text-[#262626]" : ""}`}
+                  className={`font-medium tracking-wider px-4 py-2 text-lg uppercase  hover:text-[#262626] transition-colors duration-500 ${activeCategory?.id === cat.id && showMegaMenu ? "text-[#262626]" : ""}`}
                   onClick={() => {
                     setShowSearch(false)
                     if (activeCategory?.id === cat.id && showMegaMenu) {
@@ -398,8 +398,8 @@ const HeaderMakita = ({
               <button onClick={() => {
                 setShowMegaMenu(false)
                 setActiveCategory(null); setShowSearch(!showSearch)
-              }} className="p-2 bg-secondary hover:bg-secondary rounded transition-colors">
-                <Search size={20} />
+              }} className="p-3 bg-secondary hover:bg-secondary rounded transition-colors">
+                <Search size={28} />
               </button>
             </div>
 
