@@ -101,8 +101,8 @@
       "_plus-Bot15Khs.js"
     ]
   },
-  "_CompareDetailsModal-CUZa0fKN.js": {
-    "file": "assets/CompareDetailsModal-CUZa0fKN.js",
+  "_CompareDetailsModal-Be6ZFArj.js": {
+    "file": "assets/CompareDetailsModal-Be6ZFArj.js",
     "name": "CompareDetailsModal",
     "imports": [
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
@@ -113,8 +113,7 @@
       "_index-xsH4HHeE.js",
       "resources/js/Components/Tailwind/Products/Modals/CompareDetailsModal.jsx",
       "node_modules/html2canvas/dist/html2canvas.esm.js",
-      "_loader-circle-CrvBvIt1.js",
-      "_download-Dh5rRDOT.js"
+      "_loader-circle-CrvBvIt1.js"
     ]
   },
   "_CourseCard-CbDLljRi.js": {
@@ -669,13 +668,6 @@
       "_createLucideIcon-Cy5Ya80P.js"
     ]
   },
-  "_download-Dh5rRDOT.js": {
-    "file": "assets/download-Dh5rRDOT.js",
-    "name": "download",
-    "imports": [
-      "_createLucideIcon-Cy5Ya80P.js"
-    ]
-  },
   "_em-DRiSFGEW.js": {
     "file": "assets/em-DRiSFGEW.js",
     "name": "em",
@@ -780,8 +772,8 @@
       "_index-Chjiymov.js"
     ]
   },
-  "_index-CE-W0Gbp.js": {
-    "file": "assets/index-CE-W0Gbp.js",
+  "_index-CFkglT7d.js": {
+    "file": "assets/index-CFkglT7d.js",
     "name": "index",
     "imports": [
       "_createLucideIcon-Cy5Ya80P.js",
@@ -3726,7 +3718,7 @@
     ]
   },
   "resources/js/Components/Tailwind/BananaLab.jsx": {
-    "file": "assets/BananaLab-Cn9HWXc5.js",
+    "file": "assets/BananaLab-3z9iVaNh.js",
     "name": "BananaLab",
     "src": "resources/js/Components/Tailwind/BananaLab.jsx",
     "isDynamicEntry": true,
@@ -5439,7 +5431,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Filter.jsx": {
-    "file": "assets/Filter-Bc2Q9Zh3.js",
+    "file": "assets/Filter-DB-WN9zU.js",
     "name": "Filter",
     "src": "resources/js/Components/Tailwind/Filter.jsx",
     "isDynamicEntry": true,
@@ -5709,7 +5701,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Filters/FilterMakita.jsx": {
-    "file": "assets/FilterMakita-BA2XqLiD.js",
+    "file": "assets/FilterMakita-B4wbB7aa.js",
     "name": "FilterMakita",
     "src": "resources/js/Components/Tailwind/Filters/FilterMakita.jsx",
     "isDynamicEntry": true,
@@ -5719,7 +5711,7 @@
       "_ItemsRest-DGjwRLrz.js",
       "_NoResult-C9qZVva5.js",
       "_main-BvVILmTO.js",
-      "_CompareDetailsModal-CUZa0fKN.js",
+      "_CompareDetailsModal-Be6ZFArj.js",
       "_filter-Ci9tsc_e.js",
       "_x-DBMwyD6F.js",
       "_chevron-down-DS-mdh9v.js",
@@ -5737,8 +5729,7 @@
       "_preload-helper-BfFHrpNk.js",
       "_typeof-QjJsDpFa.js",
       "node_modules/html2canvas/dist/html2canvas.esm.js",
-      "_loader-circle-CrvBvIt1.js",
-      "_download-Dh5rRDOT.js"
+      "_loader-circle-CrvBvIt1.js"
     ]
   },
   "resources/js/Components/Tailwind/Filters/FilterSalaFabulosa.jsx": {
@@ -6670,7 +6661,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Product.jsx": {
-    "file": "assets/Product-Bp3x64BT.js",
+    "file": "assets/Product-CHEIvKLS.js",
     "name": "Product",
     "src": "resources/js/Components/Tailwind/Product.jsx",
     "isDynamicEntry": true,
@@ -6693,7 +6684,7 @@
     ]
   },
   "resources/js/Components/Tailwind/ProductDetail.jsx": {
-    "file": "assets/ProductDetail-bx63USOU.js",
+    "file": "assets/ProductDetail-CFWGc_Gv.js",
     "name": "ProductDetail",
     "src": "resources/js/Components/Tailwind/ProductDetail.jsx",
     "isDynamicEntry": true,
@@ -6833,7 +6824,7 @@
     ]
   },
   "resources/js/Components/Tailwind/ProductDetails/ProductDetailMakita.jsx": {
-    "file": "assets/ProductDetailMakita-CoN78Z4L.js",
+    "file": "assets/ProductDetailMakita-BGU4KY-J.js",
     "name": "ProductDetailMakita",
     "src": "resources/js/Components/Tailwind/ProductDetails/ProductDetailMakita.jsx",
     "isDynamicEntry": true,
@@ -6880,14 +6871,13 @@
       "_arrow-right-DR00rP9v.js",
       "_grid-BZ4EKnFQ.js",
       "_adjustTextColor-FzLvY4Q1.js",
-      "_CompareDetailsModal-CUZa0fKN.js",
+      "_CompareDetailsModal-Be6ZFArj.js",
       "_index-xsH4HHeE.js",
       "resources/js/Components/Tailwind/Products/Modals/CompareDetailsModal.jsx",
       "_preload-helper-BfFHrpNk.js",
       "_typeof-QjJsDpFa.js",
       "node_modules/html2canvas/dist/html2canvas.esm.js",
-      "_loader-circle-CrvBvIt1.js",
-      "_download-Dh5rRDOT.js"
+      "_loader-circle-CrvBvIt1.js"
     ],
     "css": [
       "swiper.css",
@@ -7297,7 +7287,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Products/ProductMakita.jsx": {
-    "file": "assets/ProductMakita-JadC96KM.js",
+    "file": "assets/ProductMakita-CVXL1jFU.js",
     "name": "ProductMakita",
     "src": "resources/js/Components/Tailwind/Products/ProductMakita.jsx",
     "isDynamicEntry": true,
@@ -7309,7 +7299,7 @@
       "resources/js/Components/Tailwind/Categories/InfiniteCategory.jsx",
       "_index-BH53Isel.js",
       "_adjustTextColor-FzLvY4Q1.js",
-      "_CompareDetailsModal-CUZa0fKN.js",
+      "_CompareDetailsModal-Be6ZFArj.js",
       "_chevron-left-B2s3ZsB7.js",
       "_chevron-right-Ckt5D2ka.js",
       "_index-yBjzXJbu.js",
@@ -7323,8 +7313,7 @@
       "_preload-helper-BfFHrpNk.js",
       "_typeof-QjJsDpFa.js",
       "node_modules/html2canvas/dist/html2canvas.esm.js",
-      "_loader-circle-CrvBvIt1.js",
-      "_download-Dh5rRDOT.js"
+      "_loader-circle-CrvBvIt1.js"
     ],
     "css": [
       "swiper.css",
@@ -8475,7 +8464,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-Bs8Entw0.js",
+    "file": "assets/System-DaiNDdKJ.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,

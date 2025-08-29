@@ -79,7 +79,7 @@ const CompareDetailsModal = ({ isOpen, onClose, products, onRemoveProduct }) => 
             font-weight: 500;
             box-sizing: border-box;
           `
-          
+
           // Reemplazar el botón original con el nuevo enlace
           button.parentNode.replaceChild(newLink, button)
         }
@@ -93,14 +93,14 @@ const CompareDetailsModal = ({ isOpen, onClose, products, onRemoveProduct }) => 
       specificationContainers.forEach(container => {
         const specs = container.querySelectorAll('div[class*="p-3"]')
         const maxSpecsForPDF = Math.min(5, specs.length) // Máximo 5 especificaciones para PDF
-        
+
         // Remover especificaciones extras solo en el clon del PDF
         for (let i = maxSpecsForPDF; i < specs.length; i++) {
           if (specs[i]) {
             specs[i].remove()
           }
         }
-        
+
         // Si se removieron especificaciones, añadir un indicador
         if (specs.length > maxSpecsForPDF) {
           const moreSpecsDiv = document.createElement('div')
@@ -170,7 +170,7 @@ const CompareDetailsModal = ({ isOpen, onClose, products, onRemoveProduct }) => 
       const imgWidth = pageWidth - 20 // 10mm de margen a cada lado
       const imgHeight = (canvas.height * imgWidth) / canvas.width      // Dividir en múltiples páginas si es necesario
       const maxPageHeight = pageHeight - 20 // Altura disponible descontando márgenes (10mm arriba y abajo)
-        if (imgHeight <= maxPageHeight) {
+      if (imgHeight <= maxPageHeight) {
         // Si cabe en una sola página
         pdf.addImage(
           imgData,
@@ -182,14 +182,14 @@ const CompareDetailsModal = ({ isOpen, onClose, products, onRemoveProduct }) => 
           undefined,
           "FAST"
         )
-          // Añadir enlaces clickeables
+        // Añadir enlaces clickeables
         if (productLinks.length > 0) {
           productLinks.forEach((linkInfo, linkIndex) => {
             // Calcular posición aproximada del botón en mm con mejor espaciado
             const buttonY = 80 + (linkIndex * 90) // Posición Y estimada del botón en mm
             const buttonHeight = 15 // Altura estimada del botón en mm (más grande)
             const buttonWidth = imgWidth - 30 // Ancho del botón con márgenes
-            
+
             pdf.link(
               20, // X del enlace (centrado)
               buttonY, // Y del enlace  
@@ -212,15 +212,15 @@ const CompareDetailsModal = ({ isOpen, onClose, products, onRemoveProduct }) => 
 
           // Calcular la altura de contenido para esta página
           const currentPageHeight = Math.min(remainingHeight, maxPageHeight)
-          
+
           // Crear un canvas temporal para esta sección
           const pageCanvas = document.createElement('canvas')
           const pageCtx = pageCanvas.getContext('2d')
-          
+
           // Configurar el canvas temporal con la altura de esta página
           pageCanvas.width = canvas.width
           pageCanvas.height = (canvas.height * currentPageHeight) / imgHeight
-          
+
           // Dibujar la sección correspondiente del canvas original
           pageCtx.drawImage(
             canvas,
@@ -229,7 +229,7 @@ const CompareDetailsModal = ({ isOpen, onClose, products, onRemoveProduct }) => 
             0, 0, // Destino en el canvas temporal
             pageCanvas.width, pageCanvas.height // Tamaño en el canvas temporal
           )
-            // Convertir a imagen y añadir al PDF
+          // Convertir a imagen y añadir al PDF
           const pageImgData = pageCanvas.toDataURL("image/jpeg", 0.8)
           pdf.addImage(
             pageImgData,
@@ -247,7 +247,7 @@ const CompareDetailsModal = ({ isOpen, onClose, products, onRemoveProduct }) => 
               const buttonY = 80 + (linkIndex * 90) // Posición Y estimada del botón
               const buttonHeight = 15 // Altura estimada del botón (más grande)
               const buttonWidth = imgWidth - 30 // Ancho del botón con márgenes
-              
+
               // Solo añadir el enlace si está visible en esta página
               if (buttonY < maxPageHeight) {
                 pdf.link(
@@ -279,134 +279,137 @@ const CompareDetailsModal = ({ isOpen, onClose, products, onRemoveProduct }) => 
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm overflow-y-auto py-10">
-      <div className="bg-white  rounded-xl w-full max-w-7xl pb-8   relative max-h-[90vh] overflow-y-auto scrollbar-none shadow-2xl border border-gray-200 dark:border-gray-800">
-        {/* Cabecera con título y botones */}
-        <div className="sticky pt-8 top-0 z-20 bg-white  pb-4 mb-6 rounded-t-xl shadow-md px-4 md:px-8" style={{ boxShadow: '0 2px 8px 0 rgba(0,0,0,0.04)' }}>
-          <div className="flex items-center justify-between pt-2">
-            <h2 className="text-2xl md:text-3xl font-bold customtext-neutral-dark ">Comparar productos</h2>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={generatePDF}
-                disabled={loading || exporting || details.length === 0}
-                className="gap-2 print-hide flex items-center border border-gray-300 bg-primary brightness-125 text-white px-4 py-2 rounded-md  shadow-sm hover:brightness-100 disabled:opacity-60 disabled:cursor-not-allowed"
-                type="button"
-              >
-                {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
-                <span>{exporting ? "Generando PDF..." : "Descargar PDF"}</span>
-              </button>
-              <button
-                onClick={onClose}
-                className="print-hide flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 text-gray-700"
-                type="button"
-                aria-label="Cerrar"
-              >
-                <X className="h-5 w-5" />
-              </button>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm overflow-y-auto ">
+      <div className="relative  overflow-hidden pt-10 bg-white">
+        <button
+          onClick={onClose}
+          className="print-hide absolute right-12 top-4  flex items-center justify-center w-10 h-10 rounded-md z-[999] bg-primary  text-white hover:bg-[#219FB9]"
+          type="button"
+          aria-label="Cerrar"
+        >
+          <X className="h-5 w-5" />
+        </button>
+        <div className="bg-white   w-full max-w-7xl pb-8   relative max-h-[90vh] overflow-y-auto scrollbar-none shadow-2xl ">
+          {/* Cabecera con título y botones */}
+          <div className="sticky pt-8 top-0 z-20 bg-white  pb-4 mb-6 rounded-t-xl shadow-md px-4 md:px-8" style={{ boxShadow: '0 2px 8px 0 rgba(0,0,0,0.04)' }}>
+            <div className="flex items-center justify-between pt-2">
+              <h2 className="text-2xl md:text-3xl font-bold text-[#262626] ">Comparar productos</h2>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={generatePDF}
+                  disabled={loading || exporting || details.length === 0}
+                  className="gap-2 print-hide flex tracking-wider items-center border border-gray-300 bg-[#219FB9]  hover:bg-primary text-white px-4 py-3 rounded-md  shadow-sm hover:brightness-100 disabled:opacity-60 disabled:cursor-not-allowed"
+                  type="button"
+                >
+                  {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : ""}
+                  <span>{exporting ? "Generando PDF..." : "Descargar PDF"}</span>
+                </button>
+
+              </div>
             </div>
+            <p className="text-sm text-[#262626] mt-1">
+              Puede añadir un máximo de cuatro artículos para comparar
+            </p>
+
           </div>
-          <p className="text-sm customtext-neutral-dark dark:text-gray-400 mt-1">
-            Puede añadir un máximo de cuatro artículos para comparar
-          </p>
-          <hr className="mt-4 border-gray-200 dark:border-gray-800" />
-        </div>
 
-        {/* Contenido principal para comparación y PDF */}
-        <div ref={contentRef} className="bg-white  rounded-lg  px-8">
-          {loading ? (
-            <div className="flex flex-col items-center justify-center py-16">
-              <Loader2 className="h-8 w-8 animate-spin text-primary mb-4" />
-              <p className="customtext-neutral-dark ">Cargando detalles de productos...</p>
-            </div>
-          ) : details.length === 0 ? (
-            <div className="text-center py-16 bg-gray-50  rounded-lg">
-              <p className="customtext-neutral-dark text-lg">No hay productos para comparar.</p>
-              <p className="customtext-neutral-dark text-sm mt-2">
-                Añada productos para iniciar la comparación.
-              </p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {details.map((product) => (
-                <div key={product.id} className="overflow-hidden h-full flex flex-col bg-white  rounded-lg shadow border border-gray-200 dark:border-gray-800">
-                  <div className="relative">
-                    <div className="bg-gray-100  aspect-square flex items-center justify-center overflow-hidden">
-                      <img
-                        src={`/storage/images/item/${product.image}`}
-                        alt={product.name}
-                        className="w-full h-full object-contain p-4"
-                      />
+          {/* Contenido principal para comparación y PDF */}
+          <div ref={contentRef} className="bg-white  rounded-lg  px-8">
+            {loading ? (
+              <div className="flex flex-col items-center justify-center py-16">
+                <Loader2 className="h-8 w-8 animate-spin text-primary mb-4" />
+                <p className="customtext-neutral-dark ">Cargando detalles de productos...</p>
+              </div>
+            ) : details.length === 0 ? (
+              <div className="text-center py-16 bg-gray-50  rounded-lg">
+                <p className="customtext-neutral-dark text-lg">No hay productos para comparar.</p>
+                <p className="customtext-neutral-dark text-sm mt-2">
+                  Añada productos para iniciar la comparación.
+                </p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {details.map((product) => (
+                  <div key={product.id} className="overflow-hidden h-full flex flex-col bg-white  rounded-lg shadow border border-gray-200 dark:border-gray-800">
+                    <div className="relative">
+                      <div className="bg-gray-100  aspect-square flex items-center justify-center overflow-hidden">
+                        <img
+                          src={`/storage/images/item/${product.image}`}
+                          alt={product.name}
+                          className="w-full h-full object-contain p-4"
+                        />
+                      </div>
+                      <button
+                        onClick={() => onRemoveProduct(product.id)}
+                        className="absolute top-2 right-2 bg-white  text-gray-700 dark:text-gray-200 rounded-full w-8 h-8 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-700 shadow-md print-hide"
+                      >
+                        <X size={16} />
+                      </button>
                     </div>
-                    <button
-                      onClick={() => onRemoveProduct(product.id)}
-                      className="absolute top-2 right-2 bg-white  text-gray-700 dark:text-gray-200 rounded-full w-8 h-8 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-700 shadow-md print-hide"
-                    >
-                      <X size={16} />
-                    </button>
-                  </div>
 
-                  <div className="flex-grow flex flex-col p-4">
-                    <span className="inline-block self-start mb-2 px-2 py-1  customtext-primary rounded text-xs font-semibold bg-primary/10">
-                      {product.code}
-                    </span>
+                    <div className="flex-grow flex flex-col p-4">
+                      <span className="inline-block self-start mb-2 px-2 py-1  customtext-primary rounded text-xs font-semibold bg-primary/10">
+                        {product.code}
+                      </span>
 
-                    <h3 className="font-bold text-lg mb-2 line-clamp-2 customtext-neutral-dark dark:text-white">
-                      {product.name}
-                    </h3>
+                      <h3 className="font-bold text-lg mb-2 line-clamp-2 customtext-neutral-dark dark:text-white">
+                        {product.name}
+                      </h3>
 
-                    <div
-                      className="prose prose-sm dark:prose-invert line-clamp-2 customtext-neutral-dark  mb-4"
-                      dangerouslySetInnerHTML={{ __html: product?.description }}
-                    />
+                      <div
+                        className="prose prose-sm dark:prose-invert line-clamp-2 customtext-neutral-dark  mb-4"
+                        dangerouslySetInnerHTML={{ __html: product?.description }}
+                      />
 
-                    <a
-                      href={`/producto/${product.slug}`}
-                      className="mb-4 w-full block text-center bg-primary hover:bg-primary/90 text-white py-2 rounded-md font-medium text-sm transition-colors print-hide"
-                    >
-                      Ver detalles
-                    </a>
+                      <a
+                        href={`/producto/${product.slug}`}
+                        className="mb-4 w-full block text-center bg-primary hover:bg-primary/90 text-white py-2 rounded-md font-medium text-sm transition-colors print-hide"
+                      >
+                        Ver detalles
+                      </a>
 
-                    <hr className="my-4 border-gray-200 dark:border-gray-800" />
+                      <hr className="my-4 border-gray-200 dark:border-gray-800" />
 
-                    <div className="w-full">
-                      <h4 className="font-semibold text-sm mb-3 customtext-neutral-dark dark:text-white">
-                        Especificaciones técnicas
-                      </h4>
+                      <div className="w-full">
+                        <h4 className="font-semibold text-sm mb-3 customtext-neutral-dark dark:text-white">
+                          Especificaciones técnicas
+                        </h4>
 
-                      <div className="space-y-2">
-                        {(product.specifications || []).slice(0, 10).length > 0 ? (
-                          (product.specifications || []).slice(0, 10).map((spec, idx2) => (
-                            <div
-                              key={spec.key || spec.name || idx2}
-                              className={`p-3 rounded-md ${idx2 % 2 === 0 ? "bg-gray-50 " : "bg-white  border border-gray-100 dark:border-gray-800"}`}
-                            >
-                              <p className="font-medium text-sm customtext-neutral-dark dark:text-white">
-                                {spec.key || spec.name}
-                              </p>
-                              <p className="text-sm customtext-neutral-dark dark:text-gray-400 mt-1">{spec.value}</p>
-                            </div>
-                          ))
-                        ) : (
-                          <p className="text-center customtext-neutral-dark dark:text-gray-400 py-4">Sin especificaciones</p>
-                        )}
+                        <div className="space-y-2">
+                          {(product.specifications || []).slice(0, 10).length > 0 ? (
+                            (product.specifications || []).slice(0, 10).map((spec, idx2) => (
+                              <div
+                                key={spec.key || spec.name || idx2}
+                                className={`p-3 rounded-md ${idx2 % 2 === 0 ? "bg-gray-50 " : "bg-white  border border-gray-100 dark:border-gray-800"}`}
+                              >
+                                <p className="font-medium text-sm customtext-neutral-dark dark:text-white">
+                                  {spec.key || spec.name}
+                                </p>
+                                <p className="text-sm customtext-neutral-dark dark:text-gray-400 mt-1">{spec.value}</p>
+                              </div>
+                            ))
+                          ) : (
+                            <p className="text-center customtext-neutral-dark dark:text-gray-400 py-4">Sin especificaciones</p>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+                ))}
+              </div>
+            )}
+          </div>
 
-        {/* Botón cerrar abajo */}
-        <div className="flex justify-end mt-8 print-hide mr-8">
-          <button
-            onClick={onClose}
-            className="bg-primary  text-white px-8 py-3 rounded text-lg font-bold transition-colors"
-            type="button"
-          >
-            Cerrar
-          </button>
+          {/* Botón cerrar abajo */}
+          <div className="flex justify-end mt-8 print-hide mr-8">
+            <button
+              onClick={onClose}
+              className="bg-primary  text-white px-8 py-3 rounded text-lg font-bold transition-colors"
+              type="button"
+            >
+              Cerrar
+            </button>
+          </div>
         </div>
       </div>
     </div>
