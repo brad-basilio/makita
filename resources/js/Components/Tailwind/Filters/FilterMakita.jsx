@@ -139,11 +139,47 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
             // Validar que product existe
             if (!product) return;
 
-            // Procesar campos directos del producto que pueden ser filtros
+            console.log(`\n=== PROCESANDO PRODUCTO: ${product.name} ===`);
+            console.log('Especificaciones del producto:', product.specifications);
+
+            // PRIORIDAD 1: Procesar especificaciones técnicas del producto (ItemSpecification)
+            if (product.specifications && Array.isArray(product.specifications)) {
+                console.log(`Procesando ${product.specifications.length} especificaciones para producto ${product.name}`);
+                
+                product.specifications.forEach((spec, index) => {
+                    console.log(`Especificación ${index + 1}:`, {
+                        type: spec.type,
+                        title: spec.title,
+                        description: spec.description
+                    });
+                    
+                    // Solo procesar especificaciones de tipo 'technical'
+                    if (spec.type === 'technical' && spec.title && spec.description) {
+                        const title = spec.title.trim();
+                        const description = spec.description.trim();
+
+                        console.log(`✅ Especificación técnica válida: "${title}" = "${description}"`);
+
+                        if (title !== '' && description !== '' && description !== 'null') {
+                            if (!specsMap[title]) {
+                                specsMap[title] = new Set();
+                                console.log(`📝 Creando nueva categoría de filtro: "${title}"`);
+                            }
+                            specsMap[title].add(description);
+                            console.log(`➕ Agregando valor "${description}" a filtro "${title}"`);
+                        }
+                    } else {
+                        console.log(`❌ Especificación omitida - Tipo: ${spec.type}, Título: ${spec.title}, Descripción: ${spec.description}`);
+                    }
+                });
+            } else {
+                console.log(`⚠️ Producto ${product.name} no tiene especificaciones o no es un array:`, product.specifications);
+            }
+
+            // PRIORIDAD 2: Procesar campos directos del producto como filtros secundarios
             const directFields = {
                 'Color': product.color,
                 'Textura': product.texture,
-                'SKU': product.sku,
                 'Marca': product.brand?.name,
                 'Categoría': product.category?.name,
                 'Subcategoría': product.subcategory?.name,
@@ -152,7 +188,7 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
                 'Familia': product.family?.name,
             };
 
-            // Agregar campos directos
+            // Agregar campos directos solo si no hay suficientes especificaciones técnicas
             Object.entries(directFields).forEach(([fieldName, fieldValue]) => {
                 if (fieldValue && fieldValue.toString().trim() !== '' && fieldValue.toString().trim() !== 'null') {
                     if (!specsMap[fieldName]) {
@@ -162,31 +198,9 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
                 }
             });
 
-            // Procesar especificaciones técnicas del producto (ItemSpecification)
-            if (product.specifications && Array.isArray(product.specifications)) {
-                console.log(`Procesando especificaciones para producto ${product.name}:`, product.specifications);
-                product.specifications.forEach(spec => {
-                    // Solo procesar especificaciones de tipo 'technical'
-                    if (spec.type === 'technical' && spec.title && spec.description) {
-                        const title = spec.title.trim();
-                        const description = spec.description.trim();
-
-                        console.log(`Especificación técnica encontrada: ${title} = ${description}`);
-
-                        if (title !== '' && description !== '' && description !== 'null') {
-                            if (!specsMap[title]) {
-                                specsMap[title] = new Set();
-                            }
-                            specsMap[title].add(description);
-                        }
-                    }
-                });
-            } else {
-                console.log(`Producto ${product.name} no tiene especificaciones o no es un array:`, product.specifications);
-            }
-
-            // Si el producto tiene un campo specifications como objeto, también procesarlo
+            // PRIORIDAD 3: Si el producto tiene un campo specifications como objeto, también procesarlo
             if (product.specifications && typeof product.specifications === 'object' && !Array.isArray(product.specifications)) {
+                console.log('Procesando especificaciones como objeto:', product.specifications);
                 Object.entries(product.specifications).forEach(([specName, specValue]) => {
                     if (specValue && specValue.toString().trim() !== '' && specValue.toString().trim() !== 'null') {
                         if (!specsMap[specName]) {
@@ -197,7 +211,7 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
                 });
             }
 
-            // Extraer especificaciones del nombre del producto (común en productos técnicos)
+            // PRIORIDAD 4: Extraer especificaciones del nombre del producto (común en productos técnicos)
             if (product.name) {
                 const nameSpecs = extractSpecsFromName(product.name);
                 Object.entries(nameSpecs).forEach(([specName, specValue]) => {
@@ -226,7 +240,11 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
             }
         });
 
-        console.log('Especificaciones procesadas:', processedSpecs);
+        console.log('\n🎯 RESUMEN DE ESPECIFICACIONES PROCESADAS:');
+        Object.entries(processedSpecs).forEach(([specName, values]) => {
+            console.log(`📋 ${specName}: ${values.length} valores únicos`, values);
+        });
+        
         return processedSpecs;
     };
 
@@ -327,6 +345,7 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
                 take: 10000, // Número grande para obtener todos los productos
                 skip: 0,
                 requireTotalCount: false,
+                with: 'specifications,category,brand,collection,platform,family', // Cargar relaciones necesarias
             };
 
             console.log('Obteniendo todos los productos...');
@@ -728,7 +747,7 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
                                                     }
                                                 });
 
-                                                return Object.entries(categorizedSpecs).map(([category, categorySpecs]) => {
+                                                const renderCategories = Object.entries(categorizedSpecs).map(([category, categorySpecs]) => {
                                                     if (Object.keys(categorySpecs).length === 0) return null;
 
                                                     return (
@@ -813,8 +832,10 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
                                                             </div>
                                                         </div>
                                                     );
-                                                }).filter(Boolean)
-                                            })}
+                                                }).filter(Boolean);
+                                                
+                                                return renderCategories;
+                                            })()}
                                             </div>
                                     )}
                                 </div>
