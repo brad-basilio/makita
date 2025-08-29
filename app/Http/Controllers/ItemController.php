@@ -93,7 +93,7 @@ class ItemController extends BasicController
         //  dump($request->all());
         // dump('Estamos aqui');
         $query = $model::select(['items.*'])
-            ->with(['collection', 'category', 'subcategory', 'brand', 'tags'])
+            ->with(['collection', 'category', 'subcategory', 'brand', 'tags', 'specifications', 'platform', 'family'])
             ->leftJoin('collections AS collection', 'collection.id', 'items.collection_id')
             ->leftJoin('categories AS category', 'category.id', 'items.category_id')
             ->leftJoin('sub_categories AS subcategory', 'subcategory.id', 'items.subcategory_id')

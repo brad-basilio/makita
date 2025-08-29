@@ -53,87 +53,92 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
             console.log('filterProducts: products no es un array:', products);
             return [];
         }
-        
+
         return products.filter(product => {
             // Validar que el producto existe
             if (!product) return false;
-            
+
             // Filtro por nombre/búsqueda
             if (filters.name && filters.name.trim() !== '') {
                 const searchTerm = filters.name.toLowerCase();
                 const productName = (product.name || '').toLowerCase();
                 const productDescription = (product.description || '').toLowerCase();
                 const productSummary = (product.summary || '').toLowerCase();
-                
-                if (!productName.includes(searchTerm) && 
-                    !productDescription.includes(searchTerm) && 
+
+                if (!productName.includes(searchTerm) &&
+                    !productDescription.includes(searchTerm) &&
                     !productSummary.includes(searchTerm)) {
                     return false;
                 }
             }
-            
-            // Filtros por especificaciones
+
+            // Filtros por especificaciones técnicas
             if (filters.specifications && Object.keys(filters.specifications).length > 0) {
                 for (const [specName, selectedValues] of Object.entries(filters.specifications)) {
                     if (selectedValues.length > 0) {
                         let hasMatch = false;
-                        
-                        // Verificar según el tipo de especificación
-                        switch(specName) {
-                            case 'Color':
-                                hasMatch = selectedValues.includes(product.color);
-                                break;
-                            case 'Textura':
-                                hasMatch = selectedValues.includes(product.texture);
-                                break;
-                            case 'SKU':
-                                hasMatch = selectedValues.includes(product.sku);
-                                break;
-                            case 'Marca':
-                                hasMatch = selectedValues.includes(product.brand?.name);
-                                break;
-                            case 'Categoría':
-                                hasMatch = selectedValues.includes(product.category?.name);
-                                break;
-                            case 'Subcategoría':
-                                hasMatch = selectedValues.includes(product.subcategory?.name);
-                                break;
-                            case 'Colección':
-                                hasMatch = selectedValues.includes(product.collection?.name);
-                                break;
-                            default:
-                                // Para especificaciones extraídas del nombre
-                                hasMatch = selectedValues.some(value => 
+
+                        // Buscar en especificaciones técnicas del producto
+                        if (product.specifications && Array.isArray(product.specifications)) {
+                            product.specifications.forEach(spec => {
+                                if (spec.type === 'technical' && spec.title === specName) {
+                                    if (selectedValues.includes(spec.description)) {
+                                        hasMatch = true;
+                                    }
+                                }
+                            });
+                        }
+
+                        // Si no se encontró en especificaciones técnicas, buscar en campos directos
+                        if (!hasMatch) {
+                            const directFields = {
+                                'Color': product.color,
+                                'Textura': product.texture,
+                                'SKU': product.sku,
+                                'Marca': product.brand?.name,
+                                'Categoría': product.category?.name,
+                                'Subcategoría': product.subcategory?.name,
+                                'Colección': product.collection?.name,
+                                'Plataforma': product.platform?.name,
+                                'Familia': product.family?.name,
+                            };
+
+                            if (directFields[specName]) {
+                                hasMatch = selectedValues.includes(directFields[specName]);
+                            } else {
+                                // Para especificaciones extraídas del nombre del producto
+                                hasMatch = selectedValues.some(value =>
                                     product.name.toLowerCase().includes(value.toLowerCase())
                                 );
-                                break;
+                            }
                         }
-                        
+
                         if (!hasMatch) {
                             return false;
                         }
                     }
                 }
             }
-            
+
             return true;
         });
     };
 
     // Función para procesar especificaciones desde los productos
     const processSpecificationsFromProducts = (products) => {
+        console.log('Iniciando procesamiento de especificaciones para', products.length, 'productos');
         const specsMap = {};
-        
+
         // Validar que products sea un array
         if (!Array.isArray(products) || products.length === 0) {
             console.log('No hay productos para procesar o products no es un array:', products);
             return {};
         }
-        
+
         products.forEach(product => {
             // Validar que product existe
             if (!product) return;
-            
+
             // Procesar campos directos del producto que pueden ser filtros
             const directFields = {
                 'Color': product.color,
@@ -143,8 +148,10 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
                 'Categoría': product.category?.name,
                 'Subcategoría': product.subcategory?.name,
                 'Colección': product.collection?.name,
+                'Plataforma': product.platform?.name,
+                'Familia': product.family?.name,
             };
-            
+
             // Agregar campos directos
             Object.entries(directFields).forEach(([fieldName, fieldValue]) => {
                 if (fieldValue && fieldValue.toString().trim() !== '' && fieldValue.toString().trim() !== 'null') {
@@ -154,9 +161,32 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
                     specsMap[fieldName].add(fieldValue.toString().trim());
                 }
             });
-            
-            // Si el producto tiene un campo specifications, también procesarlo
-            if (product.specifications && typeof product.specifications === 'object') {
+
+            // Procesar especificaciones técnicas del producto (ItemSpecification)
+            if (product.specifications && Array.isArray(product.specifications)) {
+                console.log(`Procesando especificaciones para producto ${product.name}:`, product.specifications);
+                product.specifications.forEach(spec => {
+                    // Solo procesar especificaciones de tipo 'technical'
+                    if (spec.type === 'technical' && spec.title && spec.description) {
+                        const title = spec.title.trim();
+                        const description = spec.description.trim();
+
+                        console.log(`Especificación técnica encontrada: ${title} = ${description}`);
+
+                        if (title !== '' && description !== '' && description !== 'null') {
+                            if (!specsMap[title]) {
+                                specsMap[title] = new Set();
+                            }
+                            specsMap[title].add(description);
+                        }
+                    }
+                });
+            } else {
+                console.log(`Producto ${product.name} no tiene especificaciones o no es un array:`, product.specifications);
+            }
+
+            // Si el producto tiene un campo specifications como objeto, también procesarlo
+            if (product.specifications && typeof product.specifications === 'object' && !Array.isArray(product.specifications)) {
                 Object.entries(product.specifications).forEach(([specName, specValue]) => {
                     if (specValue && specValue.toString().trim() !== '' && specValue.toString().trim() !== 'null') {
                         if (!specsMap[specName]) {
@@ -166,7 +196,7 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
                     }
                 });
             }
-            
+
             // Extraer especificaciones del nombre del producto (común en productos técnicos)
             if (product.name) {
                 const nameSpecs = extractSpecsFromName(product.name);
@@ -178,43 +208,115 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
                 });
             }
         });
-        
+
         // Convertir Sets a arrays y ordenar
         const processedSpecs = {};
         Object.entries(specsMap).forEach(([specName, valuesSet]) => {
-            if (valuesSet.size > 1) { // Solo incluir si hay más de un valor
-                processedSpecs[specName] = Array.from(valuesSet).sort();
+            if (valuesSet.size > 0) { // Incluir todos los valores, incluso si solo hay uno
+                processedSpecs[specName] = Array.from(valuesSet).sort((a, b) => {
+                    // Ordenar numéricamente si ambos valores son números
+                    const numA = parseFloat(a);
+                    const numB = parseFloat(b);
+                    if (!isNaN(numA) && !isNaN(numB)) {
+                        return numA - numB;
+                    }
+                    // Ordenar alfabéticamente si no son números
+                    return a.localeCompare(b);
+                });
             }
         });
-        
+
+        console.log('Especificaciones procesadas:', processedSpecs);
         return processedSpecs;
     };
-    
+
     // Función para extraer especificaciones del nombre del producto
     const extractSpecsFromName = (name) => {
         const specs = {};
-        
-        // Patrones comunes en nombres de productos técnicos
+
+        // Patrones comunes en nombres de productos técnicos Makita
         const patterns = [
-            { regex: /(\d+)w/gi, key: 'Potencia' },
-            { regex: /(\d+)v/gi, key: 'Voltaje' },
-            { regex: /(\d+)-(\d+)\s*rpm/gi, key: 'RPM' },
-            { regex: /(\d+\.?\d*)\s*kg/gi, key: 'Peso' },
-            { regex: /(\d+\.?\d*)\s*mm/gi, key: 'Medida' },
-            { regex: /(\d+\.?\d*)\s*nm/gi, key: 'Torque' },
-            { regex: /(\d+\.?\d*)""/gi, key: 'Pulgadas' },
+            // Potencia
+            { regex: /(\d+(?:\.\d+)?)\s*w(?:att)?s?/gi, key: 'Potencia (W)' },
+            { regex: /(\d+(?:\.\d+)?)\s*kw/gi, key: 'Potencia (kW)' },
+
+            // Voltaje
+            { regex: /(\d+(?:\.\d+)?)\s*v(?:olt)?s?/gi, key: 'Tensión nominal (V)' },
+
+            // Velocidad
+            { regex: /(\d+(?:[,.]\d+)?)\s*-\s*(\d+(?:[,.]\d+)?)\s*rpm/gi, key: 'Velocidad (RPM)' },
+            { regex: /(\d+(?:[,.]\d+)?)\s*rpm/gi, key: 'Velocidad (RPM)' },
+            { regex: /(\d+(?:[,.]\d+)?)\s*min⁻¹/gi, key: 'Velocidad (min⁻¹)' },
+
+            // Peso
+            { regex: /(\d+(?:\.\d+)?)\s*kg/gi, key: 'Peso (kg)' },
+            { regex: /(\d+(?:\.\d+)?)\s*g(?!r)/gi, key: 'Peso (g)' },
+
+            // Dimensiones
+            { regex: /(\d+(?:\.\d+)?)\s*x\s*(\d+(?:\.\d+)?)\s*x\s*(\d+(?:\.\d+)?)\s*mm/gi, key: 'Dimensiones (mm)' },
+            { regex: /(\d+(?:\.\d+)?)\s*mm/gi, key: 'Medida (mm)' },
+            { regex: /(\d+(?:\.\d+)?)\s*cm/gi, key: 'Medida (cm)' },
+
+            // Torque
+            { regex: /(\d+(?:\.\d+)?)\s*nm/gi, key: 'Torque (Nm)' },
+
+            // Pulgadas
+            { regex: /(\d+(?:\.\d+)?)\s*"/gi, key: 'Medida (pulgadas)' },
+            { regex: /(\d+(?:\.\d+)?)\s*''/gi, key: 'Medida (pulgadas)' },
+
+            // Capacidad
+            { regex: /(\d+(?:\.\d+)?)\s*l(?:itros?)?/gi, key: 'Capacidad (L)' },
+            { regex: /(\d+(?:\.\d+)?)\s*ml/gi, key: 'Capacidad (ml)' },
+
+            // Capacidad de batería
+            { regex: /(\d+(?:\.\d+)?)\s*ah/gi, key: 'Capacidad batería (Ah)' },
+            { regex: /(\d+(?:\.\d+)?)\s*mah/gi, key: 'Capacidad batería (mAh)' },
+
+            // Presión
+            { regex: /(\d+(?:\.\d+)?)\s*bar/gi, key: 'Presión (bar)' },
+            { regex: /(\d+(?:\.\d+)?)\s*psi/gi, key: 'Presión (PSI)' },
+            { regex: /(\d+(?:\.\d+)?)\s*mbar/gi, key: 'Presión (mbar)' },
+
+            // Volumen de aire
+            { regex: /(\d+(?:\.\d+)?)\s*m³\/min/gi, key: 'Volumen de aire (m³/min)' },
+            { regex: /(\d+(?:\.\d+)?)\s*cfm/gi, key: 'Volumen de aire (CFM)' },
+
+            // Nivel de ruido
+            { regex: /(\d+(?:\.\d+)?)\s*db\(a\)/gi, key: 'Nivel sonoro (dB(A))' },
+            { regex: /(\d+(?:\.\d+)?)\s*db/gi, key: 'Nivel sonoro (dB)' },
+
+            // Frecuencia
+            { regex: /(\d+(?:\.\d+)?)\s*hz/gi, key: 'Frecuencia (Hz)' },
+
+            // Temperatura
+            { regex: /(\d+(?:\.\d+)?)\s*°c/gi, key: 'Temperatura (°C)' },
+            { regex: /(\d+(?:\.\d+)?)\s*°f/gi, key: 'Temperatura (°F)' },
         ];
-        
+
         patterns.forEach(pattern => {
             const matches = [...name.matchAll(pattern.regex)];
             if (matches.length > 0) {
-                const values = matches.map(match => match[1] || match[0]).filter(Boolean);
-                if (values.length > 0) {
-                    specs[pattern.key] = values[0];
-                }
+                matches.forEach(match => {
+                    let value;
+                    if (pattern.key === 'Dimensiones (mm)' && match[3]) {
+                        // Para dimensiones, concatenar todos los valores
+                        value = `${match[1]} x ${match[2]} x ${match[3]} mm`;
+                    } else if (pattern.key === 'Velocidad (RPM)' && match[2]) {
+                        // Para rangos de velocidad
+                        value = `${match[1]} - ${match[2]} RPM`;
+                    } else {
+                        value = match[1] || match[0];
+                    }
+
+                    if (value && value.toString().trim() !== '') {
+                        if (!specs[pattern.key]) {
+                            specs[pattern.key] = value.toString().trim();
+                        }
+                    }
+                });
             }
         });
-        
+
         return specs;
     };
     // Obtener todos los productos una sola vez
@@ -226,7 +328,7 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
                 skip: 0,
                 requireTotalCount: false,
             };
-            
+
             console.log('Obteniendo todos los productos...');
             console.log('Parámetros enviados:', params);
             console.log('ItemsRest instance:', itemsRest);
@@ -256,20 +358,23 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
                     products = response.data.items;
                 }
             }
-            
+
             console.log('Productos extraídos:', products);
 
             setAllProducts(products);
-            
+
             // Procesar especificaciones dinámicas con TODOS los productos
             const processedSpecs = processSpecificationsFromProducts(products);
             console.log('Especificaciones procesadas:', processedSpecs);
             setSpecifications(processedSpecs);
-            
-            // Aplicar filtros iniciales
-            const filtered = filterProducts(products, selectedFilters);
-            setFilteredProducts(filtered);
-            
+
+            // Aplicar filtros URL primero
+            const urlFiltered = applyURLFilters(products);
+
+            // Luego aplicar filtros de especificaciones
+            const finalFiltered = filterProducts(urlFiltered, selectedFilters);
+            setFilteredProducts(finalFiltered);
+
         } catch (error) {
             console.error("Error fetching products:", error);
             // En caso de error, establecer valores por defecto
@@ -286,6 +391,69 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
 
 
 
+    // Función para obtener parámetros URL
+    const getURLParams = () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const params = {};
+
+        // Obtener parámetros específicos
+        const category = urlParams.get('category');
+        const platform = urlParams.get('platform');
+        const family = urlParams.get('family');
+        const brand = urlParams.get('brand');
+        const collection = urlParams.get('collection');
+
+        if (category) params.category = category;
+        if (platform) params.platform = platform;
+        if (family) params.family = family;
+        if (brand) params.brand = brand;
+        if (collection) params.collection = collection;
+
+        return params;
+    };
+
+    // Función para aplicar filtros desde URL
+    const applyURLFilters = (products) => {
+        const urlParams = getURLParams();
+
+        if (Object.keys(urlParams).length === 0) {
+            return products;
+        }
+
+        console.log('Aplicando filtros desde URL:', urlParams);
+
+        return products.filter(product => {
+            let matches = true;
+
+            // Filtrar por categoría
+            if (urlParams.category && product.category?.slug !== urlParams.category) {
+                matches = false;
+            }
+
+            // Filtrar por plataforma
+            if (urlParams.platform && product.platform?.slug !== urlParams.platform) {
+                matches = false;
+            }
+
+            // Filtrar por familia
+            if (urlParams.family && product.family?.slug !== urlParams.family) {
+                matches = false;
+            }
+
+            // Filtrar por marca
+            if (urlParams.brand && product.brand?.slug !== urlParams.brand) {
+                matches = false;
+            }
+
+            // Filtrar por colección
+            if (urlParams.collection && product.collection?.slug !== urlParams.collection) {
+                matches = false;
+            }
+
+            return matches;
+        });
+    };
+
     useEffect(() => {
         // Solo intentar cargar productos si hay datos o si no es la carga inicial
         fetchAllProducts();
@@ -294,8 +462,12 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
     // Aplicar filtros cuando cambien
     useEffect(() => {
         if (Array.isArray(allProducts) && allProducts.length > 0) {
-            const filtered = filterProducts(allProducts, selectedFilters);
-            setFilteredProducts(filtered);
+            // Aplicar filtros URL primero
+            const urlFiltered = applyURLFilters(allProducts);
+
+            // Luego aplicar filtros de especificaciones
+            const finalFiltered = filterProducts(urlFiltered, selectedFilters);
+            setFilteredProducts(finalFiltered);
         } else {
             setFilteredProducts([]);
         }
@@ -317,22 +489,22 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
         setSelectedFilters((prev) => {
             if (type === "specifications") {
                 const newSpecifications = { ...prev.specifications };
-                
+
                 if (!newSpecifications[specName]) {
                     newSpecifications[specName] = [];
                 }
-                
+
                 const currentValues = newSpecifications[specName];
                 const newValues = currentValues.includes(value)
                     ? currentValues.filter((item) => item !== value)
                     : [...currentValues, value];
-                
+
                 if (newValues.length === 0) {
                     delete newSpecifications[specName];
                 } else {
                     newSpecifications[specName] = newValues;
                 }
-                
+
                 return {
                     ...prev,
                     specifications: newSpecifications,
@@ -378,10 +550,22 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
                                 <span className="text-gray-500 text-sm"> de {allProducts.length}</span>
                             )}
                         </span>
-                        
+
                         {/* Mostrar filtros activos */}
-                        {Object.keys(selectedFilters.specifications).length > 0 && (
+                        {(Object.keys(selectedFilters.specifications).length > 0 || Object.keys(getURLParams()).length > 0) && (
                             <div className="flex flex-wrap gap-2 text-xs">
+                                {/* Filtros URL */}
+                                {Object.entries(getURLParams()).map(([paramName, paramValue]) => (
+                                    <span
+                                        key={`url-${paramName}-${paramValue}`}
+                                        className="bg-blue-100 text-blue-700 px-2 py-1 rounded-full flex items-center gap-1"
+                                    >
+                                        {paramName}: {paramValue}
+                                        <span className="text-xs opacity-70">(URL)</span>
+                                    </span>
+                                ))}
+
+                                {/* Filtros de especificaciones */}
                                 {Object.entries(selectedFilters.specifications).map(([specName, values]) =>
                                     values.map(value => (
                                         <span
@@ -409,7 +593,7 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
                                     : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
                                 title="Vista grilla"
                             >
-                               <LayoutGrid className="h-5 w-5" />
+                                <LayoutGrid className="h-5 w-5" />
                             </button>
                             <button
                                 onClick={() => setViewType('list')}
@@ -418,7 +602,7 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
                                     : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
                                 title="Vista lista"
                             >
-                               <LucideListTodo className="h-5 w-5" />
+                                <LucideListTodo className="h-5 w-5" />
 
                             </button>
                         </div>
@@ -513,78 +697,125 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
                                         />
                                     </button>
                                     {sections.especificaciones && (
-                                        <div className="space-y-4">
-                                            {Object.entries(specifications).map(([specName, specValues]) => {
-                                                // Filtrar valores de especificación según búsqueda
-                                                const searchTerm = searchSpecifications[specName] || "";
-                                                const filteredSpecValues = specValues.filter(value =>
-                                                    value.toLowerCase().includes(searchTerm.toLowerCase())
-                                                );
-                                                
-                                                return (
-                                                    <div key={specName} className="border-b border-gray-100 pb-4 last:border-b-0">
-                                                        <h4 className="font-medium text-sm text-gray-700 mb-3 flex items-center gap-2">
-                                                            <Tag className="h-4 w-4" />
-                                                            {specName}
-                                                            <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
-                                                                {specValues.length}
-                                                            </span>
-                                                            {selectedFilters.specifications[specName]?.length > 0 && (
-                                                                <span className="text-xs text-primary bg-primary/10 px-2 py-1 rounded-full">
-                                                                    {selectedFilters.specifications[specName].length} seleccionados
+                                        <div className="space-y-6">
+                                            {(() => {
+                                                // Agrupar especificaciones por categorías
+                                                const specCategories = {
+                                                    'Energía y Alimentación': ['Voltaje de batería', 'Capacidad de batería', 'Potencia', 'Frecuencia'],
+                                                    'Dimensiones y Peso': ['Peso', 'Dimensiones', 'Longitud', 'Ancho', 'Alto'],
+                                                    'Rendimiento': ['Velocidad', 'Torque', 'Presión de aire', 'Volumen de aire', 'Nivel de presión sonora'],
+                                                    'Capacidades': ['Capacidad del tanque de polvo', 'Sellado de succión', 'Potencia de succión', 'Capacidad'],
+                                                    'Otros': []
+                                                };
+
+                                                // Clasificar especificaciones
+                                                const categorizedSpecs = {};
+                                                Object.keys(specCategories).forEach(category => {
+                                                    categorizedSpecs[category] = {};
+                                                });
+
+                                                Object.entries(specifications).forEach(([specName, specValues]) => {
+                                                    let assigned = false;
+                                                    for (const [category, keywords] of Object.entries(specCategories)) {
+                                                        if (keywords.some(keyword => specName.toLowerCase().includes(keyword.toLowerCase()))) {
+                                                            categorizedSpecs[category][specName] = specValues;
+                                                            assigned = true;
+                                                            break;
+                                                        }
+                                                    }
+                                                    if (!assigned) {
+                                                        categorizedSpecs['Otros'][specName] = specValues;
+                                                    }
+                                                });
+
+                                                return Object.entries(categorizedSpecs).map(([category, categorySpecs]) => {
+                                                    if (Object.keys(categorySpecs).length === 0) return null;
+
+                                                    return (
+                                                        <div key={category} className="bg-gray-50 rounded-lg p-4">
+                                                            <h3 className="font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                                                                <div className="w-2 h-2 bg-primary rounded-full"></div>
+                                                                {category}
+                                                                <span className="text-xs text-gray-500 bg-white px-2 py-1 rounded-full">
+                                                                    {Object.keys(categorySpecs).length} filtros
                                                                 </span>
-                                                            )}
-                                                        </h4>
-                                                        
-                                                        {/* Campo de búsqueda si hay más de 5 opciones */}
-                                                        {specValues.length > 5 && (
-                                                            <div className="relative mb-3">
-                                                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3 w-3 text-gray-400" />
-                                                                <input
-                                                                    type="text"
-                                                                    placeholder={`Buscar en ${specName.toLowerCase()}`}
-                                                                    className="w-full pl-8 pr-4 py-2 text-sm border rounded-lg focus:ring-1 focus:ring-primary/50 focus:outline-0"
-                                                                    value={searchSpecifications[specName] || ""}
-                                                                    onChange={(e) => setSearchSpecifications(prev => ({
-                                                                        ...prev,
-                                                                        [specName]: e.target.value
-                                                                    }))}
-                                                                />
+                                                            </h3>
+                                                            <div className="space-y-4">
+                                                                {Object.entries(categorySpecs).map(([specName, specValues]) => {
+                                                                    // Filtrar valores de especificación según búsqueda
+                                                                    const searchTerm = searchSpecifications[specName] || "";
+                                                                    const filteredSpecValues = specValues.filter(value =>
+                                                                        value.toLowerCase().includes(searchTerm.toLowerCase())
+                                                                    );
+
+                                                                    return (
+                                                                        <div key={specName} className="bg-white rounded-md p-3 border border-gray-200">
+                                                                            <h4 className="font-medium text-sm text-gray-700 mb-3 flex items-center gap-2">
+                                                                                <Tag className="h-4 w-4" />
+                                                                                {specName}
+                                                                                <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+                                                                                    {specValues.length}
+                                                                                </span>
+                                                                                {selectedFilters.specifications[specName]?.length > 0 && (
+                                                                                    <span className="text-xs text-primary bg-primary/10 px-2 py-1 rounded-full">
+                                                                                        {selectedFilters.specifications[specName].length} seleccionados
+                                                                                    </span>
+                                                                                )}
+                                                                            </h4>
+
+                                                                            {/* Campo de búsqueda si hay más de 5 opciones */}
+                                                                            {specValues.length > 5 && (
+                                                                                <div className="relative mb-3">
+                                                                                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3 w-3 text-gray-400" />
+                                                                                    <input
+                                                                                        type="text"
+                                                                                        placeholder={`Buscar en ${specName.toLowerCase()}`}
+                                                                                        className="w-full pl-8 pr-4 py-2 text-sm border rounded-lg focus:ring-1 focus:ring-primary/50 focus:outline-0"
+                                                                                        value={searchSpecifications[specName] || ""}
+                                                                                        onChange={(e) => setSearchSpecifications(prev => ({
+                                                                                            ...prev,
+                                                                                            [specName]: e.target.value
+                                                                                        }))}
+                                                                                    />
+                                                                                </div>
+                                                                            )}
+
+                                                                            <div className="space-y-2 max-h-[120px] overflow-y-auto">
+                                                                                {filteredSpecValues.map((value) => {
+                                                                                    const isSelected = selectedFilters.specifications[specName]?.includes(value) || false;
+                                                                                    return (
+                                                                                        <label
+                                                                                            key={`${specName}-${value}`}
+                                                                                            className={`flex items-center gap-2 py-1.5 px-2 rounded-md hover:bg-gray-50 cursor-pointer transition-colors ${isSelected ? 'bg-primary/5 border border-primary/20' : ''
+                                                                                                }`}
+                                                                                        >
+                                                                                            <input
+                                                                                                type="checkbox"
+                                                                                                className="h-4 w-4 rounded border-gray-300 accent-primary"
+                                                                                                onChange={() => handleFilterChange("specifications", value, specName)}
+                                                                                                checked={isSelected}
+                                                                                            />
+                                                                                            <span className={`text-sm ${isSelected ? 'text-primary font-medium' : 'text-gray-700'}`}>
+                                                                                                {value}
+                                                                                            </span>
+                                                                                        </label>
+                                                                                    );
+                                                                                })}
+                                                                                {filteredSpecValues.length === 0 && searchTerm && (
+                                                                                    <p className="text-sm text-gray-500 italic py-2 text-center">
+                                                                                        No se encontraron coincidencias
+                                                                                    </p>
+                                                                                )}
+                                                                            </div>
+                                                                        </div>
+                                                                    );
+                                                                })}
                                                             </div>
-                                                        )}
-                                                        
-                                                        <div className="space-y-2 max-h-[120px] overflow-y-auto">
-                                                            {filteredSpecValues.map((value) => {
-                                                                const isSelected = selectedFilters.specifications[specName]?.includes(value) || false;
-                                                                return (
-                                                                    <label
-                                                                        key={`${specName}-${value}`}
-                                                                        className={`flex items-center gap-2 py-1.5 px-2 rounded-md hover:bg-gray-50 cursor-pointer transition-colors ${
-                                                                            isSelected ? 'bg-primary/5 border border-primary/20' : ''
-                                                                        }`}
-                                                                    >
-                                                                        <input
-                                                                            type="checkbox"
-                                                                            className="h-4 w-4 rounded border-gray-300 accent-primary"
-                                                                            onChange={() => handleFilterChange("specifications", value, specName)}
-                                                                            checked={isSelected}
-                                                                        />
-                                                                        <span className={`text-sm ${isSelected ? 'text-primary font-medium' : 'text-gray-700'}`}>
-                                                                            {value}
-                                                                        </span>
-                                                                    </label>
-                                                                );
-                                                            })}
-                                                            {filteredSpecValues.length === 0 && searchTerm && (
-                                                                <p className="text-sm text-gray-500 italic py-2 text-center">
-                                                                    No se encontraron coincidencias
-                                                                </p>
-                                                            )}
                                                         </div>
-                                                    </div>
-                                                );
+                                                    );
+                                                }).filter(Boolean)
                                             })}
-                                        </div>
+                                            </div>
                                     )}
                                 </div>
                             ) : (

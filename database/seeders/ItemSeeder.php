@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Item;
+use App\Models\ItemSpecification;
 use App\Models\SubCategory;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -28,7 +29,7 @@ class ItemSeeder extends Seeder
                 $final_price = $discount;
             }
 
-            Item::create([
+            $item = Item::create([
                 'name' => $name,
                 'slug' => Str::slug($name),
                 'summary' => 'Un breve resúmen corto y preciso de ' . $name,
@@ -41,6 +42,80 @@ class ItemSeeder extends Seeder
                 'discount_percent' => 100 - ($final_price / $price * 100),
                 'category_id' => Category::all()?->random()?->id,
                 'brand_id' => Brand::all()?->random()?->id
+            ]);
+
+            // Agregar especificaciones técnicas de ejemplo
+            $this->createTechnicalSpecifications($item, $i);
+        }
+    }
+
+    /**
+     * Crear especificaciones técnicas de ejemplo para un producto
+     */
+    private function createTechnicalSpecifications(Item $item, int $index): void
+    {
+        $specifications = [
+             [
+                 'type' => 'technical',
+                 'title' => 'Tensión nominal de la batería',
+                 'description' => rand(1, 3) == 1 ? '12 V' : (rand(1, 2) == 1 ? '18 V' : '40 V')
+             ],
+             [
+                 'type' => 'technical',
+                 'title' => 'Capacidad de la batería',
+                 'description' => rand(1, 4) == 1 ? '2,0 Ah' : (rand(1, 3) == 1 ? '4,0 Ah' : (rand(1, 2) == 1 ? '6,0 Ah' : '8,0 Ah'))
+             ],
+             [
+                 'type' => 'technical',
+                 'title' => 'Peso de la herramienta con batería',
+                 'description' => (rand(10, 50) / 10) . ' kg'
+             ],
+             [
+                 'type' => 'technical',
+                 'title' => 'Dimensiones de producto (L x W x H)',
+                 'description' => rand(200, 1000) . ' x ' . rand(100, 300) . ' x ' . rand(100, 400) . ' mm'
+             ],
+             [
+                 'type' => 'technical',
+                 'title' => 'Nivel de presión sonora (LpA)',
+                 'description' => rand(50, 90) . ' dB(A)'
+             ],
+             [
+                 'type' => 'technical',
+                 'title' => 'Volumen de aire',
+                 'description' => (rand(5, 30) / 10) . ' m³/min'
+             ],
+             [
+                 'type' => 'technical',
+                 'title' => 'Capacidad del depósito para polvo',
+                 'description' => (rand(3, 15) / 10) . ' L'
+             ],
+             [
+                 'type' => 'technical',
+                 'title' => 'Máx. sellado de succión',
+                 'description' => rand(30, 100) . ' mbar'
+             ],
+             [
+                 'type' => 'technical',
+                 'title' => 'Potencia de succión',
+                 'description' => rand(100, 500) . ' W'
+             ]
+         ];
+
+        // Crear entre 3 y 6 especificaciones aleatorias para cada producto
+        $numSpecs = rand(3, 6);
+        $selectedSpecs = array_rand($specifications, $numSpecs);
+        
+        if (!is_array($selectedSpecs)) {
+            $selectedSpecs = [$selectedSpecs];
+        }
+
+        foreach ($selectedSpecs as $specIndex) {
+            ItemSpecification::create([
+                'item_id' => $item->id,
+                'type' => $specifications[$specIndex]['type'],
+                'title' => $specifications[$specIndex]['title'],
+                'description' => $specifications[$specIndex]['description']
             ]);
         }
     }

@@ -30,6 +30,7 @@ class UnifiedItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsO
     use \Maatwebsite\Excel\Concerns\Importable;
     
     private $errors = [];
+    private $warnings = [];
     private $fieldMappings = [];
     private $truncateMode = true;
 
@@ -74,11 +75,13 @@ class UnifiedItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsO
                 'specs_principales'
             ],
             'especificaciones_generales' => [
+                'especificaciones_generales_separadas_por_comas',
                 'especificaciones_generales_separado_por_comas_y_dos_puntos',
                 'especificaciones_generales',
                 'specs_generales'
             ],
             'especificaciones_tecnicas' => [
+                'especificaciones_tecnicas_separado_por_comas_y_dos_puntos',
                 'especificaciones_tecnicas_separado_por_slash_para_filas_y_dos_puntos_para_columnas',
                 'especificaciones_tecnicas',
                 'specs_tecnicas'
@@ -158,6 +161,13 @@ class UnifiedItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsO
             
             if (!$sku || !$nombreProducto) {
                 throw new Exception("SKU y nombre del producto son requeridos");
+            }
+            
+            // Verificar si el SKU ya existe - saltar fila si existe
+            $existingItem = Item::where('sku', $sku)->first();
+            if ($existingItem) {
+                $this->addWarning("SKU duplicado saltado: '$sku' ya existe en la base de datos (ID: {$existingItem->id})");
+                return null; // Saltar esta fila
             }
 
             // 1️⃣ Crear/obtener categoría (requerida)
@@ -245,12 +255,33 @@ class UnifiedItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsO
             $descuento = $this->getNumericValue($row, 'descuento', 0);
             $finalPrice = $this->calculateFinalPrice($precio, $descuento);
             $discountPercent = $this->calculateDiscountPercent($precio, $descuento);
+            
+            // Validaciones adicionales para campos
+            $descripcion = $this->getFieldValue($row, 'descripcion', '');
+            $color = $this->getFieldValue($row, 'color');
+            
+            // Validar longitudes de campos
+            if (strlen($nombreProducto) > 255) {
+                throw new Exception("El nombre del producto es demasiado largo (máximo 255 caracteres)");
+            }
+            
+            if (strlen($sku) > 100) {
+                throw new Exception("El SKU es demasiado largo (máximo 100 caracteres)");
+            }
+            
+            if (strlen($descripcion) > 65535) {
+                $descripcion = substr($descripcion, 0, 65535);
+            }
+            
+            if ($color && strlen($color) > 100) {
+                $color = substr($color, 0, 100);
+            }
 
             // 9️⃣ Crear el producto
             $itemData = [
                 'sku' => $sku,
                 'name' => $nombreProducto,
-                'description' => $this->getFieldValue($row, 'descripcion', ''),
+                'description' => $descripcion,
                 'price' => $precio,
                 'discount' => $descuento,
                 'final_price' => $finalPrice,
@@ -267,8 +298,8 @@ class UnifiedItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsO
             ];
 
             // Agregar campos opcionales si existen
-            if ($this->hasField($row, 'color')) {
-                $itemData['color'] = $this->getFieldValue($row, 'color');
+            if ($color) {
+                $itemData['color'] = $color;
             }
 
             $item = Item::create($itemData);
@@ -289,23 +320,47 @@ class UnifiedItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsO
             return $item;
 
         } catch (\Exception $e) {
+            $sku = $this->getFieldValue($row, 'sku', 'sin SKU');
+            
+            // Detectar tipos específicos de errores SQL
+            $errorType = 'Error general';
+            $errorDetails = $e->getMessage();
+            
+            if (strpos($errorDetails, 'Duplicate entry') !== false) {
+                $errorType = 'SKU duplicado';
+                $errorDetails = "El SKU '$sku' ya existe en la base de datos";
+            } elseif (strpos($errorDetails, 'foreign key constraint') !== false) {
+                $errorType = 'Error de clave foránea';
+                $errorDetails = "Problema con relaciones de base de datos para SKU '$sku'";
+            } elseif (strpos($errorDetails, 'Data too long') !== false) {
+                $errorType = 'Datos demasiado largos';
+                $errorDetails = "Algún campo excede la longitud máxima permitida para SKU '$sku'";
+            } elseif (strpos($errorDetails, 'cannot be null') !== false) {
+                $errorType = 'Campo requerido faltante';
+                $errorDetails = "Campo obligatorio faltante para SKU '$sku'";
+            }
+            
             $errorMessage = sprintf(
-                "Error al procesar fila con SKU '%s': %s (Línea: %s, Archivo: %s)",
-                $this->getFieldValue($row, 'sku', 'sin SKU'),
-                $e->getMessage(),
-                $e->getLine(),
-                basename($e->getFile())
+                "[%s] Error al procesar fila con SKU '%s': %s",
+                $errorType,
+                $sku,
+                $errorDetails
             );
             
             $this->addError($errorMessage);
             
             // Log detallado para debugging
             Log::error($errorMessage, [
-                'row_data' => $row,
-                'trace' => $e->getTraceAsString()
+                'error_type' => $errorType,
+                'sku' => $sku,
+                'original_error' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'row_data' => array_map(function($value) {
+                    return is_string($value) ? substr($value, 0, 100) : $value;
+                }, $row)
             ]);
             
-
             return null;
         }
     }
@@ -390,7 +445,7 @@ class UnifiedItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsO
         // Especificaciones técnicas
         if ($this->hasField($row, 'especificaciones_tecnicas')) {
             $specs = $this->getFieldValue($row, 'especificaciones_tecnicas');
-            $this->saveSpecificationsTecnicas($item, $specs, 'tecnica');
+            $this->saveSpecificationsTecnicas($item, $specs, 'technical');
         }
     }
 
@@ -418,6 +473,7 @@ class UnifiedItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsO
                     'description' => $spec,
                 ]);
             } else {
+                // Para especificaciones generales, verificar si contiene ':' para título:descripción
                 $parts = explode(':', $spec, 2);
                 if (count($parts) == 2) {
                     $title = trim($parts[0]);
@@ -428,13 +484,21 @@ class UnifiedItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsO
                         'title' => $title,
                         'description' => $description,
                     ]);
+                } else {
+                    // Si no tiene ':', usar el valor completo como título y descripción
+                    ItemSpecification::create([
+                        'item_id' => $item->id,
+                        'type' => $type,
+                        'title' => $spec,
+                        'description' => $spec,
+                    ]);
                 }
             }
         }
     }
 
     /**
-     * Guardar especificaciones técnicas (formato especial)
+     * Guardar especificaciones técnicas (formato: clave:valor, clave2:valor2)
      */
     private function saveSpecificationsTecnicas(Item $item, ?string $specs, string $type): void
     {
@@ -442,30 +506,40 @@ class UnifiedItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsO
             return;
         }
         
-        // Formato: "titulo1,descripcion1/titulo2,descripcion2"
-        $rows = explode('/', $specs);
-        foreach ($rows as $row) {
-            $parts = explode(':', $row, 2);
-            if (count($parts) == 2) {
-                $title = trim($parts[0]);
-                $description = trim($parts[1]);
-            } else {
-                // Intentar con coma como separador
-                $parts = explode(',', $row, 2);
-                if (count($parts) == 2) {
-                    $title = trim($parts[0]);
-                    $description = trim($parts[1]);
-                } else {
-                    continue;
-                }
+        // Formato esperado: "clave1:valor1, clave2:valor2, clave3:valor3"
+        // Donde antes de los dos puntos está la clave y después el valor
+        
+        // Dividir por comas para obtener cada especificación
+        $specsArray = explode(',', $specs);
+        
+        foreach ($specsArray as $spec) {
+            $spec = trim($spec);
+            if (empty($spec)) {
+                continue;
             }
             
-            if (!empty($title) && !empty($description)) {
+            // Dividir por ':' para separar clave y valor
+            $parts = explode(':', $spec, 2);
+            
+            if (count($parts) == 2) {
+                $title = trim($parts[0]);  // La clave está antes de ':'
+                $description = trim($parts[1]);  // El valor está después de ':'
+                
+                if (!empty($title) && !empty($description)) {
+                    ItemSpecification::create([
+                        'item_id' => $item->id,
+                        'type' => $type,
+                        'title' => $title,
+                        'description' => $description,
+                    ]);
+                }
+            } else {
+                // Si no tiene ':', usar el valor completo como título
                 ItemSpecification::create([
                     'item_id' => $item->id,
                     'type' => $type,
-                    'title' => $title,
-                    'description' => $description,
+                    'title' => $spec,
+                    'description' => $spec,
                 ]);
             }
         }
@@ -574,9 +648,29 @@ class UnifiedItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsO
         return $this->errors;
     }
 
+    public function getWarnings(): array
+    {
+        return $this->warnings;
+    }
+
+    public function getAllMessages(): array
+    {
+        return [
+            'errors' => $this->errors,
+            'warnings' => $this->warnings,
+            'has_errors' => !empty($this->errors),
+            'has_warnings' => !empty($this->warnings)
+        ];
+    }
+
     private function addError(string $message): void
     {
         $this->errors[] = $message;
+    }
+
+    private function addWarning(string $message): void
+    {
+        $this->warnings[] = $message;
     }
 
     /**

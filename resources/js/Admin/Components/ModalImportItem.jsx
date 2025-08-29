@@ -43,7 +43,7 @@ const ModalImportItem = ({ gridRef, modalRef }) => {
                 $(gridRef.current).dxDataGrid("instance").refresh();
                 // Cerrar el modal si la importación es exitosa
                 if (modalRef.current) {
-                    modalRef.current.close();
+                    $(modalRef.current).modal("hide");
                 }
             }
         } catch (error) {

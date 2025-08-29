@@ -57,30 +57,60 @@ class UnifiedImportController extends Controller
             // Ejecutar importación
             Excel::import($import, $request->file('file'));
 
-            // Obtener errores si los hay
-            $errors = $import->getErrors();
+            // Obtener errores y advertencias
+            $messages = $import->getAllMessages();
+            $errors = $messages['errors'];
+            $warnings = $messages['warnings'];
+            $hasErrors = $messages['has_errors'];
+            $hasWarnings = $messages['has_warnings'];
+
+            // Determinar el mensaje y estado de éxito
+            $success = !$hasErrors; // Solo fallar si hay errores reales
+            
+            if (!$hasErrors && !$hasWarnings) {
+                $message = 'Importación completada exitosamente';
+            } elseif (!$hasErrors && $hasWarnings) {
+                $message = 'Importación completada exitosamente con advertencias';
+            } else {
+                $message = 'Importación completada con errores';
+            }
 
             $response = [
-                'success' => empty($errors),
-                'message' => empty($errors) 
-                    ? 'Importación completada exitosamente' 
-                    : 'Importación completada con errores',
+                'success' => $success,
+                'message' => $message,
                 'errors_count' => count($errors),
+                'warnings_count' => count($warnings),
                 'field_mappings_used' => $import->getFieldMappings(),
             ];
 
-            // Incluir errores solo si hay pocos (para evitar respuestas muy grandes)
-            if (!empty($errors) && count($errors) <= 50) {
-                $response['errors'] = $errors;
-            } elseif (count($errors) > 50) {
-                $response['errors'] = array_slice($errors, 0, 10);
-                $response['message'] .= sprintf(
-                    '. Se encontraron %d errores en total. Mostrando solo los primeros 10.',
-                    count($errors)
-                );
+            // Incluir errores si los hay (limitados para evitar respuestas muy grandes)
+            if (!empty($errors)) {
+                if (count($errors) <= 50) {
+                    $response['errors'] = $errors;
+                } else {
+                    $response['errors'] = array_slice($errors, 0, 10);
+                    $response['message'] .= sprintf(
+                        '. Se encontraron %d errores en total. Mostrando solo los primeros 10.',
+                        count($errors)
+                    );
+                }
             }
 
-            return response()->json($response, empty($errors) ? 200 : 422);
+            // Incluir advertencias si las hay (limitadas)
+            if (!empty($warnings)) {
+                if (count($warnings) <= 50) {
+                    $response['warnings'] = $warnings;
+                } else {
+                    $response['warnings'] = array_slice($warnings, 0, 10);
+                    $response['message'] .= sprintf(
+                        '. Se encontraron %d advertencias en total. Mostrando solo las primeras 10.',
+                        count($warnings)
+                    );
+                }
+            }
+
+            // Código de estado HTTP: 200 si éxito, 422 si hay errores reales
+            return response()->json($response, $success ? 200 : 422);
 
         } catch (\Exception $e) {
             return response()->json([
