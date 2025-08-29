@@ -289,29 +289,32 @@ const CompareDetailsModal = ({ isOpen, onClose, products, onRemoveProduct }) => 
         >
           <X className="h-5 w-5" />
         </button>
-        <div className="bg-white   w-full max-w-7xl pb-8   relative max-h-[90vh] overflow-y-auto scrollbar-none shadow-2xl ">
+        <div className="bg-white   w-full min-w-[800px] max-w-7xl pb-8   relative max-h-[90vh] overflow-y-auto scrollbar-none shadow-2xl ">
           {/* Cabecera con título y botones */}
-          <div className="sticky pt-8 top-0 z-20 bg-white  pb-4 mb-6 rounded-t-xl shadow-md px-4 md:px-8" style={{ boxShadow: '0 2px 8px 0 rgba(0,0,0,0.04)' }}>
-            <div className="flex items-center justify-between pt-2">
-              <h2 className="text-2xl md:text-3xl font-bold text-[#262626] ">Comparar productos</h2>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={generatePDF}
-                  disabled={loading || exporting || details.length === 0}
-                  className="gap-2 print-hide flex tracking-wider items-center border border-gray-300 bg-[#219FB9]  hover:bg-primary text-white px-4 py-3 rounded-md  shadow-sm hover:brightness-100 disabled:opacity-60 disabled:cursor-not-allowed"
-                  type="button"
-                >
-                  {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : ""}
-                  <span>{exporting ? "Generando PDF..." : "Descargar PDF"}</span>
-                </button>
+          {!loading && (
 
+            <div className="sticky pt-8 top-0 z-20 bg-white  pb-4 mb-6 rounded-t-xl shadow-md px-4 md:px-8" style={{ boxShadow: '0 2px 8px 0 rgba(0,0,0,0.04)' }}>
+              <div className="flex items-center justify-between pt-2">
+                <h2 className="text-2xl md:text-3xl font-bold text-[#262626] ">Comparar productos</h2>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={generatePDF}
+                    disabled={loading || exporting || details.length === 0}
+                    className="gap-2 print-hide flex tracking-wider items-center border border-gray-300 bg-[#219FB9]  hover:bg-primary text-white px-4 py-3 rounded-md  shadow-sm hover:brightness-100 disabled:opacity-60 disabled:cursor-not-allowed"
+                    type="button"
+                  >
+                    {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : ""}
+                    <span>{exporting ? "Generando PDF..." : "Descargar PDF"}</span>
+                  </button>
+
+                </div>
               </div>
-            </div>
-            <p className="text-sm text-[#262626] mt-1">
-              Puede añadir un máximo de cuatro artículos para comparar
-            </p>
+              <p className="text-sm text-[#262626] mt-1">
+                Puede añadir un máximo de cuatro artículos para comparar
+              </p>
 
-          </div>
+            </div>
+          )}
 
           {/* Contenido principal para comparación y PDF */}
           <div ref={contentRef} className="bg-white  rounded-lg  px-8">
@@ -330,8 +333,14 @@ const CompareDetailsModal = ({ isOpen, onClose, products, onRemoveProduct }) => 
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {details.map((product) => (
-                  <div key={product.id} className="overflow-hidden h-full flex flex-col bg-white  rounded-lg shadow border border-gray-200 dark:border-gray-800">
-                    <div className="relative">
+                  <div key={product.id} className="overflow-hidden h-full flex flex-col bg-white  rounded-lg">
+                    <div className="relative pt-12">
+                      <button
+                        onClick={() => onRemoveProduct(product.id)}
+                        className="absolute top-2 left-0 bg-primary  text-white  rounded w-9 h-9 flex items-center justify-center hover:bg-secondary shadow-md print-hide"
+                      >
+                        <X size={20} />
+                      </button>
                       <div className="bg-gray-100  aspect-square flex items-center justify-center overflow-hidden">
                         <img
                           src={`/storage/images/item/${product.image}`}
@@ -339,58 +348,69 @@ const CompareDetailsModal = ({ isOpen, onClose, products, onRemoveProduct }) => 
                           className="w-full h-full object-contain p-4"
                         />
                       </div>
-                      <button
-                        onClick={() => onRemoveProduct(product.id)}
-                        className="absolute top-2 right-2 bg-white  text-gray-700 dark:text-gray-200 rounded-full w-8 h-8 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-700 shadow-md print-hide"
-                      >
-                        <X size={16} />
-                      </button>
+
                     </div>
 
-                    <div className="flex-grow flex flex-col p-4">
-                      <span className="inline-block self-start mb-2 px-2 py-1  customtext-primary rounded text-xs font-semibold bg-primary/10">
-                        {product.code}
-                      </span>
+                    <div className="flex-grow flex flex-col py-4">
+                      <div className="mb-0">
+                        <span className="inline-block   text-[#219FB9] rounded-full text-md">
+                          {product.code}
+                        </span>
+                      </div>
 
-                      <h3 className="font-bold text-lg mb-2 line-clamp-2 customtext-neutral-dark dark:text-white">
+                      <h3 className="font-bold  mb-3 line-clamp-2 text-2xl whitespace-pre-line customtext-neutral-dark">
                         {product.name}
                       </h3>
 
-                      <div
-                        className="prose prose-sm dark:prose-invert line-clamp-2 customtext-neutral-dark  mb-4"
-                        dangerouslySetInnerHTML={{ __html: product?.description }}
-                      />
+                      <div className="mb-4">
+                        <div
+                          className="text-sm text-gray-600 line-clamp-2 leading-relaxed"
+                          dangerouslySetInnerHTML={{ __html: product?.description }}
+                        />
+                      </div>
 
                       <a
                         href={`/producto/${product.slug}`}
-                        className="mb-4 w-full block text-center bg-primary hover:bg-primary/90 text-white py-2 rounded-md font-medium text-sm transition-colors print-hide"
+                        className="mb-4 w-full block text-center bg-primary hover:bg-secondary text-white py-3 rounded  text-base transition-all duration-200 shadow-sm hover:shadow-md print-hide"
                       >
-                        Ver detalles
+                        Ver
                       </a>
 
-                      <hr className="my-4 border-gray-200 dark:border-gray-800" />
+
 
                       <div className="w-full">
-                        <h4 className="font-semibold text-sm mb-3 customtext-neutral-dark dark:text-white">
+                        <h4 className="font-bold text-lg tracking-wider mt-2 mb-4 text-gray-800  border-gray-200 pb-2">
                           Especificaciones técnicas
                         </h4>
 
-                        <div className="space-y-2">
-                          {(product.specifications || []).slice(0, 10).length > 0 ? (
-                            (product.specifications || []).slice(0, 10).map((spec, idx2) => (
-                              <div
-                                key={spec.key || spec.name || idx2}
-                                className={`p-3 rounded-md ${idx2 % 2 === 0 ? "bg-gray-50 " : "bg-white  border border-gray-100 dark:border-gray-800"}`}
-                              >
-                                <p className="font-medium text-sm customtext-neutral-dark dark:text-white">
-                                  {spec.key || spec.name}
-                                </p>
-                                <p className="text-sm customtext-neutral-dark dark:text-gray-400 mt-1">{spec.value}</p>
+                        <div className="space-y-1">
+                          {console.log(product.specifications)}
+                          {(() => {
+                            // Convertir especificaciones a array si es un objeto
+                            let specs = [];
+                            if (Array.isArray(product.specifications)) {
+                              specs = product.specifications;
+                            } else if (product.specifications && typeof product.specifications === 'object') {
+                              specs = Object.values(product.specifications);
+                            }
+
+                            return specs.length > 0 ? (
+                              specs.slice(0, 10).map((spec, idx2) => (
+                                <div
+                                  key={spec.key || spec.name || idx2}
+                                  className={`p-3  ${idx2 % 2 === 0 ? "bg-gray-50" : "bg-white "}`}
+                                >
+                                  <p className="text-base text-[#262626]">
+                                    <span className="font-bold tracking-wider text-sm  customtext-neutral-dark">{spec.key || spec.name}</span><br /> {spec.value}
+                                  </p>
+                                </div>
+                              ))
+                            ) : (
+                              <div className="text-center py-8 bg-gray-50 rounded-md">
+                                <p className="text-gray-500 text-sm">Sin especificaciones técnicas disponibles</p>
                               </div>
-                            ))
-                          ) : (
-                            <p className="text-center customtext-neutral-dark dark:text-gray-400 py-4">Sin especificaciones</p>
-                          )}
+                            );
+                          })()}
                         </div>
                       </div>
                     </div>

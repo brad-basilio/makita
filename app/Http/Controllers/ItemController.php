@@ -426,13 +426,15 @@ class ItemController extends BasicController
     public function apiShow($id)
     {
         $item = Item::with(['category', 'specifications'])->findOrFail($id);
-        // Formatear especificaciones como key-value
-        $specs = $item->specifications->map(function($spec) {
-            return [
-                'key' => $spec->title ?? $spec->key,
-                'value' => $spec->description
-            ];
-        })->toArray();
+        // Formatear especificaciones técnicas como key-value
+        $specs = $item->specifications
+            ->where('type', 'technical')
+            ->map(function($spec) {
+                return [
+                    'key' => $spec->title ?? $spec->key,
+                    'value' => $spec->description
+                ];
+            })->toArray();
         return response()->json([
             'id' => $item->id,
             'slug' => $item->slug,
