@@ -145,14 +145,14 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
             // PRIORIDAD 1: Procesar especificaciones técnicas del producto (ItemSpecification)
             if (product.specifications && Array.isArray(product.specifications)) {
                 console.log(`Procesando ${product.specifications.length} especificaciones para producto ${product.name}`);
-                
+
                 product.specifications.forEach((spec, index) => {
                     console.log(`Especificación ${index + 1}:`, {
                         type: spec.type,
                         title: spec.title,
                         description: spec.description
                     });
-                    
+
                     // Solo procesar especificaciones de tipo 'technical'
                     if (spec.type === 'technical' && spec.title && spec.description) {
                         const title = spec.title.trim();
@@ -244,7 +244,7 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
         Object.entries(processedSpecs).forEach(([specName, values]) => {
             console.log(`📋 ${specName}: ${values.length} valores únicos`, values);
         });
-        
+
         return processedSpecs;
     };
 
@@ -665,7 +665,7 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
                     >
                         {/* Header fijo para mobile */}
                         <div className="fixed top-0 left-0 right-0 bg-white p-4 border-b z-10 h-16 flex items-center justify-between lg:relative lg:p-0 lg:border-none lg:h-auto">
-                            <h2 className="text-xl font-bold">Filtros</h2>
+                            <h2 className="text-3xl tracking-wider font-bold">Filtros</h2>
                             <div className="flex items-center gap-2">
                                 {/* Botón limpiar filtros */}
                                 {Object.keys(selectedFilters.specifications).length > 0 && (
@@ -682,162 +682,91 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
                                 >
                                     <X className="h-5 w-5" />
                                 </button>
-                                <Filter className="hidden lg:block h-5 w-5" />
+
                             </div>
                         </div>
 
                         {/* Contenido principal con scroll */}
-                        <div className="flex-1 overflow-y-auto px-4 mt-16 pb-20 lg:mt-0 lg:pb-0 lg:px-0">
-                            {/* Campo de búsqueda general */}
-                            <div className="mb-6">
-                                <div className="relative">
-                                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                                    <input
-                                        type="text"
-                                        placeholder="Buscar productos..."
-                                        className="w-full pl-10 pr-4 py-3 border rounded-xl focus:ring-1 focus:ring-primary/50 focus:outline-0"
-                                        value={selectedFilters.name || ''}
-                                        onChange={(e) => handleFilterChange('name', e.target.value)}
-                                    />
-                                </div>
-                            </div>
+                        <div className="flex-1  overflow-y-auto px-4 mt-16 pb-20 lg:mt-6 lg:pb-0 lg:px-0">
+
 
                             {/* Sección Características/Especificaciones Dinámicas */}
                             {Object.keys(specifications || {}).length > 0 ? (
                                 <div className="mb-6">
-                                    <button
-                                        onClick={() => toggleSection("especificaciones")}
-                                        className="flex items-center justify-between w-full mb-4 p-2 lg:p-0"
-                                    >
-                                        <span className="font-medium">Características</span>
-                                        <ChevronDown
-                                            className={`h-5 w-5 transform transition-transform ${sections.especificaciones ? "" : "-rotate-180"
-                                                }`}
-                                        />
-                                    </button>
-                                    {sections.especificaciones && (
-                                        <div className="space-y-6">
-                                            {(() => {
-                                                // Agrupar especificaciones por categorías
-                                                const specCategories = {
-                                                    'Energía y Alimentación': ['Voltaje de batería', 'Capacidad de batería', 'Potencia', 'Frecuencia'],
-                                                    'Dimensiones y Peso': ['Peso', 'Dimensiones', 'Longitud', 'Ancho', 'Alto'],
-                                                    'Rendimiento': ['Velocidad', 'Torque', 'Presión de aire', 'Volumen de aire', 'Nivel de presión sonora'],
-                                                    'Capacidades': ['Capacidad del tanque de polvo', 'Sellado de succión', 'Potencia de succión', 'Capacidad'],
-                                                    'Otros': []
-                                                };
+                                    {Object.entries(specifications).map(([specName, specValues]) => {
+                                        // Filtrar valores de especificación según búsqueda
+                                        const searchTerm = searchSpecifications[specName] || "";
+                                        const filteredSpecValues = specValues.filter(value =>
+                                            value.toLowerCase().includes(searchTerm.toLowerCase())
+                                        );
 
-                                                // Clasificar especificaciones
-                                                const categorizedSpecs = {};
-                                                Object.keys(specCategories).forEach(category => {
-                                                    categorizedSpecs[category] = {};
-                                                });
-
-                                                Object.entries(specifications).forEach(([specName, specValues]) => {
-                                                    let assigned = false;
-                                                    for (const [category, keywords] of Object.entries(specCategories)) {
-                                                        if (keywords.some(keyword => specName.toLowerCase().includes(keyword.toLowerCase()))) {
-                                                            categorizedSpecs[category][specName] = specValues;
-                                                            assigned = true;
-                                                            break;
-                                                        }
-                                                    }
-                                                    if (!assigned) {
-                                                        categorizedSpecs['Otros'][specName] = specValues;
-                                                    }
-                                                });
-
-                                                const renderCategories = Object.entries(categorizedSpecs).map(([category, categorySpecs]) => {
-                                                    if (Object.keys(categorySpecs).length === 0) return null;
-
-                                                    return (
-                                                        <div key={category} className="bg-gray-50 rounded-lg p-4">
-                                                            <h3 className="font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                                                                <div className="w-2 h-2 bg-primary rounded-full"></div>
-                                                                {category}
-                                                                <span className="text-xs text-gray-500 bg-white px-2 py-1 rounded-full">
-                                                                    {Object.keys(categorySpecs).length} filtros
-                                                                </span>
-                                                            </h3>
-                                                            <div className="space-y-4">
-                                                                {Object.entries(categorySpecs).map(([specName, specValues]) => {
-                                                                    // Filtrar valores de especificación según búsqueda
-                                                                    const searchTerm = searchSpecifications[specName] || "";
-                                                                    const filteredSpecValues = specValues.filter(value =>
-                                                                        value.toLowerCase().includes(searchTerm.toLowerCase())
-                                                                    );
-
-                                                                    return (
-                                                                        <div key={specName} className="bg-white rounded-md p-3 border border-gray-200">
-                                                                            <h4 className="font-medium text-sm text-gray-700 mb-3 flex items-center gap-2">
-                                                                                <Tag className="h-4 w-4" />
-                                                                                {specName}
-                                                                                <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
-                                                                                    {specValues.length}
-                                                                                </span>
-                                                                                {selectedFilters.specifications[specName]?.length > 0 && (
-                                                                                    <span className="text-xs text-primary bg-primary/10 px-2 py-1 rounded-full">
-                                                                                        {selectedFilters.specifications[specName].length} seleccionados
-                                                                                    </span>
-                                                                                )}
-                                                                            </h4>
-
-                                                                            {/* Campo de búsqueda si hay más de 5 opciones */}
-                                                                            {specValues.length > 5 && (
-                                                                                <div className="relative mb-3">
-                                                                                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3 w-3 text-gray-400" />
-                                                                                    <input
-                                                                                        type="text"
-                                                                                        placeholder={`Buscar en ${specName.toLowerCase()}`}
-                                                                                        className="w-full pl-8 pr-4 py-2 text-sm border rounded-lg focus:ring-1 focus:ring-primary/50 focus:outline-0"
-                                                                                        value={searchSpecifications[specName] || ""}
-                                                                                        onChange={(e) => setSearchSpecifications(prev => ({
-                                                                                            ...prev,
-                                                                                            [specName]: e.target.value
-                                                                                        }))}
-                                                                                    />
-                                                                                </div>
-                                                                            )}
-
-                                                                            <div className="space-y-2 max-h-[120px] overflow-y-auto">
-                                                                                {filteredSpecValues.map((value) => {
-                                                                                    const isSelected = selectedFilters.specifications[specName]?.includes(value) || false;
-                                                                                    return (
-                                                                                        <label
-                                                                                            key={`${specName}-${value}`}
-                                                                                            className={`flex items-center gap-2 py-1.5 px-2 rounded-md hover:bg-gray-50 cursor-pointer transition-colors ${isSelected ? 'bg-primary/5 border border-primary/20' : ''
-                                                                                                }`}
-                                                                                        >
-                                                                                            <input
-                                                                                                type="checkbox"
-                                                                                                className="h-4 w-4 rounded border-gray-300 accent-primary"
-                                                                                                onChange={() => handleFilterChange("specifications", value, specName)}
-                                                                                                checked={isSelected}
-                                                                                            />
-                                                                                            <span className={`text-sm ${isSelected ? 'text-primary font-medium' : 'text-gray-700'}`}>
-                                                                                                {value}
-                                                                                            </span>
-                                                                                        </label>
-                                                                                    );
-                                                                                })}
-                                                                                {filteredSpecValues.length === 0 && searchTerm && (
-                                                                                    <p className="text-sm text-gray-500 italic py-2 text-center">
-                                                                                        No se encontraron coincidencias
-                                                                                    </p>
-                                                                                )}
-                                                                            </div>
-                                                                        </div>
-                                                                    );
-                                                                })}
+                                        return (
+                                            <div key={specName} className="mb-0">
+                                                <button
+                                                    onClick={() => toggleSection(specName)}
+                                                    className="flex  bg-[#F6F6F6] items-center justify-between w-full  p-2 lg:p-2"
+                                                >
+                                                    <span className="font-medium text-lg">{specName}</span>
+                                                    <ChevronDown
+                                                        className={`h-5 w-5 transform transition-transform ${sections[specName] ? "" : "-rotate-180"
+                                                            }`}
+                                                    />
+                                                </button>
+                                                {sections[specName] && (
+                                                    <div className="bg-white rounded-md p-3 ">
+                                                        {/* Campo de búsqueda si hay más de 5 opciones */}
+                                                        {specValues.length > 5 && (
+                                                            <div className="relative mb-3 text-[#262626]">
+                                                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3 w-3 text-[#262626]" />
+                                                                <input
+                                                                    type="text"
+                                                                    placeholder={`Buscar en ${specName.toLowerCase()}`}
+                                                                    className="w-full pl-8 pr-4 py-2 text-sm border rounded-lg focus:ring-1 focus:ring-primary/50 focus:outline-0"
+                                                                    value={searchSpecifications[specName] || ""}
+                                                                    onChange={(e) => setSearchSpecifications(prev => ({
+                                                                        ...prev,
+                                                                        [specName]: e.target.value
+                                                                    }))}
+                                                                />
                                                             </div>
+                                                        )}
+
+                                                        <div className="space-y-2 max-h-[120px] overflow-y-auto">
+                                                            {filteredSpecValues.map((value) => {
+                                                                const isSelected = selectedFilters.specifications[specName]?.includes(value) || false;
+                                                                return (
+                                                                    <label
+                                                        key={`${specName}-${value}`}
+                                                        className={`flex items-center gap-2 py-1.5 px-2  hover:bg-gray-50 cursor-pointer transition-colors ${isSelected ? '' : ''
+                                                            }`}
+                                                        onClick={() => handleFilterChange("specifications", value, specName)}
+                                                    >
+                                                        <div className="relative h-4 w-4">
+                                                            {isSelected ? (
+                                                                <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path d="M6.83333 11L12.7083 5.125L11.5417 3.95833L6.83333 8.66667L4.45833 6.29167L3.29167 7.45833L6.83333 11ZM2.16667 15C1.70833 15 1.31597 14.8368 0.989583 14.5104C0.663194 14.184 0.5 13.7917 0.5 13.3333V1.66667C0.5 1.20833 0.663194 0.815972 0.989583 0.489583C1.31597 0.163194 1.70833 0 2.16667 0H13.8333C14.2917 0 14.684 0.163194 15.0104 0.489583C15.3368 0.815972 15.5 1.20833 15.5 1.66667V13.3333C15.5 13.7917 15.3368 14.184 15.0104 14.5104C14.684 14.8368 14.2917 15 13.8333 15H2.16667ZM2.16667 13.3333H13.8333V1.66667H2.16667V13.3333Z" fill="#219FB9"/>
+                                                                </svg>
+                                                            ) : (
+                                                                <div className="h-4 w-4 border-2 border-neutral-dark bg-white rounded"></div>
+                                                            )}
                                                         </div>
-                                                    );
-                                                }).filter(Boolean);
-                                                
-                                                return renderCategories;
-                                            })()}
+                                                                        <span className={`text-sm font-medium ${isSelected ? 'text-[#262626] font-bold' : 'text-[#262626]'}`}>
+                                                                            {value}
+                                                                        </span>
+                                                                    </label>
+                                                                );
+                                                            })}
+                                                            {filteredSpecValues.length === 0 && searchTerm && (
+                                                                <p className="text-sm text-gray-500 italic py-2 text-center">
+                                                                    No se encontraron coincidencias
+                                                                </p>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                )}
                                             </div>
-                                    )}
+                                        );
+                                    })}
                                 </div>
                             ) : (
                                 <div className="text-center py-8 text-gray-500">
