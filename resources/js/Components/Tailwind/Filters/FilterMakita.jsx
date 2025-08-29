@@ -14,7 +14,7 @@ const itemsRest = new ItemsRest();
 
 const SkeletonCard = () => {
     return (
-        <div className={`group animate-pulse transition-transform duration-300 hover:scale-105 w-1/2 lg:w-1/4 flex-shrink-0 font-font-general customtext-primary cursor-pointer`}>
+        <div className={`group animate-pulse transition-transform duration-300 hover:scale-105 w-1/2 lg:w-1/3 flex-shrink-0 font-font-general customtext-primary cursor-pointer`}>
             <div className="px-4">
                 <div className="bg-white rounded-3xl">
                     <div className="relative">
@@ -810,7 +810,7 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
                         {/* Productos */}
                         {loading ? (
                             <div className="flex items-center flex-wrap gap-y-8 transition-all duration-300 ease-in-out">
-                                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(
+                                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,13,14,15].map(
                                     (index) => (
                                         <SkeletonCard key={index} />
                                     )
