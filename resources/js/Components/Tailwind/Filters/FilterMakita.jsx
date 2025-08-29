@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 import { ChevronDown, Filter, LayoutGrid, LucideListTodo, Search, Tag, X } from "lucide-react";
@@ -69,6 +69,34 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
 
         return 'Catalogo';
     };
+
+    // Memoizar el renderizado de productos para optimizar el rendimiento
+    const renderedProducts = useMemo(() => {
+        if (!Array.isArray(filteredProducts) || filteredProducts.length === 0) {
+            return null;
+        }
+        
+        return filteredProducts.map((product) => (
+            <div
+                key={product.id}
+                className={viewType === 'grid'
+                    ? "w-full lg:h-[460px] lg:max-h-[460px] xl:h-[400px] xl:max-h-[400px] 2xl:h-[500px] 2xl:max-h-[500px] flex items-center justify-center"
+                    : "w-full mb-2 flex items-center justify-center"
+                }
+            >
+                <CardProductMakita
+                    data={data}
+                    product={product}
+                    bgImagen="bg-[#F6F6F6]"
+                    viewType={viewType}
+                    widthClass="w-full sm:w-full lg:w-full"
+                    cart={cart}
+                    setCart={setCart}
+                    onCompareClick={() => handleCompareClick(product)}
+                />
+            </div>
+        ));
+    }, [filteredProducts, viewType, data, cart]);
 
     const [categoryName, setCategoryName] = useState(getCategoryName());
 
@@ -623,13 +651,31 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
     const [searchSpecifications, setSearchSpecifications] = useState({});
 
     const [filtersOpen, setFiltersOpen] = useState(false);
+    const [isChangingView, setIsChangingView] = useState(false);
+
+    // Función optimizada para cambiar tipo de vista
+    const handleViewTypeChange = (newViewType) => {
+        if (newViewType === viewType) return;
+        
+        setIsChangingView(true);
+        
+        // Usar requestAnimationFrame para optimizar el cambio
+        requestAnimationFrame(() => {
+            setViewType(newViewType);
+            
+            // Resetear el estado después de un breve delay
+            setTimeout(() => {
+                setIsChangingView(false);
+            }, 100);
+        });
+    };
 
     return (
         <section className="py-12 bg-sections-color customtext-neutral-dark">
             <div className="mx-auto px-primary 2xl:px-0 2xl:max-w-7xl">
 
 
-                <div className="relative flex flex-col lg:flex-row gap-10">
+                <div className="relative flex flex-col lg:flex-row lg:justify-between lg:gap-16 gap-10">
                     <button
                         className="w-full flex lg:hidden gap-2 items-center"
                         onClick={() => setFiltersOpen(true)}
@@ -640,7 +686,7 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
                     <div className={`${filtersOpen
                         ? "fixed inset-0  bg-white flex flex-col h-screen z-[999]"
                         : "hidden"
-                        } lg:block lg:w-3/12 lg:bg-white lg:p-4 lg:rounded-lg lg:h-max`}
+                        } lg:block lg:w-[30%] lg:bg-white lg:p-4 lg:rounded-lg lg:h-max`}
                     >
                         {/* Header fijo para mobile */}
                         <div className="fixed top-0 left-0 right-0 bg-white p-4 border-b z-10 h-16 flex items-center justify-between lg:relative lg:p-0 lg:border-none lg:h-auto">
@@ -767,7 +813,7 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
                     </div>
 
                     <div className="w-full lg:w-8/12 py-4">
-                        <div className="flex flex-col md:flex-row md:justify-between items-center mb-4 ">
+                        <div className="flex flex-col  md:flex-row md:justify-between items-center mb-8 ">
                             <h2 className="text-[32px] md:text-3xl font-semibold md:w-6/12">
                                 Categoria {categoryName}
                             </h2>
@@ -778,11 +824,12 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
                                 {/* Controles de vista */}
                                 <div className="flex items-center gap-2 mr-2">
                                     <button
-                                        onClick={() => setViewType('grid')}
-                                        className={`p-2 rounded-md ${viewType === 'grid'
+                                        onClick={() => handleViewTypeChange('grid')}
+                                        className={`p-2 rounded-md transition-colors duration-150 ${viewType === 'grid'
                                             ? 'bg-white fill-[#219FB9]'
-                                            : 'bg-white fill-[#262626] '}`}
+                                            : 'bg-white fill-[#262626] hover:fill-[#219FB9]'}`}
                                         title="Vista grilla"
+                                        disabled={isChangingView}
                                     >
                                         <svg width="18" height="19" viewBox="0 0 18 19" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M0 8.5V0.5H8V8.5H0ZM0 18.5V10.5H8V18.5H0ZM10 8.5V0.5H18V8.5H10ZM10 18.5V10.5H18V18.5H10ZM2 6.5H6V2.5H2V6.5ZM12 6.5H16V2.5H12V6.5ZM12 16.5H16V12.5H12V16.5ZM2 16.5H6V12.5H2V16.5Z" />
@@ -791,11 +838,12 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
 
                                     </button>
                                     <button
-                                        onClick={() => setViewType('list')}
-                                        className={`p-2 rounded-md ${viewType === 'list'
+                                        onClick={() => handleViewTypeChange('list')}
+                                        className={`p-2 rounded-md transition-colors duration-150 ${viewType === 'list'
                                             ? 'bg-white fill-[#219FB9]'
-                                            : 'bg-white fill-[#262626] '}`}
+                                            : 'bg-white fill-[#262626] hover:fill-[#219FB9]'}`}
                                         title="Vista lista"
+                                        disabled={isChangingView}
                                     >
                                         <svg width="18" height="19" viewBox="0 0 18 19" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M2 14.5C1.45 14.5 0.979167 14.3042 0.5875 13.9125C0.195833 13.5208 0 13.05 0 12.5V6.5C0 5.95 0.195833 5.47917 0.5875 5.0875C0.979167 4.69583 1.45 4.5 2 4.5H16C16.55 4.5 17.0208 4.69583 17.4125 5.0875C17.8042 5.47917 18 5.95 18 6.5V12.5C18 13.05 17.8042 13.5208 17.4125 13.9125C17.0208 14.3042 16.55 14.5 16 14.5H2ZM2 12.5H16V6.5H2V12.5ZM0 2.5V0.5H18V2.5H0ZM0 18.5V16.5H18V18.5H0Z" />
@@ -809,38 +857,19 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
                         </div>
                         {/* Productos */}
                         {loading ? (
-                            <div className="flex items-center flex-wrap gap-y-8 transition-all duration-300 ease-in-out">
-                                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,13,14,15].map(
+                            <div className="flex items-center flex-wrap gap-y-8">
+                                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(
                                     (index) => (
                                         <SkeletonCard key={index} />
                                     )
                                 )}
                             </div>
                         ) : (
-                            <div className={`flex ${viewType === 'grid' ? 'grid grid-cols-3 gap-4' : 'flex-col gap-6'} transition-all duration-300 ease-in-out`}>
-                                {Array.isArray(filteredProducts) &&
-                                    filteredProducts.length > 0 ? (
-                                    filteredProducts.map((product) => (
-                                        <div
-                                            key={product.id}
-                                            className={viewType === 'grid'
-                                                ? " w-full  lg:h-[460px] lg:max-h-[460px] xl:h-[400px] xl:max-h-[400px] 2xl:h-[500px] 2xl:max-h-[500px] flex items-center justify-center"
-                                                : "w-full mb-2 flex items-center justify-center  transition-shadow duration-200"
-                                            }
-                                        >
-                                            <CardProductMakita
-                                                data={data}
-                                                product={product}
-                                                bgImagen="bg-[#F6F6F6]"
-                                                viewType={viewType}
-                                                widthClass="w-full sm:w-full lg:w-full"
-                                                cart={cart}
-                                                setCart={setCart}
-                                                onCompareClick={() => handleCompareClick(product)}
-                                            />
-                                        </div>
-                                    ))
-                                ) : (
+                            <div 
+                                className={`${viewType === 'grid' ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4' : 'flex flex-col gap-6'} transition-opacity duration-150 ease-in-out`}
+                                style={{ opacity: isChangingView ? 0.7 : 1 }}
+                            >
+                                {renderedProducts || (
                                     <div className="w-full text-center py-12">
                                         <NoResults />
                                         {allProducts.length > 0 && (
