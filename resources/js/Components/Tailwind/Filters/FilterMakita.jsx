@@ -7,6 +7,8 @@ import { Loading } from "../Components/Resources/Loading";
 import { NoResults } from "../Components/Resources/NoResult";
 import { GET } from "sode-extend-react";
 import CardProductMakita from "../Products/Components/CardProductMakita";
+import CompareBarModal from "../Products/Modals/CompareBarModal";
+import CompareDetailsModal from "../Products/Modals/CompareDetailsModal";
 
 const itemsRest = new ItemsRest();
 
@@ -45,6 +47,12 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
     });
 
     const [loading, setLoading] = useState(true);
+
+    // Estado para barra de comparación
+    const [compareBarOpen, setCompareBarOpen] = useState(false);
+    const [compareBarMinimized, setCompareBarMinimized] = useState(false);
+    const [compareProducts, setCompareProducts] = useState([]);
+    const [showCompareDetails, setShowCompareDetails] = useState(false);
 
     // Obtener el nombre de la categoría desde la URL
     const getCategoryName = () => {
@@ -496,6 +504,45 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
         });
     };
 
+    // Funciones de manejo de comparación
+    const handleCompareClick = (product) => {
+        console.log('Click en comparar', product);
+        setCompareBarOpen(true);
+        setCompareBarMinimized(false);
+        setCompareProducts((prev) => {
+            const exists = prev.find((p) => p.id === product.id);
+            console.log('Productos actuales en barra:', prev, '¿Ya existe?', exists);
+            if (exists || prev.length >= 4) return prev;
+            const nuevos = [...prev, product];
+            console.log('Nuevos productos en barra:', nuevos);
+            return nuevos;
+        });
+    };
+
+    // Quitar producto de la barra
+    const handleRemoveCompare = (id) => {
+        setCompareProducts((prev) => prev.filter((p) => p.id !== id));
+    };
+
+    // Minimizar barra
+    const handleMinimizeBar = () => setCompareBarMinimized(true);
+    // Restaurar barra
+    const handleRestoreBar = () => setCompareBarMinimized(false);
+
+    // Comparar (abrir modal detalles)
+    const handleCompare = () => {
+        if (compareProducts.length === 4) {
+            setShowCompareDetails(true);
+        }
+    };
+
+    // Cerrar modal detalles
+    const handleCloseDetails = () => {
+        setShowCompareDetails(false);
+        setCompareProducts([]);
+        setCompareBarOpen(false);
+    };
+
     useEffect(() => {
         // Solo intentar cargar productos si hay datos o si no es la carga inicial
         fetchAllProducts();
@@ -719,9 +766,9 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
                         </div>
                     </div>
 
-                    <div className="w-full lg:w-9/12 py-4">
-                        <div className="flex flex-col md:flex-row md:justify-between items-center mb-8 pb-4 border-b-2">
-                            <h2 className="text-[32px] md:text-4xl font-bold md:w-6/12">
+                    <div className="w-full lg:w-8/12 py-4">
+                        <div className="flex flex-col md:flex-row md:justify-between items-center mb-4 ">
+                            <h2 className="text-[32px] md:text-3xl font-semibold md:w-6/12">
                                 Categoria {categoryName}
                             </h2>
                             <div className="flex flex-col w-full items-center justify-end gap-4 md:flex-row md:w-5/12">
@@ -770,24 +817,26 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
                                 )}
                             </div>
                         ) : (
-                            <div className={`flex ${viewType === 'grid' ? 'items-center flex-wrap' : 'flex-col gap-6'} transition-all duration-300 ease-in-out`}>
+                            <div className={`flex ${viewType === 'grid' ? 'grid grid-cols-3 gap-4' : 'flex-col gap-6'} transition-all duration-300 ease-in-out`}>
                                 {Array.isArray(filteredProducts) &&
                                     filteredProducts.length > 0 ? (
                                     filteredProducts.map((product) => (
                                         <div
                                             key={product.id}
                                             className={viewType === 'grid'
-                                                ? "w-1/2 lg:w-1/3 xl:w-1/3 lg:h-[460px] lg:max-h-[460px] xl:h-[400px] xl:max-h-[400px] 2xl:h-[430px] 2xl:max-h-[430px] flex items-center justify-center"
-                                                : "w-full mb-2 flex items-center justify-center shadow-sm hover:shadow-lg transition-shadow duration-200"
+                                                ? " w-full  lg:h-[460px] lg:max-h-[460px] xl:h-[400px] xl:max-h-[400px] 2xl:h-[500px] 2xl:max-h-[500px] flex items-center justify-center"
+                                                : "w-full mb-2 flex items-center justify-center  transition-shadow duration-200"
                                             }
                                         >
                                             <CardProductMakita
                                                 data={data}
                                                 product={product}
+                                                bgImagen="bg-[#F6F6F6]"
                                                 viewType={viewType}
                                                 widthClass="w-full sm:w-full lg:w-full"
                                                 cart={cart}
                                                 setCart={setCart}
+                                                onCompareClick={() => handleCompareClick(product)}
                                             />
                                         </div>
                                     ))
@@ -806,6 +855,24 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
                     </div>
                 </div>
             </div>
+            
+            {/* Barra inferior de comparación */}
+            <CompareBarModal
+                open={compareBarOpen}
+                minimized={compareBarMinimized}
+                products={compareProducts}
+                onRemove={handleRemoveCompare}
+                onCompare={handleCompare}
+                onMinimize={handleMinimizeBar}
+                onRestore={handleRestoreBar}
+            />
+            
+            {/* Modal de detalles de comparación */}
+            <CompareDetailsModal
+                isOpen={showCompareDetails}
+                onClose={handleCloseDetails}
+                products={compareProducts}
+            />
         </section>
     );
 };
