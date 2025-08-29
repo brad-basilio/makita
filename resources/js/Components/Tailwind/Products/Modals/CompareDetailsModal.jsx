@@ -40,235 +40,148 @@ const CompareDetailsModal = ({ isOpen, onClose, products, onRemoveProduct }) => 
     try {
       setExporting(true)
 
-      // Crear un clon del contenido para manipularlo sin afectar la UI
-      const contentClone = contentRef.current.cloneNode(true)
+      // Verificar que hay contenido para exportar
+      console.log('contentRef.current:', contentRef.current)
+      console.log('details:', details)
+      
+      if (details.length === 0) {
+        console.error('No hay productos para exportar')
+        setExporting(false)
+        return
+      }
 
-      // Aplicar estilos para el PDF
-      contentClone.style.width = "800px" // Ancho fijo para mejor control
-      contentClone.style.paddingLeft = "40px"
-      contentClone.style.paddingRight = "40px"
-      contentClone.style.paddingTop = "10px"
-      contentClone.style.paddingBottom = "10px"
-      contentClone.style.backgroundColor = "#ffffff"
-      // Recopilar enlaces de productos ANTES de eliminar elementos
-      const productLinks = []
-      const detailButtons = contentClone.querySelectorAll('a[href*="/producto/"]')
-      detailButtons.forEach((button, index) => {
-        const href = button.getAttribute('href')
-        if (href) {
-          // Convertir href relativo a URL absoluta
-          const fullUrl = href.startsWith('http') ? href : `${window.location.origin}${href}`
-          productLinks.push({
-            url: fullUrl,
-            index: index
-          })          // En lugar de modificar el botón existente, crear un nuevo enlace centrado
-          const newLink = document.createElement('a')
-          newLink.href = fullUrl
-          newLink.innerHTML = '🔗 Ver detalles completos'
-          newLink.style.cssText = `
-            display: block;
-            width: 80%;
-            text-align: center;
-            background-color: #0066cc;
-            color: white;
-            text-decoration: none;
-            padding: 12px 16px;
-            margin: 12px auto;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 500;
-            box-sizing: border-box;
-          `
-
-          // Reemplazar el botón original con el nuevo enlace
-          button.parentNode.replaceChild(newLink, button)
-        }
+      // Capturar directamente el contenido visible sin clonación compleja
+      console.log('Capturando contenido directamente del DOM visible')
+      
+      // Ocultar temporalmente elementos que no queremos en el PDF
+      const elementsToHide = document.querySelectorAll('.print-hide')
+      const originalDisplays = []
+      elementsToHide.forEach((element, index) => {
+        originalDisplays[index] = element.style.display
+        element.style.display = 'none'
       })
 
-      // Eliminar solo los elementos que NO son botones de ver detalles
-      const elementsToRemove = contentClone.querySelectorAll(".print-hide:not(a[href*='/producto/'])")
-      elementsToRemove.forEach((element) => element.remove())
-      // Limitar especificaciones solo para el PDF para evitar overflow
-      const specificationContainers = contentClone.querySelectorAll('.space-y-2')
-      specificationContainers.forEach(container => {
-        const specs = container.querySelectorAll('div[class*="p-3"]')
-        const maxSpecsForPDF = Math.min(5, specs.length) // Máximo 5 especificaciones para PDF
-
-        // Remover especificaciones extras solo en el clon del PDF
-        for (let i = maxSpecsForPDF; i < specs.length; i++) {
-          if (specs[i]) {
-            specs[i].remove()
-          }
-        }
-
-        // Si se removieron especificaciones, añadir un indicador
-        if (specs.length > maxSpecsForPDF) {
-          const moreSpecsDiv = document.createElement('div')
-          moreSpecsDiv.className = 'p-3 rounded-md bg-gray-100 text-center'
-          moreSpecsDiv.innerHTML = `
-            <p class="font-medium text-sm text-gray-600">
-              ... y ${specs.length - maxSpecsForPDF} especificaciones más
-            </p>
-            <p class="text-xs text-gray-500 mt-1">
-              Ver producto completo para más detalles
-            </p>
-          `
-          container.appendChild(moreSpecsDiv)
-        }
-      })
-      // Crear un contenedor temporal para renderizar el clon
-      const tempContainer = document.createElement("div")
-      tempContainer.style.position = "absolute"
-      tempContainer.style.left = "-9999px"
-      tempContainer.style.top = "0"
-      tempContainer.appendChild(contentClone)
-      document.body.appendChild(tempContainer)
-
-      // Añadir un título al PDF
-      const titleElement = document.createElement("h1")
-      titleElement.textContent = "Comparación de Productos"
-      titleElement.style.textAlign = "center"
-      titleElement.style.fontSize = "32px"
-      titleElement.style.fontWeight = "bold"
-      titleElement.style.marginBottom = "20px"
-      titleElement.style.color = "#333"
-      titleElement.style.fontFamily = "Arial, sans-serif"
-      contentClone.insertBefore(titleElement, contentClone.firstChild)
-
-
-
-      // Esperar a que el DOM se actualice
-      await new Promise((resolve) => setTimeout(resolve, 200))
-
-      // Configuración mejorada para html2canvas
-      const canvas = await html2canvas(contentClone, {
-        scale: 2, // Mayor resolución
+      // Esperar un momento para que se apliquen los cambios
+      await new Promise(resolve => setTimeout(resolve, 100))
+      
+      // Capturar el contenido directamente con configuración optimizada para portrait
+      const canvas = await html2canvas(contentRef.current, {
+        scale: 2,
         useCORS: true,
-        logging: false,
+        logging: true,
         backgroundColor: "#ffffff",
         allowTaint: true,
-        windowWidth: contentClone.scrollWidth,
-        windowHeight: contentClone.scrollHeight,
+        foreignObjectRendering: false,
+        imageTimeout: 15000,
+        width: Math.min(contentRef.current.scrollWidth, 1200), // Limitar ancho máximo
+        height: contentRef.current.scrollHeight,
+        onclone: (clonedDoc) => {
+          // Asegurar que el contenido clonado tenga estilos apropiados
+          const clonedContent = clonedDoc.querySelector('[data-html2canvas-ignore]') || clonedDoc.body
+          clonedContent.style.backgroundColor = '#ffffff'
+          clonedContent.style.padding = '20px'
+          clonedContent.style.maxWidth = '1200px'
+          clonedContent.style.margin = '0 auto'
+          
+          // Forzar visibilidad de todos los elementos importantes
+          const products = clonedDoc.querySelectorAll('.grid > div')
+          products.forEach(product => {
+            product.style.display = 'block'
+            product.style.visibility = 'visible'
+            product.style.opacity = '1'
+          })
+          
+          // Mejorar títulos para que no se corten
+          const titles = clonedDoc.querySelectorAll('h3')
+          titles.forEach(title => {
+            title.style.fontSize = '18px'
+            title.style.lineHeight = '1.3'
+            title.style.wordBreak = 'break-word'
+            title.style.hyphens = 'auto'
+            title.style.minHeight = 'auto'
+            title.style.height = 'auto'
+          })
+        }
       })
 
-      // Limpiar el contenedor temporal
-      document.body.removeChild(tempContainer)
+      // Restaurar elementos ocultos
+      elementsToHide.forEach((element, index) => {
+        element.style.display = originalDisplays[index]
+      })
 
-      // Crear PDF con mejor calidad
-      const imgData = canvas.toDataURL("image/jpeg", 0.5)
+      console.log('Canvas generado directamente:', {
+        width: canvas.width,
+        height: canvas.height,
+        dataURL: canvas.toDataURL().substring(0, 100) + '...'
+      })
+
+      // Verificar que el canvas no esté vacío
+      if (canvas.width === 0 || canvas.height === 0) {
+        console.error('Canvas está vacío:', { width: canvas.width, height: canvas.height })
+        setExporting(false)
+        return
+      }
+
+      // Crear PDF en formato portrait (más alto que ancho)
       const pdf = new jsPDF({
         orientation: "portrait",
         unit: "mm",
         format: "a4",
-        compress: true,
+        compress: false
       })
+      
+      const imgData = canvas.toDataURL("image/png", 1.0)
+      console.log('Imagen generada, tamaño:', imgData.length, 'caracteres')
 
       const pageWidth = pdf.internal.pageSize.getWidth()
       const pageHeight = pdf.internal.pageSize.getHeight()
-
-      // Calcular dimensiones manteniendo la proporción
-      const imgWidth = pageWidth - 20 // 10mm de margen a cada lado
-      const imgHeight = (canvas.height * imgWidth) / canvas.width      // Dividir en múltiples páginas si es necesario
-      const maxPageHeight = pageHeight - 20 // Altura disponible descontando márgenes (10mm arriba y abajo)
-      if (imgHeight <= maxPageHeight) {
-        // Si cabe en una sola página
-        pdf.addImage(
-          imgData,
-          "JPEG",
-          10, // Margen izquierdo de 10mm
-          10, // Margen superior de 10mm
-          imgWidth,
-          imgHeight,
-          undefined,
-          "FAST"
-        )
-        // Añadir enlaces clickeables
-        if (productLinks.length > 0) {
-          productLinks.forEach((linkInfo, linkIndex) => {
-            // Calcular posición aproximada del botón en mm con mejor espaciado
-            const buttonY = 80 + (linkIndex * 90) // Posición Y estimada del botón en mm
-            const buttonHeight = 15 // Altura estimada del botón en mm (más grande)
-            const buttonWidth = imgWidth - 30 // Ancho del botón con márgenes
-
-            pdf.link(
-              20, // X del enlace (centrado)
-              buttonY, // Y del enlace  
-              buttonWidth, // Ancho del enlace
-              buttonHeight, // Alto del enlace
-              { url: linkInfo.url }
-            )
-          })
-        }
+      
+      // Calcular dimensiones para formato portrait
+      const margin = 15
+      const maxWidth = pageWidth - (margin * 2)
+      const maxHeight = pageHeight - (margin * 2)
+      
+      const canvasRatio = canvas.width / canvas.height
+      let imgWidth, imgHeight
+      
+      // Ajustar para formato portrait
+      if (canvasRatio > (maxWidth / maxHeight)) {
+        imgWidth = maxWidth
+        imgHeight = maxWidth / canvasRatio
       } else {
-        // Dividir en múltiples páginas
-        let remainingHeight = imgHeight
-        let sourceY = 0
-        let pageNumber = 0
-
-        while (remainingHeight > 0) {
-          if (pageNumber > 0) {
-            pdf.addPage()
-          }
-
-          // Calcular la altura de contenido para esta página
-          const currentPageHeight = Math.min(remainingHeight, maxPageHeight)
-
-          // Crear un canvas temporal para esta sección
-          const pageCanvas = document.createElement('canvas')
-          const pageCtx = pageCanvas.getContext('2d')
-
-          // Configurar el canvas temporal con la altura de esta página
-          pageCanvas.width = canvas.width
-          pageCanvas.height = (canvas.height * currentPageHeight) / imgHeight
-
-          // Dibujar la sección correspondiente del canvas original
-          pageCtx.drawImage(
-            canvas,
-            0, (canvas.height * sourceY) / imgHeight, // Origen en el canvas original
-            canvas.width, (canvas.height * currentPageHeight) / imgHeight, // Tamaño de la sección
-            0, 0, // Destino en el canvas temporal
-            pageCanvas.width, pageCanvas.height // Tamaño en el canvas temporal
-          )
-          // Convertir a imagen y añadir al PDF
-          const pageImgData = pageCanvas.toDataURL("image/jpeg", 0.8)
-          pdf.addImage(
-            pageImgData,
-            "JPEG",
-            10, // Margen izquierdo
-            10, // Margen superior
-            imgWidth,
-            (imgWidth * pageCanvas.height) / pageCanvas.width, // Mantener proporción
-            undefined,
-            "FAST"
-          )          // Añadir enlaces clickeables si estamos en la primera página
-          if (pageNumber === 0 && productLinks.length > 0) {
-            productLinks.forEach((linkInfo, linkIndex) => {
-              // Calcular posición aproximada del botón con mejor espaciado
-              const buttonY = 80 + (linkIndex * 90) // Posición Y estimada del botón
-              const buttonHeight = 15 // Altura estimada del botón (más grande)
-              const buttonWidth = imgWidth - 30 // Ancho del botón con márgenes
-
-              // Solo añadir el enlace si está visible en esta página
-              if (buttonY < maxPageHeight) {
-                pdf.link(
-                  20, // X del enlace (centrado)
-                  buttonY, // Y del enlace  
-                  buttonWidth, // Ancho del enlace
-                  buttonHeight, // Alto del enlace
-                  { url: linkInfo.url }
-                )
-              }
-            })
-          }
-
-          // Actualizar para la siguiente página
-          remainingHeight -= currentPageHeight
-          sourceY += currentPageHeight
-          pageNumber++
-        }
+        imgHeight = maxHeight
+        imgWidth = maxHeight * canvasRatio
       }
-
+      
+      const x = (pageWidth - imgWidth) / 2
+      const y = margin
+      
+      console.log('Añadiendo imagen al PDF (portrait):', { x, y, imgWidth, imgHeight })
+      
+      pdf.addImage(imgData, "PNG", x, y, imgWidth, imgHeight)
+      
+      // Agregar enlaces clickeables para cada producto
+      if (details && details.length > 0) {
+        const productsPerRow = Math.min(details.length, 4)
+        const productWidth = imgWidth / productsPerRow
+        
+        details.forEach((product, index) => {
+          const col = index % productsPerRow
+          const linkX = x + (col * productWidth) + (productWidth * 0.1)
+          const linkY = y + (imgHeight * 0.7) // Posición del botón "Ver"
+          const linkWidth = productWidth * 0.8
+          const linkHeight = 15
+          
+          pdf.link(linkX, linkY, linkWidth, linkHeight, {
+            url: `${window.location.origin}/producto/${product.slug}`
+          })
+        })
+      }
+      
       pdf.save("comparacion_productos.pdf")
+      
+      console.log('PDF generado exitosamente')
+      
     } catch (error) {
       console.error("Error al generar PDF:", error)
     } finally {
@@ -331,34 +244,33 @@ const CompareDetailsModal = ({ isOpen, onClose, products, onRemoveProduct }) => 
                 </p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 {details.map((product) => (
-                  <div key={product.id} className="overflow-hidden h-full flex flex-col bg-white  rounded-lg">
+                  <div key={product.id} className="overflow-hidden h-full flex flex-col bg-white rounded-lg">
                     <div className="relative pt-12">
                       <button
                         onClick={() => onRemoveProduct(product.id)}
-                        className="absolute top-2 left-0 bg-primary  text-white  rounded w-9 h-9 flex items-center justify-center hover:bg-secondary shadow-md print-hide"
+                        className="absolute top-2 left-0 bg-primary text-white rounded w-9 h-9 flex items-center justify-center hover:bg-secondary shadow-md print-hide"
                       >
                         <X size={20} />
                       </button>
-                      <div className="bg-gray-100  aspect-square flex items-center justify-center overflow-hidden">
+                      <div className="bg-gray-100 aspect-square flex items-center justify-center overflow-hidden">
                         <img
                           src={`/storage/images/item/${product.image}`}
                           alt={product.name}
                           className="w-full h-full object-contain p-4"
                         />
                       </div>
-
                     </div>
 
-                    <div className="flex-grow flex flex-col py-4">
-                      <div className="mb-0">
-                        <span className="inline-block   text-[#219FB9] rounded-full text-md">
+                    <div className="flex-grow flex flex-col p-4">
+                      <div className="mb-2">
+                        <span className="inline-block text-[#219FB9] rounded-full text-sm font-medium">
                           {product.code}
                         </span>
                       </div>
 
-                      <h3 className="font-bold  mb-3 line-clamp-2 text-2xl whitespace-pre-line customtext-neutral-dark">
+                      <h3 className="font-bold mb-3 text-lg leading-tight customtext-neutral-dark min-h-[3rem] flex items-start">
                         {product.name}
                       </h3>
 
@@ -424,7 +336,7 @@ const CompareDetailsModal = ({ isOpen, onClose, products, onRemoveProduct }) => 
           <div className="flex justify-end mt-8 print-hide mr-8">
             <button
               onClick={onClose}
-              className="bg-primary  text-white px-8 py-3 rounded text-lg font-bold transition-colors"
+              className="bg-primary  text-white px-8 py-3 rounded text-lg  transition-colors"
               type="button"
             >
               Cerrar
