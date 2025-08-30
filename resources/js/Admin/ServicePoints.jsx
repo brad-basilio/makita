@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
+import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import BaseAdminto from '@Adminto/Base';
 import CreateReactScript from '../Utils/CreateReactScript';
 import Table from '../Components/Adminto/Table';
@@ -13,6 +14,7 @@ import { renderToString } from 'react-dom/server';
 import TextareaFormGroup from '../Components/Adminto/form/TextareaFormGroup';
 import Modal from '../Components/Adminto/Modal';
 import SelectFormGroup from '../Components/Adminto/form/SelectFormGroup';
+import Global from '../Utils/Global';
 
 const servicePointRest = new ServicePointRest();
 
@@ -25,15 +27,17 @@ const ServicePoints = ({ }) => {
   const nameRef = useRef()
   const businessNameRef = useRef()
   const addressRef = useRef()
-  const phonesRef = useRef()
-  const emailsRef = useRef()
-  const openingHoursRef = useRef()
-  const locationRef = useRef()
+  // Removed unused refs - now using state management
   const statusRef = useRef()
   const visibleRef = useRef()
 
   const [isEditing, setIsEditing] = useState(false)
   const [branches, setBranches] = useState([])
+  const [phones, setPhones] = useState([''])
+  const [emails, setEmails] = useState([''])
+  const [openingHours, setOpeningHours] = useState([{ day: 'Lun - Vie', hours: '08:00 - 20:00' }])
+  const [location, setLocation] = useState({ lat: -12.0464, lng: -77.0428 })
+  const [activeMapTab, setActiveMapTab] = useState('main') // 'main' or branch index
   const onModalOpen = (data) => {
     if (data?.id) setIsEditing(true)
     else setIsEditing(false)
@@ -43,13 +47,65 @@ const ServicePoints = ({ }) => {
     nameRef.current.value = data?.name ?? ''
     businessNameRef.current.value = data?.business_name ?? ''
     addressRef.current.value = data?.address ?? ''
-    phonesRef.current.value = data?.phones ?? ''
-    emailsRef.current.value = data?.emails ?? ''
-    openingHoursRef.current.value = data?.opening_hours ?? ''
-    locationRef.current.value = data?.location ?? ''
     
-    // Set branches state
-    setBranches(data?.branches || [])
+    // Parse phones
+    const phonesArray = data?.phones ? data.phones.split(',').map(p => p.trim()).filter(p => p) : ['']
+    setPhones(phonesArray.length > 0 ? phonesArray : [''])
+    
+    // Parse emails
+    const emailsArray = data?.emails ? data.emails.split(',').map(e => e.trim()).filter(e => e) : ['']
+    setEmails(emailsArray.length > 0 ? emailsArray : [''])
+    
+    // Parse opening hours
+    const hoursArray = data?.opening_hours ? 
+      data.opening_hours.split('\n').map(line => {
+        const parts = line.split(':')
+        return parts.length >= 2 ? { day: parts[0].trim(), hours: parts.slice(1).join(':').trim() } : { day: line.trim(), hours: '' }
+      }).filter(h => h.day) : 
+      [{ day: 'Lun - Vie', hours: '08:00 - 20:00' }]
+    setOpeningHours(hoursArray.length > 0 ? hoursArray : [{ day: 'Lun - Vie', hours: '08:00 - 20:00' }])
+    
+    // Parse location
+    if (data?.location) {
+      const locationParts = data.location.split(',')
+      if (locationParts.length >= 2) {
+        const lat = parseFloat(locationParts[0].trim())
+        const lng = parseFloat(locationParts[1].trim())
+        if (!isNaN(lat) && !isNaN(lng)) {
+          setLocation({ lat, lng })
+        }
+      }
+    } else {
+      setLocation({ lat: -12.0464, lng: -77.0428 })
+    }
+    
+    // Set branches state with proper structure
+    const branchesData = data?.branches || []
+    setBranches(branchesData.map(branch => ({
+      name: branch.name || '',
+      address: branch.address || '',
+      phones: branch.phones ? branch.phones.split(',').map(p => p.trim()).filter(p => p) : [''],
+      emails: branch.emails ? branch.emails.split(',').map(e => e.trim()).filter(e => e) : [''],
+      opening_hours: branch.opening_hours ? 
+        branch.opening_hours.split('\n').map(line => {
+          const parts = line.split(':')
+          return parts.length >= 2 ? { day: parts[0].trim(), hours: parts.slice(1).join(':').trim() } : { day: line.trim(), hours: '' }
+        }).filter(h => h.day) : 
+        [{ day: 'Lun - Vie', hours: '08:00 - 20:00' }],
+      location: branch.location ? (() => {
+        const parts = branch.location.split(',')
+        if (parts.length >= 2) {
+          const lat = parseFloat(parts[0].trim())
+          const lng = parseFloat(parts[1].trim())
+          if (!isNaN(lat) && !isNaN(lng)) {
+            return { lat, lng }
+          }
+        }
+        return { lat: -12.0464, lng: -77.0428 }
+      })() : { lat: -12.0464, lng: -77.0428 }
+    })))
+    
+    setActiveMapTab('main')
     
     if (data?.status) {
       $(statusRef.current).prop('checked', true).trigger('change')
@@ -74,12 +130,19 @@ const ServicePoints = ({ }) => {
       name: nameRef.current.value,
       business_name: businessNameRef.current.value,
       address: addressRef.current.value,
-      phones: phonesRef.current.value,
-      emails: emailsRef.current.value,
-      opening_hours: openingHoursRef.current.value,
-      location: locationRef.current.value,
-      branches: branches.length > 0 ? branches : null,
-      status: statusRef.current.checked ? 1 : 0,
+      phones: phones.filter(p => p.trim()).join(', '),
+      emails: emails.filter(e => e.trim()).join(', '),
+      opening_hours: openingHours.filter(h => h.day && h.hours).map(h => `${h.day}: ${h.hours}`).join('\n'),
+      location: `${location.lat}, ${location.lng}`,
+      branches: branches.length > 0 ? branches.map(branch => ({
+         name: branch.name,
+         address: branch.address,
+         phones: branch.phones.filter(p => p.trim()).join(', '),
+         emails: branch.emails.filter(e => e.trim()).join(', '),
+         opening_hours: branch.opening_hours.filter(h => h.day && h.hours).map(h => `${h.day}: ${h.hours}`).join('\n'),
+         location: `${branch.location.lat}, ${branch.location.lng}`
+       })) : [],
+       status: statusRef.current.checked ? 1 : 0,
       visible: visibleRef.current.checked ? 1 : 0
     }
 
@@ -125,26 +188,158 @@ const ServicePoints = ({ }) => {
     return type === 'distributor' ? 'badge-soft-primary' : 'badge-soft-success'
   }
 
+  // Phone management functions
+  const addPhone = () => {
+    setPhones([...phones, ''])
+  }
+
+  const removePhone = (index) => {
+    if (phones.length > 1) {
+      setPhones(phones.filter((_, i) => i !== index))
+    }
+  }
+
+  const updatePhone = (index, value) => {
+    const updatedPhones = [...phones]
+    updatedPhones[index] = value
+    setPhones(updatedPhones)
+  }
+
+  // Email management functions
+  const addEmail = () => {
+    setEmails([...emails, ''])
+  }
+
+  const removeEmail = (index) => {
+    if (emails.length > 1) {
+      setEmails(emails.filter((_, i) => i !== index))
+    }
+  }
+
+  const updateEmail = (index, value) => {
+    const updatedEmails = [...emails]
+    updatedEmails[index] = value
+    setEmails(updatedEmails)
+  }
+
+  // Opening hours management functions
+  const addOpeningHour = () => {
+    setOpeningHours([...openingHours, { day: '', hours: '' }])
+  }
+
+  const removeOpeningHour = (index) => {
+    if (openingHours.length > 1) {
+      setOpeningHours(openingHours.filter((_, i) => i !== index))
+    }
+  }
+
+  const updateOpeningHour = (index, field, value) => {
+    const updatedHours = [...openingHours]
+    updatedHours[index][field] = value
+    setOpeningHours(updatedHours)
+  }
+
+  // Map click handler
+  const handleMapClick = (event) => {
+    const lat = event.latLng.lat()
+    const lng = event.latLng.lng()
+    
+    if (activeMapTab === 'main') {
+      setLocation({ lat, lng })
+    } else {
+      const branchIndex = parseInt(activeMapTab)
+      if (!isNaN(branchIndex) && branches[branchIndex]) {
+        updateBranch(branchIndex, 'location', { lat, lng })
+      }
+    }
+  }
+
   // Functions for dynamic branches management
   const addBranch = () => {
     setBranches([...branches, {
       name: '',
       address: '',
-      phones: '',
-      emails: '',
-      opening_hours: '',
-      location: ''
+      phones: [''],
+      emails: [''],
+      opening_hours: [{ day: 'Lun - Vie', hours: '08:00 - 20:00' }],
+      location: { lat: -12.0464, lng: -77.0428 }
     }])
   }
 
   const removeBranch = (index) => {
     setBranches(branches.filter((_, i) => i !== index))
+    if (activeMapTab === index.toString()) {
+      setActiveMapTab('main')
+    }
   }
 
   const updateBranch = (index, field, value) => {
     const updatedBranches = branches.map((branch, i) => 
       i === index ? { ...branch, [field]: value } : branch
     )
+    setBranches(updatedBranches)
+  }
+
+  // Branch phone management
+  const addBranchPhone = (branchIndex) => {
+    const updatedBranches = [...branches]
+    updatedBranches[branchIndex].phones.push('')
+    setBranches(updatedBranches)
+  }
+
+  const removeBranchPhone = (branchIndex, phoneIndex) => {
+    const updatedBranches = [...branches]
+    if (updatedBranches[branchIndex].phones.length > 1) {
+      updatedBranches[branchIndex].phones = updatedBranches[branchIndex].phones.filter((_, i) => i !== phoneIndex)
+      setBranches(updatedBranches)
+    }
+  }
+
+  const updateBranchPhone = (branchIndex, phoneIndex, value) => {
+    const updatedBranches = [...branches]
+    updatedBranches[branchIndex].phones[phoneIndex] = value
+    setBranches(updatedBranches)
+  }
+
+  // Branch email management
+  const addBranchEmail = (branchIndex) => {
+    const updatedBranches = [...branches]
+    updatedBranches[branchIndex].emails.push('')
+    setBranches(updatedBranches)
+  }
+
+  const removeBranchEmail = (branchIndex, emailIndex) => {
+    const updatedBranches = [...branches]
+    if (updatedBranches[branchIndex].emails.length > 1) {
+      updatedBranches[branchIndex].emails = updatedBranches[branchIndex].emails.filter((_, i) => i !== emailIndex)
+      setBranches(updatedBranches)
+    }
+  }
+
+  const updateBranchEmail = (branchIndex, emailIndex, value) => {
+    const updatedBranches = [...branches]
+    updatedBranches[branchIndex].emails[emailIndex] = value
+    setBranches(updatedBranches)
+  }
+
+  // Branch opening hours management
+  const addBranchOpeningHour = (branchIndex) => {
+    const updatedBranches = [...branches]
+    updatedBranches[branchIndex].opening_hours.push({ day: '', hours: '' })
+    setBranches(updatedBranches)
+  }
+
+  const removeBranchOpeningHour = (branchIndex, hourIndex) => {
+    const updatedBranches = [...branches]
+    if (updatedBranches[branchIndex].opening_hours.length > 1) {
+      updatedBranches[branchIndex].opening_hours = updatedBranches[branchIndex].opening_hours.filter((_, i) => i !== hourIndex)
+      setBranches(updatedBranches)
+    }
+  }
+
+  const updateBranchOpeningHour = (branchIndex, hourIndex, field, value) => {
+    const updatedBranches = [...branches]
+    updatedBranches[branchIndex].opening_hours[hourIndex][field] = value
     setBranches(updatedBranches)
   }
 
@@ -292,7 +487,7 @@ const ServicePoints = ({ }) => {
         >
             <option value='distributor'>Distribuidor</option>
             <option value='service_network'>Red de Servicio</option>
-        </SelectFormGroup>S
+        </SelectFormGroup>
         
   
         
@@ -301,36 +496,186 @@ const ServicePoints = ({ }) => {
         
         <TextareaFormGroup eRef={addressRef} label='Dirección' rows={2} />
         
-        <TextareaFormGroup 
-          eRef={phonesRef} 
-          label='Teléfonos' 
-          col='col-md-4'
-          rows={2}
-          specification='Separar múltiples teléfonos con comas'
-        />
-        
-        <TextareaFormGroup 
-          eRef={emailsRef} 
-          label='Correos Electrónicos' 
-          col='col-md-4'
-          rows={2}
-          specification='Separar múltiples emails con comas'
-        />
-        
-        <TextareaFormGroup 
-          eRef={openingHoursRef} 
-          label='Horarios de Atención' 
-          col='col-md-4'
-          rows={2}
-          specification='Ej: L-V: 8:00-18:00, S: 9:00-15:00'
-        />
-        
-        <TextareaFormGroup 
-          eRef={locationRef} 
-          label='Ubicación (Latitud, Longitud)' 
-          rows={1}
-          specification='Ej: -12.0464, -77.0428'
-        />
+        {/* Teléfonos dinámicos */}
+        <div className='col-12'>
+          <div className='form-group'>
+            <label>Teléfonos</label>
+            {phones.map((phone, index) => (
+              <div key={index} className='input-group mb-2'>
+                <input
+                  type='text'
+                  className='form-control'
+                  value={phone}
+                  onChange={(e) => updatePhone(index, e.target.value)}
+                  placeholder='Ej: +51 999 999 999'
+                />
+                <div className='input-group-append'>
+                  {phones.length > 1 && (
+                    <button
+                      type='button'
+                      className='btn btn-outline-danger'
+                      onClick={() => removePhone(index)}
+                    >
+                      <i className='fa fa-trash'></i>
+                    </button>
+                  )}
+                  {index === phones.length - 1 && (
+                    <button
+                      type='button'
+                      className='btn btn-outline-primary'
+                      onClick={addPhone}
+                    >
+                      <i className='fa fa-plus'></i>
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Emails dinámicos */}
+        <div className='col-12'>
+          <div className='form-group'>
+            <label>Emails</label>
+            {emails.map((email, index) => (
+              <div key={index} className='input-group mb-2'>
+                <input
+                  type='email'
+                  className='form-control'
+                  value={email}
+                  onChange={(e) => updateEmail(index, e.target.value)}
+                  placeholder='Ej: contacto@empresa.com'
+                />
+                <div className='input-group-append'>
+                  {emails.length > 1 && (
+                    <button
+                      type='button'
+                      className='btn btn-outline-danger'
+                      onClick={() => removeEmail(index)}
+                    >
+                      <i className='fa fa-trash'></i>
+                    </button>
+                  )}
+                  {index === emails.length - 1 && (
+                    <button
+                      type='button'
+                      className='btn btn-outline-primary'
+                      onClick={addEmail}
+                    >
+                      <i className='fa fa-plus'></i>
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Horarios de atención dinámicos */}
+        <div className='col-12'>
+          <div className='form-group'>
+            <label>Horarios de Atención</label>
+            {openingHours.map((hour, index) => (
+              <div key={index} className='row mb-2'>
+                <div className='col-md-4'>
+                  <input
+                    type='text'
+                    className='form-control'
+                    value={hour.day}
+                    onChange={(e) => updateOpeningHour(index, 'day', e.target.value)}
+                    placeholder='Ej: Lun - Vie'
+                  />
+                </div>
+                <div className='col-md-6'>
+                  <input
+                    type='text'
+                    className='form-control'
+                    value={hour.hours}
+                    onChange={(e) => updateOpeningHour(index, 'hours', e.target.value)}
+                    placeholder='Ej: 08:00 - 20:00'
+                  />
+                </div>
+                <div className='col-md-2'>
+                  {openingHours.length > 1 && (
+                    <button
+                      type='button'
+                      className='btn btn-outline-danger btn-sm'
+                      onClick={() => removeOpeningHour(index)}
+                    >
+                      <i className='fa fa-trash'></i>
+                    </button>
+                  )}
+                  {index === openingHours.length - 1 && (
+                    <button
+                      type='button'
+                      className='btn btn-outline-primary btn-sm ml-1'
+                      onClick={addOpeningHour}
+                    >
+                      <i className='fa fa-plus'></i>
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Mapa para ubicación */}
+        <div className='col-12'>
+          <div className='form-group'>
+            <label>Ubicación</label>
+            <div className='mb-2'>
+              <small className='text-muted'>Haz clic en el mapa para seleccionar la ubicación</small>
+            </div>
+            <div className='mb-2'>
+              <button
+                type='button'
+                className={`btn btn-sm mr-2 ${activeMapTab === 'main' ? 'btn-primary' : 'btn-outline-primary'}`}
+                onClick={() => setActiveMapTab('main')}
+              >
+                Ubicación Principal
+              </button>
+              {branches.map((_, index) => (
+                <button
+                  key={index}
+                  type='button'
+                  className={`btn btn-sm mr-2 ${activeMapTab === index.toString() ? 'btn-primary' : 'btn-outline-primary'}`}
+                  onClick={() => setActiveMapTab(index.toString())}
+                >
+                  Sucursal {index + 1}
+                </button>
+              ))}
+            </div>
+            <LoadScript 
+              googleMapsApiKey={Global.GMAPS_API_KEY}
+              preventGoogleFontsLoading={true}
+              loadingElement={<div>Cargando mapa...</div>}
+            >
+              <GoogleMap
+                mapContainerStyle={{ width: '100%', height: '300px' }}
+                center={activeMapTab === 'main' ? location : (branches[parseInt(activeMapTab)]?.location || location)}
+                zoom={15}
+                onClick={handleMapClick}
+              >
+                <Marker
+                  position={activeMapTab === 'main' ? location : (branches[parseInt(activeMapTab)]?.location || location)}
+                />
+              </GoogleMap>
+            </LoadScript>
+            <div className='mt-2'>
+              <small className='text-muted'>
+                Coordenadas: {activeMapTab === 'main' ? 
+                  `${location.lat.toFixed(6)}, ${location.lng.toFixed(6)}` : 
+                  (branches[parseInt(activeMapTab)]?.location ? 
+                    `${branches[parseInt(activeMapTab)].location.lat.toFixed(6)}, ${branches[parseInt(activeMapTab)].location.lng.toFixed(6)}` : 
+                    'No seleccionada'
+                  )
+                }
+              </small>
+            </div>
+          </div>
+        </div>
         
         {/* Dynamic Branches Section */}
         <div className="col-12">
@@ -352,14 +697,14 @@ const ServicePoints = ({ }) => {
             </div>
           )}
           
-          {branches.map((branch, index) => (
-            <div key={index} className="card mb-3">
+          {branches.map((branch, branchIndex) => (
+            <div key={branchIndex} className="card mb-3">
               <div className="card-header d-flex justify-content-between align-items-center">
-                <h6 className="mb-0">Sucursal #{index + 1}</h6>
+                <h6 className="mb-0">Sucursal #{branchIndex + 1}</h6>
                 <button 
                   type="button" 
                   className="btn btn-sm btn-soft-danger"
-                  onClick={() => removeBranch(index)}
+                  onClick={() => removeBranch(branchIndex)}
                 >
                   <i className="fa fa-trash"></i>
                 </button>
@@ -372,7 +717,7 @@ const ServicePoints = ({ }) => {
                       type="text" 
                       className="form-control"
                       value={branch.name}
-                      onChange={(e) => updateBranch(index, 'name', e.target.value)}
+                      onChange={(e) => updateBranch(branchIndex, 'name', e.target.value)}
                       placeholder="Nombre de la sucursal"
                     />
                   </div>
@@ -382,54 +727,157 @@ const ServicePoints = ({ }) => {
                       type="text" 
                       className="form-control"
                       value={branch.address}
-                      onChange={(e) => updateBranch(index, 'address', e.target.value)}
+                      onChange={(e) => updateBranch(branchIndex, 'address', e.target.value)}
                       placeholder="Dirección completa"
                     />
                   </div>
+                  
+                  {/* Teléfonos dinámicos para sucursal */}
                   <div className="col-md-4">
                     <label className="form-label">Teléfonos</label>
-                    <input 
-                      type="text" 
-                      className="form-control"
-                      value={branch.phones}
-                      onChange={(e) => updateBranch(index, 'phones', e.target.value)}
-                      placeholder="Separar con comas"
-                    />
+                    {branch.phones.map((phone, phoneIndex) => (
+                      <div key={phoneIndex} className="input-group mb-1">
+                        <input
+                          type="text"
+                          className="form-control form-control-sm"
+                          value={phone}
+                          onChange={(e) => updateBranchPhone(branchIndex, phoneIndex, e.target.value)}
+                          placeholder="Teléfono"
+                        />
+                        <div className="input-group-append">
+                          {branch.phones.length > 1 && (
+                            <button
+                              type="button"
+                              className="btn btn-outline-danger btn-sm"
+                              onClick={() => removeBranchPhone(branchIndex, phoneIndex)}
+                            >
+                              <i className="fa fa-trash"></i>
+                            </button>
+                          )}
+                          {phoneIndex === branch.phones.length - 1 && (
+                            <button
+                              type="button"
+                              className="btn btn-outline-primary btn-sm"
+                              onClick={() => addBranchPhone(branchIndex)}
+                            >
+                              <i className="fa fa-plus"></i>
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    ))}
                   </div>
+                  
+                  {/* Emails dinámicos para sucursal */}
                   <div className="col-md-4">
-                    <label className="form-label">Correos</label>
-                    <input 
-                      type="text" 
-                      className="form-control"
-                      value={branch.emails}
-                      onChange={(e) => updateBranch(index, 'emails', e.target.value)}
-                      placeholder="Separar con comas"
-                    />
+                    <label className="form-label">Emails</label>
+                    {branch.emails.map((email, emailIndex) => (
+                      <div key={emailIndex} className="input-group mb-1">
+                        <input
+                          type="email"
+                          className="form-control form-control-sm"
+                          value={email}
+                          onChange={(e) => updateBranchEmail(branchIndex, emailIndex, e.target.value)}
+                          placeholder="Email"
+                        />
+                        <div className="input-group-append">
+                          {branch.emails.length > 1 && (
+                            <button
+                              type="button"
+                              className="btn btn-outline-danger btn-sm"
+                              onClick={() => removeBranchEmail(branchIndex, emailIndex)}
+                            >
+                              <i className="fa fa-trash"></i>
+                            </button>
+                          )}
+                          {emailIndex === branch.emails.length - 1 && (
+                            <button
+                              type="button"
+                              className="btn btn-outline-primary btn-sm"
+                              onClick={() => addBranchEmail(branchIndex)}
+                            >
+                              <i className="fa fa-plus"></i>
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    ))}
                   </div>
+                  
+                  {/* Horarios dinámicos para sucursal */}
                   <div className="col-md-4">
-                    <label className="form-label">Horarios</label>
-                    <input 
-                      type="text" 
-                      className="form-control"
-                      value={branch.opening_hours}
-                      onChange={(e) => updateBranch(index, 'opening_hours', e.target.value)}
-                      placeholder="L-V: 8:00-18:00"
-                    />
+                    <label className="form-label">Horarios de Atención</label>
+                    {branch.opening_hours.map((hour, hourIndex) => (
+                      <div key={hourIndex} className="row mb-1">
+                        <div className="col-5">
+                          <input
+                            type="text"
+                            className="form-control form-control-sm"
+                            value={hour.day}
+                            onChange={(e) => updateBranchOpeningHour(branchIndex, hourIndex, 'day', e.target.value)}
+                            placeholder="Días"
+                          />
+                        </div>
+                        <div className="col-5">
+                          <input
+                            type="text"
+                            className="form-control form-control-sm"
+                            value={hour.hours}
+                            onChange={(e) => updateBranchOpeningHour(branchIndex, hourIndex, 'hours', e.target.value)}
+                            placeholder="Horario"
+                          />
+                        </div>
+                        <div className="col-2">
+                          {branch.opening_hours.length > 1 && (
+                            <button
+                              type="button"
+                              className="btn btn-outline-danger btn-sm"
+                              onClick={() => removeBranchOpeningHour(branchIndex, hourIndex)}
+                            >
+                              <i className="fa fa-trash"></i>
+                            </button>
+                          )}
+                          {hourIndex === branch.opening_hours.length - 1 && (
+                            <button
+                              type="button"
+                              className="btn btn-outline-primary btn-sm"
+                              onClick={() => addBranchOpeningHour(branchIndex)}
+                            >
+                              <i className="fa fa-plus"></i>
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                  <div className="col-md-12">
-                    <label className="form-label">Ubicación (Lat, Lng)</label>
-                    <input 
-                      type="text" 
-                      className="form-control"
-                      value={branch.location}
-                      onChange={(e) => updateBranch(index, 'location', e.target.value)}
-                      placeholder="-12.0464, -77.0428"
-                    />
+                  
+                  <div className="col-12">
+                    <label className="form-label">Ubicación de la Sucursal</label>
+                    <div className="mb-2">
+                      <small className="text-muted">
+                        Coordenadas: {branch.location.lat.toFixed(6)}, {branch.location.lng.toFixed(6)}
+                      </small>
+                    </div>
+                    <small className="text-muted">
+                      Para cambiar la ubicación, selecciona "Sucursal {branchIndex + 1}" en el mapa de arriba
+                    </small>
                   </div>
                 </div>
               </div>
             </div>
           ))}
+        </div>
+        
+        {/* Status and Visibility Controls */}
+        <div className="col-12">
+          <div className="row">
+            <div className="col-md-6">
+              <SwitchFormGroup eRef={statusRef} label='Estado activo' />
+            </div>
+            <div className="col-md-6">
+              <SwitchFormGroup eRef={visibleRef} label='Visible' />
+            </div>
+          </div>
         </div>
       </div>
     </Modal>
@@ -437,7 +885,12 @@ const ServicePoints = ({ }) => {
 }
 
 CreateReactScript((el, properties) => {
-  createRoot(el).render(<BaseAdminto {...properties} title='Puntos de Servicio'>
+  let root = el._reactRoot;
+  if (!root) {
+    root = createRoot(el);
+    el._reactRoot = root;
+  }
+  root.render(<BaseAdminto {...properties} title='Puntos de Servicio'>
     <ServicePoints {...properties} />
   </BaseAdminto>);
 })

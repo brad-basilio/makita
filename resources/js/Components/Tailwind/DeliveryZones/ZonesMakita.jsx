@@ -3,8 +3,7 @@ import { Search, ChevronDown, ChevronUp, MapPin, Phone, Mail, Clock } from 'luci
 import Global from '../../../Utils/Global';
 
 const ZonesMakita = ({ items = [] }) => {
-  console.log("ZonesMakita items:", items);
-  console.log("GMAPS_API_KEY from Global:", Global.get('GMAPS_API_KEY'));
+
 
   const [distribuidoresExpanded, setDistribuidoresExpanded] = useState(true);
   const [serviciosExpanded, setServiciosExpanded] = useState(true);
@@ -142,7 +141,7 @@ const ZonesMakita = ({ items = [] }) => {
           const lng = parseFloat(locationParts[1].trim());
 
           if (!isNaN(lat) && !isNaN(lng)) {
-            console.log(`Adding marker for ${item.name} at ${lat}, ${lng}`);            const marker = new google.maps.Marker({
+            console.log(`Adding marker for ${item.name} at ${lat}, ${lng}`); const marker = new google.maps.Marker({
               position: { lat, lng },
               map: mapInstance,
               title: item.name,
@@ -184,7 +183,7 @@ const ZonesMakita = ({ items = [] }) => {
               const lng = parseFloat(locationParts[1].trim());
 
               if (!isNaN(lat) && !isNaN(lng)) {
-                console.log(`Adding branch marker for ${branch.name} at ${lat}, ${lng}`);                const branchMarker = new google.maps.Marker({
+                console.log(`Adding branch marker for ${branch.name} at ${lat}, ${lng}`); const branchMarker = new google.maps.Marker({
                   position: { lat, lng },
                   map: mapInstance,
                   title: `${item.name} - ${branch.name}`,
@@ -242,7 +241,7 @@ const ZonesMakita = ({ items = [] }) => {
   const handleItemSelection = useCallback((item) => {
     console.log('Item selected:', item.name, item.type);
     setSelectedDetail(item);
-    
+
     // Make sure the item is selected in the checkboxes
     if (item.type === 'distributor') {
       if (!selectedDistributors.includes(item.id)) {
@@ -255,14 +254,14 @@ const ZonesMakita = ({ items = [] }) => {
         setSelectedServices(prev => [...prev, item.id]);
       }
     }
-    
+
     // Center map on the selected item
     if (map && item.location) {
       const locationParts = item.location.split(',');
       if (locationParts.length >= 2) {
         const lat = parseFloat(locationParts[0].trim());
         const lng = parseFloat(locationParts[1].trim());
-        
+
         if (!isNaN(lat) && !isNaN(lng)) {
           map.setCenter({ lat, lng });
           map.setZoom(15);
@@ -330,9 +329,12 @@ const ZonesMakita = ({ items = [] }) => {
     if (!emailString) return [];
     return emailString.split(',').map(email => email.trim()).filter(email => email);
   }, []);
+
   const parseOpenHours = useCallback((openHoursString) => {
     if (!openHoursString) return [];
-    return openHoursString.split(',').map(hour => hour.trim()).filter(hour => hour);
+    // Handle both old format (comma-separated) and new format (newline-separated)
+    const separator = openHoursString.includes('\n') ? '\n' : ',';
+    return openHoursString.split(separator).map(hour => hour.trim()).filter(hour => hour);
   }, []);
   // Get all selected items to display in details section
   const selectedItems = useMemo(() => {
@@ -343,14 +345,14 @@ const ZonesMakita = ({ items = [] }) => {
   const createMarkerIcon = useCallback((type, isMain = true) => {
     const size = isMain ? 32 : 24;
     const iconScale = isMain ? 1 : 0.8;
-    
+
     // SVG for store/building icon for distributors
     const storeIcon = `
       <g transform="scale(${iconScale}) translate(${16 - (12 * iconScale)}, ${16 - (12 * iconScale)})">
         <path fill="white" stroke="none" d="M19 7V4C19 3.45 18.55 3 18 3H6C5.45 3 5 3.45 5 4V7H3V20H21V7H19ZM17 5V7H7V5H17ZM19 18H5V9H19V18ZM7 11H9V16H7V11ZM11 11H13V16H11V11ZM15 11H17V16H15V11Z"/>
       </g>
     `;
-    
+
     // SVG for wrench/tool icon for service networks  
     const toolIcon = `
       <g transform="scale(${iconScale}) translate(${16 - (12 * iconScale)}, ${16 - (12 * iconScale)})">
@@ -360,7 +362,7 @@ const ZonesMakita = ({ items = [] }) => {
 
     // Generic pin icon for branches (when isMain = false)
     const pinIcon = `
-      <g transform="translate(${size/2 - 6}, ${size/2 - 8})">
+      <g transform="translate(${size / 2 - 6}, ${size / 2 - 8})">
         <path fill="white" stroke="none" 
               d="M6 2 
                  C4 2 2.5 3.5 2.5 5.5 
@@ -383,7 +385,7 @@ const ZonesMakita = ({ items = [] }) => {
           </filter>
         </defs>
         <!-- Red circle background -->
-        <circle cx="${size/2}" cy="${size/2}" r="${(size/2) - 2}" 
+        <circle cx="${size / 2}" cy="${size / 2}" r="${(size / 2) - 2}" 
                 fill="#EA4335" stroke="white" stroke-width="2" 
                 filter="url(#shadow-${type}-${isMain})"/>
         <!-- White pin icon -->
@@ -395,7 +397,7 @@ const ZonesMakita = ({ items = [] }) => {
       url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svgIcon),
       size: new google.maps.Size(size, size),
       scaledSize: new google.maps.Size(size, size),
-      anchor: new google.maps.Point(size/2, size/2),
+      anchor: new google.maps.Point(size / 2, size / 2),
       origin: new google.maps.Point(0, 0)
     };
   }, []);
@@ -416,14 +418,14 @@ const ZonesMakita = ({ items = [] }) => {
     const color = colors[type];
     const size = isMain ? 32 : 24;
     const iconScale = isMain ? 0.8 : 0.6;
-    
+
     // SVG for store/building icon for distributors
     const storeIcon = `
       <g transform="scale(${iconScale}) translate(${16 - (16 * iconScale)}, ${10 - (10 * iconScale)})">
         <path fill="white" stroke="none" d="M19 7V4C19 3.45 18.55 3 18 3H6C5.45 3 5 3.45 5 4V7H3V20H21V7H19ZM17 5V7H7V5H17ZM19 18H5V9H19V18ZM7 11H9V16H7V11ZM11 11H13V16H11V11ZM15 11H17V16H15V11Z"/>
       </g>
     `;
-    
+
     // SVG for wrench/tool icon for service networks  
     const toolIcon = `
       <g transform="scale(${iconScale}) translate(${16 - (16 * iconScale)}, ${10 - (10 * iconScale)})">
@@ -457,72 +459,88 @@ const ZonesMakita = ({ items = [] }) => {
       url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svgIcon),
       size: new google.maps.Size(size, size * 1.25),
       scaledSize: new google.maps.Size(size, size * 1.25),
-      anchor: new google.maps.Point(size/2, size * 1.25),
+      anchor: new google.maps.Point(size / 2, size * 1.25),
       origin: new google.maps.Point(0, 0)
     };
   }, []);
 
   return (
-    <div className="font-paragraph py-12 customtext-neutral-dark">
+    <div className="font-paragraph py-16 customtext-neutral-dark">
       <div className="px-primary mx-auto 2xl:px-0 2xl:max-w-7xl">
         <div className="mb-8">
-          <h1 className="text-3xl md:text-6xl font-bold mb-4">
+          <h1 className="text-3xl md:text-[58px] font-bold mb-4 max-w-5xl tracking-wide leading-[60px]" >
             Encuentra tu Distribuidor y Red de Servicios Makita en Perú
           </h1>
-          <p className="customtext-neutral-light">
+          <p className="text-[#262626] text-xl font-normal">
             Conoce los principales distribuidores y centros de servicio autorizados de Makita en Perú. Aquí encontrarás direcciones, teléfonos y contactos para adquirir
             herramientas originales, repuestos y acceder a mantenimiento especializado. ¡Ubica el más cercano y recibe la mejor atención!
           </p>
         </div>
 
-        <div className="grid md:grid-cols-12 gap-12">
+        <div className="grid md:grid-cols-6 gap-12 mt-16">
           {/* Left Sidebar */}
-          <div className="md:col-span-4 lg:col-span-3">
+          <div className="col-span-6 lg:col-span-2">
             {/* Distribuidores Section */}
             <div className="mb-6  bg-white">
               <div
                 className=" cursor-pointer mb-4"
 
               >
-                <h2 className="font-bold">Lista de Distribuidores y Red de Servicios</h2>
+                <h2 className="font-bold text-2xl tracking-wide">Lista de Distribuidores y Red de Servicios</h2>
 
               </div>
 
               <div className="">
-                <h3 className="font-bold mb-3 bg-gray-100 flex items-center justify-between p-4" onClick={() => setDistribuidoresExpanded(!distribuidoresExpanded)}>Distribuidores  {distribuidoresExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}</h3>
+                <h3 className="font-normal mb-0 bg-gray-100 text-lg flex items-center justify-between px-4 py-3" onClick={() => setDistribuidoresExpanded(!distribuidoresExpanded)}>Distribuidores  {distribuidoresExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}</h3>
                 {distribuidoresExpanded && (
-                  <div className='p-4'>
+                  <div className='px-4 py-2'>
                     <div className="relative mb-4">
                       <input
                         type="text"
                         placeholder="Buscar nombre"
-                        className="w-full border rounded-lg pl-10 pr-4 py-2 text-sm"
+                        className="w-full border border-gray-200 outline-none rounded-lg pr-10 pl-4 py-3 text-base"
                         value={searchDistributor}
                         onChange={(e) => setSearchDistributor(e.target.value)}
                       />
-                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 customtext-neutral-light" size={18} />
+                      <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 customtext-neutral-light" size={22} />
                     </div>
 
                     {/* Distributor Checkboxes */}
                     <div className="flex flex-col gap-4">
-                      <label className="flex items-center gap-2">
-                        <input
-                          type="checkbox"
-                          className="rounded"
-                          checked={selectedDistributors.length === distributors.length}
-                          onChange={(e) => handleSelectAllDistributors(e.target.checked)}
-                        />
-                        <span>Todos</span>
+                      <label
+                        className="flex items-center gap-2 py-1.5 px-2 hover:bg-gray-50 cursor-pointer transition-colors"
+                        onClick={() => handleSelectAllDistributors(selectedDistributors.length !== distributors.length)}
+                      >
+                        <div className="relative h-4 w-4">
+                          {selectedDistributors.length === distributors.length ? (
+                            <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M6.83333 11L12.7083 5.125L11.5417 3.95833L6.83333 8.66667L4.45833 6.29167L3.29167 7.45833L6.83333 11ZM2.16667 15C1.70833 15 1.31597 14.8368 0.989583 14.5104C0.663194 14.184 0.5 13.7917 0.5 13.3333V1.66667C0.5 1.20833 0.663194 0.815972 0.989583 0.489583C1.31597 0.163194 1.70833 0 2.16667 0H13.8333C14.2917 0 14.684 0.163194 15.0104 0.489583C15.3368 0.815972 15.5 1.20833 15.5 1.66667V13.3333C15.5 13.7917 15.3368 14.184 15.0104 14.5104C14.684 14.8368 14.2917 15 13.8333 15H2.16667ZM2.16667 13.3333H13.8333V1.66667H2.16667V13.3333Z" fill="#219FB9" />
+                            </svg>
+                          ) : (
+                            <div className="h-4 w-4 border-2 border-neutral-dark bg-white rounded"></div>
+                          )}
+                        </div>
+                        <span className={`text-sm font-medium ${selectedDistributors.length === distributors.length ? 'text-[#262626] font-bold' : 'text-[#262626]'}`}>
+                          Todos
+                        </span>
                       </label>
                       {filteredDistributors.map(distributor => (
                         <div key={distributor.id} className="border-b border-gray-100 last:border-b-0">
-                          <div className="flex items-start gap-3  rounded">
-                            <input
-                              type="checkbox"
-                              className="rounded mt-1 flex-shrink-0"
-                              checked={selectedDistributors.includes(distributor.id)}
-                              onChange={(e) => handleDistributorChange(distributor.id, e.target.checked)}
-                            />
+                          <div className="flex items-start gap-3 rounded">
+                            <label
+                              className="flex items-center gap-2 py-1.5 px-2 hover:bg-gray-50 cursor-pointer transition-colors flex-shrink-0 mt-1"
+                              onClick={() => handleDistributorChange(distributor.id, !selectedDistributors.includes(distributor.id))}
+                            >
+                              <div className="relative h-4 w-4">
+                                {selectedDistributors.includes(distributor.id) ? (
+                                  <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M6.83333 11L12.7083 5.125L11.5417 3.95833L6.83333 8.66667L4.45833 6.29167L3.29167 7.45833L6.83333 11ZM2.16667 15C1.70833 15 1.31597 14.8368 0.989583 14.5104C0.663194 14.184 0.5 13.7917 0.5 13.3333V1.66667C0.5 1.20833 0.663194 0.815972 0.989583 0.489583C1.31597 0.163194 1.70833 0 2.16667 0H13.8333C14.2917 0 14.684 0.163194 15.0104 0.489583C15.3368 0.815972 15.5 1.20833 15.5 1.66667V13.3333C15.5 13.7917 15.3368 14.184 15.0104 14.5104C14.684 14.8368 14.2917 15 13.8333 15H2.16667ZM2.16667 13.3333H13.8333V1.66667H2.16667V13.3333Z" fill="#219FB9" />
+                                  </svg>
+                                ) : (
+                                  <div className="h-4 w-4 border-2 border-neutral-dark bg-white rounded"></div>
+                                )}
+                              </div>
+                            </label>
                             <div
                               className="flex-1 cursor-pointer"
                               onClick={() => handleItemSelection(distributor)}
@@ -546,10 +564,10 @@ const ZonesMakita = ({ items = [] }) => {
             {/* Red de Servicios Section */}
             <div className="mb-6  bg-white">
               <div
-                className="flex items-center justify-between p-4 bg-gray-100 cursor-pointer"
+                className="flex items-center justify-between px-4 py-3 bg-gray-100 cursor-pointer"
                 onClick={() => setServiciosExpanded(!serviciosExpanded)}
               >
-                <h2 className="font-bold">Red de Servicios</h2>
+                <h2 className="font-normal text-lg tracking-wide">Red de Servicios</h2>
                 {serviciosExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
               </div>
               {serviciosExpanded && (
@@ -558,33 +576,44 @@ const ZonesMakita = ({ items = [] }) => {
                     <input
                       type="text"
                       placeholder="Buscar nombre"
-                      className="w-full border rounded-lg pl-10 pr-4 py-2 text-sm"
+                      className="w-full border border-gray-200 outline-none rounded-lg pr-10 pl-4 py-3 text-base"
                       value={searchService}
                       onChange={(e) => setSearchService(e.target.value)}
                     />
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 customtext-neutral-light" size={18} />
+                    <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 customtext-neutral-light" size={22} />
                   </div>
 
                   {/* Service Centers Checkboxes */}
                   <div className="space-y-2">
-                    <label className="flex items-center gap-2">
-                      <input
-                        type="checkbox"
-                        className="rounded"
-                        checked={selectedServices.length === services.length}
-                        onChange={(e) => handleSelectAllServices(e.target.checked)}
-                      />
-                      <span>Todos</span>
+                    <label className="flex items-center gap-2 py-1.5 px-2 hover:bg-gray-50 cursor-pointer transition-colors" onClick={() => handleSelectAllServices(!(selectedServices.length === services.length))}>
+                      <div className="relative h-4 w-4">
+                        {selectedServices.length === services.length ? (
+                          <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M6.83333 11L12.7083 5.125L11.5417 3.95833L6.83333 8.66667L4.45833 6.29167L3.29167 7.45833L6.83333 11ZM2.16667 15C1.70833 15 1.31597 14.8368 0.989583 14.5104C0.663194 14.184 0.5 13.7917 0.5 13.3333V1.66667C0.5 1.20833 0.663194 0.815972 0.989583 0.489583C1.31597 0.163194 1.70833 0 2.16667 0H13.8333C14.2917 0 14.684 0.163194 15.0104 0.489583C15.3368 0.815972 15.5 1.20833 15.5 1.66667V13.3333C15.5 13.7917 15.3368 14.184 15.0104 14.5104C14.684 14.8368 14.2917 15 13.8333 15H2.16667ZM2.16667 13.3333H13.8333V1.66667H2.16667V13.3333Z" fill="#219FB9" />
+                          </svg>
+                        ) : (
+                          <div className="h-4 w-4 border-2 border-neutral-dark bg-white rounded"></div>
+                        )}
+                      </div>
+                      <span className={selectedServices.length === services.length ? 'font-semibold' : ''}>Todos</span>
                     </label>
                     {filteredServices.map(service => (
                       <div key={service.id} className="border-b border-gray-100 last:border-b-0">
-                        <div className="flex items-start gap-3  hover:bg-gray-50 rounded">
-                          <input
-                            type="checkbox"
-                            className="rounded mt-1 flex-shrink-0"
-                            checked={selectedServices.includes(service.id)}
-                            onChange={(e) => handleServiceChange(service.id, e.target.checked)}
-                          />
+                        <div className="flex items-start gap-3 rounded">
+                          <label
+                            className="flex items-center gap-2 py-1.5 px-2 hover:bg-gray-50 cursor-pointer transition-colors flex-shrink-0 mt-1"
+                            onClick={() => handleServiceChange(service.id, !selectedServices.includes(service.id))}
+                          >
+                            <div className="relative h-4 w-4">
+                              {selectedServices.includes(service.id) ? (
+                                <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                  <path d="M6.83333 11L12.7083 5.125L11.5417 3.95833L6.83333 8.66667L4.45833 6.29167L3.29167 7.45833L6.83333 11ZM2.16667 15C1.70833 15 1.31597 14.8368 0.989583 14.5104C0.663194 14.184 0.5 13.7917 0.5 13.3333V1.66667C0.5 1.20833 0.663194 0.815972 0.989583 0.489583C1.31597 0.163194 1.70833 0 2.16667 0H13.8333C14.2917 0 14.684 0.163194 15.0104 0.489583C15.3368 0.815972 15.5 1.20833 15.5 1.66667V13.3333C15.5 13.7917 15.3368 14.184 15.0104 14.5104C14.684 14.8368 14.2917 15 13.8333 15H2.16667ZM2.16667 13.3333H13.8333V1.66667H2.16667V13.3333Z" fill="#219FB9" />
+                                </svg>
+                              ) : (
+                                <div className="h-4 w-4 border-2 border-neutral-dark bg-white rounded"></div>
+                              )}
+                            </div>
+                          </label>
                           <div
                             className="flex-1 cursor-pointer"
                             onClick={() => handleItemSelection(service)}
@@ -605,7 +634,7 @@ const ZonesMakita = ({ items = [] }) => {
             </div>
           </div>
           {/* Right Content - Map and Details */}
-          <div className="md:col-span-8 lg:col-span-9">            {/* Google Map */}
+          <div className="col-span-6 lg:col-span-4">            {/* Google Map */}
             <div className="w-full aspect-video bg-gray-200 rounded-lg mb-8 relative overflow-hidden">
               <div id="map" className="w-full h-full"></div>
               {(!map && typeof google === 'undefined') && (
@@ -636,21 +665,20 @@ const ZonesMakita = ({ items = [] }) => {
                     Información de Puntos Seleccionados ({selectedItems.length})
                   </h2>
                   <p className="text-gray-600 text-sm">
-                    Mostrando detalles de {selectedItems.filter(i => i.type === 'distributor').length} distribuidores 
+                    Mostrando detalles de {selectedItems.filter(i => i.type === 'distributor').length} distribuidores
                     y {selectedItems.filter(i => i.type === 'service_network').length} servicios técnicos seleccionados.
                   </p>
                 </div>                {selectedItems.map((item, itemIndex) => (
-                  <div 
-                    key={item.id} 
+                  <div
+                    key={item.id}
                     id={`detail-${item.id}`}
                     className="bg-white rounded-lg shadow-sm border p-6 transition-all duration-300"
                   >
                     <div className="flex items-start gap-3 mb-2">
-                      <div className={`px-3 py-1 rounded-full text-sm font-medium ${
-                        item.type === 'distributor' 
-                          ? 'bg-gray-100 customtext-primary' 
+                      <div className={`px-3 py-1 rounded-full text-sm font-medium ${item.type === 'distributor'
+                          ? 'bg-gray-100 customtext-primary'
                           : 'bg-gray-100 customtext-secondary'
-                      }`}>
+                        }`}>
                         {item.type === 'distributor' ? 'Distribuidor' : 'Red de Servicio'}
                       </div>
                     </div>
@@ -722,46 +750,57 @@ const ZonesMakita = ({ items = [] }) => {
                               <h4 className="font-semibold text-lg mb-2 customtext-neutral-dark">{branch.name}</h4>
 
                               <div className="space-y-3">
-                                <div className="flex items-start gap-2">
-                                  <p className="customtext-neutral-light text-sm">{branch.address}</p>
+                                <div className="flex items-start gap-2 mb-3">
+                                  <MapPin className="customtext-neutral-light mt-0.5" size={14} />
+                                  <div>
+                                    <h4 className="font-semibold text-sm mb-1">Dirección</h4>
+                                    <p className="customtext-neutral-light text-sm">{branch.address}</p>
+                                  </div>
                                 </div>
-                                <h4 className="font-semibold text-sm mb-2 customtext-neutral-dark">Teléfonos</h4>
 
-                                {branch.phones && (
-                                  <div className="flex items-start gap-2">
+                                {parsePhones(branch.phones).length > 0 && (
+                                  <div className="flex items-start gap-2 mb-3">
+                                    <Phone className="customtext-neutral-light mt-0.5" size={14} />
                                     <div>
+                                      <h4 className="font-semibold text-sm mb-1">Teléfonos</h4>
                                       {parsePhones(branch.phones).map((phone, phoneIndex) => (
                                         <p key={phoneIndex} className="customtext-neutral-light text-sm">{phone}</p>
                                       ))}
                                     </div>
                                   </div>
                                 )}
-                                <h4 className="font-semibold text-sm mb-2 customtext-neutral-dark">Correo Electrónico</h4>
 
-                                {branch.emails && (
-                                  <div className="flex items-start gap-2">
+                                {parseEmails(branch.emails).length > 0 && (
+                                  <div className="flex items-start gap-2 mb-3">
+                                    <Mail className="customtext-neutral-light mt-0.5" size={14} />
                                     <div>
+                                      <h4 className="font-semibold text-sm mb-1">Correo Electrónico</h4>
                                       {parseEmails(branch.emails).map((email, emailIndex) => (
                                         <p key={emailIndex} className="customtext-neutral-light text-sm">{email}</p>
                                       ))}
                                     </div>
                                   </div>
                                 )}
-                                <h4 className="font-semibold text-sm mb-2 customtext-neutral-dark">Horario de atención</h4>
 
-                                {branch.opening_hours && (
+                                {branch.opening_hours && parseOpenHours(branch.opening_hours).length > 0 && (
                                   <div className="flex items-start gap-2">
-                                    <p className="customtext-neutral-light text-sm">{branch.opening_hours}</p>
+                                    <Clock className="customtext-neutral-light mt-0.5" size={14} />
+                                    <div>
+                                      <h4 className="font-semibold text-sm mb-1">Horario de atención</h4>
+                                      {parseOpenHours(branch.opening_hours).map((hour, hourIndex) => (
+                                        <p key={hourIndex} className="customtext-neutral-light text-sm">{hour}</p>
+                                      ))}
+                                    </div>
                                   </div>
                                 )}
                               </div>
                             </div>
                           ))}
                         </div>
-                      </div>                    )}
+                      </div>)}
                   </div>
                 ))}
-              </div>            ) : (
+              </div>) : (
               <div className="bg-white rounded-lg shadow-sm p-6 border text-center">
                 <MapPin className="mx-auto mb-4 customtext-neutral-light" size={48} />
                 <h3 className="text-lg font-semibold mb-2">No hay puntos seleccionados</h3>

@@ -2297,7 +2297,7 @@
     ]
   },
   "resources/js/Admin/ServicePoints.jsx": {
-    "file": "assets/ServicePoints-CuS3ztoO.js",
+    "file": "assets/ServicePoints-R3rmq8Jq.js",
     "name": "ServicePoints",
     "src": "resources/js/Admin/ServicePoints.jsx",
     "isEntry": true,
@@ -2305,6 +2305,7 @@
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
       "_index-BH53Isel.js",
       "resources/js/Utils/ReactAppend.jsx",
+      "_esm-hESa1MbP.js",
       "_Base-BFPMzJYQ.js",
       "_CreateReactScript-BoGwggCx.js",
       "_Table-DitbKwtZ.js",
@@ -2318,11 +2319,11 @@
       "_TextareaFormGroup-DVzYJtLM.js",
       "_Modal-CIqmjseY.js",
       "_SelectFormGroup-YqB1XVb8.js",
+      "_Global-ErywZRdd.js",
       "_index-yBjzXJbu.js",
       "_index-fNjTmf9T.js",
-      "_Global-ErywZRdd.js",
-      "_tippy-react.esm-BWiGTO87.js",
       "_index-rimy3MAc.js",
+      "_tippy-react.esm-BWiGTO87.js",
       "_Logout-7s5dsuEK.js",
       "_main-BvVILmTO.js",
       "____vite-browser-external_commonjs-proxy-0zb4Agf2.js",
@@ -5363,7 +5364,7 @@
     ]
   },
   "resources/js/Components/Tailwind/DeliveryZone.jsx": {
-    "file": "assets/DeliveryZone-8XibeXnX.js",
+    "file": "assets/DeliveryZone-CEAkVbGH.js",
     "name": "DeliveryZone",
     "src": "resources/js/Components/Tailwind/DeliveryZone.jsx",
     "isDynamicEntry": true,
@@ -8464,7 +8465,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-CUa_8Acb.js",
+    "file": "assets/System-JSdc4Uku.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,
