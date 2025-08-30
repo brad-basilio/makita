@@ -424,15 +424,7 @@ const ServicePoints = ({ }) => {
             )
           }
         },
-        {
-          dataField: 'status',
-          caption: 'Activo',
-          dataType: 'boolean',
-          width: '80px',
-          cellTemplate: (container, { data }) => {
-            ReactAppend(container, <SwitchFormGroup checked={data.status} onChange={(e) => onStatusChange({ id: data.id, value: e.target.checked })} />)
-          }
-        },
+     
         {
           dataField: 'visible',
           caption: 'Visible',

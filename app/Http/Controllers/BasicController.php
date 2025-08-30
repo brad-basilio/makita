@@ -160,7 +160,7 @@ class BasicController extends Controller
       if (Auth::check()) {
         $table = $this->prefix4filter ? $this->prefix4filter : (new $this->model)->getTable();
         if (Schema::hasColumn($table, 'status')) {
-          $instance->whereNotNull($this->prefix4filter ? $this->prefix4filter . '.status' : 'status');
+          $instance->where($this->prefix4filter ? $this->prefix4filter . '.status' : 'status', 1);
         }
       }
 
@@ -373,7 +373,7 @@ class BasicController extends Controller
       if (!$dataBeforeDelete) throw new Exception('El registro que intenta eliminar no existe');
       if ($this->softDeletion) {
         $deleted = $this->model::where('id', $id)
-          ->update(\array_merge(['status' => null], $body));
+          ->update(\array_merge(['status' => 0], $body));
       } else {
         $deleted = $this->model::where('id', $id)
           ->delete();
