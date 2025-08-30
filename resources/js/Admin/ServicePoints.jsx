@@ -28,8 +28,7 @@ const ServicePoints = ({ }) => {
   const businessNameRef = useRef()
   const addressRef = useRef()
   // Removed unused refs - now using state management
-  const statusRef = useRef()
-  const visibleRef = useRef()
+  // statusRef y visibleRef eliminados - valores por defecto en true
 
   const [isEditing, setIsEditing] = useState(false)
   const [branches, setBranches] = useState([])
@@ -107,17 +106,9 @@ const ServicePoints = ({ }) => {
     
     setActiveMapTab('main')
     
-    if (data?.status) {
-      $(statusRef.current).prop('checked', true).trigger('change')
-    } else {
-      $(statusRef.current).prop('checked', false).trigger('change')
-    }
     
-    if (data?.visible) {
-      $(visibleRef.current).prop('checked', true).trigger('change')
-    } else {
-      $(visibleRef.current).prop('checked', false).trigger('change')
-    }
+    
+    
     
     $(modalRef.current).modal('show')
   }
@@ -142,8 +133,8 @@ const ServicePoints = ({ }) => {
          opening_hours: branch.opening_hours.filter(h => h.day && h.hours).map(h => `${h.day}: ${h.hours}`).join('\n'),
          location: `${branch.location.lat}, ${branch.location.lng}`
        })) : [],
-       status: statusRef.current.checked ? 1 : 0,
-      visible: visibleRef.current.checked ? 1 : 0
+       status: 1, // Por defecto activo
+      visible: 1 // Por defecto visible
     }
 
     const result = await servicePointRest.save(request)
@@ -473,214 +464,160 @@ const ServicePoints = ({ }) => {
           allowExporting: false
         }
       ]} />
-      <Modal modalRef={modalRef} title={isEditing ? 'Editar punto de servicio' : 'Agregar punto de servicio'} onSubmit={onModalSubmit} size='lg'>
+      <Modal modalRef={modalRef} title={isEditing ? 'Editar punto de servicio' : 'Agregar punto de servicio'} onSubmit={onModalSubmit} size='xl'>
       <div className='row' id='principal-container'>
-        <input ref={idRef} type='hidden' />
-        
-        <SelectFormGroup 
-          eRef={typeRef} 
-          label='Tipo' 
-          col='col-md-6'
-          dropdownParent={"#principal-container"}
+        {/* Columna izquierda - Formulario */}
+        <div className='col-md-6'>
+          <input ref={idRef} type='hidden' />
           
-          required 
-        >
-            <option value='distributor'>Distribuidor</option>
-            <option value='service_network'>Red de Servicio</option>
-        </SelectFormGroup>
+          <SelectFormGroup 
+            eRef={typeRef} 
+            label='Tipo' 
+            col='col-12'
+            dropdownParent={"#principal-container"}
+            required 
+          >
+              <option value='distributor'>Distribuidor</option>
+              <option value='service_network'>Red de Servicio</option>
+          </SelectFormGroup>
+          
+          <InputFormGroup eRef={nameRef} label='Nombre' col='col-12' required />
+          <InputFormGroup eRef={businessNameRef} label='Razón Social' col='col-12' />
         
-  
+          <TextareaFormGroup eRef={addressRef} label='Dirección' rows={2} col='col-12' />
         
-        <InputFormGroup eRef={nameRef} label='Nombre' col='col-md-8' required />
-        <InputFormGroup eRef={businessNameRef} label='Razón Social' col='col-md-4' />
-        
-        <TextareaFormGroup eRef={addressRef} label='Dirección' rows={2} />
-        
-        {/* Teléfonos dinámicos */}
-        <div className='col-12'>
-          <div className='form-group'>
-            <label>Teléfonos</label>
-            {phones.map((phone, index) => (
-              <div key={index} className='input-group mb-2'>
-                <input
-                  type='text'
-                  className='form-control'
-                  value={phone}
-                  onChange={(e) => updatePhone(index, e.target.value)}
-                  placeholder='Ej: +51 999 999 999'
-                />
-                <div className='input-group-append'>
-                  {phones.length > 1 && (
-                    <button
-                      type='button'
-                      className='btn btn-outline-danger'
-                      onClick={() => removePhone(index)}
-                    >
-                      <i className='fa fa-trash'></i>
-                    </button>
-                  )}
-                  {index === phones.length - 1 && (
-                    <button
-                      type='button'
-                      className='btn btn-outline-primary'
-                      onClick={addPhone}
-                    >
-                      <i className='fa fa-plus'></i>
-                    </button>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Emails dinámicos */}
-        <div className='col-12'>
-          <div className='form-group'>
-            <label>Emails</label>
-            {emails.map((email, index) => (
-              <div key={index} className='input-group mb-2'>
-                <input
-                  type='email'
-                  className='form-control'
-                  value={email}
-                  onChange={(e) => updateEmail(index, e.target.value)}
-                  placeholder='Ej: contacto@empresa.com'
-                />
-                <div className='input-group-append'>
-                  {emails.length > 1 && (
-                    <button
-                      type='button'
-                      className='btn btn-outline-danger'
-                      onClick={() => removeEmail(index)}
-                    >
-                      <i className='fa fa-trash'></i>
-                    </button>
-                  )}
-                  {index === emails.length - 1 && (
-                    <button
-                      type='button'
-                      className='btn btn-outline-primary'
-                      onClick={addEmail}
-                    >
-                      <i className='fa fa-plus'></i>
-                    </button>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Horarios de atención dinámicos */}
-        <div className='col-12'>
-          <div className='form-group'>
-            <label>Horarios de Atención</label>
-            {openingHours.map((hour, index) => (
-              <div key={index} className='row mb-2'>
-                <div className='col-md-4'>
-                  <input
-                    type='text'
-                    className='form-control'
-                    value={hour.day}
-                    onChange={(e) => updateOpeningHour(index, 'day', e.target.value)}
-                    placeholder='Ej: Lun - Vie'
-                  />
-                </div>
-                <div className='col-md-6'>
-                  <input
-                    type='text'
-                    className='form-control'
-                    value={hour.hours}
-                    onChange={(e) => updateOpeningHour(index, 'hours', e.target.value)}
-                    placeholder='Ej: 08:00 - 20:00'
-                  />
-                </div>
-                <div className='col-md-2'>
-                  {openingHours.length > 1 && (
-                    <button
-                      type='button'
-                      className='btn btn-outline-danger btn-sm'
-                      onClick={() => removeOpeningHour(index)}
-                    >
-                      <i className='fa fa-trash'></i>
-                    </button>
-                  )}
-                  {index === openingHours.length - 1 && (
-                    <button
-                      type='button'
-                      className='btn btn-outline-primary btn-sm ml-1'
-                      onClick={addOpeningHour}
-                    >
-                      <i className='fa fa-plus'></i>
-                    </button>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Mapa para ubicación */}
-        <div className='col-12'>
-          <div className='form-group'>
-            <label>Ubicación</label>
-            <div className='mb-2'>
-              <small className='text-muted'>Haz clic en el mapa para seleccionar la ubicación</small>
-            </div>
-            <div className='mb-2'>
-              <button
-                type='button'
-                className={`btn btn-sm mr-2 ${activeMapTab === 'main' ? 'btn-primary' : 'btn-outline-primary'}`}
-                onClick={() => setActiveMapTab('main')}
-              >
-                Ubicación Principal
-              </button>
-              {branches.map((_, index) => (
+          {/* Teléfonos dinámicos */}
+          <div className='col-12'>
+            <div className='form-group'>
+              <div className='d-flex justify-content-between align-items-center mb-3 mt-3'>
+                <label className='form-label mb-0'>Teléfonos</label>
                 <button
-                  key={index}
                   type='button'
-                  className={`btn btn-sm mr-2 ${activeMapTab === index.toString() ? 'btn-primary' : 'btn-outline-primary'}`}
-                  onClick={() => setActiveMapTab(index.toString())}
+                  className='btn btn-sm btn-outline-primary'
+                  onClick={addPhone}
                 >
-                  Sucursal {index + 1}
+                  <i className='fa fa-plus me-1'></i>Agregar
                 </button>
+              </div>
+              {phones.map((phone, index) => (
+                <div key={index} className='input-group mb-2'>
+                  <input
+                    type='text'
+                    className='form-control'
+                    value={phone}
+                    onChange={(e) => updatePhone(index, e.target.value)}
+                    placeholder={`Teléfono ${index + 1}`}
+                  />
+                  {phones.length > 1 && (
+                    <div className='input-group-append'>
+                      <button
+                        type='button'
+                        className='btn btn-outline-danger'
+                        onClick={() => removePhone(index)}
+                        title='Eliminar teléfono'
+                      >
+                        <i className='fa fa-trash'></i>
+                      </button>
+                    </div>
+                  )}
+                </div>
               ))}
             </div>
-            <LoadScript 
-              googleMapsApiKey={Global.GMAPS_API_KEY}
-              preventGoogleFontsLoading={true}
-              loadingElement={<div>Cargando mapa...</div>}
-            >
-              <GoogleMap
-                mapContainerStyle={{ width: '100%', height: '300px' }}
-                center={activeMapTab === 'main' ? location : (branches[parseInt(activeMapTab)]?.location || location)}
-                zoom={15}
-                onClick={handleMapClick}
-              >
-                <Marker
-                  position={activeMapTab === 'main' ? location : (branches[parseInt(activeMapTab)]?.location || location)}
-                />
-              </GoogleMap>
-            </LoadScript>
-            <div className='mt-2'>
-              <small className='text-muted'>
-                Coordenadas: {activeMapTab === 'main' ? 
-                  `${location.lat.toFixed(6)}, ${location.lng.toFixed(6)}` : 
-                  (branches[parseInt(activeMapTab)]?.location ? 
-                    `${branches[parseInt(activeMapTab)].location.lat.toFixed(6)}, ${branches[parseInt(activeMapTab)].location.lng.toFixed(6)}` : 
-                    'No seleccionada'
-                  )
-                }
-              </small>
+          </div>
+
+          {/* Emails dinámicos */}
+          <div className='col-12'>
+            <div className='form-group'>
+              <div className='d-flex justify-content-between align-items-center mb-2'>
+                <label className='form-label mb-0'>Emails</label>
+                <button
+                  type='button'
+                  className='btn btn-sm btn-outline-primary'
+                  onClick={addEmail}
+                >
+                  <i className='fa fa-plus me-1'></i>Agregar
+                </button>
+              </div>
+              {emails.map((email, index) => (
+                <div key={index} className='input-group mb-2'>
+                  <input
+                    type='email'
+                    className='form-control'
+                    value={email}
+                    onChange={(e) => updateEmail(index, e.target.value)}
+                    placeholder={`Email ${index + 1}`}
+                  />
+                  {emails.length > 1 && (
+                    <div className='input-group-append'>
+                      <button
+                        type='button'
+                        className='btn btn-outline-danger'
+                        onClick={() => removeEmail(index)}
+                        title='Eliminar email'
+                      >
+                        <i className='fa fa-trash'></i>
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
-        </div>
+
+          {/* Horarios de atención dinámicos */}
+          <div className='col-12'>
+            <div className='form-group'>
+              <div className='d-flex justify-content-between align-items-center mb-2'>
+                <label className='form-label mb-0'>Horarios de Atención</label>
+                <button
+                  type='button'
+                  className='btn btn-sm btn-outline-primary'
+                  onClick={addOpeningHour}
+                >
+                  <i className='fa fa-plus me-1'></i>Agregar
+                </button>
+              </div>
+              {openingHours.map((hour, index) => (
+                <div key={index} className='row mb-2'>
+                  <div className='col-md-4'>
+                    <input
+                      type='text'
+                      className='form-control'
+                      value={hour.day}
+                      onChange={(e) => updateOpeningHour(index, 'day', e.target.value)}
+                      placeholder='Ej: Lun - Vie'
+                    />
+                  </div>
+                  <div className='col-md-6'>
+                    <input
+                      type='text'
+                      className='form-control'
+                      value={hour.hours}
+                      onChange={(e) => updateOpeningHour(index, 'hours', e.target.value)}
+                      placeholder='Ej: 08:00 - 20:00'
+                    />
+                  </div>
+                  <div className='col-md-2'>
+                    {openingHours.length > 1 && (
+                      <button
+                        type='button'
+                        className='btn btn-outline-danger btn-sm'
+                        onClick={() => removeOpeningHour(index)}
+                        title='Eliminar horario'
+                      >
+                        <i className='fa fa-trash'></i>
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         
         {/* Dynamic Branches Section */}
         <div className="col-12">
-          <div className="d-flex justify-content-between align-items-center mb-3">
-            <label className="form-label mb-0">Sucursales</label>
+          <div className="d-flex justify-content-between align-items-center mb-3 mt-4 p-3 bg-light rounded">
+            <label className="form-label mb-0 fw-bold">Sucursales</label>
             <button 
               type="button" 
               className="btn btn-sm btn-soft-primary"
@@ -698,20 +635,21 @@ const ServicePoints = ({ }) => {
           )}
           
           {branches.map((branch, branchIndex) => (
-            <div key={branchIndex} className="card mb-3">
-              <div className="card-header d-flex justify-content-between align-items-center">
-                <h6 className="mb-0">Sucursal #{branchIndex + 1}</h6>
+            <div key={branchIndex} className="card mb-4 shadow-sm">
+              <div className="card-header d-flex justify-content-between align-items-center bg-light">
+                <h6 className="mb-0 fw-bold text-primary">Sucursal #{branchIndex + 1}</h6>
                 <button 
                   type="button" 
                   className="btn btn-sm btn-soft-danger"
                   onClick={() => removeBranch(branchIndex)}
+                  title="Eliminar sucursal"
                 >
                   <i className="fa fa-trash"></i>
                 </button>
               </div>
-              <div className="card-body">
+              <div className="card-body p-4">
                 <div className="row">
-                  <div className="col-md-6">
+                  <div className="col-md-12">
                     <label className="form-label">Nombre</label>
                     <input 
                       type="text" 
@@ -721,7 +659,7 @@ const ServicePoints = ({ }) => {
                       placeholder="Nombre de la sucursal"
                     />
                   </div>
-                  <div className="col-md-6">
+                  <div className="col-md-12 mt-2">
                     <label className="form-label">Dirección</label>
                     <input 
                       type="text" 
@@ -733,8 +671,17 @@ const ServicePoints = ({ }) => {
                   </div>
                   
                   {/* Teléfonos dinámicos para sucursal */}
-                  <div className="col-md-4">
-                    <label className="form-label">Teléfonos</label>
+                  <div className="col-md-12">
+                    <div className="d-flex justify-content-between align-items-center mb-3 mt-3">
+                      <label className="form-label mb-0">Teléfonos</label>
+                      <button
+                        type="button"
+                        className="btn btn-sm btn-outline-primary"
+                        onClick={() => addBranchPhone(branchIndex)}
+                      >
+                        <i className="fa fa-plus me-1"></i>Agregar
+                      </button>
+                    </div>
                     {branch.phones.map((phone, phoneIndex) => (
                       <div key={phoneIndex} className="input-group mb-1">
                         <input
@@ -742,35 +689,36 @@ const ServicePoints = ({ }) => {
                           className="form-control form-control-sm"
                           value={phone}
                           onChange={(e) => updateBranchPhone(branchIndex, phoneIndex, e.target.value)}
-                          placeholder="Teléfono"
+                          placeholder={`Teléfono ${phoneIndex + 1}`}
                         />
-                        <div className="input-group-append">
-                          {branch.phones.length > 1 && (
+                        {branch.phones.length > 1 && (
+                          <div className="input-group-append">
                             <button
                               type="button"
                               className="btn btn-outline-danger btn-sm"
                               onClick={() => removeBranchPhone(branchIndex, phoneIndex)}
+                              title="Eliminar teléfono"
                             >
                               <i className="fa fa-trash"></i>
                             </button>
-                          )}
-                          {phoneIndex === branch.phones.length - 1 && (
-                            <button
-                              type="button"
-                              className="btn btn-outline-primary btn-sm"
-                              onClick={() => addBranchPhone(branchIndex)}
-                            >
-                              <i className="fa fa-plus"></i>
-                            </button>
-                          )}
-                        </div>
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>
                   
                   {/* Emails dinámicos para sucursal */}
-                  <div className="col-md-4">
-                    <label className="form-label">Emails</label>
+                  <div className="col-md-12">
+                    <div className="d-flex justify-content-between align-items-center mb-2">
+                      <label className="form-label mb-0">Emails</label>
+                      <button
+                        type="button"
+                        className="btn btn-sm btn-outline-primary"
+                        onClick={() => addBranchEmail(branchIndex)}
+                      >
+                        <i className="fa fa-plus me-1"></i>Agregar
+                      </button>
+                    </div>
                     {branch.emails.map((email, emailIndex) => (
                       <div key={emailIndex} className="input-group mb-1">
                         <input
@@ -778,35 +726,36 @@ const ServicePoints = ({ }) => {
                           className="form-control form-control-sm"
                           value={email}
                           onChange={(e) => updateBranchEmail(branchIndex, emailIndex, e.target.value)}
-                          placeholder="Email"
+                          placeholder={`Email ${emailIndex + 1}`}
                         />
-                        <div className="input-group-append">
-                          {branch.emails.length > 1 && (
+                        {branch.emails.length > 1 && (
+                          <div className="input-group-append">
                             <button
                               type="button"
                               className="btn btn-outline-danger btn-sm"
                               onClick={() => removeBranchEmail(branchIndex, emailIndex)}
+                              title="Eliminar email"
                             >
                               <i className="fa fa-trash"></i>
                             </button>
-                          )}
-                          {emailIndex === branch.emails.length - 1 && (
-                            <button
-                              type="button"
-                              className="btn btn-outline-primary btn-sm"
-                              onClick={() => addBranchEmail(branchIndex)}
-                            >
-                              <i className="fa fa-plus"></i>
-                            </button>
-                          )}
-                        </div>
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>
                   
                   {/* Horarios dinámicos para sucursal */}
-                  <div className="col-md-4">
-                    <label className="form-label">Horarios de Atención</label>
+                  <div className="col-md-12">
+                    <div className="d-flex justify-content-between align-items-center mb-2">
+                      <label className="form-label mb-0">Horarios de Atención</label>
+                      <button
+                        type="button"
+                        className="btn btn-sm btn-outline-primary"
+                        onClick={() => addBranchOpeningHour(branchIndex)}
+                      >
+                        <i className="fa fa-plus me-1"></i>Agregar
+                      </button>
+                    </div>
                     {branch.opening_hours.map((hour, hourIndex) => (
                       <div key={hourIndex} className="row mb-1">
                         <div className="col-5">
@@ -833,17 +782,9 @@ const ServicePoints = ({ }) => {
                               type="button"
                               className="btn btn-outline-danger btn-sm"
                               onClick={() => removeBranchOpeningHour(branchIndex, hourIndex)}
+                              title="Eliminar horario"
                             >
                               <i className="fa fa-trash"></i>
-                            </button>
-                          )}
-                          {hourIndex === branch.opening_hours.length - 1 && (
-                            <button
-                              type="button"
-                              className="btn btn-outline-primary btn-sm"
-                              onClick={() => addBranchOpeningHour(branchIndex)}
-                            >
-                              <i className="fa fa-plus"></i>
                             </button>
                           )}
                         </div>
@@ -859,7 +800,7 @@ const ServicePoints = ({ }) => {
                       </small>
                     </div>
                     <small className="text-muted">
-                      Para cambiar la ubicación, selecciona "Sucursal {branchIndex + 1}" en el mapa de arriba
+                      Para cambiar la ubicación, selecciona "Sucursal {branchIndex + 1}" en el mapa de la derecha
                     </small>
                   </div>
                 </div>
@@ -868,14 +809,68 @@ const ServicePoints = ({ }) => {
           ))}
         </div>
         
-        {/* Status and Visibility Controls */}
-        <div className="col-12">
-          <div className="row">
-            <div className="col-md-6">
-              <SwitchFormGroup eRef={statusRef} label='Estado activo' />
-            </div>
-            <div className="col-md-6">
-              <SwitchFormGroup eRef={visibleRef} label='Visible' />
+        </div>
+        
+        {/* Columna derecha - Mapa */}
+        <div className='col-md-6'>
+          <div className='col-12'>
+            <div className='form-group'>
+              <label>Ubicación en el Mapa</label>
+              <div className='mb-2'>
+                <small className='text-muted'>Haz clic en el mapa para seleccionar la ubicación</small>
+              </div>
+              <div className='mb-2'>
+                <div className="nav nav-tabs mb-3 p-2 bg-light rounded" role="tablist" style={{gap: '8px'}}>
+                  <button
+                    type='button'
+                    className={`nav-link ${activeMapTab === 'main' ? 'active' : ''} px-3 py-2`}
+                    onClick={() => setActiveMapTab('main')}
+                    style={{marginRight: '8px', borderRadius: '6px'}}
+                  >
+                    <i className="fa fa-map-marker-alt me-1"></i>Ubicación Principal
+                  </button>
+                  {branches.map((_, index) => (
+                    <button
+                      key={index}
+                      type='button'
+                      className={`nav-link ${activeMapTab === index.toString() ? 'active' : ''} px-3 py-2`}
+                      onClick={() => setActiveMapTab(index.toString())}
+                      style={{marginRight: '8px', borderRadius: '6px'}}
+                    >
+                      <i className="fa fa-building me-1"></i>Sucursal {index + 1}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <LoadScript 
+                googleMapsApiKey={Global.GMAPS_API_KEY}
+                preventGoogleFontsLoading={true}
+                loadingElement={<div>Cargando mapa...</div>}
+              >
+                <div style={{ height: '500px', width: '100%', marginTop: '15px', borderRadius: '8px', overflow: 'hidden', border: '1px solid #e3e6f0' }}>
+                  <GoogleMap
+                    mapContainerStyle={{ width: '100%', height: '100%' }}
+                    center={activeMapTab === 'main' ? location : (branches[parseInt(activeMapTab)]?.location || location)}
+                    zoom={15}
+                    onClick={handleMapClick}
+                  >
+                  <Marker
+                    position={activeMapTab === 'main' ? location : (branches[parseInt(activeMapTab)]?.location || location)}
+                  />
+                  </GoogleMap>
+                </div>
+              </LoadScript>
+              <div className='mt-2'>
+                <small className='text-muted'>
+                  Coordenadas: {activeMapTab === 'main' ? 
+                    `${location.lat.toFixed(6)}, ${location.lng.toFixed(6)}` : 
+                    (branches[parseInt(activeMapTab)]?.location ? 
+                      `${branches[parseInt(activeMapTab)].location.lat.toFixed(6)}, ${branches[parseInt(activeMapTab)].location.lng.toFixed(6)}` : 
+                      'No seleccionada'
+                    )
+                  }
+                </small>
+              </div>
             </div>
           </div>
         </div>
