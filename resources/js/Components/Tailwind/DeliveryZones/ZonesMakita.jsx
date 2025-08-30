@@ -270,18 +270,7 @@ const ZonesMakita = ({ items = [] }) => {
       }
     }
 
-    // Scroll to the item in the details section
-    setTimeout(() => {
-      const detailElement = document.getElementById(`detail-${item.id}`);
-      if (detailElement) {
-        detailElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        // Add a brief highlight effect
-        detailElement.classList.add('ring-2', 'ring-blue-300');
-        setTimeout(() => {
-          detailElement.classList.remove('ring-2', 'ring-blue-300');
-        }, 2000);
-      }
-    }, 100);
+    
   }, [selectedDistributors, selectedServices, map]);
 
 
@@ -341,55 +330,15 @@ const ZonesMakita = ({ items = [] }) => {
     const selectedDistributorItems = distributors.filter(d => selectedDistributors.includes(d.id));
     const selectedServiceItems = services.filter(s => selectedServices.includes(s.id));
     return [...selectedDistributorItems, ...selectedServiceItems];
-  }, [distributors, services, selectedDistributors, selectedServices]);  // Create custom marker icons - Google Maps style: red circle with white icon
+  }, [distributors, services, selectedDistributors, selectedServices]);  // Create custom marker icons - Using provided SVG design
   const createMarkerIcon = useCallback((type, isMain = true) => {
-    const size = isMain ? 32 : 24;
-    const iconScale = isMain ? 1 : 0.8;
-
-    // SVG for store/building icon for distributors
-    const storeIcon = `
-      <g transform="scale(${iconScale}) translate(${16 - (12 * iconScale)}, ${16 - (12 * iconScale)})">
-        <path fill="white" stroke="none" d="M19 7V4C19 3.45 18.55 3 18 3H6C5.45 3 5 3.45 5 4V7H3V20H21V7H19ZM17 5V7H7V5H17ZM19 18H5V9H19V18ZM7 11H9V16H7V11ZM11 11H13V16H11V11ZM15 11H17V16H15V11Z"/>
-      </g>
-    `;
-
-    // SVG for wrench/tool icon for service networks  
-    const toolIcon = `
-      <g transform="scale(${iconScale}) translate(${16 - (12 * iconScale)}, ${16 - (12 * iconScale)})">
-        <path fill="white" stroke="none" d="M22.7,19L13.6,9.9C14.5,7.6 14,4.9 12.1,3C10.1,1 7.1,0.6 4.7,1.7L9,6L6,9L1.6,4.7C0.4,7.1 0.9,10.1 2.9,12.1C4.8,14 7.5,14.5 9.8,13.6L18.9,22.7C19.3,23.1 19.9,23.1 20.3,22.7L22.7,20.3C23.1,19.9 23.1,19.3 22.7,19Z"/>
-      </g>
-    `;
-
-    // Generic pin icon for branches (when isMain = false)
-    const pinIcon = `
-      <g transform="translate(${size / 2 - 6}, ${size / 2 - 8})">
-        <path fill="white" stroke="none" 
-              d="M6 2 
-                 C4 2 2.5 3.5 2.5 5.5 
-                 C2.5 7.5 6 12 6 12 
-                 S9.5 7.5 9.5 5.5 
-                 C9.5 3.5 8 2 6 2 Z 
-                 M6 7 
-                 C5 7 4.2 6.2 4.2 5.5 
-                 C4.2 4.8 5 4 6 4 
-                 C7 4 7.8 4.8 7.8 5.5 
-                 C7.8 6.2 7 7 6 7 Z"/>
-      </g>
-    `;
+    const size = isMain ? 40 : 32;
+    const scale = isMain ? 1 : 0.8;
 
     const svgIcon = `
-      <svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <filter id="shadow-${type}-${isMain}" x="-50%" y="-50%" width="200%" height="200%">
-            <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.3)"/>
-          </filter>
-        </defs>
-        <!-- Red circle background -->
-        <circle cx="${size / 2}" cy="${size / 2}" r="${(size / 2) - 2}" 
-                fill="#EA4335" stroke="white" stroke-width="2" 
-                filter="url(#shadow-${type}-${isMain})"/>
-        <!-- White pin icon -->
-        ${pinIcon}
+      <svg width="${size}" height="${size}" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" transform="scale(${scale})">
+        <circle opacity="0.92" cx="20" cy="20" r="20" fill="#EC1B24"/>
+        <path d="M20.0007 26.6663C19.8451 26.6663 19.7118 26.6219 19.6007 26.533C19.4895 26.4441 19.4062 26.3275 19.3507 26.183C19.1395 25.5608 18.8729 24.9775 18.5507 24.433C18.2395 23.8886 17.8007 23.2497 17.234 22.5163C16.6673 21.783 16.2062 21.083 15.8507 20.4163C15.5062 19.7497 15.334 18.9441 15.334 17.9997C15.334 16.6997 15.784 15.5997 16.684 14.6997C17.5951 13.7886 18.7007 13.333 20.0007 13.333C21.3007 13.333 22.4007 13.7886 23.3007 14.6997C24.2118 15.5997 24.6673 16.6997 24.6673 17.9997C24.6673 19.0108 24.4729 19.8552 24.084 20.533C23.7062 21.1997 23.2673 21.8608 22.7673 22.5163C22.1673 23.3163 21.7118 23.983 21.4007 24.5163C21.1007 25.0386 20.8507 25.5941 20.6507 26.183C20.5951 26.3386 20.5062 26.4608 20.384 26.5497C20.2729 26.6275 20.1451 26.6663 20.0007 26.6663ZM20.0007 19.6663C20.4673 19.6663 20.8618 19.5052 21.184 19.183C21.5062 18.8608 21.6673 18.4663 21.6673 17.9997C21.6673 17.533 21.5062 17.1386 21.184 16.8163C20.8618 16.4941 20.4673 16.333 20.0007 16.333C19.534 16.333 19.1395 16.4941 18.8173 16.8163C18.4951 17.1386 18.334 17.533 18.334 17.9997C18.334 18.4663 18.4951 18.8608 18.8173 19.183C19.1395 19.5052 19.534 19.6663 20.0007 19.6663Z" fill="#F6F6F6"/>
       </svg>
     `;
 
@@ -397,7 +346,7 @@ const ZonesMakita = ({ items = [] }) => {
       url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svgIcon),
       size: new google.maps.Size(size, size),
       scaledSize: new google.maps.Size(size, size),
-      anchor: new google.maps.Point(size / 2, size / 2),
+      anchor: new google.maps.Point(size / 2, size),
       origin: new google.maps.Point(0, 0)
     };
   }, []);
@@ -634,7 +583,7 @@ const ZonesMakita = ({ items = [] }) => {
             </div>
           </div>
           {/* Right Content - Map and Details */}
-          <div className="col-span-6 lg:col-span-4">            {/* Google Map */}
+          <div className="col-span-6 lg:col-span-4 lg:pl-10">            {/* Google Map */}
             <div className="w-full aspect-video bg-gray-200 rounded-lg mb-8 relative overflow-hidden">
               <div id="map" className="w-full h-full"></div>
               {(!map && typeof google === 'undefined') && (
@@ -656,55 +605,41 @@ const ZonesMakita = ({ items = [] }) => {
                   </div>
                 </div>
               )}
-            </div>            {/* Details Section - Show all selected items */}
+            </div>            
+            
+            {/* Details Section - Show all selected items */}
             {selectedItems.length > 0 ? (
               <div className="space-y-6">
                 {/* Header with count */}
-                <div className="bg-gray-50 rounded-lg p-4 border">
-                  <h2 className="text-xl font-bold mb-2">
-                    Información de Puntos Seleccionados ({selectedItems.length})
-                  </h2>
-                  <p className="text-gray-600 text-sm">
-                    Mostrando detalles de {selectedItems.filter(i => i.type === 'distributor').length} distribuidores
-                    y {selectedItems.filter(i => i.type === 'service_network').length} servicios técnicos seleccionados.
-                  </p>
-                </div>                {selectedItems.map((item, itemIndex) => (
+               
+                {selectedItems.map((item, itemIndex) => (
                   <div
                     key={item.id}
                     id={`detail-${item.id}`}
-                    className="bg-white rounded-lg shadow-sm border p-6 transition-all duration-300"
+                    className="bg-white rounded-lg shadow-sm  py-0 transition-all duration-300"
                   >
-                    <div className="flex items-start gap-3 mb-2">
-                      <div className={`px-3 py-1 rounded-full text-sm font-medium ${item.type === 'distributor'
-                          ? 'bg-gray-100 customtext-primary'
-                          : 'bg-gray-100 customtext-secondary'
-                        }`}>
-                        {item.type === 'distributor' ? 'Distribuidor' : 'Red de Servicio'}
-                      </div>
-                    </div>
+                   
 
-                    <h2 className="font-bold text-xl mb-2">{item.name}</h2>
+                    <h2 className=" tracking-wide customtext-neutral-dark text-base mb-2">Razón social</h2>
                     {item.business_name && (
-                      <h3 className="text-2xl customtext-neutral-light mb-4">{item.business_name}</h3>
+                      <h3 className="text-2xl font-bold customtext-neutral-dark mb-4">{item.business_name}</h3>
                     )}
 
-                    <div className="grid md:grid-cols-2 gap-6 mt-6">
+                    <div className="flex flex-col mt-6">
                       <div>
                         <div className="flex items-start gap-2 mb-4">
-                          <MapPin className="customtext-neutral-light mt-1" size={18} />
                           <div>
                             <h4 className="font-semibold mb-1">Dirección</h4>
-                            <p className="customtext-neutral-light">{item.address}</p>
+                            <p className="customtext-neutral-light text-lg">{item.address}</p>
                           </div>
                         </div>
 
                         {parsePhones(item.phones).length > 0 && (
                           <div className="flex items-start gap-2 mb-4">
-                            <Phone className="customtext-neutral-light mt-1" size={18} />
                             <div>
                               <h4 className="font-semibold mb-1">Teléfono</h4>
                               {parsePhones(item.phones).map((phone, index) => (
-                                <p key={index} className="customtext-neutral-light">{phone}</p>
+                                <p key={index} className="customtext-neutral-light text-lg">{phone}</p>
                               ))}
                             </div>
                           </div>
@@ -714,11 +649,10 @@ const ZonesMakita = ({ items = [] }) => {
                       <div>
                         {parseEmails(item.emails).length > 0 && (
                           <div className="flex items-start gap-2 mb-4">
-                            <Mail className="customtext-neutral-light mt-1" size={18} />
                             <div>
                               <h4 className="font-semibold mb-1">Correo Electrónico</h4>
                               {parseEmails(item.emails).map((email, index) => (
-                                <p key={index} className="customtext-neutral-light">{email}</p>
+                                <p key={index} className="customtext-neutral-light text-lg">{email}</p>
                               ))}
                             </div>
                           </div>
@@ -726,11 +660,10 @@ const ZonesMakita = ({ items = [] }) => {
 
                         {item.opening_hours && (
                           <div className="flex items-start gap-2">
-                            <Clock className="customtext-neutral-light mt-1" size={18} />
                             <div>
                               <h4 className="font-semibold mb-1">Horario de atención</h4>
                               {parseOpenHours(item.opening_hours).map((hour, index) => (
-                                <p key={index} className="customtext-neutral-light">{hour}</p>
+                                <p key={index} className="customtext-neutral-light text-lg">{hour}</p>
                               ))}
                             </div>
                           </div>
@@ -741,30 +674,28 @@ const ZonesMakita = ({ items = [] }) => {
                     {/* Sucursales */}
                     {item.branches && item.branches.length > 0 && (
                       <div className="mt-8 p-6 bg-gray-100 rounded-lg">
-                        <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
-                          Sucursales ({item.branches.length})
+                        <h3 className="text-2xl font-bold tracking-wide mb-4 flex items-center gap-2">
+                          Sucursales
                         </h3>
                         <div className="grid md:grid-cols-2 gap-6">
                           {item.branches.map((branch, index) => (
                             <div key={index} className="rounded-lg">
-                              <h4 className="font-semibold text-lg mb-2 customtext-neutral-dark">{branch.name}</h4>
+                              <h4 className=" text-xl mb-0 customtext-neutral-dark">{branch.name}</h4>
 
                               <div className="space-y-3">
                                 <div className="flex items-start gap-2 mb-3">
-                                  <MapPin className="customtext-neutral-light mt-0.5" size={14} />
                                   <div>
-                                    <h4 className="font-semibold text-sm mb-1">Dirección</h4>
-                                    <p className="customtext-neutral-light text-sm">{branch.address}</p>
+                               
+                                    <p className="customtext-neutral-light text-base">{branch.address}</p>
                                   </div>
                                 </div>
 
                                 {parsePhones(branch.phones).length > 0 && (
                                   <div className="flex items-start gap-2 mb-3">
-                                    <Phone className="customtext-neutral-light mt-0.5" size={14} />
                                     <div>
-                                      <h4 className="font-semibold text-sm mb-1">Teléfonos</h4>
+                                      <h4 className="font-bold tracking-wide text-base mb-1">Teléfonos</h4>
                                       {parsePhones(branch.phones).map((phone, phoneIndex) => (
-                                        <p key={phoneIndex} className="customtext-neutral-light text-sm">{phone}</p>
+                                        <p key={phoneIndex} className="customtext-neutral-light text-base">{phone}</p>
                                       ))}
                                     </div>
                                   </div>
@@ -772,11 +703,10 @@ const ZonesMakita = ({ items = [] }) => {
 
                                 {parseEmails(branch.emails).length > 0 && (
                                   <div className="flex items-start gap-2 mb-3">
-                                    <Mail className="customtext-neutral-light mt-0.5" size={14} />
                                     <div>
-                                      <h4 className="font-semibold text-sm mb-1">Correo Electrónico</h4>
+                                       <h4 className="font-bold tracking-wide text-base mb-1">Correo Electrónico</h4>
                                       {parseEmails(branch.emails).map((email, emailIndex) => (
-                                        <p key={emailIndex} className="customtext-neutral-light text-sm">{email}</p>
+                                        <p key={emailIndex} className="customtext-neutral-light text-base">{email}</p>
                                       ))}
                                     </div>
                                   </div>
@@ -784,11 +714,11 @@ const ZonesMakita = ({ items = [] }) => {
 
                                 {branch.opening_hours && parseOpenHours(branch.opening_hours).length > 0 && (
                                   <div className="flex items-start gap-2">
-                                    <Clock className="customtext-neutral-light mt-0.5" size={14} />
+                                 
                                     <div>
-                                      <h4 className="font-semibold text-sm mb-1">Horario de atención</h4>
+                                      <h4 className="font-bold tracking-wide text-base mb-1">Horario de atención</h4>
                                       {parseOpenHours(branch.opening_hours).map((hour, hourIndex) => (
-                                        <p key={hourIndex} className="customtext-neutral-light text-sm">{hour}</p>
+                                        <p key={hourIndex} className="customtext-neutral-light text-base">{hour}</p>
                                       ))}
                                     </div>
                                   </div>
