@@ -508,7 +508,7 @@ const ZonesMakita = ({ items = [] }) => {
                     {/* Distributor Checkboxes */}
                     <div className="flex flex-col gap-4">
                       <label
-                        className="flex items-center gap-2 py-1.5 px-2 hover:bg-gray-50 cursor-pointer transition-colors"
+                        className="flex items-center gap-3 py-1.5 px-2 hover:bg-gray-50 cursor-pointer transition-colors"
                         onClick={() => handleSelectAllDistributors(selectedDistributors.length !== distributors.length)}
                       >
                         <div className="relative h-4 w-4">
@@ -520,15 +520,15 @@ const ZonesMakita = ({ items = [] }) => {
                             <div className="h-4 w-4 border-2 border-neutral-dark bg-white rounded"></div>
                           )}
                         </div>
-                        <span className={`text-sm font-medium ${selectedDistributors.length === distributors.length ? 'text-[#262626] font-bold' : 'text-[#262626]'}`}>
+                        <span className={`text-md font-medium ${selectedDistributors.length === distributors.length ? 'text-[#262626] font-bold' : 'text-[#262626]'}`}>
                           Todos
                         </span>
                       </label>
                       {filteredDistributors.map(distributor => (
-                        <div key={distributor.id} className="border-b border-gray-100 last:border-b-0">
-                          <div className="flex items-start gap-3 rounded">
+                        <div key={distributor.id} className="">
+                          <div className="flex items-start gap-2 rounded">
                             <label
-                              className="flex items-center gap-2 py-1.5 px-2 hover:bg-gray-50 cursor-pointer transition-colors flex-shrink-0 mt-1"
+                              className="flex items-center gap-3 py-1.5 px-2 hover:bg-gray-50 cursor-pointer transition-colors flex-shrink-0 mt-1"
                               onClick={() => handleDistributorChange(distributor.id, !selectedDistributors.includes(distributor.id))}
                             >
                               <div className="relative h-4 w-4">
@@ -545,10 +545,10 @@ const ZonesMakita = ({ items = [] }) => {
                               className="flex-1 cursor-pointer"
                               onClick={() => handleItemSelection(distributor)}
                             >
-                              <div className="font-medium  text-sm">
+                              <div className="font-medium  text-md">
                                 {distributor.name}
                               </div>
-                              <div className="text-xs customtext-neutral-light mt-1">
+                              <div className="text-sm font-normal tracking-wide customtext-neutral-light mt-1">
                                 {distributor.address}
                               </div>
                             </div>
@@ -585,7 +585,7 @@ const ZonesMakita = ({ items = [] }) => {
 
                   {/* Service Centers Checkboxes */}
                   <div className="space-y-2">
-                    <label className="flex items-center gap-2 py-1.5 px-2 hover:bg-gray-50 cursor-pointer transition-colors" onClick={() => handleSelectAllServices(!(selectedServices.length === services.length))}>
+                    <label className="flex items-center gap-3 py-1.5 px-2 hover:bg-gray-50 cursor-pointer transition-colors" onClick={() => handleSelectAllServices(!(selectedServices.length === services.length))}>
                       <div className="relative h-4 w-4">
                         {selectedServices.length === services.length ? (
                           <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -595,11 +595,11 @@ const ZonesMakita = ({ items = [] }) => {
                           <div className="h-4 w-4 border-2 border-neutral-dark bg-white rounded"></div>
                         )}
                       </div>
-                      <span className={selectedServices.length === services.length ? 'font-semibold' : ''}>Todos</span>
+                      <span className={selectedServices.length === services.length ? 'font-normal' : ''}>Todos</span>
                     </label>
                     {filteredServices.map(service => (
-                      <div key={service.id} className="border-b border-gray-100 last:border-b-0">
-                        <div className="flex items-start gap-3 rounded">
+                      <div key={service.id} className="">
+                        <div className="flex items-start gap-2 rounded">
                           <label
                             className="flex items-center gap-2 py-1.5 px-2 hover:bg-gray-50 cursor-pointer transition-colors flex-shrink-0 mt-1"
                             onClick={() => handleServiceChange(service.id, !selectedServices.includes(service.id))}
@@ -618,7 +618,7 @@ const ZonesMakita = ({ items = [] }) => {
                             className="flex-1 cursor-pointer"
                             onClick={() => handleItemSelection(service)}
                           >
-                            <div className="font-medium  text-sm">
+                            <div className="font-medium  text-md">
                               {service.name}
                             </div>
                             <div className="text-xs customtext-neutral-light mt-1">
