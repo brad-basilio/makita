@@ -40,6 +40,9 @@ const HeaderMakita = ({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isFixed, setIsFixed] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
+  const [suggestions, setSuggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [loadingSuggestions, setLoadingSuggestions] = useState(false);
 
   // Mega menu state
   const [showMegaMenu, setShowMegaMenu] = useState(false);
@@ -55,6 +58,83 @@ const HeaderMakita = ({
   const [selectedApplication, setSelectedApplication] = useState(null);
   const [socials, setSocials] = useState([]);
   const [showTopBar, setShowTopBar] = useState(false);
+
+  // Función para buscar sugerencias
+  const searchSuggestions = async (query) => {
+    if (!query.trim() || query.length < 2) {
+      setSuggestions([]);
+      setShowSuggestions(false);
+      return;
+    }
+
+    setLoadingSuggestions(true);
+    try {
+      const filteredItems = items?.filter(item => 
+        item?.name?.toLowerCase().includes(query.toLowerCase()) ||
+        item?.description?.toLowerCase().includes(query.toLowerCase()) 
+       // item?.category?.name?.toLowerCase().includes(query.toLowerCase()) ||
+      //  item?.platform?.name?.toLowerCase().includes(query.toLowerCase()) ||
+        //item?.family?.name?.toLowerCase().includes(query.toLowerCase())
+      ).slice(0, 8) || []; // Limitar a 8 sugerencias
+      
+      setSuggestions(filteredItems);
+      setShowSuggestions(filteredItems.length > 0);
+    } catch (error) {
+      console.error('Error searching suggestions:', error);
+      setSuggestions([]);
+      setShowSuggestions(false);
+    } finally {
+      setLoadingSuggestions(false);
+    }
+  };
+
+  // Función para manejar cambios en el input con debounce
+  const handleSearchChange = (value) => {
+    setSearch(value);
+    
+    // Limpiar el timeout anterior
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+    }
+    
+    // Establecer nuevo timeout para debounce
+    debounceRef.current = setTimeout(() => {
+      searchSuggestions(value);
+    }, 300); // 300ms de debounce
+  };
+
+  // Función para seleccionar una sugerencia
+  const handleSuggestionClick = (item) => {
+    setSearch(item.name);
+    setShowSuggestions(false);
+    // Redirigir al producto o catálogo
+    window.location.href = `/catalogo?search=${encodeURIComponent(item.name)}`;
+  };
+
+  // Efecto para limpiar el timeout al desmontar el componente
+  useEffect(() => {
+    return () => {
+      if (debounceRef.current) {
+        clearTimeout(debounceRef.current);
+      }
+    };
+  }, []);
+
+  // Efecto para prevenir el scroll cuando el modal de búsqueda está abierto
+  useEffect(() => {
+    if (showSearch) {
+      // Prevenir scroll
+      document.body.style.overflow = 'hidden';
+    } else {
+      // Restaurar scroll
+      document.body.style.overflow = 'unset';
+    }
+
+    // Cleanup al desmontar o cambiar estado
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [showSearch]);
 
   // Categories, Platforms, Families, Applications
   const categories = Array.from(new Set(items.map((item) => JSON.stringify(item.category)))).map((item) => {
@@ -182,6 +262,8 @@ const HeaderMakita = ({
 
   const menuRef = useRef(null);
   const searchRef = useRef(null);
+  const suggestionsRef = useRef(null);
+  const debounceRef = useRef(null);
 
   const totalCount = cart.reduce((acc, item) => Number(acc) + Number(item.quantity), 0);
 
@@ -192,6 +274,9 @@ const HeaderMakita = ({
       }
       if (searchRef.current && !searchRef.current.contains(event.target)) {
         setSearchMobile(false)
+      }
+      if (suggestionsRef.current && !suggestionsRef.current.contains(event.target)) {
+        setShowSuggestions(false)
       }
     }
 
@@ -802,13 +887,10 @@ const HeaderMakita = ({
             style={{
               top: isFixed ? 64 : 125, // 64px when fixed, 120px otherwise
             }}
-            onMouseLeave={() => {
-              setShowSearch(false)
-            }}
           >
             {/* Contenido principal del mega menú */}
-            <div className="max-w-7xl mx-auto px-6 py-8 max-h-[calc(80vh-100px)] overflow-hidden">
-              <div className="block relative w-full max-w-xl">
+            <div className={`max-w-7xl mx-auto px-6 overflow-hidden transition-all duration-300 ${showSuggestions ? 'py-6 h-[calc(80vh-15vh)]' : 'py-6 max-h-[calc(80vh-100px)]'}`}>
+              <div className="block relative w-full " ref={suggestionsRef}>
                 <a
                   href={search.trim() ? `/catalogo?search=${encodeURIComponent(search)}` : "#"}
                   className="absolute left-3 top-1/2 transform -translate-y-1/2 p-2 customtext-neutral-dark transition-colors"
@@ -821,10 +903,70 @@ const HeaderMakita = ({
                   type="search"
                   placeholder="Buscar productos"
                   value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  className="w-full pl-20 py-2 border-none rounded-full focus:ring-0 focus:outline-none"
+                  onChange={(e) => handleSearchChange(e.target.value)}
+                  onFocus={() => search.length >= 2 && suggestions.length > 0 && setShowSuggestions(true)}
+                  className="w-full pl-20 py-4 text-lg border-none rounded-full focus:ring-0 focus:outline-none"
+                  autoComplete="off"
                 />
 
+                {/* Dropdown de sugerencias */}
+                {showSuggestions && (
+                  <div className="absolute top-full left-0 right-0 mt-2 bg-white   rounded-lg  z-50 max-h-[600px] overflow-y-auto">
+                    {loadingSuggestions ? (
+                      <div className="p-4 text-center text-gray-500">
+                        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary mx-auto"></div>
+                        <span className="mt-2 block">Buscando...</span>
+                      </div>
+                    ) : (
+                      <>
+                        {suggestions.map((item, index) => (
+                          <div
+                            key={item.id || index}
+                            onClick={() => handleSuggestionClick(item)}
+                            className="flex items-center p-4 hover:bg-gray-50 cursor-pointer  last:border-b-0 transition-colors"
+                          >
+                            <div className="flex-shrink-0 w-16 h-16 mr-4">
+                              {item.image ? (
+                                <img
+                                  src={`/storage/images/item/${item.image}`}
+                                  alt={item.name}
+                                  className="w-full h-full object-cover rounded"
+                                  onError={(e) => {
+                                    e.target.style.display = 'none';
+                                  }}
+                                />
+                              ) : (
+                                <div className="w-full h-full bg-gray-200 rounded flex items-center justify-center">
+                                  <Search size={16} className="text-gray-400" />
+                                </div>
+                              )}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                               <h4 className="text-lg font-medium customtext-neutral-dark truncate">
+                                 {item.name}
+                               </h4>
+                               <p className="text-base customtext-primary truncate">
+                                 {item.category?.name} {item.platform?.name && `• ${item.platform.name}`}
+                               </p>
+                            
+                             </div>
+                          </div>
+                        ))}
+                        {suggestions.length > 0 && (
+                          <div className="p-3 border-t border-gray-100 bg-gray-50">
+                            <a
+                              href={`/catalogo?search=${encodeURIComponent(search)}`}
+                              className="text-sm bg-primary hover:bg-[#219FB9] transition-colors duration-500 w-max mx-auto px-4 py-3 rounded-md text-white hover:text-primary/80 font-medium flex items-center justify-center gap-2 "
+                            >
+                              Ver todos los resultados
+                              <ChevronRight size={16} />
+                            </a>
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </motion.div>

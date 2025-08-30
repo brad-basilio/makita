@@ -441,17 +441,18 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
 
             setAllProducts(products);
 
-            // Procesar especificaciones dinámicas con TODOS los productos
-            const processedSpecs = processSpecificationsFromProducts(products);
-            console.log('Especificaciones procesadas:', processedSpecs);
-            setSpecifications(processedSpecs);
-
             // Aplicar filtros URL primero
             const urlFiltered = applyURLFilters(products);
 
             // Luego aplicar filtros de especificaciones
             const finalFiltered = filterProducts(urlFiltered, selectedFilters);
             setFilteredProducts(finalFiltered);
+
+            // Procesar especificaciones dinámicas basándose en los productos filtrados inicialmente
+            // Esto asegura que solo se muestren filtros relevantes para los productos visibles
+            const processedSpecs = processSpecificationsFromProducts(finalFiltered.length > 0 ? finalFiltered : products);
+            console.log('Especificaciones procesadas:', processedSpecs);
+            setSpecifications(processedSpecs);
 
         } catch (error) {
             console.error("Error fetching products:", error);
@@ -585,8 +586,14 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
             // Luego aplicar filtros de especificaciones
             const finalFiltered = filterProducts(urlFiltered, selectedFilters);
             setFilteredProducts(finalFiltered);
+
+            // IMPORTANTE: Regenerar especificaciones basándose solo en los productos filtrados
+            // Esto evita que aparezcan filtros para productos que no están en los resultados
+            const filteredSpecs = processSpecificationsFromProducts(finalFiltered);
+            setSpecifications(filteredSpecs);
         } else {
             setFilteredProducts([]);
+            setSpecifications({}); // Limpiar especificaciones si no hay productos
         }
     }, [selectedFilters, allProducts]);
     // Opciones de ordenación
@@ -870,7 +877,7 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
                                 style={{ opacity: isChangingView ? 0.7 : 1 }}
                             >
                                 {renderedProducts || (
-                                    <div className="w-full text-center py-12">
+                                    <div className="w-full col-span-3 text-center py-12">
                                         <NoResults />
                                         {allProducts.length > 0 && (
                                             <p className="text-gray-500 mt-4">
