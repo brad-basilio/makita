@@ -23,6 +23,7 @@ use SoDe\Extend\Crypto;
 use SoDe\Extend\Text;
 use Exception;
 use App\Models\ItemSpecification;
+use App\Models\ItemDownloadable;
 use App\Models\Symbology;
 use App\Models\Technology;
 
@@ -32,7 +33,7 @@ class ItemController extends BasicController
     public $reactView = 'Admin/Items';
     public $imageFields = ['image', 'banner', 'texture'];
     public $prefix4filter = 'items';
-    public $with4get = ['platform', 'family', 'applications', 'symbologies', 'technologies'];
+    public $with4get = ['platform', 'family', 'applications', 'symbologies', 'technologies', 'downloadables'];
 
     public function mediaGallery(Request $request, string $uuid)
     {
@@ -188,7 +189,7 @@ class ItemController extends BasicController
     public function setPaginationInstance(Request $request, string $model)
     {
         return $model::select(['items.*'])
-            ->with(['category', 'subcategory', 'brand', 'images', 'collection', 'specifications', 'applications', 'platform', 'family', 'symbologies', 'technologies'])
+            ->with(['category', 'subcategory', 'brand', 'images', 'collection', 'specifications', 'applications', 'platform', 'family', 'symbologies', 'technologies', 'downloadables'])
             ->leftJoin('categories AS category', 'category.id', 'items.category_id');
     }
 
@@ -338,6 +339,71 @@ class ItemController extends BasicController
                 // Eliminar los registros de la base de datos
                 $deletedCount = $jpa->images()->whereIn('id', $deletedImageIds)->delete();
                 \Log::info('DEBUG - Registros eliminados de BD:', ['count' => $deletedCount]);
+            }
+        }
+
+        // Manejar archivos descargables
+        if ($request->hasFile('downloadables')) {
+            foreach ($request->file('downloadables') as $file) {
+                if (!$file) continue;
+
+                $snake_case = Text::camelToSnakeCase(str_replace('App\\Models\\', '', $this->model));
+                $uuid = Crypto::randomUUID();
+                $ext = $file->getClientOriginalExtension();
+                $path = "downloads/{$snake_case}/{$uuid}.{$ext}";
+                Storage::put($path, file_get_contents($file));
+                
+                $jpa->downloadables()->create([
+                    'original_name' => $file->getClientOriginalName(),
+                    'url' => "{$uuid}.{$ext}",
+                    'size' => $file->getSize(),
+                    'mime_type' => $file->getMimeType(),
+                ]);
+            }
+        }
+
+        // Procesar downloadable_ids para preservar archivos existentes
+        if ($request->has('downloadable_ids')) {
+            $downloadableIds = $request->input('downloadable_ids');
+
+            if (is_array($downloadableIds)) {
+                foreach ($downloadableIds as $downloadableId) {
+                    if (!empty($downloadableId)) {
+                        // Verificar que el archivo existe y pertenece al item
+                        $jpa->downloadables()->where('id', $downloadableId)->update(['item_id' => $jpa->id]);
+                    }
+                }
+            }
+        }
+
+        // Eliminar los archivos descargables marcados para eliminación
+        if ($request->has('deleted_downloadables')) {
+            $deletedDownloadablesJson = $request->input('deleted_downloadables');
+            $deletedDownloadableIds = json_decode($deletedDownloadablesJson, true);
+
+            \Log::info('DEBUG - Procesando deleted_downloadables:', [
+                'deleted_downloadables_json' => $deletedDownloadablesJson,
+                'deleted_downloadable_ids' => $deletedDownloadableIds
+            ]);
+
+            if (is_array($deletedDownloadableIds) && !empty($deletedDownloadableIds)) {
+                // Obtener los archivos antes de eliminarlos para borrar los archivos físicos
+                $downloadablesToDelete = $jpa->downloadables()->whereIn('id', $deletedDownloadableIds)->get();
+
+                \Log::info('DEBUG - Archivos descargables a eliminar:', ['downloadables_to_delete' => $downloadablesToDelete->toArray()]);
+
+                foreach ($downloadablesToDelete as $downloadable) {
+                    // Eliminar el archivo físico
+                    $downloadablePath = "downloads/item/{$downloadable->url}";
+                    if (Storage::exists($downloadablePath)) {
+                        Storage::delete($downloadablePath);
+                        \Log::info('DEBUG - Archivo físico eliminado:', ['path' => $downloadablePath]);
+                    }
+                }
+
+                // Eliminar los registros de la base de datos
+                $deletedCount = $jpa->downloadables()->whereIn('id', $deletedDownloadableIds)->delete();
+                \Log::info('DEBUG - Registros de archivos eliminados de BD:', ['count' => $deletedCount]);
             }
         }
 

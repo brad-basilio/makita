@@ -66,6 +66,10 @@ const Items = ({ categories, brands, collections }) => {
     const [gallery, setGallery] = useState([]);
     const galleryRef = useRef();
 
+    /*ADD NEW LINES DOWNLOADABLES */
+    const [downloadables, setDownloadables] = useState([]);
+    const downloadablesRef = useRef();
+
     const handleGalleryChange = (e) => {
         const files = Array.from(e.target.files);
         const newImages = files.map((file) => ({
@@ -105,6 +109,124 @@ const Items = ({ categories, brands, collections }) => {
         }
     };
 
+    // Funciones para manejar archivos descargables
+    const handleDownloadablesChange = (e) => {
+        const files = Array.from(e.target.files);
+        const maxFileSize = 10 * 1024 * 1024; // 10MB en bytes
+        
+        const validFiles = [];
+        const oversizedFiles = [];
+        
+        files.forEach((file) => {
+            if (file.size > maxFileSize) {
+                oversizedFiles.push(file.name);
+            } else {
+                validFiles.push({
+                    file,
+                    name: file.name,
+                    size: file.size,
+                    type: file.type,
+                });
+            }
+        });
+        
+        if (oversizedFiles.length > 0) {
+            Swal.fire({
+                title: "Archivos muy pesados",
+                html: `Los siguientes archivos exceden el límite de 10MB y no se pueden subir:<br><br><strong>${oversizedFiles.join('<br>')}</strong><br><br>Por favor, comprime los archivos o utiliza un servicio de almacenamiento en la nube.`,
+                icon: "warning",
+                confirmButtonText: "Entendido"
+            });
+        }
+        
+        if (validFiles.length > 0) {
+            setDownloadables((prev) => [...prev, ...validFiles]);
+        }
+    };
+
+    const handleDownloadablesDrop = (e) => {
+        e.preventDefault();
+        const files = Array.from(e.dataTransfer.files);
+        const maxFileSize = 10 * 1024 * 1024; // 10MB en bytes
+        
+        const validFiles = [];
+        const oversizedFiles = [];
+        
+        files.forEach((file) => {
+            if (file.size > maxFileSize) {
+                oversizedFiles.push(file.name);
+            } else {
+                validFiles.push({
+                    file,
+                    name: file.name,
+                    size: file.size,
+                    type: file.type,
+                });
+            }
+        });
+        
+        if (oversizedFiles.length > 0) {
+            Swal.fire({
+                title: "Archivos muy pesados",
+                html: `Los siguientes archivos exceden el límite de 10MB y no se pueden subir:<br><br><strong>${oversizedFiles.join('<br>')}</strong><br><br>Por favor, comprime los archivos o utiliza un servicio de almacenamiento en la nube.`,
+                icon: "warning",
+                confirmButtonText: "Entendido"
+            });
+        }
+        
+        if (validFiles.length > 0) {
+            setDownloadables((prev) => [...prev, ...validFiles]);
+        }
+    };
+
+    const removeDownloadableFile = (e, index) => {
+        e.preventDefault();
+        const file = downloadables[index];
+        if (file.id) {
+            // Si el archivo tiene ID, significa que está guardado en la base de datos.
+            setDownloadables((prev) =>
+                prev.map((f, i) =>
+                    i === index ? { ...f, toDelete: true } : f
+                )
+            );
+        } else {
+            // Si es un archivo nuevo, simplemente lo eliminamos.
+            setDownloadables((prev) => prev.filter((_, i) => i !== index));
+        }
+    };
+
+    const formatFileSize = (bytes) => {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    };
+
+    const getFileIcon = (fileName) => {
+        const extension = fileName.split('.').pop().toLowerCase();
+        switch (extension) {
+            case 'pdf':
+                return 'mdi-file-pdf';
+            case 'doc':
+            case 'docx':
+                return 'mdi-file-word';
+            case 'xls':
+            case 'xlsx':
+                return 'mdi-file-excel';
+            case 'ppt':
+            case 'pptx':
+                return 'mdi-file-powerpoint';
+            case 'zip':
+            case 'rar':
+                return 'mdi-folder-zip';
+            case 'txt':
+                return 'mdi-file-document';
+            default:
+                return 'mdi-file';
+        }
+    };
+
     /*************************/
 
     useEffect(() => {
@@ -114,6 +236,17 @@ const Items = ({ categories, brands, collections }) => {
                 url: `/storage/images/item/${img.url}`, // Ruta de la imagen almacenada
             }));
             setGallery(existingImages);
+        }
+        
+        if (itemData && itemData.downloadables) {
+            const existingFiles = itemData.downloadables.map((file) => ({
+                id: file.id, // ID del archivo en la BD
+                name: file.original_name || file.name,
+                url: `/storage/images/downloads/item/${file.url}`,
+                size: file.size || 0,
+                type: file.mime_type || 'application/octet-stream',
+            }));
+            setDownloadables(existingFiles);
         }
     }, [itemData]);
 
@@ -166,6 +299,20 @@ const Items = ({ categories, brands, collections }) => {
             setGallery(existingImages);
         } else {
             setGallery([]); // Limpiar la galería si no hay imágenes
+        }
+
+        // Cargar los archivos descargables
+        if (data?.downloadables) {
+            const existingFiles = data.downloadables.map((file) => ({
+                id: file.id, // ID del archivo en la base de datos
+                name: file.original_name || file.name,
+                url: `/storage/downloads/item/${file.url}`,
+                size: file.size || 0,
+                type: file.mime_type || 'application/octet-stream',
+            }));
+            setDownloadables(existingFiles);
+        } else {
+            setDownloadables([]); // Limpiar los archivos si no hay
         }
 
         if (data?.specifications) {
@@ -255,12 +402,43 @@ const Items = ({ categories, brands, collections }) => {
             formData.append("deleted_images", JSON.stringify(deletedImages));
         }
 
+        // Archivos descargables
+        let downloadablesIndex = 0;
+        const downloadableIds = [];
+
+        downloadables.forEach((file, index) => {
+            if (!file.toDelete) {
+                if (file.file) {
+                    formData.append(`downloadables[${downloadablesIndex}]`, file.file);
+                    downloadablesIndex++;
+                } else {
+                    downloadableIds.push(file.id);
+                }
+            }
+        });
+
+        // Enviar los IDs de archivos existentes como array
+        if (downloadableIds.length > 0) {
+            downloadableIds.forEach((id, index) => {
+                formData.append(`downloadable_ids[${index}]`, id);
+            });
+        }
+
+        const deletedDownloadables = downloadables
+            .filter((file) => file.toDelete)
+            .map((file) => file.id);
+
+        if (deletedDownloadables.length > 0) {
+            formData.append("deleted_downloadables", JSON.stringify(deletedDownloadables));
+        }
+
         const result = await itemsRest.save(formData);
         if (!result) return;
 
         $(gridRef.current).dxDataGrid("instance").refresh();
         $(modalRef.current).modal("hide");
         setGallery([]);
+        setDownloadables([]);
     };
 
     const onVisibleChange = async ({ id, value }) => {
@@ -1003,6 +1181,123 @@ const Items = ({ categories, brands, collections }) => {
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Archivos Descargables */}
+                    <div className="row mb-4">
+                        <div className="col-12">
+                            <div className="card border-0 shadow-sm">
+                                <div className="card-header bg-success border-bottom-0" style={{ padding: '15px 20px' }}>
+                                    <div className="d-flex align-items-center">
+                                        <i className="mdi mdi-download text-white fs-5 me-3"></i>
+                                        <div>
+                                            <h6 className="mb-0 text-white fw-semibold">Archivos Descargables</h6>
+                                            <small className="text-white">Manuales, catálogos y documentos del producto</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="card-body">
+                                    <input
+                                        id="input-item-downloadables"
+                                        ref={downloadablesRef}
+                                        type="file"
+                                        multiple
+                                        accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip,.rar"
+                                        hidden
+                                        onChange={handleDownloadablesChange}
+                                    />
+                                    <div
+                                        className="border border-2 border-dashed rounded p-4 text-center"
+                                        style={{
+                                            cursor: "pointer",
+                                            backgroundColor: "#f8f9fa",
+                                            minHeight: "120px",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            transition: "all 0.3s ease",
+                                        }}
+                                        onClick={() => downloadablesRef.current.click()}
+                                        onDrop={handleDownloadablesDrop}
+                                        onDragOver={handleDragOver}
+                                        onMouseEnter={(e) => {
+                                            e.target.style.backgroundColor = "#e9ecef";
+                                            e.target.style.borderColor = "#6c757d";
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            e.target.style.backgroundColor = "#f8f9fa";
+                                            e.target.style.borderColor = "#dee2e6";
+                                        }}
+                                    >
+                                        <div>
+                                            <i className="mdi mdi-file-upload fs-3 text-muted mb-2 d-block"></i>
+                                            <span className="text-muted">
+                                                Arrastra y suelta archivos aquí o haz clic para seleccionar
+                                            </span>
+                                            <small className="d-block text-muted mt-1">
+                                                Formatos soportados: PDF, DOC, XLS, PPT, TXT, ZIP, RAR
+                                            </small>
+                                            <small className="d-block text-warning mt-1">
+                                                <i className="mdi mdi-alert-circle me-1"></i>
+                                                Tamaño máximo por archivo: 10MB
+                                            </small>
+                                        </div>
+                                    </div>
+
+                                    {/* Lista de archivos */}
+                                    {downloadables.length > 0 && (
+                                        <div className="mt-3">
+                                            <small className="text-muted mb-2 d-block">
+                                                {downloadables.filter(file => !file.toDelete).length} archivo{downloadables.filter(file => !file.toDelete).length !== 1 ? 's' : ''} seleccionado{downloadables.filter(file => !file.toDelete).length !== 1 ? 's' : ''}
+                                            </small>
+                                            <div className="list-group">
+                                                {downloadables.filter(file => !file.toDelete).map((file, index) => {
+                                                    // Obtener el índice original para la función removeDownloadableFile
+                                                    const originalIndex = downloadables.findIndex(f => f === file);
+                                                    return (
+                                                        <div
+                                                            key={originalIndex}
+                                                            className="list-group-item d-flex align-items-center justify-content-between"
+                                                        >
+                                                            <div className="d-flex align-items-center">
+                                                                <i className={`mdi ${getFileIcon(file.name)} fs-4 text-primary me-3`}></i>
+                                                                <div>
+                                                                    <div className="fw-medium">{file.name}</div>
+                                                                    <small className="text-muted">
+                                                                        {file.size ? formatFileSize(file.size) : 'Tamaño desconocido'}
+                                                                    </small>
+                                                                </div>
+                                                            </div>
+                                                            <div className="d-flex align-items-center gap-2">
+                                                                {file.url && !file.file && (
+                                                                    <a
+                                                                        href={file.url}
+                                                                        target="_blank"
+                                                                        rel="noopener noreferrer"
+                                                                        className="btn btn-sm btn-outline-primary"
+                                                                        title="Descargar archivo"
+                                                                    >
+                                                                        <i className="mdi mdi-download"></i>
+                                                                    </a>
+                                                                )}
+                                                                <button
+                                                                    type="button"
+                                                                    className="btn btn-sm btn-outline-danger"
+                                                                    onClick={(e) => removeDownloadableFile(e, originalIndex)}
+                                                                    title="Eliminar archivo"
+                                                                >
+                                                                    <i className="mdi mdi-delete"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>

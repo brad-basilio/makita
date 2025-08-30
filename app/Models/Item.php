@@ -141,6 +141,11 @@ class Item extends Model
         return $this->hasMany(ItemImage::class);
     }
 
+    public function downloadables()
+    {
+        return $this->hasMany(ItemDownloadable::class);
+    }
+
     public function specifications()
     {
         return $this->hasMany(ItemSpecification::class);
