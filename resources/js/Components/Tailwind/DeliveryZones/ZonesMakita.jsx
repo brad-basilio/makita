@@ -733,13 +733,11 @@ const ZonesMakita = ({ items = [] }) => {
               </div>) : (
               <div className="bg-white rounded-lg shadow-sm p-6 border text-center">
                 <MapPin className="mx-auto mb-4 customtext-neutral-light" size={48} />
-                <h3 className="text-lg font-semibold mb-2">No hay puntos seleccionados</h3>
+                <h3 className="text-lg font-semibold mb-2">¡Descubre nuestros puntos de atención!</h3>
                 <p className="customtext-neutral-light mb-4">
-                  Marca los checkboxes en el panel izquierdo para ver los detalles de distribuidores y servicios técnicos.
+                  Selecciona los distribuidores o centros de servicio que te interesen en el panel izquierdo para conocer todos sus detalles.
                 </p>
-                <div className="text-sm text-gray-500">
-                  💡 También puedes hacer clic en los marcadores del mapa para obtener información rápida.
-                </div>
+               
               </div>
             )}
           </div>
