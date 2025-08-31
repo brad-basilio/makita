@@ -64,7 +64,9 @@ const CompareBarModal = ({ open, minimized, products, onRemove, onCompare, onMin
                     <X size={16} />
                   </button>
                   <div className="bg-white rounded-lg p-2 aspect-square">
-                    <img src={`/storage/images/item/${product.image}`} alt={product.name} className="h-28 object-cover aspect-square mb-2" />
+                    <img src={`/storage/images/item/${product.image}`} alt={product.name} 
+                    className="h-28 object-cover aspect-square mb-2" 
+                       onError={e => e.target.src = '/assets/img/noimage/no_img.jpg'}/>
                   </div>
                   <div className="text-white text-center line-clamp-3  mt-2 max-w-[180px]">
                     {product.name}

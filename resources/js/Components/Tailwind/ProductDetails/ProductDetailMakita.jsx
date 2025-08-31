@@ -335,7 +335,7 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                                         ) : (
                                             <div className="flex flex-col items-center justify-center py-8 text-gray-400">
                                                 <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="mb-3">
-                                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="currentColor" opacity="0.3"/>
+                                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="currentColor" opacity="0.3" />
                                                 </svg>
                                                 <p className="text-sm font-medium">No hay especificaciones generales disponibles</p>
                                                 <p className="text-xs mt-1">Las especificaciones se mostrarán aquí cuando estén disponibles</p>
@@ -348,7 +348,7 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                             {/* Contenido de Info */}
                             {activeTab === "info" && (
                                 <div className="space-y-4">
-                                   
+
 
                                     <div>
                                         <h4 className="font-semibold text-sm mb-2">Especificaciones técnicas</h4>
@@ -361,15 +361,15 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                                                             <span>{spec.description}</span>
                                                             {spec.tooltip && (
                                                                 <Tippy content={spec.tooltip} arrow={true} placement="auto">
-                                                                    <svg 
-                                                                        width="20" 
-                                                                        height="20" 
-                                                                        viewBox="0 0 20 20" 
-                                                                        fill="none" 
+                                                                    <svg
+                                                                        width="20"
+                                                                        height="20"
+                                                                        viewBox="0 0 20 20"
+                                                                        fill="none"
                                                                         xmlns="http://www.w3.org/2000/svg"
                                                                         className="cursor-help"
                                                                     >
-                                                                        <path d="M9 15H11V9H9V15ZM10 7C10.2833 7 10.5208 6.90417 10.7125 6.7125C10.9042 6.52083 11 6.28333 11 6C11 5.71667 10.9042 5.47917 10.7125 5.2875C10.5208 5.09583 10.2833 5 10 5C9.71667 5 9.47917 5.09583 9.2875 5.2875C9.09583 5.47917 9 5.71667 9 6C9 6.28333 9.09583 6.52083 9.2875 6.7125C9.47917 6.90417 9.71667 7 10 7ZM10 20C8.61667 20 7.31667 19.7375 6.1 19.2125C4.88333 18.6875 3.825 17.975 2.925 17.075C2.025 16.175 1.3125 15.1167 0.7875 13.9C0.2625 12.6833 0 11.3833 0 10C0 8.61667 0.2625 7.31667 0.7875 6.1C1.3125 4.88333 2.025 3.825 2.925 2.925C3.825 2.025 4.88333 1.3125 6.1 0.7875C7.31667 0.2625 8.61667 0 10 0C11.3833 0 12.6833 0.2625 13.9 0.7875C15.1167 1.3125 16.175 2.025 17.075 2.925C17.975 3.825 18.6875 4.88333 19.2125 6.1C19.7375 7.31667 20 8.61667 20 10C20 11.3833 19.7375 12.6833 19.2125 13.9C18.6875 15.1167 17.975 16.175 17.075 17.075C16.175 17.975 15.1167 18.6875 13.9 19.2125C12.6833 19.7375 11.3833 20 10 20Z" fill="#262626"/>
+                                                                        <path d="M9 15H11V9H9V15ZM10 7C10.2833 7 10.5208 6.90417 10.7125 6.7125C10.9042 6.52083 11 6.28333 11 6C11 5.71667 10.9042 5.47917 10.7125 5.2875C10.5208 5.09583 10.2833 5 10 5C9.71667 5 9.47917 5.09583 9.2875 5.2875C9.09583 5.47917 9 5.71667 9 6C9 6.28333 9.09583 6.52083 9.2875 6.7125C9.47917 6.90417 9.71667 7 10 7ZM10 20C8.61667 20 7.31667 19.7375 6.1 19.2125C4.88333 18.6875 3.825 17.975 2.925 17.075C2.025 16.175 1.3125 15.1167 0.7875 13.9C0.2625 12.6833 0 11.3833 0 10C0 8.61667 0.2625 7.31667 0.7875 6.1C1.3125 4.88333 2.025 3.825 2.925 2.925C3.825 2.025 4.88333 1.3125 6.1 0.7875C7.31667 0.2625 8.61667 0 10 0C11.3833 0 12.6833 0.2625 13.9 0.7875C15.1167 1.3125 16.175 2.025 17.075 2.925C17.975 3.825 18.6875 4.88333 19.2125 6.1C19.7375 7.31667 20 8.61667 20 10C20 11.3833 19.7375 12.6833 19.2125 13.9C18.6875 15.1167 17.975 16.175 17.075 17.075C16.175 17.975 15.1167 18.6875 13.9 19.2125C12.6833 19.7375 11.3833 20 10 20Z" fill="#262626" />
                                                                     </svg>
                                                                 </Tippy>
                                                             )}
@@ -379,7 +379,7 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                                             ) : (
                                                 <div className="flex flex-col items-center justify-center py-8 text-gray-400">
                                                     <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="mb-3">
-                                                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" fill="currentColor" opacity="0.3"/>
+                                                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" fill="currentColor" opacity="0.3" />
                                                     </svg>
                                                     <p className="text-sm font-medium">No hay especificaciones técnicas disponibles</p>
                                                     <p className="text-xs mt-1">Las especificaciones técnicas se mostrarán aquí cuando estén disponibles</p>
@@ -394,22 +394,43 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                             {activeTab === "downloads" && (
                                 <div className="space-y-3">
                                     {item?.downloadables && item.downloadables.length > 0 ? (
-                                        item.downloadables.map((downloadable) => (
-                                            <div key={downloadable.id} className="flex items-center justify-between p-3 border rounded-lg bg-gray-50">
-                                                <div className="flex items-center gap-3">
-                                                    <div className="bg-primary/10 p-2 rounded-lg">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="customtext-primary">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                                        </svg>
+                                        item.downloadables.map((downloadable, index) => (
+                                            <div key={downloadable.id}>
+                                                <div className="flex items-center justify-between p-3 border rounded-lg bg-gray-50">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="bg-primary/10 p-2 rounded-lg">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="customtext-primary">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                            </svg>
+                                                        </div>
+                                                        <div>
+                                                            <p className="font-semibold text-sm">{downloadable.original_name || downloadable.name}</p>
+                                                            <p className="text-xs text-gray-500">{(() => {
+                                                                const sizeInBytes = parseInt(downloadable.size) || 0;
+                                                                const sizeInMB = (sizeInBytes / (1024 * 1024)).toFixed(2);
+                                                                return `${sizeInMB} MB`;
+                                                            })()}</p>
+                                                        </div>
                                                     </div>
-                                                    <div>
-                                                        <p className="font-semibold text-sm">{downloadable.original_name || downloadable.name}</p>
-                                                        <p className="text-xs text-gray-500">{downloadable.mime_type?.toUpperCase() || downloadable.type?.toUpperCase()}, {downloadable.size}</p>
-                                                    </div>
+                                                    <a href={downloadable.url} target="_blank" rel="noopener noreferrer" className="bg-primary text-white px-3 py-1.5 rounded-lg text-xs">
+                                                        Descargar {(() => {
+                                                            const fileName = downloadable.original_name || downloadable.name || '';
+                                                            const extension = fileName.split('.').pop()?.toUpperCase();
+                                                            if (extension && extension !== fileName.toUpperCase()) {
+                                                                return extension;
+                                                            }
+                                                            const mimeType = downloadable.mime_type || downloadable.type || '';
+                                                            if (mimeType.includes('spreadsheetml') || mimeType.includes('excel')) return 'XLSX';
+                                                            if (mimeType.includes('pdf')) return 'PDF';
+                                                            if (mimeType.includes('word') || mimeType.includes('document')) return 'DOCX';
+                                                            if (mimeType.includes('image')) return 'IMG';
+                                                            return 'ARCHIVO';
+                                                        })()}
+                                                    </a>
                                                 </div>
-                                                <a href={downloadable.url} target="_blank" rel="noopener noreferrer" className="bg-primary text-white px-3 py-1.5 rounded-lg text-xs">
-                                                    Descargar
-                                                </a>
+                                                {index < item.downloadables.length - 1 && (
+                                                    <hr className="border-gray-200 my-2" />
+                                                )}
                                             </div>
                                         ))
                                     ) : (
@@ -801,7 +822,7 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                                     <div className="text-center py-12">
                                         <div className="flex flex-col items-center gap-4">
                                             <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-gray-300">
-                                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="currentColor"/>
+                                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="currentColor" />
                                             </svg>
                                             <p className="text-gray-500 text-lg font-medium">No hay especificaciones generales disponibles</p>
                                         </div>
@@ -813,7 +834,7 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
 
                         {activeTab === "info" && (
                             <>
-                               
+
 
                                 {/* Datos técnicos detallados */}
                                 {item?.specifications && item.specifications.filter(spec => spec.type === 'technical').length > 0 ? (
@@ -822,20 +843,20 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                                         <div className="rounded-lg  shadow-sm">
                                             {item.specifications.filter(spec => spec.type === 'technical').map((spec, index) => (
                                                 <div key={index} className={`flex flex-row ${index % 2 === 0 ? "bg-gray-50" : "bg-white"}`}>
-                                                    <div className="py-4 px-6 w-1/2 font-bold tracking-wide customtext-neutral-dark text-base">{spec.title}</div> 
+                                                    <div className="py-4 px-6 w-1/2 font-bold tracking-wide customtext-neutral-dark text-base">{spec.title}</div>
                                                     <div className="py-4 px-6 w-1/2 customtext-neutral-dark text-base flex items-center justify-between">
                                                         <span>{spec.description}</span>
                                                         {spec.tooltip && (
                                                             <Tippy content={spec.tooltip} arrow={true} placement="auto">
-                                                                <svg 
-                                                                    width="20" 
-                                                                    height="20" 
-                                                                    viewBox="0 0 20 20" 
-                                                                    fill="none" 
+                                                                <svg
+                                                                    width="20"
+                                                                    height="20"
+                                                                    viewBox="0 0 20 20"
+                                                                    fill="none"
                                                                     xmlns="http://www.w3.org/2000/svg"
                                                                     className="cursor-help"
                                                                 >
-                                                                    <path d="M9 15H11V9H9V15ZM10 7C10.2833 7 10.5208 6.90417 10.7125 6.7125C10.9042 6.52083 11 6.28333 11 6C11 5.71667 10.9042 5.47917 10.7125 5.2875C10.5208 5.09583 10.2833 5 10 5C9.71667 5 9.47917 5.09583 9.2875 5.2875C9.09583 5.47917 9 5.71667 9 6C9 6.28333 9.09583 6.52083 9.2875 6.7125C9.47917 6.90417 9.71667 7 10 7ZM10 20C8.61667 20 7.31667 19.7375 6.1 19.2125C4.88333 18.6875 3.825 17.975 2.925 17.075C2.025 16.175 1.3125 15.1167 0.7875 13.9C0.2625 12.6833 0 11.3833 0 10C0 8.61667 0.2625 7.31667 0.7875 6.1C1.3125 4.88333 2.025 3.825 2.925 2.925C3.825 2.025 4.88333 1.3125 6.1 0.7875C7.31667 0.2625 8.61667 0 10 0C11.3833 0 12.6833 0.2625 13.9 0.7875C15.1167 1.3125 16.175 2.025 17.075 2.925C17.975 3.825 18.6875 4.88333 19.2125 6.1C19.7375 7.31667 20 8.61667 20 10C20 11.3833 19.7375 12.6833 19.2125 13.9C18.6875 15.1167 17.975 16.175 17.075 17.075C16.175 17.975 15.1167 18.6875 13.9 19.2125C12.6833 19.7375 11.3833 20 10 20Z" fill="#262626"/>
+                                                                    <path d="M9 15H11V9H9V15ZM10 7C10.2833 7 10.5208 6.90417 10.7125 6.7125C10.9042 6.52083 11 6.28333 11 6C11 5.71667 10.9042 5.47917 10.7125 5.2875C10.5208 5.09583 10.2833 5 10 5C9.71667 5 9.47917 5.09583 9.2875 5.2875C9.09583 5.47917 9 5.71667 9 6C9 6.28333 9.09583 6.52083 9.2875 6.7125C9.47917 6.90417 9.71667 7 10 7ZM10 20C8.61667 20 7.31667 19.7375 6.1 19.2125C4.88333 18.6875 3.825 17.975 2.925 17.075C2.025 16.175 1.3125 15.1167 0.7875 13.9C0.2625 12.6833 0 11.3833 0 10C0 8.61667 0.2625 7.31667 0.7875 6.1C1.3125 4.88333 2.025 3.825 2.925 2.925C3.825 2.025 4.88333 1.3125 6.1 0.7875C7.31667 0.2625 8.61667 0 10 0C11.3833 0 12.6833 0.2625 13.9 0.7875C15.1167 1.3125 16.175 2.025 17.075 2.925C17.975 3.825 18.6875 4.88333 19.2125 6.1C19.7375 7.31667 20 8.61667 20 10C20 11.3833 19.7375 12.6833 19.2125 13.9C18.6875 15.1167 17.975 16.175 17.075 17.075C16.175 17.975 15.1167 18.6875 13.9 19.2125C12.6833 19.7375 11.3833 20 10 20Z" fill="#262626" />
                                                                 </svg>
                                                             </Tippy>
                                                         )}
@@ -848,7 +869,7 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                                     <div className="text-center py-12">
                                         <div className="flex flex-col items-center gap-4">
                                             <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-gray-300">
-                                                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" fill="currentColor"/>
+                                                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" fill="currentColor" />
                                             </svg>
                                             <p className="text-gray-500 text-lg font-medium">No hay especificaciones técnicas disponibles</p>
                                         </div>
@@ -861,22 +882,47 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                                 <h2 className="text-3xl font-bold mb-6 customtext-neutral-dark">Archivos descargables</h2>
                                 <div className="space-y-4">
                                     {item?.downloadables && item.downloadables.length > 0 ? (
-                                        item.downloadables.map((downloadable) => (
-                                            <div key={downloadable.id} className="flex items-center justify-between py-4  transition-colors">
-                                                <div className="flex items-center gap-3">
-                                                    <div className="bg-primary/10 p-2 rounded-lg">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="customtext-primary">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                                        </svg>
+                                        item.downloadables.map((downloadable, index) => (
+                                            <div key={downloadable.id}>
+                                                <div className="flex items-center justify-between py-4 transition-colors">
+                                                    <div className="flex items-center gap-4">
+                                                        <div className="bg-[#E7E7E7] p-3 rounded-md">
+                                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                
+                                                                <g mask="url(#mask0_181_16134)">
+                                                                    <path d="M5 21C4.45 21 3.97917 20.8042 3.5875 20.4125C3.19583 20.0208 3 19.55 3 19V5C3 4.45 3.19583 3.97917 3.5875 3.5875C3.97917 3.19583 4.45 3 5 3H19C19.55 3 20.0208 3.19583 20.4125 3.5875C20.8042 3.97917 21 4.45 21 5V19C21 19.55 20.8042 20.0208 20.4125 20.4125C20.0208 20.8042 19.55 21 19 21H5ZM5 19H19V5H5V19ZM6 17H18L14.25 12L11.25 16L9 13L6 17ZM8.5 10C8.91667 10 9.27083 9.85417 9.5625 9.5625C9.85417 9.27083 10 8.91667 10 8.5C10 8.08333 9.85417 7.72917 9.5625 7.4375C9.27083 7.14583 8.91667 7 8.5 7C8.08333 7 7.72917 7.14583 7.4375 7.4375C7.14583 7.72917 7 8.08333 7 8.5C7 8.91667 7.14583 9.27083 7.4375 9.5625C7.72917 9.85417 8.08333 10 8.5 10Z" fill="#262626" />
+                                                                </g>
+                                                            </svg>
+
+                                                        </div>
+                                                        <div>
+                                                            <p className="text-base customtext-neutral-dark">{downloadable.original_name || downloadable.name}</p>
+                                                            <p className="text-sm customtext-neutral-light">{(() => {
+                                                                const sizeInBytes = parseInt(downloadable.size) || 0;
+                                                                const sizeInMB = (sizeInBytes / (1024 * 1024)).toFixed(2);
+                                                                return `${sizeInMB} MB`;
+                                                            })()}</p>
+                                                        </div>
                                                     </div>
-                                                    <div>
-                                                        <p className="font-semibold">{downloadable.original_name || downloadable.name}</p>
-                                                        <p className="text-sm text-gray-500">{downloadable.mime_type?.toUpperCase() || downloadable.type?.toUpperCase()}, {downloadable.size}</p>
-                                                    </div>
+                                                    <a href={downloadable.url} target="_blank" rel="noopener noreferrer" className="bg-[#219FB9] text-white px-4 py-3 rounded-md hover:bg-primary transition-colors">
+                                                        Descargar {(() => {
+                                                            const fileName = downloadable.original_name || downloadable.name || '';
+                                                            const extension = fileName.split('.').pop()?.toUpperCase();
+                                                            if (extension && extension !== fileName.toUpperCase()) {
+                                                                return extension;
+                                                            }
+                                                            const mimeType = downloadable.mime_type || downloadable.type || '';
+                                                            if (mimeType.includes('spreadsheetml') || mimeType.includes('excel')) return 'XLSX';
+                                                            if (mimeType.includes('pdf')) return 'PDF';
+                                                            if (mimeType.includes('word') || mimeType.includes('document')) return 'DOCX';
+                                                            if (mimeType.includes('image')) return 'IMG';
+                                                            return 'ARCHIVO';
+                                                        })()}
+                                                    </a>
                                                 </div>
-                                                <a href={downloadable.url} target="_blank" rel="noopener noreferrer" className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors">
-                                                    Descargar ahora
-                                                </a>
+                                                {index < item.downloadables.length - 1 && (
+                                                    <hr className="border-gray-200" />
+                                                )}
                                             </div>
                                         ))
                                     ) : (

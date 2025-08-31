@@ -259,6 +259,7 @@ const CompareDetailsModal = ({ isOpen, onClose, products, onRemoveProduct }) => 
                           src={`/storage/images/item/${product.image}`}
                           alt={product.name}
                           className="w-full h-full object-contain p-4"
+                             onError={e => e.target.src = '/assets/img/noimage/no_img.jpg'}
                         />
                       </div>
                     </div>
