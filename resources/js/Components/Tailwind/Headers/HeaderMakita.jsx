@@ -111,8 +111,13 @@ const HeaderMakita = ({
   const handleSuggestionClick = (item) => {
     setSearch(item.name);
     setShowSuggestions(false);
-    // Redirigir al producto o catálogo
-    window.location.href = `/catalogo?search=${encodeURIComponent(item.name)}`;
+    // Redirigir usando categoría, plataforma y familia como en desktop
+    if (item.category?.slug && item.platform?.slug && item.family?.slug) {
+      window.location.href = `/catalogo?category=${item.category.slug}&platform=${item.platform.slug}&family=${item.family.slug}`;
+    } else {
+      // Fallback a búsqueda por texto si no hay datos completos
+      window.location.href = `/catalogo?search=${encodeURIComponent(item.name)}`;
+    }
   };
 
   // Efecto para limpiar el timeout al desmontar el componente
@@ -482,8 +487,13 @@ const HeaderMakita = ({
   const handleMobileSuggestionClick = (item) => {
     setMobileSearchValue(item.name);
     setShowMobileSuggestions(false);
-    // Redirigir al producto o catálogo
-    window.location.href = `/catalogo?search=${encodeURIComponent(item.name)}`;
+    // Redirigir usando categoría, plataforma y familia como en desktop
+    if (item.category?.slug && item.platform?.slug && item.family?.slug) {
+      window.location.href = `/catalogo?category=${item.category.slug}&platform=${item.platform.slug}&family=${item.family.slug}`;
+    } else {
+      // Fallback a búsqueda por texto si no hay datos completos
+      window.location.href = `/catalogo?search=${encodeURIComponent(item.name)}`;
+    }
   };
 
   // Mobile menu handlers
@@ -823,7 +833,7 @@ const HeaderMakita = ({
                     getFamiliesByCategory(activeCategory?.id).map((family, index) => (
                       <motion.a
                         key={family?.id}
-                        href={`/categoria/${activeCategory?.slug}/${family?.slug}`}
+                        href={`/catalogo?category=${activeCategory?.slug}&family=${family?.slug}`}
                         className="bg-secondary hover:bg-white/10 rounded-lg p-4 transition-all duration-300 hover:scale-105 hover:shadow-lg"
                         initial={{ opacity: 0, y: 20, scale: 0.9 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -1277,7 +1287,7 @@ const HeaderMakita = ({
                                 transition={{ delay: 0.4 + (brandIndex * 0.1) + (subIndex * 0.05), duration: 0.25 }}
                               >
                                  <motion.a
-                                  href={`/categoria/${subcategory.slug}/${subcategory.slug}`}
+                                  href={`/catalogo?category=${mobileActiveCat?.slug}&family=${subcategory.slug}`}
                                   className="text-white hover:customtext-primary border-b pb-2 border-white/40 transition-all duration-300 text-sm flex items-center gap-2"
                                   whileHover={{ x: 5, scale: 1.02 }}
                                   whileTap={{ scale: 0.98 }}
@@ -1302,7 +1312,7 @@ const HeaderMakita = ({
                           transition={{ delay: 0.3 + (index * 0.05), duration: 0.3 }}
                         >
                             <motion.a
-                                href={`/categoria/${subcategory.slug}/${subcategory.slug}`}
+                                href={`/catalogo?category=${mobileActiveCat?.slug}&family=${subcategory.slug}`}
                                 className="text-white hover:customtext-primary border-b pb-2 border-white/40 transition-all duration-300 text-sm flex items-center gap-2"
                                 whileHover={{ x: 5, scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
