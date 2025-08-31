@@ -264,32 +264,25 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                         </p>
                     </div>
 
-                  
+
 
                     {/* Tecnologías */}
-                    {(item?.specifications?.some(spec => spec.title === 'Tecnología') || true) && (
+                    {item?.technologies && item.technologies.length > 0 && (
                         <div className="mb-6">
                             <h3 className="font-bold text-base mb-3">Tecnologías</h3>
                             <div className="flex gap-4 flex-wrap">
-                                {item?.brand?.name === 'Makita' && (
-                                    <>
-                                        <img
-                                            src="/assets/img/tecnologies/bl-motor.png"
-                                            alt="BL Motor"
-                                            className="h-7 object-contain"
-                                        />
-                                        <img
-                                            src="/assets/img/tecnologies/xpt.png"
-                                            alt="XPT"
-                                            className="h-7 object-contain"
-                                        />
-                                        <img
-                                            src="/assets/img/tecnologies/xgt.png"
-                                            alt="XGT"
-                                            className="h-7 object-contain"
-                                        />
-                                    </>
-                                )}
+                                {item.technologies.map((technology) => (
+                                    <div key={technology.id} className="flex flex-col items-center">
+                                        {technology.image && (
+                                            <img
+                                                src={technology.image}
+                                                alt={technology.name}
+                                                className="h-7 object-contain"
+                                            />
+                                        )}
+                                        <span className="text-xs mt-1">{technology.name}</span>
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     )}
@@ -359,7 +352,7 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                                             </ul>
                                         </div>
                                     )}
-                                    
+
                                     <div>
                                         <h4 className="font-semibold text-sm mb-2">Especificaciones técnicas:</h4>
                                         <div className="rounded overflow-hidden">
@@ -381,39 +374,28 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                             {/* Contenido de Downloads */}
                             {activeTab === "downloads" && (
                                 <div className="space-y-3">
-                                    <div className="flex items-center justify-between p-3 border rounded-lg bg-gray-50">
-                                        <div className="flex items-center gap-3">
-                                            <div className="bg-primary/10 p-2 rounded-lg">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="customtext-primary">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                                </svg>
+                                    {item?.downloadables && item.downloadables.length > 0 ? (
+                                        item.downloadables.map((downloadable) => (
+                                            <div key={downloadable.id} className="flex items-center justify-between p-3 border rounded-lg bg-gray-50">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="bg-primary/10 p-2 rounded-lg">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="customtext-primary">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                        </svg>
+                                                    </div>
+                                                    <div>
+                                                        <p className="font-semibold text-sm">{downloadable.original_name || downloadable.name}</p>
+                                                        <p className="text-xs text-gray-500">{downloadable.mime_type?.toUpperCase() || downloadable.type?.toUpperCase()}, {downloadable.size}</p>
+                                                    </div>
+                                                </div>
+                                                <a href={downloadable.url} target="_blank" rel="noopener noreferrer" className="bg-primary text-white px-3 py-1.5 rounded-lg text-xs">
+                                                    Descargar
+                                                </a>
                                             </div>
-                                            <div>
-                                                <p className="font-semibold text-sm">Manual de usuario</p>
-                                                <p className="text-xs text-gray-500">PDF, 2.4 MB</p>
-                                            </div>
-                                        </div>
-                                        <a href="#" className="bg-primary text-white px-3 py-1.5 rounded-lg text-xs">
-                                            Descargar
-                                        </a>
-                                    </div>
-
-                                    <div className="flex items-center justify-between p-3 border rounded-lg bg-gray-50">
-                                        <div className="flex items-center gap-3">
-                                            <div className="bg-primary/10 p-2 rounded-lg">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="customtext-primary">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                                </svg>
-                                            </div>
-                                            <div>
-                                                <p className="font-semibold text-sm">Ficha técnica</p>
-                                                <p className="text-xs text-gray-500">PDF, 1.8 MB</p>
-                                            </div>
-                                        </div>
-                                        <a href="#" className="bg-primary text-white px-3 py-1.5 rounded-lg text-xs">
-                                            Descargar
-                                        </a>
-                                    </div>
+                                        ))
+                                    ) : (
+                                        <p className="text-gray-500 text-center py-4">No hay archivos disponibles para descargar</p>
+                                    )}
                                 </div>
                             )}
                         </div>
@@ -449,7 +431,7 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                                                 type: "main",
                                             })
                                         }
-                                        className={`w-16 h-16 rounded-lg p-2 border-2 ${selectedImage.url === item?.image
+                                        className={`w-16 h-16 rounded-md p-2 border bg-[#F6F6F6] ${selectedImage.url === item?.image
                                             ? "border-primary"
                                             : "border-gray-200"
                                             }`}
@@ -475,7 +457,7 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                                                     type: "gallery",
                                                 })
                                             }
-                                            className={`w-16 h-16 border-2 rounded-lg p-2 ${selectedImage.url === image.url
+                                            className={`w-16 h-16 border-2 rounded-lg bg-[#F6F6F6] p-2 ${selectedImage.url === image.url
                                                 ? "border-primary"
                                                 : "border-gray-200"
                                                 }`}
@@ -494,7 +476,7 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                                 </div>
 
                                 {/* Main Image */}
-                                <div className="flex-1 flex items-center justify-center bg-gray-50 rounded-lg p-8">
+                                <div className="flex-1 flex items-center justify-center bg-[#F6F6F6] rounded-lg p-8">
                                     <img
                                         src={
                                             selectedImage.type === "main"
@@ -627,66 +609,76 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                         <div className="hidden md:block font-paragraph">
                             {/* Código y título del producto en la parte superior */}
                             <div className="mb-6">
-                                <div className="customtext-primary text-lg font-medium mb-1">
+                                <div className="text-[#219FB9] text-lg font-medium mb-1">
                                     {item?.code || item?.sku}
                                 </div>
-                                <h1 className="text-3xl font-bold">
+                                <h1 className="text-[32px] font-bold customtext-neutral-dark">
                                     {item?.name}
                                 </h1>
-                                <div className="text-sm text-gray-600 mt-2 flex items-center gap-4">
+                                {/*SECTION NO LOCALIZADO */}
+                                {/* <div className="text-sm text-gray-600 mt-2 flex items-center gap-4">
                                     <span>{item?.specifications?.find(spec => spec.title === 'Potencia')?.description || '400Vmax - 150 mm'}</span>
                                     {item?.specifications?.find(spec => spec.title === 'Peso')?.description && (
                                         <span>• {item?.specifications?.find(spec => spec.title === 'Peso')?.description}</span>
                                     )}
-                                </div>
+                                </div> */}
                             </div>
                             {/* Descripción principal */}
                             <div className="mb-6">
-                                <p className="text-lg font-medium mb-4">
+                                {/*SECTION NO LOCALIZADO 2*/}
+                                {/*  <p className="text-lg font-medium mb-4">
                                     {item?.specifications?.find(spec => spec.title === 'Descripción breve')?.description || 'Sierra de poda sin escobillas XGT® para cortar matorales y ramas.'}
-                                </p>
-                                <p className="text-base text-gray-600 line-clamp-5" dangerouslySetInnerHTML={{ __html: item?.description }}>
+                                </p> */}
+
+                                <p className="text-base text-gray-600 line-clamp-5 " dangerouslySetInnerHTML={{ __html: item?.description }}>
 
                                 </p>
+
                             </div>
 
                             {/* Tecnologías */}
-                            {(item?.specifications?.some(spec => spec.title === 'Tecnología') || true) && (
+                            {item?.technologies && item.technologies.length > 0 && (
                                 <div className="mb-6">
-                                    <h3 className="font-bold text-lg mb-3">Tecnologías</h3>
+                                    <h3 className="font-bold text-lg mb-3 customtext-neutral-dark">Tecnologías</h3>
                                     <div className="flex gap-4 flex-wrap">
-                                        {item?.brand?.name === 'Makita' && (
-                                            <>
-                                                <img
-                                                    src="/assets/img/tecnologies/bl-motor.png"
-                                                    alt="BL Motor"
-                                                    className="h-8 object-contain"
-                                                />
-                                                <img
-                                                    src="/assets/img/tecnologies/xpt.png"
-                                                    alt="XPT"
-                                                    className="h-8 object-contain"
-                                                />
-                                                <img
-                                                    src="/assets/img/tecnologies/xgt.png"
-                                                    alt="XGT"
-                                                    className="h-8 object-contain"
-                                                />
-                                            </>
-                                        )}
+                                        {item.technologies.map((technology) => (
+                                            <div key={technology.id} className="flex flex-col items-center">
+                                                {technology.banner && (
+                                                    <img
+                                                        src={`/storage/images/technology/${technology?.banner}`}
+                                                        alt={technology.name}
+                                                        className="h-7 object-contain"
+                                                        onError={(e) =>
+                                                        (e.target.src =
+                                                            "/api/cover/thumbnail/null")
+                                                        }
+                                                    />
+                                                )}
+
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
                             )}
 
                             {/* Simbología */}
-                            {(item?.specifications?.some(spec => spec.title === 'Simbología') || true) && (
+                            {item?.symbologies && item.symbologies.length > 0 && (
                                 <div className="mb-6">
-                                    <h3 className="font-bold text-lg mb-3">Simbología</h3>
+                                    <h3 className="font-bold text-lg mb-3 customtext-neutral-dark">Simbología</h3>
                                     <div className="flex gap-3 flex-wrap">
-                                        <img src="/assets/img/simbols/makita-sym1.png" alt="Símbolo 1" className="h-8 object-contain" />
-                                        <img src="/assets/img/simbols/makita-sym2.png" alt="Símbolo 2" className="h-8 object-contain" />
-                                        <img src="/assets/img/simbols/makita-sym3.png" alt="Símbolo 3" className="h-8 object-contain" />
-                                        <img src="/assets/img/simbols/makita-sym4.png" alt="Símbolo 4" className="h-8 object-contain" />
+                                        {item.symbologies.map((symbology) => (
+                                            <div key={symbology.id} className="flex flex-col items-center">
+                                                {symbology.image && (
+                                                    <img
+                                                        src={`/storage/images/symbology/${symbology.image}`}
+                                                        alt={symbology.name || `Símbolo ${symbology.id}`}
+                                                        className="h-8 object-contain"
+                                                        aria-label={symbology.name || `Símbolo ${symbology.id}`}
+                                                    />
+                                                )}
+
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
                             )}
@@ -696,12 +688,12 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                                 onClick={() => {
                                     handleClickWhatsAppCotizar();
                                 }}
-                                className="bg-primary text-white py-3 px-8 font-bold shadow-lg rounded-md hover:bg-primary/90 transition-all duration-300 mt-4"
+                                className="bg-[#225568] text-white py-4 px-8  text-lg shadow-lg rounded-md hover:bg-primary transition-all duration-300 mt-4"
                             >
                                 Cotizar producto
                             </button>
 
-                        
+
 
                         </div>
                     </div>
@@ -709,152 +701,144 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                 {/* Pestañas de navegación */}
                 <div className="bg-white rounded-xl mt-12">
                     {/* Navegación por pestañas */}
-                   <div className="bg-primary  ">
-                     <div className=" mx-auto 2xl:max-w-7xl px-primary 2xl:px-0">
-                        <div className="flex justify-between">
-                            <button
-                                className={`py-4 w-full font-medium ${activeTab === "general" ? "border-b-2 border-primary bg-black/10 text-white font-semibold" : "text-white"}`}
-                                onClick={() => setActiveTab("general")}
-                            >
-                                General
-                            </button>
-                            <button
-                                className={`py-4 w-full font-medium ${activeTab === "info" ? "border-b-2 border-primary bg-black/10 text-white font-semibold" : "text-white"}`}
-                                onClick={() => setActiveTab("info")}
-                            >
-                                Información técnica
-                            </button>
-                            <button
-                                className={`py-4 w-full font-medium ${activeTab === "downloads" ? "border-b-2 border-primary bg-black/10 text-white font-semibold" : "text-white"}`}
-                                onClick={() => setActiveTab("downloads")}
-                            >
-                                Descargables
-                            </button>
+                    <div className="bg-primary  ">
+                        <div className=" mx-auto 2xl:max-w-7xl px-primary 2xl:px-0">
+                            <div className="flex justify-between">
+                                <button
+                                    className={`py-6 text-lg w-full  ${activeTab === "general" ? "border-b-2 border-primary bg-black/10 text-white " : "text-white"}`}
+                                    onClick={() => setActiveTab("general")}
+                                >
+                                    General
+                                </button>
+                                <button
+                                    className={`py-6 text-lg w-full  ${activeTab === "info" ? "border-b-2 border-primary bg-black/10 text-white " : "text-white"}`}
+                                    onClick={() => setActiveTab("info")}
+                                >
+                                    Información técnica
+                                </button>
+                                <button
+                                    className={`py-6 text-lg w-full  ${activeTab === "downloads" ? "border-b-2 border-primary bg-black/10 text-white " : "text-white"}`}
+                                    onClick={() => setActiveTab("downloads")}
+                                >
+                                    Descargables
+                                </button>
+                            </div>
                         </div>
                     </div>
-                   </div>
 
-                   <div className="px-primary 2xl:px-0 mx-auto 2xl:max-w-7xl my-10">
-                     {/* Pestañas de contenido */}
-                    {activeTab === "general" && (
-                        <div className="grid gap-12 ">
-                            {/* Sección de Beneficios del producto */}
-                            <div>
-                                <h2 className="text-xl font-bold mb-6">
-                                    Beneficios del producto
-                                </h2>
-                                <div className="bg-white w-full rounded-lg shadow-sm overflow-hidden">
-                                    <div className="grid grid-cols-1 md:grid-cols-2">
-                                        {[
-                                            "Lubricación automática de la cadena.",
-                                            "La ventana de visualización del aceite de la cadena permite al operario comprobar fácilmente el nivel de aceite.",
-                                            "Tecnología de protección extrema (XPT) diseñada para ofrecer una mayor resistencia al polvo y al agua en las duras condiciones del lugar de trabajo.",
-                                            "Palanca de bloqueo accesible desde ambos lados.",
-                                            "Freno eléctrico para máxima productividad y mayor seguridad del operario."
-                                        ].map((beneficio, idx) => (
-                                            <div
-                                                key={idx}
-                                                className={`flex items-start gap-3 p-4 ${idx % 2 === 0 ? 'bg-gray-50' : 'bg-white'}`}
-                                            >
-                                                <div className="min-w-5 min-h-5 mt-1">
-                                                    <CircleCheckIcon className="h-5 w-5 customtext-primary" />
+                    <div className="px-primary 2xl:px-0 mx-auto 2xl:max-w-7xl my-10">
+                        {/* Pestañas de contenido */}
+                        {activeTab === "general" && (
+                            <div className="grid gap-12 pt-6">
+                                {/* Sección de Beneficios del producto */}
+                                {item?.technologies && item.technologies.length > 0 && (
+                                    <div className="mb-6">
+
+                                        <div className="flex gap-20 flex-wrap">
+                                            {item.technologies.map((technology) => (
+                                                <div key={technology.id} className="flex flex-col items-center">
+                                                    {technology.banner && (
+                                                        <img
+                                                            src={`/storage/images/technology/${technology?.banner}`}
+                                                            alt={technology.name}
+                                                            className="h-10 object-contain"
+                                                            onError={(e) =>
+                                                            (e.target.src =
+                                                                "/api/cover/thumbnail/null")
+                                                            }
+                                                        />
+                                                    )}
+
                                                 </div>
-                                                <span className="text-gray-700">{beneficio}</span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                           
-                            </div>
-                                    
-                        </div>
-                    )}
-
-                     {activeTab === "info" && (
-                                <>
-                                <div className="mb-10">
-                                 
-                                    {item?.features && item?.features.length > 0 && (
-                                        <div className="mt-4">
-                                            <h4 className="font-semibold mb-2">Características destacadas:</h4>
-                                            <ul className="list-disc pl-5 space-y-1">
-                                                {item?.features.map((feature, index) => (
-                                                    <li key={index} className="text-gray-700">
-                                                        {feature.feature}
-                                                    </li>
-                                                ))}
-                                            </ul>
+                                            ))}
                                         </div>
-                                    )}
+                                    </div>
+                                )}
+                                <div>
+                                    <h2 className="text-3xl font-bold mb-6 customtext-neutral-dark">
+                                        Beneficios del producto
+                                    </h2>
+                                    <div className="bg-white w-full rounded-lg shadow-sm overflow-hidden">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-20">
+                                            {[
+                                                "Lubricación automática de la cadena.",
+                                                "La ventana de visualización del aceite de la cadena permite al operario comprobar fácilmente el nivel de aceite.",
+                                                "Tecnología de protección extrema (XPT) diseñada para ofrecer una mayor resistencia al polvo y al agua en las duras condiciones del lugar de trabajo.",
+                                                "Palanca de bloqueo accesible desde ambos lados.",
+                                                "Freno eléctrico para máxima productividad y mayor seguridad del operario."
+                                            ].map((beneficio, idx) => (
+                                                <div
+                                                    key={idx}
+                                                    className={`flex items-start gap-3 py-2 `}
+                                                >
+                                                    <div className="min-w-5 min-h-5 mt-1">
+                                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M8.6 14.6L15.65 7.55L14.25 6.15L8.6 11.8L5.75 8.95L4.35 10.35L8.6 14.6ZM10 20C8.61667 20 7.31667 19.7375 6.1 19.2125C4.88333 18.6875 3.825 17.975 2.925 17.075C2.025 16.175 1.3125 15.1167 0.7875 13.9C0.2625 12.6833 0 11.3833 0 10C0 8.61667 0.2625 7.31667 0.7875 6.1C1.3125 4.88333 2.025 3.825 2.925 2.925C3.825 2.025 4.88333 1.3125 6.1 0.7875C7.31667 0.2625 8.61667 0 10 0C11.3833 0 12.6833 0.2625 13.9 0.7875C15.1167 1.3125 16.175 2.025 17.075 2.925C17.975 3.825 18.6875 4.88333 19.2125 6.1C19.7375 7.31667 20 8.61667 20 10C20 11.3833 19.7375 12.6833 19.2125 13.9C18.6875 15.1167 17.975 16.175 17.075 17.075C16.175 17.975 15.1167 18.6875 13.9 19.2125C12.6833 19.7375 11.3833 20 10 20Z" fill="#1F687F" />
+                                                        </svg>
+
+                                                    </div>
+                                                    <span className="customtext-neutral-dark text-lg">{beneficio}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+
                                 </div>
-                            
+
+                            </div>
+                        )}
+
+                        {activeTab === "info" && (
+                            <>
+                               
+
                                 {/* Datos técnicos detallados */}
                                 <div>
-                                    <h3 className="text-xl font-bold mb-6">Especificaciones técnicas</h3>
+                                    <h3 className="text-3xl font-bold mb-6 customtext-neutral-dark">Especificaciones técnicas</h3>
                                     <div className="rounded-lg overflow-hidden shadow-sm">
                                         {item?.specifications.map((spec, index) => (
                                             <div key={index} className={`flex flex-row ${index % 2 === 0 ? "bg-gray-50" : "bg-white"}`}>
-                                                <div className="py-4 px-6 w-1/3 font-medium text-gray-700">{spec.title}</div>
-                                                <div className="py-4 px-6 w-2/3 text-gray-900">{spec.description}</div>
+                                                <div className="py-4 px-6 w-1/2 font-bold tracking-wide customtext-neutral-dark text-base">{spec.title}</div> 
+                                                <div className="py-4 px-6 w-2/2 customtext-neutral-dark text-base">{spec.description}</div>
                                             </div>
                                         ))}
-                                        {(!item?.specifications || item?.specifications.length === 0) && [
-                                            { title: "Longitud de la espada", description: "150 mm" },
-                                            { title: "Potencia", description: "40 Vmax" },
-                                            { title: "Velocidad máxima", description: "8.0 m/s" },
-                                            { title: "Peso", description: "2.6 kg" },
-                                            { title: "Dimensiones", description: "57 x 19 x 20 cm" }
-                                        ].map((spec, index) => (
-                                            <div key={index} className={`flex flex-row ${index % 2 === 0 ? "bg-gray-50" : "bg-white"}`}>
-                                                <div className="py-4 px-6 w-1/3 font-medium text-gray-700">{spec.title}</div>
-                                                <div className="py-4 px-6 w-2/3 text-gray-900">{spec.description}</div>
-                                            </div>
-                                        ))}
+                                
                                     </div>
                                 </div></>
-)}
+                        )}
 
-                    {activeTab === "downloads" && (
-                        <div>
-                            <h2 className="text-xl font-bold mb-6">Archivos descargables</h2>
-                            <div className="space-y-4">
-                                <div className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors">
-                                    <div className="flex items-center gap-3">
-                                        <div className="bg-primary/10 p-2 rounded-lg">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="customtext-primary">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                            </svg>
+                        {activeTab === "downloads" && (
+                            <div>
+                                <h2 className="text-xl font-bold mb-6">Archivos descargables</h2>
+                                <div className="space-y-4">
+                                    {item?.downloadables && item.downloadables.length > 0 ? (
+                                        item.downloadables.map((downloadable) => (
+                                            <div key={downloadable.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="bg-primary/10 p-2 rounded-lg">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="customtext-primary">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                        </svg>
+                                                    </div>
+                                                    <div>
+                                                        <p className="font-semibold">{downloadable.original_name || downloadable.name}</p>
+                                                        <p className="text-sm text-gray-500">{downloadable.mime_type?.toUpperCase() || downloadable.type?.toUpperCase()}, {downloadable.size}</p>
+                                                    </div>
+                                                </div>
+                                                <a href={downloadable.url} target="_blank" rel="noopener noreferrer" className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors">
+                                                    Descargar ahora
+                                                </a>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <div className="text-center py-8">
+                                            <p className="text-gray-500">No hay archivos disponibles para descargar</p>
                                         </div>
-                                        <div>
-                                            <p className="font-semibold">Manual de usuario</p>
-                                            <p className="text-sm text-gray-500">PDF, 2.4 MB</p>
-                                        </div>
-                                    </div>
-                                    <a href="#" className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors">
-                                        Descargar ahora
-                                    </a>
-                                </div>
-
-                                <div className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors">
-                                    <div className="flex items-center gap-3">
-                                        <div className="bg-primary/10 p-2 rounded-lg">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="customtext-primary">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                            </svg>
-                                        </div>
-                                        <div>
-                                            <p className="font-semibold">Ficha técnica</p>
-                                            <p className="text-sm text-gray-500">PDF, 1.8 MB</p>
-                                        </div>
-                                    </div>
-                                    <a href="#" className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors">
-                                        Descargar ahora
-                                    </a>
+                                    )}
                                 </div>
                             </div>
-                        </div>
-                    )}
-                   </div>
+                        )}
+                    </div>
                 </div>
             </div>
             {relationsItems.length > 0 && (

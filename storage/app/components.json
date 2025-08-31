@@ -1390,7 +1390,20 @@
                 ],
                 "using": {
                     "model": "Item",
-                    "flied": "slug"
+                    "field": "slug",
+                    "with": [
+                        "images",
+                        "specifications",
+                        "features",
+                        "technologies",
+                        "symbologies",
+                        "downloadables"
+                    ],
+                    "relations": [
+                        "category",
+                        "brand",
+                        "subcategory"
+                    ]
                 },
                 "generals": [
                     "phone_whatsapp",

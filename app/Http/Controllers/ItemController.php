@@ -425,7 +425,7 @@ class ItemController extends BasicController
      */
     public function apiShow($id)
     {
-        $item = Item::with(['category', 'specifications'])->findOrFail($id);
+        $item = Item::with(['category', 'specifications', 'technologies', 'symbologies', 'downloadables'])->findOrFail($id);
         // Formatear especificaciones técnicas como key-value
         $specs = $item->specifications
             ->where('type', 'technical')
@@ -447,6 +447,9 @@ class ItemController extends BasicController
                 'name' => $item->category->name
             ] : null,
             'specifications' => $specs,
+            'technologies' => $item->technologies,
+            'symbologies' => $item->symbologies,
+            'downloadables' => $item->downloadables,
         ]);
     }
 }

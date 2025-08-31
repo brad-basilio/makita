@@ -6685,7 +6685,7 @@
     ]
   },
   "resources/js/Components/Tailwind/ProductDetail.jsx": {
-    "file": "assets/ProductDetail-2RJSVRBC.js",
+    "file": "assets/ProductDetail-eIwaDBb3.js",
     "name": "ProductDetail",
     "src": "resources/js/Components/Tailwind/ProductDetail.jsx",
     "isDynamicEntry": true,
@@ -6825,7 +6825,7 @@
     ]
   },
   "resources/js/Components/Tailwind/ProductDetails/ProductDetailMakita.jsx": {
-    "file": "assets/ProductDetailMakita-_BXzwaBG.js",
+    "file": "assets/ProductDetailMakita-CbgD31Vj.js",
     "name": "ProductDetailMakita",
     "src": "resources/js/Components/Tailwind/ProductDetails/ProductDetailMakita.jsx",
     "isDynamicEntry": true,
@@ -8465,7 +8465,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-Xt_KZssq.js",
+    "file": "assets/System-osSCycti.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,
