@@ -180,7 +180,7 @@ export default function AboutMakita({ data, filteredData }) {
 
 
                         <div className="mt-8 flex justify-center items-center">
-                            <a href="/contacto" className="bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-primary/90 transition-all">
+                            <a href="/contacto" className="bg-[#219FB9] text-lg hover:bg-primary text-white px-6 py-3 rounded-md font-medium  transition-all">
                                 Contáctame
                             </a>
                         </div>
@@ -213,11 +213,11 @@ export default function AboutMakita({ data, filteredData }) {
                         </div>
 
                         <div className="md:col-span-7">
-                            <h2 className="text-3xl font-bold mb-6">
+                            <h2 className="text-[40px] font-bold max-w-md mb-6 customtext-neutral-dark">
                                {sectionTwo?.title || "Sobre nosotros"}
                             </h2>
 
-                        <div className="customtext-neutral-dark   gap-8 text-left" dangerouslySetInnerHTML={{ __html: sectionTwo?.description }}></div>
+                        <div className="customtext-neutral-dark text-lg   gap-8 text-left" dangerouslySetInnerHTML={{ __html: sectionTwo?.description }}></div>
 
                         </div>
                     </div>
@@ -299,12 +299,12 @@ export default function AboutMakita({ data, filteredData }) {
                                                         {/* Top content */}
                                                         {isEven ? (
                                                             <div 
-                                                                className={` pb-10 w-full mb-16 max-w-[600px] text-left transition-opacity duration-300 ${
+                                                                className={` pb-24 w-full mb-16 max-w-[600px] text-left transition-opacity duration-300 ${
                                                                     isActive ? 'opacity-100' : 'opacity-50'
                                                                 }`}
                                                             >
-                                                                <h3 className="text-xl font-bold mb-2 text-white">{event.year} - {event.name}</h3>
-                                                                <p className="text-gray-300 text-sm leading-relaxed line-clamp-6">{event.description}</p>
+                                                                <h3 className="text-xl  mb-2 text-white">{event.year} - {event.name}</h3>
+                                                                <p className="text-gray-300 text-base leading-relaxed line-clamp-6">{event.description}</p>
                                                             </div>
                                                         ) : (
                                                             <div className="mb-12 h-[110px]"></div>
@@ -335,15 +335,15 @@ export default function AboutMakita({ data, filteredData }) {
                                                         {/* Bottom content */}
                                                         {!isEven ? (
                                                             <div 
-                                                                className={`mt-8 w-full max-w-[600px] text-left transition-opacity duration-300 ${
+                                                                className={`mt-24 w-full max-w-[600px] text-left transition-opacity duration-300 ${
                                                                     isActive ? 'opacity-100' : 'opacity-50'
                                                                 }`}
                                                             >
-                                                                <h3 className="text-xl font-bold mb-2 text-white"> {/* Year indicator under point */}
+                                                                <h3 className="text-xl  mb-2 text-white"> {/* Year indicator under point */}
                                                        
                                                             {event.year} -
                                                        {event.name}</h3>
-                                                                <p className="text-gray-300 text-sm leading-relaxed line-clamp-4">{event.description}</p>
+                                                                <p className="text-gray-300 text-lg leading-relaxed line-clamp-6">{event.description}</p>
                                                             </div>
                                                         ) : (
                                                             <div className="mt-8 h-[80px]"></div>
@@ -365,7 +365,7 @@ export default function AboutMakita({ data, filteredData }) {
                 <div className=" mx-auto px-primary 2xl:px-0 2xl:max-w-7xl">
                     <div className="grid md:grid-cols-2 gap-10 items-center">
                         <div>
-                            <h2 className="text-3xl font-bold mb-6">{sectionFour?.title}</h2>
+                            <h2 className="text-4xl font-bold mb-6 customtext-neutral-dark">{sectionFour?.title}</h2>
 
                           <div className="customtext-neutral-dark text-lg mb-6" dangerouslySetInnerHTML={{ __html: sectionFour?.description }}></div>
 

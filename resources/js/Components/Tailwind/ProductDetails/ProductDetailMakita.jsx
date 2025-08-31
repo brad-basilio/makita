@@ -904,7 +904,7 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                                                             })()}</p>
                                                         </div>
                                                     </div>
-                                                    <a href={downloadable.url} target="_blank" rel="noopener noreferrer" className="bg-[#219FB9] text-white px-4 py-3 rounded-md hover:bg-primary transition-colors">
+                                                    <a href={`/storage/images/downloads/item/${downloadable.url}`} target="_blank" rel="noopener noreferrer" className="bg-[#219FB9] text-white px-4 py-3 rounded-md hover:bg-primary transition-colors">
                                                         Descargar {(() => {
                                                             const fileName = downloadable.original_name || downloadable.name || '';
                                                             const extension = fileName.split('.').pop()?.toUpperCase();
