@@ -258,10 +258,10 @@ const SliderInteractive = ({ items, data }) => {
                                 <div className=" absolute inset-0 bg-gradient-to-b from-transparent to-[#00000033]"></div>
                         
 
-                            <div className={`relative w-full px-primary 2xl:px-0 2xl:max-w-7xl  mx-auto  h-[530px] md:h-[600px] flex flex-col items-start justify-end md:justify-center ${isDarkBg ? "text-white" : "customtext-neutral-dark"}`}>
+                            <div className={`relative w-full px-primary 2xl:px-0 2xl:max-w-7xl  mx-auto  h-[530px] md:h-[600px] flex flex-col items-start justify-end md:justify-center text-white`}>
                                 <div className="flex flex-col gap-5 lg:gap-10 items-start">
                                     <h2
-                                        className={`${Global.APP_CORRELATIVE === "stechperu" ? "w-9/12  md:w-full md:max-w-md " : "w-full  md:w-full md:max-w-lg "} font-title text-[40px] leading-tight sm:text-5xl md:text-6xl tracking-normal font-bold ${isDarkBg ? "text-white" : "customtext-neutral-dark"}`}
+                                        className={`${Global.APP_CORRELATIVE === "stechperu" ? "w-9/12  md:w-full md:max-w-md " : "w-full  md:w-full md:max-w-lg "} font-title text-[40px] leading-tight sm:text-5xl md:text-6xl tracking-normal font-bold text-white`}
                                         style={{
                                             textShadow: "0 0 20px rgba(0, 0, 0, .25)",
                                         }}
@@ -269,7 +269,7 @@ const SliderInteractive = ({ items, data }) => {
                                         {item.name}
                                     </h2>
                                     <p
-                                        className={`${Global.APP_CORRELATIVE === "stechperu" ? "w-8/12" : "w-full"} md:w-full md:max-w-md text-2xl font-medium leading-tight font-paragraph ${isDarkBg ? "text-white" : "customtext-neutral-dark"}`}
+                                        className={`${Global.APP_CORRELATIVE === "stechperu" ? "w-8/12" : "w-full"} md:w-full md:max-w-md text-2xl font-medium leading-tight font-paragraph text-white`}
                                         style={{
                                             textShadow: "0 0 20px rgba(0, 0, 0, .25)",
                                         }}
