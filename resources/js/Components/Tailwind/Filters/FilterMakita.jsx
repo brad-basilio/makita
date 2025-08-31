@@ -683,13 +683,6 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
 
 
                 <div className="relative flex flex-col lg:flex-row lg:justify-between lg:gap-16 gap-10">
-                    <button
-                        className="w-full flex lg:hidden gap-2 items-center"
-                        onClick={() => setFiltersOpen(true)}
-                    >
-                        <h2 className="text-2xl font-bold">Filtros</h2>
-                        <Filter className="h-5 w-5" />
-                    </button>
                     <div className={`${filtersOpen
                         ? "fixed inset-0  bg-white flex flex-col h-screen z-[999]"
                         : "hidden"
@@ -820,16 +813,14 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
                     </div>
 
                     <div className="w-full lg:w-8/12 py-4">
-                        <div className="flex flex-col  md:flex-row md:justify-between items-center mb-8 ">
-                            <h2 className="text-[32px] md:text-3xl font-semibold md:w-6/12">
-                                Categoria {categoryName}
-                            </h2>
-                            <div className="flex flex-col w-full items-center justify-end gap-4 md:flex-row md:w-5/12">
-
-
-
-                                {/* Controles de vista */}
-                                <div className="flex items-center gap-2 mr-2">
+                        <div className="flex flex-col mb-8">
+                            <div className="flex flex-col md:flex-row md:justify-between items-center">
+                                <h2 className="text-[32px] md:text-3xl font-semibold md:w-6/12">
+                                    Categoria {categoryName}
+                                </h2>
+                                <div className="hidden md:flex flex-col w-full items-center justify-end gap-4 md:flex-row md:w-5/12">
+                                    {/* Controles de vista - Solo visible en desktop */}
+                                    <div className="flex items-center gap-2 mr-2">
                                     <button
                                         onClick={() => handleViewTypeChange('grid')}
                                         className={`p-2 rounded-md transition-colors duration-150 ${viewType === 'grid'
@@ -858,9 +849,18 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
 
 
                                     </button>
+                                    </div>
                                 </div>
-
                             </div>
+                            
+                            {/* Botón de filtros móvil - Debajo del título */}
+                            <button
+                                className="w-full rounded-md flex items-center justify-center text-center border border-primary py-2 px-6 customtext-primary mx-auto  md:hidden gap-2  mt-4"
+                                onClick={() => setFiltersOpen(true)}
+                            >
+                                <h2 className="text-lg">Filtros</h2>
+                              
+                            </button>
                         </div>
                         {/* Productos */}
                         {loading ? (
@@ -873,7 +873,7 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
                             </div>
                         ) : (
                             <div 
-                                className={`${viewType === 'grid' ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4' : 'flex flex-col gap-6'} transition-opacity duration-150 ease-in-out`}
+                                className={`${viewType === 'grid' ? 'grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4' : 'flex flex-col gap-6'} transition-opacity duration-150 ease-in-out`}
                                 style={{ opacity: isChangingView ? 0.7 : 1 }}
                             >
                                 {renderedProducts || (
