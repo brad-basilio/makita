@@ -186,12 +186,12 @@ const BlogSectionMakita = ({ data, items: initialItems }) => {
                             </div>
                             
                             {/* Content */}
-                            <div className="w-full md:w-2/3">
+                            <div className="w-full md:w-2/3 pl-4">
                                 <h3 className="text-2xl font-bold mb-2 customtext-neutral-dark line-clamp-2">
                                     {post?.name || "Todo lo que puedes hacxer con tu Rotomartillo Inalámbrico"}
                                 </h3>
                                 
-                                <p className="customtext-neutral-light line-clamp-3">
+                                <p className="customtext-neutral-light line-clamp-3 ">
                                     {truncateText(getTextFromHTML(post?.description), 120) || 
                                     "Duis dapibus congue velit, lobortis mollis nisi volutpat quis. Nulla facilisi. Sed efficitur, eros ut tincidunt sagittis, magna sem mollis elit."}
                                 </p>
