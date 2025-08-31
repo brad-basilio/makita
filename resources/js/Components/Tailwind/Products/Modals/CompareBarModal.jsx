@@ -23,7 +23,7 @@ const CompareBarModal = ({ open, minimized, products, onRemove, onCompare, onMin
         {/* Minimizada: solo botón para restaurar */}
         {minimized ? (
           <div className="flex justify-center items-center h-full">
-            <button onClick={onRestore} className=" rounded text-3xl md:text-[30px]  p-2 text-white flex items-center gap-6 ">
+            <button onClick={onRestore} className=" rounded text-2xl md:text-[30px]  p-2 text-white flex items-center gap-2 lg:gap-6 ">
               <button onClick={onRestore} className="bg-primary rounded w-14 h-14 flex items-center justify-center text-white text-2xl hover:bg-[#219FB9] transition-all duration-300">
                    <ChevronUp size={24} />
                 </button>
@@ -34,13 +34,13 @@ const CompareBarModal = ({ open, minimized, products, onRemove, onCompare, onMin
         ) : (
           <>
             <div className="flex flex-col md:flex-row px-[5%] 2xl:px-0 2xl:max-w-7xl mx-auto items-center justify-between mb-4 gap-4">
-              <div className="flex items-center gap-8">
-                <button onClick={onMinimize} className="bg-primary rounded w-14 h-14 flex items-center justify-center text-white text-2xl hover:bg-[#219FB9] transition-all duration-300">
+              <div className="flex items-center gap-4  lg:gap-8">
+                <button onClick={onMinimize} className="bg-primary rounded min-w-14 min-h-14 flex items-center justify-center text-white text-2xl hover:bg-[#219FB9] transition-all duration-300">
                   <ChevronDown size={24} />
                 </button>
                 <div>
-                  <h2 className="text-3xl md:text-[32px] font-medium text-white">Comparar productos</h2>
-                  <p className="text-base md:text-base text-white">Puede añadir un máximo de cuatro artículos para comparar</p>
+                  <h2 className="text-2xl md:text-[32px] font-medium text-white">Comparar productos</h2>
+                  <p className="text-base line-clamp-1 lg:line-clamp-none md:text-base text-white">Puede añadir un máximo de cuatro artículos para comparar</p>
                 </div>
               </div>
               <button
