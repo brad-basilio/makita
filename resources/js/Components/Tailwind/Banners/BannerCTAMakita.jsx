@@ -75,7 +75,7 @@ const BannerCTAMakita = ({data,items,generals}) => {
       </div>
         {/* Círculo blanco transparente en top left */}
       <div 
-        className="absolute -bottom-40 -left-40 w-[600px] h-[600px] rounded-full z-[2]"
+        className=" absolute -bottom-40 -left-40 h-screen w-screen  lg:w-[600px] lg:h-[600px] rounded-full z-[2]"
         style={{
           background: 'linear-gradient(126deg, #888 20.76%, #D1D1D1 61.55%)',
           mixBlendMode: 'overlay',

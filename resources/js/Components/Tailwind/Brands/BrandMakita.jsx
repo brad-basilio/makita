@@ -29,7 +29,7 @@ const BrandMakita = ({ data, items }) => {
     <section className="relative  w-full bg-secondary text-white py-16 md:py-24">
       {/* Círculo blanco transparente en top left */}
       <div 
-        className="absolute -top-56 left-1/2 -translate-x-1/2 w-[500px] h-[500px] rounded-full z-[2]"
+        className="absolute -top-56 left-1/2 -translate-x-1/2 h-screen w-screen lg:w-[500px] lg:h-[500px] rounded-full z-[2]"
         style={{
           background: 'linear-gradient(126deg, #888 20.76%, #D1D1D1 61.55%)',
           mixBlendMode: 'overlay',

@@ -53,6 +53,10 @@ const HeaderMakita = ({
   const [mobileActiveCat, setMobileActiveCat] = useState(null);
   const [mobileSearchValue, setMobileSearchValue] = useState("");
   const [showMobileSubmenu, setShowMobileSubmenu] = useState(false);
+  const [mobileSuggestions, setMobileSuggestions] = useState([]);
+  const [showMobileSuggestions, setShowMobileSuggestions] = useState(false);
+  const [loadingMobileSuggestions, setLoadingMobileSuggestions] = useState(false);
+  const mobileDebounceRef = useRef(null);
   
   // Filter state for applications
   const [selectedApplication, setSelectedApplication] = useState(null);
@@ -116,6 +120,9 @@ const HeaderMakita = ({
     return () => {
       if (debounceRef.current) {
         clearTimeout(debounceRef.current);
+      }
+      if (mobileDebounceRef.current) {
+        clearTimeout(mobileDebounceRef.current);
       }
     };
   }, []);
@@ -263,6 +270,7 @@ const HeaderMakita = ({
   const menuRef = useRef(null);
   const searchRef = useRef(null);
   const suggestionsRef = useRef(null);
+  const mobileSuggestionsRef = useRef(null);
   const debounceRef = useRef(null);
 
   const totalCount = cart.reduce((acc, item) => Number(acc) + Number(item.quantity), 0);
@@ -277,6 +285,9 @@ const HeaderMakita = ({
       }
       if (suggestionsRef.current && !suggestionsRef.current.contains(event.target)) {
         setShowSuggestions(false)
+      }
+      if (mobileSuggestionsRef.current && !mobileSuggestionsRef.current.contains(event.target)) {
+        setShowMobileSuggestions(false)
       }
     }
 
@@ -326,6 +337,20 @@ const HeaderMakita = ({
       document.body.style.overflow = 'unset'
     }
   }, [showMegaMenu])
+
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (openMenu) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'unset'
+    }
+    
+    // Cleanup on unmount
+    return () => {
+      document.body.style.overflow = 'unset'
+    }
+  }, [openMenu])
 
   // Fetch social media data
   useEffect(() => {
@@ -412,6 +437,55 @@ const HeaderMakita = ({
     }
   `;
 
+  // Mobile search functions
+  const searchMobileSuggestions = async (query) => {
+    if (!query.trim() || query.length < 2) {
+      setMobileSuggestions([]);
+      setShowMobileSuggestions(false);
+      return;
+    }
+
+    setLoadingMobileSuggestions(true);
+    try {
+      const filteredItems = items?.filter(item => 
+        item?.name?.toLowerCase().includes(query.toLowerCase()) ||
+        item?.description?.toLowerCase().includes(query.toLowerCase()) 
+      ).slice(0, 8) || []; // Limitar a 8 sugerencias
+      
+      setMobileSuggestions(filteredItems);
+      setShowMobileSuggestions(filteredItems.length > 0);
+    } catch (error) {
+      console.error('Error searching mobile suggestions:', error);
+      setMobileSuggestions([]);
+      setShowMobileSuggestions(false);
+    } finally {
+      setLoadingMobileSuggestions(false);
+    }
+  };
+
+  // Función para manejar cambios en el input móvil con debounce
+  const handleMobileSearchChange = (value) => {
+    setMobileSearchValue(value);
+    
+    // Limpiar el timeout anterior
+    if (mobileDebounceRef.current) {
+      clearTimeout(mobileDebounceRef.current);
+    }
+    
+    // Establecer nuevo timeout para debounce
+    mobileDebounceRef.current = setTimeout(() => {
+      searchMobileSuggestions(value);
+    }, 300); // 300ms de debounce
+  };
+
+  // Función para seleccionar una sugerencia móvil
+  const handleMobileSuggestionClick = (item) => {
+    setMobileSearchValue(item.name);
+    setShowMobileSuggestions(false);
+    // Redirigir al producto o catálogo
+    window.location.href = `/catalogo?search=${encodeURIComponent(item.name)}`;
+  };
+
   // Mobile menu handlers
   const handleMobileMenuItemClick = (category) => {
     setMobileActiveCat(category);
@@ -429,7 +503,7 @@ const HeaderMakita = ({
     <>
       <style>{scrollbarStyles}</style>
       <header
-        className={`top-0 z-50 ${isFixed ? "fixed left-0 right-0" : "relative w-full"} bg-primary`}
+        className={`top-0 z-50 ${isFixed ? "fixed left-0 right-0 w-screen" : "relative w-full"} bg-primary`}
         style={{ 
           boxShadow: isFixed ? "0 2px 8px rgba(0,0,0,0.08)" : "none",
           minHeight: 'auto'
@@ -988,25 +1062,84 @@ const HeaderMakita = ({
               stiffness: 300,
               damping: 30
             }}
-            className="md:hidden bg-primary fixed left-0 w-full h-[calc(100vh-56px)] z-[9999] overflow-hidden backdrop-blur-sm"
+            className="md:hidden bg-primary fixed left-0 right-0 h-[calc(100dvh-56px)] z-[9999] overflow-hidden backdrop-blur-sm mx-0"
            style={{
-              top: isFixed ? 50 : 110, // 64px when fixed, 120px otherwise
+              top: isFixed ? 65 : 110, // 64px when fixed, 120px otherwise
               boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
             }}
          
          >
-           <div className="px-4 py-3 border-b border-white/10 bg-white">
+           <div className="px-4 py-3 border-b border-white/10 bg-white relative" ref={mobileSuggestionsRef}>
                   <div className="relative flex items-center">
                     <Search className="absolute left-3 customtext-neutral-dark" size={20} />
                     <input
                       type="search"
                       placeholder="Búsqueda"
                       value={mobileSearchValue}
-                      onChange={(e) => setMobileSearchValue(e.target.value)}
+                      onChange={(e) => handleMobileSearchChange(e.target.value)}
+                      onFocus={() => mobileSearchValue.length >= 2 && mobileSuggestions.length > 0 && setShowMobileSuggestions(true)}
                       className="w-full pl-10 py-2 bg-transparent border-b border-white/40 customtext-neutral-dark placeholder-black focus:outline-none focus:border-white"
+                      autoComplete="off"
                     />
-                 
                   </div>
+                  
+                  {/* Mobile Search Suggestions */}
+                  {showMobileSuggestions && (
+                    <div className="absolute top-full left-0 right-0  bg-white rounded-b-md shadow-xl z-[60] max-h-[50vh] overflow-y-auto border-t border-gray-200">
+                      {loadingMobileSuggestions ? (
+                        <div className="p-4 text-center text-gray-500">
+                          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary mx-auto"></div>
+                          <span className="mt-2 block text-sm">Buscando...</span>
+                        </div>
+                      ) : (
+                        <>
+                          {mobileSuggestions.map((item, index) => (
+                            <div
+                              key={item.id || index}
+                              onClick={() => handleMobileSuggestionClick(item)}
+                              className="flex items-center p-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0 transition-colors"
+                            >
+                              <div className="flex-shrink-0 w-12 h-12 mr-3">
+                                {item.image ? (
+                                  <img
+                                    src={`/storage/images/item/${item.image}`}
+                                    alt={item.name}
+                                    className="w-full h-full object-cover rounded"
+                                    onError={(e) => {
+                                      e.target.style.display = 'none';
+                                    }}
+                                  />
+                                ) : (
+                                  <div className="w-full h-full bg-gray-200 rounded flex items-center justify-center">
+                                    <Search size={14} className="text-gray-400" />
+                                  </div>
+                                )}
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <h4 className="text-sm font-medium customtext-neutral-dark truncate">
+                                  {item.name}
+                                </h4>
+                                <p className="text-xs customtext-primary truncate">
+                                  {item.category?.name} {item.platform?.name && `• ${item.platform.name}`}
+                                </p>
+                              </div>
+                            </div>
+                          ))}
+                          {mobileSuggestions.length > 0 && (
+                            <div className="p-3 border-t border-gray-100 bg-gray-50">
+                              <a
+                                href={`/catalogo?search=${encodeURIComponent(mobileSearchValue)}`}
+                                className="text-sm bg-primary hover:bg-[#219FB9] transition-colors duration-500 w-full px-3 py-3 rounded-md text-white font-medium flex items-center justify-center gap-2"
+                              >
+                                Ver todos los resultados
+                                <ChevronRight size={14} />
+                              </a>
+                            </div>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  )}
                 </div>
             {!showMobileSubmenu ? (
               // Main menu with search and categories
@@ -1104,7 +1237,7 @@ const HeaderMakita = ({
 
                 {/* Brands and subcategories */}
                 <motion.div 
-                  className="flex-1 overflow-y-auto custom-scrollbar pt-4 pb-14"
+                  className="flex-1 overflow-y-auto custom-scrollbar pt-4 pb-20 mb-14"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2, duration: 0.4 }}
