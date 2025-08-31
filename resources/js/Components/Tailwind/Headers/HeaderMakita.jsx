@@ -587,7 +587,7 @@ const HeaderMakita = ({
           <button
             aria-label="Menú"
             onClick={() => setOpenMenu(!openMenu)}
-            className="flex items-center justify-center bg-secondary p-2 rounded-lg text-white z-[51]"
+            className="flex items-center justify-center bg-secondary p-3 rounded-lg text-white z-[51]"
           >
             {!openMenu ? (
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -1109,9 +1109,9 @@ const HeaderMakita = ({
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2, duration: 0.4 }}
                 >
-                  {getBrandsByCategory(mobileActiveCat?.id).length > 0 ? (
+                  {getPlatformsByCategory(mobileActiveCat?.id).length > 0 ? (
                     <div className="p-4 space-y-6">
-                      {getBrandsByCategory(mobileActiveCat?.id).map((brand, brandIndex) => (
+                      {getPlatformsByCategory(mobileActiveCat?.id).map((brand, brandIndex) => (
                         <motion.div 
                           key={brand.id} 
                           className="space-y-3"
@@ -1126,7 +1126,7 @@ const HeaderMakita = ({
                             transition={{ duration: 0.2 }}
                           >
                             <img
-                              src={`/storage/images/brand/${brand.image}`}
+                              src={`/storage/images/platform/${brand.image}`}
                               alt={brand.name}
                               className="h-6 w-auto object-contain"
                               onError={(e) => e.target.src = "/api/cover/thumbnail/null"}
@@ -1136,7 +1136,7 @@ const HeaderMakita = ({
 
                           {/* Subcategories */}
                           <ul className="pl-4 space-y-2">
-                            {getSubcategoriesByCategoryAndBrand(mobileActiveCat?.id, brand.id).map((subcategory, subIndex) => (
+                            {getFamiliesByCategoryAndPlatform(mobileActiveCat?.id, brand.id).map((subcategory, subIndex) => (
                               <motion.li 
                                 key={subcategory.id}
                                 initial={{ opacity: 0, x: -10 }}
@@ -1161,7 +1161,7 @@ const HeaderMakita = ({
                   ) : (
                     // Display subcategories directly if no brands
                     <ul className="p-4 space-y-2">
-                      {getSubcategoriesByCategory(mobileActiveCat?.id).map((subcategory, index) => (
+                      {getFamiliesByCategory(mobileActiveCat?.id).map((subcategory, index) => (
                         <motion.li 
                           key={subcategory.id}
                           initial={{ opacity: 0, x: -20 }}
