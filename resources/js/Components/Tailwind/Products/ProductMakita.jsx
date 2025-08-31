@@ -115,38 +115,41 @@ const ProductMakita = ({ items, data, setCart, cart }) => {
 
                 {/* Swiper Carousel */}
                 <div className="relative w-full">
-                    <Swiper
-                        modules={[Navigation, Grid]}
-                        navigation={{
-                            prevEl: navigationDesktopPrevRef.current,
-                            nextEl: navigationDesktopNextRef.current,
-                            enabled: true,
-                        }}
-                        slidesPerView={2}
-                        spaceBetween={16}
-                        loop={true}
-                        grid={{
-                            fill: 'row',
-                            rows: 2,
-                        }}
-                        onSwiper={setSwiperInstance}
-                        breakpoints={{
-                            640: { slidesPerView: 2, spaceBetween: 16 },
-                            768: { slidesPerView: 3, spaceBetween: 16, grid: { rows: 1 } },
-                            1024: { slidesPerView: 4, spaceBetween: 20, grid: { rows: 1 } },
-                            1280: { slidesPerView: 4, spaceBetween: 0, grid: { rows: 1 } },
-                        }}
-                       
-                    >
-                        {items?.map((product, index) => (
-                            <SwiperSlide
-                                key={index}
-                                className="py-2 lg:px-4"
-                            >
-                                <CardProductMakita product={product} onCompareClick={() => handleCompareClick(product)} />
-                            </SwiperSlide>
-                        ))}
-                    </Swiper>
+                    {items && items.length > 0 ? (
+                        <Swiper
+                            modules={[Navigation, Grid]}
+                            navigation={{
+                                prevEl: navigationDesktopPrevRef.current,
+                                nextEl: navigationDesktopNextRef.current,
+                                enabled: true,
+                            }}
+                            slidesPerView={2}
+                            spaceBetween={16}
+                            loop={true}
+                            grid={{
+                                fill: 'row',
+                                rows: 2,
+                            }}
+                            onSwiper={setSwiperInstance}
+                            breakpoints={{
+                                640: { slidesPerView: 2, spaceBetween: 16 },
+                                768: { slidesPerView: 3, spaceBetween: 16, grid: { rows: 1 } },
+                                1024: { slidesPerView: 4, spaceBetween: 20, grid: { rows: 1 } },
+                                1280: { slidesPerView: 4, spaceBetween: 0, grid: { rows: 1 } },
+                            }}
+                        >
+                            {items?.map((product, index) => (
+                                <SwiperSlide
+                                    key={index}
+                                    className="py-2 lg:px-4"
+                                >
+                                    <CardProductMakita product={product} onCompareClick={() => handleCompareClick(product)} />
+                                </SwiperSlide>
+                            ))}
+                        </Swiper>
+                    ) : (
+                        <div className="w-full text-center py-10">Cargando productos...</div>
+                    )}
 
                     {/* Navigation Buttons */}
                     <button

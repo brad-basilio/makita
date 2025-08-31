@@ -429,7 +429,7 @@ const HeaderMakita = ({
     <>
       <style>{scrollbarStyles}</style>
       <header
-        className={`w-full top-0 left-0 z-50 ${isFixed ? "fixed" : "relative"} bg-primary`}
+        className={`top-0 z-50 ${isFixed ? "fixed left-0 right-0" : "relative w-full"} bg-primary`}
         style={{ 
           boxShadow: isFixed ? "0 2px 8px rgba(0,0,0,0.08)" : "none",
           minHeight: 'auto'
