@@ -6685,7 +6685,7 @@
     ]
   },
   "resources/js/Components/Tailwind/ProductDetail.jsx": {
-    "file": "assets/ProductDetail-eIwaDBb3.js",
+    "file": "assets/ProductDetail-Dvptw5KA.js",
     "name": "ProductDetail",
     "src": "resources/js/Components/Tailwind/ProductDetail.jsx",
     "isDynamicEntry": true,
@@ -6825,7 +6825,7 @@
     ]
   },
   "resources/js/Components/Tailwind/ProductDetails/ProductDetailMakita.jsx": {
-    "file": "assets/ProductDetailMakita-CbgD31Vj.js",
+    "file": "assets/ProductDetailMakita-CzbVbwcG.js",
     "name": "ProductDetailMakita",
     "src": "resources/js/Components/Tailwind/ProductDetails/ProductDetailMakita.jsx",
     "isDynamicEntry": true,
@@ -6843,6 +6843,7 @@
       "resources/js/Components/Tailwind/Headers/HeaderSearch.jsx",
       "_index-CMHsc23u.js",
       "resources/js/Components/Tailwind/Headers/HeaderBananaLab.jsx",
+      "_tippy-react.esm-BWiGTO87.js",
       "resources/js/Components/Tailwind/Products/ProductMakita.jsx",
       "_chevron-left-B2s3ZsB7.js",
       "_chevron-right-Ckt5D2ka.js",
@@ -6860,12 +6861,11 @@
       "_index-Chjiymov.js",
       "_CartItemRow-4VUVjpPz.js",
       "_Number2Currency-e57Tgsuk.js",
-      "_tippy-react.esm-BWiGTO87.js",
-      "_index-rimy3MAc.js",
       "_proxy-BTYtmp9V.js",
       "_trash-2-DK1wnsDn.js",
       "_plus-Bot15Khs.js",
       "_index-CFtDjG4d.js",
+      "_index-rimy3MAc.js",
       "_shopping-bag-CoWGrL8C.js",
       "_x-DBMwyD6F.js",
       "_shopping-cart-CZEUxbmv.js",
@@ -8465,7 +8465,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-osSCycti.js",
+    "file": "assets/System-BGUlOpmj.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,

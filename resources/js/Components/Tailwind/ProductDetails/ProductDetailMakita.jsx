@@ -29,6 +29,10 @@ import "swiper/css/grid";
 import { Swiper, SwiperSlide } from "swiper/react";
 import ProductBananaLab from "../Products/ProductBananaLab";
 import ProductMakita from "../Products/ProductMakita";
+import Tippy from "@tippyjs/react";
+import "tippy.js/dist/tippy.css";
+
+
 
 
 
@@ -316,23 +320,27 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                                 <div className="space-y-4">
                                     <h3 className="font-bold text-base">Beneficios del producto</h3>
                                     <div>
-                                        {[
-                                            "Lubricación automática de la cadena.",
-                                            "La ventana de visualización del aceite de la cadena permite al operario comprobar fácilmente el nivel de aceite.",
-                                            "Tecnología de protección extrema (XPT).",
-                                            "Palanca de bloqueo accesible desde ambos lados.",
-                                            "Freno eléctrico para máxima productividad."
-                                        ].map((beneficio, idx) => (
-                                            <div
-                                                key={idx}
-                                                className={`flex items-start gap-3 py-3 px-1 ${idx % 2 === 0 ? 'bg-gray-50' : 'bg-white'} -mx-1`}
-                                            >
-                                                <div className="min-w-5 min-h-5 mt-0.5">
-                                                    <CircleCheckIcon className="h-5 w-5 customtext-primary" />
+                                        {item?.specifications && item.specifications.filter(spec => spec.type === 'general').length > 0 ? (
+                                            item.specifications.filter(spec => spec.type === 'general').map((spec, idx) => (
+                                                <div
+                                                    key={idx}
+                                                    className={`flex items-start gap-3 py-3 px-1 ${idx % 2 === 0 ? 'bg-gray-50' : 'bg-white'} -mx-1`}
+                                                >
+                                                    <div className="min-w-5 min-h-5 mt-0.5">
+                                                        <CircleCheckIcon className="h-5 w-5 customtext-primary" />
+                                                    </div>
+                                                    <span className="text-gray-700 text-sm">{spec.description}</span>
                                                 </div>
-                                                <span className="text-gray-700 text-sm">{beneficio}</span>
+                                            ))
+                                        ) : (
+                                            <div className="flex flex-col items-center justify-center py-8 text-gray-400">
+                                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="mb-3">
+                                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="currentColor" opacity="0.3"/>
+                                                </svg>
+                                                <p className="text-sm font-medium">No hay especificaciones generales disponibles</p>
+                                                <p className="text-xs mt-1">Las especificaciones se mostrarán aquí cuando estén disponibles</p>
                                             </div>
-                                        ))}
+                                        )}
                                     </div>
                                 </div>
                             )}
@@ -340,32 +348,43 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                             {/* Contenido de Info */}
                             {activeTab === "info" && (
                                 <div className="space-y-4">
-                                    {item?.features && item?.features.length > 0 && (
-                                        <div>
-                                            <h4 className="font-semibold text-sm mb-2">Características destacadas:</h4>
-                                            <ul className="list-disc pl-5 space-y-1">
-                                                {item?.features.slice(0, 3).map((feature, index) => (
-                                                    <li key={index} className="text-gray-700 text-sm">
-                                                        {feature.feature}
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </div>
-                                    )}
+                                   
 
                                     <div>
-                                        <h4 className="font-semibold text-sm mb-2">Especificaciones técnicas:</h4>
+                                        <h4 className="font-semibold text-sm mb-2">Especificaciones técnicas</h4>
                                         <div className="rounded overflow-hidden">
-                                            {(item?.specifications?.length > 0 ? item?.specifications : [
-                                                { title: "Longitud de la espada", description: "150 mm" },
-                                                { title: "Potencia", description: "40 Vmax" },
-                                                { title: "Velocidad máxima", description: "8.0 m/s" }
-                                            ]).slice(0, 6).map((spec, index) => (
-                                                <div key={index} className={`flex flex-row ${index % 2 === 0 ? "bg-gray-50" : "bg-white"}`}>
-                                                    <div className="py-2 px-3 w-1/2 font-medium text-gray-700 text-sm">{spec.title}</div>
-                                                    <div className="py-2 px-3 w-1/2 text-gray-900 text-sm">{spec.description}</div>
+                                            {item?.specifications && item.specifications.filter(spec => spec.type === 'technical' || !spec.type).length > 0 ? (
+                                                item.specifications.filter(spec => spec.type === 'technical' || !spec.type).slice(0, 6).map((spec, index) => (
+                                                    <div key={index} className={`flex flex-row ${index % 2 === 0 ? "bg-gray-50" : "bg-white"}`}>
+                                                        <div className="py-2 px-3 w-1/2 font-medium text-gray-700 text-sm">{spec.title}</div>
+                                                        <div className="py-2 px-3 w-1/2 text-gray-900 text-sm flex items-center justify-between">
+                                                            <span>{spec.description}</span>
+                                                            {spec.tooltip && (
+                                                                <Tippy content={spec.tooltip} arrow={true} placement="auto">
+                                                                    <svg 
+                                                                        width="20" 
+                                                                        height="20" 
+                                                                        viewBox="0 0 20 20" 
+                                                                        fill="none" 
+                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                        className="cursor-help"
+                                                                    >
+                                                                        <path d="M9 15H11V9H9V15ZM10 7C10.2833 7 10.5208 6.90417 10.7125 6.7125C10.9042 6.52083 11 6.28333 11 6C11 5.71667 10.9042 5.47917 10.7125 5.2875C10.5208 5.09583 10.2833 5 10 5C9.71667 5 9.47917 5.09583 9.2875 5.2875C9.09583 5.47917 9 5.71667 9 6C9 6.28333 9.09583 6.52083 9.2875 6.7125C9.47917 6.90417 9.71667 7 10 7ZM10 20C8.61667 20 7.31667 19.7375 6.1 19.2125C4.88333 18.6875 3.825 17.975 2.925 17.075C2.025 16.175 1.3125 15.1167 0.7875 13.9C0.2625 12.6833 0 11.3833 0 10C0 8.61667 0.2625 7.31667 0.7875 6.1C1.3125 4.88333 2.025 3.825 2.925 2.925C3.825 2.025 4.88333 1.3125 6.1 0.7875C7.31667 0.2625 8.61667 0 10 0C11.3833 0 12.6833 0.2625 13.9 0.7875C15.1167 1.3125 16.175 2.025 17.075 2.925C17.975 3.825 18.6875 4.88333 19.2125 6.1C19.7375 7.31667 20 8.61667 20 10C20 11.3833 19.7375 12.6833 19.2125 13.9C18.6875 15.1167 17.975 16.175 17.075 17.075C16.175 17.975 15.1167 18.6875 13.9 19.2125C12.6833 19.7375 11.3833 20 10 20Z" fill="#262626"/>
+                                                                    </svg>
+                                                                </Tippy>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                ))
+                                            ) : (
+                                                <div className="flex flex-col items-center justify-center py-8 text-gray-400">
+                                                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="mb-3">
+                                                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" fill="currentColor" opacity="0.3"/>
+                                                    </svg>
+                                                    <p className="text-sm font-medium">No hay especificaciones técnicas disponibles</p>
+                                                    <p className="text-xs mt-1">Las especificaciones técnicas se mostrarán aquí cuando estén disponibles</p>
                                                 </div>
-                                            ))}
+                                            )}
                                         </div>
                                     </div>
                                 </div>
@@ -754,36 +773,40 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                                         </div>
                                     </div>
                                 )}
-                                <div>
-                                    <h2 className="text-3xl font-bold mb-6 customtext-neutral-dark">
-                                        Beneficios del producto
-                                    </h2>
-                                    <div className="bg-white w-full rounded-lg shadow-sm overflow-hidden">
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-20">
-                                            {[
-                                                "Lubricación automática de la cadena.",
-                                                "La ventana de visualización del aceite de la cadena permite al operario comprobar fácilmente el nivel de aceite.",
-                                                "Tecnología de protección extrema (XPT) diseñada para ofrecer una mayor resistencia al polvo y al agua en las duras condiciones del lugar de trabajo.",
-                                                "Palanca de bloqueo accesible desde ambos lados.",
-                                                "Freno eléctrico para máxima productividad y mayor seguridad del operario."
-                                            ].map((beneficio, idx) => (
-                                                <div
-                                                    key={idx}
-                                                    className={`flex items-start gap-3 py-2 `}
-                                                >
-                                                    <div className="min-w-5 min-h-5 mt-1">
-                                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <path d="M8.6 14.6L15.65 7.55L14.25 6.15L8.6 11.8L5.75 8.95L4.35 10.35L8.6 14.6ZM10 20C8.61667 20 7.31667 19.7375 6.1 19.2125C4.88333 18.6875 3.825 17.975 2.925 17.075C2.025 16.175 1.3125 15.1167 0.7875 13.9C0.2625 12.6833 0 11.3833 0 10C0 8.61667 0.2625 7.31667 0.7875 6.1C1.3125 4.88333 2.025 3.825 2.925 2.925C3.825 2.025 4.88333 1.3125 6.1 0.7875C7.31667 0.2625 8.61667 0 10 0C11.3833 0 12.6833 0.2625 13.9 0.7875C15.1167 1.3125 16.175 2.025 17.075 2.925C17.975 3.825 18.6875 4.88333 19.2125 6.1C19.7375 7.31667 20 8.61667 20 10C20 11.3833 19.7375 12.6833 19.2125 13.9C18.6875 15.1167 17.975 16.175 17.075 17.075C16.175 17.975 15.1167 18.6875 13.9 19.2125C12.6833 19.7375 11.3833 20 10 20Z" fill="#1F687F" />
-                                                        </svg>
-
+                                {/* Especificaciones generales */}
+                                {item?.specifications && item.specifications.filter(spec => spec.type === 'general').length > 0 ? (
+                                    <div>
+                                        <h2 className="text-3xl font-bold mb-6 customtext-neutral-dark">
+                                            Especificaciones generales
+                                        </h2>
+                                        <div className="bg-white w-full rounded-lg shadow-sm overflow-hidden">
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-20">
+                                                {item.specifications.filter(spec => spec.type === 'general').map((spec, idx) => (
+                                                    <div
+                                                        key={idx}
+                                                        className={`flex items-start gap-3 py-2 `}
+                                                    >
+                                                        <div className="min-w-5 min-h-5 mt-1">
+                                                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path d="M8.6 14.6L15.65 7.55L14.25 6.15L8.6 11.8L5.75 8.95L4.35 10.35L8.6 14.6ZM10 20C8.61667 20 7.31667 19.7375 6.1 19.2125C4.88333 18.6875 3.825 17.975 2.925 17.075C2.025 16.175 1.3125 15.1167 0.7875 13.9C0.2625 12.6833 0 11.3833 0 10C0 8.61667 0.2625 7.31667 0.7875 6.1C1.3125 4.88333 2.025 3.825 2.925 2.925C3.825 2.025 4.88333 1.3125 6.1 0.7875C7.31667 0.2625 8.61667 0 10 0C11.3833 0 12.6833 0.2625 13.9 0.7875C15.1167 1.3125 16.175 2.025 17.075 2.925C17.975 3.825 18.6875 4.88333 19.2125 6.1C19.7375 7.31667 20 8.61667 20 10C20 11.3833 19.7375 12.6833 19.2125 13.9C18.6875 15.1167 17.975 16.175 17.075 17.075C16.175 17.975 15.1167 18.6875 13.9 19.2125C12.6833 19.7375 11.3833 20 10 20Z" fill="#1F687F" />
+                                                            </svg>
+                                                        </div>
+                                                        <span className="customtext-neutral-dark text-lg">{spec.description}</span>
                                                     </div>
-                                                    <span className="customtext-neutral-dark text-lg">{beneficio}</span>
-                                                </div>
-                                            ))}
+                                                ))}
+                                            </div>
                                         </div>
                                     </div>
-
-                                </div>
+                                ) : (
+                                    <div className="text-center py-12">
+                                        <div className="flex flex-col items-center gap-4">
+                                            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-gray-300">
+                                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="currentColor"/>
+                                            </svg>
+                                            <p className="text-gray-500 text-lg font-medium">No hay especificaciones generales disponibles</p>
+                                        </div>
+                                    </div>
+                                )}
 
                             </div>
                         )}
@@ -793,27 +816,53 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                                
 
                                 {/* Datos técnicos detallados */}
-                                <div>
-                                    <h3 className="text-3xl font-bold mb-6 customtext-neutral-dark">Especificaciones técnicas</h3>
-                                    <div className="rounded-lg overflow-hidden shadow-sm">
-                                        {item?.specifications.map((spec, index) => (
-                                            <div key={index} className={`flex flex-row ${index % 2 === 0 ? "bg-gray-50" : "bg-white"}`}>
-                                                <div className="py-4 px-6 w-1/2 font-bold tracking-wide customtext-neutral-dark text-base">{spec.title}</div> 
-                                                <div className="py-4 px-6 w-2/2 customtext-neutral-dark text-base">{spec.description}</div>
-                                            </div>
-                                        ))}
-                                
+                                {item?.specifications && item.specifications.filter(spec => spec.type === 'technical').length > 0 ? (
+                                    <div className="overflow-hidden w-full">
+                                        <h3 className="text-3xl font-bold mb-6 customtext-neutral-dark">Especificaciones técnicas</h3>
+                                        <div className="rounded-lg  shadow-sm">
+                                            {item.specifications.filter(spec => spec.type === 'technical').map((spec, index) => (
+                                                <div key={index} className={`flex flex-row ${index % 2 === 0 ? "bg-gray-50" : "bg-white"}`}>
+                                                    <div className="py-4 px-6 w-1/2 font-bold tracking-wide customtext-neutral-dark text-base">{spec.title}</div> 
+                                                    <div className="py-4 px-6 w-1/2 customtext-neutral-dark text-base flex items-center justify-between">
+                                                        <span>{spec.description}</span>
+                                                        {spec.tooltip && (
+                                                            <Tippy content={spec.tooltip} arrow={true} placement="auto">
+                                                                <svg 
+                                                                    width="20" 
+                                                                    height="20" 
+                                                                    viewBox="0 0 20 20" 
+                                                                    fill="none" 
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    className="cursor-help"
+                                                                >
+                                                                    <path d="M9 15H11V9H9V15ZM10 7C10.2833 7 10.5208 6.90417 10.7125 6.7125C10.9042 6.52083 11 6.28333 11 6C11 5.71667 10.9042 5.47917 10.7125 5.2875C10.5208 5.09583 10.2833 5 10 5C9.71667 5 9.47917 5.09583 9.2875 5.2875C9.09583 5.47917 9 5.71667 9 6C9 6.28333 9.09583 6.52083 9.2875 6.7125C9.47917 6.90417 9.71667 7 10 7ZM10 20C8.61667 20 7.31667 19.7375 6.1 19.2125C4.88333 18.6875 3.825 17.975 2.925 17.075C2.025 16.175 1.3125 15.1167 0.7875 13.9C0.2625 12.6833 0 11.3833 0 10C0 8.61667 0.2625 7.31667 0.7875 6.1C1.3125 4.88333 2.025 3.825 2.925 2.925C3.825 2.025 4.88333 1.3125 6.1 0.7875C7.31667 0.2625 8.61667 0 10 0C11.3833 0 12.6833 0.2625 13.9 0.7875C15.1167 1.3125 16.175 2.025 17.075 2.925C17.975 3.825 18.6875 4.88333 19.2125 6.1C19.7375 7.31667 20 8.61667 20 10C20 11.3833 19.7375 12.6833 19.2125 13.9C18.6875 15.1167 17.975 16.175 17.075 17.075C16.175 17.975 15.1167 18.6875 13.9 19.2125C12.6833 19.7375 11.3833 20 10 20Z" fill="#262626"/>
+                                                                </svg>
+                                                            </Tippy>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
                                     </div>
-                                </div></>
+                                ) : (
+                                    <div className="text-center py-12">
+                                        <div className="flex flex-col items-center gap-4">
+                                            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-gray-300">
+                                                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" fill="currentColor"/>
+                                            </svg>
+                                            <p className="text-gray-500 text-lg font-medium">No hay especificaciones técnicas disponibles</p>
+                                        </div>
+                                    </div>
+                                )}</>
                         )}
 
                         {activeTab === "downloads" && (
                             <div>
-                                <h2 className="text-xl font-bold mb-6">Archivos descargables</h2>
+                                <h2 className="text-3xl font-bold mb-6 customtext-neutral-dark">Archivos descargables</h2>
                                 <div className="space-y-4">
                                     {item?.downloadables && item.downloadables.length > 0 ? (
                                         item.downloadables.map((downloadable) => (
-                                            <div key={downloadable.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors">
+                                            <div key={downloadable.id} className="flex items-center justify-between py-4  transition-colors">
                                                 <div className="flex items-center gap-3">
                                                     <div className="bg-primary/10 p-2 rounded-lg">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="customtext-primary">
