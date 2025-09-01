@@ -30,13 +30,13 @@ const JobApplications = ({ }) => {
   const [isEditing, setIsEditing] = useState(false)
 
   const getStatusBadge = (status) => {
-    return status 
+    return status
       ? '<span class="badge badge-success">Activo</span>'
       : '<span class="badge badge-secondary">Inactivo</span>'
   }
 
   const getSeenBadge = (seen) => {
-    return seen 
+    return seen
       ? '<span class="badge badge-info">Visto</span>'
       : '<span class="badge badge-warning">No visto</span>'
   }
@@ -51,7 +51,7 @@ const JobApplications = ({ }) => {
     emailRef.current.value = data?.email ?? ''
 
     notesRef.current.value = data?.notes ?? ''
-    
+
     $(modalRef.current).modal('show')
   }
 
@@ -115,11 +115,21 @@ const JobApplications = ({ }) => {
     $(gridRef.current).dxDataGrid('instance').refresh()
   }
 
- const onBooleanChange = async ({ id, field, value }) => {
-        const result = await jobApplicationsRest.boolean({ id, field, value });
-        if (!result) return;
-        $(gridRef.current).dxDataGrid("instance").refresh();
-    };
+  const onBooleanChange = async ({ id, field, value }) => {
+    console.log('onBooleanChange called with:', { id, field, value });
+    const result = await jobApplicationsRest.boolean({ id, field, value });
+    console.log('boolean result:', result);
+    if (!result) return;
+
+    // Force a complete refresh of the grid data
+    const gridInstance = $(gridRef.current).dxDataGrid("instance");
+    gridInstance.refresh();
+
+    // Also force a reload of the data source
+    setTimeout(() => {
+      gridInstance.refresh();
+    }, 100);
+  };
   return (<>
     <Table gridRef={gridRef} title='Solicitudes de Empleo' rest={jobApplicationsRest}
       toolBar={(container) => {
@@ -160,8 +170,8 @@ const JobApplications = ({ }) => {
           allowFiltering: false,
           cellTemplate: (container, { data }) => {
             if (data.cv_file) {
-              ReactAppend(container, 
-                <button 
+              ReactAppend(container,
+                <button
                   className="btn btn-xs btn-soft-primary"
                   onClick={() => downloadCV(data.cv_file)}
                   title="Descargar CV"
@@ -174,37 +184,50 @@ const JobApplications = ({ }) => {
             }
           }
         },
-      
-       
+
+
         {
           dataField: 'seen',
           caption: 'Visto',
           width: '10%',
           cellTemplate: (container, { data }) => {
-               const is_seenValue = data.seen === 1 || data.seen === '1' || data.seen === true;
-            ReactAppend(container, 
-               <SwitchFormGroup
-                                    checked={is_seenValue}
-                                    onChange={(e) =>
-                                        onBooleanChange({
-                                            id: data.id,
-                                            field: "seen",
-                                            value: e.target.checked ? 1 : 0,
-                                        })
-                                    }
-                                />
+            console.log('Rendering seen cell for ID:', data.id, 'seen value:', data.seen, 'type:', typeof data.seen);
+            const is_seenValue = data.seen === 1 || data.seen === '1' || data.seen === true;
+            console.log('is_seenValue calculated as:', is_seenValue);
+            ReactAppend(container,
+              <SwitchFormGroup
+                checked={is_seenValue}
+                onChange={(e) => {
+                  console.log('Switch clicked, checked:', e.target.checked);
+                  onBooleanChange({
+                    id: data.id,
+                    field: "seen",
+                    value: e.target.checked ? 1 : 0,
+                  })
+                }}
+              />
             )
           }
         },
-         {
+        {
           dataField: 'visible',
           caption: 'Visible',
           width: '10%',
           cellTemplate: (container, { data }) => {
-            ReactAppend(container, 
-              <SwitchFormGroup 
-                checked={data.visible} 
-                onChange={(value) => toggleVisible({ id: data.id, value })} 
+            console.log('Rendering visible cell for ID:', data.id, 'visible value:', data.visible, 'type:', typeof data.visible);
+            const is_visibleValue = data.visible === 1 || data.visible === '1' || data.visible === true;
+            console.log('is_visibleValue calculated as:', is_visibleValue);
+            ReactAppend(container,
+              <SwitchFormGroup
+                checked={is_visibleValue}
+                onChange={(e) => {
+                  console.log('Visible switch clicked, checked:', e.target.checked);
+                  onBooleanChange({
+                    id: data.id,
+                    field: "visible",
+                    value: e.target.checked ? 1 : 0,
+                  })
+                }}
               />
             )
           }
@@ -245,7 +268,7 @@ const JobApplications = ({ }) => {
         <InputFormGroup eRef={nameRef} label='Nombre completo' col='col-md-12' readOnly={true} />
         <InputFormGroup eRef={emailRef} label='Email' col='col-md-12' readOnly={true} />
         <InputFormGroup eRef={phoneRef} label='Teléfono' col='col-md-12' readOnly={true} />
-       
+
         <TextareaFormGroup eRef={notesRef} label='Notas internas' rows={3} />
       </div>
     </Modal>

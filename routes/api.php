@@ -208,6 +208,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/job-applications/paginate', [AdminJobApplicationController::class, 'paginate']);
     Route::patch('/job-applications/status', [AdminJobApplicationController::class, 'status']);
     Route::patch('/job-applications/{field}', [AdminJobApplicationController::class, 'boolean']);
+    Route::patch('/job-applications/boolean', [AdminJobApplicationController::class, 'boolean']); // Backward compatibility
     Route::delete('/job-applications/{id}', [AdminJobApplicationController::class, 'delete']);
     Route::get('/job-applications/media/{uuid}', [AdminJobApplicationController::class, 'media']);
 

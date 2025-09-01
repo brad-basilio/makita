@@ -141,11 +141,13 @@ class BasicRest {
 
     boolean = async ({ id, field, value }) => {
         try {
+            // Backend routes are defined as PATCH /api/{path}/{field}
+            // so call the specific field route and pass { id, value }
             const { status: fetchStatus, result } = await Fetch(
-                `/api/${this.path}/boolean`,
+                `/api/${this.path}/${field}`,
                 {
                     method: "PATCH",
-                    body: JSON.stringify({ id, field, value }),
+                    body: JSON.stringify({ id, value }),
                 }
             );
             if (!fetchStatus)

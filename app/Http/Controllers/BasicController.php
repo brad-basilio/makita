@@ -337,11 +337,17 @@ class BasicController extends Controller
       $data = [];
       $data[$request->field] = $request->value;
 
-      $this->model::where('id', $request->id)
-        ->update($data);
+     
+
+      $updated = $this->model::where('id', $request->id)->update($data);
+      
+      $afterUpdate = $this->model::find($request->id);
+      
+    
 
       $response->status = 200;
       $response->message = 'Operacion correcta';
+      $response->data = $afterUpdate; // Return updated record
     } catch (\Throwable $th) {
       $response->status = 400;
       $response->message = $th->getMessage();
