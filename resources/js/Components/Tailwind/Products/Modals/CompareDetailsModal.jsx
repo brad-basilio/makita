@@ -50,7 +50,24 @@ const CompareDetailsModal = ({ isOpen, onClose, products, onRemoveProduct }) => 
             .catch(() => null),
         ),
       ).then((data) => {
-        setDetails(data.filter(Boolean))
+        const filtered = data.filter(Boolean)
+        setDetails(filtered)
+        // Debug: log specifications structure for each product so we can inspect shapes
+        try {
+          filtered.forEach(p => {
+            // Use console.group for clearer output
+            console.groupCollapsed && console.groupCollapsed(`compare: specs for product ${p?.id || p?.code || '(no-id)'} `)
+            console.log('compare: product id:', p?.id || p?.code || '(no-id)')
+            try {
+              console.log('compare: specifications:', JSON.stringify(p?.specifications, null, 2))
+            } catch (e) {
+              console.log('compare: specifications (non-serializable):', p?.specifications)
+            }
+            console.groupEnd && console.groupEnd()
+          })
+        } catch (e) {
+          console.log('compare: error logging specifications', e)
+        }
         setLoading(false)
       })
     } else {
@@ -60,110 +77,312 @@ const CompareDetailsModal = ({ isOpen, onClose, products, onRemoveProduct }) => 
 
   const generatePDF = async () => {
     setExporting(true)
-    
+
+    // Helper: crea un nodo DOM temporal con layout de escritorio para renderizar el PDF
+    const createPrintableDiv = (items) => {
+      const wrapper = document.createElement('div')
+      wrapper.id = 'printable-compare'
+      wrapper.style.position = 'absolute'
+      wrapper.style.left = '-9999px'
+      wrapper.style.top = '0'
+      wrapper.style.width = '1000px'
+      wrapper.style.background = '#ffffff'
+      wrapper.style.padding = '24px'
+      wrapper.style.boxSizing = 'border-box'
+      wrapper.style.fontFamily = 'Arial, Helvetica, sans-serif'
+
+      const escape = (str) => {
+        if (str === undefined || str === null) return ''
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+      }
+
+      // Header
+      let html = `
+        <div style="width:100%;margin-bottom:12px;">
+          <h2 style="font-size:22px;margin:0 0 8px 0;color:#262626;">Comparar productos</h2>
+          <p style="margin:0;color:#666;">Se exporta la información de los productos comparados.</p>
+        </div>
+      `
+
+      // Grid de 2 columnas
+      html += '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;align-items:start;">'
+
+      items.forEach(product => {
+        const name = escape(product.name)
+        const code = escape(product.code)
+        const img = escape(product.image)
+          // Description: insertar como HTML (permitir etiquetas) según lo solicitado
+          // --- WARNING: this will insert raw HTML from product.description ---
+          const desc = product.description || ''
+
+        // Construir HTML de especificaciones como tabla
+        let specsHtml = ''
+
+        const stringifySpecValue = (v) => {
+          if (v === null || v === undefined) return ''
+          if (typeof v === 'object') {
+            // Prefer common fields
+            if (Array.isArray(v)) {
+              return v.map(item => {
+                if (item === null || item === undefined) return ''
+                if (typeof item === 'object') {
+                  return item.value || item.val || item.v || item.name || JSON.stringify(item)
+                }
+                return String(item)
+              }).join(', ')
+            }
+            if ('value' in v || 'val' in v || 'v' in v) return String(v.value || v.val || v.v)
+            if ('name' in v && 'value' in v) return String(v.value)
+            try { return JSON.stringify(v) } catch (e) { return String(v) }
+          }
+          return String(v)
+        }
+
+        const buildTableFromPairs = (pairs) => {
+          if (!pairs || pairs.length === 0) return ''
+          let t = '<table style="width:100%;border-collapse:collapse;font-size:12px;">'
+          t += '<tbody>'
+          // Header row: KEY | VALUE
+          t += pairs.map(([kk, vv]) => {
+            const keyEsc = escape(kk)
+            // allow line breaks in values
+            const rawVal = stringifySpecValue(vv)
+            const valWithBreaks = escape(rawVal).replace(/\n/g, '<br/>')
+            // Left: key (bold), Right: value
+            return `\n<tr><td style="border:1px solid #eee;padding:6px;width:40%;vertical-align:top;background:#fafafa"><strong>${keyEsc}</strong></td><td style="border:1px solid #eee;padding:6px;vertical-align:top">${valWithBreaks}</td></tr>`
+          }).join('')
+          t += '\n</tbody></table>'
+          return t
+        }
+
+        const normalizeSpecItem = (item) => {
+          // Return [key, value]
+          if (item === null || item === undefined) return ['', '']
+          if (typeof item === 'object') {
+            // If the spec item uses title/description (common in your data), prefer that
+            if ('title' in item || 'description' in item) {
+              const key = item.title || item.name || item.key || ''
+              const val = item.description || item.value || item.val || ''
+              return [String(key), String(val)]
+            }
+            const key = item.key || item.name || item.k || ''
+            const val = item.value || item.val || item.v || ''
+            return [String(key), String(val)]
+          }
+          if (typeof item === 'string') {
+            let s = item.trim()
+            // try JSON first
+            try {
+              const parsed = JSON.parse(s)
+              if (typeof parsed === 'object') return normalizeSpecItem(parsed)
+            } catch (e) {
+              // not JSON
+            }
+
+            // remove outer braces/brackets
+            s = s.replace(/^\s*[{\[]\s*|\s*[}\]]\s*$/g, '')
+
+            // Try to capture labeled key/value (key ... value ...)
+            const keyLabelMatch = s.match(/key\s*["'\.:\=]*\s*["']?([^"',\n\}]+)["']?/i)
+            const valueLabelMatch = s.match(/value\s*["'\.:\=]*\s*["']?([\s\S]+)["']?$/i)
+            if (keyLabelMatch || valueLabelMatch) {
+              const key = keyLabelMatch ? keyLabelMatch[1].trim() : ''
+              const val = valueLabelMatch ? valueLabelMatch[1].trim().replace(/^[",\s]+|[",\s]+$/g, '') : ''
+              return [key, val]
+            }
+
+            // Try generic key:value or key.value or key="value"
+            const kvMatch = s.match(/^["']?\s*([^"':=\n\|\.\[\]]+?)\s*["']?\s*[:\.\=]\s*["']?([\s\S]+?)["']?\s*$/)
+            if (kvMatch) {
+              const k = kvMatch[1].trim()
+              const v = kvMatch[2].trim().replace(/^,|,$/g, '')
+              return [k, v]
+            }
+
+            // Try split by newline: first line key, rest value
+            const lines = s.split(/\r?\n/).map(l => l.trim()).filter(Boolean)
+            if (lines.length >= 2) {
+              // If the first line looks like a value (starts with a digit), treat the whole thing as value
+              if (/^\s*\d/.test(lines[0])) {
+                return ['', lines.join(' ')]
+              }
+              return [lines[0], lines.slice(1).join(' ')]
+            }
+
+            // Try split by common separators
+            const parts = s.split(/\s*[,;|]\s*/)
+            if (parts.length >= 2) {
+              // If the first chunk looks like a numeric value, treat entire string as value
+              if (/^\s*\d/.test(parts[0])) {
+                return ['', parts.join(', ')]
+              }
+              return [parts[0].replace(/^"|"$/g, '').trim(), parts.slice(1).join(', ').replace(/^"|"$/g, '').trim()]
+            }
+
+            // Fallback: treat whole as value
+            return ['', s.replace(/^"|"$/g, '')]
+          }
+          // other types
+          return [String(item), '']
+        }
+
+        const getPairsFromSpecifications = (specs) => {
+          const pairs = []
+          if (!specs && specs !== 0) return pairs
+          if (Array.isArray(specs)) {
+            specs.forEach(s => {
+              const [k, v] = normalizeSpecItem(s)
+              if (k || v) pairs.push([k, v])
+            })
+            return pairs
+          }
+          if (typeof specs === 'object') {
+            // If it's an object map where values are objects with title/description,
+            // convert to pairs accordingly. Otherwise fall back to k->v.
+            Object.entries(specs).forEach(([k, v]) => {
+              if (v !== null && typeof v === 'object') {
+                // Prefer title/description
+                if ('title' in v || 'description' in v) {
+                  pairs.push([String(v.title || k), String(v.description || stringifySpecValue(v))])
+                // If object uses key/value fields (your logged shape), use them
+                } else if ('key' in v || 'value' in v) {
+                  pairs.push([String(v.key || k), stringifySpecValue(v.value)])
+                } else {
+                  // fallback: map object's key name to a stringified value
+                  pairs.push([String(k), stringifySpecValue(v)])
+                }
+              } else {
+                pairs.push([String(k), String(v)])
+              }
+            })
+            return pairs
+          }
+          if (typeof specs === 'string') {
+            const s = specs.trim()
+            // try JSON first
+            try {
+              const parsed = JSON.parse(s)
+              return getPairsFromSpecifications(parsed)
+            } catch (e) {
+              // not JSON
+            }
+
+            // Try to extract labeled key/value pairs inside the string
+            const labeledPairs = []
+            const keyRegex = /key\s*["'\.:\=]*\s*["']?([^"'\,\}]+)["']?/ig
+            const valueRegex = /value\s*["'\.:\=]*\s*["']?([\s\S]*?)(?=(,|\}|$))/ig
+            const km = keyRegex.exec(s)
+            const vm = valueRegex.exec(s)
+            if (km || vm) {
+              const k = km ? km[1].trim() : ''
+              const v = vm ? vm[1].trim().replace(/^,|,$/g, '') : ''
+              if (k || v) labeledPairs.push([k, v])
+            }
+            if (labeledPairs.length > 0) return labeledPairs
+
+            // Split by lines and try normalize each line
+            const lines = s.split(/\r?\n/).map(l => l.trim()).filter(Boolean)
+            if (lines.length > 1) {
+              lines.forEach(line => {
+                const [k, v] = normalizeSpecItem(line)
+                if (k || v) pairs.push([k, v])
+              })
+              return pairs
+            }
+
+            // If single line, try to parse multiple pairs separated by ',' or ';'
+            const chunks = s.split(/\s*[,;|]\s*/).map(c => c.trim()).filter(Boolean)
+            if (chunks.length > 1) {
+              chunks.forEach(chunk => {
+                const [k, v] = normalizeSpecItem(chunk)
+                if (k || v) pairs.push([k, v])
+              })
+              return pairs
+            }
+
+            // Last resort: try normalize whole string
+            const [k, v] = normalizeSpecItem(s)
+            if (k || v) pairs.push([k, v])
+            return pairs
+          }
+          return pairs
+        }
+
+        const pairs = getPairsFromSpecifications(product.specifications)
+        specsHtml = buildTableFromPairs(pairs)
+
+        if (!specsHtml) {
+          specsHtml = '<p style="color:#888;font-size:12px;margin:6px 0;">Sin especificaciones técnicas disponibles</p>'
+        }
+
+        html += `
+          <div style="border:1px solid #eee;border-radius:8px;padding:12px;background:#fff;box-sizing:border-box;">
+            <div style="width:100%;display:flex;align-items:center;justify-content:center;margin-bottom:8px;min-height:100%;">
+              <img src="/storage/images/item/${img || ''}" alt="${name}" style="max-width:220px;max-height:100$;object-fit:contain;" />
+            </div>
+            <div style="font-size:13px;color:#219FB9;font-weight:600;margin-bottom:6px;">${code}</div>
+            <h3 style="font-size:16px;margin:0 0 8px 0;color:#222;">${name}</h3>
+            <div style="font-size:12px;color:#444;margin-bottom:8px;">${desc}</div>
+            <div style="font-size:13px;color:#222;font-weight:600;margin-bottom:6px;">Especificaciones técnicas</div>
+            <div style="font-size:12px;color:#444;max-height:220px;overflow:auto;">${specsHtml}</div>
+          </div>
+        `
+      })
+
+      html += '</div>'
+      wrapper.innerHTML = html
+      return wrapper
+    }
+
+    let printableNode = null
     try {
-      // Ocultar elementos que no queremos en el PDF
-      const elementsToHide = document.querySelectorAll('.print-hide')
-      const originalDisplays = []
-      
-      if (details.length === 0) {
+      if (!details || details.length === 0) {
         console.log('No hay detalles para generar PDF')
         return
       }
-      
-      // Guardar estilos originales y ocultar elementos
-      elementsToHide.forEach((element, index) => {
-        originalDisplays[index] = element.style.display
-        element.style.display = 'none'
+
+      // Ocultar elementos UI que no queremos en el PDF durante el proceso
+      const elementsToHide = document.querySelectorAll('.print-hide')
+      const originalDisplays = []
+      elementsToHide.forEach((el, i) => {
+        originalDisplays[i] = el.style.display
+        el.style.display = 'none'
       })
-      
-      // Generar canvas del contenido
-      const canvas = await html2canvas(contentRef.current, {
-        scale: 2,
+
+      // Creamos un nodo temporal con layout de escritorio (consistente)
+      printableNode = createPrintableDiv(details)
+      document.body.appendChild(printableNode)
+
+      // Renderizar canvas desde el nodo temporal
+      const canvas = await html2canvas(printableNode, {
+        scale: 1.2,
         useCORS: true,
         allowTaint: true,
-        backgroundColor: '#ffffff',
-        width: contentRef.current.scrollWidth,
-        height: contentRef.current.scrollHeight,
-        scrollX: 0,
-        scrollY: 0,
-          onclone: (clonedDoc) => {
-          // Asegurar que el contenido clonado tenga el tamaño correcto
-          const clonedElement = clonedDoc.querySelector('[ref="contentRef"]')
-          if (clonedElement) {
-            clonedElement.style.width = 'auto'
-            clonedElement.style.height = 'auto'
-          }
+        backgroundColor: '#ffffff'
+      })
 
-          // Asegurar que las imágenes se muestren correctamente
-          // Usar una búsqueda segura (querySelectorAll('img')) y comparar por alt
-          // en vez de construir un selector con el nombre del producto, ya que
-          // nombres pueden contener comillas u otros caracteres que rompan el selector.
-          try {
-            const allImgs = clonedDoc.querySelectorAll('img')
-            if (allImgs && allImgs.length) {
-              allImgs.forEach(img => {
-                try {
-                  const alt = img.getAttribute('alt') || ''
-                  // Encontrar si este alt coincide exactamente con algún producto
-                  const match = products.find(p => (p.name || '') === alt)
-                  if (match) {
-                    img.style.maxWidth = '100%'
-                    img.style.height = 'auto'
-                  }
-                } catch (e) {
-                  // Ignorar errores individuales para no romper el proceso de clonación
-                }
-              })
-            }
-          } catch (err) {
-            // Si por alguna razón querySelectorAll falla, no queremos que toda la
-            // generación del PDF falle. Dejamos que continúe.
-            console.warn('No se pudieron ajustar imágenes en onclone:', err)
-          }
-          
-          // Ajustar títulos para mejor legibilidad
-          const titles = clonedDoc.querySelectorAll('h2, h3, h4')
-          titles.forEach(title => {
-            title.style.pageBreakAfter = 'avoid'
-            title.style.pageBreakInside = 'avoid'
-          })
-        }
+      // Restaurar visibilidad de elementos ocultos
+      elementsToHide.forEach((el, i) => {
+        el.style.display = originalDisplays[i]
       })
-      
-      // Restaurar elementos ocultos
-      elementsToHide.forEach((element, index) => {
-        element.style.display = originalDisplays[index]
-      })
-      
-      console.log('Canvas generado directamente:', {
-        width: canvas.width,
-        height: canvas.height,
-        dataURL: canvas.toDataURL().substring(0, 100) + '...'
-      })
-      
-      if (canvas.width === 0 || canvas.height === 0) {
+
+      if (!canvas || canvas.width === 0 || canvas.height === 0) {
         throw new Error('El canvas generado está vacío')
       }
-      
-      // Crear PDF
-      const pdf = new jsPDF({
-        orientation: 'portrait',
-        unit: 'mm',
-        format: 'a4'
-      })
-      
-      const imgData = canvas.toDataURL('image/png')
+
+      // Crear PDF y usar JPEG comprimido para reducir tamaño
+      const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' })
+      const imgData = canvas.toDataURL('image/jpeg', 0.8)
       const pdfWidth = pdf.internal.pageSize.getWidth()
       const pdfHeight = pdf.internal.pageSize.getHeight()
-      
-      // Calcular dimensiones manteniendo proporción
       const canvasRatio = canvas.width / canvas.height
-      const maxWidth = pdfWidth - 20 // margen de 10mm a cada lado
-      const maxHeight = pdfHeight - 20 // margen de 10mm arriba y abajo
-      
+      const maxWidth = pdfWidth - 20
+      const maxHeight = pdfHeight - 20
       let imgWidth, imgHeight
-      
       if (canvasRatio > (maxWidth / maxHeight)) {
         imgWidth = maxWidth
         imgHeight = maxWidth / canvasRatio
@@ -171,32 +390,20 @@ const CompareDetailsModal = ({ isOpen, onClose, products, onRemoveProduct }) => 
         imgHeight = maxHeight
         imgWidth = maxHeight * canvasRatio
       }
-      
       const x = (pdfWidth - imgWidth) / 2
       const y = (pdfHeight - imgHeight) / 2
-      
-      pdf.addImage(imgData, 'PNG', x, y, imgWidth, imgHeight)
-      
-      // Agregar enlaces a los productos si están disponibles
-      if (details && details.length > 0) {
-        const linkHeight = imgHeight / details.length
-        
-        details.forEach((product, index) => {
-          const linkY = y + (index * linkHeight)
-          const linkX = x
-          const linkWidth = imgWidth
-          
-          pdf.link(linkX, linkY, linkWidth, linkHeight, {
-            url: `${window.location.origin}/producto/${product.slug}`
-          })
-        })
-      }
-      
+      pdf.addImage(imgData, 'JPEG', x, y, imgWidth, imgHeight)
+
+      // Enlaces: como el layout es estático, no colocamos zonas exactas, pero
+      // podemos añadir enlaces generales al principio por producto (opcional).
+      // Guardamos el archivo
       pdf.save('comparacion-productos.pdf')
-      
+
     } catch (error) {
-      console.error('Error al generar PDF:', error)
+      console.error('Error al generar PDF (printable):', error)
     } finally {
+      // Limpiar nodo temporal
+      try { if (printableNode && printableNode.parentNode) printableNode.parentNode.removeChild(printableNode) } catch(e){}
       setExporting(false)
     }
   }
