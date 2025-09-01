@@ -417,7 +417,7 @@ const ZonesMakita = ({ items = [] }) => {
     <div className="font-paragraph py-16 customtext-neutral-dark">
       <div className="px-primary mx-auto 2xl:px-0 2xl:max-w-7xl">
         <div className="mb-8">
-          <h1 className="text-3xl md:text-[58px] font-bold mb-4 max-w-5xl tracking-wide leading-[60px]" >
+          <h1 className="text-3xl md:text-[58px] font-bold mb-4 max-w-5xl tracking-wide lg:leading-[60px]" >
             Encuentra tu Distribuidor y Red de Servicios Makita en Perú
           </h1>
           <p className="text-[#262626] text-xl font-normal">
@@ -584,7 +584,7 @@ const ZonesMakita = ({ items = [] }) => {
           </div>
           {/* Right Content - Map and Details */}
           <div className="col-span-6 lg:col-span-4 lg:pl-10">            {/* Google Map */}
-            <div className="w-full aspect-video bg-gray-200 rounded-lg mb-8 relative overflow-hidden">
+            <div className="w-full aspect-square  lg:aspect-video bg-gray-200 rounded-lg mb-8 relative overflow-hidden">
               <div id="map" className="w-full h-full"></div>
               {(!map && typeof google === 'undefined') && (
                 <div className="absolute inset-0 flex items-center justify-center bg-gray-100">

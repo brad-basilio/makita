@@ -165,7 +165,7 @@ export default function AboutMakita({ data, filteredData }) {
                 }
             `}</style>
             {/* Hero Section */}
-            <div className="bg-gray-50 py-16 customtext-neutral-dark">
+            <div className="bg-gray-50 py-8 lg:py-16 customtext-neutral-dark">
                 <div className="px-[5%] mx-auto 2xl:px-0 2xl:max-w-7xl">
                     <div className="  mb-12">
                         <h1 className="max-w-6xl text-center  mx-auto text-3xl lg:text-5xl font-bold mb-6">
@@ -180,7 +180,7 @@ export default function AboutMakita({ data, filteredData }) {
 
 
                         <div className="mt-8 flex justify-center items-center">
-                            <a href="/contacto" className="bg-[#219FB9] text-lg hover:bg-primary text-white px-6 py-3 rounded-md font-medium  transition-all">
+                            <a href="/contacto" className="bg-[#219FB9] text-center flex items-center justify-center w-full lg:w-max text-lg hover:bg-primary text-white px-6 py-3 rounded-md font-medium  transition-all">
                                 Contáctame
                             </a>
                         </div>
@@ -190,7 +190,7 @@ export default function AboutMakita({ data, filteredData }) {
                         <img
                             src={`/storage/images/aboutus/${sectionOne?.image}`}
                             alt={sectionOne?.title || "Makita Cover"}
-                            className="w-full aspect-[16/6] object-cover"
+                            className="w-full aspect-square lg:aspect-[16/6] object-cover"
                              onError={(e) => (e.target.src = "/api/cover/thumbnail/null")}
                         />
                     </div>
@@ -198,14 +198,14 @@ export default function AboutMakita({ data, filteredData }) {
             </div>
 
             {/* Sobre nosotros section */}
-            <div className="py-16">
+            <div className="pb-8 lg:py-16">
                 <div className="px-[5%] mx-auto 2xl:px-0 2xl:max-w-7xl">
                     <div className="grid md:grid-cols-12 gap-8 items-center">
-                        <div className="md:col-span-5">
+                        <div className="order-1 md:col-span-5">
                             <img
                                 src={`/storage/images/aboutus/${sectionTwo?.image}`}
                                 alt={sectionTwo?.title || "Trabajador con herramienta Makita"}
-                                className="w-full aspect-[4/3] rounded-xl shadow-md object-cover"
+                                className="w-full aspect-square lg:aspect-[4/3] rounded-xl shadow-md object-cover"
                                 onError={(e) => {
                                     e.target.src = "/api/cover/thumbnail/null";
                                 }}
@@ -213,7 +213,7 @@ export default function AboutMakita({ data, filteredData }) {
                         </div>
 
                         <div className="md:col-span-7">
-                            <h2 className="text-[40px] font-bold max-w-md mb-6 customtext-neutral-dark">
+                            <h2 className="text-3xl lg:text-[40px] font-bold max-w-[300px] lg:max-w-md mb-6 customtext-neutral-dark">
                                {sectionTwo?.title || "Sobre nosotros"}
                             </h2>
 
@@ -375,7 +375,7 @@ export default function AboutMakita({ data, filteredData }) {
                             <img
                                  src={`/storage/images/aboutus/${sectionFour?.image}`}
                                 alt="Control de calidad Makita"
-                                className="w-full h-auto rounded-xl shadow-md object-cover"
+                                className="w-full h-auto aspect-square rounded-xl shadow-md object-cover"
                                onError={(e) => (e.target.src = "/api/cover/thumbnail/null")}
                             />
                         </div>
