@@ -1736,10 +1736,10 @@
                     "model": "Post",
                     "field": "slug",
                     "with": [
-                        "category"
+                        "postCategory"
                     ],
                     "relations": [
-                        "category"
+                        "postCategory"
                     ]
                 }
             }

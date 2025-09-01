@@ -71,7 +71,7 @@ const BlogSectionMakita = ({ data, items: initialItems }) => {
                         {data?.description || "Duis dapibus congue velit, lobortis mollis nisi volutpat quis."}
                     </p>
                     <a 
-                        href={data?.link_blog || "#blog"} 
+                        href={data?.link_blog || "/blogs"} 
                         className="inline-block bg-custom hover:bg-secondary text-white font-medium py-3 px-6 text-lg rounded-md transition-all duration-500"
                     >
                         {data?.button_text || "Ver blog"}
@@ -110,7 +110,8 @@ const BlogSectionMakita = ({ data, items: initialItems }) => {
                             <SwiperSlide key={slideIndex}>
                                 <div className="grid grid-cols-1 gap-4">
                                     {items.slice(slideIndex * 2, slideIndex * 2 + 2).map((post, itemIndex) => (
-                                        <article 
+                                      <a href={`/post/${post?.slug}`}>
+                                         <article 
                                             key={slideIndex * 2 + itemIndex}
                                             className="flex flex-col gap-4 bg-white rounded-xl overflow-hidden"
                                         >
@@ -136,6 +137,8 @@ const BlogSectionMakita = ({ data, items: initialItems }) => {
                                                 </p>
                                             </div>
                                         </article>
+                                      </a>
+                                     
                                     ))}
                                 </div>
                             </SwiperSlide>
@@ -171,7 +174,8 @@ const BlogSectionMakita = ({ data, items: initialItems }) => {
                 {/* Desktop Grid - 2x2 on desktop */}
                 <div className={`hidden md:grid grid-cols-2 gap-8 mt-12 ${loading ? 'opacity-50' : ''}`}>
                     {Array.isArray(items) && items.length > 0 && items.slice(0, 4).map((post, index) => (
-                        <article 
+                      <a href={`/post/${post?.slug}`}>
+                      <article 
                             key={index}
                             className="flex flex-col items-center md:flex-row gap-6 bg-white rounded-xl overflow-hidden"
                         >
@@ -197,6 +201,7 @@ const BlogSectionMakita = ({ data, items: initialItems }) => {
                                 </p>
                             </div>
                         </article>
+                        </a>
                     ))}
                 </div>
             </div>

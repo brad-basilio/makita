@@ -191,6 +191,13 @@ class SystemController extends BasicController
             if ($model && $field && $value) {
                 // Cargar un registro específico
                 $class = 'App\\Models\\' . $model;
+                // Ensure Post loads its postCategory relation if not explicitly provided
+                if ($model === 'Post') {
+                    $relations = $using['relations'] ?? [];
+                    if (!in_array('postCategory', $relations)) {
+                        $relations[] = 'postCategory';
+                    }
+                }
                 $result = $class::with($relations)
                     ->where($field, $value)
                     ->first();
@@ -211,7 +218,16 @@ class SystemController extends BasicController
                 }
                 
                 if (isset($using['relations'])) {
-                    $query->with($using['relations']);
+                    $rels = $using['relations'];
+                } else {
+                    $rels = [];
+                }
+                // Ensure Post loads its postCategory relation for listing if not provided
+                if ($model === 'Post' && !in_array('postCategory', $rels)) {
+                    $rels[] = 'postCategory';
+                }
+                if (!empty($rels)) {
+                    $query->with($rels);
                 }
                 $props['filteredData'][$key] = $query->get();
             } elseif (isset($using['static'])) {

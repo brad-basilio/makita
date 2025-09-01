@@ -696,13 +696,6 @@
       "_createLucideIcon-Cy5Ya80P.js"
     ]
   },
-  "_facebook-D0ITDhw2.js": {
-    "file": "assets/facebook-D0ITDhw2.js",
-    "name": "facebook",
-    "imports": [
-      "_createLucideIcon-Cy5Ya80P.js"
-    ]
-  },
   "_filepond-plugin-image-preview-B3bH-pD8.js": {
     "file": "assets/filepond-plugin-image-preview-B3bH-pD8.js",
     "name": "filepond-plugin-image-preview",
@@ -2804,7 +2797,7 @@
     ]
   },
   "resources/js/BlogArticle.jsx": {
-    "file": "assets/BlogArticle-BahCT5P1.js",
+    "file": "assets/BlogArticle-suiWyxsj.js",
     "name": "BlogArticle",
     "src": "resources/js/BlogArticle.jsx",
     "isEntry": true,
@@ -2817,7 +2810,6 @@
       "_HtmlContent-FTivcJrM.js",
       "_tippy-react.esm-BWiGTO87.js",
       "_proxy-BTYtmp9V.js",
-      "_facebook-D0ITDhw2.js",
       "_createLucideIcon-Cy5Ya80P.js",
       "_index-yBjzXJbu.js",
       "_index.esm-DAJ8Pwbk.js",
@@ -4212,7 +4204,7 @@
     ]
   },
   "resources/js/Components/Tailwind/Blog.jsx": {
-    "file": "assets/Blog-Hgqr1J3g.js",
+    "file": "assets/Blog-q3aWS0aD.js",
     "name": "Blog",
     "src": "resources/js/Components/Tailwind/Blog.jsx",
     "isDynamicEntry": true,
@@ -6645,7 +6637,7 @@
     ]
   },
   "resources/js/Components/Tailwind/PostDetail.jsx": {
-    "file": "assets/PostDetail-DYRWyXy8.js",
+    "file": "assets/PostDetail-B9fxiWcv.js",
     "name": "PostDetail",
     "src": "resources/js/Components/Tailwind/PostDetail.jsx",
     "isDynamicEntry": true,
@@ -8477,7 +8469,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-C_gBV9Rc.js",
+    "file": "assets/System-B09kqBxa.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,

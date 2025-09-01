@@ -42,28 +42,29 @@ export default function PostDetailSimple({ item }) {
         }
         window.open(url, "_blank", "noopener,noreferrer");
     };
+    console.log("PostDetailSimple", item);
 
     return (
         <article className="min-h-screen bg-white font-paragraph">
-            <div className="px-[5%] 2xl:max-w-6xl mx-auto py-8 flex flex-col justify-center">
+            <div className="px-[5%] 2xl:px-0 2xl:max-w-7xl mx-auto py-8 flex flex-col justify-center">
                 {/* Metadata */}
-                <div className="flex items-center gap-2 text-base mb-4 customtext-primary font-semibold 2xl:text-lg max-w-xl mx-auto">
-                    <span className="">{item?.category?.name}</span>
+                <div className="hidden  items-center gap-2 text-base mb-4 customtext-primary font-semibold 2xl:text-lg max-w-xl mx-auto">
+                    <span className="">{item?.post_category?.name ?? item?.category?.name}</span>
                     <span>|</span>
                     <time>{formatDate(item?.created_at)}</time>
                 </div>
 
                 {/* Title */}
-                <h1 className="font-title text-3xl md:text-4xl lg:text-5xl font-bold mb-8 max-w-5xl mx-auto text-center 2xl:max-w-6xl">
+                <h1 className="font-title customtext-neutral-dark text-3xl md:text-4xl lg:text-5xl font-bold mb-8 max-w-5xl mx-auto text-center 2xl:max-w-7xl">
                     {item?.name}
                 </h1>
 
                 {/* Featured Image */}
-                <div className="relative mb-8 max-w-4xl 2xl:max-w-5xl h-auto mx-auto">
+                <div className="relative mb-8 max-w-4xl 2xl:max-w-7xl h-auto mx-auto">
                     <img
                         src={`/storage/images/post/${item?.image}`}
                         alt="Main Thumbnail"
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover rounded-md"
                         onError={(e) =>
                             (e.target.src = "/api/cover/thumbnail/null")
                         }
@@ -78,30 +79,40 @@ export default function PostDetailSimple({ item }) {
 
                 {/* Share buttons */}
                 <div className="mt-8 pt-8 border-t">
-                    <h3 className="text-lg font-semibold mb-4">Compartir</h3>
+                    <h3 className="text-lg mb-4">Compartir</h3>
                     <div className="flex gap-4">
                         <button
-                            aria-label="Compartir en Facebook"
-                            className="p-2 rounded-full bg-blue-100 hover:bg-blue-500 hover:text-white transition"
-                            onClick={() => handleShare("facebook")}
+                            aria-label="Copiar enlace"
+                            className="min-h-10 min-w-10 flex items-center justify-center rounded-full bg-[#D5F4F8] fill-[#219FB9] hover:bg-primary hover:fill-white transition"
+                            onClick={() => handleShare("link")}
                         >
-                            <Facebook />
+                            <svg width="18" height="18" viewBox="0 0 18 18"  xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M17.9999 4.66008V5.00008C18.0007 6.06616 17.576 7.0885 16.8199 7.84L13.9999 10.67C13.4738 11.1911 12.6261 11.1911 12.1 10.67L12 10.56C11.8094 10.3656 11.8094 10.0544 12 9.86L15.4399 6.42006C15.807 6.03938 16.0083 5.52883 15.9999 5.00008V4.66008C16.0003 4.12705 15.788 3.61589 15.4099 3.2401L14.7599 2.59011C14.3841 2.21207 13.873 1.99969 13.3399 2.00011H12.9999C12.4669 1.99969 11.9558 2.21207 11.58 2.59011L8.14 6.00007C7.9456 6.19064 7.6344 6.19064 7.44 6.00007L7.33 5.89007C6.8089 5.36394 6.8089 4.51623 7.33 3.99009L10.16 1.15012C10.9165 0.405048 11.9382 -0.00867213 12.9999 0.000137874H13.3399C14.4011 -0.000702126 15.4191 0.420178 16.1699 1.17012L16.8299 1.83012C17.5798 2.5809 18.0007 3.59891 17.9999 4.66008ZM5.64993 10.94L10.9399 5.65008C11.0338 5.55543 11.1616 5.50218 11.2949 5.50218C11.4282 5.50218 11.556 5.55543 11.6499 5.65008L12.3499 6.35007C12.4445 6.44395 12.4978 6.57175 12.4978 6.70507C12.4978 6.83839 12.4445 6.96618 12.3499 7.0601L7.0599 12.35C6.96604 12.4447 6.83824 12.4979 6.70492 12.4979C6.57161 12.4979 6.44381 12.4447 6.34993 12.35L5.64993 11.65C5.55528 11.5561 5.50204 11.4283 5.50204 11.295C5.50204 11.1617 5.55528 11.0339 5.64993 10.94ZM10.5599 12C10.3655 11.8094 10.0543 11.8094 9.8599 12L6.42993 15.41C6.0517 15.7905 5.53645 16.003 4.99995 15.9999H4.65995C4.12691 16.0004 3.61576 15.788 3.23997 15.41L2.58997 14.76C2.21194 14.3842 1.99956 13.873 1.99998 13.34V13C1.99956 12.4669 2.21194 11.9558 2.58997 11.58L6.00993 8.14C6.2005 7.9456 6.2005 7.6345 6.00993 7.44L5.89993 7.33C5.3738 6.80894 4.52609 6.80894 3.99996 7.33L1.17999 10.16C0.423921 10.9116 -0.000838757 11.9339 1.24351e-06 13V13.35C0.00182124 14.4077 0.422491 15.4216 1.16999 16.1699L1.82998 16.8299C2.58076 17.5799 3.59878 18.0008 4.65995 17.9999H4.99995C6.05338 18.0061 7.0667 17.5964 7.8199 16.8599L10.6699 14.01C11.191 13.4838 11.191 12.6361 10.6699 12.11L10.5599 12Z"  />
+                            </svg>
+
                         </button>
                         <button
                             aria-label="Compartir en Twitter"
-                            className="p-2 rounded-full bg-blue-100 hover:bg-blue-400 hover:text-white transition"
+                            className="min-h-10 min-w-10 flex items-center justify-center rounded-full bg-[#D5F4F8] fill-[#219FB9] hover:bg-primary hover:fill-white transition"
                             onClick={() => handleShare("twitter")}
                         >
-                            <TwitterIcon />
+                            <svg width="18" height="17" viewBox="0 0 18 17"  xmlns="http://www.w3.org/2000/svg">
+                                <path d="M14.1761 0.242188H16.9362L10.9061 7.01959L18 16.2422H12.4456L8.0951 10.6488L3.11723 16.2422H0.35544L6.80517 8.99299L0 0.242188H5.69545L9.6279 5.35481L14.1761 0.242188ZM13.2073 14.6176H14.7368L4.86441 1.78147H3.2232L13.2073 14.6176Z"  />
+                            </svg>
+
+                        </button>
+                          <button
+                            aria-label="Compartir en Facebook"
+                            className="min-h-10 min-w-10 flex items-center justify-center rounded-full bg-[#D5F4F8] fill-[#219FB9] hover:bg-primary hover:fill-white transition"
+                            onClick={() => handleShare("facebook")}
+                        >
+                            <svg width="20" height="21" viewBox="0 0 20 21"  xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 10.3033C20 4.7467 15.5229 0.242188 10 0.242188C4.47715 0.242188 0 4.7467 0 10.3033C0 15.325 3.65684 19.4874 8.4375 20.2422V13.2116H5.89844V10.3033H8.4375V8.08671C8.4375 5.56515 9.9305 4.17231 12.2146 4.17231C13.3088 4.17231 14.4531 4.36882 14.4531 4.36882V6.8448H13.1922C11.95 6.8448 11.5625 7.62041 11.5625 8.41609V10.3033H14.3359L13.8926 13.2116H11.5625V20.2422C16.3432 19.4874 20 15.3252 20 10.3033Z"  />
+                            </svg>
+
                         </button>
 
-                        <button
-                            aria-label="Copiar enlace"
-                            className="p-2 rounded-full bg-gray-100 hover:bg-gray-400 hover:text-white transition"
-                            onClick={() => handleShare("link")}
-                        >
-                            <Link />
-                        </button>
+                      
                     </div>
                     {copied && (
                         <div className="mt-2 text-green-600 text-sm font-medium">
