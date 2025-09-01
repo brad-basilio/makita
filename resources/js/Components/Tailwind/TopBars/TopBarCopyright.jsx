@@ -216,7 +216,7 @@ const TopBarCopyright = ({ data, generals = [] }) => {
                 isOpen={modalOpen === 2}
                 onRequestClose={closeModal}
                 contentLabel="Trabaja con nosotros"
-                className="absolute p-8 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white  shadow-2xl w-[95%] max-w-4xl  "
+                className={`absolute p-4 sm:p-8 left-1/2 -translate-x-1/2 sm:left-1/2 sm:top-1/2 top-4 sm:-translate-y-1/2 bg-white shadow-2xl w-[95%] max-w-4xl max-h-[90vh] overflow-y-auto`}
                 overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-50"
             >
                 {/* Botón cerrar fijo - no se mueve con el scroll */}
@@ -230,15 +230,15 @@ const TopBarCopyright = ({ data, generals = [] }) => {
                 </button>
               </div>
 
-                <div className="flex gap-8 h-full min-h-[80vh] max-h-[80vh] overflow-y-hidden">
+                <div className="flex flex-col overflow-y-auto custom-scrollbar lg:flex-row gap-8 h-auto lg:h-full min-h-0 lg:max-h-[80vh] lg:overflow-y-hidden">
                     {/* Imagen lateral */}
-                    <div className="hidden rounded-xl md:block w-1/2  relative overflow-hidden">
+                    <div className="w-full h-96 lg:h-auto rounded-xl lg:w-1/2 relative overflow-hidden">
                         <div className="absolute inset-0 bg-black bg-opacity-20"></div>
-                        <div className="absolute   inset-0 flex items-center justify-center">
+                        <div className="absolute inset-0 flex items-center justify-center">
                             <img
                                 src="/assets/img/makita/form-cv.webp"
                                 alt="Trabajador Makita"
-                                className="w-full min-h-[80vh] max-h-[80vh] object-cover"
+                                className="w-full h-full object-cover"
                                 onError={(e) => {
                                     e.target.style.display = 'none';
                                     e.target.parentElement.innerHTML = `
@@ -254,7 +254,7 @@ const TopBarCopyright = ({ data, generals = [] }) => {
                     </div>
 
                     {/* Formulario */}
-                    <div className="w-full md:w-1/2 overflow-y-auto custom-scrollbar">
+                    <div className="w-full md:w-1/2 lg:overflow-y-auto lg:custom-scrollbar">
 
                         {!showSuccessMessage ? (
                             <div>
