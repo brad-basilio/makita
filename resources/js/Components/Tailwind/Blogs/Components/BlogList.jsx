@@ -10,7 +10,7 @@ export default function BlogList({ data, posts, postsLatest, loading, isFilter }
       <div className="px-primary   mx-auto 2xl:px-0 2xl:max-w-7xl">
         {!isFilter ? (
           <div>
-            <h2 className="text-3xl font-bold mb-4 font-title customtext-primary">
+            <h2 className="text-[40px] tracking-wide font-bold mb-8 font-title customtext-neutral-dark">
               {
                 data?.second_title ? data?.second_title : 'Últimas publicaciones'
               }

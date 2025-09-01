@@ -35,7 +35,7 @@ export default function BlogHeader({
 
     // Categorías
     if (filters.category_id) {
-      transformedFilters.push(["category_id", "=", filters.category_id]);
+      transformedFilters.push(["post_category_id", "=", filters.category_id]);
     }
     // Fecha
     if (filters.post_date) {
@@ -145,8 +145,8 @@ export default function BlogHeader({
           }`}
       >
         <div className="space-y-4">
-          <span className="customtext-primary">BLOG</span>
-          <h1 className={`font-title text-3xl md:text-5xl 2xl:text-6xl font-bold tracking-tight ${data?.class_title || 'customtext-primary'}`}>
+    
+          <h1 className={`font-title text-3xl md:text-5xl 2xl:text-[56px] font-bold tracking-normal ${data?.class_title || 'customtext-neutral-dark'}`}>
             {
               data?.title
                 ? <span 
@@ -175,13 +175,13 @@ export default function BlogHeader({
             <input
               type="search"
               placeholder="Buscar publicación"
-              className={`w-full px-4 relative py-3 border customtext-neutral-dark  border-neutral-ligth rounded-xl focus:ring-0 focus:outline-0   transition-all duration-300`}
+              className={`w-full px-4 relative py-3 border customtext-neutral-dark  border-neutral-ligth rounded-md text-lg focus:ring-0 focus:outline-0   transition-all duration-300`}
               onChange={(e) =>
                 handleFilterChange("name", e.target.value)
               }
             />
-            <div className="absolute right-3 p-2 rounded-xl bg-primary">
-              <Search className=" h-5 w-5 text-white" />
+            <div className="absolute right-3 p-2 rounded-md bg-neutral-dark">
+              <Search className=" h-6 w-6 text-white" />
             </div>
           </div>
           <div className="flex w-full gap-2 md:gap-4 md:w-5/12">
@@ -197,11 +197,12 @@ export default function BlogHeader({
                 }}
                 labelKey="name"
                 valueKey="id"
+                className={`w-full px-4 py-3 text-lg  border-neutral-ligth !rounded-md focus:ring-0 focus:outline-0   transition-all duration-300`}
               />
             </div>
             <input
               type="date"
-              className={`w-1/2 md:w-full px-4 py-3 border customtext-neutral-dark  border-neutral-ligth rounded-xl focus:ring-0 focus:outline-0   transition-all duration-300`}
+              className={`w-1/2 md:w-full px-4 py-3 border customtext-neutral-dark  border-neutral-ligth text-lg !rounded-md focus:ring-0 focus:outline-0   transition-all duration-300`}
               onChange={(e) => {
                 handleFilterChange("post_date", e.target.value);
               }}
@@ -211,7 +212,7 @@ export default function BlogHeader({
 
         {/* Featured Posts */}
         {!isFilter && (
-          <div className="mt-12 flex gap-8 py-[2.5%] rounded-2xl">
+          <div className="mt-8 flex gap-8 py-[2.5%] rounded-2xl">
             <div className="w-full md:w-1/2">
               <BlogPostCard data={data} featured post={headerPosts[0]} />
             </div>
