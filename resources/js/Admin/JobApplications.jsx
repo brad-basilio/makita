@@ -24,9 +24,7 @@ const JobApplications = ({ }) => {
   const nameRef = useRef()
   const phoneRef = useRef()
   const emailRef = useRef()
-  const statusRef = useRef()
-  const visibleRef = useRef()
-  const seenRef = useRef()
+
   const notesRef = useRef()
 
   const [isEditing, setIsEditing] = useState(false)
@@ -51,9 +49,7 @@ const JobApplications = ({ }) => {
     nameRef.current.value = data?.name ?? ''
     phoneRef.current.value = data?.phone ?? ''
     emailRef.current.value = data?.email ?? ''
-    $(statusRef.current).prop('checked', data?.status ?? true)
-    $(visibleRef.current).prop('checked', data?.visible ?? true)
-    $(seenRef.current).prop('checked', data?.seen ?? false)
+
     notesRef.current.value = data?.notes ?? ''
     
     $(modalRef.current).modal('show')
@@ -67,13 +63,23 @@ const JobApplications = ({ }) => {
       name: nameRef.current.value,
       phone: phoneRef.current.value,
       email: emailRef.current.value,
-      status: $(statusRef.current).is(':checked'),
-      visible: $(visibleRef.current).is(':checked'),
-      seen: $(seenRef.current).is(':checked'),
       notes: notesRef.current.value
     }
 
-    const result = await jobApplicationsRest.save(request)
+    // If the rest client expects files (hasFiles=true) we must send a FormData
+    // so PHP/Laravel will correctly parse multipart/form-data and receive fields.
+    let payload = request
+    if (jobApplicationsRest.hasFiles) {
+      const form = new FormData()
+      if (request.id) form.append('id', request.id)
+      form.append('name', request.name || '')
+      form.append('phone', request.phone || '')
+      form.append('email', request.email || '')
+      form.append('notes', request.notes || '')
+      payload = form
+    }
+
+    const result = await jobApplicationsRest.save(payload)
     if (!result) return
 
     $(gridRef.current).dxDataGrid('instance').refresh()
@@ -109,11 +115,11 @@ const JobApplications = ({ }) => {
     $(gridRef.current).dxDataGrid('instance').refresh()
   }
 
-  const toggleSeen = async ({ id, value }) => {
-    await jobApplicationsRest.boolean({ id, field: 'seen', value })
-    $(gridRef.current).dxDataGrid('instance').refresh()
-  }
-
+ const onBooleanChange = async ({ id, field, value }) => {
+        const result = await jobApplicationsRest.boolean({ id, field, value });
+        if (!result) return;
+        $(gridRef.current).dxDataGrid("instance").refresh();
+    };
   return (<>
     <Table gridRef={gridRef} title='Solicitudes de Empleo' rest={jobApplicationsRest}
       toolBar={(container) => {
@@ -168,20 +174,29 @@ const JobApplications = ({ }) => {
             }
           }
         },
+      
+       
         {
-          dataField: 'status',
-          caption: 'Estado',
+          dataField: 'seen',
+          caption: 'Visto',
           width: '10%',
           cellTemplate: (container, { data }) => {
+               const is_seenValue = data.seen === 1 || data.seen === '1' || data.seen === true;
             ReactAppend(container, 
-              <SwitchFormGroup 
-                checked={data.status} 
-                onChange={(value) => toggleStatus({ id: data.id, value })} 
-              />
+               <SwitchFormGroup
+                                    checked={is_seenValue}
+                                    onChange={(e) =>
+                                        onBooleanChange({
+                                            id: data.id,
+                                            field: "seen",
+                                            value: e.target.checked ? 1 : 0,
+                                        })
+                                    }
+                                />
             )
           }
         },
-        {
+         {
           dataField: 'visible',
           caption: 'Visible',
           width: '10%',
@@ -190,19 +205,6 @@ const JobApplications = ({ }) => {
               <SwitchFormGroup 
                 checked={data.visible} 
                 onChange={(value) => toggleVisible({ id: data.id, value })} 
-              />
-            )
-          }
-        },
-        {
-          dataField: 'seen',
-          caption: 'Visto',
-          width: '10%',
-          cellTemplate: (container, { data }) => {
-            ReactAppend(container, 
-              <SwitchFormGroup 
-                checked={data.seen} 
-                onChange={(value) => toggleSeen({ id: data.id, value })} 
               />
             )
           }
@@ -240,18 +242,10 @@ const JobApplications = ({ }) => {
     <Modal modalRef={modalRef} title={isEditing ? 'Editar solicitud' : 'Ver solicitud'} onSubmit={onModalSubmit} size='md'>
       <div className='row' id='principal-container'>
         <input ref={idRef} type='hidden' />
-        <InputFormGroup eRef={nameRef} label='Nombre completo' col='col-md-6' readOnly={true} />
-        <InputFormGroup eRef={emailRef} label='Email' col='col-md-6' readOnly={true} />
-        <InputFormGroup eRef={phoneRef} label='Teléfono' col='col-md-6' readOnly={true} />
-        <div className='col-md-6'>
-          <SwitchFormGroup eRef={statusRef} label='Estado activo' />
-        </div>
-        <div className='col-md-6'>
-          <SwitchFormGroup eRef={visibleRef} label='Visible' />
-        </div>
-        <div className='col-md-6'>
-          <SwitchFormGroup eRef={seenRef} label='Marcado como visto' />
-        </div>
+        <InputFormGroup eRef={nameRef} label='Nombre completo' col='col-md-12' readOnly={true} />
+        <InputFormGroup eRef={emailRef} label='Email' col='col-md-12' readOnly={true} />
+        <InputFormGroup eRef={phoneRef} label='Teléfono' col='col-md-12' readOnly={true} />
+       
         <TextareaFormGroup eRef={notesRef} label='Notas internas' rows={3} />
       </div>
     </Modal>

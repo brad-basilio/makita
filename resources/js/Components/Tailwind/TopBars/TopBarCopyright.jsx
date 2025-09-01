@@ -232,7 +232,7 @@ const TopBarCopyright = ({ data, generals = [] }) => {
 
                 <div className="flex flex-col overflow-y-auto custom-scrollbar lg:flex-row gap-8 h-auto lg:h-full min-h-0 lg:max-h-[80vh] lg:overflow-y-hidden">
                     {/* Imagen lateral */}
-                    <div className="w-full h-96 lg:h-auto rounded-xl lg:w-1/2 relative overflow-hidden">
+                    <div className="w-full mt-8 lg:mt-0 h-96 lg:h-auto rounded-xl lg:w-1/2 relative overflow-hidden">
                         <div className="absolute inset-0 bg-black bg-opacity-20"></div>
                         <div className="absolute inset-0 flex items-center justify-center">
                             <img
