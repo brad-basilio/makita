@@ -14,18 +14,20 @@ export default function BlogHeader({
   posts,
   setPosts,
   headerPosts,
+  postsLatest,
   filteredData,
   loading,
   setLoading,
   isFilter,
   setIsFilter,
 }) {
-  const { categories } = filteredData;
+  const [categories, setCategories] = useState([]);
   const [selectedFilters, setSelectedFilters] = useState({
     category_id: "",
     post_date: "",
     name: "",
   });
+  console.log("BLOG LAST POSTS", postsLatest);
   const [initialLoad, setInitialLoad] = useState(true);
 
   const transformFilters = (filters) => {
@@ -62,7 +64,8 @@ export default function BlogHeader({
         selectedFilters.name;
 
       const params = {
-        with: "category",
+        // backend PostController expects relation named 'postCategory'
+        with: "postCategory",
         filter: filters,
       };
 
@@ -80,6 +83,42 @@ export default function BlogHeader({
       setLoading(false);
     }
   };
+
+  // Derive categories from available posts (headerPosts, postsLatest, posts)
+  useEffect(() => {
+    const derive = () => {
+      const allPosts = [];
+      if (Array.isArray(headerPosts)) allPosts.push(...headerPosts);
+      if (Array.isArray(postsLatest)) allPosts.push(...postsLatest);
+      if (Array.isArray(posts)) allPosts.push(...posts);
+
+      const map = new Map();
+
+      allPosts.forEach((p) => {
+        // support multiple possible relation keys
+        const single = p?.postCategory || p?.post_category || p?.category;
+        if (single && single.id) {
+          if (!map.has(single.id)) map.set(single.id, { id: single.id, name: single.name });
+        }
+        const multiple = p?.categories || p?.post_categories;
+        if (Array.isArray(multiple)) {
+          multiple.forEach((c) => {
+            if (c && c.id && !map.has(c.id)) map.set(c.id, { id: c.id, name: c.name });
+          });
+        }
+      });
+
+      const derived = Array.from(map.values());
+      // fallback to filteredData categories if nothing derived
+      if (derived.length === 0 && filteredData && Array.isArray(filteredData.categories)) {
+        setCategories(filteredData.categories);
+      } else {
+        setCategories(derived);
+      }
+    };
+
+    derive();
+  }, [headerPosts, postsLatest, posts, filteredData]);
 
   useEffect(() => {
     if (!initialLoad) {
@@ -99,17 +138,22 @@ export default function BlogHeader({
     console.log("BlogHeader - posts actualizados:", posts);
   }, [posts]);
   return (
-    <main className="bg-white !font-font-general ">
+    <main className="bg-white font-title">
       {/* Hero Section */}
       <section
-        className={`px-primary mx-auto 2xl:px-0 2xl:max-w-7xl ${isFilter ? "pt-8" : "py-8"
+        className={`px-primary 2xl:px-0 2xl:max-w-7xl mx-auto ${isFilter ? "pt-8" : "py-8"
           }`}
       >
         <div className="space-y-4">
-          <h1 className="customtext-primary font-title text-3xl md:text-5xl 2xl:text-6xl font-bold tracking-tight whitespace-break-spaces">
+          <span className="customtext-primary">BLOG</span>
+          <h1 className={`font-title text-3xl md:text-5xl 2xl:text-6xl font-bold tracking-tight ${data?.class_title || 'customtext-primary'}`}>
             {
               data?.title
-                ? data?.title
+                ? <span 
+                    dangerouslySetInnerHTML={{ __html: data.title }}
+                    className="leading-tight block"
+                    style={{ lineHeight: '1.1' }}
+                  ></span>
                 : <>
                   Descubre lo mejor:
                   <br />
@@ -119,7 +163,7 @@ export default function BlogHeader({
           </h1>
           {
             data?.description &&
-            <p className="customtext-neutral-dark opacity-80 text-base 2xl:text-xl">
+            <p className="customtext-neutral-dark opacity-80 text-base 2xl:text-xl font-title">
             { data?.description}
             </p>
           }

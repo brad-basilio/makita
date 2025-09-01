@@ -15,10 +15,10 @@ class PostController extends BasicController
     public function setPaginationInstance(Request $request, string $model)
     {
         return $model::select(['posts.*'])
-            ->with(['category'])
-            ->join('categories AS category', 'category.id', 'posts.category_id')
+            ->with(['postCategory'])
+            ->join('post_categories AS postCategory', 'postCategory.id', 'posts.post_category_id')
             ->where('posts.status', true)
-            ->where('category.status', true);
+            ->where('postCategory.status', true);
     }
 
     /**

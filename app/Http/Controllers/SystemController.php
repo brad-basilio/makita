@@ -220,8 +220,9 @@ class SystemController extends BasicController
             }
         }
       
-        $props['headerPosts'] = Post::with('category')->where('status', true)->latest()->take(3)->get();
-        $props['postsLatest'] = Post::with('category')->where('status', true)->latest()->take(6)->get();
+    // Use postCategory relation (post_category_id) so header posts include the correct category
+    $props['headerPosts'] = Post::with('postCategory')->where('status', true)->latest()->take(3)->get();
+    $props['postsLatest'] = Post::with('postCategory')->where('status', true)->latest()->take(6)->get();
         $props['textstatic'] = Aboutus::where('visible', true)->where('status', true)->get();
 
         return $props;

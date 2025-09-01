@@ -13,6 +13,7 @@ const BlogSimple = ({ data, headerPosts, filteredData, postsLatest }) => {
             <BlogHeader
                 data={data}
                 headerPosts={headerPosts}
+                postsLatest={postsLatest}
                 loading={loading}
                 setLoading={setLoading}
                 posts={posts}
