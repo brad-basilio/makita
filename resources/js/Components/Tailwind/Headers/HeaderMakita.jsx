@@ -1193,7 +1193,7 @@ const HeaderMakita = ({
                       transition={{ delay: 0.1 + (categories.length * 0.05), duration: 0.3 }}
                     >
                       <motion.a
-                        href="/blog"
+                        href="/blogs"
                         className="flex items-center justify-between w-full p-4 text-left hover:bg-white/5 transition-all duration-300"
                         whileHover={{ scale: 1.02, x: 5 }}
                         whileTap={{ scale: 0.98 }}
