@@ -132,6 +132,22 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
         }
     };
 
+    // Build a short meta line (e.g. "40Vmax • 150 mm • 8,0 m/s") from common spec titles
+    const getMetaLine = () => {
+        const specs = item?.specifications || [];
+        const find = (titles) => {
+            if (!specs || !Array.isArray(specs)) return null;
+            return specs.find((sp) => titles.includes((sp.title || "").toString().trim()))?.description || null;
+        };
+
+        const potencia = find(["Potencia", "Potencia máxima", "Voltaje", "Voltaje max", "Voltaje máximo", "40Vmax"]);
+        const barra = find(["Barra guía", "Barra guia", "Barra", "Guide bar", "Diámetro de disco"]);
+        const velocidad = find(["Velocidad", "Velocidad máxima", "Velocidad de cadena", "Cadena velocidad"]);
+
+        const parts = [potencia, barra, velocidad].filter(Boolean);
+        return parts.join(" • ");
+    };
+
     const [expandedSpecificationMain, setExpanded] = useState(false);
 
 
@@ -187,104 +203,105 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
         <>
             {/* Versión Mobile */}
             <div className="md:hidden min-h-screen font-paragraph">
-                {/* Header Estilo App */}
-                <div className="sticky top-0 bg-white shadow-sm z-20">
-                    <div className="flex items-center p-4 gap-4 border-b">
-                        {/* <button onClick={() => window.history.back()} className="text-gray-600">
-                            <ChevronLeft size={24} />
-                        </button>*/}
-                        <div>
-                            <div className="customtext-primary text-sm font-medium mb-1">
-                                {item?.code || item?.sku}
-                            </div>
-                            <h1 className="text-lg font-bold flex-1 line-clamp-2">{item?.name}</h1>
-                        </div>
-                    </div>
-                </div>
+             
 
                 {/* Contenido Principal */}
                 <div className="p-4 pb-24">
-                    {/* Carrusel Principal */}
-                    <div className="relative aspect-square mb-6 rounded-xl overflow-hidden shadow-md">
-                        <Swiper
-                            ref={mainSwiperRef}
-                            modules={[Navigation, Pagination]}
-                            navigation={{
-                                prevEl: navigationPrevRef.current,
-                                nextEl: navigationNextRef.current,
-                            }}
-                            pagination={{
-                                clickable: true,
-                                renderBullet: (_, className) =>
-                                    `<span class="${className} !w-2 !h-2 !bg-white/50 !mx-1"></span>`,
-                            }}
-                            loop={true}
-                            onSwiper={(swiper) => {
-                                mainSwiperRef.current = swiper;
-                            }}
-                            className="h-full"
-                        >
-                            {[item?.image, ...item?.images]
-                                .filter((image, index, self) =>
-                                    index === self.findIndex((img) => img.url === image.url)
-                                )
-                                .map((img, i) => (
-                                    <SwiperSlide key={i}>
-                                        <div className="w-full h-full bg-gray-50 flex items-center justify-center">
-                                            <img
-                                                src={`/storage/images/item/${img.url || img}`}
-                                                className="w-full h-full object-contain"
-                                                loading="lazy"
-                                                onError={(e) => (e.target.src = "/api/cover/thumbnail/null")}
-                                            />
-                                        </div>
-                                    </SwiperSlide>
-                                ))}
-                        </Swiper>
+                        {/* Mobile image + thumbnails layout (left thumbnails, right large image) */}
+                        <div className="flex gap-4 mb-6 items-start">
+                            <div className="flex flex-col gap-3 w-16">
+                                {/* Thumbnails column */}
+                                {[item?.image, ...(item?.images || [])]
+                                    .filter((image, index, self) => index === self.findIndex((img) => (img.url || img) === (image.url || image)))
+                                    .map((img, i) => {
+                                        const url = img?.url || img;
+                                        const isActive = selectedImage.url === url;
+                                        return (
+                                            <button
+                                                key={i}
+                                                onClick={() => setSelectedImage({ url: url, type: i === 0 ? 'main' : 'gallery' })}
+                                                className={`w-16 h-16 rounded-md p-2 border ${isActive ? 'border-primary' : 'border-gray-200'} bg-[#F6F6F6]`}
+                                            >
+                                                <img
+                                                    src={`/storage/images/item/${url}`}
+                                                    className="w-full h-full object-contain"
+                                                    onError={(e) => (e.target.src = "/api/cover/thumbnail/null")}
+                                                    alt={`thumb-${i}`}
+                                                />
+                                            </button>
+                                        );
+                                    })}
+                            </div>
 
-                        {/* Botones de navegación */}
-                        <div className="absolute top-1/2 w-full flex justify-between px-2 transform -translate-y-1/2 z-10">
-                            <button
-                                ref={navigationPrevRef}
-                                className="w-8 h-8 flex items-center justify-center rounded-full bg-white/80 shadow-lg hover:scale-110 transition-transform"
-                            >
-                                <ChevronLeft className="text-gray-800" size={20} />
-                            </button>
-                            <button
-                                ref={navigationNextRef}
-                                className="w-8 h-8 flex items-center justify-center rounded-full bg-white/80 shadow-lg hover:scale-110 transition-transform"
-                            >
-                                <ChevronRight className="text-gray-800" size={20} />
-                            </button>
+                            <div className="flex-1 bg-gray-50 rounded-xl p-4 flex items-center justify-center">
+                                <img
+                                    src={`/storage/images/item/${selectedImage.url || item?.image}`}
+                                    className="w-full h-[360px] object-contain"
+                                    onError={(e) => (e.target.src = "/api/cover/thumbnail/null")}
+                                    alt="Product main"
+                                    loading="lazy"
+                                />
+                            </div>
                         </div>
-                    </div>
 
-                    {/* Breve descripción */}
-                    <div className="mb-6">
-                        <p className="text-base font-medium mb-3">
-                            {item?.specifications?.find(spec => spec.title === 'Descripción breve')?.description || 'Sierra de poda sin escobillas XGT® para cortar matorales y ramas.'}
-                        </p>
-                        <p className="text-sm text-gray-600 line-clamp-3" dangerouslySetInnerHTML={{ __html: item?.description }}>
-                        </p>
-                    </div>
+                        {/* Breve descripción */}
+                        <div className="mb-6">
+                            <div className="text-sm text-[#219FB9] font-medium mb-1">
+                                {item?.code || item?.sku}
+                            </div>
+                            <h2 className="text-2xl font-bold mb-2 line-clamp-2">{item?.name}</h2>
+                            <p className="text-sm text-gray-500 mb-3">{getMetaLine()}</p>
+
+                            <p className="text-base text-gray-700 mb-2 font-semibold">
+                                {item?.specifications?.find(spec => spec.title === 'Descripción breve')?.description || ''}
+                            </p>
+
+                            <p className="text-sm text-gray-600 line-clamp-3" dangerouslySetInnerHTML={{ __html: item?.description }}>
+                            </p>
+                        </div>
 
 
 
-                    {/* Tecnologías */}
+                    {/* Tecnologías (mobile: show logos like desktop) */}
                     {item?.technologies && item.technologies.length > 0 && (
                         <div className="mb-6">
                             <h3 className="font-bold text-base mb-3">Tecnologías</h3>
-                            <div className="flex gap-4 flex-wrap">
-                                {item.technologies.map((technology) => (
-                                    <div key={technology.id} className="flex flex-col items-center">
-                                        {technology.image && (
+                            <div className="flex gap-4 flex-wrap items-center">
+                                {item.technologies.map((technology) => {
+                                    const src = technology.banner ? `/storage/images/technology/${technology.banner}` : technology.image || '';
+                                    return (
+                                        <div key={technology.id} className="flex items-center">
+                                            {src && (
+                                                <img
+                                                    src={src}
+                                                    alt={technology.name || `Tecnología ${technology.id}`}
+                                                    className="h-10 object-contain"
+                                                    onError={(e) => (e.target.src = "/api/cover/thumbnail/null")}
+                                                />
+                                            )}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Simbología (mobile) - same as desktop */}
+                    {item?.symbologies && item.symbologies.length > 0 && (
+                        <div className="mb-6">
+                            <h3 className="font-bold text-base mb-3">Simbología</h3>
+                            <div className="flex gap-3 flex-wrap">
+                                {item.symbologies.map((symbology) => (
+                                    <div key={symbology.id} className="flex flex-col items-center">
+                                        {symbology.image && (
                                             <img
-                                                src={technology.image}
-                                                alt={technology.name}
-                                                className="h-7 object-contain"
+                                                src={`/storage/images/symbology/${symbology.image}`}
+                                                alt={symbology.name || `Símbolo ${symbology.id}`}
+                                                className="h-8 object-contain"
+                                                aria-label={symbology.name || `Símbolo ${symbology.id}`}
+                                                onError={(e) => (e.target.src = "/api/cover/thumbnail/null")}
                                             />
                                         )}
-                                        <span className="text-xs mt-1">{technology.name}</span>
                                     </div>
                                 ))}
                             </div>
@@ -301,10 +318,10 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                                 General
                             </button>
                             <button
-                                className={`py-3 flex-1 text-sm font-medium ${activeTab === "info" ? "border-b-2 border-primary customtext-primary" : "text-gray-600"}`}
+                                className={`py-3  flex-1 line-clamp-1 text-sm font-medium ${activeTab === "info" ? "border-b-2 border-primary customtext-primary" : "text-gray-600"}`}
                                 onClick={() => setActiveTab("info")}
                             >
-                                Información técnica
+                                Información
                             </button>
                             <button
                                 className={`py-3 flex-1 text-sm font-medium ${activeTab === "downloads" ? "border-b-2 border-primary customtext-primary" : "text-gray-600"}`}
@@ -327,16 +344,18 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                                                     className={`flex items-start gap-3 py-3 px-1 ${idx % 2 === 0 ? 'bg-gray-50' : 'bg-white'} -mx-1`}
                                                 >
                                                     <div className="min-w-5 min-h-5 mt-0.5">
-                                                        <CircleCheckIcon className="h-5 w-5 customtext-primary" />
+                                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-5 w-5">
+                                                            <path d="M8.6 14.6L15.65 7.55L14.25 6.15L8.6 11.8L5.75 8.95L4.35 10.35L8.6 14.6ZM10 20C8.61667 20 7.31667 19.7375 6.1 19.2125C4.88333 18.6875 3.825 17.975 2.925 17.075C2.025 16.175 1.3125 15.1167 0.7875 13.9C0.2625 12.6833 0 11.3833 0 10C0 8.61667 0.2625 7.31667 0.7875 6.1C1.3125 4.88333 2.025 3.825 2.925 2.925C3.825 2.025 4.88333 1.3125 6.1 0.7875C7.31667 0.2625 8.61667 0 10 0C11.3833 0 12.6833 0.2625 13.9 0.7875C15.1167 1.3125 16.175 2.025 17.075 2.925C17.975 3.825 18.6875 4.88333 19.2125 6.1C19.7375 7.31667 20 8.61667 20 10C20 11.3833 19.7375 12.6833 19.2125 13.9C18.6875 15.1167 17.975 16.175 17.075 17.075C16.175 17.975 15.1167 18.6875 13.9 19.2125C12.6833 19.7375 11.3833 20 10 20Z" fill="#1F687F" />
+                                                        </svg>
                                                     </div>
                                                     <span className="text-gray-700 text-sm">{spec.description}</span>
                                                 </div>
                                             ))
                                         ) : (
                                             <div className="flex flex-col items-center justify-center py-8 text-gray-400">
-                                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="mb-3">
-                                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="currentColor" opacity="0.3" />
-                                                </svg>
+                                                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-gray-300">
+                                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="currentColor" />
+                                                    </svg>
                                                 <p className="text-sm font-medium">No hay especificaciones generales disponibles</p>
                                                 <p className="text-xs mt-1">Las especificaciones se mostrarán aquí cuando estén disponibles</p>
                                             </div>
@@ -396,36 +415,26 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                                     {item?.downloadables && item.downloadables.length > 0 ? (
                                         item.downloadables.map((downloadable, index) => (
                                             <div key={downloadable.id}>
-                                                <div className="flex items-center justify-between p-3 border rounded-lg bg-gray-50">
-                                                    <div className="flex items-center gap-3">
-                                                        <div className="bg-primary/10 p-2 rounded-lg">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="customtext-primary">
-                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                <div className="flex items-center justify-between  bg-gray-50">
+                                                    <div className="flex items-center gap-4">
+                                                        <div className="bg-[#E7E7E7] p-3 rounded-md">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24">
+                                                                <g mask="url(#mask0_181_16134)">
+                                                                    <path d="M5 21C4.45 21 3.97917 20.8042 3.5875 20.4125C3.19583 20.0208 3 19.55 3 19V5C3 4.45 3.19583 3.97917 3.5875 3.5875C3.97917 3.19583 4.45 3 5 3H19C19.55 3 20.0208 3.19583 20.4125 3.5875C20.8042 3.97917 21 4.45 21 5V19C21 19.55 20.8042 20.0208 20.4125 20.4125C20.0208 20.8042 19.55 21 19 21H5ZM6 17H18L14.25 12L11.25 16L9 13L6 17ZM8.5 10C8.91667 10 9.27083 9.85417 9.5625 9.5625C9.85417 9.27083 10 8.91667 10 8.5C10 8.08333 9.85417 7.72917 9.5625 7.4375C9.27083 7.14583 8.91667 7 8.5 7C8.08333 7 7.72917 7.14583 7.4375 7.4375C7.14583 7.72917 7 8.08333 7 8.5C7 8.91667 7.14583 9.27083 7.4375 9.5625C7.72917 9.85417 8.08333 10 8.5 10Z" fill="#262626" />
+                                                                </g>
                                                             </svg>
                                                         </div>
                                                         <div>
-                                                            <p className="font-semibold text-sm">{downloadable.original_name || downloadable.name}</p>
-                                                            <p className="text-xs text-gray-500">{(() => {
+                                                            <p className="text-base customtext-neutral-dark">{downloadable.original_name || downloadable.name}</p>
+                                                            <p className="text-sm customtext-neutral-light">{(() => {
                                                                 const sizeInBytes = parseInt(downloadable.size) || 0;
                                                                 const sizeInMB = (sizeInBytes / (1024 * 1024)).toFixed(2);
                                                                 return `${sizeInMB} MB`;
                                                             })()}</p>
                                                         </div>
                                                     </div>
-                                                    <a href={downloadable.url} target="_blank" rel="noopener noreferrer" className="bg-primary text-white px-3 py-1.5 rounded-lg text-xs">
-                                                        Descargar {(() => {
-                                                            const fileName = downloadable.original_name || downloadable.name || '';
-                                                            const extension = fileName.split('.').pop()?.toUpperCase();
-                                                            if (extension && extension !== fileName.toUpperCase()) {
-                                                                return extension;
-                                                            }
-                                                            const mimeType = downloadable.mime_type || downloadable.type || '';
-                                                            if (mimeType.includes('spreadsheetml') || mimeType.includes('excel')) return 'XLSX';
-                                                            if (mimeType.includes('pdf')) return 'PDF';
-                                                            if (mimeType.includes('word') || mimeType.includes('document')) return 'DOCX';
-                                                            if (mimeType.includes('image')) return 'IMG';
-                                                            return 'ARCHIVO';
-                                                        })()}
+                                                    <a href={`/storage/images/downloads/item/${downloadable.url}`} target="_blank" rel="noopener noreferrer" className="bg-[#219FB9]  text-white px-4 py-3 rounded-md hover:bg-primary transition-colors">
+                                                        Descargar 
                                                     </a>
                                                 </div>
                                                 {index < item.downloadables.length - 1 && (
