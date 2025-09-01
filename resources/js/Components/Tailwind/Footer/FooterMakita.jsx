@@ -6,6 +6,21 @@ import SubscriptionsRest from "../../../Actions/SubscriptionsRest";
 import Global from "../../../Utils/Global";
 import HtmlContent from "../../../Utils/HtmlContent";
 import Tippy from "@tippyjs/react";
+import {
+  FaFacebook,
+  FaTwitter,
+  FaInstagram,
+  FaLinkedin,
+  FaYoutube,
+  FaTiktok,
+  FaWhatsapp,
+  FaTelegram,
+  FaDiscord,
+  FaSnapchat,
+  FaPinterest,
+  FaReddit,
+  FaGlobe
+} from 'react-icons/fa';
 
 const FooterMakita = ({ pages, generals, items }) => {
     const subscriptionsRest = new SubscriptionsRest();
@@ -19,6 +34,22 @@ const FooterMakita = ({ pages, generals, items }) => {
         privacy_policy: "Políticas de privacidad",
         saleback_policy: "Políticas de devolución y cambio",
     };
+
+    // Redes sociales predefinidas como en Socials.jsx
+    const predefinedSocials = [
+        { id: 'facebook', name: 'Facebook', icon: FaFacebook, iconRef: 'fab fa-facebook' },
+        { id: 'instagram', name: 'Instagram', icon: FaInstagram, iconRef: 'fab fa-instagram' },
+        { id: 'twitter', name: 'Twitter/X', icon: FaTwitter, iconRef: 'fab fa-twitter' },
+        { id: 'linkedin', name: 'LinkedIn', icon: FaLinkedin, iconRef: 'fab fa-linkedin' },
+        { id: 'youtube', name: 'YouTube', icon: FaYoutube, iconRef: 'fab fa-youtube' },
+        { id: 'tiktok', name: 'TikTok', icon: FaTiktok, iconRef: 'fab fa-tiktok' },
+        { id: 'whatsapp', name: 'WhatsApp', icon: FaWhatsapp, iconRef: 'fab fa-whatsapp' },
+        { id: 'telegram', name: 'Telegram', icon: FaTelegram, iconRef: 'fab fa-telegram' },
+        { id: 'discord', name: 'Discord', icon: FaDiscord, iconRef: 'fab fa-discord' },
+        { id: 'snapchat', name: 'Snapchat', icon: FaSnapchat, iconRef: 'fab fa-snapchat' },
+        { id: 'pinterest', name: 'Pinterest', icon: FaPinterest, iconRef: 'fab fa-pinterest' },
+        { id: 'reddit', name: 'Reddit', icon: FaReddit, iconRef: 'fab fa-reddit' }
+    ];
 
     const openModal = (index) => setModalOpen(index);
     const closeModal = () => setModalOpen(null);
@@ -101,28 +132,60 @@ const FooterMakita = ({ pages, generals, items }) => {
                         </div>
                         <div className="flex gap-2 items-center">
                             <p className="text-sm ">Siga a Makita:</p>
-                            <div className="flex space-x-4">
+                            <div className="flex space-x-0">
                                 {
-                                    items && items.length > 0 ? items.filter(g => g.description !== 'WhatsApp').map((social, index) => (
-                                        <Tippy
-                                            key={index}
-                                            content={`Ver ${social.name || social.description || 'Red social'}`}>
-                                            <a
-                                                className={`text-xl w-8 h-8 flex items-center justify-center text-white rounded-full p-2 hover:scale-110 transition-transform duration-200 cursor-pointer`}
-                                                href={social.url || social.link || '#'}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                onClick={(e) => {
-                                                    if (!social.url && !social.link) {
-                                                        e.preventDefault();
-                                                       // console.warn('URL no configurada para:', social);
-                                                    }
-                                                }}
-                                            >
-                                                <i className={social.icon || 'fab fa-globe'} />
-                                            </a>
-                                        </Tippy>
-                                    )) : (
+                                    items && items.length > 0 ? items.filter(g => g.description !== 'WhatsApp').map((social, index) => {
+                                        // Buscar el icono como en Socials.jsx
+                                        const socialData = predefinedSocials.find(s =>
+                                            s.name === social.description || s.iconRef === social.icon
+                                        );
+                                        
+                                        if (socialData) {
+                                            const IconComponent = socialData.icon;
+                                            return (
+                                                <Tippy
+                                                    key={index}
+                                                    content={`Ver ${social.name || social.description || 'Red social'}`}>
+                                                    <a
+                                                        className={`text-xl w-8 h-8 flex items-center justify-center text-white rounded-full  hover:scale-110 transition-transform duration-200 cursor-pointer`}
+                                                        href={social.url || social.link || '#'}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        onClick={(e) => {
+                                                            if (!social.url && !social.link) {
+                                                                e.preventDefault();
+                                                               // console.warn('URL no configurada para:', social);
+                                                            }
+                                                        }}
+                                                    >
+                                                        <IconComponent />
+                                                    </a>
+                                                </Tippy>
+                                            );
+                                        } else {
+                                            // Fallback con Font Awesome si no encuentra el React Icon
+                                            return (
+                                                <Tippy
+                                                    key={index}
+                                                    content={`Ver ${social.name || social.description || 'Red social'}`}>
+                                                    <a
+                                                        className={`text-xl w-8 h-8 flex items-center justify-center text-white rounded-full p-2 hover:scale-110 transition-transform duration-200 cursor-pointer`}
+                                                        href={social.url || social.link || '#'}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        onClick={(e) => {
+                                                            if (!social.url && !social.link) {
+                                                                e.preventDefault();
+                                                               // console.warn('URL no configurada para:', social);
+                                                            }
+                                                        }}
+                                                    >
+                                                        <FaGlobe />
+                                                    </a>
+                                                </Tippy>
+                                            );
+                                        }
+                                    }) : (
                                         <span className="text-sm opacity-75">No hay redes sociales configuradas</span>
                                     )
                                 }
