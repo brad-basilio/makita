@@ -45,14 +45,47 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
         type: "main",
     });
 
-    // Estado para controlar la pestaña activa
-    const [activeTab, setActiveTab] = useState("general");
+    // Función para determinar la pestaña por defecto (recibe producto como parámetro)
+    const getDefaultTab = (product) => {
+        if (!product) return "general";
+        const hasGeneral = product?.specifications?.filter(spec => spec.type === 'general').length > 0;
+        const hasTechnical = product?.specifications?.filter(spec => spec.type === 'technical').length > 0;
+        const hasDownloadables = product?.downloadables?.length > 0;
+        
+        if (hasGeneral) return "general";
+        if (hasTechnical) return "info";
+        if (hasDownloadables) return "downloads";
+        return "general"; // fallback
+    };
     
     // Estados para variantes
     const [productVariants, setProductVariants] = useState([]);
-    const [selectedAttributes, setSelectedAttributes] = useState({});
+    
+    // Inicializar selectedAttributes con los atributos del item
+    const [selectedAttributes, setSelectedAttributes] = useState(() => {
+        console.log('🔍 ITEM COMPLETO:', item);
+        console.log('🔍 item.attributes:', item?.attributes);
+        const initialAttrs = {};
+        if (item?.attributes && item.attributes.length > 0) {
+            console.log('✅ Item tiene atributos, procesando...');
+            item.attributes.forEach(attr => {
+                console.log('  - Atributo:', attr.name, '| Pivot:', attr.pivot, '| Value:', attr.pivot?.value);
+                if (attr.pivot?.value) {
+                    initialAttrs[attr.name] = attr.pivot.value;
+                }
+            });
+        } else {
+            console.log('❌ Item NO tiene atributos o está vacío');
+        }
+        console.log('🔵 useState initializer - selectedAttributes:', initialAttrs);
+        return initialAttrs;
+    });
+    
     const [currentProduct, setCurrentProduct] = useState(item);
     const [loadingVariants, setLoadingVariants] = useState(false);
+    
+    // Estado para controlar la pestaña activa (inicializar DESPUÉS de currentProduct)
+    const [activeTab, setActiveTab] = useState(getDefaultTab(item));
 
     const [quantity, setQuantity] = useState(1);
     const handleChange = (e) => {
@@ -89,31 +122,68 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
 
     useEffect(() => {
         if (item?.id) {
+            console.log('🟣 useEffect ejecutado - item:', item);
+            console.log('🟣 useEffect - item.attributes:', item?.attributes);
             setCurrentProduct(item);
+            
+            // Establecer atributos seleccionados del item inicial
+            const initialAttrs = {};
+            if (item.attributes && item.attributes.length > 0) {
+                console.log('✅ useEffect - Item tiene atributos');
+                item.attributes.forEach(attr => {
+                    console.log('  - Procesando atributo:', attr.name, '=', attr.pivot?.value);
+                    if (attr.pivot?.value) {
+                        initialAttrs[attr.name] = attr.pivot.value;
+                    }
+                });
+                console.log('🟣 useEffect - Estableciendo selectedAttributes:', initialAttrs);
+                setSelectedAttributes(initialAttrs);
+            } else {
+                console.log('❌ useEffect - Item NO tiene atributos');
+            }
+            
             productosRelacionados(item);
             handleViewUpdate(item);
             loadProductVariants(item);
+            setActiveTab(getDefaultTab(item));
         }
     }, [item]); // Agregar `item` como dependencia
+    
+    // Actualizar pestaña cuando cambie el producto actual por variantes
+    useEffect(() => {
+        setActiveTab(getDefaultTab(currentProduct));
+    }, [currentProduct]);
     
     // Cargar variantes del producto
     const loadProductVariants = async (product) => {
         try {
+            console.log('🟡 loadProductVariants - Inicio, selectedAttributes:', selectedAttributes);
+            console.log('🟡 loadProductVariants - product.id:', product.id);
             setLoadingVariants(true);
             const response = await fetch(`/api/items/variants?product_id=${product.id}`);
             const data = await response.json();
             
             if (data.status === 200 && data.data) {
-                setProductVariants(data.data.variants || []);
+                const variants = data.data.variants || [];
+                console.log('🟢 loadProductVariants - Variantes recibidas:', variants.length);
+                setProductVariants(variants);
                 
-                // Establecer atributos seleccionados del producto actual
-                const currentAttrs = {};
-                if (product.attributes && product.attributes.length > 0) {
-                    product.attributes.forEach(attr => {
-                        currentAttrs[attr.name] = attr.pivot.value;
+                // Buscar el producto actual en las variantes para obtener sus atributos
+                const currentVariant = variants.find(v => v.id === product.id);
+                console.log('� loadProductVariants - currentVariant encontrada:', currentVariant);
+                
+                if (currentVariant && currentVariant.attributes && currentVariant.attributes.length > 0) {
+                    const attrs = {};
+                    currentVariant.attributes.forEach(attr => {
+                        if (attr.pivot?.value) {
+                            attrs[attr.name] = attr.pivot.value;
+                        }
                     });
+                    console.log('✅ loadProductVariants - Estableciendo selectedAttributes:', attrs);
+                    setSelectedAttributes(attrs);
+                } else {
+                    console.log('❌ loadProductVariants - No se encontró variante actual con atributos');
                 }
-                setSelectedAttributes(currentAttrs);
             }
         } catch (error) {
             console.error('Error loading variants:', error);
@@ -251,18 +321,43 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
     );
 
     const numeroWhatsApp = phone_whatsapp?.description; // Reemplaza con tu número
-    const mensajeWhatsApp = encodeURIComponent(
-        `¡Hola! Tengo dudas sobre este producto: ${currentProduct.name}`
-    );
+    
+    // Construir mensaje mejorado de WhatsApp
+    const buildWhatsAppMessage = (tipo = 'consulta') => {
+        const productUrl = window.location.href;
+        let mensaje = tipo === 'consulta' 
+            ? `¡Hola! Tengo dudas sobre este producto:\n\n`
+            : `¡Hola! Me gustaría cotizar este producto:\n\n`;
+        
+        mensaje += `📦 *Producto:* ${currentProduct?.name}\n`;
+        mensaje += `🔖 *SKU:* ${currentProduct?.sku || currentProduct?.code}\n`;
+        
+        // Agregar atributos si existen
+        if (currentProduct?.attributes && currentProduct.attributes.length > 0) {
+            mensaje += `\n*Características:*\n`;
+            currentProduct.attributes.forEach(attr => {
+                if (attr.pivot?.value) {
+                    mensaje += `• ${attr.name}: ${attr.pivot.value}\n`;
+                }
+            });
+        }
+        
+        // Agregar link del producto
+        mensaje += `\n🔗 *Ver producto:* ${productUrl}`;
+        
+        return encodeURIComponent(mensaje);
+    };
+    
+    const mensajeWhatsApp = buildWhatsAppMessage('consulta');
     const linkWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${mensajeWhatsApp}`;
 
     const handleClickWhatsApp = () => {
         window.open(linkWhatsApp, "_blank");
     };
-    const mensajeWhatsAppCotizar = encodeURIComponent(
-        `¡Hola! Me gustaría cotizar este producto: ${currentProduct.name}`
-    );
+    
+    const mensajeWhatsAppCotizar = buildWhatsAppMessage('cotizar');
     const linkWhatsAppCotizar = `https://wa.me/${numeroWhatsApp}?text=${mensajeWhatsAppCotizar}`;
+    
     const handleClickWhatsAppCotizar = () => {
         window.open(linkWhatsAppCotizar, "_blank");
     };
@@ -409,6 +504,7 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                                         <div className="flex gap-2 flex-wrap">
                                             {attribute.values.map((value, vIdx) => {
                                                 const isSelected = selectedAttributes[attribute.name] === value;
+                                                console.log(`Mobile - Atributo: ${attribute.name}, Valor: ${value}, isSelected: ${isSelected}, selectedAttributes[${attribute.name}]: ${selectedAttributes[attribute.name]}`);
                                                 return (
                                                     <button
                                                         key={vIdx}
@@ -430,24 +526,27 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                         </div>
                     )}
 
-                    {/* Pestañas de navegación */}
+                    {/* Pestañas de navegación - Solo mostrar si hay contenido */}
+                    {((currentProduct?.specifications?.filter(spec => spec.type === 'general').length > 0) || 
+                      (currentProduct?.specifications?.filter(spec => spec.type === 'technical').length > 0) || 
+                      (currentProduct?.downloadables?.length > 0)) && (
                     <div className="bg-white rounded-lg shadow-sm mb-6 overflow-hidden border border-gray-100">
                         <div className="flex border-b">
-                            {currentProduct.specifications.filter(spec => spec.type === 'general').length > 0 && (
+                            {currentProduct?.specifications?.filter(spec => spec.type === 'general').length > 0 && (
                             <button
                                 className={`py-3 flex-1 text-sm font-medium ${activeTab === "general" ? "border-b-2 border-primary customtext-primary" : "text-gray-600"}`}
                                 onClick={() => setActiveTab("general")}
                             >
                                 General
                             </button>)}
-                            {currentProduct.specifications.filter(spec => spec.type === 'technical').length > 0 && (
+                            {currentProduct?.specifications?.filter(spec => spec.type === 'technical').length > 0 && (
                             <button
-                                className={`py-3  flex-1 line-clamp-1 text-sm font-medium ${activeTab === "info" ? "border-b-2 border-primary customtext-primary" : "text-gray-600"}`}
+                                className={`py-3 flex-1 line-clamp-1 text-sm font-medium ${activeTab === "info" ? "border-b-2 border-primary customtext-primary" : "text-gray-600"}`}
                                 onClick={() => setActiveTab("info")}
                             >
                                 Información
                             </button>)}
-                            {currentProduct.downloadables.length > 0 && (
+                            {currentProduct?.downloadables?.length > 0 && (
                             <button
                                 className={`py-3 flex-1 text-sm font-medium ${activeTab === "downloads" ? "border-b-2 border-primary customtext-primary" : "text-gray-600"}`}
                                 onClick={() => setActiveTab("downloads")}
@@ -574,6 +673,7 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                             )}
                         </div>
                     </div>
+                    )}
                 </div>
 
                 {/* Bottom Navigation */}
@@ -860,16 +960,16 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                             {/* Selector de Variantes (desktop) */}
                             {productVariants.length > 1 && getUniqueAttributes().length > 0 && (
                                 <div className="mb-6 bg-gray-50 rounded-lg p-6 border border-gray-200">
-                                    <h3 className="font-bold text-lg mb-4 customtext-neutral-dark">Variantes del producto</h3>
                                     <div className="space-y-5">
                                         {getUniqueAttributes().map((attribute, idx) => (
                                             <div key={idx}>
-                                                <label className="text-sm font-semibold text-gray-700 mb-3 block">
+                                                <label className="text-md font-semibold text-gray-700 mb-3 block">
                                                     {attribute.name}
                                                 </label>
                                                 <div className="flex gap-3 flex-wrap">
                                                     {attribute.values.map((value, vIdx) => {
                                                         const isSelected = selectedAttributes[attribute.name] === value;
+                                                        console.log(`Desktop - Atributo: ${attribute.name}, Valor: ${value}, isSelected: ${isSelected}, selectedAttributes[${attribute.name}]: ${selectedAttributes[attribute.name]}`);
                                                         return (
                                                             <button
                                                                 key={vIdx}
@@ -888,11 +988,7 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                                             </div>
                                         ))}
                                     </div>
-                                    {productVariants.length > 1 && (
-                                        <p className="text-sm text-gray-500 mt-4">
-                                            {productVariants.length} variantes disponibles
-                                        </p>
-                                    )}
+                                    
                                 </div>
                             )}
 
@@ -911,30 +1007,32 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                         </div>
                     </div>
                 </div>
-                {/* Pestañas de navegación */}
+                {/* Pestañas de navegación - Solo mostrar si hay contenido */}
+                {((currentProduct?.specifications?.filter(spec => spec.type === 'general').length > 0) || 
+                  (currentProduct?.specifications?.filter(spec => spec.type === 'technical').length > 0) || 
+                  (currentProduct?.downloadables?.length > 0)) && (
                 <div className="bg-white rounded-xl mt-12">
                     {/* Navegación por pestañas */}
-                    <div className="bg-primary  ">
-                        <div className=" mx-auto 2xl:max-w-7xl px-primary 2xl:px-0">
+                    <div className="bg-primary">
+                        <div className="mx-auto 2xl:max-w-7xl px-primary 2xl:px-0">
                             <div className="flex justify-between">
-                                 {currentProduct.specifications.filter(spec => spec.type === 'general').length > 0 && (
-                            
+                                {currentProduct?.specifications?.filter(spec => spec.type === 'general').length > 0 && (
                                 <button
-                                    className={`py-6 text-lg w-full  ${activeTab === "general" ? "border-b-2 border-primary bg-black/10 text-white " : "text-white"}`}
+                                    className={`py-6 text-lg w-full ${activeTab === "general" ? "border-b-2 border-primary bg-black/10 text-white" : "text-white"}`}
                                     onClick={() => setActiveTab("general")}
                                 >
                                     General
                                 </button>)}
-                                {currentProduct.specifications.filter(spec => spec.type === 'technical').length > 0 && (
+                                {currentProduct?.specifications?.filter(spec => spec.type === 'technical').length > 0 && (
                                 <button
-                                    className={`py-6 text-lg w-full  ${activeTab === "info" ? "border-b-2 border-primary bg-black/10 text-white " : "text-white"}`}
+                                    className={`py-6 text-lg w-full ${activeTab === "info" ? "border-b-2 border-primary bg-black/10 text-white" : "text-white"}`}
                                     onClick={() => setActiveTab("info")}
                                 >
                                     Información técnica
                                 </button>)}
-                                   {currentProduct.downloadables.length > 0 && (
+                                {currentProduct?.downloadables?.length > 0 && (
                                 <button
-                                    className={`py-6 text-lg w-full  ${activeTab === "downloads" ? "border-b-2 border-primary bg-black/10 text-white " : "text-white"}`}
+                                    className={`py-6 text-lg w-full ${activeTab === "downloads" ? "border-b-2 border-primary bg-black/10 text-white" : "text-white"}`}
                                     onClick={() => setActiveTab("downloads")}
                                 >
                                     Descargables
@@ -1112,6 +1210,7 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                         )}
                     </div>
                 </div>
+                )}
             </div>
             {relationsItems.length > 0 && (
                 <ProductMakita
