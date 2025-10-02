@@ -40,6 +40,8 @@ use App\Http\Controllers\Admin\SymbologyController as AdminSymbologyController;
 use App\Http\Controllers\Admin\TechnologyController as AdminTechnologyController;
 
 use App\Http\Controllers\Admin\PlatformController as AdminPlatformController;
+use App\Http\Controllers\Admin\AttributeController as AdminAttributeController;
+use App\Http\Controllers\Admin\FamilyController as AdminFamilyController;
 // Public 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RepositoryController;
@@ -103,6 +105,8 @@ Route::middleware(['can:Admin', 'auth'])->prefix('admin')->group(function () {
     Route::get('/technologies', [AdminTestimonyController::class, 'reactView'])->name('Admin/Technologies.jsx');
     
     Route::get('/platforms', [AdminPlatformController::class, 'reactView'])->name('Admin/Platforms.jsx');
+    Route::get('/families', [AdminFamilyController::class, 'reactView'])->name('Admin/Families.jsx');
+    Route::get('/attributes', [AdminAttributeController::class, 'reactView'])->name('Admin/Attributes.jsx');
     Route::get('/prices', [AdminDeliveryPriceController::class, 'reactView'])->name('Admin/DeliveryPricesType.jsx');
     Route::get('/messages', [AdminSubscriptionController::class, 'reactView'])->name('Admin/Messages.jsx');
     Route::get('/subscriptions', [AdminSubscriptionController::class, 'reactView'])->name('Admin/Subscriptions.jsx');

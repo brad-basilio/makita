@@ -212,10 +212,10 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                             <div className="flex flex-col gap-3 w-16">
                                 {/* Thumbnails column */}
                                 {[item?.image, ...(item?.images || [])]
-                                    .filter((image, index, self) => index === self.findIndex((img) => (img.url || img) === (image.url || image)))
+                                    .filter((image, index, self) => index === self.findIndex((img) => (img?.url || img) === (image?.url || image)))
                                     .map((img, i) => {
                                         const url = img?.url || img;
-                                        const isActive = selectedImage.url === url;
+                                        const isActive = selectedImage?.url === url;
                                         return (
                                             <button
                                                 key={i}
@@ -235,7 +235,7 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
 
                             <div className="flex-1 bg-gray-50 rounded-xl p-4 flex items-center justify-center">
                                 <img
-                                    src={`/storage/images/item/${selectedImage.url || item?.image}`}
+                                    src={`/storage/images/item/${selectedImage?.url || item?.image}`}
                                     className="w-full h-[360px] object-contain"
                                     onError={(e) => (e.target.src = "/api/cover/thumbnail/null")}
                                     alt="Product main"
@@ -414,7 +414,7 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                                 <div className="space-y-3">
                                     {item?.downloadables && item.downloadables.length > 0 ? (
                                         item.downloadables.map((downloadable, index) => (
-                                            <div key={downloadable.id}>
+                                            <div key={downloadable?.id}>
                                                 <div className="flex items-center justify-between  bg-gray-50">
                                                     <div className="flex items-center gap-4">
                                                         <div className="bg-[#E7E7E7] p-3 rounded-md">
@@ -425,15 +425,15 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                                                             </svg>
                                                         </div>
                                                         <div>
-                                                            <p className="text-base customtext-neutral-dark">{downloadable.original_name || downloadable.name}</p>
+                                                            <p className="text-base customtext-neutral-dark">{downloadable?.original_name || downloadable?.name}</p>
                                                             <p className="text-sm customtext-neutral-light">{(() => {
-                                                                const sizeInBytes = parseInt(downloadable.size) || 0;
+                                                                const sizeInBytes = parseInt(downloadable?.size) || 0;
                                                                 const sizeInMB = (sizeInBytes / (1024 * 1024)).toFixed(2);
                                                                 return `${sizeInMB} MB`;
                                                             })()}</p>
                                                         </div>
                                                     </div>
-                                                    <a href={`/storage/images/downloads/item/${downloadable.url}`} target="_blank" rel="noopener noreferrer" className="bg-[#219FB9]  text-white px-4 py-3 rounded-md hover:bg-primary transition-colors">
+                                                    <a href={`/storage/images/downloads/item/${downloadable?.url}`} target="_blank" rel="noopener noreferrer" className="bg-[#219FB9]  text-white px-4 py-3 rounded-md hover:bg-primary transition-colors">
                                                         Descargar 
                                                     </a>
                                                 </div>
@@ -480,7 +480,7 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                                                 type: "main",
                                             })
                                         }
-                                        className={`w-16 h-16 rounded-md p-2 border bg-[#F6F6F6] ${selectedImage.url === item?.image
+                                        className={`w-16 h-16 rounded-md p-2 border bg-[#F6F6F6] ${selectedImage?.url === item?.image
                                             ? "border-primary"
                                             : "border-gray-200"
                                             }`}
@@ -506,7 +506,7 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                                                     type: "gallery",
                                                 })
                                             }
-                                            className={`w-16 h-16 border-2 rounded-lg bg-[#F6F6F6] p-2 ${selectedImage.url === image.url
+                                            className={`w-16 h-16 border-2 rounded-lg bg-[#F6F6F6] p-2 ${selectedImage?.url === image.url
                                                 ? "border-primary"
                                                 : "border-gray-200"
                                                 }`}
@@ -528,9 +528,9 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                                 <div className="flex-1 flex items-center justify-center bg-[#F6F6F6] rounded-lg p-8">
                                     <img
                                         src={
-                                            selectedImage.type === "main"
-                                                ? `/storage/images/item/${selectedImage.url}`
-                                                : `/storage/images/item/${selectedImage.url}`
+                                            selectedImage?.type === "main"
+                                                ? `/storage/images/item/${selectedImage?.url}`
+                                                : `/storage/images/item/${selectedImage?.url}`
                                         }
                                         onError={(e) =>
                                         (e.target.src =
@@ -892,7 +892,7 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                                 <div className="space-y-4">
                                     {item?.downloadables && item.downloadables.length > 0 ? (
                                         item.downloadables.map((downloadable, index) => (
-                                            <div key={downloadable.id}>
+                                            <div key={downloadable?.id}>
                                                 <div className="flex items-center justify-between py-4 transition-colors">
                                                     <div className="flex items-center gap-4">
                                                         <div className="bg-[#E7E7E7] p-3 rounded-md">
@@ -905,22 +905,22 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
 
                                                         </div>
                                                         <div>
-                                                            <p className="text-base customtext-neutral-dark">{downloadable.original_name || downloadable.name}</p>
+                                                            <p className="text-base customtext-neutral-dark">{downloadable?.original_name || downloadable?.name}</p>
                                                             <p className="text-sm customtext-neutral-light">{(() => {
-                                                                const sizeInBytes = parseInt(downloadable.size) || 0;
+                                                                const sizeInBytes = parseInt(downloadable?.size) || 0;
                                                                 const sizeInMB = (sizeInBytes / (1024 * 1024)).toFixed(2);
                                                                 return `${sizeInMB} MB`;
                                                             })()}</p>
                                                         </div>
                                                     </div>
-                                                    <a href={`/storage/images/downloads/item/${downloadable.url}`} target="_blank" rel="noopener noreferrer" className="bg-[#219FB9] text-white px-4 py-3 rounded-md hover:bg-primary transition-colors">
+                                                    <a href={`/storage/images/downloads/item/${downloadable?.url}`} target="_blank" rel="noopener noreferrer" className="bg-[#219FB9] text-white px-4 py-3 rounded-md hover:bg-primary transition-colors">
                                                         Descargar {(() => {
-                                                            const fileName = downloadable.original_name || downloadable.name || '';
+                                                            const fileName = downloadable?.original_name || downloadable?.name || '';
                                                             const extension = fileName.split('.').pop()?.toUpperCase();
                                                             if (extension && extension !== fileName.toUpperCase()) {
                                                                 return extension;
                                                             }
-                                                            const mimeType = downloadable.mime_type || downloadable.type || '';
+                                                            const mimeType = downloadable?.mime_type || downloadable?.type || '';
                                                             if (mimeType.includes('spreadsheetml') || mimeType.includes('excel')) return 'XLSX';
                                                             if (mimeType.includes('pdf')) return 'PDF';
                                                             if (mimeType.includes('word') || mimeType.includes('document')) return 'DOCX';

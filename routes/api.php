@@ -26,6 +26,8 @@ use App\Http\Controllers\Admin\SymbologyController as AdminSymbologyController;
 use App\Http\Controllers\Admin\TechnologyController as AdminTechnologyController;
 
 use App\Http\Controllers\Admin\PlatformController as AdminPlatformController;
+use App\Http\Controllers\Admin\AttributeController as AdminAttributeController;
+use App\Http\Controllers\Admin\FamilyController as AdminFamilyController;
 
 use App\Http\Controllers\Admin\DeliveryPriceController as AdminDeliveryPriceController;
 use App\Http\Controllers\Admin\TypesDeliveryController as AdminTypesDeliveryController;
@@ -337,6 +339,20 @@ Route::middleware('auth')->group(function () {
     Route::patch('/platforms/{field}', [AdminPlatformController::class, 'boolean']);
     Route::delete('/platforms/{id}', [AdminPlatformController::class, 'delete']);
     Route::get('/platforms/with-product-count', [AdminPlatformController::class, 'getPlatformsWithProductCount']);
+
+    Route::post('/families', [AdminFamilyController::class, 'save']);
+    Route::post('/families/paginate', [AdminFamilyController::class, 'paginate']);
+    Route::patch('/families/status', [AdminFamilyController::class, 'status']);
+    Route::patch('/families/{field}', [AdminFamilyController::class, 'boolean']);
+    Route::delete('/families/{id}', [AdminFamilyController::class, 'delete']);
+
+    Route::post('/attributes', [AdminAttributeController::class, 'save']);
+    Route::post('/attributes/paginate', [AdminAttributeController::class, 'paginate']);
+    Route::patch('/attributes/status', [AdminAttributeController::class, 'status']);
+    Route::patch('/attributes/{field}', [AdminAttributeController::class, 'boolean']);
+    Route::delete('/attributes/{id}', [AdminAttributeController::class, 'delete']);
+    Route::get('/attributes/with-values', [AdminAttributeController::class, 'getAttributesWithValues']);
+    Route::get('/attributes/item/{itemId}', [AdminAttributeController::class, 'getItemAttributes']);
 
     Route::post('/prices', [AdminDeliveryPriceController::class, 'save']);
     Route::post('/prices/paginate', [AdminDeliveryPriceController::class, 'paginate']);

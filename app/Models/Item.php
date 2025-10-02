@@ -156,6 +156,13 @@ class Item extends Model
         return $this->hasMany(ItemFeature::class);
     }
 
+    public function attributes()
+    {
+        return $this->belongsToMany(Attribute::class, 'item_attribute')
+            ->withPivot('value')
+            ->withTimestamps();
+    }
+
     protected static function booted()
     {
         static::creating(function ($item) {

@@ -26,6 +26,8 @@ use App\Models\ItemSpecification;
 use App\Models\ItemDownloadable;
 use App\Models\Symbology;
 use App\Models\Technology;
+use App\Models\Attribute;
+use App\Models\ItemAttribute;
 
 class ItemController extends BasicController
 {
@@ -33,7 +35,7 @@ class ItemController extends BasicController
     public $reactView = 'Admin/Items';
     public $imageFields = ['image', 'banner', 'texture'];
     public $prefix4filter = 'items';
-    public $with4get = ['platform', 'family', 'applications', 'symbologies', 'technologies', 'downloadables'];
+    public $with4get = ['platform', 'family', 'applications', 'symbologies', 'technologies', 'downloadables', 'attributes'];
 
     public function mediaGallery(Request $request, string $uuid)
     {
@@ -173,6 +175,7 @@ class ItemController extends BasicController
         $applications = Application::where('status', 1)->get();
         $symbologies = Symbology::where('status', 1)->get();
         $technologies = Technology::where('status', 1)->get();
+        $attributes = Attribute::where('visible', 1)->orderBy('order')->get();
 
         return [
             'categories' => $categories,
@@ -182,14 +185,15 @@ class ItemController extends BasicController
             'families' => $families,
             'applications' => $applications,
             'symbologies' => $symbologies,
-            'technologies' => $technologies
+            'technologies' => $technologies,
+            'attributes' => $attributes,
         ];
     }
 
     public function setPaginationInstance(Request $request, string $model)
     {
         return $model::select(['items.*'])
-            ->with(['category', 'subcategory', 'brand', 'images', 'collection', 'specifications', 'applications', 'platform', 'family', 'symbologies', 'technologies', 'downloadables'])
+            ->with(['category', 'subcategory', 'brand', 'images', 'collection', 'specifications', 'applications', 'platform', 'family', 'symbologies', 'technologies', 'downloadables', 'attributes'])
             ->leftJoin('categories AS category', 'category.id', 'items.category_id');
     }
 
@@ -404,6 +408,40 @@ class ItemController extends BasicController
                 // Eliminar los registros de la base de datos
                 $deletedCount = $jpa->downloadables()->whereIn('id', $deletedDownloadableIds)->delete();
                 \Log::info('DEBUG - Registros de archivos eliminados de BD:', ['count' => $deletedCount]);
+            }
+        }
+
+        // Manejo de Atributos
+        if ($request->has('attributes')) {
+            $attributesData = $request->input('attributes');
+            
+            // Si es string JSON, decodificar
+            if (is_string($attributesData)) {
+                $attributesData = json_decode($attributesData, true);
+            }
+            
+            if (is_array($attributesData)) {
+                // Eliminar atributos que ya no están seleccionados
+                $attributeIds = collect($attributesData)->pluck('attribute_id')->filter();
+                
+                ItemAttribute::where('item_id', $jpa->id)
+                    ->whereNotIn('attribute_id', $attributeIds)
+                    ->delete();
+
+                // Actualizar o crear los atributos
+                foreach ($attributesData as $attrData) {
+                    if (!empty($attrData['attribute_id']) && !empty($attrData['value'])) {
+                        ItemAttribute::updateOrCreate(
+                            [
+                                'item_id' => $jpa->id,
+                                'attribute_id' => $attrData['attribute_id']
+                            ],
+                            [
+                                'value' => $attrData['value']
+                            ]
+                        );
+                    }
+                }
             }
         }
 

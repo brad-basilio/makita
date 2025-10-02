@@ -10,6 +10,8 @@ use App\Models\Brand;
 use App\Models\Platform;
 use App\Models\Family;
 use App\Models\Application;
+use App\Models\Attribute;
+use App\Models\ItemAttribute;
 use App\Models\ItemSpecification;
 use App\Models\ItemImage;
 use Exception;
@@ -88,7 +90,18 @@ class UnifiedItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsO
             ],
             'plataforma' => ['plataforma', 'platform','Plataforma'],
             'familia' => ['familia', 'family','Familia'],
-            'aplicaciones' => ['aplicaciones', 'applications', 'aplicacion','Aplicacion', 'aplicacion']
+            'aplicaciones' => ['aplicaciones', 'applications', 'aplicacion','Aplicacion', 'aplicacion'],
+            'atributo' => ['atributo', 'atributos', 'attribute', 'attributes','Atributo'],
+            'valor_atributo' => [
+                'valor_atributo', 
+                'valor_del_atributo',  // Agregado
+                'valor atributo', 
+                'valor del atributo',  // Agregado
+                'attribute_value', 
+                'valor',
+                'Valor del atributo',
+                'Valor'
+            ],
         ];
     }
 
@@ -103,6 +116,7 @@ class UnifiedItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsO
         DB::table('item_application')->truncate();
         ItemImage::truncate();
         ItemSpecification::truncate();
+        ItemAttribute::truncate();
         Item::truncate();
         SubCategory::truncate();
         Collection::truncate();
@@ -313,6 +327,9 @@ class UnifiedItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsO
                 
                 // 1️⃣2️⃣ Guardar aplicaciones
                 $this->saveApplications($item, $row);
+                
+                // 1️⃣3️⃣ Guardar atributos
+                $this->saveAttributes($item, $row);
             } else {
                 throw new Exception("No se pudo crear el producto con SKU: {$sku}");
             }
@@ -734,5 +751,110 @@ class UnifiedItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsO
             
             Log::info('Pivot relation created for item ' . $item->id . ' and application ' . $application->id);
         }
+    }
+
+    /**
+     * Guardar atributos del producto
+     * Formato esperado en Excel:
+     * - Columna "atributo": atributo1, atributo2, atributo3
+     * - Columna "valor_atributo": valor1, valor2, valor3
+     */
+    private function saveAttributes(Item $item, array $row): void
+    {
+        Log::info("========== INICIO PROCESO ATRIBUTOS ==========");
+        Log::info("SKU del producto: {$item->sku}");
+        Log::info("Todas las columnas de la fila:", array_keys($row));
+        
+        // Verificar si los campos existen
+        $hasAtributo = $this->hasField($row, 'atributo');
+        $hasValor = $this->hasField($row, 'valor_atributo');
+        
+        Log::info("¿Tiene campo 'atributo'?: " . ($hasAtributo ? 'SÍ' : 'NO'));
+        Log::info("¿Tiene campo 'valor_atributo'?: " . ($hasValor ? 'SÍ' : 'NO'));
+        
+        if (!$hasAtributo || !$hasValor) {
+            Log::warning("⚠️ No se encontraron los campos necesarios para atributos");
+            Log::info("Campos posibles para 'atributo': " . json_encode($this->fieldMappings['atributo'] ?? []));
+            Log::info("Campos posibles para 'valor_atributo': " . json_encode($this->fieldMappings['valor_atributo'] ?? []));
+            return;
+        }
+
+        $atributos = $this->getFieldValue($row, 'atributo');
+        $valores = $this->getFieldValue($row, 'valor_atributo');
+        
+        Log::info("Valor RAW de atributos: '{$atributos}'");
+        Log::info("Valor RAW de valores: '{$valores}'");
+        
+        if (empty($atributos) || empty($valores)) {
+            Log::warning("⚠️ Uno o ambos campos están vacíos");
+            return;
+        }
+
+        // Separar por comas
+        $atributosArray = array_map('trim', explode(',', $atributos));
+        $valoresArray = array_map('trim', explode(',', $valores));
+
+        Log::info("Atributos separados: " . json_encode($atributosArray));
+        Log::info("Valores separados: " . json_encode($valoresArray));
+        Log::info("Cantidad de atributos: " . count($atributosArray));
+        Log::info("Cantidad de valores: " . count($valoresArray));
+
+        // Verificar que haya la misma cantidad de atributos y valores
+        if (count($atributosArray) !== count($valoresArray)) {
+            $warning = "SKU '{$item->sku}': Número de atributos (" . count($atributosArray) . 
+                ") no coincide con número de valores (" . count($valoresArray) . ")";
+            Log::error("❌ " . $warning);
+            $this->addWarning($warning);
+            return;
+        }
+
+        // Procesar cada par atributo-valor
+        foreach ($atributosArray as $index => $atributoName) {
+            Log::info("--- Procesando par #{$index} ---");
+            Log::info("Nombre del atributo: '{$atributoName}'");
+            Log::info("Valor del atributo: '{$valoresArray[$index]}'");
+            
+            if (empty($atributoName) || empty($valoresArray[$index])) {
+                Log::warning("⚠️ Atributo o valor vacío, se omite");
+                continue;
+            }
+
+            try {
+                // Crear o encontrar el atributo
+                $attribute = Attribute::firstOrCreate(
+                    ['name' => $atributoName],
+                    [
+                        'slug' => Str::slug($atributoName),
+                        'visible' => true,
+                        'required' => false,
+                        'order' => 0
+                    ]
+                );
+
+                Log::info("✓ Atributo creado/encontrado - ID: {$attribute->id}, Nombre: {$attribute->name}");
+
+                // Guardar la relación item-atributo con su valor
+                $itemAttribute = ItemAttribute::updateOrCreate(
+                    [
+                        'item_id' => $item->id,
+                        'attribute_id' => $attribute->id
+                    ],
+                    [
+                        'value' => $valoresArray[$index]
+                    ]
+                );
+
+                Log::info("✓ Relación item-atributo guardada - Item ID: {$item->id}, Attribute ID: {$attribute->id}, Valor: {$valoresArray[$index]}");
+                Log::info("✓ ItemAttribute ID: " . ($itemAttribute->id ?? 'N/A'));
+                
+            } catch (\Exception $e) {
+                $errorMsg = "SKU '{$item->sku}': Error al guardar atributo '{$atributoName}': " . $e->getMessage();
+                Log::error("❌ " . $errorMsg);
+                Log::error("Stack trace: " . $e->getTraceAsString());
+                $this->addWarning($errorMsg);
+            }
+        }
+        
+        Log::info("========== FIN PROCESO ATRIBUTOS ==========");
     }
 }
