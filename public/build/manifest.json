@@ -421,8 +421,8 @@
       "_BasicRest-9qsOCV42.js"
     ]
   },
-  "_SelectAPIFormGroup-BYWbn4kr.js": {
-    "file": "assets/SelectAPIFormGroup-BYWbn4kr.js",
+  "_SelectAPIFormGroup-VVeKHwcX.js": {
+    "file": "assets/SelectAPIFormGroup-VVeKHwcX.js",
     "name": "SelectAPIFormGroup",
     "imports": [
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
@@ -1537,7 +1537,7 @@
     ]
   },
   "resources/js/Admin/Combos.jsx": {
-    "file": "assets/Combos-qpAVAXFa.js",
+    "file": "assets/Combos-Br9975El.js",
     "name": "Combos",
     "src": "resources/js/Admin/Combos.jsx",
     "isEntry": true,
@@ -1552,7 +1552,7 @@
       "_Modal-CIqmjseY.js",
       "_Table-DitbKwtZ.js",
       "_InputFormGroup-D5I6zpZc.js",
-      "_SelectAPIFormGroup-BYWbn4kr.js",
+      "_SelectAPIFormGroup-VVeKHwcX.js",
       "_DxButton-DV0H-ZcL.js",
       "_CreateReactScript-BoGwggCx.js",
       "_Number2Currency-e57Tgsuk.js",
@@ -1980,7 +1980,7 @@
     ]
   },
   "resources/js/Admin/Items.jsx": {
-    "file": "assets/Items-CJOxN_K8.js",
+    "file": "assets/Items-BLUsgQ9d.js",
     "name": "Items",
     "src": "resources/js/Admin/Items.jsx",
     "isEntry": true,
@@ -1999,7 +1999,7 @@
       "_ImageFormGroup-BPR9pDAU.js",
       "_InputFormGroup-D5I6zpZc.js",
       "_QuillFormGroup-D8zDHSfJ.js",
-      "_SelectAPIFormGroup-BYWbn4kr.js",
+      "_SelectAPIFormGroup-VVeKHwcX.js",
       "_SelectFormGroup-YqB1XVb8.js",
       "_DxButton-DV0H-ZcL.js",
       "_CreateReactScript-BoGwggCx.js",
@@ -2187,7 +2187,7 @@
     ]
   },
   "resources/js/Admin/Posts.jsx": {
-    "file": "assets/Posts-DN5XO3LS.js",
+    "file": "assets/Posts-B3076maO.js",
     "name": "Posts",
     "src": "resources/js/Admin/Posts.jsx",
     "isEntry": true,
@@ -2202,7 +2202,7 @@
       "_ImageFormGroup-BPR9pDAU.js",
       "_InputFormGroup-D5I6zpZc.js",
       "_QuillFormGroup-D8zDHSfJ.js",
-      "_SelectAPIFormGroup-BYWbn4kr.js",
+      "_SelectAPIFormGroup-VVeKHwcX.js",
       "_Modal-CIqmjseY.js",
       "_Table-DitbKwtZ.js",
       "_DxButton-DV0H-ZcL.js",
@@ -2515,7 +2515,7 @@
     ]
   },
   "resources/js/Admin/SubCategories.jsx": {
-    "file": "assets/SubCategories-T0leSd5q.js",
+    "file": "assets/SubCategories-CUs_yQqt.js",
     "name": "SubCategories",
     "src": "resources/js/Admin/SubCategories.jsx",
     "isEntry": true,
@@ -2530,7 +2530,7 @@
       "_BasicRest-9qsOCV42.js",
       "_ImageFormGroup-BPR9pDAU.js",
       "_InputFormGroup-D5I6zpZc.js",
-      "_SelectAPIFormGroup-BYWbn4kr.js",
+      "_SelectAPIFormGroup-VVeKHwcX.js",
       "_Modal-CIqmjseY.js",
       "_Table-DitbKwtZ.js",
       "_DxButton-DV0H-ZcL.js",
@@ -6735,7 +6735,7 @@
     ]
   },
   "resources/js/Components/Tailwind/ProductDetail.jsx": {
-    "file": "assets/ProductDetail-D1tI7R_6.js",
+    "file": "assets/ProductDetail-C8__v3NI.js",
     "name": "ProductDetail",
     "src": "resources/js/Components/Tailwind/ProductDetail.jsx",
     "isDynamicEntry": true,
@@ -6875,7 +6875,7 @@
     ]
   },
   "resources/js/Components/Tailwind/ProductDetails/ProductDetailMakita.jsx": {
-    "file": "assets/ProductDetailMakita-CPEkydHz.js",
+    "file": "assets/ProductDetailMakita-BpasyBEJ.js",
     "name": "ProductDetailMakita",
     "src": "resources/js/Components/Tailwind/ProductDetails/ProductDetailMakita.jsx",
     "isDynamicEntry": true,
@@ -8518,7 +8518,7 @@
     ]
   },
   "resources/js/System.jsx": {
-    "file": "assets/System-DPRntblu.js",
+    "file": "assets/System-C_GGpvw4.js",
     "name": "System",
     "src": "resources/js/System.jsx",
     "isEntry": true,

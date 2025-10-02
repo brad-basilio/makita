@@ -47,6 +47,12 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
 
     // Estado para controlar la pestaña activa
     const [activeTab, setActiveTab] = useState("general");
+    
+    // Estados para variantes
+    const [productVariants, setProductVariants] = useState([]);
+    const [selectedAttributes, setSelectedAttributes] = useState({});
+    const [currentProduct, setCurrentProduct] = useState(item);
+    const [loadingVariants, setLoadingVariants] = useState(false);
 
     const [quantity, setQuantity] = useState(1);
     const handleChange = (e) => {
@@ -83,11 +89,93 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
 
     useEffect(() => {
         if (item?.id) {
+            setCurrentProduct(item);
             productosRelacionados(item);
-
             handleViewUpdate(item);
+            loadProductVariants(item);
         }
     }, [item]); // Agregar `item` como dependencia
+    
+    // Cargar variantes del producto
+    const loadProductVariants = async (product) => {
+        try {
+            setLoadingVariants(true);
+            const response = await fetch(`/api/items/variants?product_id=${product.id}`);
+            const data = await response.json();
+            
+            if (data.status === 200 && data.data) {
+                setProductVariants(data.data.variants || []);
+                
+                // Establecer atributos seleccionados del producto actual
+                const currentAttrs = {};
+                if (product.attributes && product.attributes.length > 0) {
+                    product.attributes.forEach(attr => {
+                        currentAttrs[attr.name] = attr.pivot.value;
+                    });
+                }
+                setSelectedAttributes(currentAttrs);
+            }
+        } catch (error) {
+            console.error('Error loading variants:', error);
+        } finally {
+            setLoadingVariants(false);
+        }
+    };
+    
+    // Cambiar a otra variante del producto
+    const handleVariantChange = (attributeName, attributeValue) => {
+        const newSelectedAttrs = {
+            ...selectedAttributes,
+            [attributeName]: attributeValue
+        };
+        
+        // Buscar el producto que coincida con la combinación de atributos
+        const matchingVariant = productVariants.find(variant => {
+            if (!variant.attributes || variant.attributes.length === 0) return false;
+            
+            // Verificar que todos los atributos seleccionados coincidan
+            return Object.keys(newSelectedAttrs).every(attrName => {
+                const variantAttr = variant.attributes.find(a => a.name === attrName);
+                return variantAttr && variantAttr.pivot.value === newSelectedAttrs[attrName];
+            });
+        });
+        
+        if (matchingVariant && matchingVariant.id !== currentProduct.id) {
+            // Cambiar al nuevo producto
+            setCurrentProduct(matchingVariant);
+            setSelectedAttributes(newSelectedAttrs);
+            setSelectedImage({
+                url: matchingVariant.image,
+                type: "main"
+            });
+            
+            // Actualizar URL sin recargar la página
+            window.history.pushState({}, '', `/producto/${matchingVariant.slug}`);
+        } else {
+            setSelectedAttributes(newSelectedAttrs);
+        }
+    };
+    
+    // Obtener atributos únicos para mostrar en el selector
+    const getUniqueAttributes = () => {
+        const attributesMap = {};
+        
+        productVariants.forEach(variant => {
+            if (variant.attributes) {
+                variant.attributes.forEach(attr => {
+                    if (!attributesMap[attr.name]) {
+                        attributesMap[attr.name] = new Set();
+                    }
+                    attributesMap[attr.name].add(attr.pivot.value);
+                });
+            }
+        });
+        
+        return Object.keys(attributesMap).map(attrName => ({
+            name: attrName,
+            values: Array.from(attributesMap[attrName])
+        }));
+    };
     const handleViewUpdate = async (item) => {
         try {
             const request = {
@@ -134,7 +222,7 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
 
     // Build a short meta line (e.g. "40Vmax • 150 mm • 8,0 m/s") from common spec titles
     const getMetaLine = () => {
-        const specs = item?.specifications || [];
+        const specs = currentProduct?.specifications || [];
         const find = (titles) => {
             if (!specs || !Array.isArray(specs)) return null;
             return specs.find((sp) => titles.includes((sp.title || "").toString().trim()))?.description || null;
@@ -164,7 +252,7 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
 
     const numeroWhatsApp = phone_whatsapp?.description; // Reemplaza con tu número
     const mensajeWhatsApp = encodeURIComponent(
-        `¡Hola! Tengo dudas sobre este producto: ${item.name}`
+        `¡Hola! Tengo dudas sobre este producto: ${currentProduct.name}`
     );
     const linkWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${mensajeWhatsApp}`;
 
@@ -172,7 +260,7 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
         window.open(linkWhatsApp, "_blank");
     };
     const mensajeWhatsAppCotizar = encodeURIComponent(
-        `¡Hola! Me gustaría cotizar este producto: ${item.name}`
+        `¡Hola! Me gustaría cotizar este producto: ${currentProduct.name}`
     );
     const linkWhatsAppCotizar = `https://wa.me/${numeroWhatsApp}?text=${mensajeWhatsAppCotizar}`;
     const handleClickWhatsAppCotizar = () => {
@@ -211,7 +299,7 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                         <div className="flex gap-4 mb-6 items-start">
                             <div className="flex flex-col gap-3 w-16">
                                 {/* Thumbnails column */}
-                                {[item?.image, ...(item?.images || [])]
+                                {[currentProduct?.image, ...(currentProduct?.images || [])]
                                     .filter((image, index, self) => index === self.findIndex((img) => (img?.url || img) === (image?.url || image)))
                                     .map((img, i) => {
                                         const url = img?.url || img;
@@ -235,7 +323,7 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
 
                             <div className="flex-1 bg-gray-50 rounded-xl p-4 flex items-center justify-center">
                                 <img
-                                    src={`/storage/images/item/${selectedImage?.url || item?.image}`}
+                                    src={`/storage/images/item/${selectedImage?.url || currentProduct?.image}`}
                                     className="w-full h-[360px] object-contain"
                                     onError={(e) => (e.target.src = "/api/cover/thumbnail/null")}
                                     alt="Product main"
@@ -247,27 +335,27 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                         {/* Breve descripción */}
                         <div className="mb-6">
                             <div className="text-sm text-[#219FB9] font-medium mb-1">
-                                {item?.code || item?.sku}
+                                {currentProduct?.code || currentProduct?.sku}
                             </div>
-                            <h2 className="text-2xl font-bold mb-2 line-clamp-2">{item?.name}</h2>
+                            <h2 className="text-2xl font-bold mb-2 line-clamp-2">{currentProduct?.name}</h2>
                             <p className="text-sm text-gray-500 mb-3">{getMetaLine()}</p>
 
                             <p className="text-base text-gray-700 mb-2 font-semibold">
-                                {item?.specifications?.find(spec => spec.title === 'Descripción breve')?.description || ''}
+                                {currentProduct?.specifications?.find(spec => spec.title === 'Descripción breve')?.description || ''}
                             </p>
 
-                            <p className="text-sm text-gray-600 line-clamp-3" dangerouslySetInnerHTML={{ __html: item?.description }}>
+                            <p className="text-sm text-gray-600 line-clamp-3" dangerouslySetInnerHTML={{ __html: currentProduct?.description }}>
                             </p>
                         </div>
 
 
 
                     {/* Tecnologías (mobile: show logos like desktop) */}
-                    {item?.technologies && item.technologies.length > 0 && (
+                    {currentProduct?.technologies && currentProduct.technologies.length > 0 && (
                         <div className="mb-6">
                             <h3 className="font-bold text-base mb-3">Tecnologías</h3>
                             <div className="flex gap-4 flex-wrap items-center">
-                                {item.technologies.map((technology) => {
+                                {currentProduct.technologies.map((technology) => {
                                     const src = technology.banner ? `/storage/images/technology/${technology.banner}` : technology.image || '';
                                     return (
                                         <div key={technology.id} className="flex items-center">
@@ -287,11 +375,11 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                     )}
 
                     {/* Simbología (mobile) - same as desktop */}
-                    {item?.symbologies && item.symbologies.length > 0 && (
+                    {currentProduct?.symbologies && currentProduct.symbologies.length > 0 && (
                         <div className="mb-6">
                             <h3 className="font-bold text-base mb-3">Simbología</h3>
                             <div className="flex gap-3 flex-wrap">
-                                {item.symbologies.map((symbology) => (
+                                {currentProduct.symbologies.map((symbology) => (
                                     <div key={symbology.id} className="flex flex-col items-center">
                                         {symbology.image && (
                                             <img
@@ -308,27 +396,64 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                         </div>
                     )}
 
+                    {/* Selector de Variantes (mobile) */}
+                    {productVariants.length > 1 && getUniqueAttributes().length > 0 && (
+                        <div className="mb-6">
+                            <h3 className="font-bold text-base mb-3">Variantes disponibles</h3>
+                            <div className="space-y-4">
+                                {getUniqueAttributes().map((attribute, idx) => (
+                                    <div key={idx}>
+                                        <label className="text-sm font-medium text-gray-700 mb-2 block">
+                                            {attribute.name}
+                                        </label>
+                                        <div className="flex gap-2 flex-wrap">
+                                            {attribute.values.map((value, vIdx) => {
+                                                const isSelected = selectedAttributes[attribute.name] === value;
+                                                return (
+                                                    <button
+                                                        key={vIdx}
+                                                        onClick={() => handleVariantChange(attribute.name, value)}
+                                                        className={`px-4 py-2 rounded-md border transition-all ${
+                                                            isSelected
+                                                                ? 'border-primary bg-primary text-white font-medium'
+                                                                : 'border-gray-300 bg-white text-gray-700 hover:border-primary'
+                                                        }`}
+                                                    >
+                                                        {value}
+                                                    </button>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
                     {/* Pestañas de navegación */}
                     <div className="bg-white rounded-lg shadow-sm mb-6 overflow-hidden border border-gray-100">
                         <div className="flex border-b">
+                            {currentProduct.specifications.filter(spec => spec.type === 'general').length > 0 && (
                             <button
                                 className={`py-3 flex-1 text-sm font-medium ${activeTab === "general" ? "border-b-2 border-primary customtext-primary" : "text-gray-600"}`}
                                 onClick={() => setActiveTab("general")}
                             >
                                 General
-                            </button>
+                            </button>)}
+                            {currentProduct.specifications.filter(spec => spec.type === 'technical').length > 0 && (
                             <button
                                 className={`py-3  flex-1 line-clamp-1 text-sm font-medium ${activeTab === "info" ? "border-b-2 border-primary customtext-primary" : "text-gray-600"}`}
                                 onClick={() => setActiveTab("info")}
                             >
                                 Información
-                            </button>
+                            </button>)}
+                            {currentProduct.downloadables.length > 0 && (
                             <button
                                 className={`py-3 flex-1 text-sm font-medium ${activeTab === "downloads" ? "border-b-2 border-primary customtext-primary" : "text-gray-600"}`}
                                 onClick={() => setActiveTab("downloads")}
                             >
                                 Descargables
-                            </button>
+                            </button>)}
                         </div>
 
                         <div className="p-4">
@@ -337,8 +462,8 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                                 <div className="space-y-4">
                                     <h3 className="font-bold text-base">Beneficios del producto</h3>
                                     <div>
-                                        {item?.specifications && item.specifications.filter(spec => spec.type === 'general').length > 0 ? (
-                                            item.specifications.filter(spec => spec.type === 'general').map((spec, idx) => (
+                                        {currentProduct?.specifications && currentProduct.specifications.filter(spec => spec.type === 'general').length > 0 ? (
+                                            currentProduct.specifications.filter(spec => spec.type === 'general').map((spec, idx) => (
                                                 <div
                                                     key={idx}
                                                     className={`flex items-start gap-3 py-3 px-1 ${idx % 2 === 0 ? 'bg-gray-50' : 'bg-white'} -mx-1`}
@@ -372,8 +497,8 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                                     <div>
                                         <h4 className="font-semibold text-sm mb-2">Especificaciones técnicas</h4>
                                         <div className="rounded overflow-hidden">
-                                            {item?.specifications && item.specifications.filter(spec => spec.type === 'technical' || !spec.type).length > 0 ? (
-                                                item.specifications.filter(spec => spec.type === 'technical' || !spec.type).slice(0, 6).map((spec, index) => (
+                                            {currentProduct?.specifications && currentProduct.specifications.filter(spec => spec.type === 'technical' || !spec.type).length > 0 ? (
+                                                currentProduct.specifications.filter(spec => spec.type === 'technical' || !spec.type).slice(0, 6).map((spec, index) => (
                                                     <div key={index} className={`flex flex-row ${index % 2 === 0 ? "bg-gray-50" : "bg-white"}`}>
                                                         <div className="py-2 px-3 w-1/2 font-medium text-gray-700 text-sm">{spec.title}</div>
                                                         <div className="py-2 px-3 w-1/2 text-gray-900 text-sm flex items-center justify-between">
@@ -412,8 +537,8 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                             {/* Contenido de Downloads */}
                             {activeTab === "downloads" && (
                                 <div className="space-y-3">
-                                    {item?.downloadables && item.downloadables.length > 0 ? (
-                                        item.downloadables.map((downloadable, index) => (
+                                    {currentProduct?.downloadables && currentProduct.downloadables.length > 0 ? (
+                                        currentProduct.downloadables.map((downloadable, index) => (
                                             <div key={downloadable?.id}>
                                                 <div className="flex items-center justify-between  bg-gray-50">
                                                     <div className="flex items-center gap-4">
@@ -476,17 +601,17 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                                     <button
                                         onClick={() =>
                                             setSelectedImage({
-                                                url: item?.image,
+                                                url: currentProduct?.image,
                                                 type: "main",
                                             })
                                         }
-                                        className={`w-16 h-16 rounded-md p-2 border bg-[#F6F6F6] ${selectedImage?.url === item?.image
+                                        className={`w-16 h-16 rounded-md p-2 border bg-[#F6F6F6] ${selectedImage?.url === currentProduct?.image
                                             ? "border-primary"
                                             : "border-gray-200"
                                             }`}
                                     >
                                         <img
-                                            src={`/storage/images/item/${item?.image}`}
+                                            src={`/storage/images/item/${currentProduct?.image}`}
                                             alt="Main Thumbnail"
                                             className="w-full h-full object-contain"
                                             onError={(e) =>
@@ -495,7 +620,7 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                                             }
                                         />
                                     </button>
-                                    {item?.images.filter((image, index, self) =>
+                                    {currentProduct?.images.filter((image, index, self) =>
                                         index === self.findIndex((img) => img.url === image.url) // Filtra duplicados
                                     ).map((image, index) => (
                                         <button
@@ -615,7 +740,7 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                                             }`}
                                         style={{ listStyleType: "disc" }}
                                     >
-                                        {item?.specifications.map(
+                                        {currentProduct?.specifications.map(
                                             (spec, index) =>
                                                 spec.type === "principal" && (
                                                     <li
@@ -659,10 +784,10 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                             {/* Código y título del producto en la parte superior */}
                             <div className="mb-6">
                                 <div className="text-[#219FB9] text-lg font-medium mb-1">
-                                    {item?.code || item?.sku}
+                                    {currentProduct?.code || currentProduct?.sku}
                                 </div>
                                 <h1 className="text-[32px] font-bold customtext-neutral-dark">
-                                    {item?.name}
+                                    {currentProduct?.name}
                                 </h1>
                                 {/*SECTION NO LOCALIZADO */}
                                 {/* <div className="text-sm text-gray-600 mt-2 flex items-center gap-4">
@@ -679,18 +804,18 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                                     {item?.specifications?.find(spec => spec.title === 'Descripción breve')?.description || 'Sierra de poda sin escobillas XGT® para cortar matorales y ramas.'}
                                 </p> */}
 
-                                <p className="text-base text-gray-600 line-clamp-5 " dangerouslySetInnerHTML={{ __html: item?.description }}>
+                                <p className="text-base text-gray-600 line-clamp-5 " dangerouslySetInnerHTML={{ __html: currentProduct?.description }}>
 
                                 </p>
 
                             </div>
 
                             {/* Tecnologías */}
-                            {item?.technologies && item.technologies.length > 0 && (
+                            {currentProduct?.technologies && currentProduct.technologies.length > 0 && (
                                 <div className="mb-6">
                                     <h3 className="font-bold text-lg mb-3 customtext-neutral-dark">Tecnologías</h3>
                                     <div className="flex gap-4 flex-wrap">
-                                        {item.technologies.map((technology) => (
+                                        {currentProduct.technologies.map((technology) => (
                                             <div key={technology.id} className="flex flex-col items-center">
                                                 {technology.banner && (
                                                     <img
@@ -711,11 +836,11 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                             )}
 
                             {/* Simbología */}
-                            {item?.symbologies && item.symbologies.length > 0 && (
+                            {currentProduct?.symbologies && currentProduct.symbologies.length > 0 && (
                                 <div className="mb-6">
                                     <h3 className="font-bold text-lg mb-3 customtext-neutral-dark">Simbología</h3>
                                     <div className="flex gap-3 flex-wrap">
-                                        {item.symbologies.map((symbology) => (
+                                        {currentProduct.symbologies.map((symbology) => (
                                             <div key={symbology.id} className="flex flex-col items-center">
                                                 {symbology.image && (
                                                     <img
@@ -729,6 +854,45 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                                             </div>
                                         ))}
                                     </div>
+                                </div>
+                            )}
+
+                            {/* Selector de Variantes (desktop) */}
+                            {productVariants.length > 1 && getUniqueAttributes().length > 0 && (
+                                <div className="mb-6 bg-gray-50 rounded-lg p-6 border border-gray-200">
+                                    <h3 className="font-bold text-lg mb-4 customtext-neutral-dark">Variantes del producto</h3>
+                                    <div className="space-y-5">
+                                        {getUniqueAttributes().map((attribute, idx) => (
+                                            <div key={idx}>
+                                                <label className="text-sm font-semibold text-gray-700 mb-3 block">
+                                                    {attribute.name}
+                                                </label>
+                                                <div className="flex gap-3 flex-wrap">
+                                                    {attribute.values.map((value, vIdx) => {
+                                                        const isSelected = selectedAttributes[attribute.name] === value;
+                                                        return (
+                                                            <button
+                                                                key={vIdx}
+                                                                onClick={() => handleVariantChange(attribute.name, value)}
+                                                                className={`px-5 py-3 rounded-lg border-2 transition-all font-medium ${
+                                                                    isSelected
+                                                                        ? 'border-primary bg-primary text-white shadow-md'
+                                                                        : 'border-gray-300 bg-white text-gray-700 hover:border-primary hover:shadow-sm'
+                                                                }`}
+                                                            >
+                                                                {value}
+                                                            </button>
+                                                        );
+                                                    })}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    {productVariants.length > 1 && (
+                                        <p className="text-sm text-gray-500 mt-4">
+                                            {productVariants.length} variantes disponibles
+                                        </p>
+                                    )}
                                 </div>
                             )}
 
@@ -753,24 +917,28 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                     <div className="bg-primary  ">
                         <div className=" mx-auto 2xl:max-w-7xl px-primary 2xl:px-0">
                             <div className="flex justify-between">
+                                 {currentProduct.specifications.filter(spec => spec.type === 'general').length > 0 && (
+                            
                                 <button
                                     className={`py-6 text-lg w-full  ${activeTab === "general" ? "border-b-2 border-primary bg-black/10 text-white " : "text-white"}`}
                                     onClick={() => setActiveTab("general")}
                                 >
                                     General
-                                </button>
+                                </button>)}
+                                {currentProduct.specifications.filter(spec => spec.type === 'technical').length > 0 && (
                                 <button
                                     className={`py-6 text-lg w-full  ${activeTab === "info" ? "border-b-2 border-primary bg-black/10 text-white " : "text-white"}`}
                                     onClick={() => setActiveTab("info")}
                                 >
                                     Información técnica
-                                </button>
+                                </button>)}
+                                   {currentProduct.downloadables.length > 0 && (
                                 <button
                                     className={`py-6 text-lg w-full  ${activeTab === "downloads" ? "border-b-2 border-primary bg-black/10 text-white " : "text-white"}`}
                                     onClick={() => setActiveTab("downloads")}
                                 >
                                     Descargables
-                                </button>
+                                </button>)}
                             </div>
                         </div>
                     </div>
@@ -780,11 +948,11 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                         {activeTab === "general" && (
                             <div className="grid gap-12 pt-6">
                                 {/* Sección de Beneficios del producto */}
-                                {item?.technologies && item.technologies.length > 0 && (
+                                {currentProduct?.technologies && currentProduct.technologies.length > 0 && (
                                     <div className="mb-6">
 
                                         <div className="flex gap-20 flex-wrap">
-                                            {item.technologies.map((technology) => (
+                                            {currentProduct.technologies.map((technology) => (
                                                 <div key={technology.id} className="flex flex-col items-center">
                                                     {technology.banner && (
                                                         <img
@@ -804,14 +972,14 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                                     </div>
                                 )}
                                 {/* Especificaciones generales */}
-                                {item?.specifications && item.specifications.filter(spec => spec.type === 'general').length > 0 ? (
+                                {currentProduct?.specifications && currentProduct.specifications.filter(spec => spec.type === 'general').length > 0 ? (
                                     <div>
                                         <h2 className="text-3xl font-bold mb-6 customtext-neutral-dark">
                                             Especificaciones generales
                                         </h2>
                                         <div className="bg-white w-full rounded-lg shadow-sm overflow-hidden">
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-20">
-                                                {item.specifications.filter(spec => spec.type === 'general').map((spec, idx) => (
+                                                {currentProduct.specifications.filter(spec => spec.type === 'general').map((spec, idx) => (
                                                     <div
                                                         key={idx}
                                                         className={`flex items-start gap-3 py-2 `}
@@ -846,11 +1014,11 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
 
 
                                 {/* Datos técnicos detallados */}
-                                {item?.specifications && item.specifications.filter(spec => spec.type === 'technical').length > 0 ? (
+                                {currentProduct?.specifications && currentProduct.specifications.filter(spec => spec.type === 'technical').length > 0 ? (
                                     <div className="overflow-hidden w-full">
                                         <h3 className="text-3xl font-bold mb-6 customtext-neutral-dark">Especificaciones técnicas</h3>
                                         <div className="rounded-lg  shadow-sm">
-                                            {item.specifications.filter(spec => spec.type === 'technical').map((spec, index) => (
+                                            {currentProduct.specifications.filter(spec => spec.type === 'technical').map((spec, index) => (
                                                 <div key={index} className={`flex flex-row ${index % 2 === 0 ? "bg-gray-50" : "bg-white"}`}>
                                                     <div className="py-4 px-6 w-1/2 font-bold tracking-wide customtext-neutral-dark text-base">{spec.title}</div>
                                                     <div className="py-4 px-6 w-1/2 customtext-neutral-dark text-base flex items-center justify-between">
@@ -890,8 +1058,8 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                             <div>
                                 <h2 className="text-3xl font-bold mb-6 customtext-neutral-dark">Archivos descargables</h2>
                                 <div className="space-y-4">
-                                    {item?.downloadables && item.downloadables.length > 0 ? (
-                                        item.downloadables.map((downloadable, index) => (
+                                    {currentProduct?.downloadables && currentProduct.downloadables.length > 0 ? (
+                                        currentProduct.downloadables.map((downloadable, index) => (
                                             <div key={downloadable?.id}>
                                                 <div className="flex items-center justify-between py-4 transition-colors">
                                                     <div className="flex items-center gap-4">

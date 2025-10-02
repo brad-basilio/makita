@@ -100,6 +100,9 @@ Route::post('/unified-import', [UnifiedImportController::class, 'import']);
 Route::post('/unified-import/preview', [UnifiedImportController::class, 'preview']);
 Route::get('/unified-import/field-mappings', [UnifiedImportController::class, 'getFieldMappings']);
 
+// Product Variants
+Route::get('/items/variants', [ItemController::class, 'getProductVariants']);
+
 Route::post('/complaints', [ComplaintController::class, 'saveComplaint']);
 Route::post('/job-applications', [JobApplicationController::class, 'save']);
 

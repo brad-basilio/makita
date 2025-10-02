@@ -292,6 +292,10 @@ class UnifiedItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsO
             }
 
             // 9️⃣ Crear el producto
+            Log::info("======== PROCESANDO IMÁGENES PARA SKU: {$sku} ========");
+            $mainImage = $this->getMainImage($sku);
+            Log::info("Imagen principal detectada: " . ($mainImage ?? 'NINGUNA'));
+            
             $itemData = [
                 'sku' => $sku,
                 'name' => $nombreProducto,
@@ -306,7 +310,7 @@ class UnifiedItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsO
                 'brand_id' => $brand ? $brand->id : null,
                 'platform_id' => $platform ? $platform->id : null,
                 'family_id' => $family ? $family->id : null,
-                'image' => $this->getMainImage($sku),
+                'image' => $mainImage,
                 'slug' => $slug,
                 'stock' => $this->getNumericValue($row, 'stock', 10),
             ];
@@ -567,24 +571,43 @@ class UnifiedItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsO
      */
     private function getMainImage(string $sku): ?string
     {
+        Log::info("[getMainImage] Iniciando búsqueda para SKU: {$sku}");
         $extensions = ['png', 'jpg', 'jpeg', 'webp'];
         
         // Buscar imagen principal (sku.ext)
+        Log::info("[getMainImage] Buscando formato: {$sku}.ext");
         foreach ($extensions as $ext) {
             $path = "images/item/{$sku}.{$ext}";
+            Log::info("[getMainImage] Verificando: {$path}");
             if (Storage::exists($path)) {
+                Log::info("✓ Imagen principal encontrada: {$sku}.{$ext}");
                 return "{$sku}.{$ext}";
             }
         }
 
-        // Buscar imagen con índice (sku_1.ext)
+        // Buscar imagen con índice de un dígito (sku_1.ext)
+        Log::info("[getMainImage] Buscando formato: {$sku}_1.ext");
         foreach ($extensions as $ext) {
             $path = "images/item/{$sku}_1.{$ext}";
+            Log::info("[getMainImage] Verificando: {$path}");
             if (Storage::exists($path)) {
+                Log::info("✓ Imagen principal encontrada: {$sku}_1.{$ext}");
                 return "{$sku}_1.{$ext}";
             }
         }
         
+        // Buscar imagen con índice de dos dígitos (sku_01.ext)
+        Log::info("[getMainImage] Buscando formato: {$sku}_01.ext");
+        foreach ($extensions as $ext) {
+            $path = "images/item/{$sku}_01.{$ext}";
+            Log::info("[getMainImage] Verificando: {$path}");
+            if (Storage::exists($path)) {
+                Log::info("✓ Imagen principal encontrada: {$sku}_01.{$ext}");
+                return "{$sku}_01.{$ext}";
+            }
+        }
+        
+        Log::warning("⚠️ No se encontró imagen principal para SKU: {$sku}");
         return null;
     }
 
@@ -593,30 +616,79 @@ class UnifiedItemImport implements ToModel, WithHeadingRow, SkipsOnError, SkipsO
      */
     private function saveGalleryImages(Item $item, string $sku): void
     {
+        Log::info("[saveGalleryImages] Iniciando búsqueda de galería para SKU: {$sku} (Item ID: {$item->id})");
         $extensions = ['png', 'jpg', 'jpeg', 'webp'];
-        $index = 2; // Empezar desde _2 ya que _1 puede ser la imagen principal
-
+        $galleryCount = 0;
+        
+        // Buscar imágenes con formato _2, _3, _4... (un dígito)
+        $index = 2;
         while (true) {
             $found = false;
+            Log::info("[saveGalleryImages] Buscando índice {$index} (un dígito)");
             
             foreach ($extensions as $ext) {
                 $filename = "{$sku}_{$index}.{$ext}";
                 $path = "images/item/{$filename}";
+                Log::info("[saveGalleryImages] Verificando: {$path}");
                 
                 if (Storage::exists($path)) {
                     ItemImage::create([
                         'item_id' => $item->id,
                         'url' => $filename,
                     ]);
+                    Log::info("✓ Imagen de galería agregada: {$filename}");
+                    $galleryCount++;
                     $found = true;
                     break;
+                } else {
+                    Log::info("[saveGalleryImages] No existe: {$path}");
                 }
             }
 
             if (!$found) {
+                Log::info("[saveGalleryImages] No se encontraron más imágenes en índice {$index} (un dígito)");
                 break;
             }
             $index++;
+        }
+        
+        // Buscar imágenes con formato _02, _03, _04... (dos dígitos)
+        $index = 2;
+        while (true) {
+            $found = false;
+            $indexStr = str_pad($index, 2, '0', STR_PAD_LEFT);
+            Log::info("[saveGalleryImages] Buscando índice {$indexStr} (dos dígitos)");
+            
+            foreach ($extensions as $ext) {
+                $filename = "{$sku}_{$indexStr}.{$ext}";
+                $path = "images/item/{$filename}";
+                Log::info("[saveGalleryImages] Verificando: {$path}");
+                
+                if (Storage::exists($path)) {
+                    ItemImage::create([
+                        'item_id' => $item->id,
+                        'url' => $filename,
+                    ]);
+                    Log::info("✓ Imagen de galería agregada: {$filename}");
+                    $galleryCount++;
+                    $found = true;
+                    break;
+                } else {
+                    Log::info("[saveGalleryImages] No existe: {$path}");
+                }
+            }
+
+            if (!$found) {
+                Log::info("[saveGalleryImages] No se encontraron más imágenes en índice {$indexStr} (dos dígitos)");
+                break;
+            }
+            $index++;
+        }
+        
+        if ($galleryCount > 0) {
+            Log::info("✓ Total imágenes de galería para SKU {$sku}: {$galleryCount}");
+        } else {
+            Log::info("ℹ️ No se encontraron imágenes de galería para SKU: {$sku}");
         }
     }
 

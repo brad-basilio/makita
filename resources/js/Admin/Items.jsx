@@ -889,7 +889,6 @@ const Items = ({ categories, brands, collections, attributes }) => {
                                         label="Familia"
                                         searchAPI="/api/admin/families/paginate"
                                         searchBy="name"
-                                        filter={["category_id", "=", selectedCategory]}
                                         dropdownParent="#principal-container"
                                         onChange={(e) => setSelectedFamily(e.target.value)}
                                     />
@@ -900,7 +899,6 @@ const Items = ({ categories, brands, collections, attributes }) => {
                                         label="Plataforma"
                                         searchAPI="/api/admin/platforms/paginate"
                                         searchBy="name"
-                                        filter={["family_id", "=", selectedFamily]}
                                         dropdownParent="#principal-container"
                                     />
                                 </div>

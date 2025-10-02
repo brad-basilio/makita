@@ -24,6 +24,21 @@ const SelectAPIFormGroup = ({ id, col, label, eRef, required = false, dropdownPa
         type: "POST",
         quietMillis: 50,
         data: function ({ term, page }) {
+          // Construir el filtro base de búsqueda
+          const baseFilter = [searchBy, "contains", term || ''];
+          
+          // Solo agregar el filtro adicional si existe Y tiene un valor válido
+          let finalFilter = baseFilter;
+          
+          if (filter && Array.isArray(filter) && filter.length >= 3) {
+            const filterValue = filter[2]; // El tercer elemento es el valor del filtro
+            
+            // Solo aplicar el filtro si el valor no es null, undefined o vacío
+            if (filterValue !== null && filterValue !== undefined && filterValue !== '' && filterValue !== 'null') {
+              finalFilter = [baseFilter, 'and', filter];
+            }
+          }
+          
           return JSON.stringify({
             sort: [
               {
@@ -33,17 +48,7 @@ const SelectAPIFormGroup = ({ id, col, label, eRef, required = false, dropdownPa
             ],
             skip: ((page ?? 1) - 1) * 10,
             take: 10,
-            filter: filter ? [
-              [
-                searchBy,
-                "contains",
-                term || ''
-              ], 'and', filter
-            ] : [
-              searchBy,
-              "contains",
-              term || ''
-            ]
+            filter: finalFilter
           })
         },
         processResults: function (data, { page }) {

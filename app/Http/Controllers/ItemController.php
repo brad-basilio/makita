@@ -37,16 +37,18 @@ class ItemController extends BasicController
 
             $limite = $request->limit ?? 0;
             // Obtener el producto principal por slug
-            $product = Item::with(['category', 'brand', 'images', 'specifications'])
+            $product = Item::with(['category', 'brand', 'images', 'specifications', 'attributes'])
                 ->where('slug', $request->slug)
                 ->firstOrFail();
 
             if ($limite > 0) {
                 $product->load(['variants' => function ($query) use ($limite) {
-                    $query->limit($limite);
+                    $query->with('attributes')->limit($limite);
                 }]);
             }else{
-                $product->load(['variants']);
+                $product->load(['variants' => function ($query) {
+                    $query->with('attributes');
+                }]);
             }
             // Obtener las variantes (productos con el mismo nombre pero diferente ID)
             // $variants = Item::where('name', $product->name)
@@ -62,6 +64,93 @@ class ItemController extends BasicController
             dd($th->getMessage());
             $response->status = 404;
             $response->message = 'Producto no encontrado';
+        }
+
+        return response($response->toArray(), $response->status);
+    }
+
+    /**
+     * Obtener variantes de un producto con sus atributos completos
+     */
+    public function getProductVariants(Request $request)
+    {
+        $response = new Response();
+
+        try {
+            // Obtener el producto actual
+            $product = Item::with(['attributes'])
+                ->where('id', $request->product_id)
+                ->orWhere('slug', $request->slug)
+                ->firstOrFail();
+
+            // Buscar todas las variantes (productos con el mismo nombre)
+            $variants = Item::with([
+                'attributes',
+                'images',
+                'specifications',
+                'symbologies',
+                'technologies',
+                'downloadables'
+            ])
+                ->where('name', $product->name)
+                ->where('visible', true)
+                ->where('status', true)
+                ->get();
+
+            // Organizar atributos únicos para el selector
+            $attributeOptions = [];
+            foreach ($variants as $variant) {
+                foreach ($variant->attributes as $attribute) {
+                    $attrName = $attribute->name;
+                    if (!isset($attributeOptions[$attrName])) {
+                        $attributeOptions[$attrName] = [
+                            'attribute_id' => $attribute->id,
+                            'attribute_name' => $attrName,
+                            'values' => []
+                        ];
+                    }
+                    
+                    // Agregar valor único
+                    $valueExists = collect($attributeOptions[$attrName]['values'])
+                        ->contains(function($v) use ($attribute) {
+                            return $v['value'] === $attribute->pivot->value;
+                        });
+                    
+                    if (!$valueExists) {
+                        $attributeOptions[$attrName]['values'][] = [
+                            'value' => $attribute->pivot->value,
+                            'product_ids' => []
+                        ];
+                    }
+                }
+            }
+
+            // Asociar productos a cada combinación de atributos
+            foreach ($variants as $variant) {
+                foreach ($variant->attributes as $attribute) {
+                    $attrName = $attribute->name;
+                    $valueIndex = collect($attributeOptions[$attrName]['values'])
+                        ->search(function($v) use ($attribute) {
+                            return $v['value'] === $attribute->pivot->value;
+                        });
+                    
+                    if ($valueIndex !== false) {
+                        $attributeOptions[$attrName]['values'][$valueIndex]['product_ids'][] = $variant->id;
+                    }
+                }
+            }
+
+            $response->status = 200;
+            $response->message = 'Variantes obtenidas correctamente';
+            $response->data = [
+                'current_product' => $product,
+                'variants' => $variants,
+                'attribute_options' => array_values($attributeOptions),
+                'total_variants' => $variants->count()
+            ];
+        } catch (\Throwable $th) {
+            $response->status = 404;
+            $response->message = 'Error al obtener variantes: ' . $th->getMessage();
         }
 
         return response($response->toArray(), $response->status);
