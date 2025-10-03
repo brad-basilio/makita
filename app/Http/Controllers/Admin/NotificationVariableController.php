@@ -25,6 +25,8 @@ class NotificationVariableController extends Controller
             'password_reset'        => \App\Notifications\PasswordResetLinkNotification::class,
             'subscription'          => \App\Notifications\SubscriptionNotification::class,
             'verify_account'        => \App\Notifications\VerifyAccountNotification::class,
+            'job_application_applicant' => \App\Notifications\JobApplicationApplicantNotification::class,
+            'job_application_admin' => \App\Notifications\JobApplicationAdminNotification::class,
         ];
         if (!isset($map[$type])) {
             return response()->json(['error' => 'Tipo de notificación no válido'], 404);

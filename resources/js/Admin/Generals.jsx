@@ -21,8 +21,8 @@ const Generals = ({ generals }) => {
     generals.find((x) => x.correlative == "location")?.description ?? "0,0";
 
   // First add these to your formData state
-  // Filtrar solo los generales que son plantillas de email (excluyendo correo de soporte)
-  const emailTemplates = generals.filter(g => g.correlative.endsWith('_email') && g.correlative !== 'support_email');
+  // Filtrar solo los generales que son plantillas de email (excluyendo correo de soporte y corporativo)
+  const emailTemplates = generals.filter(g => g.correlative.endsWith('_email') && g.correlative !== 'support_email' && g.correlative !== 'corporate_email');
   const [showPreview, setShowPreview] = useState(false);
   const [selectedEmailCorrelative, setSelectedEmailCorrelative] = useState(emailTemplates[0]?.correlative || "");
   const [templateVariables, setTemplateVariables] = useState({});
@@ -41,6 +41,8 @@ const Generals = ({ generals }) => {
       reset_password_email: "password_reset",
       subscription_email: "subscription",
       verify_account_email: "verify_account",
+      job_application_applicant_email: "job_application_applicant",
+      job_application_admin_email: "job_application_admin",
     };
     const type = correlativeToType[selectedEmailCorrelative];
     if (!type) {
@@ -88,6 +90,9 @@ const Generals = ({ generals }) => {
         ?.description ?? "",
     supportEmail:
       generals.find((x) => x.correlative == "support_email")
+        ?.description ?? "",
+    corporateEmail:
+      generals.find((x) => x.correlative == "corporate_email")
         ?.description ?? "",
     privacyPolicy:
       generals.find((x) => x.correlative == "privacy_policy")
@@ -234,6 +239,11 @@ const Generals = ({ generals }) => {
           correlative: "support_email",
           name: "Correo de soporte",
           description: formData.supportEmail,
+        },
+        {
+          correlative: "corporate_email",
+          name: "Correo Corporativo",
+          description: formData.corporateEmail,
         },
         {
           correlative: "privacy_policy",
@@ -751,6 +761,28 @@ const Generals = ({ generals }) => {
                   setFormData({
                     ...formData,
                     supportEmail: e.target.value,
+                  })
+                }
+                required
+              />
+            </div>
+            <div className="mb-2">
+              <label
+                htmlFor="corporateEmail"
+                className="form-label"
+              >
+                Correo Corporativo
+                <small className="d-block text-muted">Recibirá notificaciones de postulaciones laborales</small>
+              </label>
+              <input
+                type="email"
+                className="form-control"
+                id="corporateEmail"
+                value={formData.corporateEmail}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    corporateEmail: e.target.value,
                   })
                 }
                 required
