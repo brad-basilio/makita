@@ -367,13 +367,11 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
         mensaje += `📦 *Producto:* ${currentProduct?.name}\n`;
         mensaje += `🔖 *SKU:* ${currentProduct?.sku || currentProduct?.code}\n`;
         
-        // Agregar atributos si existen
-        if (currentProduct?.attributes && currentProduct.attributes.length > 0) {
-            mensaje += `\n*Características:*\n`;
-            currentProduct.attributes.forEach(attr => {
-                if (attr.pivot?.value) {
-                    mensaje += `• ${attr.name}: ${attr.pivot.value}\n`;
-                }
+        // Agregar atributos seleccionados por el cliente
+        if (selectedAttributes && Object.keys(selectedAttributes).length > 0) {
+            mensaje += `\n🏷️ *Atributos seleccionados:*\n`;
+            Object.entries(selectedAttributes).forEach(([attrName, attrValue]) => {
+                mensaje += `• ${attrName}: ${attrValue}\n`;
             });
         }
         
