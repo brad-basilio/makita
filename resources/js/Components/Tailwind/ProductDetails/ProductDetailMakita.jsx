@@ -194,26 +194,33 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
     
     // Cambiar a otra variante del producto
     const handleVariantChange = (attributeName, attributeValue) => {
-        const newSelectedAttrs = {
-            ...selectedAttributes,
-            [attributeName]: attributeValue
-        };
+        console.log('🔄 handleVariantChange llamado:', attributeName, '=', attributeValue);
         
-        // Buscar el producto que coincida con la combinación de atributos
+        // Buscar la primera variante que tenga este valor de atributo EXACTO
         const matchingVariant = productVariants.find(variant => {
             if (!variant.attributes || variant.attributes.length === 0) return false;
             
-            // Verificar que todos los atributos seleccionados coincidan
-            return Object.keys(newSelectedAttrs).every(attrName => {
-                const variantAttr = variant.attributes.find(a => a.name === attrName);
-                return variantAttr && variantAttr.pivot.value === newSelectedAttrs[attrName];
-            });
+            // Buscar si esta variante tiene el atributo clickeado con el valor exacto
+            return variant.attributes.some(attr => 
+                attr.name === attributeName && attr.pivot.value === attributeValue
+            );
         });
         
+        console.log('🔄 Variante encontrada:', matchingVariant?.name || 'ninguna');
+        
         if (matchingVariant && matchingVariant.id !== currentProduct.id) {
-            // Cambiar al nuevo producto
+            // Cambiar a la nueva variante y extraer TODOS sus atributos
+            console.log('✅ Cambiando a variante:', matchingVariant.slug);
+            
+            // Extraer todos los atributos de la nueva variante
+            const newAttrs = {};
+            matchingVariant.attributes.forEach(attr => {
+                newAttrs[attr.name] = attr.pivot.value;
+            });
+            
+            // Actualizar todos los estados
+            setSelectedAttributes(newAttrs);
             setCurrentProduct(matchingVariant);
-            setSelectedAttributes(newSelectedAttrs);
             setSelectedImage({
                 url: matchingVariant.image,
                 type: "main"
@@ -221,31 +228,59 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
             
             // Actualizar URL sin recargar la página
             window.history.pushState({}, '', `/producto/${matchingVariant.slug}`);
+            
+            console.log('✅ Nueva selección completa:', newAttrs);
+        } else if (matchingVariant && matchingVariant.id === currentProduct.id) {
+            console.log('ℹ️ Ya estás viendo esta variante');
         } else {
-            setSelectedAttributes(newSelectedAttrs);
+            console.log('⚠️ No se encontró variante con este atributo');
         }
     };
     
     // Obtener atributos únicos para mostrar en el selector
     const getUniqueAttributes = () => {
+        if (productVariants.length === 0) return [];
+        
+        // Paso 1: Obtener solo los atributos que TODAS las variantes tienen (intersección)
+        const allVariantAttributes = productVariants.map(variant => {
+            if (!variant.attributes) return [];
+            return variant.attributes.map(attr => attr.name);
+        });
+        
+        // Encontrar atributos comunes (intersección)
+        const commonAttributes = allVariantAttributes.reduce((common, variantAttrs) => {
+            if (common === null) return new Set(variantAttrs);
+            return new Set(variantAttrs.filter(attr => common.has(attr)));
+        }, null);
+        
+        if (!commonAttributes || commonAttributes.size === 0) return [];
+        
+        // Paso 2: Para cada atributo común, recopilar todos sus valores posibles
         const attributesMap = {};
+        Array.from(commonAttributes).forEach(attrName => {
+            attributesMap[attrName] = new Set();
+        });
         
         productVariants.forEach(variant => {
             if (variant.attributes) {
                 variant.attributes.forEach(attr => {
-                    if (!attributesMap[attr.name]) {
-                        attributesMap[attr.name] = new Set();
+                    if (commonAttributes.has(attr.name)) {
+                        // Agregar el valor único de esta variante (sin parsear comas)
+                        attributesMap[attr.name].add(attr.pivot.value);
                     }
-                    attributesMap[attr.name].add(attr.pivot.value);
                 });
             }
         });
+        
+        console.log('🔍 Atributos comunes encontrados:', Array.from(commonAttributes));
+        console.log('🔍 Valores por atributo:', attributesMap);
         
         return Object.keys(attributesMap).map(attrName => ({
             name: attrName,
             values: Array.from(attributesMap[attrName])
         }));
     };
+    
     const handleViewUpdate = async (item) => {
         try {
             const request = {
@@ -503,8 +538,10 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                                         </label>
                                         <div className="flex gap-2 flex-wrap">
                                             {attribute.values.map((value, vIdx) => {
+                                                // Verificar si este valor está seleccionado (comparación exacta)
                                                 const isSelected = selectedAttributes[attribute.name] === value;
-                                                console.log(`Mobile - Atributo: ${attribute.name}, Valor: ${value}, isSelected: ${isSelected}, selectedAttributes[${attribute.name}]: ${selectedAttributes[attribute.name]}`);
+                                                
+                                                console.log(`📱 Mobile - ${attribute.name}: ${value} | Selected: ${isSelected}`);
                                                 return (
                                                     <button
                                                         key={vIdx}
@@ -512,7 +549,7 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                                                         className={`px-4 py-2 rounded-md border transition-all ${
                                                             isSelected
                                                                 ? 'border-primary bg-primary text-white font-medium'
-                                                                : 'border-gray-300 bg-white text-gray-700 hover:border-primary'
+                                                                : 'border-gray-300 bg-white text-gray-700 hover:border-primary cursor-pointer'
                                                         }`}
                                                     >
                                                         {value}
@@ -968,8 +1005,10 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                                                 </label>
                                                 <div className="flex gap-3 flex-wrap">
                                                     {attribute.values.map((value, vIdx) => {
+                                                        // Verificar si este valor está seleccionado (comparación exacta)
                                                         const isSelected = selectedAttributes[attribute.name] === value;
-                                                        console.log(`Desktop - Atributo: ${attribute.name}, Valor: ${value}, isSelected: ${isSelected}, selectedAttributes[${attribute.name}]: ${selectedAttributes[attribute.name]}`);
+                                                        
+                                                        console.log(`💻 Desktop - ${attribute.name}: ${value} | Selected: ${isSelected}`);
                                                         return (
                                                             <button
                                                                 key={vIdx}
@@ -977,7 +1016,7 @@ const ProductDetailMakita = ({ item, data, setCart, cart, generals, favorites, s
                                                                 className={`px-5 py-3 rounded-lg border-2 transition-all font-medium ${
                                                                     isSelected
                                                                         ? 'border-primary bg-primary text-white shadow-md'
-                                                                        : 'border-gray-300 bg-white text-gray-700 hover:border-primary hover:shadow-sm'
+                                                                        : 'border-gray-300 bg-white text-gray-700 hover:border-primary hover:shadow-sm cursor-pointer'
                                                                 }`}
                                                             >
                                                                 {value}
