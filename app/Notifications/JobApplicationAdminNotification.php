@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use App\Models\General;
+use Illuminate\Support\Facades\Storage;
 
 class JobApplicationAdminNotification extends Notification
 {
@@ -34,7 +35,7 @@ class JobApplicationAdminNotification extends Notification
             'applicant_email' => $this->jobApplication->email,
             'applicant_phone' => $this->jobApplication->phone,
             'application_date' => $this->jobApplication->created_at->format('d/m/Y H:i'),
-            'cv_link' => url('/assets/resources/' . $this->jobApplication->cv_file),
+            'cv_link' => url(Storage::url("images/job_application/" . $this->jobApplication->cv_file)),
         ];
 
         // Reemplazar variables en la plantilla
