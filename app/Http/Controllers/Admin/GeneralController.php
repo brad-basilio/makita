@@ -35,6 +35,7 @@ class GeneralController extends BasicController
                     'description' => $record['description']
                 ]);
             }
+            return 'Configuración general guardada correctamente';
         });
         return response($response->toArray(), $response->status);
     }

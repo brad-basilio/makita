@@ -78,8 +78,10 @@ class BasicRest {
                 );
 
               if(this.is_use_notify){
+                // Si result.data es un string, usar ese mensaje; sino usar result.message
+                const successMessage = typeof result.data === 'string' ? result.data : result.message;
                 toast.success("¡Excelente!", {
-                    description: result.message,
+                    description: successMessage,
                   
                     duration: 3000,
                     position: "bottom-center",

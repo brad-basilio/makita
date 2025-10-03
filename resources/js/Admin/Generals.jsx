@@ -187,8 +187,8 @@ const Generals = ({ generals }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Guardar solo el template seleccionado
-      await generalsRest.save([
+      // Guardar datos generales
+      const result = await generalsRest.save([
         // Guardar solo el template seleccionado
         ...Object.keys(formData.email_templates).map(correlative => ({
           correlative,
@@ -366,10 +366,13 @@ const Generals = ({ generals }) => {
           description: formData.shippingFree,
         },
       ]);
-      // alert('Datos guardados exitosamente');
+      
+      // Si el guardado fue exitoso, el BasicRest ya mostró la notificación
+      if (result) {
+        console.log('✅ Datos guardados correctamente');
+      }
     } catch (error) {
-      console.error("Error al guardar los datos:", error);
-      // alert('Error al guardar los datos');
+      console.error("❌ Error al guardar los datos:", error);
     }
   };
 
