@@ -34,7 +34,7 @@ class JobApplicationAdminNotification extends Notification
             'applicant_name' => $this->jobApplication->name,
             'applicant_email' => $this->jobApplication->email,
             'applicant_phone' => $this->jobApplication->phone,
-            'application_date' => $this->jobApplication->created_at->format('d/m/Y H:i'),
+            'application_date' => $this->jobApplication->created_at->setTimezone(config('app.timezone', 'America/Lima'))->format('d/m/Y H:i'),
             'cv_link' => url(Storage::url("images/job_application/" . $this->jobApplication->cv_file)),
         ];
 
