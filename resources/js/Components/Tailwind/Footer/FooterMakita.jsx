@@ -204,7 +204,7 @@ const FooterMakita = ({ pages, generals, items }) => {
                                     {categories.map((category) => (
                                         <li key={category.id}>
                                             <a
-                                                href={`#${category.slug || category.id}`}
+                                                href={`/catalogo?category=${category.slug || category.id}`}
                                                 className="hover:text-[#27b6cc] transition-colors"
                                             >
                                                 {capitalizeFirst(category.name)}

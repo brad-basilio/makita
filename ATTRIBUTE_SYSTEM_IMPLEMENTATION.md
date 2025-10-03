@@ -1,14 +1,18 @@
-# Sistema de Atributos para Productos - Guía de Implementación
+# Sistema de Atributos y Variantes para Productos - Guía de Implementación
 
 ## 📋 Descripción General
 
-Este documento detalla la implementación completa de un sistema de atributos dinámicos para productos en Laravel + React. El sistema permite:
+Este documento detalla la implementación completa de un sistema de atributos dinámicos y variantes para productos en Laravel + React. El sistema permite:
 
 - ✅ Importar atributos desde Excel (columnas: `atributo`, `valor_atributo`)
 - ✅ Gestionar atributos mediante CRUD en interfaz de administración
-- ✅ Asignar múltiples atributos a cada producto (Color, Talla, Material, etc.)
+- ✅ Asignar múltiples atributos a cada producto (Color, Talla, Voltaje, etc.)
 - ✅ Crear atributos sobre la marcha desde la interfaz
 - ✅ Valores dinámicos por producto para cada atributo
+- ✅ **Sistema de variantes en ProductDetail**: Cambio automático de producto al seleccionar atributos
+- ✅ **Selector inteligente**: Solo muestra atributos comunes entre variantes
+- ✅ **Cambio de URL automático**: Actualiza la URL sin recargar página al cambiar variante
+- ✅ **Mensajes de WhatsApp**: Incluye atributos seleccionados en cotizaciones
 
 ---
 
@@ -929,7 +933,331 @@ npm run dev
 
 ---
 
-## 📝 Notas Importantes
+## 🎯 PASO 10: Sistema de Variantes en ProductDetailMakita.jsx
+
+### Funcionalidad Implementada
+
+El componente `ProductDetailMakita.jsx` ahora incluye un selector de variantes inteligente que:
+
+1. **Muestra solo atributos comunes**: Intersección de atributos entre todas las variantes
+2. **Cambio automático de producto**: Al hacer clic en un valor de atributo, busca y carga la variante correspondiente
+3. **Actualización de URL**: Usa `window.history.pushState` para actualizar la URL sin recargar
+4. **Sincronización de imagen**: Cambia la imagen principal al cambiar de variante
+5. **WhatsApp con atributos**: Los mensajes de cotización incluyen los atributos seleccionados
+
+### Archivo: `resources/js/Components/Tailwind/ProductDetails/ProductDetailMakita.jsx`
+
+```jsx
+// Estados para variantes
+const [productVariants, setProductVariants] = useState([]);
+const [selectedAttributes, setSelectedAttributes] = useState({});
+const [currentProduct, setCurrentProduct] = useState(item);
+
+// Cargar variantes del producto
+const loadProductVariants = async (product) => {
+    try {
+        setLoadingVariants(true);
+        const response = await fetch(`/api/items/variants?product_id=${product.id}`);
+        
+        if (!response.ok) throw new Error('Error cargando variantes');
+        
+        const data = await response.json();
+        console.log('🟢 Variantes cargadas:', data.data);
+        
+        if (data.success && data.data?.variants) {
+            setProductVariants(data.data.variants);
+            
+            // Encontrar la variante actual y establecer sus atributos
+            const currentVariant = data.data.variants.find(v => v.id === product.id);
+            if (currentVariant?.attributes) {
+                const currentAttrs = {};
+                currentVariant.attributes.forEach(attr => {
+                    currentAttrs[attr.name] = attr.pivot.value;
+                });
+                setSelectedAttributes(currentAttrs);
+                console.log('🟢 Atributos seleccionados:', currentAttrs);
+            }
+        }
+    } catch (error) {
+        console.error('❌ Error cargando variantes:', error);
+        setProductVariants([]);
+    } finally {
+        setLoadingVariants(false);
+    }
+};
+
+// Cambiar a otra variante del producto
+const handleVariantChange = (attributeName, attributeValue) => {
+    console.log('🔄 handleVariantChange llamado:', attributeName, '=', attributeValue);
+    
+    // Buscar la primera variante que tenga este valor de atributo
+    const matchingVariant = productVariants.find(variant => {
+        if (!variant.attributes || variant.attributes.length === 0) return false;
+        
+        // Buscar si esta variante tiene el atributo clickeado con el valor clickeado
+        return variant.attributes.some(attr => 
+            attr.name === attributeName && attr.pivot.value === attributeValue
+        );
+    });
+    
+    console.log('🔄 Variante encontrada:', matchingVariant?.name || 'ninguna');
+    
+    if (matchingVariant && matchingVariant.id !== currentProduct.id) {
+        // Cambiar a la nueva variante y extraer TODOS sus atributos
+        console.log('✅ Cambiando a variante:', matchingVariant.slug);
+        
+        // Extraer todos los atributos de la nueva variante
+        const newAttrs = {};
+        matchingVariant.attributes.forEach(attr => {
+            newAttrs[attr.name] = attr.pivot.value;
+        });
+        
+        // Actualizar todos los estados
+        setSelectedAttributes(newAttrs);
+        setCurrentProduct(matchingVariant);
+        setSelectedImage({
+            url: matchingVariant.image,
+            type: "main"
+        });
+        
+        // Actualizar URL sin recargar la página
+        window.history.pushState({}, '', `/producto/${matchingVariant.slug}`);
+        
+        console.log('✅ Nueva selección completa:', newAttrs);
+    } else if (matchingVariant && matchingVariant.id === currentProduct.id) {
+        console.log('ℹ️ Ya estás viendo esta variante');
+    } else {
+        console.log('⚠️ No se encontró variante con este atributo');
+    }
+};
+
+// Obtener atributos únicos para mostrar en el selector (INTERSECCIÓN)
+const getUniqueAttributes = () => {
+    if (productVariants.length === 0) return [];
+    
+    // Obtener solo los atributos que TODAS las variantes tienen (intersección)
+    const allVariantAttributes = productVariants.map(variant => {
+        return variant.attributes?.map(attr => attr.name) || [];
+    });
+    
+    // Encontrar atributos comunes (intersección)
+    const commonAttributes = allVariantAttributes.reduce((common, variantAttrs) => {
+        if (common === null) return new Set(variantAttrs);
+        return new Set(variantAttrs.filter(attr => common.has(attr)));
+    }, null);
+    
+    if (!commonAttributes || commonAttributes.size === 0) return [];
+    
+    // Para cada atributo común, recopilar todos sus valores posibles
+    const attributesMap = {};
+    Array.from(commonAttributes).forEach(attrName => {
+        attributesMap[attrName] = new Set();
+    });
+    
+    productVariants.forEach(variant => {
+        variant.attributes?.forEach(attr => {
+            if (attributesMap[attr.name]) {
+                attributesMap[attr.name].add(attr.pivot.value);
+            }
+        });
+    });
+    
+    return Object.keys(attributesMap).map(attrName => ({
+        name: attrName,
+        values: Array.from(attributesMap[attrName])
+    }));
+};
+
+// Construir mensaje mejorado de WhatsApp con atributos
+const buildWhatsAppMessage = (tipo = 'consulta') => {
+    const productUrl = window.location.href;
+    let mensaje = tipo === 'consulta' 
+        ? `¡Hola! Tengo dudas sobre este producto:\n\n`
+        : `¡Hola! Me gustaría cotizar este producto:\n\n`;
+    
+    mensaje += `📦 *Producto:* ${currentProduct?.name}\n`;
+    mensaje += `🔖 *SKU:* ${currentProduct?.sku || currentProduct?.code}\n`;
+    
+    // Agregar atributos seleccionados
+    if (selectedAttributes && Object.keys(selectedAttributes).length > 0) {
+        mensaje += `\n📋 *Especificaciones seleccionadas:*\n`;
+        Object.entries(selectedAttributes).forEach(([key, value]) => {
+            mensaje += `   • ${key}: ${value}\n`;
+        });
+    }
+    
+    // Agregar link del producto
+    mensaje += `\n🔗 *Ver producto:* ${productUrl}`;
+    
+    return encodeURIComponent(mensaje);
+};
+```
+
+### Render del Selector de Variantes (Mobile):
+
+```jsx
+{productVariants.length > 1 && getUniqueAttributes().length > 0 && (
+    <div className="mb-6">
+        <h3 className="font-bold text-base mb-3">Variantes disponibles</h3>
+        <div className="space-y-4">
+            {getUniqueAttributes().map((attribute, idx) => (
+                <div key={idx}>
+                    <label className="text-sm font-medium text-gray-700 mb-2 block">
+                        {attribute.name}
+                    </label>
+                    <div className="flex gap-2 flex-wrap">
+                        {attribute.values.map((value, vIdx) => {
+                            const isSelected = selectedAttributes[attribute.name] === value;
+                            console.log(`� Mobile render - ${attribute.name}: ${value}, selected:`, isSelected);
+                            
+                            return (
+                                <button
+                                    key={vIdx}
+                                    onClick={() => handleVariantChange(attribute.name, value)}
+                                    className={`px-4 py-2 rounded-md text-sm font-medium transition-all cursor-pointer ${
+                                        isSelected
+                                            ? 'border-2 border-primary bg-primary text-white'
+                                            : 'border border-gray-300 bg-white text-gray-700 hover:border-primary'
+                                    }`}
+                                >
+                                    {value}
+                                </button>
+                            );
+                        })}
+                    </div>
+                </div>
+            ))}
+        </div>
+    </div>
+)}
+```
+
+### Render del Selector de Variantes (Desktop):
+
+```jsx
+{productVariants.length > 1 && getUniqueAttributes().length > 0 && (
+    <div className="mb-6 bg-gray-50 rounded-lg p-6 border border-gray-200">
+        <div className="space-y-5">
+            {getUniqueAttributes().map((attribute, idx) => (
+                <div key={idx}>
+                    <label className="text-md font-semibold text-gray-700 mb-3 block">
+                        {attribute.name}
+                    </label>
+                    <div className="flex gap-3 flex-wrap">
+                        {attribute.values.map((value, vIdx) => {
+                            const isSelected = selectedAttributes[attribute.name] === value;
+                            console.log(`💻 Desktop render - ${attribute.name}: ${value}, selected:`, isSelected);
+                            
+                            return (
+                                <button
+                                    key={vIdx}
+                                    onClick={() => handleVariantChange(attribute.name, value)}
+                                    className={`px-5 py-3 rounded-md text-sm font-medium transition-all cursor-pointer ${
+                                        isSelected
+                                            ? 'border-2 border-primary bg-primary text-white shadow-md'
+                                            : 'border border-gray-300 bg-white text-gray-700 hover:border-primary hover:shadow-sm'
+                                    }`}
+                                >
+                                    {value}
+                                </button>
+                            );
+                        })}
+                    </div>
+                </div>
+            ))}
+        </div>
+    </div>
+)}
+```
+
+### Backend API Endpoint
+
+**Archivo: `routes/api.php`**
+
+```php
+// Endpoint para obtener variantes de un producto
+Route::get('/items/variants', function (Request $request) {
+    $productId = $request->query('product_id');
+    
+    if (!$productId) {
+        return response()->json(['success' => false, 'message' => 'product_id requerido'], 400);
+    }
+    
+    $product = Item::with(['attributes', 'platform', 'family'])
+        ->findOrFail($productId);
+    
+    // Obtener todas las variantes (productos con misma familia y plataforma)
+    $variants = Item::with(['attributes'])
+        ->where('platform_id', $product->platform_id)
+        ->where('family_id', $product->family_id)
+        ->where('visible', true)
+        ->get();
+    
+    return response()->json([
+        'success' => true,
+        'data' => [
+            'product' => $product,
+            'variants' => $variants
+        ]
+    ]);
+});
+```
+
+---
+
+## 🎨 Comportamiento del Sistema de Variantes
+
+### Ejemplo Real:
+
+**Producto Base:** Taladro Makita  
+**Variantes disponibles:**
+- Producto A: Voltaje=40V, Tipo de lijadora=50
+- Producto B: Voltaje=100V, Tipo de lijadora=50
+- Producto C: Voltaje=100V, Tipo de lijadora=40
+- Producto D: Voltaje=100V, Tipo de lijadora=30
+
+**Atributos comunes mostrados:**
+- Voltaje (todos tienen voltaje)
+- Tipo de lijadora (todos tienen tipo de lijadora)
+
+**Flujo de interacción:**
+
+1. Usuario carga página con Producto A (40V, Tipo 50)
+   - ✅ Botón "40V" está seleccionado
+   - ✅ Botón "50" está seleccionado
+
+2. Usuario hace clic en "100V"
+   - 🔍 Sistema busca primera variante con Voltaje=100V
+   - ✅ Encuentra Producto B (100V, Tipo 50)
+   - 🔄 Cambia a Producto B
+   - ✅ Ahora "100V" y "50" están seleccionados
+   - 🖼️ Imagen cambia a la del Producto B
+   - 🔗 URL actualiza a `/producto/taladro-makita-100v-50`
+
+3. Usuario hace clic en "30"
+   - 🔍 Sistema busca variante con Tipo de lijadora=30
+   - ✅ Encuentra Producto D (100V, Tipo 30)
+   - 🔄 Cambia a Producto D
+   - ✅ Ahora "100V" y "30" están seleccionados
+
+4. Usuario hace clic en "Cotizar producto"
+   - 📱 Mensaje de WhatsApp incluye:
+     ```
+     ¡Hola! Me gustaría cotizar este producto:
+     
+     📦 *Producto:* Taladro Makita
+     🔖 *SKU:* M-100V-30
+     
+     📋 *Especificaciones seleccionadas:*
+        • Voltaje: 100V
+        • Tipo de lijadora: 30
+     
+     🔗 *Ver producto:* https://...
+     ```
+
+---
+
+## �📝 Notas Importantes
 
 1. **UUIDs:** El sistema usa UUIDs como primary keys. Si tu proyecto usa integers, ajusta las migraciones.
 
@@ -941,12 +1269,19 @@ npm run dev
 
 5. **Performance:** Si tienes muchos productos, considera eager loading: `Item::with('attributes')->get()`.
 
+6. **Variantes:** Cada producto debe tener **UN SOLO VALOR** por atributo. NO uses valores separados por comas (ej: "S,M,L"). En su lugar, crea 3 productos separados con Talla=S, Talla=M, Talla=L.
+
+7. **Atributos Comunes:** El selector solo muestra atributos que TODAS las variantes tienen en común (intersección). Si una variante tiene "Color" pero otra no, "Color" NO se mostrará.
+
+8. **URL Persistence:** El sistema actualiza la URL pero no maneja el botón "Atrás" del navegador. Considera implementar `popstate` listener si necesitas esa funcionalidad.
+
 ---
 
 ## 📧 Soporte
 
 Para dudas o problemas, contactar al equipo de desarrollo original.
 
-**Versión:** 1.0  
+**Versión:** 2.0  
 **Fecha:** Octubre 2024  
-**Stack:** Laravel 10.x + React 18+ + DevExtreme + Select2
+**Última actualización:** Octubre 2024  
+**Stack:** Laravel 10.x + React 18+ + DevExtreme + Select2 + Framer Motion
