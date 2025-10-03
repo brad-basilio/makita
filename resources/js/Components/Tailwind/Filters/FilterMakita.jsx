@@ -731,9 +731,9 @@ const FilterMakita = ({ items, data, filteredData, cart, setCart }) => {
                                                     onClick={() => toggleSection(specName)}
                                                     className="flex  bg-[#F6F6F6] items-center justify-between w-full  p-2 lg:p-2"
                                                 >
-                                                    <span className="font-medium text-lg">{specName}</span>
+                                                    <span className="font-medium text-start text-lg">{specName}</span>
                                                     <ChevronDown
-                                                        className={`h-5 w-5 transform transition-transform ${sections[specName] ? "" : "-rotate-180"
+                                                        className={`min-h-5 min-w-5 max-h-5 max-w-5 transform transition-transform ${sections[specName] ? "" : "-rotate-180"
                                                             }`}
                                                     />
                                                 </button>

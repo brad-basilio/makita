@@ -138,7 +138,7 @@ const TopBarCopyright = ({ data, generals = [] }) => {
             <div className={`${data?.background_color ? `${data.background_color}` : 'bg-white mx-auto'}`}>
             {data?.policyTerms ? (
                 <div className={`${data?.background_color ? `${data.background_color}` : 'bg-white'} ${data?.color ? `${data.color}` : 'customtext-neutral-dark'} text-sm mx-auto font-medium py-3 customtext-neutral-dark text-center px-primary 2xl:px-0  2xl:max-w-7xl flex flex-col lg:flex-row justify-between items-center font-paragraph`}>
-                    <p className="!text-sm lg:text-base">{copyright?.description || "© 2025 Todos los derechos reservados"}</p>
+                    <p className="!text-sm lg:text-base">{copyright?.description || "© 2025 Todos los derechos reservados"}     <span className="italic ">  Powered by  <a href="https://www.mundoweb.pe" target="_blank" rel="noopener noreferrer">MundoWeb</a></span></p>
                     <ul className="gap-3 mt-2 lg:mt-0 flex flex-col lg:flex-row  text-white">
                         <li>
                             <a
@@ -177,6 +177,7 @@ const TopBarCopyright = ({ data, generals = [] }) => {
             ) : (
                 <div className={`${data?.background_color ? `${data.background_color}` : 'bg-white'} ${data?.color ? `${data.color}` : 'customtext-neutral-dark'} text-sm font-bold py-3 customtext-neutral-dark text-center px-primary flex justify-center items-center font-paragraph`}>
                     <p>{copyright?.description || "© 2025 Todos los derechos reservados"}</p>
+                        <span className="italic ">  Powered by  <a href="https://www.mundoweb.pe" target="_blank" rel="noopener noreferrer">MundoWeb</a></span>
                 </div>
             )}
 
@@ -216,7 +217,7 @@ const TopBarCopyright = ({ data, generals = [] }) => {
                 isOpen={modalOpen === 2}
                 onRequestClose={closeModal}
                 contentLabel="Trabaja con nosotros"
-                className={`absolute p-4 sm:p-8 left-1/2 -translate-x-1/2 sm:left-1/2 sm:top-1/2 top-4 sm:-translate-y-1/2 bg-white shadow-2xl w-[95%] max-w-4xl max-h-[90vh] overflow-y-auto`}
+                className={`absolute p-4 sm:p-8 left-1/2 -translate-x-1/2 sm:left-1/2 sm:top-1/2 top-4 sm:-translate-y-1/2 bg-white shadow-2xl w-[95%] max-w-4xl max-h-[95vh] overflow-y-auto`}
                 overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-50"
             >
                 {/* Botón cerrar fijo - no se mueve con el scroll */}

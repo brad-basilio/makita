@@ -9,7 +9,7 @@ const Footer = () => {
                 <div className="row">
                     <div className="col-md-6">
                         {fullYear} &copy; {Global.APP_NAME} | Desarrollado por{" "}
-                        <a href="#">Manuel Gamboa</a> | Powered by{" "}
+                      {" "}
                         <a href="//mundoweb.pe" target="_blank">
                             Mundo Web
                         </a>
