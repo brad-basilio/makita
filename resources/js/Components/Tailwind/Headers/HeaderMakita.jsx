@@ -919,14 +919,14 @@ const HeaderMakita = ({
                       </button>
                     )}
                   </div>
-                  <div className="flex flex-wrap items-center gap-4 md:gap-6">
+                  <div className="flex  items-center gap-4 md:gap-6 max-w-2xl overflow-x-auto custom-scrollbar py-2">
                     {uniqueApplications.map((application, index, array) => (
                       <React.Fragment key={application.id || application.name}>
                         <motion.button
                           onClick={() => {
                             setSelectedApplication(selectedApplication?.id === application.id ? null : application);
                           }}
-                          className={`transition-all duration-300 text-sm font-medium uppercase tracking-wide px-3 py-2 hover:scale-105 ${
+                          className={`transition-all duration-300 text-sm font-medium uppercase tracking-wide px-4 py-2 rounded-md whitespace-nowrap flex-shrink-0 ${
                             selectedApplication?.id === application.id 
                               ? 'bg-[#00B5CE] text-white shadow-lg' 
                               : 'text-white hover:text-[#00B5CE] hover:bg-white/10'
@@ -941,7 +941,7 @@ const HeaderMakita = ({
                         </motion.button>
                         {index < array.length - 1 && (
                           <motion.span 
-                            className="text-white hidden md:inline"
+                            className="text-white hidden md:inline flex-shrink-0"
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ delay: 0.2 + (index * 0.05), duration: 0.2 }}
