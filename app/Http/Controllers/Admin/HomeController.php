@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\BasicController;
-use App\Models\Benefit;
 use App\Models\Item;
-use App\Models\Sale;
-use App\Models\SaleStatus;
+use App\Models\ProductAnalytic;
+use App\Models\UserSession;
+use App\Models\Subscription;
+use App\Models\JobApplication;
+use App\Models\Category;
+use App\Models\Post;
 use Carbon\Carbon;
-use Culqi\Culqi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -19,91 +21,193 @@ class HomeController extends BasicController
 
     public function setReactViewProperties(Request $request)
     {
-        
         $today = Carbon::today();
+        $startOfWeek = Carbon::now()->startOfWeek();
         $startOfMonth = Carbon::now()->startOfMonth();
         $startOfYear = Carbon::now()->startOfYear();
 
-        // Total productos activos (visible = 1, status activo)
+        // ===== ESTADÍSTICAS GENERALES =====
         $totalProducts = Item::where('visible', true)->where('status', 1)->count();
-
-        // Total stock disponible
         $totalStock = Item::where('visible', true)->where('status', 1)->sum('stock');
+        $totalCategories = Category::where('status', 1)->count();
+        $totalPosts = Post::where('status', 1)->count();
 
-        // Total ventas y monto generado hoy, mes, año
-        $salesToday = Sale::whereDate('created_at', $today)->count();
-        $salesMonth = Sale::whereBetween('created_at', [$startOfMonth, Carbon::now()])->count();
-        $salesYear = Sale::whereBetween('created_at', [$startOfYear, Carbon::now()])->count();
+        // ===== TRACKING Y ANALYTICS =====
+        // Vistas de productos hoy, semana, mes
+        $productViewsToday = ProductAnalytic::whereDate('created_at', $today)
+            ->where('event_type', 'view')
+            ->count();
+        
+        $productViewsWeek = ProductAnalytic::whereBetween('created_at', [$startOfWeek, Carbon::now()])
+            ->where('event_type', 'view')
+            ->count();
+        
+        $productViewsMonth = ProductAnalytic::whereBetween('created_at', [$startOfMonth, Carbon::now()])
+            ->where('event_type', 'view')
+            ->count();
 
-        $incomeToday = Sale::whereDate('created_at', $today)->sum('amount');
-        $incomeMonth = Sale::whereBetween('created_at', [$startOfMonth, Carbon::now()])->sum('amount');
-        $incomeYear = Sale::whereBetween('created_at', [$startOfYear, Carbon::now()])->sum('amount');
+        // Sesiones únicas hoy, semana, mes
+        $uniqueSessionsToday = UserSession::whereDate('created_at', $today)
+            ->distinct('session_id')
+            ->count('session_id');
+        
+        $uniqueSessionsWeek = UserSession::whereBetween('created_at', [$startOfWeek, Carbon::now()])
+            ->distinct('session_id')
+            ->count('session_id');
+        
+        $uniqueSessionsMonth = UserSession::whereBetween('created_at', [$startOfMonth, Carbon::now()])
+            ->distinct('session_id')
+            ->count('session_id');
 
-        // Pedidos por estado
-        $statuses = SaleStatus::all();
-        $ordersByStatus = [];
-        foreach ($statuses as $status) {
-            $count = Sale::where('status_id', $status->id)->count();
-            $ordersByStatus[] = [
-                'name' => $status->name,
-                'color' => $status->color,
-                'count' => $count
-            ];
-        }
+        // ===== SUSCRIPCIONES Y POSTULACIONES =====
+        $subscriptionsToday = Subscription::whereDate('created_at', $today)->count();
+        $subscriptionsMonth = Subscription::whereBetween('created_at', [$startOfMonth, Carbon::now()])->count();
+        $subscriptionsTotal = Subscription::count();
 
-        // Productos más vendidos (top 5)
-        $topProducts = DB::table('sale_details')
-            ->select('item_id', DB::raw('SUM(quantity) as total_quantity'))
+        $jobApplicationsToday = JobApplication::whereDate('created_at', $today)->count();
+        // Mes incluye desde inicio del mes hasta ahora (incluyendo hoy)
+        $jobApplicationsMonth = JobApplication::whereYear('created_at', Carbon::now()->year)
+            ->whereMonth('created_at', Carbon::now()->month)
+            ->count();
+        $jobApplicationsTotal = JobApplication::count();
+
+        // ===== PRODUCTOS MÁS VISITADOS (Top 10) =====
+        $mostViewedProducts = ProductAnalytic::select('item_id', DB::raw('COUNT(*) as views'))
+            ->where('event_type', 'view')
+            ->whereBetween('created_at', [$startOfMonth, Carbon::now()])
             ->groupBy('item_id')
-            ->orderByDesc('total_quantity')
-            ->limit(5)
+            ->orderByDesc('views')
+            ->limit(10)
             ->get()
             ->map(function($row) {
                 $item = Item::find($row->item_id);
                 return [
-                    'name' => $item ? $item->name : 'Desconocido',
-                    'quantity' => $row->total_quantity,
+                    'id' => $row->item_id,
+                    'name' => $item ? $item->name : 'Producto eliminado',
+                    'views' => $row->views,
                     'image' => $item ? $item->image : null,
+                    'sku' => $item ? $item->sku : null,
                 ];
             });
 
-        // Nuevos productos destacados (is_new o featured)
-        $newFeatured = Item::where('visible', true)
-            ->where(function ($q) {
-                $q->where('is_new', true)
-                  ->orWhere('featured', true);
-            })
+        // ===== ESTADÍSTICAS POR DISPOSITIVO =====
+        $deviceStats = UserSession::select('device_type', DB::raw('COUNT(DISTINCT session_id) as sessions'))
+            ->whereBetween('created_at', [$startOfMonth, Carbon::now()])
+            ->groupBy('device_type')
+            ->get()
+            ->map(function($row) {
+                return [
+                    'device' => $row->device_type ?: 'Desconocido',
+                    'sessions' => $row->sessions,
+                ];
+            });
+
+        // ===== ESTADÍSTICAS POR NAVEGADOR =====
+        $browserStats = UserSession::select('browser', DB::raw('COUNT(DISTINCT session_id) as sessions'))
+            ->whereBetween('created_at', [$startOfMonth, Carbon::now()])
+            ->whereNotNull('browser')
+            ->groupBy('browser')
+            ->orderByDesc('sessions')
             ->limit(5)
-            ->get(['id', 'name', 'image', 'price']);
+            ->get();
 
-        // Ventas por dispositivo (simulación / ejemplo)
-        // Asumimos que tienes columna 'device' en tabla sales con valores: desktop, mobile, tablet, other
-      /*  $salesByDevice = Sale::select('device', DB::raw('COUNT(*) as count'), DB::raw('SUM(amount) as total'))
-            ->groupBy('device')
-            ->get();*/
+        // ===== ESTADÍSTICAS POR SISTEMA OPERATIVO =====
+        $osStats = UserSession::select('os', DB::raw('COUNT(DISTINCT session_id) as sessions'))
+            ->whereBetween('created_at', [$startOfMonth, Carbon::now()])
+            ->whereNotNull('os')
+            ->groupBy('os')
+            ->orderByDesc('sessions')
+            ->limit(5)
+            ->get();
 
-        // Ventas por ubicación (departamento, provincia, distrito)
-        $salesByLocation = Sale::select('department', 'province', 'district', DB::raw('COUNT(*) as count'), DB::raw('SUM(amount) as total'))
-            ->groupBy('department', 'province', 'district')
-            ->orderByDesc('count')
+        // ===== ESTADÍSTICAS POR UBICACIÓN (Solo País) =====
+        $locationStats = UserSession::select('country', DB::raw('COUNT(DISTINCT session_id) as sessions'))
+            ->whereBetween('created_at', [$startOfMonth, Carbon::now()])
+            ->whereNotNull('country')
+            ->groupBy('country')
+            ->orderByDesc('sessions')
             ->limit(10)
             ->get();
-            $latestTransactions = Sale::latest()->take(5)->get();
+
+        // ===== PRODUCTOS RECIENTES (Últimos 5 agregados) =====
+        $recentProducts = Item::where('visible', true)
+            ->where('status', 1)
+            ->orderBy('created_at', 'desc')
+            ->limit(5)
+            ->get(['id', 'name', 'image', 'sku', 'created_at']);
+
+        // ===== PRODUCTOS DESTACADOS (Featured) =====
+        $featuredProducts = Item::where('visible', true)
+            ->where('status', 1)
+            ->where('recommended', true)
+            ->limit(5)
+            ->get(['id', 'name', 'image', 'sku']);
+
+        // ===== TENDENCIAS DE VISUALIZACIONES (Últimos 7 días) =====
+        $viewsTrend = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $date = Carbon::now()->subDays($i);
+            $views = ProductAnalytic::whereDate('created_at', $date)
+                ->where('event_type', 'view')
+                ->count();
+            
+            $viewsTrend[] = [
+                'date' => $date->format('d/m'),
+                'views' => $views,
+            ];
+        }
+
+        // ===== POSTS RECIENTES =====
+        $recentPosts = Post::where('status', 1)
+            ->orderBy('created_at', 'desc')
+            ->limit(5)
+            ->get(['id', 'name', 'image', 'created_at']);
+
         return [
+            // Estadísticas generales
             'totalProducts' => $totalProducts,
             'totalStock' => $totalStock,
-            'salesToday' => $salesToday,
-            'salesMonth' => $salesMonth,
-            'salesYear' => $salesYear,
-            'incomeToday' => $incomeToday,
-            'incomeMonth' => $incomeMonth,
-            'incomeYear' => $incomeYear,
-            'ordersByStatus' => $ordersByStatus,
-            'topProducts' => $topProducts,
-            'newFeatured' => $newFeatured,
-            'latestTransactions' => $latestTransactions,
-          //  'salesByDevice' => $salesByDevice,
-            'salesByLocation' => $salesByLocation,
+            'totalCategories' => $totalCategories,
+            'totalPosts' => $totalPosts,
+            
+            // Vistas de productos
+            'productViewsToday' => $productViewsToday,
+            'productViewsWeek' => $productViewsWeek,
+            'productViewsMonth' => $productViewsMonth,
+            
+            // Sesiones únicas
+            'uniqueSessionsToday' => $uniqueSessionsToday,
+            'uniqueSessionsWeek' => $uniqueSessionsWeek,
+            'uniqueSessionsMonth' => $uniqueSessionsMonth,
+            
+            // Suscripciones
+            'subscriptionsToday' => $subscriptionsToday,
+            'subscriptionsMonth' => $subscriptionsMonth,
+            'subscriptionsTotal' => $subscriptionsTotal,
+            
+            // Postulaciones laborales
+            'jobApplicationsToday' => $jobApplicationsToday,
+            'jobApplicationsMonth' => $jobApplicationsMonth,
+            'jobApplicationsTotal' => $jobApplicationsTotal,
+            
+            // Productos más visitados
+            'mostViewedProducts' => $mostViewedProducts,
+            
+            // Analytics por dispositivo/navegador/OS
+            'deviceStats' => $deviceStats,
+            'browserStats' => $browserStats,
+            'osStats' => $osStats,
+            'locationStats' => $locationStats,
+            
+            // Productos
+            'recentProducts' => $recentProducts,
+            'featuredProducts' => $featuredProducts,
+            
+            // Tendencias
+            'viewsTrend' => $viewsTrend,
+            
+            // Posts
+            'recentPosts' => $recentPosts,
         ];
     }
 }

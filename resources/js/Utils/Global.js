@@ -5,12 +5,13 @@ class Global {
     static APP_URL = null;
     static APP_DOMAIN = null;
     static APP_ENV = "production";
-    static APP_NAME = "Stech Perú";
+    static APP_NAME = "Makita Perú";
     static APP_CORRELATIVE = null;
     static GMAPS_API_KEY = null;
     static APP_COLOR_PRIMARY = null;
     static CULQI_PUBLIC_KEY = null;
     static CULQI_API = null;
+
 
     static set = (name, value) => {
         Global[name] = value;

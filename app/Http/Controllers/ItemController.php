@@ -15,6 +15,7 @@ use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use SoDe\Extend\Response;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\RedirectResponse;
@@ -460,13 +461,104 @@ class ItemController extends BasicController
     }
     public function updateViews(Request $request)
     {
-        //dump($request->all());
-        $product = Item::findOrFail($request->id); // Asegúrate de que el modelo sea el correcto
-        if (!$product) {
-            return response()->json(['error' => 'Producto no encontrado'], 404);
+        try {
+            $product = Item::findOrFail($request->id);
+            
+            if (!$product) {
+                return response()->json(['error' => 'Producto no encontrado'], 404);
+            }
+            
+            // Incrementar contador de vistas en el producto
+            $product->increment('views');
+            
+            // Registrar en product_analytics para dashboard
+            $sessionId = session()->getId();
+            $userAgent = $request->header('User-Agent');
+            
+            // Detectar tipo de dispositivo básico
+            $deviceType = 'desktop';
+            if (preg_match('/mobile|android|iphone|ipad|tablet/i', $userAgent)) {
+                if (preg_match('/ipad|tablet/i', $userAgent)) {
+                    $deviceType = 'tablet';
+                } else {
+                    $deviceType = 'mobile';
+                }
+            }
+            
+            // Guardar analítica
+            \App\Models\ProductAnalytic::create([
+                'id' => \Illuminate\Support\Str::uuid(),
+                'item_id' => $product->id,
+                'user_id' => auth()->id(),
+                'session_id' => $sessionId,
+                'event_type' => 'view',
+                'device_type' => $deviceType,
+                'source' => $request->header('Referer'),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+            
+            // Crear o actualizar sesión de usuario
+            $this->trackUserSession($request, $sessionId, $deviceType);
+            
+            return response()->json(['success' => true, 'views' => $product->views]);
+        } catch (\Exception $e) {
+            Log::error('Error tracking product view: ' . $e->getMessage());
+            return response()->json(['error' => 'Error al registrar vista'], 500);
         }
-        $product->increment('views'); // Incrementa en 1
-        return response()->json(['success' => true, 'views' => $product->views]);
+    }
+    
+    private function trackUserSession($request, $sessionId, $deviceType)
+    {
+        try {
+            $userAgent = $request->header('User-Agent');
+            
+            // Detectar navegador
+            $browser = 'Desconocido';
+            if (preg_match('/Chrome/i', $userAgent)) $browser = 'Chrome';
+            elseif (preg_match('/Firefox/i', $userAgent)) $browser = 'Firefox';
+            elseif (preg_match('/Safari/i', $userAgent)) $browser = 'Safari';
+            elseif (preg_match('/Edge/i', $userAgent)) $browser = 'Edge';
+            elseif (preg_match('/Opera/i', $userAgent)) $browser = 'Opera';
+            
+            // Detectar SO
+            $os = 'Desconocido';
+            if (preg_match('/Windows/i', $userAgent)) $os = 'Windows';
+            elseif (preg_match('/Mac/i', $userAgent)) $os = 'macOS';
+            elseif (preg_match('/Linux/i', $userAgent)) $os = 'Linux';
+            elseif (preg_match('/Android/i', $userAgent)) $os = 'Android';
+            elseif (preg_match('/iOS|iPhone|iPad/i', $userAgent)) $os = 'iOS';
+            
+            // Buscar sesión existente hoy
+            $session = \App\Models\UserSession::where('session_id', $sessionId)
+                ->whereDate('created_at', today())
+                ->first();
+            
+            if ($session) {
+                // Actualizar sesión existente
+                $session->increment('page_views');
+                $session->touch();
+            } else {
+                // Crear nueva sesión
+                \App\Models\UserSession::create([
+                    'id' => \Illuminate\Support\Str::uuid(),
+                    'user_id' => auth()->id(),
+                    'session_id' => $sessionId,
+                    'device_type' => $deviceType,
+                    'browser' => $browser,
+                    'os' => $os,
+                    'country' => 'PE', // Por defecto Perú
+                    'city' => null,
+                    'ip_address' => $request->ip(),
+                    'referrer' => $request->header('Referer'),
+                    'page_views' => 1,
+                    'duration' => 0,
+                    'converted' => false,
+                ]);
+            }
+        } catch (\Exception $e) {
+            Log::error('Error tracking user session: ' . $e->getMessage());
+        }
     }
 
     public function relationsItems(Request $request): HttpResponse | ResponseFactory

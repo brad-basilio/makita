@@ -22,7 +22,6 @@ class UserSession extends Model
         'country',
         'city',
         'ip_address',
-        'user_agent',
         'referrer',
         'page_views',
         'duration',

@@ -1,0 +1,1 @@
+import"./AboutSimple-Cf8x2fCZ.js";import"./BlogCarousel-CCgb3gK1.js";import"./index-BH53Isel.js";/* empty css               */import{G as o}from"./Global-BD3biX1l.js";import"./index-yBjzXJbu.js";`${o.APP_CORRELATIVE}`;
