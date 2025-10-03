@@ -163,18 +163,23 @@ const Technologies = () => {
                     },
                     {
                         dataField: "image",
-                        caption: "Imagen",
-                        width: "90px",
+                        caption: "Imagen blanca",
+                        width: "110px",
                         allowFiltering: false,
                         cellTemplate: (container, { data }) => {
                             ReactAppend(
                                 container,
-                                <img
+                                   <div   style={{
+                                        padding: "8px",
+                                        borderRadius: "4px",
+                                        backgroundColor: "#1F687F",
+                                    }}>
+ <img
                                     src={`/storage/images/technology/${data.image}`}
                                     style={{
                                         width: "80px",
                                         height: "48px",
-                                        objectFit: "cover",
+                                        objectFit: "contain",
                                         objectPosition: "center",
                                         borderRadius: "4px",
                                     }}
@@ -183,13 +188,16 @@ const Technologies = () => {
                                         "/api/cover/thumbnail/null")
                                     }
                                 />
+
+                                    </div>
+                               
                             );
                         },
                     },
                      {
                         dataField: "banner",
-                        caption: "Imagen de producto",
-                        width: "90px",
+                        caption: "Imagen color",
+                        width: "110px",
                         allowFiltering: false,
                         cellTemplate: (container, { data }) => {
                             ReactAppend(
@@ -199,7 +207,7 @@ const Technologies = () => {
                                     style={{
                                         width: "80px",
                                         height: "48px",
-                                        objectFit: "cover",
+                                        objectFit: "contain",
                                         objectPosition: "center",
                                         borderRadius: "4px",
                                     }}
@@ -211,7 +219,7 @@ const Technologies = () => {
                             );
                         },
                     },
-                    {
+                    /*{
                         dataField: "featured",
                         caption: "Destacado",
                         dataType: "boolean",
@@ -230,7 +238,7 @@ const Technologies = () => {
                                 />
                             );
                         },
-                    },
+                    },*/
                     {
                         dataField: "visible",
                         caption: "Visible",
@@ -285,24 +293,8 @@ const Technologies = () => {
             >
                 <input ref={idRef} type="hidden" />
                 <div className="row" id="platforms-container">
-                    <div className="col-md-6">
-                       
-                        <ImageFormGroup
-                            eRef={imageRef}
-                            label="Imagen de marca"
-                            col="col-12"
-                            aspect={16 / 9}
-                        />
-
-                         <ImageFormGroup
-                            eRef={bannerRef}
-                            label="Imagen de producto"
-                            col="col-12"
-                            aspect={16/9}
-                        />
-
-                    </div>
-                    <div className="col-md-6">
+               
+                    <div className="col-md-12">
                         <InputFormGroup
                             eRef={nameRef}
                             label="Tecnología"
@@ -319,6 +311,23 @@ const Technologies = () => {
                             label="Descripción"
                             rows={4}
                         />
+                    </div>
+                         <div className=" row col-md-12">
+                       
+                        <ImageFormGroup
+                            eRef={imageRef}
+                            label="Imagen blanca"
+                            col="col-md-6"
+                            aspect={1}
+                        />
+
+                         <ImageFormGroup
+                            eRef={bannerRef}
+                            label="Imagen color"
+                            col="col-md-6"
+                            aspect={1}
+                        />
+
                     </div>
                 </div>
             </Modal>

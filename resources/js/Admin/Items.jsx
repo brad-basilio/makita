@@ -509,28 +509,22 @@ const Items = ({ categories, brands, collections, attributes }) => {
                             container.html(
                                 renderToString(
                                     <>
-                                        <b className="d-block fst-italic text-muted">
-                                            {data.collection?.name}
-                                        </b>
+                                       
                                         <b className="d-block">
                                             {data.category?.name}
                                         </b>
                                         <small className="text-muted">
-                                            {data.subcategory?.name}
+                                            {data.platform?.name}
                                         </small>
                                     </>
                                 )
                             );
                         },
                     },
+                  
                     {
-                        dataField: "subcategory.name",
-                        caption: "Subcategoría",
-                        visible: false,
-                    },
-                    {
-                        dataField: "brand.name",
-                        caption: "Marca",
+                        dataField: "family.name",
+                        caption: "Familia",
                         width: "120px",
                     },
                     {
@@ -562,39 +556,7 @@ const Items = ({ categories, brands, collections, attributes }) => {
                             );
                         },
                     },
-                    {
-                        dataField: "final_price",
-                        caption: "Precio",
-                        dataType: "number",
-                        width: "75px",
-                        cellTemplate: (container, { data }) => {
-                            container.html(
-                                renderToString(
-                                    <>
-                                        {data.discount > 0 && (
-                                            <small
-                                                className="d-block text-muted"
-                                                style={{
-                                                    textDecoration:
-                                                        "line-through",
-                                                }}
-                                            >
-                                                S/.{Number2Currency(data.price)}
-                                            </small>
-                                        )}
-                                        <span>
-                                            S/.
-                                            {Number2Currency(
-                                                data.discount > 0
-                                                    ? data.discount
-                                                    : data.price
-                                            )}
-                                        </span>
-                                    </>
-                                )
-                            );
-                        },
-                    },
+                
                     {
                         dataField: "image",
                         caption: "Imagen",
@@ -642,7 +604,7 @@ const Items = ({ categories, brands, collections, attributes }) => {
                             );
                         },
                     },
-                    {
+                 /*   {
                         dataField: "offering",
                         caption: "En oferta",
                         dataType: "boolean",
@@ -663,7 +625,7 @@ const Items = ({ categories, brands, collections, attributes }) => {
                                 />
                             );
                         },
-                    },
+                    },*/
                     {
                         dataField: "recommended",
                         caption: "Recomendado",
@@ -686,7 +648,7 @@ const Items = ({ categories, brands, collections, attributes }) => {
                             );
                         },
                     },
-                    {
+                   /* {
                         dataField: "featured",
                         caption: "Destacado",
                         dataType: "boolean",
@@ -708,7 +670,7 @@ const Items = ({ categories, brands, collections, attributes }) => {
                                 />
                             );
                         },
-                    },
+                    },*/
                     {
                         dataField: "visible",
                         caption: "Visible",

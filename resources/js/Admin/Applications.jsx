@@ -153,7 +153,7 @@ const Applications = () => {
                         caption: "Descripción",
                         width: "50%",
                     },
-                    {
+                   /* {
                         dataField: "image",
                         caption: "Imagen",
                         width: "90px",
@@ -197,7 +197,7 @@ const Applications = () => {
                                 />
                             );
                         },
-                    },
+                    },*/
                     {
                         dataField: "visible",
                         caption: "Visible",
@@ -251,7 +251,7 @@ const Applications = () => {
             >
                 <input ref={idRef} type="hidden" />
                 <div className="row" id="applications-container">
-                    <div className="col-md-6">
+                    <div className="col-md-6" hidden>
                         <ImageFormGroup
                             eRef={bannerRef}
                             label="Banner"
@@ -266,8 +266,8 @@ const Applications = () => {
                         />
 
                     </div>
-                    <div className="col-md-6">
-                        <TextareaFormGroup
+                    <div className="col-md-12">
+                        <InputFormGroup
                             eRef={nameRef}
                             label="Aplicación"
                             rows={2}

@@ -146,14 +146,16 @@ const Families = () => {
                     {
                         dataField: "name",
                         caption: "Familia",
-                        width: "30%",
+                     
+                        height: "48px",
                     },
                     {
                         dataField: "description",
                         caption: "Descripción",
                         width: "50%",
+                        height: "48px",
                     },
-                    {
+                 /*   {
                         dataField: "image",
                         caption: "Imagen",
                         width: "90px",
@@ -217,9 +219,11 @@ const Families = () => {
                                 />
                             );
                         },
-                    },
+                    },*/
                     {
                         caption: "Acciones",
+                        width: "100px",
+                         height: "48px",
                         cellTemplate: (container, { data }) => {
                             container.css("text-overflow", "unset");
                             container.append(
@@ -251,7 +255,7 @@ const Families = () => {
             >
                 <input ref={idRef} type="hidden" />
                 <div className="row" id="families-container">
-                    <div className="col-md-6">
+                    <div className="col-md-6" hidden>
                         <ImageFormGroup
                             eRef={bannerRef}
                             label="Banner"
@@ -266,8 +270,8 @@ const Families = () => {
                         />
 
                     </div>
-                    <div className="col-md-6">
-                        <TextareaFormGroup
+                    <div className="col-md-12">
+                        <InputFormGroup
                             eRef={nameRef}
                             label="Familia"
                             rows={2}

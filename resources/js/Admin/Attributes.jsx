@@ -126,23 +126,18 @@ const Attributes = () => {
                         caption: "ID",
                         visible: false,
                     },
-                    {
-                        dataField: "order",
-                        caption: "Orden",
-                        width: "80px",
-                        dataType: "number",
-                    },
+                  
                     {
                         dataField: "name",
                         caption: "Nombre del Atributo",
-                        width: "25%",
+                       
                     },
                     {
                         dataField: "description",
                         caption: "Descripción",
                         width: "45%",
                     },
-                    {
+                   /* {
                         dataField: "required",
                         caption: "Requerido",
                         dataType: "boolean",
@@ -162,7 +157,7 @@ const Attributes = () => {
                                 />
                             );
                         },
-                    },
+                    },*/
                     {
                         dataField: "visible",
                         caption: "Visible",
@@ -186,7 +181,7 @@ const Attributes = () => {
                     },
                     {
                         caption: "Acciones",
-                        width: "120px",
+                        width: "100px",
                         cellTemplate: (container, { data }) => {
                             container.css("text-overflow", "unset");
                             container.append(

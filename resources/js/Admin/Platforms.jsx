@@ -12,6 +12,7 @@ import Table from "../Components/Adminto/Table";
 import DxButton from "../Components/dx/DxButton";
 import CreateReactScript from "../Utils/CreateReactScript";
 import ReactAppend from "../Utils/ReactAppend";
+import { backIn } from "framer-motion";
 
 const platformsRest = new PlatformsRest();
 
@@ -149,32 +150,55 @@ const Platforms = () => {
                     {
                         dataField: "name",
                         caption: "Plataforma",
-                        width: "30%",
-                    },
-                    {
-                        dataField: "description",
-                        caption: "Subtitulo",
-                        width: "50%",
-                    },
-                     {
-                        dataField: "content",
-                        caption: "Descripción",
-                        width: "50%",
+                      
                     },
                     {
                         dataField: "image",
                         caption: "Imagen",
-                        width: "90px",
+                        width: "110px",
+                        allowFiltering: false,
+                  
+                        cellTemplate: (container, { data }) => {
+                            ReactAppend(
+                                container,
+                              <div   style={{
+                                        padding: "8px",
+                                        borderRadius: "4px",
+                                        backgroundColor: "#1F687F",
+                                    }}>
+                                  <img
+                                    src={`/storage/images/platform/${data.image}`}
+                                    style={{
+                                        width: "80px",
+                                        height: "48px",
+                                        objectFit: "contain",
+                                        objectPosition: "center",
+                                        borderRadius: "4px",
+                                    }}
+                                    onError={(e) =>
+                                    (e.target.src =
+                                        "/api/cover/thumbnail/null")
+                                    }
+                                />
+                              </div>
+                            );
+                        },
+                    },
+                      {
+                        dataField: "banner",
+                        caption: "Imagen de producto",
+                        width: "150px",
+                     
                         allowFiltering: false,
                         cellTemplate: (container, { data }) => {
                             ReactAppend(
                                 container,
                                 <img
-                                    src={`/storage/images/platform/${data.image}`}
+                                    src={`/storage/images/platform/${data.banner}`}
                                     style={{
-                                        width: "80px",
+                                        width: "100%",
                                         height: "48px",
-                                        objectFit: "cover",
+                                        objectFit: "contain",
                                         objectPosition: "center",
                                         borderRadius: "4px",
                                     }}
@@ -186,7 +210,7 @@ const Platforms = () => {
                             );
                         },
                     },
-                    {
+                    /*{
                         dataField: "featured",
                         caption: "Destacado",
                         dataType: "boolean",
@@ -205,11 +229,12 @@ const Platforms = () => {
                                 />
                             );
                         },
-                    },
+                    },*/
                     {
                         dataField: "visible",
                         caption: "Visible",
                         dataType: "boolean",
+                        width: "100px",
                         cellTemplate: (container, { data }) => {
                             $(container).empty();
                             ReactAppend(
@@ -228,6 +253,7 @@ const Platforms = () => {
                     },
                     {
                         caption: "Acciones",
+                            width: "120px",
                         cellTemplate: (container, { data }) => {
                             container.css("text-overflow", "unset");
                             container.append(
@@ -260,30 +286,34 @@ const Platforms = () => {
             >
                 <input ref={idRef} type="hidden" />
                 <div className="row" id="platforms-container">
-                    <div className="col-md-6">
+                       <InputFormGroup
+                            eRef={nameRef}
+                            label="Plataforma"
+                            rows={2}
+                            required
+                            
+                        />
+                    <div className="row col-md-12">
                        
                         <ImageFormGroup
                             eRef={imageRef}
                             label="Imagen de marca"
-                            col="col-12"
-                            aspect={16 / 9}
+                            col="col-md-6"
+                            aspect={1}
+                          
                         />
 
                          <ImageFormGroup
                             eRef={bannerRef}
                             label="Imagen de producto"
-                            col="col-12"
-                            aspect={16/9}
+                            col="col-md-6"
+                            aspect={1}
+                           
                         />
 
                     </div>
-                    <div className="col-md-6">
-                        <InputFormGroup
-                            eRef={nameRef}
-                            label="Plataforma"
-                            rows={2}
-                            required
-                        />
+                    <div className="col-md-6" hidden>
+                     
                         <InputFormGroup
                             eRef={descriptionRef}
                             label="Subtitulo"

@@ -153,7 +153,7 @@ const Categories = () => {
                         caption: "Descripción",
                         width: "50%",
                     },
-                    {
+                    /*{
                         dataField: "image",
                         caption: "Imagen",
                         width: "90px",
@@ -177,8 +177,8 @@ const Categories = () => {
                                 />
                             );
                         },
-                    },
-                    {
+                    },*/
+                 /*   {
                         dataField: "featured",
                         caption: "Destacado",
                         dataType: "boolean",
@@ -197,7 +197,7 @@ const Categories = () => {
                                 />
                             );
                         },
-                    },
+                    },*/
                     {
                         dataField: "visible",
                         caption: "Visible",
@@ -251,7 +251,7 @@ const Categories = () => {
             >
                 <input ref={idRef} type="hidden" />
                 <div className="row" id="categories-container">
-                    <div className="col-md-6">
+                <div className="col-md-6" hidden>
                         <ImageFormGroup
                             eRef={bannerRef}
                             label="Banner"
@@ -265,12 +265,12 @@ const Categories = () => {
                             aspect={16 / 9}
                         />
 
-                    </div>
-                    <div className="col-md-6">
-                        <TextareaFormGroup
+                    </div> 
+                    <div className="col-md-12">
+                        <InputFormGroup
                             eRef={nameRef}
                             label="Categoría"
-                            rows={2}
+                            rows={1}
                             required
                         />
                         <TextareaFormGroup

@@ -1293,7 +1293,7 @@
     ]
   },
   "resources/js/Admin/Applications.jsx": {
-    "file": "assets/Applications-CvtdKIsV.js",
+    "file": "assets/Applications-DfOawq7C.js",
     "name": "Applications",
     "src": "resources/js/Admin/Applications.jsx",
     "isEntry": true,
@@ -1307,6 +1307,7 @@
       "resources/js/Components/Tailwind/Components/ProductCard.jsx",
       "_BasicRest-9qsOCV42.js",
       "_ImageFormGroup-BPR9pDAU.js",
+      "_InputFormGroup-D5I6zpZc.js",
       "_Modal-CIqmjseY.js",
       "_Table-DitbKwtZ.js",
       "_DxButton-DV0H-ZcL.js",
@@ -1333,7 +1334,7 @@
     ]
   },
   "resources/js/Admin/Attributes.jsx": {
-    "file": "assets/Attributes-DJ9CVgFN.js",
+    "file": "assets/Attributes-TZQc5bS5.js",
     "name": "Attributes",
     "src": "resources/js/Admin/Attributes.jsx",
     "isEntry": true,
@@ -1456,7 +1457,7 @@
     ]
   },
   "resources/js/Admin/Categories.jsx": {
-    "file": "assets/Categories-BL8vFFBQ.js",
+    "file": "assets/Categories-DUoPVFXr.js",
     "name": "Categories",
     "src": "resources/js/Admin/Categories.jsx",
     "isEntry": true,
@@ -1470,6 +1471,7 @@
       "resources/js/Components/Tailwind/Components/ProductCard.jsx",
       "_BasicRest-9qsOCV42.js",
       "_ImageFormGroup-BPR9pDAU.js",
+      "_InputFormGroup-D5I6zpZc.js",
       "_Modal-CIqmjseY.js",
       "_Table-DitbKwtZ.js",
       "_DxButton-DV0H-ZcL.js",
@@ -1758,25 +1760,24 @@
     ]
   },
   "resources/js/Admin/Families.jsx": {
-    "file": "assets/Families-Cd-1tsTu.js",
+    "file": "assets/Families-DCqPmaqS.js",
     "name": "Families",
     "src": "resources/js/Admin/Families.jsx",
     "isEntry": true,
     "imports": [
       "resources/js/Components/Tailwind/AboutUs/AboutSimple.jsx",
       "_Base-BHGQuspE.js",
-      "_SwitchFormGroup-CGYpv_4Q.js",
-      "_TextareaFormGroup-DVzYJtLM.js",
       "_index-BH53Isel.js",
+      "_TextareaFormGroup-DVzYJtLM.js",
       "resources/js/Utils/ReactAppend.jsx",
       "resources/js/Components/Tailwind/Components/ProductCard.jsx",
       "_BasicRest-9qsOCV42.js",
       "_ImageFormGroup-BPR9pDAU.js",
+      "_InputFormGroup-D5I6zpZc.js",
       "_Modal-CIqmjseY.js",
       "_Table-DitbKwtZ.js",
       "_DxButton-DV0H-ZcL.js",
       "_CreateReactScript-BoGwggCx.js",
-      "_ReactAppend-D7S498fx.js",
       "_index-yBjzXJbu.js",
       "_Global-ErywZRdd.js",
       "_tippy-react.esm-BWiGTO87.js",
@@ -1980,7 +1981,7 @@
     ]
   },
   "resources/js/Admin/Items.jsx": {
-    "file": "assets/Items-DRom5hzs.js",
+    "file": "assets/Items-D7NxnsDv.js",
     "name": "Items",
     "src": "resources/js/Admin/Items.jsx",
     "isEntry": true,
@@ -2003,7 +2004,6 @@
       "_SelectFormGroup-YqB1XVb8.js",
       "_DxButton-DV0H-ZcL.js",
       "_CreateReactScript-BoGwggCx.js",
-      "_Number2Currency-e57Tgsuk.js",
       "_ReactAppend-D7S498fx.js",
       "_SetSelectValue-UxyCmHse.js",
       "_main-BvVILmTO.js",
@@ -2106,7 +2106,7 @@
     ]
   },
   "resources/js/Admin/Platforms.jsx": {
-    "file": "assets/Platforms-BDE2YNsd.js",
+    "file": "assets/Platforms-DbXdlSA0.js",
     "name": "Platforms",
     "src": "resources/js/Admin/Platforms.jsx",
     "isEntry": true,
@@ -2594,7 +2594,7 @@
     ]
   },
   "resources/js/Admin/Symbologies.jsx": {
-    "file": "assets/Symbologies-BI1Zre00.js",
+    "file": "assets/Symbologies-CvjrhCMn.js",
     "name": "Symbologies",
     "src": "resources/js/Admin/Symbologies.jsx",
     "isEntry": true,
@@ -2608,6 +2608,7 @@
       "resources/js/Components/Tailwind/Components/ProductCard.jsx",
       "_BasicRest-9qsOCV42.js",
       "_ImageFormGroup-BPR9pDAU.js",
+      "_InputFormGroup-D5I6zpZc.js",
       "_Modal-CIqmjseY.js",
       "_Table-DitbKwtZ.js",
       "_DxButton-DV0H-ZcL.js",
@@ -2714,7 +2715,7 @@
     ]
   },
   "resources/js/Admin/Technologies.jsx": {
-    "file": "assets/Technologies-DggzWP9f.js",
+    "file": "assets/Technologies-XKHA3q2q.js",
     "name": "Technologies",
     "src": "resources/js/Admin/Technologies.jsx",
     "isEntry": true,

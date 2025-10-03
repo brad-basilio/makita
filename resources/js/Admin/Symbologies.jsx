@@ -178,7 +178,7 @@ const Symbologies = () => {
                             );
                         },
                     },
-                    {
+                   /* {
                         dataField: "featured",
                         caption: "Destacado",
                         dataType: "boolean",
@@ -197,7 +197,7 @@ const Symbologies = () => {
                                 />
                             );
                         },
-                    },
+                    },*/
                     {
                         dataField: "visible",
                         caption: "Visible",
@@ -251,34 +251,39 @@ const Symbologies = () => {
             >
                 <input ref={idRef} type="hidden" />
                 <div className="row" id="symbologies-container">
-                    <div className="col-md-6">
+                    <div className="col-md-6" hidden>
                         <ImageFormGroup
                             eRef={bannerRef}
                             label="Banner"
                             col="col-12"
                             aspect={3 / 1}
                         />
-                        <ImageFormGroup
-                            eRef={imageRef}
-                            label="Imagen"
-                            col="col-12"
-                            aspect={16 / 9}
-                        />
+                     
 
                     </div>
-                    <div className="col-md-6">
-                        <TextareaFormGroup
+                    <div className="col-md-12">
+                        <InputFormGroup
                             eRef={nameRef}
                             label="Simbología"
                             rows={2}
                             required
                         />
-                        <TextareaFormGroup
+                      
+                    </div>
+                    <div className="row col-md-12">
+                          <TextareaFormGroup
                             eRef={descriptionRef}
                             label="Descripción"
-                            rows={3}
+                            rows={11}
+                            col="col-md-6"
                         />
-                    </div>
+                           <ImageFormGroup
+                            eRef={imageRef}
+                            label="Imagen"
+                            col="col-md-6"
+                            aspect={1}
+                        />
+                        </div>
                 </div>
             </Modal>
         </>
