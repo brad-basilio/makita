@@ -399,7 +399,7 @@ const Generals = ({ generals }) => {
               Información de Contacto
             </button>
           </li>
-          <li className="nav-item" role="presentation">
+          <li className="nav-item" role="presentation" hidden>
             <button
               className={`nav-link ${activeTab === "checkout" ? "active" : ""
                 }`}
@@ -443,7 +443,7 @@ const Generals = ({ generals }) => {
             Email
           </button>
         </li>
-        <li className="nav-item" role="presentation">
+        <li className="nav-item" role="presentation" hidden>
           <button
             className={`nav-link ${activeTab === "shippingfree" ? "active" : ""}`}
             onClick={() => setActiveTab("shippingfree")}
@@ -515,7 +515,7 @@ const Generals = ({ generals }) => {
             role="tabpanel"
           >
             <div className="row">
-              <div className="col-md-6 mb-2">
+              <div className="col-md-6 mb-2" hidden>
                 <label htmlFor="cintillo" className="form-label">
                   Cintillo
                 </label>
@@ -531,7 +531,7 @@ const Generals = ({ generals }) => {
                   }
                 ></textarea>
               </div>
-              <div className="col-md-6 mb-2">
+              <div className="col-md-12 mb-2">
                 <label htmlFor="copyright" className="form-label">
                   Copyright
                 </label>
@@ -548,7 +548,7 @@ const Generals = ({ generals }) => {
                 ></textarea>
               </div>
             </div>
-            <div className="mb-2">
+            <div className="mb-2" hidden>
               <label htmlFor="address" className="form-label">
                 Dirección
               </label>
@@ -565,7 +565,7 @@ const Generals = ({ generals }) => {
                 required
               ></textarea>
             </div>
-            <div className="mb-2">
+            <div className="mb-2" hidden>
               <TextareaFormGroup
                 label="Horarios de atencion"
                 onChange={(e) =>
@@ -578,7 +578,7 @@ const Generals = ({ generals }) => {
                 required
               />
             </div>
-            <div className="mb-2">
+            <div className="mb-2" hidden>
               <label
                 htmlFor="igvCheckout"
                 className="form-label"
@@ -1267,7 +1267,7 @@ const Generals = ({ generals }) => {
                 }
               />
             </div>
-            <div className="mb-2">
+            <div className="mb-2" hidden>
               <QuillFormGroup
                 label="Políticas de envío"
                 value={formData.deliveryPolicy}
@@ -1279,7 +1279,7 @@ const Generals = ({ generals }) => {
                 }
               />
             </div>
-            <div className="mb-2">
+            <div className="mb-2" hidden>
               <QuillFormGroup
                 label="Políticas de devolución y cambio"
                 value={formData.salebackPolicy}

@@ -127,7 +127,7 @@ const Strengths = ({ details }) => {
           caption: 'Descripción',
           width: '50%',
         },
-        {
+       /* {
           dataField: 'image',
           caption: 'Imagen',
           cellTemplate: (container, { data }) => {
@@ -145,7 +145,7 @@ const Strengths = ({ details }) => {
               value: !data.visible
             })} />)
           }
-        },
+        },*/
         {
           caption: 'Acciones',
           cellTemplate: (container, { data }) => {
@@ -172,7 +172,10 @@ const Strengths = ({ details }) => {
         <input ref={idRef} type='hidden' />
         <InputFormGroup eRef={nameRef} label='Fortaleza' col='col-12' required />
         <TextareaFormGroup eRef={descriptionRef} label='Descripción' rows={3} />
+      </div>
+      <div hidden>
         <ImageFormGroup eRef={imageRef} label='Imagen' col='col-12' rows={3} />
+
       </div>
     </Modal>
   </>

@@ -133,19 +133,19 @@ const Menu = ({ session, hasRole }) => {
                   <MenuItem href="/admin/service-points" icon="mdi mdi-briefcase"> Distribuidores y Red de Servicios</MenuItem>
                   <MenuItem href="/admin/about" icon="mdi mdi-briefcase">Nosotros</MenuItem>
                   {/* <MenuItem href="/admin/delivery-zones" icon="mdi mdi-map-marker-radius">Zonas de Cobertura</MenuItem> */}
-                  <MenuItem href="/admin/indicators" icon="mdi mdi-dots-grid">Indicadores</MenuItem>
+                {/*  <MenuItem href="/admin/indicators" icon="mdi mdi-dots-grid">Indicadores</MenuItem>*/}
                   <MenuItem href="/admin/strengths" icon="mdi mdi-arm-flex">Fortalezas</MenuItem>
                   <MenuItem href="/admin/banners" icon="mdi mdi-post-outline">Banners</MenuItem>
                   <MenuItem href="/admin/sliders" icon="mdi mdi-page-layout-body">Sliders</MenuItem>
-                  <MenuItem href="/admin/faqs" icon="mdi mdi-forum">Preguntas Frecuentes</MenuItem>
-                  <MenuItem href="/admin/testimonies" icon="mdi mdi-forum">Testimonios</MenuItem>
+                {/*  <MenuItem href="/admin/faqs" icon="mdi mdi-forum">Preguntas Frecuentes</MenuItem> */}
+           {/*       <MenuItem href="/admin/testimonies" icon="mdi mdi-forum">Testimonios</MenuItem> */}
                   <MenuItem href="/admin/socials" icon="mdi mdi-web">Redes Sociales</MenuItem>
 
                   {/* Recursos */}
                   <li className="menu-title">Recursos</li>
                   <MenuItem href="/admin/gallery" icon="mdi mdi-image-multiple">Galeria</MenuItem>
-                  <MenuItem href="/admin/repository" icon="mdi mdi-database">Repositorio</MenuItem>
-
+               {/*   <MenuItem href="/admin/repository" icon="mdi mdi-database">Repositorio</MenuItem>
+ */}
                   {/* Configuraciones */}
                   <li className="menu-title">Configuraciones</li>
                   {hasRole("Root") && (

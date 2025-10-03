@@ -153,26 +153,7 @@ const About = ({ details: detailsDB }) => {
         <>
             <Table
                 gridRef={gridRef}
-                title={
-                    <>
-                        <BasicEditing correlative="about" details={detailsDB} />
-                        {videoEditing ? (
-                            <input
-                                className="form-control form-control-sm mb-1"
-                                defaultValue={details?.[`about.video`]}
-                                onBlur={onVideoChange}
-                                autoFocus
-                            />
-                        ) : (
-                            <smal
-                                className="header-title mt-1"
-                                onClick={() => setVideoEditing(true)}
-                            >
-                                {details?.[`about.video`] || "Sin video"}
-                            </smal>
-                        )}
-                    </>
-                }
+              title={"Secciones de la pagina Sobre Nosotros"}
                 rest={aboutusRest}
                 toolBar={(container) => {
                     container.unshift({
@@ -187,7 +168,7 @@ const About = ({ details: detailsDB }) => {
                                     .refresh(),
                         },
                     });
-                    container.unshift({
+                   /* container.unshift({
                       widget: 'dxButton', location: 'after',
                       options: {
                       icon: 'plus',
@@ -195,7 +176,7 @@ const About = ({ details: detailsDB }) => {
                         hint: 'Nuevo about',
                         onClick: () => onModalOpen()
                    }
-                     });
+                     });*/
                 }}
                 columns={[
                     {
